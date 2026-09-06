@@ -2,13 +2,13 @@
 # evaluer-coherence.sh
 # Evalue la coherence inter-fichiers : liens, references croisees
 # Proprietaire : Themis (outil partage)
-# Version : 0.2.5
+# Version : 0.3.0
 
 # identite:
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.5"
+VERSION="0.3.0"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -65,7 +65,8 @@ racine_projet = sys.argv[2]
 motifs_generiques = ('texte', 'chemin', 'ancien.md', 'nouveau.md', 'perdu.md',
                      'exemple.md', '.*', 'fichier.md', 'dossier.md', 'cible.md',
                      'source.md', 'destination.md', 'fichier-exemple', 'index.md',
-                     'frere-a', 'frere-b', 'sous-dossier', 'parent.md', 'racine/')
+                     'frere-a', 'frere-b', 'sous-dossier', 'parent.md', 'racine/',
+                     'protocole-X')
 
 pattern = re.compile(r'\[[^]]+\]\(([^)]+)\)')
 
@@ -92,6 +93,10 @@ for base, dossiers, fichiers in os.walk(racine):
                 dans_bloc = not dans_bloc
                 continue
             if dans_bloc:
+                continue
+            # Ignorer les lignes de tableau de versioning (changelog) :
+            # | x.y.z | date | description... - leurs liens sont documentaires
+            if re.match(r'^\|\s*\d+\.\d+\.\d+', ligne.strip()):
                 continue
             for m in pattern.finditer(ligne):
                 chemin = m.group(1).strip()

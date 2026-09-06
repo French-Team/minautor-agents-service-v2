@@ -6,14 +6,14 @@ identite:
 ---
 # Cerveau-Projet
 
-[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Agents](https://img.shields.io/badge/Agents-19-blue?style=flat)](https://img.shields.io/badge/Agents-19-blue?style=flat) [![Outils](https://img.shields.io/badge/Outils-177-blueviolet?style=flat)](https://img.shields.io/badge/Outils-177-blueviolet?style=flat) [![Tests](https://img.shields.io/badge/Tests-97-red?style=flat)](https://img.shields.io/badge/Tests-97-red?style=flat) [![Protocoles](https://img.shields.io/badge/Protocoles-36-orange?style=flat)](https://img.shields.io/badge/Protocoles-36-orange?style=flat) [![Regles](https://img.shields.io/badge/Regles-75-yellow?style=flat)](https://img.shields.io/badge/Regles-75-yellow?style=flat) [![Version](https://img.shields.io/badge/Version-v1.8.0-blue?style=flat)](https://img.shields.io/badge/Version-v1.8.0-blue?style=flat)
+[![Plateforme](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat)](https://img.shields.io/badge/Plateforme-Windows-blue?style=flat) [![Fait avec](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat)](https://img.shields.io/badge/Fait_avec-Bash-orange?style=flat) [![Statut](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat)](https://img.shields.io/badge/Statut-stable-brightgreen?style=flat) [![Agents](https://img.shields.io/badge/Agents-22-blue?style=flat)](https://img.shields.io/badge/Agents-22-blue?style=flat) [![Outils](https://img.shields.io/badge/Outils-177-blueviolet?style=flat)](https://img.shields.io/badge/Outils-177-blueviolet?style=flat) [![Tests](https://img.shields.io/badge/Tests-97-red?style=flat)](https://img.shields.io/badge/Tests-97-red?style=flat) [![Protocoles](https://img.shields.io/badge/Protocoles-36-orange?style=flat)](https://img.shields.io/badge/Protocoles-36-orange?style=flat) [![Regles](https://img.shields.io/badge/Regles-75-yellow?style=flat)](https://img.shields.io/badge/Regles-75-yellow?style=flat) [![Version](https://img.shields.io/badge/Version-v1.8.0-blue?style=flat)](https://img.shields.io/badge/Version-v1.8.0-blue?style=flat)
 
 
 ![Logo](cerveau-projet/assets/images/logo.jpg)
 
 
 Je suis un **systeme agentique** qui peut vous aider a developper votre projet.
-Je suis compose de **19 agents** qui s'auto-ameliorent en continu, capables de
+Je suis compose de **22 agents** qui s'auto-ameliorent en continu, capables de
 detecter les erreurs que les autres agents vont faire, les erreurs dans leurs
 fichiers, leurs regles, leurs protocoles, leurs conventions, et bien plus encore.
 
@@ -41,13 +41,13 @@ rigueur).
 | **Outiller** | Des outils partages, crees et ameliores par le systeme lui-meme |
 | **Apprendre** | Chaque agent note ses erreurs et ne les refait plus |
 | **Coordonner** | Oracle pilote le flux entre les agents (activation, historisation, retour) |
-| **Tester** | 101 tests automatiques verifient que tout fonctionne |
+| **Tester** | 97 tests automatiques verifient que tout fonctionne |
 
 ---
 
 ## Mes agents
 
-Je suis anime par **19 agents IA**, chacun avec un role et une carte de decision :
+Je suis anime par **22 agents IA**, chacun avec un role et une carte de decision :
 
 | Agent | Role |
 |---|---|
@@ -70,6 +70,9 @@ Je suis anime par **19 agents IA**, chacun avec un role et une carte de decision
 | **Socrate** | Conversateur de revision strategique |
 | **Redacteur-v2** | Redacteur PRO des docs de la v2 (freelance) |
 | **Hades** | Gardien des archives git - SEUL habilite aux commandes git |
+| **Ferrari** | Agent v1 specialise freelance (double identite v1/v2) -- corrige et modifie le dossier freelance/ |
+| **Nemesis** | Analyste en Chef - avis contradictoire avant validation (audite, ne corrige jamais) |
+| **Oracle** | Coordinateur de l'equipe v1 (session-admin) - pilote le flux entre les agents (activation, historisation, retour) |
 
 ### Mon pilote : Oracle
 
@@ -99,7 +102,7 @@ Oracle -> Agents (execution)
 
 Je me protege par des tests automatiques :
 
-- **101 tests** verifient que rien ne casse quand quelque chose change.
+- **97 tests** verifient que rien ne casse quand quelque chose change.
   Un seul agent, **Janus**, a le droit de lancer la non-regression complete :
   les autres agents testent uniquement leur propre travail.
 - **Aucun fichier temporaire** n'est laisse a la racine du projet apres un travail :
@@ -215,10 +218,3 @@ guide etape par etape.
 | **Verrou** | Mecanisme d'exclusion mutuelle pour la securite des fichiers |
 | **Workflow** | Enchainement d'etapes pour accomplir une tache |
 | **Inter-round** | Mecanisme de reparation : un agent detecte un KO et active l'agent habilite sans interrompre le round |
-
-| **Socrate** | Le philosophe qui questionne -- discute des revisions avec l'utilisateur et produit une liste de missions pour Cerberus | Selon sa carte de decision |
-| **Redacteur-v2** | Le redacteur PRO des docs de la v2 (freelance) -- mode conversation | Sur activation (reste actif en conversation, reactive Cerberus sur "fin de cycle") |
-
-| **Ferrari** | Agent | Selon sa carte de decision |
-
-| **Nemesis** | Nemesis -- Analyste en Chef / Detective de la Robustesse : donne un avis contradictoire sur toute proposition (solution, plan, conception) avant validation. Ne valide jamais : il audite les 3 axes (cas limites, optimisation, securite/integrite) et rend des Points d Amelioration Critique et des Scenarios de Defaillance a Mitiger. | Selon sa carte de decision |

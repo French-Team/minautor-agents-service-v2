@@ -22,7 +22,7 @@ Options:
   --help             Afficher cette aide
 
 Proprietaire : Clio (agent dedie au README)
-Version : 0.4.5-py
+Version : 0.4.8-py
 Statut : prepare
 """
 
@@ -31,7 +31,7 @@ import os
 import re
 import sys
 
-VERSION = "0.4.5-py"
+VERSION = "0.4.8-py"
 STATUT = "prepare"
 
 README = "README.md"
@@ -41,6 +41,11 @@ AGENTS_DIR = "cerveau-projet/agents"
 TOOLS_DIR = "cerveau-projet/agents/tools"
 
 CATEGORIES_EXCLUES = {"combos"}
+
+
+def _est_outil(nom):
+    """Un outil est un sous-dossier reel (jamais un dossier technique)."""
+    return nom != "" and not nom.startswith("__")
 
 
 def compter_agents():
@@ -93,12 +98,16 @@ def lire_role_agent(agent):
 
 
 def lister_categories():
-    """Lister les categories d'outils (chaque sous-dossier, plus combos et templates)."""
+    """Lister les categories d'outils (chaque sous-dossier, plus combos et templates).
+
+    v0.4.7 : les dossiers techniques (__pycache__, __MACOSX...) ne sont pas
+    des categories.
+    """
     categories = []
     if os.path.isdir(TOOLS_DIR):
         for nom in sorted(os.listdir(TOOLS_DIR)):
             chemin = os.path.join(TOOLS_DIR, nom)
-            if os.path.isdir(chemin) and nom not in CATEGORIES_EXCLUES:
+            if os.path.isdir(chemin) and nom not in CATEGORIES_EXCLUES and _est_outil(nom):
                 categories.append(nom)
     categories.append("combos")
     categories.append("templates")
@@ -121,13 +130,10 @@ def compter_outils_categorie(categorie):
         protections = os.path.join(dir_cat, "protections")
         if not os.path.isdir(protections):
             return 0
-        return len([d for d in os.listdir(protections) if os.path.isdir(os.path.join(protections, d))])
+        return len([d for d in os.listdir(protections) if _est_outil(d) and os.path.isdir(os.path.join(protections, d))])
 
-    # Cas special combos : compter les sous-dossiers
-    if categorie == "combos":
-        return len([d for d in os.listdir(dir_cat) if os.path.isdir(os.path.join(dir_cat, d))])
-
-    return len([d for d in os.listdir(dir_cat) if os.path.isdir(os.path.join(dir_cat, d))])
+    # v0.4.7 : un dossier technique (__pycache__) n'est pas un outil
+    return len([d for d in os.listdir(dir_cat) if _est_outil(d) and os.path.isdir(os.path.join(dir_cat, d))])
 
 
 def lister_outils_categorie(categorie):
@@ -149,7 +155,7 @@ def lister_outils_categorie(categorie):
         noms = [f[:-3] for f in os.listdir(protections) if f.endswith(".md") and os.path.isfile(os.path.join(protections, f))]
         return ", ".join(sorted(noms))
 
-    noms = [d for d in os.listdir(dir_cat) if os.path.isdir(os.path.join(dir_cat, d))]
+    noms = [d for d in os.listdir(dir_cat) if _est_outil(d) and os.path.isdir(os.path.join(dir_cat, d))]
     return ", ".join(sorted(noms))
 
 
@@ -191,6 +197,32 @@ def lire_readme():
     """Lire le README complet."""
     with io.open(README, "r", encoding="utf-8", errors="replace") as fh:
         return fh.read()
+
+
+def extraire_table_agents(contenu):
+    """Region de la table 'Mes agents' du README public : du titre
+    '## Mes agents' jusqu'au titre suivant (### ou ##).
+
+    v0.4.8 : la presence des agents est verifiee DANS CETTE TABLE
+    uniquement. Avant, la recherche se faisait dans tout le fichier : une
+    mention narrative ('**Oracle**' dans 'Mon pilote : Oracle') ou des
+    lignes orphelines en fin de fichier masquaient des agents absents de
+    la table.
+
+    Retourne (region, pos_insertion) :
+      - region : texte depuis le titre jusqu'au titre suivant (exclu)
+      - pos_insertion : index ou inserer de nouvelles lignes (juste avant
+        le titre suivant), None si aucun titre suivant.
+    """
+    marque = "## Mes agents"
+    pos = contenu.find(marque)
+    if pos == -1:
+        return contenu, None
+    pos += len(marque)
+    m = re.search(r"^### |^## ", contenu[pos:], re.MULTILINE)
+    if not m:
+        return contenu[pos:], None
+    return contenu[pos:pos + m.start()], pos + m.start()
 
 
 def verifier_somme_comptes():
@@ -235,6 +267,120 @@ def verifier_somme_comptes():
     return ecarts
 
 
+def aligner_badges_header():
+    """Aligner les badges du header du README public sur les comptes reels :
+    les 2 occurrences (affichage img + href) de 'Outils-N' et 'Agents-N'.
+
+    v0.4.6 (lecon Clio/Janus) : --maj corrigeait les tables mais pas les
+    badges en dur du header.
+    """
+    if not os.path.isfile(README):
+        return
+    with io.open(README, "r", encoding="utf-8", errors="replace") as fh:
+        contenu = fh.read()
+    modifie = False
+    for nom, reel in (("Outils", compter_total_outils()), ("Agents", compter_agents())):
+        pattern = re.compile(r"badge/%s-\d+-" % nom)
+        if pattern.search(contenu):
+            nouveau = pattern.sub("badge/%s-%d-" % (nom, reel), contenu)
+            if nouveau != contenu:
+                contenu = nouveau
+                modifie = True
+                print("  [CORRIGE] Badge %s aligne : %d (affichage + href)." % (nom, reel))
+    if modifie:
+        with io.open(README, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(contenu)
+    else:
+        print("  [OK] Badges du header deja a jour.")
+
+
+def corriger_readme_dev():
+    """Corriger readme-dev : tableau section 6 (comptes reels par categorie,
+    categories obsoletes retirees, manquantes ajoutees) + ligne d'intro +
+    lignes de synthese (section 1 : Agents, Outils).
+
+    v0.4.6 (anti-recurrence bug Clio 132 vs 134) : verifier SANS corriger ne
+    suffisait pas -- on reconstruit le tableau lui-meme.
+    v0.4.7 : la ligne de separation |---|---| est conservee, les exemples
+    deja curates sont conserves (sauf si '__pycache__' s y est glisse), et
+    les lignes de synthese de la section 1 sont corrigees aussi.
+    """
+    if not os.path.isfile(README_DEV):
+        print("  [MANQUANT] readme-dev introuvable : %s" % README_DEV)
+        return
+    with io.open(README_DEV, "r", encoding="utf-8", errors="replace") as fh:
+        contenu = fh.read()
+    modifie = False
+
+    categories = [c for c in lister_categories() if compter_outils_categorie(c) > 0]
+    total = compter_total_outils()
+
+    # 1. Ligne d'intro '**N outils dans M categories** :'
+    m_intro = re.search(r"^\*\*[0-9]+ outils dans [0-9]+ categories\*\* :", contenu, re.MULTILINE)
+    if m_intro:
+        nouveau = "**%d outils dans %d categories** :" % (total, len(categories))
+        if m_intro.group(0) != nouveau:
+            contenu = contenu.replace(m_intro.group(0), nouveau, 1)
+            modifie = True
+            print("  [CORRIGE] readme-dev intro : %d outils / %d categories" % (total, len(categories)))
+
+    # 2. Tableau section 6 : reperer l'entete puis les lignes de donnees
+    lignes = contenu.split("\n")
+    idx_entete = None
+    for i, ligne in enumerate(lignes):
+        if re.match(r"^\| Categorie \| Nb \| Exemples \|$", ligne.strip()):
+            idx_entete = i
+            break
+    if idx_entete is None:
+        # Structure absente : rien a corriger (l outil ne cree pas la section)
+        return
+    fin = idx_entete + 2
+    exemples = {}
+    while fin < len(lignes):
+        m = re.match(r"^\| ([A-Za-z][^|]*?) \| (\d+) \| (.*?) \|\s*$", lignes[fin])
+        if not m:
+            break
+        exemples[m.group(1).strip()] = m.group(3).strip()
+        fin += 1
+
+    nouvelles = []
+    for cle in categories:
+        cat = nom_categorie_affichable(cle)
+        nb = compter_outils_categorie(cle)
+        ex = exemples.get(cat, "")
+        if not ex or "__pycache__" in ex:
+            ex = lister_outils_categorie(cle)
+        nouvelles.append("| %s | %d | %s |" % (cat, nb, ex))
+
+    ancien_bloc = "\n".join(lignes[idx_entete + 2:fin])
+    nouveau_bloc = "\n".join(nouvelles)
+    if ancien_bloc != nouveau_bloc:
+        lignes[idx_entete + 2:fin] = nouvelles
+        contenu = "\n".join(lignes)
+        modifie = True
+        print("  [CORRIGE] Tableau readme-dev section 6 : %d categories (%d outils)." % (len(nouvelles), total))
+    else:
+        print("  [OK] Tableau readme-dev section 6 deja a jour (%d categories)." % len(nouvelles))
+
+    # 3. Lignes de synthese de la section 1 (Agents / Outils)
+    syntheses = (
+        ("Agents", "%d agents + classeur-variables (voir section 4)" % compter_agents()),
+        ("Outils", "%d outils dans %d categories (voir section 6)" % (total, len(categories))),
+    )
+    for nom, valeur in syntheses:
+        m = re.search(r"^\| \*\*%s\*\* \| [^|]* \|\s*$" % nom, contenu, re.MULTILINE)
+        if m:
+            nouveau = "| **%s** | %s |" % (nom, valeur)
+            if m.group(0).strip() != nouveau:
+                contenu = contenu.replace(m.group(0), nouveau, 1)
+                modifie = True
+                print("  [CORRIGE] readme-dev synthese %s : %s" % (nom, valeur))
+
+    if modifie:
+        with io.open(README_DEV, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(contenu)
+
+
 def verifier():
     """Verifier l'etat reel et comparer avec le README."""
     total = compter_total_outils()
@@ -252,14 +398,17 @@ def verifier():
 
     contenu = lire_readme()
 
-    # Agents manquants dans la table du README (casse insensible)
+    # Agents manquants dans la table 'Mes agents' du README public.
+    # v0.4.8 : presence verifiee DANS LA TABLE uniquement (lignes
+    # '| **Agent** |'), pas dans tout le fichier.
+    region, _pos = extraire_table_agents(contenu)
     ecart = 0
     for agent in lister_agents_reels():
-        if not re.search(r"\*\*%s\*\*" % re.escape(agent), contenu, re.IGNORECASE):
-            print("  [MANQUANT] Agent '%s' absent de la table 'Les agents'" % agent)
+        if not re.search(r"^\| \*\*%s\*\* \|" % re.escape(agent), region, re.MULTILINE | re.IGNORECASE):
+            print("  [MANQUANT] Agent '%s' absent de la table 'Mes agents'" % agent)
             ecart += 1
     if ecart == 0:
-        print("  [OK] Tous les agents sont dans la table")
+        print("  [OK] Tous les agents sont dans la table 'Mes agents'")
 
     # Badge Outils du README public (nouvelle norme 1ere personne 20/08) :
     # la liste technique exhaustive vit dans readme-dev (section 6), pas dans
@@ -272,6 +421,16 @@ def verifier():
             print("  [OBSOLETE] Badge Outils-%d -> devrait etre %d" % (lue, total))
         else:
             print("  [OK] Badge Outils-%d (README public)" % lue)
+
+    # Badge Agents du README public (v0.4.6)
+    badge_agents = re.search(r"Agents-(\d+)", contenu)
+    if badge_agents:
+        lue = int(badge_agents.group(1))
+        reel = compter_agents()
+        if lue != reel:
+            print("  [OBSOLETE] Badge Agents-%d -> devrait etre %d" % (lue, reel))
+        else:
+            print("  [OK] Badge Agents-%d (README public)" % lue)
     if re.search(r"^## La boite a outils \(([0-9]*) outils\)", contenu, re.MULTILINE):
         print("  [INFO] Section 'La boite a outils' encore presente (ancien format) : compteurs verifies ci-dessous")
     else:
@@ -333,23 +492,37 @@ def mettre_a_jour():
             contenu = re.sub(r"\*\*%s \([0-9]*\)\*\*" % re.escape(cat), "**%s (%d)**" % (cat, nb), contenu)
             print("  [CORRIGE] %s : %d" % (cat, nb))
 
-    # 3. Ajouter les agents manquants dans la table 'Les agents'
-    agents_ajoutes = 0
+    # 3. Ajouter les agents manquants dans la table 'Mes agents' du README
+    # public. v0.4.8 : la presence est verifiee dans la table uniquement
+    # (region entre '## Mes agents' et le titre suivant), et l'insertion se
+    # fait en fin de table au format 2 colonnes de cette table. Avant :
+    # recherche globale + ancre obsolete ('### Le cycle fondamental') +
+    # format 3 colonnes creaient des lignes orphelines en fin de fichier.
+    region, pos_insertion = extraire_table_agents(contenu)
+    manquants = []
     for agent in lister_agents_reels():
-        if not re.search(r"\*\*%s\*\*" % re.escape(agent), contenu, re.IGNORECASE):
+        if not re.search(r"^\| \*\*%s\*\* \|" % re.escape(agent), region, re.MULTILINE | re.IGNORECASE):
+            manquants.append(agent)
+    if manquants:
+        lignes = []
+        for agent in manquants:
             role = lire_role_agent(agent)
             if not role:
                 role = "Agent"
-            nom_affichable = capitaliser(agent)
-            ligne = "| **%s** | %s | Selon sa carte de decision |" % (nom_affichable, role)
-            # Inserer la ligne avant '### Le cycle fondamental' (fin de la table des agents)
-            if "### Le cycle fondamental" in contenu:
-                contenu = contenu.replace("### Le cycle fondamental", ligne + "\n### Le cycle fondamental", 1)
-            else:
-                contenu += "\n" + ligne + "\n"
-            print("  [AJOUTE] Agent '%s' ajoute dans la table" % nom_affichable)
-            agents_ajoutes += 1
-    if agents_ajoutes == 0:
+            lignes.append("| **%s** | %s |" % (capitaliser(agent), role))
+        bloc = "".join(l + "\n" for l in lignes)
+        if pos_insertion is not None:
+            # Coller le bloc a la derniere ligne de la table : la ligne
+            # blanche qui precedait le titre suivant passe apres le bloc.
+            debut = contenu[:pos_insertion]
+            if debut.endswith("\n\n"):
+                debut = debut[:-1]
+            contenu = debut + bloc + "\n" + contenu[pos_insertion:]
+        else:
+            contenu += "\n" + bloc + "\n"
+        for agent in manquants:
+            print("  [AJOUTE] Agent '%s' ajoute dans la table 'Mes agents'" % capitaliser(agent))
+    else:
         print("  [OK] Table des agents complete")
 
     # 4. Reconstruire la liste des outils de chaque categorie
@@ -372,6 +545,16 @@ def mettre_a_jour():
 
     with io.open(README, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(contenu)
+
+    # 5. Aligner les badges du header (Outils-N, Agents-N) : affichage + href
+    # (lecon Clio/Janus : --maj corrigeait les tables mais pas les badges)
+    aligner_badges_header()
+
+    # 6. Corriger le tableau readme-dev (section 6) : comptes reels par
+    # categorie, categories obsoletes retirees, manquantes ajoutees
+    # (anti-recurrence bug Clio 132 vs 134 : verifier SANS corriger ne
+    # suffisait pas - v0.4.6 corrige le tableau lui-meme)
+    corriger_readme_dev()
 
     print("")
     print("[OK] README corrige pour refleter l'etat reel.")
@@ -573,15 +756,51 @@ def dry_run():
             if lue != nb:
                 changements.append("%s : %d -> %d" % (cat, lue, nb))
 
-    # 3. Agents manquants
+    # 3. Agents manquants (v0.4.8 : dans la table 'Mes agents' uniquement,
+    # pas dans tout le fichier -- une mention narrative ou une ligne
+    # orpheline masquait les absents de la table)
+    region, _pos = extraire_table_agents(contenu)
     agents_manquants = []
     for agent in lister_agents_reels():
-        if not re.search(r"\*\*%s\*\*" % re.escape(agent), contenu, re.IGNORECASE):
+        if not re.search(r"^\| \*\*%s\*\* \|" % re.escape(agent), region, re.MULTILINE | re.IGNORECASE):
             agents_manquants.append(capitaliser(agent))
     if agents_manquants:
         changements.append("Agents a ajouter : %s" % ", ".join(agents_manquants))
 
-    # 4. Outils manquants par categorie : uniquement si l ancienne section
+    # 4. Badges du header (Outils-N, Agents-N) : affichage + href
+    for nom, reel in (("Outils", total), ("Agents", compter_agents())):
+        mb = re.search(r"badge/%s-(\d+)-" % nom, contenu)
+        if mb and int(mb.group(1)) != reel:
+            changements.append("Badge %s : %d -> %d (affichage + href)" % (nom, int(mb.group(1)), reel))
+
+    # 5. readme-dev : intro, categories obsoletes/manquantes, synthese
+    if os.path.isfile(README_DEV):
+        with io.open(README_DEV, "r", encoding="utf-8", errors="replace") as fh:
+            contenu_dev = fh.read()
+        categories_actives = [c for c in lister_categories() if compter_outils_categorie(c) > 0]
+        m_intro = re.search(r"^\*\*([0-9]+) outils dans ([0-9]+) categories\*\* :", contenu_dev, re.MULTILINE)
+        if m_intro and (int(m_intro.group(1)), int(m_intro.group(2))) != (total, len(categories_actives)):
+            changements.append("readme-dev intro : '%s outils dans %s categories' -> '%d outils dans %d categories'"
+                               % (m_intro.group(1), m_intro.group(2), total, len(categories_actives)))
+        noms_tableau = set()
+        for ligne in contenu_dev.split("\n"):
+            m_row = re.match(r"^\| ([A-Z][^|]*?) \| (\d+) \| .* \|\s*$", ligne)
+            if m_row and m_row.group(1).strip() != "Categorie":
+                noms_tableau.add(m_row.group(1).strip())
+        obsoletes = [n for n in sorted(noms_tableau) if n.lower().replace(" ", "-") not in [c.lower() for c in categories_actives]]
+        if obsoletes:
+            changements.append("readme-dev categories obsoletes a retirer : %s" % ", ".join(obsoletes))
+        manquantes = [nom_categorie_affichable(c) for c in categories_actives
+                      if nom_categorie_affichable(c) not in noms_tableau]
+        if manquantes:
+            changements.append("readme-dev categories manquantes a ajouter : %s" % ", ".join(manquantes))
+        for nom, valeur in (("Agents", "%d agents + classeur-variables (voir section 4)" % compter_agents()),
+                            ("Outils", "%d outils dans %d categories (voir section 6)" % (total, len(categories_actives)))):
+            m_syn = re.search(r"^\| \*\*%s\*\* \| [^|]* \|\s*$" % nom, contenu_dev, re.MULTILINE)
+            if m_syn and m_syn.group(0).strip() != "| **%s** | %s |" % (nom, valeur):
+                changements.append("readme-dev synthese %s a corriger" % nom)
+
+    # 6. Outils manquants par categorie : uniquement si l ancienne section
     # 'La boite a outils' existe dans le README public (retro-compatibilite).
     # Nouvelle norme : les listes d outils vivent dans readme-dev (section 6).
     if re.search(r"^## La boite a outils \(([0-9]*) outils\)", contenu, re.MULTILINE):

@@ -59,6 +59,8 @@ FICHIERS_AUTORISES = frozenset([
     ".tmpignore",
     # Note personnelle de l utilisateur (autorisee explicitement, 2026-08-19)
     "COMMENT-DEMARRER.md",
+    # Profil racine de l utilisateur (langue, lue par le pilote Oracle 2026-09-05)
+    "USER-PROFIL.md",
 ])
 DOSSIERS_AUTORISES = frozenset([
     ".git",

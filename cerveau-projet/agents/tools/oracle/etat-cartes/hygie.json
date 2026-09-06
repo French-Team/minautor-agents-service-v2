@@ -2,11 +2,10 @@
  "agent": "hygie",
  "parcours": "agents/hygie/parcours/arbre-hygie.json",
  "case_courante": null,
- "mission_type": "autre",
- "mission": "MIGRATION v1->v2 ETAPE B.5 : supprimer corrections.db + corrections-db.py apres .bak verifie (mission 12e87bbf)",
- "historise_debut": true,
- "precedent": "oracle",
- "etape": "fin",
- "historise_fin": true,
- "theme_courant": null
+ "mission_type": "",
+ "mission": "",
+ "historise_debut": false,
+ "precedent": null,
+ "etape": "debut",
+ "historise_fin": false
 }

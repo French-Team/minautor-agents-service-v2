@@ -58,6 +58,7 @@ identite:
 | [protocole-argus-contradictions/](protocole-argus-contradictions/) | Detection et signalement des contradictions (Argus) : 4 elements obligatoires (type, gravite, fichier+ligne, 2 sources croisees), cas types, preuve negative --fichier quand soupcon, cycle signalement -> agent habilite | ebauche |
 | [protocole-education-continue/](protocole-education-continue/) | Education continue des agents (Chiron) : re-eduer quand les outils/regles/protocoles changent. Analyse fiches/corrections/regles/cartes pour detecter les incoherences nuisant a l intelligence operationnelle | actif |
 | [protocole-verification-coherence/](protocole-verification-coherence/) | Verification de coherence des fichiers a compteurs/tables/badges (Themis, lecons re-audit README) | ebauche |
+| [protocole-evaluation-croisee/](protocole-evaluation-croisee/) | Evaluation croisee periodique des agents actifs (Themis) : declenchement [NOTATION] + format du rapport + regles Themis + fin vers ORACLE | ebauche |
 | [protocole-reparer-arbres/](protocole-reparer-arbres/) | Reparer les arbres de decision (aligner la racine sur le vocabulaire du pilote `_type_mission_auto`/`_resoudre_racine`, theme-inter-round + fins precedent-aware reactiver-fin, UN AGENT A LA FOIS, test reel, checklist) | ebauche |
 
 ## Navigation

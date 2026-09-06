@@ -1,7 +1,7 @@
 #!/bin/bash
 # corriger-nommage.sh
 # Corriger le nommage des fichiers selon les conventions
-# Version : 0.2.0
+# Version : 0.3.1
 # Date: 2026-08-05
 # Auteur: Vulcain
 
@@ -10,7 +10,7 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.2.0"
+VERSION="0.3.1"
 DATE="2026-08-05"
 
 # Couleurs pour la sortie
@@ -34,7 +34,7 @@ aide() {
     echo "  --dry-run           Simuler sans modifier"
     echo "  --verbose, -v       Afficher les details"
     echo "  --version           Afficher la version"
-    echo "  --type TYPE         Type de fichier (protocole, convention, agent, outil)"
+    echo "  --type TYPE         Type de fichier (protocole, convention, agent, outil). Absent -> auto-detection"
     echo ""
     echo "Exemples:"
     echo "  corriger-nommage --type protocole chemin/vers/protocole.md"
@@ -62,9 +62,12 @@ corriger_protocole() {
 
     # Verifier si le format est correct
     if [[ -z "$nom_part" || -z "$major_part" || -z "$minor_part" || -z "$statut_part" ]]; then
-        echo -e "  ${RED}[ERREUR] Format invalide : ${basename}${NC}"
-        echo -e "    Impossible de corriger automatiquement"
-        return 1
+        if [[ "$basename" != *.md ]]; then
+            echo -e "  ${GREEN}[OK] Aucune correction necessaire (fichier non .md)${NC}"
+            return 0
+        fi
+        echo -e "  ${GREEN}[OK] Aucune correction necessaire (format hors protocole)${NC}"
+        return 0
     fi
 
     # Construire le nouveau nom
@@ -107,6 +110,11 @@ corriger_agent() {
 
     echo -e "${BLUE}[OUTIL] Correction du nommage : ${basename}${NC}"
     echo ""
+
+    if [[ "$basename" != *.md ]]; then
+        echo -e "  ${GREEN}[OK] Aucune correction necessaire (fichier non .md)${NC}"
+        return 0
+    fi
 
     # Verifier le format : nom-agent.md
     if [[ "$basename" =~ ^[a-z]+\.md$ ]]; then
@@ -193,6 +201,11 @@ corriger_convention() {
     echo -e "${BLUE}[OUTIL] Correction du nommage : ${basename}${NC}"
     echo ""
 
+    if [[ "$basename" != *.md ]]; then
+        echo -e "  ${GREEN}[OK] Aucune correction necessaire (fichier non .md)${NC}"
+        return 0
+    fi
+
     # Verifier le format : convention-nom.md
     if [[ "$basename" =~ ^convention-[a-z-]+\.md$ ]]; then
         echo -e "  ${GREEN}[OK] Aucune correction necessaire${NC}"
@@ -276,12 +289,57 @@ if [[ ! -f "$FICHIER" ]]; then
     exit 1
 fi
 
-# Verifier le type
+# Verifier le type : auto-detection par le chemin si absent (combo generique)
 if [[ -z "$TYPE" ]]; then
-    echo "Erreur: Type non specifie"
-    echo "Utilisez --type pour specifier le type"
-    exit 1
+    chemin_posix=$(echo "$FICHIER" | tr '\\' '/')
+    basename_type=$(basename "$FICHIER")
+    if [[ "$chemin_posix" == */agents/tools/* ]]; then
+        TYPE="outil"
+    elif [[ "$chemin_posix" == */agents/conventions/* ]] || [[ "$basename_type" == convention-* ]]; then
+        TYPE="convention"
+    elif [[ "$chemin_posix" == */protocole-* ]]; then
+        TYPE="protocole"
+    else
+        dossier_agent=$(echo "$chemin_posix" | sed -n 's|.*/agents/\([a-z0-9-]*\)/.*|\1|p')
+        case "$dossier_agent" in
+            regles-immuables|classeur-variables|traces|lecons|habilitation|conventions)
+                TYPE=""
+                ;;
+            *)
+                if [[ -n "$dossier_agent" ]]; then
+                    TYPE="agent"
+                fi
+                ;;
+        esac
+    fi
+    if [[ -z "$TYPE" ]]; then
+        echo -e "${BLUE}[OUTIL] Correction du nommage : $(basename "$FICHIER")${NC}"
+        echo ""
+        echo -e "  ${GREEN}[OK] Aucune correction necessaire (type non specifie et non detectable depuis le chemin)${NC}"
+        exit 0
+    fi
+    echo -e "${YELLOW}[AUTO] Type detecte depuis le chemin : ${TYPE}${NC}"
 fi
+
+# Garde anti-renommage : extension compatible avec le type
+case "$TYPE" in
+    protocole|agent|convention)
+        if [[ "$(basename "$FICHIER")" != *.md ]]; then
+            echo -e "${BLUE}[OUTIL] Correction du nommage : $(basename "$FICHIER")${NC}"
+            echo ""
+            echo -e "  ${GREEN}[OK] Aucune correction necessaire (extension hors perimetre du type ${TYPE})${NC}"
+            exit 0
+        fi
+        ;;
+    outil)
+        if [[ "$(basename "$FICHIER")" != *.sh && "$(basename "$FICHIER")" != *.py && "$(basename "$FICHIER")" != *.md ]]; then
+            echo -e "${BLUE}[OUTIL] Correction du nommage : $(basename "$FICHIER")${NC}"
+            echo ""
+            echo -e "  ${GREEN}[OK] Aucune correction necessaire (extension hors perimetre du type outil)${NC}"
+            exit 0
+        fi
+        ;;
+esac
 
 # Execution selon le type
 case $TYPE in

@@ -1,7 +1,7 @@
 # demarrer-llm -- DEMARRAGE EXCLUSIF DU LLM
 
 > **Ni v1, ni v2.** Cet outil vit dans `outils-llm/` a la racine du projet,
-> hors de `cerveau-projet/agents/` (v1) et hors de `cerveau-projet/freelance/` (v2).
+> hors de `cerveau-projet/agents/` et hors de `cerveau-projet/freelance/`.
 > Il est exclusif au demarrage d'une session LLM : le LLM ne doit PLUS
 > reflechir ni poser de question au demarrage -- il suit les ordres.
 
@@ -37,8 +37,8 @@ python3 outils-llm/demarrer-llm.py <id> <session>
 Exemples :
 
 ```bash
-python3 outils-llm/demarrer-llm.py glm5 admin       # session-admin (equipe v1)
-python3 outils-llm/demarrer-llm.py freebuff freelance  # session-freelance (equipe v2)
+python3 outils-llm/demarrer-llm.py glm5 admin       # session-admin (equipe du cerveau-projet)
+python3 outils-llm/demarrer-llm.py freebuff freelance  # session-freelance (equipe independante)
 ```
 
 Options : `--help` / `-h` (aide), `--version`.

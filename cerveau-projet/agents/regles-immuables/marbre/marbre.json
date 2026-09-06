@@ -8,9 +8,9 @@
    "marqueur_debut": "<!-- MARBRE:DEBUT constitution -->",
    "marqueur_fin": "<!-- MARBRE:FIN constitution -->",
    "raison": "Constitution du cerveau-projet : Configuration Active + cycle fondamental (regles immuables du comportement de Cerberus)",
-   "empreinte": "d49d5550070a0b7cf763b47d0543fa3aebc93847526b28f37f0133b42c987667",
-   "modifie_le": "2026-09-02 09:44:16",
-   "raison_modification": "ajout des 2 regles permanentes de round (reprise apres redemarrage + mode single-llm) dans la Configuration Active d AGENTS.md - decision utilisateur 2026-09-02"
+   "empreinte": "6ab8ecf98a4edc83a67d7f6bae33270c5c39683be4eae47824d67c2d2d4a6968",
+   "modifie_le": "2026-09-05 19:53:38",
+   "raison_modification": "Ajout regle 3 TRAVAIL EN SERIE OBLIGATOIRE en mode single-llm (decision utilisateur 2026-09-05, proposition Gardien validee par l utilisateur)"
   },
   "regles-groupes-agents": {
    "fichier": "cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md",

@@ -24,9 +24,9 @@ identite:
 | **Langages** | Bash, Python, Markdown |
 | **Point d'entree** | `demarrer.md` (a lire en premier) |
 | **Fichiers racine** | `AGENTS.md` (sessions), `README.md` (public), `cerveau-projet/` (le cerveau) |
-| **Agents** | 19 agents + classeur-variables (voir section 4) |
-| **Outils** | 164 outils dans 39 categories (voir section 6) |
-| **Cartes de decision** | 16 parcours JSON (voir section 5) |
+| **Agents** | 22 agents + classeur-variables (voir section 4) |
+| **Outils** | 177 outils dans 41 categories (voir section 6) |
+| **Cartes de decision** | 22 arbres v2, un par agent (voir section 5) |
 | **Tests** | 97 tests de non-regression |
 | **Protocoles** | 36 protocoles |
 | **Regles** | 75 regles immuables |
@@ -139,14 +139,21 @@ Quand un agent est active en inter-round, il repond `inter-round` a sa
 question de mission (c1) et suit la case c1ir : accuser reception du
 rapport KO ; c'est le pilote qui renvoie l'appelant en fin d'inter-round.
 
-### 3.4 Lancer plusieurs LLM en parallele
+### 3.4 TRAVAIL EN SERIE OBLIGATOIRE (mode single-llm)
 
-Je suis **multi-session** : plusieurs LLM peuvent travailler sur le
-meme projet. Chaque LLM s'identifie -> obtient SA session (`session-llm-N`)
--> demarre comme Cerberus. Le cycle se deroule DANS la session :
+Je suis **multi-session** : chaque LLM possede SA session et SON agent
+principal dans `AGENTS.md`. Le cycle se deroule DANS la session :
 `activer <session> <agent> <raison>` puis `reactiver <session> <raison>
 <agent>`. L'historique (`AGENTS-historique.md`) identifie chaque
 intervention par sa session : `| date | session | agent | raison |`.
+
+> **DECISION UTILISATEUR 2026-09-05 (TRAVAIL EN SERIE OBLIGATOIRE)** : en
+> mode single-llm, le travail en parallele n'existe PAS. Un SEUL agent est
+> incarne a la fois, jamais 2 missions relayees simultanement. Chaque
+> mission est relayee une par une : l'agent termine, sa fin va vers ORACLE
+> (reactiver-fin --cible oracle), le pilote decide du suivant, puis la
+> mission suivante est relayee. Aucune instruction ne doit autoriser le
+> multi-relais ou le travail en parallele dans une session single-llm.
 
 | Etape | Action |
 |---|---|
@@ -155,6 +162,7 @@ intervention par sa session : `| date | session | agent | raison |`.
 | 3 | Cerberus analyse le besoin et active l'agent habilite |
 | 4 | L'agent execute sa mission en suivant SA carte |
 | 5 | La fin suit SA carte : reactiver-fin <agent> --cible oracle (le pilote decide du suivant) |
+| 6 | Une SEULE mission a la fois : la suivante n'est relayee qu'apres la fin de la precedente |
 
 ---
 
@@ -183,6 +191,9 @@ Source : `AGENTS.md` (liste des agents) + chaque fiche `[agent].md`.
 | **Socrate** | Conversateur de revision strategique | Revision, priorisation, liste de missions pour Cerberus |
 | **Redacteur-v2** | Redacteur PRO des docs de la v2 (freelance) - mode conversation | Redaction des docs v2 sur activation ; reste actif en conversation, reactive Cerberus sur fin de cycle |
 | **Hades** | Gardien des archives git - SEUL habilite aux commandes git | Commandes git (log, status, diff, checkout fichiers recents) |
+| **Ferrari** | Agent v1 specialise freelance (double identite v1/v2) | Intervenir cote v1 sur les fichiers du dossier freelance/ (couche superieure, invisible des agents v2) |
+| **Nemesis** | Analyste en Chef - avis contradictoire avant validation | Avis contradictoire sur toute proposition avant validation (audite, ne corrige jamais) |
+| **Oracle** | Coordinateur de l'equipe v1 (session-admin) - pilote le flux entre les agents | Coordination : activations, historisation debut/fin, controle processus, roulage messages |
 | **Shuri** | Constructeur des agents de la v2 (freelance) - mode conversation (MARVEL) | Construction complete d'agents v2 sur activation ; reste actif en conversation, reactive Cerberus sur fin de cycle |
 
 > **Note** : le dossier `cerveau-projet/agents/classeur-variables/` est un
@@ -249,18 +260,15 @@ Chaque besoin d'un theme porte les indications exactes a appliquer :
 Ma boite a outils partagee, organisee par **action** (chaque dossier = ce que
 fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 
-**165 outils dans 39 categories** :
+**177 outils dans 41 categories** :
 
 | Categorie | Nb | Exemples |
 |---|---|---|
 | Activer | 1 | activer-agent-principal |
-| Coordination | 1 | Oracle (hub v1, equivaut a JARVIS v2) |
 | Ajouter | 1 | ajouter-contenu-fichier |
 | Analyser | 9 | analyser-dependances, analyser-fonctions, analyser-io-tests, analyser-performance-tests, analyser-round, analyser-structure, analyser-tokens, analyser-workers, analyser-noms-maj |
-| Cartographier | 1 | cartographier-parcours |
 | Changer | 1 | changer-statut |
 | Chronometrer | 1 | chronometrer-duree |
-| Combos | 21 | combos-moteur, combo-maj-readme, combos-analyse-projet |
 | Condenser | 1 | condenser-fichier |
 | Configurer | 1 | configurer-environnement |
 | Consulter | 3 | consulter-lecons, consulter-combos |
@@ -269,31 +277,34 @@ fait l'outil). Source de verite : `cerveau-projet/agents/tools/index-tools.md`.
 | Creer | 4 | creer-fichier, creer-remplir-* |
 | Decomposer | 1 | decomposer-fichier |
 | Deplacer | 1 | deplacer-fichier |
-| Detecter | 19 | detecter-cablages-manquants, detecter-residus, detecter-fautes-orthographe, detecter-processus-residuels, detecter-contradictions, detecter-ecritures-hors-cycle, detecter-donnees-en-dur |
+| Detecter | 20 | detecter-cablages-manquants, detecter-residus, detecter-fautes-orthographe, detecter-processus-residuels, detecter-contradictions, detecter-ecritures-hors-cycle, detecter-donnees-en-dur |
 | Ecrire | 1 | ecrire-fichier |
-| Editer | 3 | editer-fichier, editer-parcours |
+| Editer | 2 | editer-fichier, editer-parcours |
 | Enregistrer | 2 | enregistrer-usage-outil, enregistrer-lecon |
 | Evaluer | 7 | evaluer-agents, evaluer-coherence, evaluer-processus, evaluer-rating |
-| Executer | 1 | executer-script-temporaire (ENTONNOIR) |
-| Generateurs | 10 | generateurs-commande, generateurs-amelioration |
+| Executer | 2 | executer-script-temporaire (ENTONNOIR) |
+| Generateurs | 7 | generateurs-commande, generateurs-amelioration |
 | Gerer | 1 | gerer-sous-mission |
 | Git | 1 | hades-contexte-git |
-| Guider | 2 | guider-parcours (archive v1), guider-arbre (v2) |
+| Guider | 1 | guider-parcours (archive v1), guider-arbre (v2) |
 | Inserer | 1 | inserer-contenu-fichier |
 | Lire | 5 | lire-fichier, lire-activite-recente |
-| Lister | 8 | lister-agents, lister-outils |
+| Lister | 9 | lister-agents, lister-outils |
 | Mettre a jour | 2 | mettre-a-jour-readme, mettre-a-jour-versions |
-| Migrer | 2 | migrer-identite, migrer-cases-relecture |
+| Migrer | 1 | migrer-identite, migrer-cases-relecture |
 | Nettoyer | 4 | nettoyer-fichier, nettoyer-processus-residuels, nettoyer-sessions, snapshot-nettoyage |
+| Oracle | 12 | cerveau-projet, data, etat-cartes, files, fonctions, historique, inbox, observations, outbox, pilote, routines, super-co, ... |
+| Presenter | 1 | presenter-agent |
 | Proteger | 3 | proteger-verrou-habilitation, proteger-verrou-marbre, proteger-modifier-marbre |
 | Purifier | 1 | purifier-rvav |
 | Rechercher | 11 | rechercher-texte, rechercher-fichier, rechercher-web |
 | Remplacer | 1 | remplacer-texte |
 | Supprimer | 3 | supprimer-fichier, supprimer-ligne |
-| Templates | 1 | outil-template |
 | Tester | 3 | tester-protection-blocage, tester-protection-boucles-infinies, tester-protection-erreurs-silencieuses |
-| Valider | 13 | valider-cartes-decision, valider-case |
-| Verifier | 6 | verifier-conformite-fiche, verifier-systeme |
+| Valider | 12 | valider-cartes-decision, valider-case |
+| Verifier | 9 | verifier-conformite-fiche, verifier-systeme |
+| Combos | 21 | combos-moteur, combo-maj-readme, combos-analyse-projet |
+| Templates | 1 | outil-template |
 
 **Principes** :
 - Les agents utilisent **exclusivement leurs propres outils** (regle absolue 4),

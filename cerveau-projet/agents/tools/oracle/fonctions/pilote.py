@@ -12,6 +12,9 @@ et avance seul jusqu a une vraie decision libre.
 
 v0.2.0 : support du format arbre v2-like (racine -> theme -> redirects
 -> fins centralisees). Detection auto du format depuis identite.type.
+v0.2.5 : protocole langue utilisateur (USER-PROFIL.md racine) - le pilote
+injecte un rappel de langue en tete des messages servis pour que l agent
+ne derive jamais dans une autre langue que celle de l utilisateur.
 v0.2.4 : reinitialisation verifiee des cartes lors des relais et repli
 ATTENTION vers AUTRE pour les arbres qui ne declarent pas cette branche.
 v0.2.1 : modele aero (2026-08-30) - cible=oracle gere dans
@@ -38,7 +41,7 @@ L etat de carte est persiste dans oracle/etat-cartes/<agent>.json :
     "etape": "travail" | "fin" | "autre"
   }
 
-Proprietaire : Vulcain (outils v1). Version : 0.2.4.
+Proprietaire : Vulcain (outils v1). Version : 0.2.5.
 
 REPARATION DES ARBRES : si un pilote s arrete sur 'theme <type> non reconnu
 dans la racine', suivre le protocole dedie (aligner la racine de l arbre sur
@@ -49,11 +52,12 @@ cerveau-projet/agents/regles-immuables/general/protocole-reparer-arbres/
 import io
 import json
 import os
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.2.4"
+VERSION = "0.2.5"
 
 # Racine du projet : oracle/fonctions -> outils -> agents -> cerveau-projet -> racine
 _RACINE = Path(__file__).resolve().parents[4]
@@ -881,6 +885,62 @@ def _substituer_placeholders(cmd, agent, mission=""):
 _RACINE_PROJET = Path(__file__).resolve().parents[5]
 
 
+def _rappel_langue():
+    """Rappel de langue de l utilisateur (USER-PROFIL.md racine).
+
+    Lit la fiche racine USER-PROFIL.md (champ Langue du tableau) et
+    retourne le message de rappel injecte par le pilote en tete des
+    messages servis, ou [] si absent. But : l agent ne doit JAMAIS
+    deriver dans une autre langue que celle de l utilisateur
+    (decision utilisateur 2026-09-05).
+    """
+    profil = _RACINE_PROJET / "USER-PROFIL.md"
+    langue = None
+    if profil.is_file():
+        try:
+            for ligne in profil.read_text(encoding="utf-8").splitlines():
+                m = re.match(r"^\|\s*Langue\s*\|\s*([^|]+?)\s*\|", ligne)
+                if m:
+                    langue = m.group(1).strip()
+                    break
+        except (OSError, ValueError):
+            langue = None
+    if not langue:
+        return []
+    return ["[LANGUE] Repondre dans la langue de l utilisateur : %s" % langue]
+
+
+def _texte_langue():
+    """Ligne de rappel de langue, ou '' si USER-PROFIL.md absent."""
+    lignes = _rappel_langue()
+    return lignes[0] if lignes else ""
+
+
+def _prefixe_mission(mission):
+    """Prefixer un texte de mission avec le rappel de langue.
+
+    Utilise par oracle.py (_envoyer_direct) pour que la mission relayee
+    porte aussi le rappel de langue dans l inbox de l agent.
+    """
+    texte = _texte_langue()
+    if not texte:
+        return mission
+    return texte + "\n" + mission
+
+
+def _sans_prefixe_langue(corps):
+    """Retirer une eventuelle ligne de rappel de langue en tete d un corps.
+
+    Utilise par files.py (_consommer_notification_mission) pour comparer
+    le corps du message a la mission relayee en ignorant le prefixe.
+    Tolerant : corps sans prefixe = retourne tel quel.
+    """
+    lignes = (corps or "").split("\n")
+    if lignes and lignes[0].strip().startswith("[LANGUE]"):
+        return "\n".join(lignes[1:]).strip()
+    return corps
+
+
 def _resoudre_chemins(cmd):
     """Resoudre les chemins relatifs dans une commande.
 
@@ -1167,7 +1227,7 @@ def _piloter_arbre(arbre, arbre_dir, etat, agent, limite):
     fins_fichier = fins_ref.get("fichier", "fins.json")
     fins_data = _charger_fichier(arbre_dir, fins_fichier)
 
-    messages = []
+    messages = _rappel_langue()
     theme_courant = etat.get("theme_courant")
 
     # Premiere execution : resoudre la racine
@@ -1181,7 +1241,7 @@ def _piloter_arbre(arbre, arbre_dir, etat, agent, limite):
             _sauver_etat(etat)
             return {
                 "etat": etat,
-                "messages": ["DECISION LIBRE : theme '%s" % etat.get("mission_type", "?") +
+                "messages": _rappel_langue() + ["DECISION LIBRE : theme '%s" % etat.get("mission_type", "?") +
                              "' non reconnu dans la racine. Laisser la main a l agent."]
             }
         theme_courant = vers
@@ -1247,7 +1307,7 @@ def pilote(agent, parcours_perso=None, limite=float("inf")):
     if etat.get("etape") == "fin" and etat.get("historise_fin"):
         return {
             "etat": etat,
-            "messages": [
+            "messages": _rappel_langue() + [
                 "[PILOTE] Mission deja terminee (etape=fin, FIN posee).",
                 "[PILOTE] Aucun nouveau travail a servir : la suite suit SA carte",
                 "(reactiver-fin %s --cible oracle)." % agent,
@@ -1276,7 +1336,7 @@ def pilote(agent, parcours_perso=None, limite=float("inf")):
     if cid not in cases:
         cid = meta.get("case_depart") or "c0"
 
-    messages = []
+    messages = _rappel_langue()
     pas = 0
 
     while pas < limite:

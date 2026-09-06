@@ -66,10 +66,10 @@
         "regle": "REPRISE : apres resolution du probleme outil, je reprends exactement ou j en etais."
       },
       {
-        "besoin": "Ajouter les lecons dans corrections.md",
+        "besoin": "Ajouter les lecons dans la BDD v1 (corrections.md gele)",
         "action": "procedure",
-        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/gardien/corrections.md <lecon>"],
-        "regle": "PROTOCOLE FIN-MISSION."
+        "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent gardien --domaine <domaine> --lecon <texte>"],
+        "regle": "PROTOCOLE FIN-MISSION : lecon dans la BDD v1 (corrections.md gele depuis 2026-09-04, decision v1->v2)."
       }
     ]
   },

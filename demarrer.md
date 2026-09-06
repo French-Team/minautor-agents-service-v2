@@ -37,8 +37,8 @@ parcours.
 ## ORDRE 3 -- SUIS LE RESULTAT DE L'OUTIL
 
 L'outil te dit QUI tu es (agent actif), TA fiche, TES corrections et TON
-parcours. Execute exactement ce qu'il affiche : relis TA fiche puis TES
-corrections, puis suis TON parcours/arbre.
+arbre. Execute exactement ce qu'il affiche : relis TA fiche puis TES
+corrections, puis suis TON arbre.
 
 REGLE : NE DEMANDE JAMAIS "Que souhaitez-vous faire ?" -- la seule action
 possible a ce stade est d executer l outil de demarrage. Execute-le.
@@ -75,6 +75,12 @@ possible a ce stade est d executer l outil de demarrage. Execute-le.
   puis SES corrections, executer SA mission, rendre SA fin vers ORACLE).
 - AUCUNE fin passive n est acceptee : chaque fin reactiver-fin <agent> va
   vers ORACLE, le pilote decide, et TU JOUES le maillon largue.
+- TRAVAIL EN SERIE OBLIGATOIRE (decision utilisateur 2026-09-05) : un SEUL
+  agent est incarne a la fois - le travail en parallele n existe PAS. Une
+  seule mission est relayee a la fois : elle doit etre TERMINEE (fin vers
+  ORACLE) avant de relayer la suivante. JAMAIS 2 missions relayees
+  simultanement. Les missions en file se traitent une par une, en serie
+  stricte, jusqu a la fin de chaine.
 - Le round continue jusqu a la fin de chaine (bilan consolide -> Cerberus).
 - Le mode reste actif jusqu a ce que l utilisateur dise le contraire.
 

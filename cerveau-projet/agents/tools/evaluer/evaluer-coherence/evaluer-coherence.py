@@ -20,7 +20,7 @@ Options :
 Retour: 0 toujours (outil d'evaluation, rapport sur stdout).
 
 Proprietaire : Themis (outil partage)
-Version : 0.2.5-py
+Version : 0.3.0-py
 Statut : beta
 """
 
@@ -30,7 +30,7 @@ import os
 import re
 import sys
 
-VERSION = "0.2.5-py"
+VERSION = "0.3.0-py"
 STATUT = "beta"
 
 # Couleurs ANSI : desactivees si la sortie n'est pas un terminal (capture,
@@ -49,6 +49,12 @@ MOTIFS_GENERIQUES = ('texte', 'chemin', 'ancien.md', 'nouveau.md', 'perdu.md',
                      'protocole-X')
 
 PATTERN_LIEN = re.compile(r"\[[^]]+\]\(([^)]+)\)")
+
+# Lignes de tableau de versioning (changelog) : | x.y.z | date | description...
+# Les liens cites dans ces lignes sont des exemples/historique documentaires,
+# pas des liens reels vers des fichiers existants (decision utilisateur
+# 2026-09-05, rapport Themis evaluation-croisee-periodique-2026-09-05-1835.md).
+PATTERN_LIGNE_VERSIONING = re.compile(r"^\|\s*\d+\.\d+\.\d+")
 
 AGENTS_ATTENDUS = ["argus", "cerberus", "buffy", "athena", "atlas", "clio",
                    "janus", "minerve", "morpheus", "promethee", "vulcain",
@@ -127,6 +133,9 @@ def lister_liens_casses(racine, racine_projet=None):
                     dans_bloc = not dans_bloc
                     continue
                 if dans_bloc:
+                    continue
+                # Ignorer les lignes de tableau de versioning (changelog)
+                if PATTERN_LIGNE_VERSIONING.match(ligne.strip()):
                     continue
                 for m in PATTERN_LIEN.finditer(ligne):
                     chemin = m.group(1).strip()

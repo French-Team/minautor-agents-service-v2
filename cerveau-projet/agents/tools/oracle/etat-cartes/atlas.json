@@ -1,0 +1,12 @@
+{
+ "agent": "atlas",
+ "parcours": "agents/atlas/parcours/arbre-atlas.json",
+ "case_courante": null,
+ "mission_type": "explorer",
+ "mission": "VERIFIER LES OUTILS LLM A METTRE A JOUR (point 1/3, demande utilisateur) : inventaire/analyse du dossier outils-llm/ (racine) : demarrer-llm.py/md, fermer-session.py/md, redemarrer-session.py/md, nettoyer-session.py/md + tests/ - identifier QUELS outils LLM referencent un modele/version obsolete ou a mettre a jour (id LLM glm5, references de session, versions pinnees dans les .md), lister les ecarts (fichier, ligne, ancien -> nouveau attendu) et produire un rapport d inventaire dans atlas/rapports/. INVENTAIRE SEUL - NE PAS modifier les outils (les mises a jour viendront ensuite via Vulcain). A la fin : suis TA carte (Pattern 13).",
+ "historise_debut": true,
+ "precedent": null,
+ "etape": "fin",
+ "historise_fin": true,
+ "theme_courant": null
+}

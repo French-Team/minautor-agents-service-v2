@@ -165,7 +165,7 @@ def _charger_json(chemin):
 
 def valider_arbre_v2(chemin, nom_display, agent=None):
     """Valide un arbre v2 (arbre-<agent>.json : racine/branches -> themes
-    -> fins centralisees). C est le format SERVI par le pilote v0.2.4
+    -> fins centralisees). C est le format SERVI par le pilote v0.2.5
     (detection auto : identite.type == 'arbre'). Retourne 0 si conforme.
 
     Points de controle :

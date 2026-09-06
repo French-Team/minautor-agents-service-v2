@@ -37,7 +37,7 @@
         "besoin": "Lire les interventions pour savoir ce qui a change",
         "action": "procedure",
         "etapes": [
-          "python3 cerveau-projet/agents/tools/metmettre-a-jour-readme/metmettre-a-jour-readme.py --journal"
+          "python3 cerveau-projet/agents/tools/mettre-a-jour-readme/mettre-a-jour-readme.py --journal"
         ],
         "regle": "RECHERCHE : lire les interventions AVANT de corriger."
       },
@@ -45,7 +45,7 @@
         "besoin": "Verifier les ecarts entre etat reel et README",
         "action": "procedure",
         "etapes": [
-          "python3 cerveau-projet/agents/tools/metmettre-a-jour-readme/metmettre-a-jour-readme.py --verifier"
+          "python3 cerveau-projet/agents/tools/mettre-a-jour-readme/mettre-a-jour-readme.py --verifier"
         ],
         "regle": "VERIFICATION : comparer etat reel vs README AVANT de corriger."
       },
@@ -53,7 +53,7 @@
         "besoin": "Mettre a jour les compteurs et badges",
         "action": "procedure",
         "etapes": [
-          "python3 cerveau-projet/agents/tools/metmettre-a-jour-readme/metmettre-a-jour-readme.py --maj"
+          "python3 cerveau-projet/agents/tools/mettre-a-jour-readme/mettre-a-jour-readme.py --maj"
         ],
         "regle": "MISE A JOUR : compter les agents, outils, tests, protocoles, regles AVANT de mettre a jour les badges."
       },

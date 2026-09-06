@@ -66,5 +66,17 @@
  "09:06:10.732|flux|Aucun P1 non-acquitte (probleme regle)": "2026-09-04T09:14:14",
  "09:22:17.264|flux|Aucun P1 non-acquitte (probleme regle)": "2026-09-04T09:38:23",
  "19:41:52.579|flux|1 P1 non-acquitte(s) detecte(s)": "2026-09-04T19:41:52",
- "19:57:59.274|flux|Aucun P1 non-acquitte (probleme regle)": "2026-09-04T20:06:02"
+ "19:57:59.274|flux|Aucun P1 non-acquitte (probleme regle)": "2026-09-04T20:06:02",
+ "18:53:54.338|flux|2 P1 non-acquitte(s) detecte(s)": "2026-09-05T19:01:57",
+ "19:18:05.671|flux|2 P1 non-acquitte(s) detecte(s)": "2026-09-05T19:26:08",
+ "19:10:02.617|flux|3 P1 non-acquitte(s) detecte(s)": "2026-09-05T19:26:08",
+ "19:50:17.822|flux|4 P1 non-acquitte(s) detecte(s)": "2026-09-05T19:50:18",
+ "19:42:14.519|flux|3 P1 non-acquitte(s) detecte(s)": "2026-09-05T19:50:18",
+ "19:34:11.704|flux|Aucun P1 non-acquitte (probleme regle)": "2026-09-05T19:50:18",
+ "20:14:27.730|flux|2 P1 non-acquitte(s) detecte(s)": "2026-09-05T20:14:28",
+ "19:58:21.875|flux|3 P1 non-acquitte(s) detecte(s)": "2026-09-05T20:14:28",
+ "20:38:37.583|flux|3 P1 non-acquitte(s) detecte(s)": "2026-09-05T20:38:37",
+ "21:18:56.314|flux|1 P1 non-acquitte(s) detecte(s)": "2026-09-05T21:27:00",
+ "21:10:52.661|flux|2 P1 non-acquitte(s) detecte(s)": "2026-09-05T21:27:00",
+ "23:12:34.289|flux|Aucun P1 non-acquitte (probleme regle)": "2026-09-05T23:28:09"
 }

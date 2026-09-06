@@ -6,7 +6,7 @@
  "mission": null,
  "historise_debut": false,
  "precedent": "oracle",
- "etape": null,
- "historise_fin": false,
+ "etape": "fin",
+ "historise_fin": true,
  "theme_courant": null
 }

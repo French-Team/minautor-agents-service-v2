@@ -32,7 +32,7 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 
-VERSION = "0.5.12"
+VERSION = "0.5.13"
 
 # Modules fonctions
 _fonctions_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -129,11 +129,19 @@ def _cmd_mission_relais(args):
 
 
 def _envoyer_direct(agent, mission):
-    """Envoyer un message Oracle->agent sans duplicata de mission."""
+    """Envoyer un message Oracle->agent sans duplicata de mission.
+
+    La mission relayee est prefixee du rappel de langue (USER-PROFIL.md,
+    decision utilisateur 2026-09-05) pour que l agent voie la langue
+    des la reception, avant meme le pilote. L anti-doublon compare en
+    ignorant ce prefixe (symetrique de _consommer_notification_mission).
+    """
     cible = INBOX_DIR / f"{agent}.jsonl"
+    corps = _pilote._prefixe_mission(mission)
     for ancien in _lire_messages_fichier(cible):
         if (ancien.get("de") == "oracle" and ancien.get("vers") == agent
-                and ancien.get("corps") == mission and not ancien.get("accuse")):
+                and _pilote._sans_prefixe_langue(ancien.get("corps")) == mission
+                and not ancien.get("accuse")):
             print("[ORACLE] Mission deja en attente pour %s (pas de doublon)" % agent)
             return ancien
     msg = {
@@ -143,7 +151,7 @@ def _envoyer_direct(agent, mission):
         "priorite": 1,
         "date": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
         "objet": "MISSION pour %s" % agent,
-        "corps": mission,
+        "corps": corps,
         "lu": False,
         "accuse": False,
         "requis_accuse": True,

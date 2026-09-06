@@ -3,10 +3,12 @@
  "parcours": "agents/morpheus/parcours/arbre-morpheus.json",
  "case_courante": null,
  "mission_type": "tester",
- "mission": "MIGRATION v1->v2 ETAPE D : garde-fous et tests (D.1-D.4, mission 85b4545d)",
+ "mission": "TESTER (inter-round, suite mission 8ed06172 Vulcain) : garde-fou du correctif corriger-nommage v0.3.1 (--type optionnel + auto-detection par chemin). Verifier : 1) corriger-nommage SANS --type retourne 0 (pas code 2) sur un .md d'outil (agents/tools/...) et sur un .json de parcours (agents/<agent>/parcours/...) - AUCUN renommage de .json ; 2) auto-detection par chemin : agents/tools/ -> outil, agents/conventions/ -> convention, protocole-* -> protocole, agents/<agent>/ -> agent ; 3) --type explicite conserve le comportement historique (--type outil .py OK) ; 4) parite py/sh : memes resultats sur les 4 cas ; 5) ASCII 0/0 + LF pur sur corriger-nommage.py/.sh/.md ; 6) le combo-corriger-fichier passe de bout en bout (rc 0) sur un .md et sur un .json (c1 ne plante plus). Numero de test : prochain libre. A la fin : fin vers ORACLE.\n=== OUTILS A UTILISER (injectes par le pilote) ===\n[OUTIL] corriger-nommage -- Corriger le nommage des fichiers selon les conventions\n  Flags : type (texte, optionnel)\n  Pour etre guide : python3 cerveau-projet/agents/tools/executer/executer-formulaire/executer-formulaire.py --outil corriger-nommage --schema",
  "historise_debut": true,
- "precedent": "Cerberus",
+ "precedent": null,
  "etape": "fin",
  "historise_fin": true,
- "theme_courant": null
+ "theme_courant": "theme-tester.json",
+ "redirect_idx": 6,
+ "etape_idx": 0
 }

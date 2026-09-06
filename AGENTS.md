@@ -23,18 +23,25 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | glm5 |
-| **Nom Agent** | Cerberus |
-| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Nom Agent** | oracle |
+| **Role Agent** | Coordinateur de l'equipe v1 (session-admin) -- traite les alertes de coordination (processus fantomes, serveurs morts, roulage messages) + controle processus |
 | **Derniere mise a jour** | 2026-09-05 |
-| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
-| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
-| **Active par** | janus (retour de mission) |
-| **Raison** | Suite complete lancee par janus : 107 tests OK / 0 KO (fin migration v1->v2 2026-09-05). |
+| **Fiche** | [cerveau-projet/agents/oracle/oracle.md](cerveau-projet/agents/oracle/oracle.md) |
+| **Corrections** | [cerveau-projet/agents/oracle/corrections.md](cerveau-projet/agents/oracle/corrections.md) |
+| **Active par** | Cerberus (automatique) |
+| **Raison** | RETOUR CLIO : GROSSE MAJ DES README (point 2/3, mission 5c301d82) TERMINEE. Livrables : (1) README public coherent : table 'Mes agents' complete (22 agents, roles concis canoniques : Ferrari v1 specialise freelance, Nemesis Analyste en Chef, Oracle coordinateur), narratifs 22 agents / 97 tests, lignes orphelines 3 colonnes en fin de Vocabulaire supprimees. (2) readme-dev : section 4 complete (Ferrari/Nemesis/Oracle ajoutes), section 1 (22 agents, 177 outils/41 categories, 22 arbres v2, 97 tests), tableau section 6 reconstruit et verifie. (3) OUTIL mettre-a-jour-readme REPARE ET RECONSTRUIT en 0.4.8 (py + sh + md) : le verifier/maj cherchait les agents dans tout le fichier (mentions narratives et orphelins masquaient les absents de la table) -> verification restreinte a la region '## Mes agents', insertion 2 colonnes en fin de table ; badges Outils/Agents alignes affichage+href ; readme-dev corrige par --maj (tableau section 6 + synthese section 1) ; exclusion __pycache__ du compte outils ; parite .sh (cache compteurs + bash pur, migration v2 arbre). INCIDENT TRANSPARENT : un 'git checkout' sur le dossier outil (artefact .pyc tracke) avait restaure l outil en 0.4.5 -- reconstruction complete re-appliquee et validee (verifier vert, idempotence md5, parite py/sh sur copie defectueuse, ASCII OK). Point 3/3 restant : discussion du dossier 'matrix' (plan utilisateur). |
+
+DEMARRAGE OBLIGATOIRE (v2) : lance ton arbre des decisions avec :
+python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py \
+  cerveau-projet/agents/oracle/parcours/arbre-oracle.json
+(racine : choisis TON theme selon ta mission, puis suis les besoins /
+procedures du theme ; Oracle te pilote via l arbre ;
+si tu reprends apres une interruption, relance l arbre et poursuis).
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-admin | glm5 | Cerberus | 2026-09-05 14:16:58.859 |
+| session-admin | glm5 | oracle | 2026-09-05 23:06:10.887 |
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus
@@ -74,8 +81,15 @@ CERBERUS -> AGENT -> CERBERUS
    passe en arriere-plan) : apres chaque activation il joue immediatement le
    role de l agent active (relecture fiche/corrections, mission, fin vers
    ORACLE), jusqu a la fin de chaine (bilan consolide -> Cerberus).
+3. **TRAVAIL EN SERIE OBLIGATOIRE (decision utilisateur 2026-09-05)** : en
+   mode single-llm, un SEUL agent est incarne a la fois -- le travail en
+   parallele n existe PAS. Une seule mission est relayee a la fois : elle
+   doit etre TERMINEE (fin vers ORACLE) avant de relayer la suivante.
+   Jamais 2 missions relayees simultanement (ex: relayer Atlas ET Clio en
+   meme temps = violation). Les missions en file se traitent une par une,
+   en serie stricte, jusqu a la fin de chaine (bilan consolide -> Cerberus).
 
-> Ces 2 regles sont aussi gravees dans `demarrer.md` (ORDRE 4 et ORDRE 5) :
+> Ces 3 regles sont aussi gravees dans `demarrer.md` (ORDRE 4 et ORDRE 5) :
 > elles sont donc lues a chaque demarrage de session, en plus d ici.
 <!-- MARBRE:FIN constitution -->
 

@@ -1,8 +1,8 @@
 #!/bin/bash
 # mettre-a-jour-readme.sh
 # Outil pour corriger le README afin qu'il reflete l'etat reel du projet
-# Version : 0.4.5
-# Statut : ebauche
+# Version : 0.4.8
+# Statut : prepare
 # Proprietaire : Clio (agent dedie au README)
 
 # Configuration
@@ -10,9 +10,10 @@
 #   type: outil
 #   appartient_a: commun
 #   commun: true
-VERSION="0.4.5"
-STATUT="ebauche"
+VERSION="0.4.8"
+STATUT="prepare"
 README="README.md"
+README_DEV="cerveau-projet/readme-dev.md"
 HISTORIQUE="AGENTS-historique.md"
 AGENTS_DIR="cerveau-projet/agents"
 TOOLS_DIR="cerveau-projet/agents/tools"
@@ -58,8 +59,9 @@ compter_agents() {
         [ -d "$d" ] || continue
         local nom=$(basename "$d")
         [ "$nom" != "tools" ] || continue
-        # Un agent d action a un parcours JSON : agents/<nom>/parcours/parcours-<nom>.json
-        [ -f "$AGENTS_DIR/$nom/parcours/parcours-$nom.json" ] || continue
+        # Un agent d action a un arbre v2 : agents/<nom>/parcours/arbre-<nom>.json
+        # (migration v1->v2 : les parcours v1 sont retires)
+        [ -f "$AGENTS_DIR/$nom/parcours/arbre-$nom.json" ] || continue
         nb=$((nb + 1))
     done
     echo "$nb"
@@ -71,8 +73,9 @@ lister_agents_reels() {
         [ -d "$d" ] || continue
         local nom=$(basename "$d")
         [ "$nom" != "tools" ] || continue
-        # Un agent d action a un parcours JSON : agents/<nom>/parcours/parcours-<nom>.json
-        [ -f "$AGENTS_DIR/$nom/parcours/parcours-$nom.json" ] || continue
+        # Un agent d action a un arbre v2 : agents/<nom>/parcours/arbre-<nom>.json
+        # (migration v1->v2 : les parcours v1 sont retires)
+        [ -f "$AGENTS_DIR/$nom/parcours/arbre-$nom.json" ] || continue
         echo "$nom"
     done
 }
@@ -82,45 +85,18 @@ lire_role_agent() {
     local agent="$1"
     local fiche="$AGENTS_DIR/$agent/$agent.md"
     if [ -f "$fiche" ]; then
-        grep -E '^[[:space:]]*role_specifique:' "$fiche" | head -1 | sed 's/.*: *//; s/["'"'"']//g' | tr -d '\r'
+        grep -E '^[[:space:]]*role_specifique:' "$fiche" | head -1 \
+            | sed 's/^[[:space:]]*role_specifique:[[:space:]]*//' \
+            | tr -d '"' | tr -d "'" | tr -d '\r'
     fi
 }
 
-# Compter les outils d'une categorie (chaque outil = un sous-dossier)
-compter_outils_categorie() {
-    local categorie="$1"
-    local dir="$TOOLS_DIR/$categorie"
-    local nb=0
-    # Cas special templates : outil-template (fichiers a la racine de tools/)
-    if [ "$categorie" = "templates" ]; then
-        [ -f "$TOOLS_DIR/outil-template.md" ] && nb=1
-        echo "$nb"
-        return
-    fi
-    if [ ! -d "$dir" ]; then
-        echo 0
-        return
-    fi
-    # Cas special tester : compter les protections dans tester/protections/
-    if [ "$categorie" = "tester" ]; then
-        for d in "$dir/protections"/*/; do
-            [ -d "$d" ] && nb=$((nb + 1))
-        done
-        echo "$nb"
-        return
-    fi
-    # Cas special combos : compter les sous-dossiers
-    if [ "$categorie" = "combos" ]; then
-        for d in "$dir"/*/; do
-            [ -d "$d" ] && nb=$((nb + 1))
-        done
-        echo "$nb"
-        return
-    fi
-    for d in "$dir"/*/; do
-        [ -d "$d" ] && nb=$((nb + 1))
-    done
-    echo "$nb"
+# Nom de categorie affichable (capitalise + 'Mettre a jour')
+# Implementation 100% bash (pas de sous-processus : lent sur Windows/msys)
+nom_categorie_affichable() {
+    local cle="$1"
+    local cat="${cle^}"
+    echo "${cat//Mettre-a-jour/Mettre a jour}"
 }
 
 # Lister les outils reels d'une categorie (noms des sous-dossiers, separes par ', ')
@@ -128,6 +104,8 @@ lister_outils_categorie() {
     local categorie="$1"
     local dir="$TOOLS_DIR/$categorie"
     local liste=""
+    local first=""
+    local d nom
     # Cas special templates
     if [ "$categorie" = "templates" ]; then
         [ -f "$TOOLS_DIR/outil-template.md" ] && echo "outil-template"
@@ -137,12 +115,13 @@ lister_outils_categorie() {
         echo ""
         return
     fi
-    # Cas special tester : lister les protections
+    # v0.4.7 : un dossier technique (__pycache__) n'est pas un outil
+    # (filtre en bash pur, pas de sous-processus par dossier)
     if [ "$categorie" = "tester" ]; then
-        local first=""
         for d in "$dir/protections"/*/; do
             [ -d "$d" ] || continue
-            local nom=$(basename "$d")
+            nom=${d%/}; nom=${nom##*/}
+            case "$nom" in __*) continue ;; esac
             if [ -z "$first" ]; then
                 liste="$nom"
                 first="1"
@@ -153,26 +132,10 @@ lister_outils_categorie() {
         echo "$liste"
         return
     fi
-    # Cas special combos : lister les sous-dossiers
-    if [ "$categorie" = "combos" ]; then
-        local first=""
-        for d in "$dir"/*/; do
-            [ -d "$d" ] || continue
-            local nom=$(basename "$d")
-            if [ -z "$first" ]; then
-                liste="$nom"
-                first="1"
-            else
-                liste="${liste}, ${nom}"
-            fi
-        done
-        echo "$liste"
-        return
-    fi
-    local first=""
     for d in "$dir"/*/; do
         [ -d "$d" ] || continue
-        local nom=$(basename "$d")
+        nom=${d%/}; nom=${nom##*/}
+        case "$nom" in __*) continue ;; esac
         if [ -z "$first" ]; then
             liste="$nom"
             first="1"
@@ -183,13 +146,15 @@ lister_outils_categorie() {
     echo "$liste"
 }
 
-# Lister les categories d'outils (chaque sous-dossier, plus tester et templates)
+# Lister les categories d'outils (chaque sous-dossier, plus combos et templates)
 lister_categories() {
+    local d nom
     for d in "$TOOLS_DIR"/*/; do
         [ -d "$d" ] || continue
-        local nom=$(basename "$d")
+        nom=${d%/}; nom=${nom##*/}
         case "$nom" in
             combos) continue ;;
+            __*) continue ;;
         esac
         echo "$nom"
     done
@@ -198,13 +163,99 @@ lister_categories() {
     echo "templates"
 }
 
-# Total des outils
-compter_total_outils() {
-    local total=0
-    for cat in $(lister_categories); do
-        total=$((total + $(compter_outils_categorie "$cat")))
+# Cache des compteurs : les categories et leurs comptes sont calcules UNE
+# SEULE fois par invocation (les sous-processus coutent ~0.4 s chacun sur
+# Windows/msys : boucler sur $(compter_outils_categorie ...) ruinerait le temps).
+# CATS_TOTAL : total des outils. CATS_CNT : cle -> compte. CATS_SPEC : lignes
+# 'Nom|compte' des categories actives (compte > 0), dans l ordre reel.
+declare -A CATS_CNT
+CATS_TOTAL=""
+CATS_SPEC=""
+
+_remplir_cache() {
+    [ -n "$CATS_TOTAL" ] && return
+    local d nom cle nb total=0 spec=""
+    # Categories reelles : sous-dossiers de tools/ (hors combos et '__'),
+    # puis combos et templates (meme ordre que lister_categories).
+    for d in "$TOOLS_DIR"/*/; do
+        [ -d "$d" ] || continue
+        nom=${d%/}; nom=${nom##*/}
+        case "$nom" in combos|__*) continue ;; esac
+        cle="$nom"
+        nb=0
+        for sd in "$d"/*/; do
+            [ -d "$sd" ] || continue
+            case "${sd%/}" in *"/__"*) continue ;; esac
+            nb=$((nb + 1))
+        done
+        [ "$cle" = "tester" ] && nb=$(compter_outils_categorie "tester")
+        CATS_CNT["$cle"]=$nb
+        total=$((total + nb))
+        if [ "$nb" -gt 0 ]; then
+            spec="${spec}$(nom_categorie_affichable "$cle")|${nb}\n"
+        fi
     done
-    echo "$total"
+    # combos (sous-dossiers reels) et templates (fichier outil-template.md)
+    nb=0
+    for sd in "$TOOLS_DIR/combos"/*/; do [ -d "$sd" ] || continue; nb=$((nb + 1)); done
+    CATS_CNT["combos"]=$nb; total=$((total + nb))
+    if [ "$nb" -gt 0 ]; then spec="${spec}Combos|${nb}\n"; fi
+    nb=0
+    [ -f "$TOOLS_DIR/outil-template.md" ] && nb=1
+    CATS_CNT["templates"]=$nb; total=$((total + nb))
+    if [ "$nb" -gt 0 ]; then spec="${spec}Templates|${nb}\n"; fi
+    CATS_TOTAL=$total
+    CATS_SPEC="$spec"
+}
+
+# Total des outils (calcule une seule fois par invocation)
+compter_total_outils() {
+    _remplir_cache
+    echo "$CATS_TOTAL"
+}
+
+# Compte d'une categorie (via le cache quand il est rempli)
+compter_outils_categorie() {
+    if [ -n "$CATS_TOTAL" ]; then
+        echo "${CATS_CNT[$1]:-0}"
+        return
+    fi
+    compter_outils_categorie_reel "$1"
+}
+
+# Compte reel d'une categorie (sans cache) : boucle bash pur, aucun
+# sous-processus par dossier.
+compter_outils_categorie_reel() {
+    local categorie="$1"
+    local dir="$TOOLS_DIR/$categorie"
+    local nb=0
+    local d nom
+    if [ "$categorie" = "templates" ]; then
+        [ -f "$TOOLS_DIR/outil-template.md" ] && nb=1
+        echo "$nb"
+        return
+    fi
+    if [ ! -d "$dir" ]; then
+        echo 0
+        return
+    fi
+    if [ "$categorie" = "tester" ]; then
+        for d in "$dir/protections"/*/; do
+            [ -d "$d" ] || continue
+            nom=${d%/}; nom=${nom##*/}
+            case "$nom" in __*) continue ;; esac
+            nb=$((nb + 1))
+        done
+        echo "$nb"
+        return
+    fi
+    for d in "$dir"/*/; do
+        [ -d "$d" ] || continue
+        nom=${d%/}; nom=${nom##*/}
+        case "$nom" in __*) continue ;; esac
+        nb=$((nb + 1))
+    done
+    echo "$nb"
 }
 
 # Lire les N dernieres interventions de l'historique (diagnostic uniquement)
@@ -215,6 +266,60 @@ lire_journal() {
     grep '^| <span' "$HISTORIQUE" 2>/dev/null | head -n "$n"
 }
 
+# Extraire la region de la table 'Mes agents' du README public (v0.4.8) :
+# du titre '## Mes agents' jusqu'au titre suivant (### ou ##). La presence
+# des agents se verifie dans cette table uniquement -- avant, la recherche
+# globale laissait une mention narrative ('**Oracle**') ou des lignes
+# orphelines masquer des agents absents de la table.
+extraire_region_agents() {
+    awk '
+        /^## Mes agents/ { f = 1; print; next }
+        f && /^(###|##) / { exit }
+        f { print }
+    ' "$README"
+}
+
+# Verifier la SOMME des compteurs du tableau readme-dev (section 6)
+# = le total reel. Retourne 0 si coherent.
+# Boucle en bash pur (un seul awk de prefiltre ; pas de sous-processus par
+# ligne : tres lent sur Windows/msys).
+verifier_somme_comptes() {
+    if [ ! -f "$README_DEV" ]; then
+        echo -e "  ${RED}[MANQUANT]${NC} readme-dev introuvable : $README_DEV"
+        return 1
+    fi
+    _remplir_cache
+    local total="$CATS_TOTAL"
+    local somme=0 nb_lignes=0 ecarts=0
+    local nom nb cle reel
+    while IFS='|' read -r _ nom nb _; do
+        # Nettoyer espaces de bord en bash pur
+        while [ "$nom" != "${nom# }" ]; do nom="${nom# }"; done
+        while [ "$nom" != "${nom% }" ]; do nom="${nom% }"; done
+        [ "$nom" = "Categorie" ] && continue
+        nb="${nb//[!0-9]/}"
+        [ -z "$nb" ] && continue
+        # cle : minuscules + espaces -> tirets (compte lu dans le cache)
+        cle="${nom,,}"
+        cle="${cle// /-}"
+        reel="${CATS_CNT[$cle]:-0}"
+        somme=$((somme + nb))
+        nb_lignes=$((nb_lignes + 1))
+        if [ "$reel" != "$nb" ]; then
+            echo -e "  ${RED}[ECART]${NC} ${nom} : tableau dit ${nb}, reel = ${reel}"
+            ecarts=$((ecarts + 1))
+        fi
+    done < <(awk '/^\| [A-Za-z][^|]* \| [0-9]+ \|/ { print }' "$README_DEV")
+    if [ "$somme" != "$total" ]; then
+        echo -e "  ${RED}[ECART SOMME]${NC} readme-dev tableau : somme = ${somme}, total reel = ${total}"
+        ecarts=$((ecarts + 1))
+    fi
+    if [ "$ecarts" -eq 0 ]; then
+        echo -e "  ${GREEN}[OK]${NC} readme-dev tableau : ${nb_lignes} categories, somme ${somme} = total reel ${total}"
+    fi
+    return "$ecarts"
+}
+
 # Verifier l'etat reel et comparer avec le README
 verifier() {
     echo "=== ETAT REEL DU PROJET ==="
@@ -223,8 +328,9 @@ verifier() {
     echo ""
     echo "Outils par categorie :"
     local total=0
+    local cat nb
     for cat in $(lister_categories); do
-        local nb=$(compter_outils_categorie "$cat")
+        nb=$(compter_outils_categorie "$cat")
         printf "  %-14s : %s\n" "$cat" "$nb"
         total=$((total + nb))
     done
@@ -233,16 +339,22 @@ verifier() {
     echo "=== ECARTS AVEC LE README ==="
     echo ""
 
-    # Agents manquants dans la table du README (casse insensible)
+    # Agents manquants dans la table 'Mes agents' du README public
+    # (v0.4.8 : presence dans la table uniquement, pas dans tout le fichier)
     local ecart=0
+    local agent region_agents
+    region_agents=$(extraire_region_agents)
     for agent in $(lister_agents_reels); do
-        if ! grep -qi "\*\*${agent}\*\*" "$README"; then
-            echo -e "  ${RED}[MANQUANT]${NC} Agent '${agent}' absent de la table 'Les agents'"
-            ecart=$((ecart + 1))
-        fi
+        case "$region_agents" in
+            *"| **${agent^}** |"*) ;;
+            *)
+                echo -e "  ${RED}[MANQUANT]${NC} Agent '${agent}' absent de la table 'Mes agents'"
+                ecart=$((ecart + 1))
+                ;;
+        esac
     done
     if [ "$ecart" -eq 0 ]; then
-        echo -e "  ${GREEN}[OK]${NC} Tous les agents sont dans la table"
+        echo -e "  ${GREEN}[OK]${NC} Tous les agents sont dans la table 'Mes agents'"
     fi
 
     # Badge Outils du README public (nouvelle norme 1ere personne 20/08) :
@@ -255,6 +367,14 @@ verifier() {
     elif [ -n "$badge" ]; then
         echo -e "  ${GREEN}[OK]${NC} Badge Outils-$badge (README public)"
     fi
+    # Badge Agents du README public (v0.4.6)
+    local badge_agents=$(grep -o 'Agents-[0-9]*' "$README" | head -1 | grep -o '[0-9]*')
+    local reel_agents=$(compter_agents)
+    if [ -n "$badge_agents" ] && [ "$badge_agents" != "$reel_agents" ]; then
+        echo -e "  ${RED}[OBSOLETE]${NC} Badge Agents-$badge_agents -> devrait etre $reel_agents"
+    elif [ -n "$badge_agents" ]; then
+        echo -e "  ${GREEN}[OK]${NC} Badge Agents-$badge_agents (README public)"
+    fi
     if grep -q '^## La boite a outils ([0-9]* outils)' "$README"; then
         echo -e "  ${YELLOW}[INFO]${NC} Section 'La boite a outils' encore presente (ancien format) : compteurs verifies ci-dessous"
     else
@@ -265,8 +385,7 @@ verifier() {
     # existe encore dans le README public (retro-compatibilite).
     if grep -q '^## La boite a outils ([0-9]* outils)' "$README"; then
     for cle in $(lister_categories); do
-        local cat=$(echo "${cle:0:1}" | tr '[:lower:]' '[:upper:]')${cle:1}
-        cat=$(echo "$cat" | sed 's/Mettre-a-jour/Mettre a jour/')
+        local cat=$(nom_categorie_affichable "$cle")
         local nb=$(compter_outils_categorie "$cle")
         local lue=$(grep -o "\*\*${cat} ([0-9]*)\*\*" "$README" | grep -o '[0-9]*' | head -1)
         if [ -n "$lue" ] && [ "$lue" != "$nb" ]; then
@@ -285,6 +404,11 @@ verifier() {
         done
     done
     fi
+
+    # Somme des compteurs du readme-dev (anti-recurrence bug Clio 132 vs 134)
+    echo ""
+    echo "=== README-DEV (tableau des categories, section 6) ==="
+    verifier_somme_comptes
 
     echo ""
     echo "Utilisez --maj pour corriger le texte du README."
@@ -312,8 +436,7 @@ dry_run() {
     # Nouvelle norme : les compteurs vivent dans readme-dev (section 6).
     if grep -q '^## La boite a outils ([0-9]* outils)' "$README"; then
     for cle in $(lister_categories); do
-        local cat=$(echo "${cle:0:1}" | tr '[:lower:]' '[:upper:]')${cle:1}
-        cat=$(echo "$cat" | sed 's/Mettre-a-jour/Mettre a jour/')
+        local cat=$(nom_categorie_affichable "$cle")
         local nb=$(compter_outils_categorie "$cle")
         local lue=$(grep -o "\*\*${cat} ([0-9]*)\*\*" "$README" | grep -o '[0-9]*' | head -1)
         if [ -n "$lue" ] && [ "$lue" != "$nb" ]; then
@@ -322,20 +445,54 @@ dry_run() {
     done
     fi
 
-    # 3. Agents manquants
+    # 3. Agents manquants (v0.4.8 : dans la table 'Mes agents' uniquement)
     local agents_manquants=""
+    local agent region_agents
+    region_agents=$(extraire_region_agents)
     for agent in $(lister_agents_reels); do
-        if ! grep -qi "\*\*${agent}\*\*" "$README"; then
-            local nom_affichable="$(echo "${agent:0:1}" | tr '[:lower:]' '[:upper:]')${agent:1}"
-            if [ -z "$agents_manquants" ]; then
-                agents_manquants="$nom_affichable"
-            else
-                agents_manquants="${agents_manquants}, ${nom_affichable}"
-            fi
-        fi
+        case "$region_agents" in
+            *"| **${agent^}** |"*) ;;
+            *)
+                local nom_affichable="${agent^}"
+                if [ -z "$agents_manquants" ]; then
+                    agents_manquants="$nom_affichable"
+                else
+                    agents_manquants="${agents_manquants}, ${nom_affichable}"
+                fi
+                ;;
+        esac
     done
     if [ -n "$agents_manquants" ]; then
         changements+=("Agents a ajouter : ${agents_manquants}")
+    fi
+
+    # 4. Badges du header (Outils-N, Agents-N) : affichage + href
+    local b_actuel b_reel
+    b_actuel=$(grep -o 'badge/Outils-[0-9]*-' "$README" | head -1 | grep -o '[0-9]*')
+    if [ -n "$b_actuel" ] && [ "$b_actuel" != "$total" ]; then
+        changements+=("Badge Outils : ${b_actuel} -> ${total} (affichage + href)")
+    fi
+    b_actuel=$(grep -o 'badge/Agents-[0-9]*-' "$README" | head -1 | grep -o '[0-9]*')
+    b_reel=$(compter_agents)
+    if [ -n "$b_actuel" ] && [ "$b_actuel" != "$b_reel" ]; then
+        changements+=("Badge Agents : ${b_actuel} -> ${b_reel} (affichage + href)")
+    fi
+
+    # 5. readme-dev : intro, synthese (les lignes du tableau sont verifiees
+    # ligne a ligne par --verifier / verifier_somme_comptes)
+    if [ -f "$README_DEV" ]; then
+        local m_intro=$(grep -o '^\*\*[0-9]* outils dans [0-9]* categories\*\* :' "$README_DEV" | head -1)
+        if [ -n "$m_intro" ]; then
+            local actuel_outils=$(echo "$m_intro" | grep -o '[0-9]*' | head -1)
+            local actuel_cats=$(echo "$m_intro" | grep -o '[0-9]*' | tail -1)
+            local nb_cats=0 cle2
+            for cle2 in $(lister_categories); do
+                [ "$(compter_outils_categorie "$cle2")" -gt 0 ] && nb_cats=$((nb_cats + 1))
+            done
+            if [ "$actuel_outils" != "$total" ] || [ "$actuel_cats" != "$nb_cats" ]; then
+                changements+=("readme-dev intro : '${actuel_outils} outils dans ${actuel_cats} categories' -> '${total} outils dans ${nb_cats} categories'")
+            fi
+        fi
     fi
 
     if [ ${#changements[@]} -eq 0 ]; then
@@ -353,6 +510,150 @@ dry_run() {
     echo "Pour appliquer ces changements, utilisez --maj."
 }
 
+# Aligner les badges du header README (affichage + href) sur les comptes reels
+# v0.4.6 : badges Outils et Agents (2 occurrences : affichage + href)
+aligner_badges_header() {
+    local modifie=0
+    local contenu nouveau
+    # Outils
+    local total_outils=$(compter_total_outils)
+    contenu=$(cat "$README")
+    nouveau=$(printf '%s' "$contenu" | sed "s|badge/Outils-[0-9]*-|badge/Outils-${total_outils}-|g")
+    if [ "$nouveau" != "$contenu" ]; then
+        printf '%s' "$nouveau" > "$README"
+        echo -e "  ${GREEN}[CORRIGE]${NC} Badge Outils aligne : ${total_outils} (affichage + href)."
+        modifie=1
+    fi
+    # Agents
+    local total_agents=$(compter_agents)
+    contenu=$(cat "$README")
+    nouveau=$(printf '%s' "$contenu" | sed "s|badge/Agents-[0-9]*-|badge/Agents-${total_agents}-|g")
+    if [ "$nouveau" != "$contenu" ]; then
+        printf '%s' "$nouveau" > "$README"
+        echo -e "  ${GREEN}[CORRIGE]${NC} Badge Agents aligne : ${total_agents} (affichage + href)."
+        modifie=1
+    fi
+    if [ "$modifie" -eq 0 ]; then
+        echo -e "  ${GREEN}[OK]${NC} Badges du header deja a jour."
+    fi
+}
+
+# Corriger readme-dev : tableau section 6 (comptes reels par categorie,
+# categories obsoletes retirees, manquantes ajoutees) + ligne d'intro +
+# lignes de synthese (section 1 : Agents, Outils).
+# v0.4.6 : verifier SANS corriger ne suffisait pas (bug Clio 132 vs 134).
+# v0.4.7 : la ligne de separation |---|---| est conservee, les exemples deja
+# curates sont conserves, les lignes de synthese de la section 1 sont
+# corrigees aussi.
+# La cle de categorie (dossier) se deduit du nom affiche : minuscules +
+# espaces -> tirets (ex : 'Mettre a jour' -> 'mettre-a-jour').
+cle_depuis_nom() {
+    printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g'
+}
+
+corriger_readme_dev() {
+    if [ ! -f "$README_DEV" ]; then
+        echo -e "  ${RED}[MANQUANT]${NC} readme-dev introuvable : $README_DEV"
+        return
+    fi
+    # Spec : categories actives (compte > 0) dans l ordre reel, fournie par
+    # le cache (calcule une seule fois par invocation).
+    _remplir_cache
+    local total="$CATS_TOTAL"
+    local tmp="$README_DEV.tmp"
+    local spec="$README_DEV.spec"
+    local cle nb cat nb_cats=0
+    printf '%b' "$CATS_SPEC" > "$spec"
+    nb_cats=$(printf '%b' "$CATS_SPEC" | grep -c '|')
+
+    # --- 1. Construire le fichier corrige dans $tmp (intro + tableau +
+    # categories manquantes avant la ligne 'Combos' + synthese section 1).
+    local nouvelle_intro="**${total} outils dans ${nb_cats} categories**"
+    local syn_agents="| **Agents** | $(compter_agents) agents + classeur-variables (voir section 4) |"
+    local syn_outils="| **Outils** | ${total} outils dans ${nb_cats} categories (voir section 6) |"
+
+    # Pass 1 (awk) : lire la spec, reconstruire chaque ligne de donnees avec
+    # le compte reel (exemples curates conserves), retirer les categories
+    # obsoletes, corriger l intro et les lignes de synthese.
+    awk -F'|' -v intro="$nouvelle_intro" -v sa="$syn_agents" -v so="$syn_outils" '
+        NR == FNR {
+            split($0, s, "|")
+            cnt[s[1]] = s[2]
+            next
+        }
+        {
+            if ($0 ~ /^\*\*[0-9]* outils dans [0-9]* categories\*\* :/) {
+                print intro " :"
+                next
+            }
+            if (index($0, "| **Agents** |") == 1) {
+                print sa
+                next
+            }
+            if (index($0, "| **Outils** |") == 1) {
+                print so
+                next
+            }
+            if ($0 ~ /^\| [A-Za-z][^|]* \| [0-9]+ \|/) {
+                name = $2
+                gsub(/^ +| +$/, "", name)
+                if (name in cnt) {
+                    ex = $4
+                    gsub(/^ +| +$/, "", ex)
+                    printf "| %s | %s | %s |\n", name, cnt[name], ex
+                    vu[name] = 1
+                    next
+                }
+                next   # categorie obsolete : retiree
+            }
+            print
+        }
+    ' "$spec" "$README_DEV" > "$tmp"
+
+    # --- 2. Categories manquantes : a ajouter avant la ligne 'Combos'
+    # (toutes les categories reelles precedant combos/templates).
+    # Recherche en bash pur sur le contenu deja genere (pas de grep par ligne).
+    local manquantes=""
+    local contenu_tmp
+    contenu_tmp=$(cat "$tmp")
+    while IFS= read -r cat; do
+        [ -n "$cat" ] || continue
+        case "$contenu_tmp" in
+            *"| ${cat} |"*) ;;
+            *)
+                [ -z "$manquantes" ] && manquantes="${cat}" || manquantes="${manquantes}\n${cat}"
+                ;;
+        esac
+    done < <(cut -d'|' -f1 "$spec")
+    if [ -n "$manquantes" ]; then
+        local bloc_manquantes=""
+        while IFS= read -r cat; do
+            [ -n "$cat" ] || continue
+            cle=$(cle_depuis_nom "$cat")
+            nb=$(awk -F'|' -v n="$cat" '$1==n{print $2}' "$spec")
+            bloc_manquantes="${bloc_manquantes}| ${cat} | ${nb} | $(lister_outils_categorie "$cle") |\n"
+        done <<< "$(printf '%b' "$manquantes")"
+        if grep -q '^| Combos |' "$tmp"; then
+            awk -v b="$(printf '%b' "$bloc_manquantes")" '
+                /^\| Combos \|/ && !done { printf "%s", b; done = 1 }
+                { print }
+            ' "$tmp" > "$tmp.2" && mv "$tmp.2" "$tmp"
+        else
+            printf '%b' "$bloc_manquantes" >> "$tmp"
+        fi
+    fi
+
+    # --- 3. Appliquer uniquement si le contenu change (idempotence).
+    if ! diff -q "$README_DEV" "$tmp" > /dev/null 2>&1; then
+        mv "$tmp" "$README_DEV"
+        echo -e "  ${GREEN}[CORRIGE]${NC} Tableau readme-dev section 6 : ${nb_cats} categories (${total} outils)."
+    else
+        rm -f "$tmp"
+        echo -e "  ${GREEN}[OK]${NC} Tableau readme-dev section 6 deja a jour (${nb_cats} categories)."
+    fi
+    rm -f "$spec" "$tmp.2" 2> /dev/null
+}
+
 # Corriger le README pour qu'il reflete l'etat reel
 mettre_a_jour() {
     local total=$(compter_total_outils)
@@ -364,39 +665,72 @@ mettre_a_jour() {
         echo -e "  ${GREEN}[CORRIGE]${NC} Titre : La boite a outils ($total outils)"
     fi
 
-    # 2. Compteurs par categorie (capitaliser les noms)
+    # 2. Compteurs par categorie (capitaliser les noms) : uniquement si
+    # l ancienne section 'La boite a outils' existe encore (retro-compatibilite)
+    local contenu_readme="$(cat "$README")"
+    if grep -q '^## La boite a outils ([0-9]* outils)' "$README"; then
     for cle in $(lister_categories); do
-        local cat=$(echo "${cle:0:1}" | tr '[:lower:]' '[:upper:]')${cle:1}
-        cat=$(echo "$cat" | sed 's/Mettre-a-jour/Mettre a jour/')
+        local cat=$(nom_categorie_affichable "$cle")
         local nb=$(compter_outils_categorie "$cle")
-        if grep -q "\*\*${cat} ([0-9]*)\*\*" "$README"; then
-            sed -i "s/\*\*${cat} ([0-9]*)\*\*/**${cat} ($nb)**/g" "$README"
-            echo -e "  ${GREEN}[CORRIGE]${NC} ${cat} : ${nb}"
-        fi
+        case "$contenu_readme" in
+            *"**${cat} ("*)
+                sed -i "s/\*\*${cat} ([0-9]*)\*\*/**${cat} ($nb)**/g" "$README"
+                echo -e "  ${GREEN}[CORRIGE]${NC} ${cat} : ${nb}"
+                ;;
+        esac
     done
+    fi
 
-    # 3. Ajouter les agents manquants dans la table 'Les agents' (casse insensible)
+    # 3. Ajouter les agents manquants dans la table 'Mes agents' (v0.4.8 :
+    # presence dans la table uniquement, insertion en fin de table au format
+    # 2 colonnes -- avant : recherche globale + ancre obsolete + format
+    # 3 colonnes creaient des lignes orphelines en fin de fichier)
     local agents_ajoutes=0
+    local agent region_agents
+    region_agents=$(extraire_region_agents)
+    local bloc_ajout=""
     for agent in $(lister_agents_reels); do
-        if ! grep -qi "\*\*${agent}\*\*" "$README"; then
-            local role=$(lire_role_agent "$agent")
-            [ -z "$role" ] && role="Agent"
-            # Capitaliser le nom (cerberus -> Cerberus)
-            local nom_affichable="$(echo "${agent:0:1}" | tr '[:lower:]' '[:upper:]')${agent:1}"
-            # Inserer la ligne avant '### Le cycle fondamental' (fin de la table des agents)
-            local ligne="| **${nom_affichable}** | ${role} | Selon sa carte de decision |"
-            sed -i "/^### Le cycle fondamental/i ${ligne}" "$README"
-            echo -e "  ${GREEN}[AJOUTE]${NC} Agent '${nom_affichable}' ajoute dans la table"
-            agents_ajoutes=$((agents_ajoutes + 1))
-        fi
+        case "$region_agents" in
+            *"| **${agent^}** |"*) ;;
+            *)
+                local role=$(lire_role_agent "$agent")
+                [ -z "$role" ] && role="Agent"
+                # Capitaliser le nom (cerberus -> Cerberus)
+                local nom_affichable="${agent^}"
+                bloc_ajout="${bloc_ajout}| **${nom_affichable}** | ${role} |\n"
+                echo -e "  ${GREEN}[AJOUTE]${NC} Agent '${nom_affichable}' ajoute dans la table 'Mes agents'"
+                agents_ajoutes=$((agents_ajoutes + 1))
+                ;;
+        esac
     done
-    [ "$agents_ajoutes" -eq 0 ] && echo -e "  ${GREEN}[OK]${NC} Table des agents complete"
+    if [ "$agents_ajoutes" -gt 0 ]; then
+        # Inserer le bloc en fin de table : coller a la derniere ligne de la
+        # table (juste avant le titre suivant). Si la ligne qui precedait le
+        # titre est vide, elle passe apres le bloc.
+        local insert_at=$(awk '/^## Mes agents/{f=1;next} f && /^(###|##) /{print NR; exit}' "$README")
+        if [ -n "$insert_at" ]; then
+            if sed -n "$((insert_at - 1))p" "$README" | grep -q '^[[:space:]]*$'; then
+                head -n $((insert_at - 1)) "$README" | sed '$d' > "$README.tmp"
+            else
+                head -n $((insert_at - 1)) "$README" > "$README.tmp"
+            fi
+            printf '%b' "$bloc_ajout" >> "$README.tmp"
+            printf '\n' >> "$README.tmp"
+            tail -n +"$insert_at" "$README" >> "$README.tmp"
+            mv "$README.tmp" "$README"
+        else
+            printf '%b' "$bloc_ajout" >> "$README"
+        fi
+    else
+        echo -e "  ${GREEN}[OK]${NC} Table des agents complete"
+    fi
 
-    # 4. Reconstruire la liste des outils de chaque categorie (ajout + suppression + renommage)
-    # La cellule 'outils' du README doit correspondre EXACTEMENT aux outils reels
+    # 4. Reconstruire la liste des outils de chaque categorie : uniquement si
+    # l ancienne section 'La boite a outils' existe encore (retro-compatibilite).
+    # Nouvelle norme : les listes d outils vivent dans readme-dev (section 6).
+    if grep -q '^## La boite a outils ([0-9]* outils)' "$README"; then
     for cle in $(lister_categories); do
-        local cat=$(echo "${cle:0:1}" | tr '[:lower:]' '[:upper:]')${cle:1}
-        cat=$(echo "$cat" | sed 's/Mettre-a-jour/Mettre a jour/')
+        local cat=$(nom_categorie_affichable "$cle")
         local nb=$(compter_outils_categorie "$cle")
         local liste_reelle=$(lister_outils_categorie "$cle")
         # Reconstruire la ligne de la categorie en conservant la colonne Usage
@@ -414,9 +748,27 @@ mettre_a_jour() {
         ' cat="$cat" "$README" > "$README.tmp" && mv "$README.tmp" "$README"
         echo -e "  ${GREEN}[RECONSTRUIT]${NC} ${cat} : ${nb} outils"
     done
+    fi
+
+    # 5. Aligner les badges du header (Outils-N, Agents-N) : affichage + href
+    # (lecon Clio/Janus : --maj corrigeait les tables mais pas les badges)
+    aligner_badges_header
+
+    # 6. Corriger le tableau readme-dev (section 6) : comptes reels par
+    # categorie, categories obsoletes retirees, manquantes ajoutees
+    # (anti-recurrence bug Clio 132 vs 134 : verifier SANS corriger ne
+    # suffisait pas - v0.4.6 corrige le tableau lui-meme)
+    corriger_readme_dev
 
     echo ""
     echo -e "${GREEN}[OK]${NC} README corrige pour refleter l'etat reel."
+    echo ""
+    echo "=== CONTROLE FINAL : somme des compteurs readme-dev ==="
+    if verifier_somme_comptes; then
+        echo "[OK] somme des compteurs = total reel (readme-dev coherent)."
+    else
+        echo "[ECART] readme-dev incoherent - corriger le tableau (section 6) avant de conclure."
+    fi
 }
 
 # Inserer une image (logo) en tete du README, apres le titre H1

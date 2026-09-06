@@ -383,6 +383,31 @@ def point_8_persistance_relais(tmp_dir):
     chrono_etape("8 persistance relais", t0)
 
 
+def point_9_prefixe_langue(tmp_dir):
+    """Corps prefixe [LANGUE] (protocole langue utilisateur 2026-09-05)
+    -> terminer() consomme quand meme (comparaison tolerant au prefixe,
+    symetrique de _envoyer_direct qui prefixe la mission relayee)."""
+    t0 = time.monotonic()
+    base = sous_tmp(tmp_dir, "p9")
+    f, _ = charger_files(base)
+    e, _ = f.ajouter("TEST mission point 9", file="asap", agent="t")
+    # la mission relayee est prefixee du rappel de langue dans l inbox
+    corps_prefixe = "[LANGUE] Repondre dans la langue de l utilisateur : francais\n" + e["mission"]
+    ecrire_inbox(base, "t",
+                 [{"id": "notif-langue", "de": "oracle", "vers": "t",
+                   "priorite": 1, "date": "2026-09-05T09:00:00",
+                   "objet": "MISSION pour t", "corps": corps_prefixe,
+                   "lu": False, "accuse": False}])
+    pris, _ = f.prendre(file="asap")
+    ret, err = f.terminer(pris["id"], file="asap")
+    restants = lire_inbox(base, "t")
+    ok = (err is None and ret.get("statut") == "TERMINEE"
+          and len(restants) == 0)
+    verifier("9. corps prefixe [LANGUE] : consomme a la TERMINEE",
+             ok, "restants=%d" % len(restants))
+    chrono_etape("9 prefixe langue", t0)
+
+
 def point_7_normes():
     """ASCII strict + LF pur sur files.py et le test."""
     t0 = time.monotonic()
@@ -417,6 +442,8 @@ def main():
             point_7_normes()
         if point_actif(8):
             point_8_persistance_relais(tmp_dir)
+        if point_actif(9):
+            point_9_prefixe_langue(tmp_dir)
     finally:
         shutil.rmtree(tmp_dir, ignore_errors=True)
     bilan_chrono()

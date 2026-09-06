@@ -8,7 +8,7 @@ identite:
 ---
 # evaluer-coherence
 
-**Version :** 0.2.5
+**Version :** 0.3.0
 **Statut :** prepare
 **Categorie :** evaluer
 **Chemin :** `agents/tools/evaluer/evaluer-coherence/`
@@ -61,5 +61,6 @@ Rapport markdown sur stdout avec score /100.
 | 0.2.2 | 2026-08-09 | Correction faux positifs : scan des outils references limite aux 11 agents officiels (AGENTS_ATTENDUS) au lieu de tous les dossiers de agents/ - classeur-variables/ et ses variables (statut-mission, contexte, resultats, erreurs) ne sont plus interpretees comme des outils inexistants. Parite py/sh maintenue |
 | 0.2.3 | 2026-08-15 | Correction faux positifs (lecon Janus, non-regression barriere E) : (1) options de ligne de commande --xx exclues du scan (--parallele, --serial, --etat-tests), (2) mots francais simples entre backticks (conforme, success, probleme) exclus - un nom d outil du cerveau contient un tiret ou est connu des dossiers reels, (3) AGENTS_ATTENDUS passe de 11 a 15 agents (ajout hygie, hermes, gardien, argus) |
 | 0.2.5 | 2026-08-19 | Mission liens casses (volet Vulcain) : ajout de `protocole-X` aux MOTIFS_GENERIQUES - les references [protocole-X/](protocole-X/) dans les lecons sont des exemples de format (placeholder documentaire), pas des liens reels. Resultat : evaluer-coherence passe de 5 a 0 lien casse |
+| 0.3.0 | 2026-09-05 | Exclusion des liens des tableaux de versioning (decision utilisateur, suite rapport Themis evaluation-croisee-periodique-2026-09-05-1835.md) : toute ligne de tableau de versioning (`| x.y.z | date | description`) est ignoree du scan des liens casses - les liens cites dans les changelogs sont documentaires (ex: [protocole-X/](protocole-X/) dans la ligne 0.2.5 de ce fichier). Applique au .py ET au .sh (le .sh portait une copie des motifs generiques sans protocole-X - parite retablie) |
 
 ---

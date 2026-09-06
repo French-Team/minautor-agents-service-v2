@@ -237,6 +237,17 @@ def prendre(file="asap"):
     return e, None
 
 
+def _corps_sans_langue(corps):
+    """Retirer une eventuelle ligne de rappel de langue ([LANGUE] ...)
+    en tete d un corps de message. Symetrique de pilote._prefixe_mission
+    (oracle.py _envoyer_direct). Tolerant : corps sans prefixe = tel quel.
+    """
+    lignes = (corps or "").split("\n")
+    if lignes and lignes[0].strip().startswith("[LANGUE]"):
+        return "\n".join(lignes[1:]).strip()
+    return corps
+
+
 def _consommer_notification_mission(entree):
     """Apres une TERMINEE, consommer le message 'MISSION pour X' envoye
     a l agent lors du relais de cette mission.
@@ -280,10 +291,14 @@ def _consommer_notification_mission(entree):
             if not isinstance(m, dict):
                 garde.append(brut)
                 continue
+            # Tolerant au prefixe [LANGUE] (decision utilisateur 2026-09-05) :
+            # _envoyer_direct prefixe la mission relayee du rappel de langue
+            # -> retirer une eventuelle ligne [LANGUE] avant la comparaison.
+            corps_sans_langue = _corps_sans_langue(m.get("corps") or "")
             correspond = (m.get("de") == "oracle"
                           and m.get("vers") == agent
                           and m.get("objet") == objet
-                          and " ".join((m.get("corps") or "").split())
+                          and " ".join(corps_sans_langue.split())
                           == norm_mission)
             if correspond:
                 consommes += 1

@@ -29,7 +29,7 @@
         "besoin": "Verifier les ecarts (compteurs + texte)",
         "action": "procedure",
         "etapes": [
-          "python3 cerveau-projet/agents/tools/metmettre-a-jour-readme/metmettre-a-jour-readme.py --verifier"
+          "python3 cerveau-projet/agents/tools/mettre-a-jour-readme/mettre-a-jour-readme.py --verifier"
         ],
         "regle": "Verifier les ecarts entre etat reel et README."
       },

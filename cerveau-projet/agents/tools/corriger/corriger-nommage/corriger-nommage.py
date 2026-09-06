@@ -2,7 +2,7 @@
 # -*- coding: ascii -*-
 # corriger-nommage.py
 # Corriger le nommage des fichiers selon les conventions
-# Version : 0.2.0-py
+# Version : 0.3.1-py
 # Statut : beta
 
 # identite:
@@ -17,7 +17,7 @@ Usage:
   corriger-nommage.py [OPTIONS]
 """
 
-VERSION = "0.2.0-py"
+VERSION = "0.3.1-py"
 STATUT = "beta"
 
 import re
@@ -75,17 +75,54 @@ def renommer(fichier, nouveau_nom, dry_run):
         return 1
 
 
+def detecter_type_chemin(fichier):
+    """Detecte le type de fichier depuis son chemin quand --type est absent.
+    Retourne None si aucun type n'est detectable avec certitude (le fichier
+    n'est alors pas renomme : il sort du perimetre des 4 conventions)."""
+    chemin = str(fichier).replace("\\", "/")
+    basename = fichier.name
+
+    # Outil : sous agents/tools/ ou outils-llm/ (les outils vivent dans ces dossiers)
+    if "/agents/tools/" in chemin:
+        return "outil"
+    # Convention : dossier agents/conventions/ ou nom convention-*.md
+    if "/agents/conventions/" in chemin or basename.startswith("convention-"):
+        return "convention"
+    # Protocole : chemin contenant un dossier protocole-* (regles-immuables)
+    if "/protocole-" in chemin:
+        return "protocole"
+    # Agent : sous agents/<agent>/ (dossier direct d'un agent, hors outils/conventions)
+    m = re.match(r"^.*/agents/([a-z0-9-]+)/.*$", chemin)
+    if m and m.group(1) not in ("regles-immuables", "classeur-variables", "traces", "lecons", "habilitation", "corrections-db.md"):
+        return "agent"
+    return None
+
+
+def extension_compatible(type_fichier, fichier):
+    """Garde anti-renommage : ne corriger que les fichiers dont l extension
+    correspond au type (protocole/agent/convention = .md ; outil = .sh/.py/.md).
+    Les autres fichiers (ex: .json de parcours v2) sortent du perimetre : ils
+    ne doivent JAMAIS etre renommes par corriger-nommage."""
+    ext = fichier.suffix.lower()
+    if type_fichier in ("protocole", "agent", "convention"):
+        return ext == ".md"
+    return ext in (".sh", ".py", ".md")
+
+
 def corriger_protocole(fichier, dry_run):
     basename = fichier.name
     print(BLUE + "[OUTIL] Correction du nommage : " + basename + NC)
     print("")
 
+    if fichier.suffix.lower() != ".md":
+        print("  " + GREEN + "[OK] Aucune correction necessaire (fichier non .md)" + NC)
+        return 0
+
     # Format : [nom].[major].[minor].[statut].md
     parties = basename.split(".")
     if len(parties) < 5:
-        print("  " + RED + "[ERREUR] Format invalide : " + basename + NC)
-        print("    Impossible de corriger automatiquement")
-        return 1
+        print("  " + GREEN + "[OK] Aucune correction necessaire (format hors protocole)" + NC)
+        return 0
 
     nouveau_nom = ".".join(parties) if basename.endswith(".md") else basename + ".md"
     # Le format attendu est deja nom.majeur.mineur.statut.md
@@ -96,6 +133,10 @@ def corriger_agent(fichier, dry_run):
     basename = fichier.name
     print(BLUE + "[OUTIL] Correction du nommage : " + basename + NC)
     print("")
+
+    if fichier.suffix.lower() != ".md":
+        print("  " + GREEN + "[OK] Aucune correction necessaire (fichier non .md)" + NC)
+        return 0
 
     # Format : nom-agent.md (minuscules)
     if re.match(r"^[a-z]+\.md$", basename):
@@ -128,6 +169,10 @@ def corriger_convention(fichier, dry_run):
     print(BLUE + "[OUTIL] Correction du nommage : " + basename + NC)
     print("")
 
+    if fichier.suffix.lower() != ".md":
+        print("  " + GREEN + "[OK] Aucune correction necessaire (fichier non .md)" + NC)
+        return 0
+
     # Format : convention-nom.md
     if re.match(r"^convention-[a-z-]+\.md$", basename):
         print("  " + GREEN + "[OK] Aucune correction necessaire" + NC)
@@ -149,8 +194,8 @@ def main():
         description="Corriger le nommage des fichiers selon les conventions.",
     )
     parser.add_argument("fichier", help="Chemin du fichier a corriger")
-    parser.add_argument("--type", required=True, choices=["protocole", "agent", "outil", "convention"],
-                        help="Type de fichier (protocole, agent, outil, convention)")
+    parser.add_argument("--type", default=None, choices=["protocole", "agent", "outil", "convention"],
+                        help="Type de fichier (protocole, agent, outil, convention). Absent -> auto-detection par le chemin.")
     parser.add_argument("--dry-run", action="store_true", help="Simuler sans modifier")
     parser.add_argument("--verbose", action="store_true", help="Afficher les details")
     parser.add_argument("--version", action="version", version="corriger-nommage " + VERSION + " (" + STATUT + ")")
@@ -163,13 +208,29 @@ def main():
         print("Erreur: Le fichier '" + args.fichier + "' n'existe pas")
         return 1
 
-    if args.type == "protocole":
+    type_fichier = args.type
+    if type_fichier is None:
+        type_fichier = detecter_type_chemin(fichier)
+        if type_fichier is None:
+            print(BLUE + "[OUTIL] Correction du nommage : " + fichier.name + NC)
+            print("")
+            print("  " + GREEN + "[OK] Aucune correction necessaire (type non specifie et non detectable depuis le chemin)" + NC)
+            return 0
+        print(YELLOW + "[AUTO] Type detecte depuis le chemin : " + type_fichier + NC)
+
+    if not extension_compatible(type_fichier, fichier):
+        print(BLUE + "[OUTIL] Correction du nommage : " + fichier.name + NC)
+        print("")
+        print("  " + GREEN + "[OK] Aucune correction necessaire (extension hors perimetre du type " + type_fichier + ")" + NC)
+        return 0
+
+    if type_fichier == "protocole":
         return corriger_protocole(fichier, args.dry_run)
-    elif args.type == "agent":
+    elif type_fichier == "agent":
         return corriger_agent(fichier, args.dry_run)
-    elif args.type == "outil":
+    elif type_fichier == "outil":
         return corriger_outil(fichier, args.dry_run)
-    elif args.type == "convention":
+    elif type_fichier == "convention":
         return corriger_convention(fichier, args.dry_run)
     return 1
 

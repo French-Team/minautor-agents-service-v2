@@ -1,3 +1,7 @@
+{"date": "2026-09-05 19:03:17", "agent": "vulcain", "serie": "c", "test": "test-095-catalogue-combos-garde-fou.py", "verdict": "OK", "duree": 0.201, "run_id": "20260905-190317"}
+{"date": "2026-09-05 19:03:11", "agent": "vulcain", "serie": "c", "test": "test-001-evaluer-agents-coherence.py", "verdict": "OK", "duree": 1.008, "run_id": "20260905-190310"}
+{"date": "2026-09-05 19:03:04", "agent": "vulcain", "serie": "c", "test": "test-001-evaluer-agents-coherence.py", "verdict": "OK", "duree": 1.012, "run_id": "20260905-190303"}
+{"date": "2026-09-05 19:03:03", "agent": "vulcain", "serie": "c", "test": "test-095-catalogue-combos-garde-fou.py", "verdict": "OK", "duree": 0.303, "run_id": "20260905-190303"}
 {"date": "2026-09-05 14:16:32", "agent": "janus", "serie": "tous", "test": "test-125-migration-lecons-v1-v2.py", "verdict": "OK", "duree": 0.345, "run_id": "20260905-141405"}
 {"date": "2026-09-05 14:16:32", "agent": "janus", "serie": "tous", "test": "test-126-vestiges-v1-outils.py", "verdict": "OK", "duree": 0.314, "run_id": "20260905-141405"}
 {"date": "2026-09-05 14:16:31", "agent": "janus", "serie": "tous", "test": "test-121-lister-flags-garde-fou.py", "verdict": "OK", "duree": 6.558, "run_id": "20260905-141405"}
@@ -494,7 +498,3 @@
 {"date": "2026-09-02 12:35:14", "agent": "janus", "serie": "tous", "test": "test-032-pool-workers.py", "verdict": "OK", "duree": 9.874, "run_id": "20260902-123404"}
 {"date": "2026-09-02 12:35:14", "agent": "janus", "serie": "tous", "test": "test-033-passage-janus-obligatoire.py", "verdict": "OK", "duree": 0.057, "run_id": "20260902-123404"}
 {"date": "2026-09-02 12:35:14", "agent": "janus", "serie": "tous", "test": "test-034-cerberus-sans-outils-tests.py", "verdict": "OK", "duree": 0.056, "run_id": "20260902-123404"}
-{"date": "2026-09-02 12:35:13", "agent": "janus", "serie": "a", "test": "test-029-conformite-template.py", "verdict": "OK", "duree": 0.202, "run_id": "20260902-123512"}
-{"date": "2026-09-02 12:35:13", "agent": "janus", "serie": "c", "test": "test-001-evaluer-agents-coherence.py", "verdict": "OK", "duree": 0.911, "run_id": "20260902-123512"}
-{"date": "2026-09-02 12:35:11", "agent": "janus", "serie": "tous", "test": "test-001-evaluer-agents-coherence.py", "verdict": "OK", "duree": 0.863, "run_id": "20260902-123510"}
-{"date": "2026-09-02 12:35:11", "agent": "janus", "serie": "tous", "test": "test-029-conformite-template.py", "verdict": "OK", "duree": 0.127, "run_id": "20260902-123510"}

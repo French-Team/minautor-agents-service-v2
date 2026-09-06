@@ -9,7 +9,7 @@ identite:
 ---
 # corriger-nommage
 
-**Version :** 0.2.0
+**Version :** 0.3.1
 **Statut :** prepare
 **Categorie :** corriger
 **Chemin :** `agents/tools/corriger/corriger-nommage/`
@@ -25,17 +25,27 @@ Corriger automatiquement le nommage des fichiers et dossiers.
 
 ## Utilisation
 
-### CLI Python (version 0.2.0-py)
+### CLI Python (version 0.3.1-py)
 
 ```
 python3 corriger-nommage.py --type <protocole|agent|outil|convention> [OPTIONS] <fichier>
+python3 corriger-nommage.py [OPTIONS] <fichier>  # --type absent -> auto-detection par le chemin
 
 Options :
-  --type        Type de fichier (obligatoire)
+  --type        Type de fichier (optionnel : absent -> auto-detection par le chemin)
   --dry-run     Simuler sans modifier
   --verbose     Afficher les details
   --version     Afficher la version
 ```
+
+> **V0.3.1 (2026-09-05)** : `--type` devient OPTIONNEL. Quand il est absent, le
+> type est detecte depuis le chemin du fichier (agents/tools/ -> outil,
+> agents/conventions/ -> convention, protocole-* -> protocole, agents/<agent>/
+> -> agent). Si aucun type n'est detectable OU si l'extension du fichier est
+> hors perimetre du type (ex: .json de parcours v2), l'outil n'echoue PLUS : il
+> affiche une non-correction et retourne 0. Cette tolerance repare le
+> combo-corriger-fichier (case c1) qui lancait corriger-nommage SANS --type et
+> echouait en code 2 sur TOUT fichier.
 
 ### API (version originale)
 

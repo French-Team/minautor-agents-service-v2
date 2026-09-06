@@ -9,7 +9,7 @@ identite:
 ---
 # mettre-a-jour-readme
 
-**Version :** 0.4.5
+**Version :** 0.4.8
 **Statut :** prepare
 **Categorie :** mettre-a-jour
 **Chemin :** `agents/tools/mettre-a-jour/mettre-a-jour-readme/`
@@ -142,6 +142,8 @@ Utilisez --maj pour corriger le texte du README.
 
 | Version | Date | Changements |
 |---|---|---|
+| 0.4.8 | 2026-09-05 | FIX TABLE AGENTS DU README PUBLIC : la presence des agents etait verifiee dans tout le fichier -- une mention narrative ('**Oracle**' dans 'Mon pilote') ou des lignes orphelines en fin de fichier masquaient des agents absents de la table (Ferrari/Nemesis/Oracle manquaient, des doublons 3 colonnes trainaient en fin de Vocabulaire). v0.4.8 : verification restreinte a la table 'Mes agents' (region entre le titre et le titre suivant), insertion des manquants en fin de table au format 2 colonnes de cette table (avant : ancre obsolete '### Le cycle fondamental' + format 3 colonnes). Verifier + dry-run + maj corriges (python et bash, parite). Version bash : compteurs calcules une seule fois par invocation (cache) + boucles sans sous-processus par dossier (lenteur msys). |
+| 0.4.7 | 2026-09-05 | MAJ COMPLETE : --maj corrige desormais CE QUE --verifier signale. (1) Badges du header README (Outils-N, Agents-N) alignes affichage + href (lecon Clio/Janus : les badges en dur n etaient pas corriges). (2) Tableau readme-dev section 6 reconstruit : comptes reels par categorie, categories obsoletes (compte 0, ex Coordination/Cartographier) retirees, manquantes (ex Oracle/Presenter) ajoutees, ligne de synthese section 1 mise a jour (anti-recurrence bug Clio 132 vs 134 : on corrige au lieu de verifier). (3) Exclusion des dossiers techniques `__pycache__` du compte d outils (alignement sur combos-analyse-projet : un dossier de compilation n est pas un outil). (4) verifier() controle aussi le badge Agents. (5) Version bash : migration agents v1 (parcours-<nom>.json) -> v2 (arbre-<nom>.json) + README_DEV + memes correctifs. |
 | 0.2.0-beta | 2026-08-06 | Version precedente (beta) |
 | 0.2.0 | 2026-08-07 | Promotion prepare : passage v2 final |
 | 0.2.0-py | 2026-08-07 | Version Python creee (mettre-a-jour-readme.py), basee sur outil-template.py. Portage fidele : verifier/maj/journal/agents/outils, cas speciaux tester/combos/templates, reconstruction des lignes outils en 3 colonnes |
