@@ -12,6 +12,7 @@ python main.py noter --mission M-XXX --theme SUIVI --action <action> --detail ".
                      [--fichiers "a,b"] [--portes "a,b"] [--duree-s N]
 python main.py lire [--mission M] [--action <action>] [--n N]
 python main.py verifier
+python main.py vue   (genere la vue markdown dediee matrice/suivi-optimus.md)
 ```
 
 - `--action` : action fermee (enum, voir constants.py) -- obligatoire.
@@ -51,6 +52,7 @@ Plus un etalon `suivi-optimus.jsonl.sha256` (empreinte recalculee a chaque ajout
 | commun.py | fonctions communes : lire, ajouter (atomique, LF), empreinte, options |
 | noter/ | noter un evenement (action fermee) |
 | lire/ | lister (tout ou par mission/action, n derniers) |
+| vue/ | generer la vue markdown dediee (matrice/suivi-optimus.md) |
 | verifier/ | integrite SHA-256 (etalon-or) |
 
 ## Protections

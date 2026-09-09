@@ -7,6 +7,7 @@ Usage :
     python main.py ajouter --nom "NOM DU THEME" --categorie <SYSTEME|PERSONNALITE|QUESTION|GOUVERNANCE> --but "..." [--description "..."]
     python main.py lire [--nom "NOM"] [--categorie CATEGORIE]
     python main.py categoriser --id "TH-XXX" --categorie <CATEGORIE>
+    python main.py modifier --id "TH-XXX" [--but "..."] [--description "..."] [--categorie <CATEGORIE>]
     python main.py retirer --id "TH-XXX" (ou --nom "NOM DU THEME")
     python main.py verifier
 """
@@ -15,6 +16,7 @@ import sys
 from ajouter.entry import executer as ajouter_executer
 from categoriser.entry import executer as categoriser_executer
 from lire.entry import executer as lire_executer
+from modifier.entry import executer as modifier_executer
 from retirer.entry import executer as retirer_executer
 from verifier.entry import executer as verifier_executer
 
@@ -22,6 +24,7 @@ COMMANDES = {
     "ajouter": ajouter_executer,
     "lire": lire_executer,
     "categoriser": categoriser_executer,
+    "modifier": modifier_executer,
     "retirer": retirer_executer,
     "verifier": verifier_executer,
 }

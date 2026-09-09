@@ -5,6 +5,7 @@ Aucune logique metier ici (convention-architecture-outils).
 
 Usage :
     python main.py ajouter --lecon "..." --tags "a,b" [--source "..."]
+    python main.py modifier --id L-XXX --lecon "..." [--source "..."]
     python main.py lire [--tag <tag>]
     python main.py verifier
 """
@@ -12,10 +13,12 @@ import sys
 
 from ajouter.entry import executer as ajouter_executer
 from lire.entry import executer as lire_executer
+from modifier.entry import executer as modifier_executer
 from verifier.entry import executer as verifier_executer
 
 COMMANDES = {
     "ajouter": ajouter_executer,
+    "modifier": modifier_executer,
     "lire": lire_executer,
     "verifier": verifier_executer,
 }

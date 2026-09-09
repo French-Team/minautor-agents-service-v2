@@ -45,3 +45,9 @@ else:
 from racine import detecter_racine  # noqa: E402
 
 RACINE = detecter_racine(REPERTOIRE_OUTIL)
+
+# Vue markdown dediee (decision createur 2026-09-09) : visuel lisible de la
+# trace, dans matrice/ (comme journal-multi-encarts.md), jamais edite a la main.
+REPERTOIRE_MATRICE = RACINE / "cerveau-projet" / "matrix" / "matrice"
+NOM_VUE = "suivi-optimus.md"
+CHEMIN_VUE = REPERTOIRE_MATRICE / NOM_VUE

@@ -10,8 +10,8 @@ from constants import NOMS_NIVEAUX
 from monter.fonctions import verifier_montee
 
 # M-080 : a defcon 5, la Matrice met la session-matrix EN PAUSE (protocole
-# de pause). Le cameleon est arrete, optimus est reveille. La pause part par
-# la PORTE UNIQUE pause-session (sous-processus, jamais bloquant ici).
+# de pause). Le cameleon est arrete, la maintenance est reveillee. La pause
+# part par la PORTE UNIQUE pause-session (sous-processus, jamais bloquant ici).
 
 def declencher_pause_auto():
     """Declenche la pause de session-matrix si defcon 5 vient d'etre pose."""
@@ -72,7 +72,7 @@ def executer(arguments):
     )
     if cible == 5:
         print(
-            "DEFCON 5 : l'agent par defaut est stoppe, optimus-prime est reveille "
+            "DEFCON 5 : l'agent par defaut est stoppe, maintenance reveillee "
             "-- seules les missions themees DEFCON restent injectables."
         )
         declencher_pause_auto()

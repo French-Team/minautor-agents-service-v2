@@ -1785,3 +1785,47 @@
 {"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 19:45:20"}
 {"type": "passe-debut", "mode": "relax", "date": "2026-09-09 19:50:20"}
 {"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 19:50:20"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 19:55:20"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 19:55:21"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 20:00:21"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 20:00:22"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 20:05:22"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 20:05:22"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 20:10:22"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 20:10:23"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 20:15:23"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 20:15:24"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 20:20:24"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 20:20:24"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 20:25:24"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 20:25:25"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 20:30:25"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 20:30:25"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 20:35:26"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 20:35:26"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 20:40:26"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 20:40:27"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 20:45:27"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 20:45:28"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 20:50:28"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 20:50:28"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 20:55:28"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 20:55:29"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 21:00:29"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 21:00:30"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 21:05:30"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 21:05:30"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 21:10:30"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 21:10:31"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 21:15:31"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 21:15:32"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 21:20:32"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 21:20:32"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 21:25:32"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 21:25:33"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 21:30:33"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 21:30:34"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 21:35:34"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 21:35:34"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 21:40:34"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 21:40:35"}

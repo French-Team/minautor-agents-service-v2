@@ -20,6 +20,7 @@
 | Commande | Usage |
 |---|---|
 | `ajouter` | `python main.py ajouter --lecon "..." --tags "a,b" [--source "..."]` |
+| `modifier` | `python main.py modifier --id L-XXX --lecon "..." [--source "..."]` (correction, garde l'id) |
 | `lire` | `python main.py lire [--tag X]` |
 | `verifier` | `python main.py verifier` |
 
@@ -119,6 +120,7 @@
 | `verifier` | `python main.py verifier` (structurel : JSON valide, cles requises, tags non vides) |
 
 **Protections** : journal jsonl en AJOUT SEUL (l'histoire jamais reecrite, sans empreinte -- comme historiques-missions) ; tags obligatoires (refus code 2) ; ecriture LF ; garde-fou structurel sur `data/`.
+**Amelioration sac a dos (audit protections 2026-09-09)** : quand un outil REFUSE (code != 0), le message de protection (ligne REFUS) est note en DETAIL dans la BDD et affiche par `lire` -- le sac a dos trace la RAISON de chaque protection declenchee, pas seulement le code. Teste en reel (categorie hors liste fermee -> code 1 + message).
 **Quand** : chaque appel d'un outil/combo/routine (espions embarques du sac a dos) ; la veille-flux y note deja ses passes ; le createur peut y lire les stats de tout ce qui tourne.
 
 ## 11. bdd-variables -- `matrice/data/outils/bdd-variables/`
@@ -197,6 +199,7 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 | Verbe | Commande |
 |---|---|
 | `ajouter` | `python main.py ajouter --nom "NOM" --but "..." [--description "..."]` |
+| `modifier` | `python main.py modifier --id TH-XXX --but "..."` (correction, garde l'id) |
 | `lire` | `python main.py lire [--nom "NOM"]` |
 | `retirer` | `python main.py retirer --id "TH-XXX"` (ou `--nom "NOM"`) |
 | `verifier` | `python main.py verifier` |
@@ -285,7 +288,13 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 | `python routines/vie/main.py activer` | lance les boucles arretees (detache invisible) |
 | `python routines/vie/server_matrice.py` | DEMARRE le server matrice (boucle de surveillance, intervalle 60 s) |
 | `python routines/vie/main.py server arret` | arret cooperatif du server (drapeau, jamais de kill) |
-| `python routines/vie/main.py server etat` | etat du server matrice |
+| `python routines/vie/main.py server etat` | etat du server matrice (PID REELMENT sonde ; fantome detecte + nettoye) |
+
+**Correction audit protections 2026-09-09** : `server etat` lisait le fichier
+PID sans verifier le processus (faux `ACTIVE` avec un PID mort). Desormais il
+SONDE le PID (motif `processus_vivant` partage avec les boucles) : un fantome
+est signale et nettoye. Le server matrice a ete demarre et sa relance auto
+prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 
 ## 23. journal-multi-encarts -- `matrice/data/outils/journal-multi-encarts/` (M-079)
 
@@ -299,7 +308,9 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 | `construire` | `python main.py construire` (regenere le journal complet, ordre ferme des encarts) |
 | `lire` | `python main.py lire` (journal entier) ; `python main.py lire --encart <nom>` (UN encart ; inconnu -> code 2) |
 
-**Encarts (ordre ferme, jamais en vrac)** : matrice (defcon + boucles), missions (en cours + vrac/files/brin), routines (dernieres passes veille), alertes (veille + intercom), cameleon (messages RECUS par le cameleon, M-080), optimus (8 derniers evenements de la trace, M-084), usages (8 derniers appels), modifications (5 derniers fichiers), lecons (5 dernieres), variables (classeur). Chaque encart est present meme vide -- aucune entree en vrac. Format createur (M-080) : chaque encart porte SA ligne de FLUX (d'ou viennent les infos, vers ou elles vont) + un TABLEAU `| Entree | Heure | Date |` (heure et date separees, format HH:MM:SS JJ/MM/AAAA, jamais en debut de ligne).
+**Encarts (ordre ferme, jamais en vrac)** : matrice (defcon + boucles), missions (en cours + vrac/files/brin), routines (dernieres passes veille), alertes (veille + intercom), cameleon (messages RECUS par le cameleon, M-080), usages (8 derniers appels), modifications (5 derniers fichiers), lecons (5 dernieres), variables (classeur).
+> PAS d'encart optimus (decision createur 2026-09-09) : optimus reste INVISIBLE --
+> son suivi vit UNIQUEMENT dans son fichier dedie `matrice/suivi-optimus.md`. Chaque encart est present meme vide -- aucune entree en vrac. Format createur (M-080) : chaque encart porte SA ligne de FLUX (d'ou viennent les infos, vers ou elles vont) + un TABLEAU `| Entree | Heure | Date |` (heure et date separees, format HH:MM:SS JJ/MM/AAAA, jamais en debut de ligne).
 
 ## 24. pause-session -- `matrice/data/outils/pause-session/` (M-080)
 
@@ -313,13 +324,14 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 | Verbe | Commande |
 |---|---|
 | `pause` | `python main.py pause [--raison "..."]` (manuel `[pause]` ou defcon 5 auto) |
-| `reprendre` | `python main.py reprendre` (apres maintenance user + optimus ; restore + notifie) |
+| `reprendre` | `python main.py reprendre` (apres maintenance user ; restore + notifie) |
 | `etat` | `python main.py etat` (montre l'etat de pause s'il existe) |
 | `perimetre` | `python main.py perimetre --zones "a,b"` (reduit la lecture cameleon ; vide = restaure) |
 | `journal` | `python main.py journal` (10 derniers evenements pause/reprise) |
 
 **Protections** : REFUS si pause deja posee (pas de pause double) ; REFUS de reprendre si une mission est en cours (serie stricte) ; pendant la pause, le pilote REFUSE toute injection/enchainement (garde `session_en_pause`) et la fin HORS lot ne relance rien ; defcon 5 declenche la pause AUTOMATIQUEMENT (raccord dans machine-defcon `monter`) ; perimetre tenu dans le classeur-variables (cle `perimetre-cameleon`, ecriture atomique + empreinte) ; journal `data/pauses-session-matrix.jsonl` (append-only). Boite cameleon : `intercom/cameleon/inbox.jsonl` (etancheite : raison "maintenance" seulement).
-**Quand** : demande `[pause]` (maintenance manuelle avec optimus), defcon 5 (mise en securite totale), ou reprise apres maintenance.
+**Etancheite des sorties (audit protections 2026-09-09)** : aucune sortie console de la Matrice (pause-session, machine-defcon, pilote, verifier-*) ne revele le nom de l'entite interne -- terme neutre "maintenance" uniquement. La zone `perimetre-cameleon` du classeur porte la zone NEUTRE `maintenance` ; `lire_perimetre` la RESOUT vers les chemins reels a exclure (le classeur ne fuit jamais le nom).
+**Quand** : demande `[pause]` (maintenance manuelle), defcon 5 (mise en securite totale), ou reprise apres maintenance.
 
 ## 25. trio marbre BDD -- `matrice/data/outils/bdd-{regles,conventions,protocoles}-matrice/` (M-082)
 
@@ -335,7 +347,10 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 | `bdd-conventions-matrice` | `data/bdd-conventions-matrice.json` | C-001..C-005 (0 valeur en dur, ascii, outils structure, sac-a-dos, crochets) |
 | `bdd-protocoles-matrice` | `data/bdd-protocoles-matrice.json` | P-001..P-003 (routes cameleon, protocoles 6-7-8) |
 
-**Interface** (identique pour les 3) : `ajouter --entree "..." --tags "..."` / `lire [--tag ...]` / `verifier`. Espion : les 3 BDD sont surveillees (registre integrite).
+**Interface** (identique pour les 3) : `ajouter --entree "..." --tags "..."` / `modifier --id R-XXX --entree "..."` (ou `--regle`/`--convention`/`--protocole`, correction qui garde l'id) / `lire [--tag ...]` / `verifier`. Espion : les 3 BDD sont surveillees (registre integrite).
+> Le verbe `modifier` existe parce que ces BDD gravees sont LUS par le cameleon :
+> toute correction de contenu (ex : retirer une mention interdite) passe par la
+> porte, jamais par reecriture manuelle (porte unique).
 **Quand** : toute nouvelle regle/convention/protocole de la Matrice passe par ces outils (plus aucun fichier markdown de marbre dans `matrice/`).
 
 ## 26. suivi-optimus -- `matrice/data/outils/suivi-optimus/` (M-084)
@@ -351,7 +366,10 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 |---|---|
 | `noter` | `python main.py noter --mission M-XXX --theme SUIVI --action <action> --detail "..." [--fichiers "a,b"] [--portes "a,b"] [--duree-s N]` |
 | `lire` | `python main.py lire [--mission M] [--action a] [--n N]` (filtres + n derniers) |
+| `vue` | `python main.py vue` (genere le markdown dedie `matrice/suivi-optimus.md`, tous les evenements) |
 | `verifier` | `python main.py verifier` (integrite SHA-256, etalon-or) |
 
-**Actions fermees (enum, anti-bruit par EVENEMENT)** : `debut`, `fin`, `porte`, `depot`, `decision`, `decouverte`, `bilan` -- hors enum refusee (code 2). Format d'une ligne : `date, mission, theme, action, detail, fichiers[], portes[], duree_s`. Encart `optimus` au journal multi-encarts (8 derniers evenements, vue lecture seule).
+**Actions fermees (enum, anti-bruit par EVENEMENT)** : `debut`, `fin`, `porte`, `depot`, `decision`, `decouverte`, `bilan` -- hors enum refusee (code 2). Format d'une ligne : `date, mission, theme, action, detail, fichiers[], portes[], duree_s`.
+**Vue** : `vue` genere le fichier markdown dedie `matrice/suivi-optimus.md` avec UN TABLEAU PAR ACTION (sections fermees dans l'ordre de l'enum) -- decision createur 2026-09-09 : optimus n'a PAS d'encart au journal multi-encarts (il reste invisible), SON fichier est la seule vue de son travail. Le fichier est genere, jamais edite a la main.
+**Etancheite (philosophie d'invisibilite, C-006/L-016)** : le cameleon n'accede JAMAIS a cette trace ; la zone `suivi-optimus` (et `suivi-optimus.md`) est exclue du perimetre-cameleon.
 **Quand** : a chaque action significative d'optimus (GO/arbitrage, fin de mission, porte utilisee, depot au vrac, decouverte d'audit, bilan).

@@ -27,10 +27,12 @@ def executer(arguments):
 
     for ligne in resultats:
         duree = (" " + str(ligne["duree_ms"]) + " ms") if "duree_ms" in ligne else ""
+        detail = ("  DETAIL : " + ligne["detail"]) if ligne.get("detail") else ""
         print(
             ligne["date"] + "  " + ligne["outil"] + "/" + ligne["commande"]
             + "  code " + str(ligne["code"]) + duree
             + "  tags : " + ", ".join(ligne["tags"])
+            + detail
         )
     print(str(len(resultats)) + " usage(s) affiche(s).")
     return 0

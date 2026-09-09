@@ -53,7 +53,19 @@
         "bdd"
       ],
       "source": "M-013 createur"
+    },
+    {
+      "id": "C-006",
+      "date": "2026-09-09 20:13:29",
+      "convention": "COHERENCE LECTURE CAMELEON : tout contenu que le cameleon est cense lire (fiche, routes, personnalites, lecons, themes, checklist, objectif) est VERIFIE avant validation : AUCUNE mention d'entite interne invisible (nom, domicile, trace, zone exclue). Le cameleon ne connait que la Matrice, la MAINTENANCE et l'user.",
+      "tags": [
+        "coherence",
+        "invisibilite",
+        "cameleon",
+        "audit"
+      ],
+      "source": "correction-philosophie (audit-invisibilite)"
     }
   ],
-  "compteur": 5
+  "compteur": 6
 }

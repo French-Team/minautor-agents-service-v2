@@ -87,10 +87,10 @@
     },
     {
       "id": "TH-012",
-      "date": "2026-09-07 18:45:35",
+      "date": "2026-09-09 20:12:45",
       "nom": "DEFCON",
       "nom_affiche": "VIVIER",
-      "but": "Piloter les periodes de mise en securite de la Matrice : echelle 5 (bloque tout sauf optimus-prime), 4 (suivi de bout en bout), 3 (surveiller puis valider), 2 (normal). Le theme DEFCON est le seul injectable quand defcon=5",
+      "but": "Piloter les periodes de mise en securite de la Matrice : echelle 5 (bloque tout sauf la MAINTENANCE), 4 (suivi de bout en bout), 3 (surveiller puis valider), 2 (normal). Le theme DEFCON est le seul injectable quand defcon=5",
       "description": "",
       "categorie": "GOUVERNANCE"
     },
@@ -168,11 +168,11 @@
     },
     {
       "id": "TH-021",
-      "date": "2026-09-07 20:49:31",
+      "date": "2026-09-09 20:12:45",
       "nom": "REPARATEUR",
       "nom_affiche": "VIVIER",
       "but": "Executer les missions reparation apres alerte : reproduire, diagnostiquer a la racine, reparer un changement minimum, retour vert (proto-8)",
-      "description": "Personnalite reparation de cameleon. Reproduire avant de reparer (pas a l'aveugle) ; pas de rustine ; jamais supprimer pour faire taire ; arret cooperatif (L-012) ; hors perimetre -> signaler optimus-prime.",
+      "description": "Personnalite reparation de cameleon. Reproduire avant de reparer (pas a l'aveugle) ; pas de rustine ; jamais supprimer pour faire taire ; arret cooperatif (L-012) ; hors perimetre -> signaler a la Matrice (mission au vrac).",
       "categorie": "PERSONNALITE"
     },
     {

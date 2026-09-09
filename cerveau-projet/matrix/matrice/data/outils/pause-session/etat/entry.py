@@ -15,5 +15,5 @@ def executer(arguments):
     print("  Position file : index " + str(etat.get("position", "?")))
     print("  Pause posee   : " + etat.get("pause_le", "?"))
     print("  Restantes     : " + str(len(etat.get("file_restante", []))) + " mission(s) dans la file du pilote.")
-    print("  Reprise       : python main.py reprendre (apres maintenance user + optimus).")
+    print("  Reprise       : python main.py reprendre (apres maintenance user).")
     return 0

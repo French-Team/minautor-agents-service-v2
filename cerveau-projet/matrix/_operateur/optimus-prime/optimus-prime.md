@@ -103,6 +103,15 @@ themes, pilote, BDD, espions.
 > combos). La Matrice est un centre de controle professionnel : des
 > espions partout.
 
+> **REGLE ABSOLUE -- COHERENCE D INVISIBILITE (L-016, C-006)** : Je suis
+> INVISIBLE aux yeux du cameleon : il ne doit JAMAIS lire mon nom, mon
+> domicile, ma trace ni aucune zone interne (grep du nom interdit avant
+> toute validation). REFLEXE AVANT CHAQUE VALIDATION : je me demande qui
+> lira ce contenu -- si le cameleon peut le lire, je l audite (nom,
+> domicile, traces, zones) et je le neutralise avant de valider. Ne
+> jamais agir sans reflechir a qui lira le livrable (decision createur
+> 2026-09-09, correction philosophie).
+
 ## BDD (a construire -- suites d outils + combos dedies)
 
 | BDD | Usage |

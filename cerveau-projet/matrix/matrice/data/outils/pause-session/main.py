@@ -7,7 +7,7 @@ PAUSE SEULEMENT, session-matrix en pause (jamais cassee), notification
 
 Usage :
     python main.py pause    [--raison "..."]      (manuel ou defcon 5)
-    python main.py reprendre                     (apres maintenance user + optimus)
+    python main.py reprendre                     (apres maintenance user)
     python main.py etat                          (montre l'etat de pause s'il existe)
     python main.py perimetre --zones "a,b"       (reduit le perimetre de lecture cameleon)
     python main.py journal                       (derniers evenements pause/reprise)

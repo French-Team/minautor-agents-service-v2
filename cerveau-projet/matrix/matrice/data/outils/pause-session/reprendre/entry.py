@@ -25,7 +25,7 @@ def executer(arguments):
     id_mission = mission.get("id", "M-???")
 
     # Zones exclues de la lecture cameleon (regle matrice-utilise-cameleon) :
-    # la reduction peut etre posee PENDANT la maintenance par optimus + createur.
+    # la reduction peut etre posee PENDANT la maintenance (cote maintenance).
     _, zones, _ = lire_perimetre()
     if zones:
         print("Perimetre cameleon : " + str(len(zones)) + " zone(s) exclue(s) de SA lecture (reprise conforme).")

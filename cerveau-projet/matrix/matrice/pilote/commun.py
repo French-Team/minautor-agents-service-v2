@@ -99,7 +99,7 @@ def defcon_bloque_theme(theme):
         if niveau == NIVEAU_DEFCON_MAX and theme != THEME_DEFCON:
             return 1, (
                 "REFUS defcon 5 : mise en securite totale -- seules les missions "
-                "themees DEFCON restent injectables (optimus-prime reveille)."
+                "themees DEFCON restent injectables (maintenance reveillee)."
             )
         return 0, ""
     return 0, ""

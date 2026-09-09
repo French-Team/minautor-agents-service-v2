@@ -194,6 +194,12 @@
             "pilote",
             "auto-audit"
           ]
+        },
+        {
+          "date": "2026-09-09 21:31:20",
+          "action": "modifie",
+          "detail": "Audit protections : sorties console neutralisees (maintenance reveillee au lieu du nom interne)",
+          "tags": []
         }
       ],
       "tags": [
@@ -408,6 +414,15 @@
             "manuel",
             "contrat"
           ]
+        },
+        {
+          "date": "2026-09-09 19:58:36",
+          "action": "modifie",
+          "detail": "Fiche 26 : verbe vue ajoute + mention du fichier dedie",
+          "tags": [
+            "suivi-optimus",
+            "manuel"
+          ]
         }
       ],
       "tags": [
@@ -426,7 +441,8 @@
         "m078",
         "timeout",
         "m079",
-        "M-084"
+        "M-084",
+        "suivi-optimus"
       ]
     },
     "_operateur/optimus-prime/conventions/convention-indices.md": {
@@ -486,6 +502,12 @@
             "conventions",
             "outil"
           ]
+        },
+        {
+          "date": "2026-09-09 21:31:20",
+          "action": "modifie",
+          "detail": "Audit protections : messages d'ecart neutralises (nom du fichier seul, pas le chemin)",
+          "tags": []
         }
       ],
       "tags": [
@@ -509,6 +531,12 @@
             "regles",
             "racine-agents-md"
           ]
+        },
+        {
+          "date": "2026-09-09 21:31:20",
+          "action": "modifie",
+          "detail": "Audit protections : messages d'ecart neutralises (nom du fichier seul, pas le chemin)",
+          "tags": []
         }
       ],
       "tags": [
@@ -532,6 +560,12 @@
             "protocoles",
             "reparation"
           ]
+        },
+        {
+          "date": "2026-09-09 21:31:20",
+          "action": "modifie",
+          "detail": "Audit protections : messages d'ecart neutralises (nom du fichier seul, pas le chemin)",
+          "tags": []
         }
       ],
       "tags": [
@@ -2025,6 +2059,12 @@
             "m076",
             "sac-a-dos"
           ]
+        },
+        {
+          "date": "2026-09-09 21:42:05",
+          "action": "modifie",
+          "detail": "Audit protections : le sac a dos note la RAISON du refus (ligne REFUS en detail) quand un outil refuse -- journal des protections",
+          "tags": []
         }
       ],
       "tags": [
@@ -2340,12 +2380,30 @@
             "suivi-optimus",
             "outil"
           ]
+        },
+        {
+          "date": "2026-09-09 19:58:36",
+          "action": "modifie",
+          "detail": "Vue markdown dediee ajoutee (decision createur) : verbe vue + categorie vue/ + CHEMIN_VUE ; RACINE deplacee apres son import (bug NameError attrape en reel)",
+          "tags": [
+            "suivi-optimus",
+            "vue",
+            "decision-createur"
+          ]
+        },
+        {
+          "date": "2026-09-09 20:33:40",
+          "action": "modifie",
+          "detail": "Vue redessinee en tableaux dedies par action (vue/fonctions.py) : sections fermees par action, pas de colonnes vides pour les actions sans evenements",
+          "tags": []
         }
       ],
       "tags": [
         "M-084",
         "suivi-optimus",
-        "outil"
+        "outil",
+        "vue",
+        "decision-createur"
       ]
     },
     "matrice/data/suivi-optimus.jsonl": {
@@ -2473,6 +2531,18 @@
             "perimetre",
             "etancheite"
           ]
+        },
+        {
+          "date": "2026-09-09 20:33:40",
+          "action": "modifie",
+          "detail": "Perimetre-cameleon etendu a 9 zones exclues : suivi-optimus, suivi-optimus.md, archives pilote (file-missions, historiques), modifications, usages, activites, journal-multi-encarts",
+          "tags": []
+        },
+        {
+          "date": "2026-09-09 21:31:20",
+          "action": "modifie",
+          "detail": "Audit protections : zone neutre 'maintenance' dans perimetre-cameleon (le nom interne ne fuit plus)",
+          "tags": []
         }
       ],
       "tags": [
@@ -2556,6 +2626,172 @@
         "index",
         "parcours"
       ]
+    },
+    "matrice/suivi-optimus.md": {
+      "modifications": [
+        {
+          "date": "2026-09-09 19:58:36",
+          "action": "cree",
+          "detail": "Vue markdown dediee du suivi d'optimus generee (5 evenements) -- jamais editee a la main (verbe vue)",
+          "tags": [
+            "suivi-optimus",
+            "vue"
+          ]
+        },
+        {
+          "date": "2026-09-09 20:33:40",
+          "action": "modifie",
+          "detail": "Fichier markdown dedie cree (genere par verbe vue, jamais edite a la main) : reponse a la demande createur",
+          "tags": []
+        }
+      ],
+      "tags": [
+        "suivi-optimus",
+        "vue"
+      ]
+    },
+    "matrice/agents/cameleon/cameleon.md": {
+      "modifications": [
+        {
+          "date": "2026-09-09 20:33:20",
+          "action": "modifie",
+          "detail": "Correction philosophique invisibilite : 3 mentions d'entite interne retirees de la fiche cameleon (regle 9 zones exclues conservee, neutre)",
+          "tags": []
+        }
+      ],
+      "tags": []
+    },
+    "matrice/data/vivier-themes.json": {
+      "modifications": [
+        {
+          "date": "2026-09-09 20:33:20",
+          "action": "modifie",
+          "detail": "TH-012 et TH-021 modifiees via porte modifier theme-vivier : mentions d'entite interne retirees (personnalites lues par le cameleon)",
+          "tags": []
+        }
+      ],
+      "tags": []
+    },
+    "matrice/data/regles-matrice.json": {
+      "modifications": [
+        {
+          "date": "2026-09-09 20:33:20",
+          "action": "modifie",
+          "detail": "R-002 modifiee via porte modifier bdd-regles-matrice : mention d'entite interne retiree (marbre lu par le cameleon)",
+          "tags": []
+        }
+      ],
+      "tags": []
+    },
+    "matrice/data/lecons.json": {
+      "modifications": [
+        {
+          "date": "2026-09-09 20:33:20",
+          "action": "modifie",
+          "detail": "L-016 reecrite sans nom d'entite via porte modifier bdd-lecons (lecons injectees au cameleon)",
+          "tags": []
+        }
+      ],
+      "tags": []
+    },
+    "matrice/data/conventions-matrice.json": {
+      "modifications": [
+        {
+          "date": "2026-09-09 20:33:40",
+          "action": "modifie",
+          "detail": "C-006 ajoutee : coherence lecture cameleon (tout contenu lu verifie avant validation)",
+          "tags": []
+        }
+      ],
+      "tags": []
+    },
+    "matrice/data/outils/{bdd-regles-matrice,theme-vivier,bdd-lecons}": {
+      "modifications": [
+        {
+          "date": "2026-09-09 20:33:40",
+          "action": "modifie",
+          "detail": "Verbe modifier ajoute aux 3 portes BDD (correction de contenu grave garde l'id, jamais reecriture manuelle) -- gap revele par la correction philosophique",
+          "tags": []
+        }
+      ],
+      "tags": []
+    },
+    "matrice/data/outils/journal-multi-encarts": {
+      "modifications": [
+        {
+          "date": "2026-09-09 20:33:40",
+          "action": "modifie",
+          "detail": "Encart optimus retire du journal (constants/commun/construire) : optimus invisible, 9 encarts restants",
+          "tags": []
+        }
+      ],
+      "tags": []
+    },
+    "matrice/data/outils/machine-defcon/constants.py": {
+      "modifications": [
+        {
+          "date": "2026-09-09 21:31:14",
+          "action": "modifie",
+          "detail": "Audit protections (decision createur) : sortie console defcon 5 neutralisee (maintenance reveillee au lieu du nom interne)",
+          "tags": []
+        }
+      ],
+      "tags": []
+    },
+    "matrice/data/outils/pause-session": {
+      "modifications": [
+        {
+          "date": "2026-09-09 21:31:15",
+          "action": "modifie",
+          "detail": "Audit protections : sorties console neutralisees (maintenance), zone neutre perimetre-cameleon resolue en chemins reels",
+          "tags": []
+        }
+      ],
+      "tags": []
+    },
+    "matrice/data/outils/bdd-variables/lire/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-09 21:31:21",
+          "action": "modifie",
+          "detail": "Bug corrige : entree perimetre-cameleon sans id plantait la lecture (KeyError)",
+          "tags": []
+        }
+      ],
+      "tags": []
+    },
+    "matrice/data/outils/bdd-usages": {
+      "modifications": [
+        {
+          "date": "2026-09-09 21:42:06",
+          "action": "modifie",
+          "detail": "Audit protections : lire affiche le detail (raison de protection)",
+          "tags": []
+        }
+      ],
+      "tags": []
+    },
+    "matrice/routines/vie/server/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-09 21:42:06",
+          "action": "modifie",
+          "detail": "Audit protections : server etat sonde reellement le PID (fantome detecte et nettoye, plus de faux ACTIVE)",
+          "tags": []
+        }
+      ],
+      "tags": []
+    },
+    "matrice/routines/vie/server_matrice.py": {
+      "modifications": [
+        {
+          "date": "2026-09-09 21:42:15",
+          "action": "modifie",
+          "detail": "Audit protections : server matrice demarre en arriere-plan, relance auto prouvee en reel (espion tue puis relance)",
+          "tags": []
+        }
+      ],
+      "tags": []
     }
   }
 }

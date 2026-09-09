@@ -30,12 +30,17 @@ def lire_lignes(chemin):
 
 
 def detecter_non_ascii(chemin):
-    """Retourne les ecarts ASCII du fichier (format fichier:ligne:colonne)."""
+    """Retourne les ecarts ASCII du fichier (format fichier:ligne:colonne).
+
+    Etancheite (decision createur, audit protections 2026-09-09) : seul le
+    NOM du fichier est affiche, jamais son chemin complet (les chemins
+    internes ne doivent pas fuir vers le cameleon).
+    """
     ecarts = []
     for numero, ligne in enumerate(lire_lignes(chemin), 1):
         for colonne, caractere in enumerate(ligne, 1):
             if ord(caractere) > 127:
-                ecarts.append(str(chemin) + ":" + str(numero) + ":" + str(colonne))
+                ecarts.append(chemin.name + ":" + str(numero) + ":" + str(colonne))
     return ecarts
 
 
@@ -60,7 +65,7 @@ def verifier_frontmatter(chemin):
         if contenu.startswith("type:") and contenu.split(":", 1)[1].strip() != TYPE_ATTENDU:
             ecarts.append("type attendu '" + TYPE_ATTENDU + "'")
         if contenu.startswith("appartient_a:") and contenu.split(":", 1)[1].strip() != APPARTIENT_A:
-            ecarts.append("appartient_a attendu '" + APPARTIENT_A + "'")
+            ecarts.append("appartient_a non conforme au marbre (voir le front-matter attendu)")
     if not any(ligne.strip().startswith("type:") for ligne in entete):
         ecarts.append("champ 'type' absent du front-matter")
     if not any(ligne.strip().startswith("appartient_a:") for ligne in entete):

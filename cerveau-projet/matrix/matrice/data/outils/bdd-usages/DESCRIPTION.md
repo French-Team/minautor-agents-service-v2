@@ -11,7 +11,7 @@
 - `noter` : ajoute UN enregistrement d'usage (outil, commande, code de sortie,
   duree optionnelle, detail optionnel, tags obligatoires).
 - `lire` : lit la BDD, filtres combinables --outil / --tag (reponse vide =
-  aucun resultat).
+  aucun resultat) ; affiche le DETAIL (raison de protection) quand il existe.
 - `verifier` : controle structurel : chaque ligne est un JSON valide avec les
   cles requises et des tags non vides. Code 0/1.
 

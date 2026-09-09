@@ -174,7 +174,19 @@
         "lecon-m078"
       ],
       "source": "M-078 timeout veille (2 incidents de test nettoyes a la main)"
+    },
+    {
+      "id": "L-016",
+      "date": "2026-09-09 20:15:38",
+      "lecon": "Philosophie d'invisibilite : si un acteur est invisible aux yeux d'un autre, il ne doit JAMAIS etre nomme dans ce que l'acteur visible lit : fiche, injections, marbre, vivier, lecons. Avant toute validation, AUDITER ce que l'acteur visible lira (recherche du nom interdit + relecture). Attrape en reel : fiche (3 mentions), TH-012, TH-021, R-002 -- corrige par portes modifier ajoutees (bdd-regles-matrice, theme-vivier, bdd-lecons).",
+      "tags": [
+        "invisibilite",
+        "cameleon",
+        "audit",
+        "philosophie"
+      ],
+      "source": "correction-philosophie"
     }
   ],
-  "compteur": 15
+  "compteur": 16
 }

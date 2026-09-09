@@ -8,17 +8,20 @@ Usage :
                         [--fichiers "a,b"] [--portes "a,b"] [--duree-s N]
     python main.py lire [--mission M] [--action <action>] [--n N]
     python main.py verifier
+    python main.py vue   (genere la vue markdown dediee matrice/suivi-optimus.md)
 """
 import sys
 
 from lire.entry import executer as lire_executer
 from noter.entry import executer as noter_executer
 from verifier.entry import executer as verifier_executer
+from vue.entry import executer as vue_executer
 
 COMMANDES = {
     "noter": noter_executer,
     "lire": lire_executer,
     "verifier": verifier_executer,
+    "vue": vue_executer,
 }
 
 

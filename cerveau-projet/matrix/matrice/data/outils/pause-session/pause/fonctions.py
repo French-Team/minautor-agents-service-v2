@@ -15,7 +15,7 @@ def notifier_cameleon(id_mission):
 
     Etancheite garantie : le message porte la raison "maintenance", jamais
     l'origine (defcon 5 ou pause manuelle), jamais l'intervention
-    user/optimus -- le cameleon ne doit JAMAIS apprendre la raison.
+    user/maintenance -- le cameleon ne doit JAMAIS apprendre la raison.
     """
     message = {
         "type": "pause",

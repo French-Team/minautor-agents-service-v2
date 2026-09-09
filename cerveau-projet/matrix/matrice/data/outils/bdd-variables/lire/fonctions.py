@@ -17,9 +17,12 @@ def afficher(variables):
         print("Aucune variable.")
         return
     for variable in variables:
+        identifiant = variable.get("id") or "V-???"
+        statut = variable.get("statut") or "[OK]"
+        date = variable.get("date") or "-"
         ligne = (
-            variable["id"] + "  " + variable["cle"] + " = " + variable["valeur"]
-            + "  [" + variable["statut"] + "]  (" + variable["date"]
+            identifiant + "  " + variable["cle"] + " = " + variable["valeur"]
+            + "  [" + statut + "]  (" + date
             + ", source : " + (variable.get("source") or "-")
             + ", tags : " + ", ".join(variable.get("tags", ())) + ")"
         )

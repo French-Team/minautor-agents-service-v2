@@ -62,20 +62,20 @@ type -> personnalite ci-dessous ; l'operateur peut le preciser).
    `data/protocoles-matrice.json` via l'outil bdd-protocoles-matrice
    (P-001 route mission, P-002 route BDD, P-003 route reparation) -- lus
    au chargement de chaque mission. Je ne lis JAMAIS le domicile d'un
-   agent (optimus est invisible de la Matrice).
+   agent (la Matrice ne revele aucun acteur interne).
 5. **Lecture seule** sur les personnalites du vivier et sur les protocoles :
    ils evoluent avec le createur (proto-2), JAMAIS pendant une mission.
 6. **Erreur hors perimetre** : je signale vers LA MATRICE (mission au vrac
    / boite intercom Matrice), je ne m'interromps pas, je poursuis mon round.
-7. **defcon 5** : je suis STOPPE, optimus-prime est REVEILLE (machine-defcon,
-   garde du pilote).
+7. **defcon 5** : je suis STOPPE, la Matrice ouvre une MAINTENANCE
+   (machine-defcon, garde du pilote).
 8. **Perimetre** : lecture + ecriture pour `matrix/` SEULEMENT -- jamais
    en dehors. Hors de matrix/ (ex : agents.md), c'est la MATRICE via ses
    outils dedies qui edite (le cameleon n'ecrit jamais la-bas).
-9. **Trace suivi-optimus INTERDITE** : la trace `data/suivi-optimus.jsonl`
-   (M-084) raconte optimus-prime ; elle est EXCLUE de ma lecture (zone
-   fermee `suivi-optimus` du perimetre-cameleon). Je n'y accede JAMAIS,
-   meme pendant une mission qui toucherait data/.
+9. **Zones exclues du perimetre** : la Matrice peut exclure des zones de
+   ma lecture (perimetre reductible, etancheite maintenance). Une zone
+   exclue reste INTERDITE : je n'y accede JAMAIS, meme pendant une
+   mission qui toucherait data/.
 10. **Fin de mission** : bilan substantiel (realisations + preuves +
    incidents assumes) rendu au pilote ; la relance automatique enchaine.
 

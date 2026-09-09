@@ -46,5 +46,5 @@ def executer(arguments):
     print("  Mission sauvegardee : " + mission["id"] + " [" + mission.get("theme", "") + "] " + mission.get("objectif", "")[:60])
     print("  Etat serialise : " + NOM_ETAT + " (reprise a l'identique, sauvegarde SEULEMENT a la pause).")
     print("  Cameleon notifie : '" + RAISON_NOTIFIEE + "' -- la raison reelle n'est JAMAIS divulguee.")
-    print("  Reprise : python main.py reprendre (optimus-prime + createur apres maintenance).")
+    print("  Reprise : python main.py reprendre (maintenance terminee).")
     return 0

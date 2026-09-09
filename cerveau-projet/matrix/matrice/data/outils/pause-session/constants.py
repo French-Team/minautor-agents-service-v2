@@ -45,6 +45,19 @@ CHEMIN_CLASSEUR = REPERTOIRE_DATA / "classeur-variables.json"
 CHEMIN_EMPREINTE_CLASSEUR = REPERTOIRE_DATA / "classeur-variables.json.sha256"
 NOM_CLASSEUR_TMP = "classeur-variables.tmp"
 
+# Zone neutre "maintenance" (decision createur, audit protections 2026-09-09) :
+# le classeur ne revele JAMAIS le nom reel de l'entite interne. La zone cachee
+# dans le classeur est "maintenance" ; cette table RESOUT la zone vers les
+# chemins reels a exclure de la lecture cameleon (appliquee a la lecture).
+ZONE_MAINTENANCE = "maintenance"
+CHEMINS_MAINTENANCE = (
+    "data/outils/suivi-optimus",
+    "data/suivi-optimus.jsonl",
+    "data/suivi-optimus.jsonl.sha256",
+    "suivi-optimus.md",
+    "docs/suivi-optimus-conception.md",
+)
+
 # Niveau defcon qui declenche la pause automatique (lecture seule ici).
 CLE_DEFCON = "defcon"
 NIVEAU_PAUSE_AUTO = 5

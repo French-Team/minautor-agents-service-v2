@@ -36,7 +36,6 @@ CHEMIN_BDD_USAGES = REPERTOIRE_DATA / "usages-outils-combos.jsonl"
 CHEMIN_BDD_MODIFICATIONS = REPERTOIRE_DATA / "modifications-par-fichier.json"
 CHEMIN_BDD_LECONS = REPERTOIRE_DATA / "lecons.json"
 CHEMIN_BDD_VARIABLES = REPERTOIRE_DATA / "classeur-variables.json"
-CHEMIN_BDD_SUIVI = REPERTOIRE_DATA / "suivi-optimus.jsonl"
 
 # Encarts fermes (decision createur) : ordre d'affichage, jamais en vrac.
 ENCARTS = (
@@ -45,7 +44,6 @@ ENCARTS = (
     "routines",
     "alertes",
     "cameleon",
-    "optimus",
     "usages",
     "modifications",
     "lecons",
@@ -69,9 +67,6 @@ FLUX = {
     ),
     "cameleon": (
         "intercom/cameleon/inbox.jsonl (ecrit par pause-session) -> VUE lecture seule"
-    ),
-    "optimus": (
-        "suivi-optimus.jsonl (ecrit par optimus via l'outil suivi-optimus, jamais le cameleon) -> VUE lecture seule"
     ),
     "usages": (
         "sac-a-dos (chaque outil) -> bdd-usages -> usages-outils-combos.jsonl -> VUE"

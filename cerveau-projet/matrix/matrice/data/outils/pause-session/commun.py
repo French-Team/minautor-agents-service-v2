@@ -13,6 +13,7 @@ from constants import (
     CHEMIN_ETAT,
     CHEMIN_FILE_PILOTE,
     CHEMIN_JOURNAL,
+    CHEMINS_MAINTENANCE,
     CLE_DEFCON,
     CLE_PERIMETRE,
     ENCODAGE,
@@ -22,6 +23,7 @@ from constants import (
     NOM_ETAT_TMP,
     STATUT_EN_COURS,
     TAILLE_BLOC_LECTURE,
+    ZONE_MAINTENANCE,
 )
 
 
@@ -162,6 +164,10 @@ def lire_perimetre():
     Les zones exclues vivent dans le classeur-variables (cle CLE_PERIMETRE) :
     UNE source de verite, tenue par l'outil pause-session lui-meme (porte
     bdd-variables, motif atomique + empreinte repris de machine-defcon).
+
+    Etancheite (decision createur, audit protections 2026-09-09) : la zone
+    neutre ZONE_MAINTENANCE est RESOLUE vers ses chemins reels ici, afin
+    que le classeur ne revele jamais le nom de l'entite interne.
     """
     niveau, message = lire_niveau_defcon()
     zones = []
@@ -175,4 +181,7 @@ def lire_perimetre():
                     zones = [z.strip() for z in str(brut).split(",") if z.strip()]
         except (json.JSONDecodeError, OSError):
             zones = []
+    if ZONE_MAINTENANCE in zones:
+        zones.remove(ZONE_MAINTENANCE)
+        zones.extend(list(CHEMINS_MAINTENANCE))
     return niveau, zones, message

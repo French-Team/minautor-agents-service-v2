@@ -39,7 +39,7 @@ NOMS_NIVEAUX = {
     2: "normal",
     3: "surveiller puis valider (la validation clot def3)",
     4: "suivi des problemes a resoudre, de bout en bout",
-    5: "stop de l'agent par defaut (cameleon a venir), optimus-prime reveille",
+    5: "stop de l'agent par defaut (cameleon a venir), maintenance reveillee",
 }
 
 # A defcon 5, seul ce theme reste injectable (garde posee dans le pilote).

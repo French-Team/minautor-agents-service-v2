@@ -50,7 +50,7 @@ def preparer_injection(charger_file):
     """
     if session_en_pause():
         print("REFUS : session-matrix EN PAUSE (protocole M-080) -- aucune injection pendant la maintenance.")
-        print("(reprise par l'outil pause-session, verbe reprendre, apres maintenance user + optimus)")
+        print("(reprise par l'outil pause-session, verbe reprendre, apres maintenance user)")
         return 1
     file_missions = charger_file()
     if mission_en_cours(file_missions) is not None:

@@ -10,7 +10,7 @@ Usage :
     python main.py valider   --raison "..."   (clot def3 -> defcon 2)
 
 L'echelle est FERMEE : 2 = normal, 3 = surveiller puis valider,
-4 = suivi de bout en bout, 5 = stop agent par defaut / optimus-prime reveille.
+4 = suivi de bout en bout, 5 = stop agent par defaut / maintenance reveillee.
 1 est reserve (jamais atteint : la descente s'arrete a 2).
 """
 import sys
