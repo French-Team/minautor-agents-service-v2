@@ -16,7 +16,13 @@ python main.py activer --intervalle <s>    -> lancement avec intervalle personna
 
 ## Garanties
 
-- LANCEMENT DETACHE : DETACHED_PROCESS + CREATE_NEW_PROCESS_GROUP -- la boucle
+- LANCEMENT DETACHE SANS FENETRE (E-056, M-081) : motif UNIQUE partage
+  data/commun/lancement.py (Windows : CREATE_NO_WINDOW + CREATE_NEW_PROCESS_GROUP
+  + startupinfo SW_HIDE ; POSIX : start_new_session) -- aucune fenetre console
+  n'apparait jamais, le redemarrage d'une routine est invisible pour le createur.
+- SERVER MATRICE (E-056, M-081) : server_matrice.py surveille les boucles en
+  continu et RELANCE toute routine morte (arret cooperatif : main.py server arret) ;
+  chaque routine est un fils du server, jamais lancee en direct -- la boucle
   survit a la session qui l'a demarree, zero processus fantome a la fermeture.
 - GARDE DE DOUBLE LANCEMENT : chaque routine porte SON PID (veille-flux.pid,
   espion.pid) et refuse elle-meme un second lancement ; l'activateur

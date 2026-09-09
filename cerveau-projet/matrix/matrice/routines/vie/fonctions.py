@@ -1,6 +1,5 @@
 """Fonctions simples de l'activateur de vie : une seule tache chacune."""
 import os
-import subprocess
 import sys
 
 from constants import NOM_PID_VEILLE, ENCODAGE
@@ -50,21 +49,13 @@ def etat_boucle(nom, chemin_routine, nom_pid):
 
 
 def lancer_detache(chemin_routine, arguments):
-    """Lance une boucle en processus DETACHE (survit a la session) et retourne son PID.
+    """Lance une boucle en processus DETACHE sans AUCUNE fenetre (E-056, M-081).
 
-    CreationFlags DETACHED_PROCESS + CREATE_NEW_PROCESS_GROUP : pas de console
-    accrochee, pas de signal de fermeture de session. Les flux vont a DEVNULL
-    (la routine journalise deja elle-meme dans ses propres fichiers).
+    Motif UNIQUE partage data/commun/lancement.py (fini la duplication) :
+    Windows : CREATE_NO_WINDOW + CREATE_NEW_PROCESS_GROUP + startupinfo SW_HIDE.
+    POSIX   : start_new_session=True.
+    Retourne (pid, duree_ms) -- la duree du lancement est la metrique E-055.
     """
-    creationflags = 0
-    if os.name == "nt":
-        creationflags = subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP
-    processus = subprocess.Popen(
-        [sys.executable, str(chemin_routine / "main.py")] + arguments,
-        cwd=str(chemin_routine),
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        stdin=subprocess.DEVNULL,
-        creationflags=creationflags,
-    )
-    return processus.pid
+    from lancement import lancer_invisible
+
+    return lancer_invisible(chemin_routine, arguments)

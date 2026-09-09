@@ -10,7 +10,7 @@ Flux : classeur-variables.json + fichiers PID des boucles -> VUE lecture seule
 | Entree | Heure | Date |
 |---|---|---|
 | defcon : 2 | 07:33:10 | 09/09/2026 |
-| veille-flux : ACTIVE (PID 13376) | 07:14:49 | 08/09/2026 |
+| veille-flux : ACTIVE (PID 17656) | 09:18:59 | 09/09/2026 |
 | espion-integrite : ACTIVE (PID 10436) | 07:51:27 | 09/09/2026 |
 
 ## Encart : missions
@@ -19,7 +19,8 @@ Flux : pilote/file-missions.json + pilote/entonnoir-files.json -> VUE lecture se
 
 | Entree | Heure | Date |
 |---|---|---|
-| vrac : 4 mission(s) (E-051, E-054, E-055, E-056) | 08:21:45 | 09/09/2026 |
+| EN COURS M-084 -- SUIVI-OPTIMUS | 09:59:26 | 09/09/2026 |
+| vrac : 1 mission(s) (E-057) | 09:57:08 | 09/09/2026 |
 
 ## Encart : routines
 
@@ -27,11 +28,11 @@ Flux : routines/veille-flux/journal-veille.txt -> VUE lecture seule
 
 | Entree | Heure | Date |
 |---|---|---|
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 08:20:22 | 09/09/2026 |
-| passe relax demarree | 08:23:37 | 09/09/2026 |
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 08:23:38 | 09/09/2026 |
-| passe relax demarree | 08:25:24 | 09/09/2026 |
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 08:25:27 | 09/09/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 19:25:17 | 09/09/2026 |
+| passe relax demarree | 19:30:17 | 09/09/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 19:30:18 | 09/09/2026 |
+| passe relax demarree | 19:35:18 | 09/09/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 19:35:18 | 09/09/2026 |
 
 ## Encart : alertes
 
@@ -39,11 +40,11 @@ Flux : veille-flux/alertes-emises.json + intercom/matrice/inbox.jsonl -> VUE lec
 
 | Entree | Heure | Date |
 |---|---|---|
-| intercom : fin-mission | 22:48:20 | 07/09/2026 |
-| intercom : fin-mission | 23:03:18 | 07/09/2026 |
-| intercom : fin-mission | 07:25:26 | 08/09/2026 |
 | intercom : fin-mission | 09:54:19 | 08/09/2026 |
 | intercom : fin-mission | 08:27:41 | 09/09/2026 |
+| intercom : fin-mission | 09:23:16 | 09/09/2026 |
+| intercom : fin-mission | 09:42:29 | 09/09/2026 |
+| intercom : fin-mission | 09:59:26 | 09/09/2026 |
 
 ## Encart : cameleon
 
@@ -56,20 +57,28 @@ Flux : intercom/cameleon/inbox.jsonl (ecrit par pause-session) -> VUE lecture se
 | pause -- mission M-080 | 07:32:53 | 09/09/2026 |
 | reprise -- mission M-080 | 07:33:09 | 09/09/2026 |
 
+## Encart : optimus
+
+Flux : suivi-optimus.jsonl (ecrit par optimus via l'outil suivi-optimus, jamais le cameleon) -> VUE lecture seule
+
+| Entree | Heure | Date |
+|---|---|---|
+| decision \| M-084 \| GO createur : construire suivi-optimus | 19:35:29 | 09/09/2026 |
+
 ## Encart : usages
 
 Flux : sac-a-dos (chaque outil) -> bdd-usages -> usages-outils-combos.jsonl -> VUE
 
 | Entree | Heure | Date |
 |---|---|---|
-| corriger-ascii/corriger code 1 70ms | 08:25:25 | 09/09/2026 |
-| veille-flux/passe-relax code 0 2279ms | 08:25:28 | 09/09/2026 |
-| bdd-activites/noter code 0 1ms | 08:25:29 | 09/09/2026 |
-| journal-multi-encarts/construire code 0 10ms | 08:26:09 | 09/09/2026 |
-| bdd-modifications/noter code 0 3ms | 08:27:04 | 09/09/2026 |
-| bdd-modifications/noter code 0 3ms | 08:27:04 | 09/09/2026 |
-| bdd-modifications/noter code 0 3ms | 08:27:04 | 09/09/2026 |
-| bdd-modifications/noter code 0 3ms | 08:27:05 | 09/09/2026 |
+| suivi-optimus/noter code 2 0ms | 19:35:29 | 09/09/2026 |
+| suivi-optimus/lire code 0 0ms | 19:35:29 | 09/09/2026 |
+| suivi-optimus/lire code 0 0ms | 19:35:29 | 09/09/2026 |
+| suivi-optimus/verifier code 0 0ms | 19:35:30 | 09/09/2026 |
+| pause-session/perimetre code 0 2ms | 19:35:58 | 09/09/2026 |
+| pause-session/etat code 0 0ms | 19:35:58 | 09/09/2026 |
+| journal-multi-encarts/construire code 0 10ms | 19:35:59 | 09/09/2026 |
+| journal-multi-encarts/lire code 0 0ms | 19:35:59 | 09/09/2026 |
 
 ## Encart : modifications
 
@@ -77,11 +86,11 @@ Flux : notes de mission -> bdd-modifications -> modifications-par-fichier.json -
 
 | Entree | Heure | Date |
 |---|---|---|
-| matrice/matrice-readme.md | 09:53:55 | 08/09/2026 |
-| data/outils/journal-multi-encarts/ | 08:27:04 | 09/09/2026 |
-| data/outils/pause-session/ | 08:27:04 | 09/09/2026 |
-| pilote/commun.py + injection + fin | 08:27:04 | 09/09/2026 |
-| data/outils/machine-defcon/monter/entry.py | 08:27:05 | 09/09/2026 |
+| routines/vie/fonctions.py + activer.py | 09:21:34 | 09/09/2026 |
+| routines/vie/server_matrice.py + server/entry.py | 09:21:34 | 09/09/2026 |
+| data/outils/bdd-regles-matrice/ + bdd-conventions-matrice/ + bdd-protocoles-matrice/ | 09:34:26 | 09/09/2026 |
+| matrice-readme.md + agents/cameleon/cameleon.md | 09:34:26 | 09/09/2026 |
+| data/bdd-theme-vivier.json | 09:57:43 | 09/09/2026 |
 
 ## Encart : lecons
 
@@ -103,4 +112,4 @@ Flux : machine-defcon / pause-session / bdd-variables -> classeur-variables.json
 |---|---|---|
 | veille-intervalle = 600 | 16:19:00 | 06/09/2026 |
 | defcon = 2 | 07:33:10 | 09/09/2026 |
-| perimetre-cameleon = (perimetre complet : aucune zone exclue) | 07:32:33 | 09/09/2026 |
+| perimetre-cameleon = suivi-optimus | 19:35:58 | 09/09/2026 |

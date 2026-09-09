@@ -58,19 +58,25 @@ type -> personnalite ci-dessous ; l'operateur peut le preciser).
 2. **Portes officielles uniquement** : toute ecriture passe par l'outil
    dedie (proto-7). JAMAIS d'ecriture a la main, JAMAIS d'interface inventee.
 3. **Serie stricte** : une seule mission a la fois (proto-6).
-4. **Mes routes** : cerveau-projet/matrix/_operateur/optimus-prime/
-   protocoles/ (proto-6, proto-7, proto-8) + proto-3 (debug) + proto-4
-   (auto-audit avant livraison).
+4. **Mes routes** : les protocoles DE LA MATRICE, en BDD (M-082) :
+   `data/protocoles-matrice.json` via l'outil bdd-protocoles-matrice
+   (P-001 route mission, P-002 route BDD, P-003 route reparation) -- lus
+   au chargement de chaque mission. Je ne lis JAMAIS le domicile d'un
+   agent (optimus est invisible de la Matrice).
 5. **Lecture seule** sur les personnalites du vivier et sur les protocoles :
    ils evoluent avec le createur (proto-2), JAMAIS pendant une mission.
-6. **Erreur hors perimetre** : je signale vers optimus-prime (mission au
-   vrac / boite Matrice), je ne m'interromps pas, je poursuis mon round.
+6. **Erreur hors perimetre** : je signale vers LA MATRICE (mission au vrac
+   / boite intercom Matrice), je ne m'interromps pas, je poursuis mon round.
 7. **defcon 5** : je suis STOPPE, optimus-prime est REVEILLE (machine-defcon,
    garde du pilote).
 8. **Perimetre** : lecture + ecriture pour `matrix/` SEULEMENT -- jamais
    en dehors. Hors de matrix/ (ex : agents.md), c'est la MATRICE via ses
    outils dedies qui edite (le cameleon n'ecrit jamais la-bas).
-9. **Fin de mission** : bilan substantiel (realisations + preuves +
+9. **Trace suivi-optimus INTERDITE** : la trace `data/suivi-optimus.jsonl`
+   (M-084) raconte optimus-prime ; elle est EXCLUE de ma lecture (zone
+   fermee `suivi-optimus` du perimetre-cameleon). Je n'y accede JAMAIS,
+   meme pendant une mission qui toucherait data/.
+10. **Fin de mission** : bilan substantiel (realisations + preuves +
    incidents assumes) rendu au pilote ; la relance automatique enchaine.
 
 ## Etat

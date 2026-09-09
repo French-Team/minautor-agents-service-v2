@@ -266,10 +266,28 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 |---|---|---|
 | `racine.py` | L'UNIQUE `detecter_racine(depart)` : remonte jusqu'au dossier portant AGENTS.md (pattern v1, L-013) | dans un `constants.py` : `sys.path.insert(0, str(REPERTOIRE_DATA / "commun"))` puis `from racine import detecter_racine` et `RACINE = detecter_racine(REPERTOIRE_OUTIL)` |
 | `sac_a_dos.py` | `envelopper(principal, arguments)` : chronometre, execute, puis note l'usage (outil, verbe, code, duree ms) dans la BDD usages PAR L'OUTIL bdd-usages (porte unique). Echec de notation jamais bloquant. Garde : bdd-usages ne se note jamais lui-meme | dans un `main.py` : `sys.exit(envelopper(principal, sys.argv[1:]))` |
+| `lancement.py` | `lancer_invisible(chemin, arguments, script="main.py")` : lancement DETACHE SANS AUCUNE FENETRE (E-056 : Windows CREATE_NO_WINDOW + SW_HIDE, POSIX start_new_session), retourne (pid, duree_ms). L'UNIQUE facon de lancer un processus de fond -- fini les fenetres qui clignotent | dans un relanceur : `from lancement import lancer_invisible` (voir routines/vie) |
 
 **Regle de naissance** : tout nouvel outil (y compris via `dupliquer-template`) nait EQUIPE -- le motif et le sac a dos sont dans les moules `templates/outil-bdd` et `templates/theme-bdd`. Une note sans tag `sac-a-dos` dans la BDD usages = ecriture directe hors porte (ecart).
 
-## 22. journal-multi-encarts -- `matrice/data/outils/journal-multi-encarts/` (M-079)
+## 22. Activateur de vie + server matrice -- `matrice/routines/vie/` (M-081)
+
+> Le server de demarrage a 2 etages (E-056) : **server matrice**
+> (`server_matrice.py`, boucle de fond invisible) possede le lancement de
+> toutes les routines -- **server routine** : chaque routine est lancee/
+> relancee PAR LUI, jamais en direct. Toute routine morte est relancee
+> automatiquement, SANS AUCUNE FENETRE console (motif partage
+> `data/commun/lancement.py`), en ~1 ms (preuve M-081).
+
+| Commande | Effet |
+|---|---|
+| `python routines/vie/main.py etat` | etat des boucles (ARRET / ACTIVE / fantome nettoye) |
+| `python routines/vie/main.py activer` | lance les boucles arretees (detache invisible) |
+| `python routines/vie/server_matrice.py` | DEMARRE le server matrice (boucle de surveillance, intervalle 60 s) |
+| `python routines/vie/main.py server arret` | arret cooperatif du server (drapeau, jamais de kill) |
+| `python routines/vie/main.py server etat` | etat du server matrice |
+
+## 23. journal-multi-encarts -- `matrice/data/outils/journal-multi-encarts/` (M-079)
 
 > Le VISUEL des metriques de la Matrice (v3, E-049) : un NOUVEAU fichier
 > `matrice/journal-multi-encarts.md`, propre a la v3 -- il ne remplace rien
@@ -281,9 +299,9 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 | `construire` | `python main.py construire` (regenere le journal complet, ordre ferme des encarts) |
 | `lire` | `python main.py lire` (journal entier) ; `python main.py lire --encart <nom>` (UN encart ; inconnu -> code 2) |
 
-**Encarts (ordre ferme, jamais en vrac)** : matrice (defcon + boucles), missions (en cours + vrac/files/brin), routines (dernieres passes veille), alertes (veille + intercom), cameleon (messages RECUS par le cameleon, M-080), usages (8 derniers appels), modifications (5 derniers fichiers), lecons (5 dernieres), variables (classeur). Chaque encart est present meme vide -- aucune entree en vrac. Format createur (M-080) : chaque encart porte SA ligne de FLUX (d'ou viennent les infos, vers ou elles vont) + un TABLEAU `| Entree | Heure | Date |` (heure et date separees, format HH:MM:SS JJ/MM/AAAA, jamais en debut de ligne).
+**Encarts (ordre ferme, jamais en vrac)** : matrice (defcon + boucles), missions (en cours + vrac/files/brin), routines (dernieres passes veille), alertes (veille + intercom), cameleon (messages RECUS par le cameleon, M-080), optimus (8 derniers evenements de la trace, M-084), usages (8 derniers appels), modifications (5 derniers fichiers), lecons (5 dernieres), variables (classeur). Chaque encart est present meme vide -- aucune entree en vrac. Format createur (M-080) : chaque encart porte SA ligne de FLUX (d'ou viennent les infos, vers ou elles vont) + un TABLEAU `| Entree | Heure | Date |` (heure et date separees, format HH:MM:SS JJ/MM/AAAA, jamais en debut de ligne).
 
-## 23. pause-session -- `matrice/data/outils/pause-session/` (M-080)
+## 24. pause-session -- `matrice/data/outils/pause-session/` (M-080)
 
 > Protocole de pause session-matrix (decisions createur) : LA MATRICE UTILISE
 > LE CAMELEON, jamais l'inverse (regle `matrice/regles/matrice-utilise-cameleon.md`).
@@ -302,3 +320,38 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 
 **Protections** : REFUS si pause deja posee (pas de pause double) ; REFUS de reprendre si une mission est en cours (serie stricte) ; pendant la pause, le pilote REFUSE toute injection/enchainement (garde `session_en_pause`) et la fin HORS lot ne relance rien ; defcon 5 declenche la pause AUTOMATIQUEMENT (raccord dans machine-defcon `monter`) ; perimetre tenu dans le classeur-variables (cle `perimetre-cameleon`, ecriture atomique + empreinte) ; journal `data/pauses-session-matrix.jsonl` (append-only). Boite cameleon : `intercom/cameleon/inbox.jsonl` (etancheite : raison "maintenance" seulement).
 **Quand** : demande `[pause]` (maintenance manuelle avec optimus), defcon 5 (mise en securite totale), ou reprise apres maintenance.
+
+## 25. trio marbre BDD -- `matrice/data/outils/bdd-{regles,conventions,protocoles}-matrice/` (M-082)
+
+> Domiciliation du marbre Matrice (E-051) : les regles, conventions et protocoles
+> DE LA MATRICE vivent en 3 BDD separees (un outil par BDD, nes du moule
+> `outil-bdd`). Ecriture : optimus seul (hors session-matrix, en maintenance).
+> Lecture : Matrice + cameleon. Les marbres d'optimus restent dans `_operateur/`
+> (versions-intangibles, intouchables).
+
+| Outil | BDD | Contenu |
+|---|---|---|
+| `bdd-regles-matrice` | `data/bdd-regles-matrice.json` | R-001/R-002/R-003 (matrice-utilise-cameleon, perimetre, langue) |
+| `bdd-conventions-matrice` | `data/bdd-conventions-matrice.json` | C-001..C-005 (0 valeur en dur, ascii, outils structure, sac-a-dos, crochets) |
+| `bdd-protocoles-matrice` | `data/bdd-protocoles-matrice.json` | P-001..P-003 (routes cameleon, protocoles 6-7-8) |
+
+**Interface** (identique pour les 3) : `ajouter --entree "..." --tags "..."` / `lire [--tag ...]` / `verifier`. Espion : les 3 BDD sont surveillees (registre integrite).
+**Quand** : toute nouvelle regle/convention/protocole de la Matrice passe par ces outils (plus aucun fichier markdown de marbre dans `matrice/`).
+
+## 26. suivi-optimus -- `matrice/data/outils/suivi-optimus/` (M-084)
+
+> Trace de suivi d'optimus-prime (GO createur) : le createur ne peut pas le
+> voir travailler (optimus invisible dans la v3), cette trace note L'AGENT
+> (decisions, portes, missions, pourquoi) -- le sac-a-dos note les OUTILS,
+> jamais de recouvrement. Trace append-only + etalon SHA-256, ecrite par
+> optimus seul (porte unique), le cameleon n'y accede JAMAIS (zone `suivi-optimus`
+> exclue du perimetre-cameleon, regle gravee dans sa fiche).
+
+| Verbe | Commande |
+|---|---|
+| `noter` | `python main.py noter --mission M-XXX --theme SUIVI --action <action> --detail "..." [--fichiers "a,b"] [--portes "a,b"] [--duree-s N]` |
+| `lire` | `python main.py lire [--mission M] [--action a] [--n N]` (filtres + n derniers) |
+| `verifier` | `python main.py verifier` (integrite SHA-256, etalon-or) |
+
+**Actions fermees (enum, anti-bruit par EVENEMENT)** : `debut`, `fin`, `porte`, `depot`, `decision`, `decouverte`, `bilan` -- hors enum refusee (code 2). Format d'une ligne : `date, mission, theme, action, detail, fichiers[], portes[], duree_s`. Encart `optimus` au journal multi-encarts (8 derniers evenements, vue lecture seule).
+**Quand** : a chaque action significative d'optimus (GO/arbitrage, fin de mission, porte utilisee, depot au vrac, decouverte d'audit, bilan).

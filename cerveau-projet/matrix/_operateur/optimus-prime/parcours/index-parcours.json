@@ -16,6 +16,12 @@
       "theme": "AUTO-EVOLUTION",
       "fichier": "themes/theme-auto-evolution.json",
       "statut": "pret"
+    },
+    {
+      "ordre": 3,
+      "theme": "CONTRE-ANALYSE",
+      "fichier": "themes/theme-contre-analyse.json",
+      "statut": "pret"
     }
   ]
 }

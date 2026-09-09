@@ -24,6 +24,10 @@ BDDS = {
     "vivier-themes.json": True,
     "defcon-historique.jsonl": True,
     "pauses-session-matrix.jsonl": True,
+    "suivi-optimus.jsonl": True,
+    "regles-matrice.json": True,
+    "conventions-matrice.json": True,
+    "protocoles-matrice.json": True,
 }
 # NOTA (M-080) : session-matrix-etat.json n'est PAS surveillee -- c'est un
 # fichier EPHEMERE qui n'existe QUE pendant une pause (pose par pause-session,

@@ -1,0 +1,39 @@
+{
+  "identite": {
+    "type": "regles-matrice.json",
+    "version": 1
+  },
+  "regles": [
+    {
+      "id": "R-001",
+      "date": "2026-09-09 09:28:41",
+      "regle": "LA MATRICE UTILISE LE CAMELEON, JAMAIS L'INVERSE (regle fondatrice v3) : la Matrice fournit mission + personnalite + lecons + theme au cameleon et exploite ses resultats ; le cameleon n'active jamais la Matrice pour ses besoins propres, ne modifie JAMAIS le marbre ni le contenu de la Matrice (il n'ecrit que les DONNEES de mission via les portes officielles)",
+      "tags": [
+        "gouvernance",
+        "fondatrice"
+      ],
+      "source": "M-073 createur"
+    },
+    {
+      "id": "R-002",
+      "date": "2026-09-09 09:28:41",
+      "regle": "PERIMETRE CAMELEON REDUCTIBLE : la Matrice SEULE reduit le perimetre de lecture du cameleon (zones exclues posees via l'outil pause-session, cle perimetre-cameleon du classeur) ; le cameleon ne voit JAMAIS la raison d'une pause ni l'intervention user/optimus (etancheite maintenance)",
+      "tags": [
+        "gouvernance",
+        "etancheite"
+      ],
+      "source": "M-080 createur"
+    },
+    {
+      "id": "R-003",
+      "date": "2026-09-09 09:28:41",
+      "regle": "VERSIONS INTANGIBLES : les fichiers des versions v1 et v2 (AGENTS-historique, AGENTS-activite-recente, freelance/) ne sont JAMAIS touches par la v3 ; le journal multi-encarts et le marbre BDD sont des fichiers PROPRES a la v3",
+      "tags": [
+        "gouvernance",
+        "versions"
+      ],
+      "source": "M-079 createur"
+    }
+  ],
+  "compteur": 3
+}

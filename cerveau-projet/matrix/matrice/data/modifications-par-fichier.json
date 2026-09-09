@@ -398,6 +398,16 @@
             "contrat",
             "manuel"
           ]
+        },
+        {
+          "date": "2026-09-09 19:43:34",
+          "action": "modifie",
+          "detail": "M-084 : fiche 26 suivi-optimus ajoutee + fiche 23 (encarts) mise a jour",
+          "tags": [
+            "M-084",
+            "manuel",
+            "contrat"
+          ]
         }
       ],
       "tags": [
@@ -415,7 +425,8 @@
         "m077",
         "m078",
         "timeout",
-        "m079"
+        "m079",
+        "M-084"
       ]
     },
     "_operateur/optimus-prime/conventions/convention-indices.md": {
@@ -771,6 +782,16 @@
             "m-016",
             "espion"
           ]
+        },
+        {
+          "date": "2026-09-09 19:43:34",
+          "action": "modifie",
+          "detail": "M-084 : registre des BDD surveillees : suivi-optimus.jsonl ajoutee (14 BDD)",
+          "tags": [
+            "M-084",
+            "espion",
+            "registre"
+          ]
         }
       ],
       "tags": [
@@ -780,7 +801,8 @@
         "bdd",
         "m-014",
         "m-015",
-        "m-016"
+        "m-016",
+        "M-084"
       ]
     },
     "matrice/matrice-readme.md": {
@@ -813,6 +835,16 @@
             "contrat",
             "readme"
           ]
+        },
+        {
+          "date": "2026-09-09 19:43:34",
+          "action": "modifie",
+          "detail": "M-084 : ligne d'etat suivi-optimus FAIT + journal 10 encarts",
+          "tags": [
+            "M-084",
+            "contrat",
+            "readme"
+          ]
         }
       ],
       "tags": [
@@ -821,7 +853,8 @@
         "m062",
         "etat",
         "m079",
-        "readme"
+        "readme",
+        "M-084"
       ]
     },
     "matrice/data/outils/bdd-variables/": {
@@ -2084,12 +2117,22 @@
             "journal",
             "visuel"
           ]
+        },
+        {
+          "date": "2026-09-09 19:43:24",
+          "action": "modifie",
+          "detail": "M-084 : journal regenere (10 encarts, encart optimus inclus)",
+          "tags": [
+            "M-084",
+            "journal"
+          ]
         }
       ],
       "tags": [
         "m079",
         "journal",
-        "visuel"
+        "visuel",
+        "M-084"
       ]
     },
     "data/outils/pause-session/": {
@@ -2168,6 +2211,350 @@
         "matrice",
         "defcon",
         "pause"
+      ]
+    },
+    "data/commun/lancement.py": {
+      "modifications": [
+        {
+          "date": "2026-09-09 09:21:33",
+          "action": "modifie",
+          "detail": "Motif UNIQUE de lancement invisible (E-056, M-081) : CREATE_NO_WINDOW + SW_HIDE Windows / start_new_session POSIX, duree mesuree ; plus aucune fenetre console au demarrage ou redemarrage d'une routine",
+          "tags": [
+            "matrice",
+            "commun",
+            "lancement",
+            "server"
+          ]
+        }
+      ],
+      "tags": [
+        "matrice",
+        "commun",
+        "lancement",
+        "server"
+      ]
+    },
+    "routines/vie/server_matrice.py + server/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-09 09:21:34",
+          "action": "modifie",
+          "detail": "Server matrice (E-056) : surveillance en boucle, relance de toute routine morte preuve reelle (veille tuee relancee en 1 ms, invisible, ACTIVE PID 17656), arret cooperatif, garde --once sur le PID",
+          "tags": [
+            "matrice",
+            "server",
+            "routine"
+          ]
+        }
+      ],
+      "tags": [
+        "matrice",
+        "server",
+        "routine"
+      ]
+    },
+    "routines/vie/fonctions.py + activer.py": {
+      "modifications": [
+        {
+          "date": "2026-09-09 09:21:34",
+          "action": "modifie",
+          "detail": "lancer_detache bascule sur le motif partage (retour tuple pid,duree) ; activer.py consomme le tuple ; z duplication restante",
+          "tags": [
+            "matrice",
+            "vie",
+            "refactor"
+          ]
+        }
+      ],
+      "tags": [
+        "matrice",
+        "vie",
+        "refactor"
+      ]
+    },
+    "data/outils/bdd-regles-matrice/ + bdd-conventions-matrice/ + bdd-protocoles-matrice/": {
+      "modifications": [
+        {
+          "date": "2026-09-09 09:34:26",
+          "action": "modifie",
+          "detail": "Marbre Matrice domicilie (M-082, E-051) : 3 BDD separees n\u00e9es du moule outil-bdd (3 R + 5 C + 3 P), ecriture optimus seul, lecture Matrice + cameleon, empreintes + espion au registre ; regles/ markdown retire (contenu en BDD)",
+          "tags": [
+            "matrice",
+            "marbre",
+            "bdd"
+          ]
+        }
+      ],
+      "tags": [
+        "matrice",
+        "marbre",
+        "bdd"
+      ]
+    },
+    "matrice-readme.md + agents/cameleon/cameleon.md": {
+      "modifications": [
+        {
+          "date": "2026-09-09 09:34:26",
+          "action": "modifie",
+          "detail": "Contrats M-082 : matrice-readme sans reference _operateur (section marbre 3 BDD), fiche cameleon routes -> BDD protocoles-matrice + signal hors-perimetre -> la Matrice",
+          "tags": [
+            "matrice",
+            "contrats",
+            "cameleon"
+          ]
+        }
+      ],
+      "tags": [
+        "matrice",
+        "contrats",
+        "cameleon"
+      ]
+    },
+    "data/bdd-theme-vivier.json": {
+      "modifications": [
+        {
+          "date": "2026-09-09 09:57:43",
+          "action": "cree",
+          "detail": "M-083 : theme mere PERFORMANCE + 3 sous-themes PERFORMANCE-OUTILS / PERFORMANCE-ROUTINES / PERFORMANCE-SERVEURS (TH-022 a TH-025, categorie SYSTEME), cycle ANALYSER -> OPTIMISER -> AMELIORER grave dans chaque but ; mission E-057 (angle mort corriger-ascii : JSON/md hors scan veille) deposee au vrac",
+          "tags": [
+            "theme-vivier",
+            "M-083",
+            "performances"
+          ]
+        }
+      ],
+      "tags": [
+        "theme-vivier",
+        "M-083",
+        "performances"
+      ]
+    },
+    "matrice/data/outils/suivi-optimus": {
+      "modifications": [
+        {
+          "date": "2026-09-09 19:43:23",
+          "action": "cree",
+          "detail": "M-084 : outil suivi-optimus (10 fichiers, ne du moule outil-bdd puis adapte) : trace append-only + etalon SHA-256, verbe noter/lire/verifier, enum fermee des actions, etancheite cameleon",
+          "tags": [
+            "M-084",
+            "suivi-optimus",
+            "outil"
+          ]
+        }
+      ],
+      "tags": [
+        "M-084",
+        "suivi-optimus",
+        "outil"
+      ]
+    },
+    "matrice/data/suivi-optimus.jsonl": {
+      "modifications": [
+        {
+          "date": "2026-09-09 19:43:23",
+          "action": "cree",
+          "detail": "M-084 : trace de suivi d'optimus creee (append-only, premiere entree : GO createur)",
+          "tags": [
+            "M-084",
+            "suivi-optimus",
+            "bdd"
+          ]
+        }
+      ],
+      "tags": [
+        "M-084",
+        "suivi-optimus",
+        "bdd"
+      ]
+    },
+    "matrice/data/outils/journal-multi-encarts/constants.py": {
+      "modifications": [
+        {
+          "date": "2026-09-09 19:43:23",
+          "action": "modifie",
+          "detail": "M-084 : encart optimus ajoute (ENCARTS + FLUX suivi-optimus)",
+          "tags": [
+            "M-084",
+            "journal",
+            "encart"
+          ]
+        }
+      ],
+      "tags": [
+        "M-084",
+        "journal",
+        "encart"
+      ]
+    },
+    "matrice/data/outils/journal-multi-encarts/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-09 19:43:24",
+          "action": "modifie",
+          "detail": "M-084 : entrees_optimus (8 derniers evenements de la trace)",
+          "tags": [
+            "M-084",
+            "journal",
+            "encart"
+          ]
+        }
+      ],
+      "tags": [
+        "M-084",
+        "journal",
+        "encart"
+      ]
+    },
+    "matrice/data/outils/journal-multi-encarts/construire/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-09 19:43:24",
+          "action": "modifie",
+          "detail": "M-084 : FONCTIONS_ENCARTS branche optimus",
+          "tags": [
+            "M-084",
+            "journal",
+            "encart"
+          ]
+        }
+      ],
+      "tags": [
+        "M-084",
+        "journal",
+        "encart"
+      ]
+    },
+    "matrice/routines/vie/constants.py": {
+      "modifications": [
+        {
+          "date": "2026-09-09 19:43:34",
+          "action": "corrige",
+          "detail": "M-084 : bug d'import lancement (ModuleNotFoundError) : data/commun absent de sys.path pour l'activateur de vie -- motif M-076 rejoint via matrice/data/commun (redemarrage de l'espion requis par L-012)",
+          "tags": [
+            "M-084",
+            "reparation",
+            "import"
+          ]
+        }
+      ],
+      "tags": [
+        "M-084",
+        "reparation",
+        "import"
+      ]
+    },
+    "agents/cameleon/cameleon.md": {
+      "modifications": [
+        {
+          "date": "2026-09-09 19:43:34",
+          "action": "modifie",
+          "detail": "M-084 : regle 9 ajoutee -- trace suivi-optimus interdite (etancheite, zone exclue du perimetre)",
+          "tags": [
+            "M-084",
+            "cameleon",
+            "etancheite"
+          ]
+        }
+      ],
+      "tags": [
+        "M-084",
+        "cameleon",
+        "etancheite"
+      ]
+    },
+    "matrice/data/classeur-variables.json": {
+      "modifications": [
+        {
+          "date": "2026-09-09 19:43:35",
+          "action": "modifie",
+          "detail": "M-084 : perimetre-cameleon reduit -- zone suivi-optimus exclue de la lecture cameleon (via pause-session)",
+          "tags": [
+            "M-084",
+            "perimetre",
+            "etancheite"
+          ]
+        }
+      ],
+      "tags": [
+        "M-084",
+        "perimetre",
+        "etancheite"
+      ]
+    },
+    "matrice/docs/suivi-optimus-conception.md": {
+      "modifications": [
+        {
+          "date": "2026-09-09 19:43:35",
+          "action": "modifie",
+          "detail": "M-084 : GO createur obtenu, construction livree (outil + encart + espion + etancheite)",
+          "tags": [
+            "M-084",
+            "conception",
+            "GO"
+          ]
+        }
+      ],
+      "tags": [
+        "M-084",
+        "conception",
+        "GO"
+      ]
+    },
+    "matrice/pilote/entonnoir-files.json": {
+      "modifications": [
+        {
+          "date": "2026-09-09 19:52:50",
+          "action": "modifie",
+          "detail": "E-057 retiree du vrac (verdict : deja couvert -- corriger-ascii v3 scanne deja .md/.py/.json partout, preuve test reel + audit 0 non-ASCII ; le 0 detection de 09:44 etait correct, file-missions.json ecrit en ensure_ascii)",
+          "tags": [
+            "E-057",
+            "entonnoir",
+            "verdict"
+          ]
+        }
+      ],
+      "tags": [
+        "E-057",
+        "entonnoir",
+        "verdict"
+      ]
+    },
+    "demarrer-optimus-prime.md (racine, hors matrix/)": {
+      "modifications": [
+        {
+          "date": "2026-09-09 19:54:16",
+          "action": "corrige",
+          "detail": "Friction : reference morte a corrections.md (retraite le 2026-09-06) -- ORDRE 2.2 remplace par les lecons via bdd-lecons (porte unique) ; edition autorisee explicitement par le createur (hors perimetre habituel)",
+          "tags": [
+            "friction",
+            "demarrer",
+            "lecons"
+          ]
+        }
+      ],
+      "tags": [
+        "friction",
+        "demarrer",
+        "lecons"
+      ]
+    },
+    "_operateur/optimus-prime/parcours/index-parcours.json": {
+      "modifications": [
+        {
+          "date": "2026-09-09 19:54:16",
+          "action": "modifie",
+          "detail": "Friction : desynchro index-themes (3 themes) vs index-parcours (2) -- CONTRE-ANALYSE ajoute (ordre 3, statut pret)",
+          "tags": [
+            "friction",
+            "index",
+            "parcours"
+          ]
+        }
+      ],
+      "tags": [
+        "friction",
+        "index",
+        "parcours"
       ]
     }
   }

@@ -51,8 +51,8 @@ def executer(arguments):
                 arguments_boucle += ["--intervalle", intervalle]
         elif intervalle:
             arguments_boucle += ["--interval", intervalle]
-        pid_nouveau = lancer_detache(chemin_routine, arguments_boucle)
-        lancees.append(nom + " (PID " + str(pid_nouveau) + ")")
+        pid_nouveau, duree_ms = lancer_detache(chemin_routine, arguments_boucle)
+        lancees.append(nom + " (PID " + str(pid_nouveau) + ", lance en " + str(duree_ms) + " ms)")
 
     if lancees:
         print("Boucles lancees en detache (survivent a la session) : " + ", ".join(lancees))

@@ -1,38 +1,5 @@
 {
-  "vrac": [
-    {
-      "id": "E-051",
-      "theme": "MIGRATION",
-      "objectif": "DOMICILIER LE MARBRE MATRICE (3 BDD SEPAREES, decision createur) : regles/conventions/protocoles DE LA MATRICE chez elle (matrice/regles/ cree + conventions/ + protocoles/ a creer) ; chaque marbre = 1 BDD dediee (regles-matrice, conventions-matrice, protocoles-matrice) + outils dedies : ECRITURE OPTIMUS SEUL (porte unique, empreinte, espion), LECTURE ouverte Matrice + cameleon (il lit ses routes au chargement) + vues markdown generees jamais editees a la main ; le cameleon ne modifie JAMAIS le marbre ni le contenu de la Matrice (il n'ecrit que les DONNEES de mission via les portes officielles) ; matrice-readme ne reference plus _operateur/optimus-prime (optimus invisible de la Matrice) ; fiche cameleon : routes -> matrice/protocoles/, signal hors-perimetre -> la Matrice",
-      "urgence": "haute",
-      "source": "directives v3 createur",
-      "deposee_le": "2026-09-08 09:00:15"
-    },
-    {
-      "id": "E-054",
-      "theme": "SUIVI-OPTIMUS",
-      "objectif": "Journal de suivi d'optimus-prime (question createur) : optimus est INVISIBLE dans la v3 (regle versions-intangibles, domicile _operateur/ hors de la portee de la Matrice), donc le createur ne peut pas le voir travailler. Concevoir SUIVI-OPTIMUS : une trace append-only ecrite par optimus A CHAQUE ACTION significative (fichiers modifies, portes utilisees, decisions, temps) + un encart dedie au journal multi-encarts (encart optimus) + une lecture a la demande. Concevoir AVANT d'ecrire : proposer le format de la trace, ce qui declenche une entree, et la difference avec le sac-a-dos (qui note les OUTILS, pas l'AGENT). Le cameleon n'accede JAMAIS a cette trace (etancheite pause + perimetre reducible).",
-      "urgence": "normale",
-      "source": "createur",
-      "deposee_le": "2026-09-09 08:07:48"
-    },
-    {
-      "id": "E-055",
-      "theme": "PERFORMANCES",
-      "objectif": "Creer le theme PERFORMANCE au vivier (theme-vivier, categorise) + SES sous-themes par type de performance : PERFORMANCE-OUTILS (analyser/optimiser/ameliorer les outils de la Matrice), PERFORMANCE-ROUTINES (veille-flux, espion, passes automatiques), PERFORMANCE-SERVEURS (boucles de fond, activateur de vie, serveurs futurs). Chaque sous-theme couvre le cycle ANALYSER (mesures existantes : sac-a-dos durees/codes, bilan-periode) -> OPTIMISER (cibles chiffrees) -> AMELIORER (livraison mesuree avant/apres). Les metriques de performance afficheront plus tard un encart dedie au journal multi-encarts.",
-      "urgence": "normale",
-      "source": "createur",
-      "deposee_le": "2026-09-09 08:21:16"
-    },
-    {
-      "id": "E-056",
-      "theme": "PERFORMANCES",
-      "objectif": "Evaluer les performances des routines (E-055) AVEC le constat createur : les fenetres console apparaissent/disparaissent quand une routine redemarre (lancement detache actuel = fenetre visible a chaque cycle de vie). EXIGENCE : plus AUCUNE fenetre visible -- creer un SERVER DE DEMARRAGE a 2 etages : server 'matrice' (l'orchestrateur de vie qui possede le lancement DETACHE SANS FENETRE : Popen with CREATE_NO_WINDOW / startupinfo SW_HIDE sur Windows) + server 'routine' (chaque routine lancee/relancee PAR le server, jamais en direct). Le redemarrage d'une routine (arret cooperatif + relance) doit etre INVISIBLE pour le createur. Mesurer avant/apres (duree de lancement, visibilite fenetre). Lien : activateur de vie (routines/vie) devient le noyau du server matrice.",
-      "urgence": "haute",
-      "source": "createur",
-      "deposee_le": "2026-09-09 08:21:45"
-    }
-  ],
+  "vrac": [],
   "files": {
     "dev": [],
     "reparation": [],
@@ -40,6 +7,6 @@
     "audit": [],
     "revision": []
   },
-  "compteur": 56,
+  "compteur": 57,
   "brin": []
 }

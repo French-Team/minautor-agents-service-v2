@@ -1,0 +1,39 @@
+{
+  "identite": {
+    "type": "protocoles-matrice.json",
+    "version": 1
+  },
+  "protocoles": [
+    {
+      "id": "P-001",
+      "date": "2026-09-09 09:30:07",
+      "protocole": "PROTO-6 ROUTE MISSION (route du cameleon pour missions dev/doc/audit/revision/reparation) : au chargement, cameleon lit SA fiche + SA personnalite (vivier) + l'injection du pilote ; il execute UN changement a la fois par les portes officielles, teste avant de poursuivre ; relecture = auto-audit sur disque ; fin = bilan substantiel au pilote (realisations + preuves + incidents assumes)",
+      "tags": [
+        "routes",
+        "cameleon"
+      ],
+      "source": "proto-6 M-067"
+    },
+    {
+      "id": "P-002",
+      "date": "2026-09-09 09:30:07",
+      "protocole": "PROTO-7 ROUTE BDD (toute ecriture passe par l'outil dedie) : jamais d'ecriture directe de fichier de donnees ; porte unique par BDD (ajouter/lire/verifier), empreinte maintenue, tags obligatoires (pas d'entree orpheline) ; le cameleon consomme via lire, n'ecrit jamais le marbre",
+      "tags": [
+        "routes",
+        "bdd"
+      ],
+      "source": "proto-7 M-067"
+    },
+    {
+      "id": "P-003",
+      "date": "2026-09-09 09:30:07",
+      "protocole": "PROTO-8 ROUTE REPARATION (apres alerte veille/espion) : reproduire AVANT de reparer (pas a l'aveugle), diagnostiquer a la racine, reparer un changement minimum, retour vert prouve (test avant/apres) ; jamais supprimer pour faire taire ; arret cooperatif des boucles (L-012 : jamais de kill) ; hors perimetre -> signaler la Matrice",
+      "tags": [
+        "routes",
+        "reparation"
+      ],
+      "source": "proto-8 M-073"
+    }
+  ],
+  "compteur": 3
+}

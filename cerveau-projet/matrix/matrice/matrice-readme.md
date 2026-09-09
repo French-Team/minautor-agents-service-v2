@@ -19,18 +19,33 @@ user -> Matrice (theme) -> pilote (+ mission) -> agent (execution)
 | `routines/` | Vie de la Matrice (securite, orchestration, demarrage, espions) | routines/routines-readme.md |
 | `pilote/` | File de missions, serie stricte, lot, entonnoir + tresse | pilote/DESCRIPTION.md + data/manuel-outils.md |
 
-## Regles structurelles (ancrees ailleurs, rappelees ici)
+## Marbre de la Matrice : 3 BDD separees (M-082, decision createur)
 
-- Ecriture : `matrix/` exclusivement (regles-immuables/perimetre-write.md).
-- Serie stricte : une mission a la fois (regles-immuables/serie-stricte.md).
-- Outils Python seul, protections ouverture/fermeture (regles-immuables/python-seul.md).
-- Anti-surcharge : modifications notees en BDD, JAMAIS en commentaire dans les fichiers
-  (regles-immuables/anti-surcharge.md).
-- ASCII strict (regles-immuables/ascii-strict.md).
-- Architecture des outils : entree -> categorie -> fonctions simples
-  (conventions/convention-architecture-outils.md).
-- Zero valeur en dur (conventions/convention-zero-valeurs-en-dur.md).
-- Integrite par SHA-256 (conventions/convention-integrite-sha256.md).
+Le marbre de la Matrice (regles / conventions / protocoles QUI LA REGISSENT)
+vit chez ELLE, en BDD, jamais dans un domicile d'agent (optimus est invisible
+de la Matrice) :
+
+| BDD | Outil (porte unique) | Lecture |
+|---|---|---|
+| `data/regles-matrice.json` | bdd-regles-matrice (ajouter/lire/verifier) | Matrice + cameleon |
+| `data/conventions-matrice.json` | bdd-conventions-matrice (ajouter/lire/verifier) | Matrice + cameleon |
+| `data/protocoles-matrice.json` | bdd-protocoles-matrice (ajouter/lire/verifier) | Matrice + cameleon (SES routes) |
+
+**ECRITURE = OPTIMUS SEUL** (avec le createur, via ces 3 portes ; empreinte
+SHA-256, espion au registre). Le cameleon ne modifie JAMAIS le marbre ni le
+contenu de la Matrice : il ne fait que LIRE (routes au chargement) et n'ecrit
+que les DONNEES de mission via les portes officielles.
+
+## Regles structurelles (graves dans la BDD regles-matrice, rappelees ici)
+
+- Ecriture : `matrix/` exclusivement.
+- Serie stricte : une mission a la fois.
+- Outils Python seul.
+- Anti-surcharge : modifications notees en BDD, JAMAIS en commentaire dans les fichiers.
+- ASCII strict hors base acceptee.
+- Architecture des outils : entree -> categorie -> fonctions simples (BDD conventions-matrice C-001).
+- Zero valeur en dur.
+- Integrite par SHA-256 (BDD conventions-matrice C-003).
 
 ## Etat de construction (2026-09-06)
 
@@ -55,9 +70,11 @@ user -> Matrice (theme) -> pilote (+ mission) -> agent (execution)
 | Vie de la Matrice : activateur routines/vie/ (lancement DETACHE des boucles veille-flux + espion-integrite, etat, garde double, PID fantome nettoye) + VEILLE PERMANENTE ACTIVEE | FAIT (2026-09-06, M-046) -- raccord demarrage : `routines/vie/main.py activer` |
 | Entonnoir en echelon (0 vrac, 1 type -- dev/reparation/doc/audit/**revision** --, 2 categorie, 3 urgence, 4 tresse) + puisage auto par l'injection | FAIT (2026-09-06, M-018 a M-023, M-026/M-027 ; revision ajoutee 2026-09-07, M-055, decision createur) |
 | Moules templates/ (outil-bdd + theme-bdd) + outil dupliquer-template (--moule, clones conformes verifies avant ecriture) | POSES (2026-09-06, M-030 + M-031) |
-| Machine defcon (echelle fermee 5-4-3-2, descente stricte, valider clot def3) + garde defcon 5 dans le pilote (seul DEFCON injectable) + journal defcon-historique | FAIT (2026-09-07, M-059/M-060, decision createur) -- convention des demandes a crochets `_operateur/optimus-prime/conventions/convention-crochets.md` |
+| Machine defcon (echelle fermee 5-4-3-2, descente stricte, valider clot def3) + garde defcon 5 dans le pilote (seul DEFCON injectable) + journal defcon-historique | FAIT (2026-09-07, M-059/M-060, decision createur) -- convention des demandes a crochets (graves en BDD conventions-matrice + domicile optimus pour la forme longue) |
 | Outil bilan-periode (periodes fermees 1h/heures/24h/3j/semaine/mois, lecture seule, 4 sources horodatees) -- porte de la demande [bilan] | FAIT (2026-09-07, M-061) |
-| Journal multi-encarts (visuel des metriques genere depuis les BDD, 9 encarts a ordre ferme : matrice, missions, routines, alertes, cameleon, usages, modifications, lecons, variables ; tableaux Entree/Heure/Date + ligne de FLUX par encart) -- nouveau fichier propre a la v3, jamais les fichiers v1/v2 | FAIT (2026-09-08, M-079 ; enrichi M-080) |
+| Journal multi-encarts (visuel des metriques genere depuis les BDD, 10 encarts a ordre ferme : matrice, missions, routines, alertes, cameleon, optimus, usages, modifications, lecons, variables ; tableaux Entree/Heure/Date + ligne de FLUX par encart) -- nouveau fichier propre a la v3, jamais les fichiers v1/v2 | FAIT (2026-09-08, M-079 ; enrichi M-080, M-084) |
 | Protocole de pause session-matrix (outil pause-session : pause/reprendre/etat/perimetre/journal ; defcon 5 -> pause automatique, crochets [alerte]/[pause], gardes pilote, perimetre cameleon reductible, notifications etanchees) | FAIT (2026-09-09, M-080) |
 | Agent unique cameleon (fiche matrix/agents/cameleon, personnalites au vivier TH-017..021, perimetre matrix/ seul) + outil editer-agents-md (encart session-matrix dans AGENTS.md, garde structurelle) -- **flux v3** : la Matrice accueille au demarrage, l'operateur fait sa demande, la Matrice lance le cameleon | FAIT (2026-09-07, M-072 a M-074) ; branchement cameleon au pilote : a venir (GO) |
+| Marbre Matrice domicilie : 3 BDD separees (regles / conventions / protocoles) + 3 outils portes (ecriture optimus seul, lecture Matrice + cameleon) | FAIT (2026-09-09, M-082, decision createur) |
+| Suivi d'optimus (trace data/suivi-optimus.jsonl append-only + etalon, outil suivi-optimus noter/lire/verifier, encart optimus au journal, etancheite cameleon zone suivi-optimus) | FAIT (2026-09-09, M-084, GO createur) |
 | Autres routines de vie / securite / orchestration | a construire (avec le createur) |

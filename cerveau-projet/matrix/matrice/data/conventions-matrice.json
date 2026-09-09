@@ -1,0 +1,59 @@
+{
+  "identite": {
+    "type": "conventions-matrice.json",
+    "version": 1
+  },
+  "conventions": [
+    {
+      "id": "C-001",
+      "date": "2026-09-09 09:29:19",
+      "convention": "ARCHITECTURE DES OUTILS : point d'entree main.py (DIRIGER, aucune logique metier) -> dossier categorie entry.py (interface) -> fonctions.py (UNE tache par fonction) ; convention zero-valeur-en-dur : la logique CONSOMME les constantes, ne les contient pas ; gardes structurels dans constants.py",
+      "tags": [
+        "architecture",
+        "outils"
+      ],
+      "source": "moule outil-bdd"
+    },
+    {
+      "id": "C-002",
+      "date": "2026-09-09 09:29:20",
+      "convention": "PY_COMPILE AVANT LIVRAISON : tout fichier Python de la Matrice passe py_compile (global ou par fichier) avant toute fin de mission ; un fichier qui ne compile pas n'est pas livre",
+      "tags": [
+        "qualite",
+        "tests"
+      ],
+      "source": "M-024 createur"
+    },
+    {
+      "id": "C-003",
+      "date": "2026-09-09 09:29:20",
+      "convention": "INTEGRITE SHA-256 : toute ecriture deterministe (BDD, classeur, etat) force LF et maintient son fichier empreinte .sha256 ; l'espion-integrite surveille les BDD du registre ; journal jsonl append-only",
+      "tags": [
+        "integrite",
+        "bdd"
+      ],
+      "source": "M-002 createur"
+    },
+    {
+      "id": "C-004",
+      "date": "2026-09-09 09:29:20",
+      "convention": "ASCII STRICT hors base acceptee : les fichiers de la Matrice (code + contrats markdown) restent ASCII ; les caracteres accentues du createur sont acceptes par la base (corriger-ascii signale le reste)",
+      "tags": [
+        "langue",
+        "fichiers"
+      ],
+      "source": "M-057 createur"
+    },
+    {
+      "id": "C-005",
+      "date": "2026-09-09 09:29:20",
+      "convention": "NOTES BDD PAR LA PORTE UNIQUE : chaque fichier touche par une mission est note dans modifications-par-fichier via bdd-modifications ; le sac-a-dos note chaque usage d'outil dans usages-outils-combos ; jamais d'ecriture directe de journal",
+      "tags": [
+        "tracabilite",
+        "bdd"
+      ],
+      "source": "M-013 createur"
+    }
+  ],
+  "compteur": 5
+}

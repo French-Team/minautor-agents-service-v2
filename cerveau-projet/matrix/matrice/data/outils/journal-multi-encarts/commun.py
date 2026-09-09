@@ -17,6 +17,7 @@ from constants import (
     CHEMIN_ENTONNOIR_FILES,
     CHEMIN_FILE_MISSIONS,
     CHEMIN_INBOX_MATRICE,
+    CHEMIN_BDD_SUIVI,
     ENCODAGE,
 )
 
@@ -232,6 +233,23 @@ def entrees_cameleon():
             e.get("date", ""),
         )
         for e in lire_lignes_jsonl(CHEMIN_BOITE_CAMELEON, 8)
+    ]
+
+
+def entrees_optimus():
+    """Encart optimus : les 8 derniers evenements de la trace suivi-optimus.
+
+    Etancheite conservee : le cameleon n'accede JAMAIS a cette trace, la
+    Matrice ne montre que la vue lecture seule du journal.
+    """
+    return [
+        paire(
+            str(e.get("action", "?"))
+            + (" | " + str(e.get("mission")) if e.get("mission") else "")
+            + " | " + str(e.get("detail", ""))[:80],
+            e.get("date", ""),
+        )
+        for e in lire_lignes_jsonl(CHEMIN_BDD_SUIVI, 8)
     ]
 
 

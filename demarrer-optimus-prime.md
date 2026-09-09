@@ -16,7 +16,10 @@ Pas de session : l operateur est hors sessions (ni admin, ni freelance).
 ## ORDRE 2 -- RELIS TON COEUR
 
 1. Ta fiche : `cerveau-projet/matrix/_operateur/optimus-prime/optimus-prime.md`
-2. Tes corrections : `cerveau-projet/matrix/_operateur/optimus-prime/corrections.md`
+2. Tes lecons : BDD `cerveau-projet/matrix/matrice/data/lecons.json` via l'outil
+   `bdd-lecons` (commande `lire`) -- porte unique, jamais ecrites a la main
+   (corrections.md a ete RETRAITE le 2026-09-06 : doublon de la fiche, lecons
+   migrees en BDD ; la reference a ce fichier est morte).
 3. Ta mission prioritaire : `cerveau-projet/matrix/docs/IMPERATIF.md`
 4. Ton theme de reprise : `cerveau-projet/matrix/_operateur/optimus-prime/parcours/themes/theme-reprise-mission.json`
    + son protocole : `cerveau-projet/matrix/_operateur/optimus-prime/protocoles/proto-1-reprise-mission.md`

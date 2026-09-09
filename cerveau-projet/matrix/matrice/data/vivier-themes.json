@@ -174,7 +174,43 @@
       "but": "Executer les missions reparation apres alerte : reproduire, diagnostiquer a la racine, reparer un changement minimum, retour vert (proto-8)",
       "description": "Personnalite reparation de cameleon. Reproduire avant de reparer (pas a l'aveugle) ; pas de rustine ; jamais supprimer pour faire taire ; arret cooperatif (L-012) ; hors perimetre -> signaler optimus-prime.",
       "categorie": "PERSONNALITE"
+    },
+    {
+      "id": "TH-022",
+      "date": "2026-09-09 09:55:23",
+      "nom": "PERFORMANCE",
+      "nom_affiche": "VIVIER",
+      "categorie": "SYSTEME",
+      "but": "Theme mere des performances de la Matrice : couvre ses 3 types de cibles (outils, routines, serveurs) via ses 3 sous-themes PERFORMANCE-OUTILS, PERFORMANCE-ROUTINES, PERFORMANCE-SERVEURS. Chaque sous-theme suit le cycle ANALYSER (mesures existantes : sac-a-dos durees/codes, bilan-periode) -> OPTIMISER (cibles chiffrees) -> AMELIORER (livraison mesuree avant/apres). Les metriques afficheront un encart dedie au journal multi-encarts.",
+      "description": ""
+    },
+    {
+      "id": "TH-023",
+      "date": "2026-09-09 09:55:23",
+      "nom": "PERFORMANCE-OUTILS",
+      "nom_affiche": "VIVIER",
+      "categorie": "SYSTEME",
+      "but": "Analyser / optimiser / ameliorer les OUTILS de la Matrice (data/outils/) : durees par verbe (sac-a-dos), codes de sortie, doublons de logique, simplifications. ANALYSER avec les mesures existantes, OPTIMISER sur cibles chiffrees, AMELIORER avec preuve avant/apres.",
+      "description": ""
+    },
+    {
+      "id": "TH-024",
+      "date": "2026-09-09 09:55:24",
+      "nom": "PERFORMANCE-ROUTINES",
+      "nom_affiche": "VIVIER",
+      "categorie": "SYSTEME",
+      "but": "Analyser / optimiser / ameliorer les ROUTINES (veille-flux, espion-integrite, passes automatiques) : intervalles, durees de passe, charge des sous-processus, fenetres. ANALYSER avec journal-veille + bilan-periode, OPTIMISER sur cibles chiffrees, AMELIORER avec preuve avant/apres.",
+      "description": ""
+    },
+    {
+      "id": "TH-025",
+      "date": "2026-09-09 09:55:24",
+      "nom": "PERFORMANCE-SERVEURS",
+      "nom_affiche": "VIVIER",
+      "categorie": "SYSTEME",
+      "but": "Analyser / optimiser / ameliorer les SERVEURS et boucles de fond (server-matrice, activateur de vie, serveurs futurs) : cycles de surveillance, latence de relance, consommation. ANALYSER avec les traces du sac-a-dos, OPTIMISER sur cibles chiffrees, AMELIORER avec preuve avant/apres.",
+      "description": ""
     }
   ],
-  "compteur": 21
+  "compteur": 25
 }
