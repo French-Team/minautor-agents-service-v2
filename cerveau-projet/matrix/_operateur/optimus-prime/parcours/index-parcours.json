@@ -1,0 +1,21 @@
+{
+  "identite": {
+    "type": "index-parcours",
+    "appartient_a": "optimus-prime"
+  },
+  "theme_courant": "REPRISE-MISSION",
+  "parcours": [
+    {
+      "ordre": 1,
+      "theme": "REPRISE-MISSION",
+      "fichier": "themes/theme-reprise-mission.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 2,
+      "theme": "AUTO-EVOLUTION",
+      "fichier": "themes/theme-auto-evolution.json",
+      "statut": "pret"
+    }
+  ]
+}

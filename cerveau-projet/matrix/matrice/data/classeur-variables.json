@@ -1,0 +1,38 @@
+{
+  "identite": {
+    "type": "bdd-variables",
+    "version": 1
+  },
+  "variables": [
+    {
+      "id": "V-001",
+      "cle": "veille-intervalle",
+      "valeur": "600",
+      "source": "M-014 reparation",
+      "date": "2026-09-06 16:19:00",
+      "statut": "[OK]",
+      "tags": [
+        "matrice",
+        "config"
+      ]
+    },
+    {
+      "id": "V-002",
+      "cle": "defcon",
+      "valeur": "2",
+      "source": "machine-defcon valider",
+      "date": "2026-09-09 07:33:10",
+      "statut": "[OK]",
+      "tags": [
+        "defcon",
+        "etat"
+      ]
+    },
+    {
+      "cle": "perimetre-cameleon",
+      "valeur": "",
+      "source": "pause-session perimetre",
+      "date": "2026-09-09 07:32:33"
+    }
+  ]
+}

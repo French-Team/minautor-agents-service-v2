@@ -1,0 +1,40 @@
+"""Point d'entree global de l'outil machine-defcon.
+
+Role : DIRIGER (parser la commande, router vers la categorie).
+Aucune logique metier ici (convention-architecture-outils).
+
+Usage :
+    python main.py lire
+    python main.py monter    --niveau <3-5> --raison "..."
+    python main.py descendre --niveau <cible> --raison "..."
+    python main.py valider   --raison "..."   (clot def3 -> defcon 2)
+
+L'echelle est FERMEE : 2 = normal, 3 = surveiller puis valider,
+4 = suivi de bout en bout, 5 = stop agent par defaut / optimus-prime reveille.
+1 est reserve (jamais atteint : la descente s'arrete a 2).
+"""
+import sys
+
+from descendre.entry import executer as descendre_executer
+from lire.entry import executer as lire_executer
+from monter.entry import executer as monter_executer
+from valider.entry import executer as valider_executer
+
+COMMANDES = {
+    "lire": lire_executer,
+    "monter": monter_executer,
+    "descendre": descendre_executer,
+    "valider": valider_executer,
+}
+
+
+def principal(arguments):
+    if not arguments or arguments[0] not in COMMANDES:
+        print(__doc__)
+        return 2
+    return COMMANDES[arguments[0]](arguments[1:])
+
+
+if __name__ == "__main__":
+    from sac_a_dos import envelopper
+    sys.exit(envelopper(principal, sys.argv[1:]))

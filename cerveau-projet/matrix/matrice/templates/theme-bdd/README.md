@@ -1,0 +1,36 @@
+# MOULE -- theme-bdd (template de registre de themes de mission)
+
+> Sibling du moule outil-bdd : meme generateur (`dupliquer-template`,
+> option `--moule theme-bdd`), memes verifications avant ecriture
+> (py_compile + ASCII + jeton residuel, clone executable).
+> Modele-mere semantique : les themes de l'operateur
+> (`_operateur/optimus-prime/parcours/themes/`) -- un INDEX + des themes
+> nommes, chaque theme = un but + des redirects (besoin -> etapes -> regle)
+> + une fin.
+
+## Les jetons (remplaces a la generation)
+
+| Jeton | Signification | Exemple |
+|---|---|---|
+| `__NOM_OUTIL__` | nom du dossier outil (sous data/outils/) | theme-vivier |
+| `__NOM_BDD__` | nom du fichier BDD (dans data/) | vivier-themes.json |
+| `__PREFIXE_ID__` | prefixe des identifiants de themes | TH |
+| `__NOM_AFFICHE__` | nom affiche par defaut du nouveau theme | VIVIER |
+
+## Duplication (l'unique porte : dupliquer-template)
+
+```
+python main.py generer --moule theme-bdd --nom theme-vivier \
+       --bdd vivier-themes.json --prefixe TH [--nom-affiche "VIVIER"]
+```
+
+Le generateur verifie les sources EN MEMOIRE avant d'ecrire (jamais
+d'outil a moitie livre), refuse un nom hors forme fermee ou un doublon.
+
+## Ce que le code genere garantit
+
+- Registre JSON : `{"identite", "themes": [{"id", "nom", "but", "description"}]}`.
+- UNICITE du nom de theme (majuscules, compare en casse ignoree) : refusee code 2.
+- Nouveau theme par `ajouter --nom "NOM" --but "..." [--description "..."]`,
+  consultable par `lire`, SORTIE du registre par `retirer --id TH-XXX`
+  (ou `--nom "NOM"`), integrite par `verifier` (empreinte SHA-256).

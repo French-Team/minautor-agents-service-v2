@@ -6,6 +6,6 @@
  "mission": "",
  "historise_debut": false,
  "precedent": null,
- "etape": "debut",
- "historise_fin": false
+ "etape": "fin",
+ "historise_fin": true
 }

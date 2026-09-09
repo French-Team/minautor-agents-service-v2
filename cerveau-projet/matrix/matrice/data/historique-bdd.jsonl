@@ -1,0 +1,4 @@
+{"id": "H-001", "date": "2026-09-06 16:39:32", "type": "mission", "detail": "M-016 : historique-bdd construite", "tags": ["m-016", "bdd"]}
+{"id": "H-002", "date": "2026-09-06 16:39:32", "type": "passe", "detail": "passe veille verte", "tags": ["veille", "auto"]}
+{"id": "H-003", "date": "2026-09-06 16:39:32", "type": "obsolete", "cible": "H-001", "tags": ["obsolete"], "motif": "evenement de test"}
+{"id": "H-004", "date": "2026-09-06 16:39:33", "type": "mission", "detail": "M-016 : historique-bdd construite", "tags": ["m-016", "bdd"]}

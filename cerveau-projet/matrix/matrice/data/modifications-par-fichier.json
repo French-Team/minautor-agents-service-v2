@@ -1,0 +1,2174 @@
+{
+  "identite": {
+    "type": "bdd-modifications",
+    "version": 1
+  },
+  "fichiers": {
+    "matrice/data/data-readme.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 08:45:02",
+          "action": "modifie",
+          "detail": "Contrat data : 7 BDD, regles, ordre de construction",
+          "tags": [
+            "contrat",
+            "bdd"
+          ]
+        },
+        {
+          "date": "2026-09-06 09:39:06",
+          "action": "modifie",
+          "detail": "Contrat data enrichi : diagramme du flux d'ecriture (porte unique) insere avant le tableau de statut",
+          "tags": [
+            "contrat",
+            "bdd",
+            "flux"
+          ]
+        },
+        {
+          "date": "2026-09-06 13:54:54",
+          "action": "modifie",
+          "detail": "statut 4/7 : usages-outils-combos FAITE (outil bdd-usages) ; ordre de construction ajuste",
+          "tags": [
+            "M-013",
+            "contrat"
+          ]
+        },
+        {
+          "date": "2026-09-06 16:22:04",
+          "action": "modifie",
+          "detail": "M-014 : statut 5/7, classeur-variables FAITE avec outil bdd-variables",
+          "tags": [
+            "contrat",
+            "bdd",
+            "m-014"
+          ]
+        },
+        {
+          "date": "2026-09-06 16:34:46",
+          "action": "modifie",
+          "detail": "M-015 : statut 6/7, activites-recentes FAITE",
+          "tags": [
+            "contrat",
+            "bdd",
+            "m-015"
+          ]
+        },
+        {
+          "date": "2026-09-06 16:41:30",
+          "action": "modifie",
+          "detail": "M-016 : statut PLAN COMPLETE (7/7), historique-bdd FAITE",
+          "tags": [
+            "contrat",
+            "bdd",
+            "m-016"
+          ]
+        },
+        {
+          "date": "2026-09-07 19:15:38",
+          "action": "modifie",
+          "detail": "M-059 : BDD additionnelle defcon-historique.jsonl (journal append-only, machine-defcon) + deuxieme ecrivain declare sur la cle defcon du classeur-variables",
+          "tags": [
+            "m059",
+            "defcon",
+            "contrat"
+          ]
+        }
+      ],
+      "tags": [
+        "contrat",
+        "bdd",
+        "flux",
+        "M-013",
+        "m-014",
+        "m-015",
+        "m-016",
+        "m059",
+        "defcon"
+      ]
+    },
+    "matrice/data/outils/bdd-modifications": {
+      "modifications": [
+        {
+          "date": "2026-09-06 08:45:02",
+          "action": "cree",
+          "detail": "Outil bdd-modifications : 10 fichiers (DESCRIPTION, constants, commun, main, 3 categories)",
+          "tags": [
+            "outil",
+            "python",
+            "bdd"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "python",
+        "bdd"
+      ]
+    },
+    "matrice/data/modifications-par-fichier.json": {
+      "modifications": [
+        {
+          "date": "2026-09-06 08:55:21",
+          "action": "corrige",
+          "detail": "Reparation : BDD deplacee de data/outils/ vers data/ (REPERTOIRE_DATA faux dans constants.py) + protection verifier sur BDD absente",
+          "tags": [
+            "reparation",
+            "dag",
+            "chemin"
+          ]
+        }
+      ],
+      "tags": [
+        "reparation",
+        "dag",
+        "chemin"
+      ]
+    },
+    "matrice/data/outils/bdd-modifications/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 09:27:18",
+          "action": "corrige",
+          "detail": "Determinisme des ecritures : fins de ligne forcees en LF (newline) pour empreinte stable -- le sed de restauration avait change les EOL, empreinte fauss\u00e9e sans difference logique",
+          "tags": [
+            "reparation",
+            "determinisme",
+            "eol"
+          ]
+        }
+      ],
+      "tags": [
+        "reparation",
+        "determinisme",
+        "eol"
+      ]
+    },
+    "matrice/routines/espion-integrite": {
+      "modifications": [
+        {
+          "date": "2026-09-06 09:31:45",
+          "action": "cree",
+          "detail": "Espion d'integrite : tour (2 chapitres) + boucle (drapeau d'arret, refus de double) + journal en ajout seul ; teste en reel (detection d'ecart incluse)",
+          "tags": [
+            "espion",
+            "routine",
+            "integrite"
+          ]
+        }
+      ],
+      "tags": [
+        "espion",
+        "routine",
+        "integrite"
+      ]
+    },
+    "matrice/pilote": {
+      "modifications": [
+        {
+          "date": "2026-09-06 09:52:34",
+          "action": "cree",
+          "detail": "Squelette du pilote multi-missions : file (charger/afficher), injection ordonnee (refus de double, serie stricte), fin (historique BDD + intercom) ; cycle M-001 complet teste en reel",
+          "tags": [
+            "pilote",
+            "serie-stricte",
+            "intercom"
+          ]
+        },
+        {
+          "date": "2026-09-06 09:57:04",
+          "action": "modifie",
+          "detail": "Nouvelle sous-commande transformer : re-etiquetage d'une mission EN ATTENTE uniquement (refus en cours/terminee) ; M-002 transformee en mission reelle (theme lecons, 3/7)",
+          "tags": [
+            "pilote",
+            "file",
+            "serie-stricte"
+          ]
+        },
+        {
+          "date": "2026-09-06 10:02:56",
+          "action": "corrige",
+          "detail": "Relecture complete du pilote : 1) charger_lecons_utiles retourne une vraie liste (json.load, bug de type corrige) ; 2) doc fin : la suivante RESTE en attente ; 3) import STATUT_EN_ATTENTE depuis constants (SSOT) ; 4) usage transformer complete",
+          "tags": [
+            "relecture",
+            "pilote",
+            "auto-audit"
+          ]
+        }
+      ],
+      "tags": [
+        "pilote",
+        "serie-stricte",
+        "intercom",
+        "file",
+        "relecture",
+        "auto-audit"
+      ]
+    },
+    "matrice/matrice/matrice-readme.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 09:52:34",
+          "action": "modifie",
+          "detail": "Tableau d'etat : BDD 2/7, pilote pose, 2 boites intercom reelles",
+          "tags": [
+            "contrat",
+            "matrice"
+          ]
+        }
+      ],
+      "tags": [
+        "contrat",
+        "matrice"
+      ]
+    },
+    "matrice/_operateur/optimus-prime/conventions/convention-py-compile.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 10:09:00",
+          "action": "cree",
+          "detail": "Convention gravee : tout fichier Python passe py_compile avant livraison (controle global de la Matrice, ordre tester-relier-compiler-noter)",
+          "tags": [
+            "convention",
+            "python",
+            "qualite"
+          ]
+        }
+      ],
+      "tags": [
+        "convention",
+        "python",
+        "qualite"
+      ]
+    },
+    "matrice/data/outils/bdd-lecons": {
+      "modifications": [
+        {
+          "date": "2026-09-06 10:14:16",
+          "action": "cree",
+          "detail": "Outil bdd-lecons : BDD lecons (3/7) avec tags obligatoires, format consomme par le pilote (charger_lecons_utiles) ; 3 premieres lecons reelles gravees ; py_compile 35/35",
+          "tags": [
+            "outil",
+            "bdd",
+            "lecons"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "bdd",
+        "lecons"
+      ]
+    },
+    "_operateur/optimus-prime/corrections.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 11:05:55",
+          "action": "supprime",
+          "detail": "Retraite de corrections.md (doublon de la fiche pour les regles, couche morte pour les lecons) : 4 lecons migrees en BDD lecons (L-004 a L-007), 2 doublons deja couverts (L-002, L-003), 4 references reecrites vers la porte unique bdd-lecons (proto-1, proto-2, theme-reprise-mission.json, theme-auto-evolution.json)",
+          "tags": [
+            "retraite",
+            "lecons",
+            "bdd",
+            "porte-unique"
+          ]
+        }
+      ],
+      "tags": [
+        "retraite",
+        "lecons",
+        "bdd",
+        "porte-unique"
+      ]
+    },
+    "matrice/indices.md + data/indices.md + intercom/indices.md + routines/indices.md + pilote/indices.md + _operateur/optimus-prime/indices.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 11:25:58",
+          "action": "cree",
+          "detail": "Mission M-006 (indices-1) : 6 indices.md poses (parapluie matrice+docs, data, intercom, routines, pilote, operateur). Format : table Besoin->Lire + conventions de zone. Regle gravee : l'indice se lit AVANT les fichiers de la zone.",
+          "tags": [
+            "indices",
+            "m006",
+            "lecture"
+          ]
+        }
+      ],
+      "tags": [
+        "indices",
+        "m006",
+        "lecture"
+      ]
+    },
+    "matrice/data/manuel-outils.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 11:25:58",
+          "action": "cree",
+          "detail": "Manuel central des outils cree : fiche par outil (bdd-modifications, bdd-lecons, pilote, espion-integrite, emplacement outils operateur). Mise a jour obligatoire a chaque naissance ou modif d'outil (convention-indices).",
+          "tags": [
+            "indices",
+            "manuel",
+            "outils",
+            "m006"
+          ]
+        },
+        {
+          "date": "2026-09-06 13:38:59",
+          "action": "modifie",
+          "detail": "fiche 9 veille-flux ajoutee (commandes, protections, quand)",
+          "tags": [
+            "M-012",
+            "manuel"
+          ]
+        },
+        {
+          "date": "2026-09-06 13:54:54",
+          "action": "modifie",
+          "detail": "fiche 10 bdd-usages ajoutee (commandes, protections, quand)",
+          "tags": [
+            "M-013",
+            "manuel"
+          ]
+        },
+        {
+          "date": "2026-09-06 16:22:04",
+          "action": "modifie",
+          "detail": "M-014 : fiche 11 bdd-variables (outils operateur decales en 12)",
+          "tags": [
+            "contrat",
+            "manuel",
+            "m-014"
+          ]
+        },
+        {
+          "date": "2026-09-06 16:47:38",
+          "action": "modifie",
+          "detail": "M-017 : fiche veille-flux completee (depot activites)",
+          "tags": [
+            "contrat",
+            "manuel",
+            "m-017"
+          ]
+        },
+        {
+          "date": "2026-09-06 20:50:54",
+          "action": "modifie",
+          "detail": "fiche 17 theme-vivier posee (verbes, 8 themes, quand l'utiliser) + protections fiche 16 mises a jour (retirer)",
+          "tags": [
+            "contrat",
+            "manuel",
+            "vivier"
+          ]
+        },
+        {
+          "date": "2026-09-07 22:46:13",
+          "action": "modifie",
+          "detail": "Section 21 : modules partages commun/ (racine + sac a dos) ; indices.md et data-readme.maj",
+          "tags": [
+            "m076",
+            "contrat"
+          ]
+        },
+        {
+          "date": "2026-09-07 23:00:54",
+          "action": "modifie",
+          "detail": "Section 19 : stats usages (codes, durees) documentees dans la fiche bilan-periode",
+          "tags": [
+            "m077",
+            "contrat"
+          ]
+        },
+        {
+          "date": "2026-09-08 07:18:01",
+          "action": "modifie",
+          "detail": "M-078 : fiche 9 veille-flux, protection timeout=120s ajoutee",
+          "tags": [
+            "m078",
+            "timeout",
+            "contrat"
+          ]
+        },
+        {
+          "date": "2026-09-08 09:53:55",
+          "action": "modifie",
+          "detail": "M-079 : fiche 22 journal-multi-encarts ajoutee",
+          "tags": [
+            "m079",
+            "contrat",
+            "manuel"
+          ]
+        }
+      ],
+      "tags": [
+        "indices",
+        "manuel",
+        "outils",
+        "m006",
+        "M-012",
+        "M-013",
+        "contrat",
+        "m-014",
+        "m-017",
+        "vivier",
+        "m076",
+        "m077",
+        "m078",
+        "timeout",
+        "m079"
+      ]
+    },
+    "_operateur/optimus-prime/conventions/convention-indices.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 11:25:58",
+          "action": "cree",
+          "detail": "Convention indices gravee : tete de lecture par zone, format indices.md, manuel-outils central obligatoire, templates+dupliquer-template prevus (proto-5). Index conventions mis a jour (5 conventions).",
+          "tags": [
+            "convention",
+            "indices",
+            "manuel",
+            "m006"
+          ]
+        }
+      ],
+      "tags": [
+        "convention",
+        "indices",
+        "manuel",
+        "m006"
+      ]
+    },
+    "matrice/pilote/fin/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 11:38:00",
+          "action": "corrige",
+          "detail": "Bug attrape a la cloture de M-006 : le lot arme n'etait jamais desamorce apres son RETOUR, chaque fin hors lot rejouait un faux RETOUR consolide. Deux garde-fous a la source : (1) seule une mission DU LOT declenche la logique de lot, (2) le lot est mis a None apres son RETOUR. Preuve en reel : M-007 (hors lot) cloturee sans aucun RETOUR rejoue.",
+          "tags": [
+            "pilote",
+            "lot",
+            "garde-fou",
+            "bug",
+            "m006"
+          ]
+        }
+      ],
+      "tags": [
+        "pilote",
+        "lot",
+        "garde-fou",
+        "bug",
+        "m006"
+      ]
+    },
+    "matrice/data/outils/verifier-conventions": {
+      "modifications": [
+        {
+          "date": "2026-09-06 12:01:09",
+          "action": "cree",
+          "detail": "Mission M-008 (lot marbre 1/3) : outil verifier-conventions (6 fichiers, lecture seule). Controles : ASCII strict ligne:colonne, front-matter identite (type+appartient_a), index synchronise (lignes de tableau seulement). Test negatif valide (3 ecarts attrapes sur fausse convention). Faux positif corrige a la source (index = tableau, prose ignoree). Fiche manuel-outils ajoutee.",
+          "tags": [
+            "m008",
+            "lot-marbre",
+            "verifier",
+            "conventions",
+            "outil"
+          ]
+        }
+      ],
+      "tags": [
+        "m008",
+        "lot-marbre",
+        "verifier",
+        "conventions",
+        "outil"
+      ]
+    },
+    "matrice/data/outils/verifier-regles": {
+      "modifications": [
+        {
+          "date": "2026-09-06 12:03:16",
+          "action": "cree",
+          "detail": "Mission M-009 (lot marbre 2/3) : outil verifier-regles (6 fichiers, lecture seule, 3 controles). NE avec detection de racine par AGENTS.md (pattern v1, decision createur) : test prouve depuis un cwd quelconque, plus aucun chemin compte a la main. Test negatif valide (3 ecarts attrapes, code 1).",
+          "tags": [
+            "m009",
+            "lot-marbre",
+            "verifier",
+            "regles",
+            "racine-agents-md"
+          ]
+        }
+      ],
+      "tags": [
+        "m009",
+        "lot-marbre",
+        "verifier",
+        "regles",
+        "racine-agents-md"
+      ]
+    },
+    "matrice/data/outils/verifier-protocoles": {
+      "modifications": [
+        {
+          "date": "2026-09-06 12:10:06",
+          "action": "cree",
+          "detail": "Mission M-010 (lot marbre 3/3) : outil verifier-protocoles (6 fichiers, lecture seule). A attrape 3 ecarts REELS du marbre : front-matter absents (proto-1, proto-2, proto-5), proto-5 non declare dans l'index, lien mort ../../docs (2 remontees au lieu de 3) -- tous repar\u00e9s, 3 marbres verts. Racine detectee par AGENTS.md, citations avec chemin relatif acceptees.",
+          "tags": [
+            "m010",
+            "lot-marbre",
+            "verifier",
+            "protocoles",
+            "reparation"
+          ]
+        }
+      ],
+      "tags": [
+        "m010",
+        "lot-marbre",
+        "verifier",
+        "protocoles",
+        "reparation"
+      ]
+    },
+    "_operateur/optimus-prime/protocoles/protocoles-readme.md + proto-1 + proto-2 + proto-5": {
+      "modifications": [
+        {
+          "date": "2026-09-06 12:10:06",
+          "action": "corrige",
+          "detail": "Reparations de marbre detectees par verifier-protocoles : front-matter identite ajoutes (3 protocoles), proto-5 declare dans l'index, lien docs corrige (3 remontees).",
+          "tags": [
+            "marbre",
+            "reparation",
+            "protocoles",
+            "m010"
+          ]
+        }
+      ],
+      "tags": [
+        "marbre",
+        "reparation",
+        "protocoles",
+        "m010"
+      ]
+    },
+    "matrice/data/outils/corriger-ascii": {
+      "modifications": [
+        {
+          "date": "2026-09-06 12:27:28",
+          "action": "cree",
+          "detail": "Mission M-011 : outil corriger-ascii (8 fichiers). Carte de conversion en echappements Unicode, jamais de fichier sous etalon .sha256 reecrit, .jsonl hors cibles, affichage console par points de code (2 crashes cp1252 repar\u00e9s a la source). Conversion initiale docs/ appliquee avec validation createur : 961 caracteres convertis, 53 emojis laisses signales. Convention-auto-correction gravee (doctrine : la Matrice corrige en arriere-plan, probleme grave = alerte intercom).",
+          "tags": [
+            "m011",
+            "corriger-ascii",
+            "auto-correction",
+            "doctrine",
+            "outil"
+          ]
+        }
+      ],
+      "tags": [
+        "m011",
+        "corriger-ascii",
+        "auto-correction",
+        "doctrine",
+        "outil"
+      ]
+    },
+    "matrice/routines/veille-flux/": {
+      "modifications": [
+        {
+          "date": "2026-09-06 13:38:58",
+          "action": "cree",
+          "detail": "M-012 : routine veille-flux (main, constants, commun, passe, boucle) + base-acceptee.json (25 codes acceptes) ; doctrine auto-correction en arriere-plan",
+          "tags": [
+            "M-012",
+            "veille-flux",
+            "routine"
+          ]
+        }
+      ],
+      "tags": [
+        "M-012",
+        "veille-flux",
+        "routine"
+      ]
+    },
+    "matrice/routines/veille-flux/constants.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 13:38:59",
+          "action": "corrige",
+          "detail": "PYTHONIOENCODING invalide (replace seul) : le fils mourait a init_stdio_encoding ; format valide utf-8:replace + chemin base-acceptee",
+          "tags": [
+            "M-012",
+            "bug-environnement"
+          ]
+        },
+        {
+          "date": "2026-09-06 16:47:37",
+          "action": "modifie",
+          "detail": "M-017 : CHEMIN_BDD_ACTIVITES + SECTION_PASSES (zero valeur en dur)",
+          "tags": [
+            "veille-flux",
+            "m-017"
+          ]
+        },
+        {
+          "date": "2026-09-06 17:43:02",
+          "action": "modifie",
+          "detail": "M-020 : CHEMIN_ENTONNOIR + URGENCE_VEILLE + THEME_REPARATION (zero valeur en dur)",
+          "tags": [
+            "veille-flux",
+            "entonnoir",
+            "m-020"
+          ]
+        },
+        {
+          "date": "2026-09-07 22:46:13",
+          "action": "modifie",
+          "detail": "Detection racine locale remplacee par le motif unique partage (M-076)",
+          "tags": [
+            "m076",
+            "motif-unique"
+          ]
+        },
+        {
+          "date": "2026-09-08 07:18:01",
+          "action": "modifie",
+          "detail": "M-078 : constante TIMEOUT_COMBO_SECONDES=120 (garde anti-blocage E-045)",
+          "tags": [
+            "m078",
+            "timeout",
+            "veille-flux"
+          ]
+        }
+      ],
+      "tags": [
+        "M-012",
+        "bug-environnement",
+        "veille-flux",
+        "m-017",
+        "entonnoir",
+        "m-020",
+        "m076",
+        "motif-unique",
+        "m078",
+        "timeout"
+      ]
+    },
+    "matrice/routines/veille-flux/passe/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 13:38:59",
+          "action": "corrige",
+          "detail": "garde sortie_en_crash : un crash de sous-processus n'est plus confondu avec le code 1 legitime de corriger-ascii",
+          "tags": [
+            "M-012",
+            "garde-fou"
+          ]
+        }
+      ],
+      "tags": [
+        "M-012",
+        "garde-fou"
+      ]
+    },
+    "matrice/routines/routines-readme.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 13:38:59",
+          "action": "modifie",
+          "detail": "statut : 2 routines posees (espion-integrite, veille-flux)",
+          "tags": [
+            "M-012",
+            "contrat"
+          ]
+        },
+        {
+          "date": "2026-09-06 16:47:37",
+          "action": "modifie",
+          "detail": "M-017 : contrat routines mis a jour (depot en section passes) + coquille elelle-meme corrigee",
+          "tags": [
+            "contrat",
+            "m-017"
+          ]
+        },
+        {
+          "date": "2026-09-06 21:39:52",
+          "action": "modifie",
+          "detail": "statut routines : 3 routines posees, veille permanente activee, raccord demarrage documente (vie/main.py activer)",
+          "tags": [
+            "contrat",
+            "routines"
+          ]
+        }
+      ],
+      "tags": [
+        "M-012",
+        "contrat",
+        "m-017",
+        "routines"
+      ]
+    },
+    "matrice/data/outils/bdd-usages/": {
+      "modifications": [
+        {
+          "date": "2026-09-06 13:54:54",
+          "action": "cree",
+          "detail": "M-013 : outil bdd-usages (noter/lire/verifier) + BDD usages-outils-combos.jsonl (journal ajout seul, sans empreinte) ; premier usage note (auto-notation)",
+          "tags": [
+            "M-013",
+            "bdd-usages",
+            "4-sur-7"
+          ]
+        }
+      ],
+      "tags": [
+        "M-013",
+        "bdd-usages",
+        "4-sur-7"
+      ]
+    },
+    "matrice/routines/espion-integrite/constants.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 13:54:54",
+          "action": "modifie",
+          "detail": "registre : usages-outils-combos.jsonl bascule a faite (True)",
+          "tags": [
+            "M-013",
+            "espion",
+            "registre"
+          ]
+        },
+        {
+          "date": "2026-09-06 16:22:04",
+          "action": "modifie",
+          "detail": "M-014 : classeur-variables.json bascule dans le registre des BDD surveillees",
+          "tags": [
+            "bdd",
+            "m-014",
+            "espion"
+          ]
+        },
+        {
+          "date": "2026-09-06 16:34:45",
+          "action": "modifie",
+          "detail": "M-015 : activites-recentes.json bascule dans le registre des BDD surveillees",
+          "tags": [
+            "bdd",
+            "m-015",
+            "espion"
+          ]
+        },
+        {
+          "date": "2026-09-06 16:41:30",
+          "action": "modifie",
+          "detail": "M-016 : historique-bdd.jsonl bascule dans le registre (7/7 BDD surveillees)",
+          "tags": [
+            "bdd",
+            "m-016",
+            "espion"
+          ]
+        }
+      ],
+      "tags": [
+        "M-013",
+        "espion",
+        "registre",
+        "bdd",
+        "m-014",
+        "m-015",
+        "m-016"
+      ]
+    },
+    "matrice/matrice-readme.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 13:54:55",
+          "action": "modifie",
+          "detail": "etat : BDD usages-outils-combos FAITE (4/7), 3 restantes",
+          "tags": [
+            "M-013",
+            "contrat"
+          ]
+        },
+        {
+          "date": "2026-09-07 19:26:11",
+          "action": "modifie",
+          "detail": "M-062 : etat mis a jour -- machine defcon (M-059/M-060) et bilan-periode (M-061) FAITS, convention a crochets posee (M-062)",
+          "tags": [
+            "m062",
+            "contrat",
+            "etat"
+          ]
+        },
+        {
+          "date": "2026-09-08 09:53:55",
+          "action": "modifie",
+          "detail": "M-079 : ligne d'etat journal multi-encarts FAIT (M-079)",
+          "tags": [
+            "m079",
+            "contrat",
+            "readme"
+          ]
+        }
+      ],
+      "tags": [
+        "M-013",
+        "contrat",
+        "m062",
+        "etat",
+        "m079",
+        "readme"
+      ]
+    },
+    "matrice/data/outils/bdd-variables/": {
+      "modifications": [
+        {
+          "date": "2026-09-06 16:22:03",
+          "action": "cree",
+          "detail": "M-014 : outil bdd-variables (9 fichiers, definir/lire/verifier), BDD classeur-variables.json (une cle = une valeur courante, empreinte SHA-256), modele-mere classeur v1",
+          "tags": [
+            "bdd",
+            "m-014",
+            "variables"
+          ]
+        }
+      ],
+      "tags": [
+        "bdd",
+        "m-014",
+        "variables"
+      ]
+    },
+    "matrice/routines/veille-flux/passe/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 16:22:04",
+          "action": "modifie",
+          "detail": "Raccordement veille-flux -> bdd-usages : chaque passe se note elle-meme (code, duree, detections, tags), echec de notation jamais bloquant",
+          "tags": [
+            "veille-flux",
+            "bdd-usages",
+            "m-014"
+          ]
+        },
+        {
+          "date": "2026-09-06 16:47:37",
+          "action": "modifie",
+          "detail": "M-017 : deposer_passe ajoute - chaque passe se depose dans la section passes des activites-recentes (echec jamais bloquant), en plus de sa note usages",
+          "tags": [
+            "veille-flux",
+            "bdd-activites",
+            "m-017"
+          ]
+        }
+      ],
+      "tags": [
+        "veille-flux",
+        "bdd-usages",
+        "m-014",
+        "bdd-activites",
+        "m-017"
+      ]
+    },
+    "matrice/data/outils/bdd-activites/": {
+      "modifications": [
+        {
+          "date": "2026-09-06 16:34:45",
+          "action": "cree",
+          "detail": "M-015 : outil bdd-activites (10 fichiers), BDD activites-recentes.json (4 sections pre-declarees, rotation 50 prouvee en reel : 52 deposees, 50 gardees, tete 52/queue 3), modele-mere AGENTS-activite-recente",
+          "tags": [
+            "bdd",
+            "m-015",
+            "activites"
+          ]
+        }
+      ],
+      "tags": [
+        "bdd",
+        "m-015",
+        "activites"
+      ]
+    },
+    "matrice/data/outils/bdd-historique/": {
+      "modifications": [
+        {
+          "date": "2026-09-06 16:41:30",
+          "action": "cree",
+          "detail": "M-016 : outil bdd-historique (11 fichiers), BDD historique-bdd.jsonl (journal ajout seul, doublons actifs refuses, obsolete sur ajout, cles requises selon le type de ligne), plan des 7 BDD COMPLETE",
+          "tags": [
+            "bdd",
+            "m-016",
+            "historique"
+          ]
+        }
+      ],
+      "tags": [
+        "bdd",
+        "m-016",
+        "historique"
+      ]
+    },
+    "matrice/pilote/entonnoir/": {
+      "modifications": [
+        {
+          "date": "2026-09-06 17:16:04",
+          "action": "cree",
+          "detail": "M-018 : echelons 0-3 de l'entonnoir (deposer vrac + type propose par mots-cles, classer par type/categorie listes fermees, urgencer, file) - 2 bugs reels attrapes au test : atomique a moitie ecrite (os.replace manque) et validation apres recherche ; repares a la source. Persistance prouvee dans pilote/entonnoir-files.json",
+          "tags": [
+            "entonnoir",
+            "m-018",
+            "pilote"
+          ]
+        }
+      ],
+      "tags": [
+        "entonnoir",
+        "m-018",
+        "pilote"
+      ]
+    },
+    "matrice/routines/veille-flux/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 17:43:02",
+          "action": "modifie",
+          "detail": "M-020 : deposer_mission_vrac - chaque alerte-grave verse sa mission-reparation au vrac de l'entonnoir (bloquante, source veille, echec jamais bloquant, anti-spam = 1 depot par signature)",
+          "tags": [
+            "veille-flux",
+            "entonnoir",
+            "m-020"
+          ]
+        },
+        {
+          "date": "2026-09-08 07:18:01",
+          "action": "modifie",
+          "detail": "M-078 : timeout=120 + TimeoutExpired journalise (code 124) sur lancer_combo et lancer_py_compile",
+          "tags": [
+            "m078",
+            "timeout",
+            "veille-flux"
+          ]
+        }
+      ],
+      "tags": [
+        "veille-flux",
+        "entonnoir",
+        "m-020",
+        "m078",
+        "timeout"
+      ]
+    },
+    "matrice/pilote/checklist/": {
+      "modifications": [
+        {
+          "date": "2026-09-06 17:50:40",
+          "action": "cree",
+          "detail": "M-021 : outil checklist (listes.py/stockage.py/entry.py) - checklist fermee par type (E: etapes, V: verifications), generee a l'injection (2 points : preparer_injection + enchainer, stockee dans la mission), consultable a la demande (checklist --id). Incident reel : listes.py tronque sur disque (L-009 re-verify), repare par reecriture",
+          "tags": [
+            "checklist",
+            "m-021",
+            "pilote"
+          ]
+        }
+      ],
+      "tags": [
+        "checklist",
+        "m-021",
+        "pilote"
+      ]
+    },
+    "matrice/pilote/injection/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 17:50:40",
+          "action": "modifie",
+          "detail": "M-021 : champ checklist ajoute aux 2 injections (directe + lot), stockee dans la mission",
+          "tags": [
+            "checklist",
+            "m-021",
+            "pilote"
+          ]
+        }
+      ],
+      "tags": [
+        "checklist",
+        "m-021",
+        "pilote"
+      ]
+    },
+    "matrice/pilote/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 17:50:41",
+          "action": "modifie",
+          "detail": "M-021 : route checklist + docstring (file consommer, checklist)",
+          "tags": [
+            "m-021",
+            "pilote"
+          ]
+        }
+      ],
+      "tags": [
+        "m-021",
+        "pilote"
+      ]
+    },
+    "pilote/entonnoir-files.json": {
+      "modifications": [
+        {
+          "date": "2026-09-06 18:03:14",
+          "action": "supprime",
+          "detail": "Purge des 5 missions d'exemple de l'entonnoir : E-001 a E-005 retirees (vrac + files + brin), E-006 (reparation reelle de la veille) seule conservee. Bilan M-019 corrige par la lecon L-011 (preuves jamais courues) + scorie franglaise reparee dans la BDD lecons.",
+          "tags": [
+            "purge",
+            "entonnoir",
+            "verite"
+          ]
+        },
+        {
+          "date": "2026-09-06 18:12:07",
+          "action": "modifie",
+          "detail": "Consommation reelle : tete du brin (E-006) versee au pilote -> M-022 (provenance entonnoir:E-006:reparation/routine:bloquante). Sortie de sa file-type verifiee (brin vide, file reparation vide) : la preuve M-019 jamais courue l'est desormais (L-011). M-022 injectee + checklist auto-generee + fin : incident deja resolu par le menage M-020.",
+          "tags": [
+            "tresse",
+            "consommation",
+            "cycle-complet"
+          ]
+        },
+        {
+          "date": "2026-09-06 19:00:28",
+          "action": "supprime",
+          "detail": "Purge des 5 missions de preuve E-012 a E-016 des files-types (socle des tests M-027 : proposition auto, garde-fou hors-type, main souveraine, sans mot-cle). Comptes verifies avant/apres (5/5 retirees). E-008 (reparation reelle en tete du brin) conservee : vrac et files autres vides.",
+          "tags": [
+            "purge",
+            "entonnoir",
+            "preuves"
+          ]
+        }
+      ],
+      "tags": [
+        "purge",
+        "entonnoir",
+        "verite",
+        "tresse",
+        "consommation",
+        "cycle-complet",
+        "preuves"
+      ]
+    },
+    "pilote/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 18:24:55",
+          "action": "modifie",
+          "detail": "Raccord ent-auto : tisser_tresse() (sous-processus vers la porte officielle de l'entonnoir, jamais d'import croise) + puiser_tresse() (tisser d'abord, puis consommer_tete_tresse, retourne la mission ou None). Bug D.A.G. attrape par le premier test reel : le sous-processus pointait pilote/main.py au lieu de entonnoir/main.py (code 2) - repare a la source.",
+          "tags": [
+            "tresse",
+            "puisage",
+            "pilote",
+            "dag"
+          ]
+        }
+      ],
+      "tags": [
+        "tresse",
+        "puisage",
+        "pilote",
+        "dag"
+      ]
+    },
+    "pilote/injection/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 18:24:55",
+          "action": "modifie",
+          "detail": "preparer_injection : puisage auto de la tresse en dernier recours (lot -> file -> tresse). Priorite createur PROUVEE : M-023 injectee pendant que E-007 attendait dans la tresse. Puisage PROUVE : M-024 <- E-007 (provenance entonnoir:E-007:dev/pilote:normale) a l'injection suivant la fin.",
+          "tags": [
+            "tresse",
+            "puisage",
+            "pilote"
+          ]
+        },
+        {
+          "date": "2026-09-06 20:38:56",
+          "action": "modifie",
+          "detail": "M-037 : charger_themes_utiles (doctrine lecons_utiles : liste vide si BDD absente ou illisible) + themes_utiles dans les 2 messages d'injection (directe + lot). Preuves : chargement nominal TH-001 VIVIER, garde fichier absent (mv/cache + retour, empreinte intacte), outbox M-038 lit themes_utiles = [TH-001 VIVIER] + 11 lecons.",
+          "tags": [
+            "themes",
+            "pilote",
+            "injection"
+          ]
+        }
+      ],
+      "tags": [
+        "tresse",
+        "puisage",
+        "pilote",
+        "themes",
+        "injection"
+      ]
+    },
+    "pilote/DESCRIPTION.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 18:24:55",
+          "action": "modifie",
+          "detail": "Facade pilote a jour : regle de priorite de injecter (lot, file, tresse) + section PUISAGE AUTO (tisser avant, porte officielle, priorite createur).",
+          "tags": [
+            "contrat",
+            "pilote"
+          ]
+        },
+        {
+          "date": "2026-09-06 20:34:14",
+          "action": "modifie",
+          "detail": "Contrat fin a jour : sans lot, la suivante (file ou tresse) demarre automatiquement (E-008).",
+          "tags": [
+            "contrat",
+            "pilote"
+          ]
+        }
+      ],
+      "tags": [
+        "contrat",
+        "pilote"
+      ]
+    },
+    "data/manuel-outils.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 18:24:55",
+          "action": "modifie",
+          "detail": "Fiche 3 pilote : la commande injecter documente le puisage automatique depuis la tresse (lot et file vides).",
+          "tags": [
+            "contrat",
+            "manuel",
+            "pilote"
+          ]
+        },
+        {
+          "date": "2026-09-06 18:58:22",
+          "action": "modifie",
+          "detail": "Fiche 14 : comportement categorie proposee auto au classer documente (garde-fou par type, souverainete explicite).",
+          "tags": [
+            "contrat",
+            "manuel",
+            "entonnoir"
+          ]
+        },
+        {
+          "date": "2026-09-06 20:34:15",
+          "action": "modifie",
+          "detail": "Fiche 3 pilote : comportement du fin documente (lot : enchainement + RETOUR ; hors lot : relance auto file/tresse).",
+          "tags": [
+            "contrat",
+            "manuel",
+            "pilote"
+          ]
+        },
+        {
+          "date": "2026-09-07 09:36:20",
+          "action": "corrige",
+          "detail": "M-056 : relecture des contrats apres le type revision - fiche 14 (classer) mise a jour avec revision, matrice-readme ligne entonnoir mise a jour (5 types), data-readme et intercom-readme ne mentionnent pas les types (rien a changer), indices entonnoir deja a jour (M-055)",
+          "tags": [
+            "contrat",
+            "revision",
+            "relire"
+          ]
+        }
+      ],
+      "tags": [
+        "contrat",
+        "manuel",
+        "pilote",
+        "entonnoir",
+        "revision",
+        "relire"
+      ]
+    },
+    "pilote/indices.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 18:32:52",
+          "action": "modifie",
+          "detail": "Indices pilote a jour : priorite d'injection (lot -> file -> tresse), puisage auto (tisser d'abord, porte officielle, jamais d'import croise), commandes completes (file consommer, checklist), lien vers les indices dedies de l'entonnoir.",
+          "tags": [
+            "indices",
+            "pilote",
+            "contrat"
+          ]
+        },
+        {
+          "date": "2026-09-06 20:34:14",
+          "action": "modifie",
+          "detail": "Indices pilote : la regle 'la suivante RESTE en attente' est remplacee par la relance automatique (E-008), sortie propre si tout est vide.",
+          "tags": [
+            "contrat",
+            "indices",
+            "pilote"
+          ]
+        }
+      ],
+      "tags": [
+        "indices",
+        "pilote",
+        "contrat"
+      ]
+    },
+    "pilote/entonnoir/indices.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 18:32:52",
+          "action": "cree",
+          "detail": "Indices dedies de l'entonnoir : echelons 0-4, listes fermees de listes.py (seule source), tresse deterministe (paliers + round-robin), porte officielle du tressage, ecriture atomique (lecon M-018).",
+          "tags": [
+            "indices",
+            "entonnoir",
+            "contrat"
+          ]
+        },
+        {
+          "date": "2026-09-06 18:58:22",
+          "action": "modifie",
+          "detail": "Indices entonnoir : la ligne classer pointe desormais sur classer/fonctions.py (proposition auto + gardes, M-027).",
+          "tags": [
+            "contrat",
+            "indices",
+            "entonnoir"
+          ]
+        },
+        {
+          "date": "2026-09-07 09:36:26",
+          "action": "corrige",
+          "detail": "M-056 : relecture des contrats apres le type revision - fiche 14 (classer) mise a jour avec revision, matrice-readme ligne entonnoir mise a jour (5 types), data-readme et intercom-readme ne mentionnent pas les types (rien a changer), indices entonnoir deja a jour (M-055)",
+          "tags": [
+            "contrat",
+            "revision",
+            "relire"
+          ]
+        }
+      ],
+      "tags": [
+        "indices",
+        "entonnoir",
+        "contrat",
+        "revision",
+        "relire"
+      ]
+    },
+    "pilote/entonnoir/mots.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 18:50:06",
+          "action": "cree",
+          "detail": "Module mots_de/mot_parcourt : correspondance par MOTS ENTIERS (casse ignoree, pluriel simple tolere) partagee par les proposers de l'entonnoir. Cause racine M-026 : 'mot_cle in texte' (sous-chaine) faisait proposer reparation pour 'preparer'.",
+          "tags": [
+            "classement",
+            "mots-entiers",
+            "dag"
+          ]
+        }
+      ],
+      "tags": [
+        "classement",
+        "mots-entiers",
+        "dag"
+      ]
+    },
+    "pilote/entonnoir/vrac/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 18:50:06",
+          "action": "corrige",
+          "detail": "proposer_type branche sur mots entiers. Incident attrape par le test : mots_de manquait a l'import (NameError) - repare. Verbe proposer_categorie existant mais sans consommateur : signale, porte la meme reparation.",
+          "tags": [
+            "classement",
+            "mots-entiers"
+          ]
+        }
+      ],
+      "tags": [
+        "classement",
+        "mots-entiers"
+      ]
+    },
+    "pilote/entonnoir/classer/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 18:50:06",
+          "action": "corrige",
+          "detail": "proposer_categorie branche sur mots entiers (outils->outil, lecons->lecon prouves). 9 cas types + 4 cas categories verts ; incident d'origine re-teste par la porte reelle : 'preparer la relance' propose desormais dev (defaut).",
+          "tags": [
+            "classement",
+            "mots-entiers"
+          ]
+        },
+        {
+          "date": "2026-09-06 18:58:22",
+          "action": "modifie",
+          "detail": "M-027 : classer_mission propose la categorie auto (proposer_categorie, mots entiers) quand --categorie absente ; proposition GARDEE seulement si elle est dans les categories du type, sinon defaut du type ; --categorie explicite reste souveraine mais verifiee (refus code 2 hors liste). Ordre M-018 preserve (listes avant recherche). Nouveau chercheur mono-tache mission_du_vrac. Preuves : E-012 outil auto, E-013/E-014 bdd hors-type -> autre (garde-fou), E-015 main souveraine, E-016 sans mot-cle -> autre ; refus 2/1/2 prouves.",
+          "tags": [
+            "classement",
+            "categorie-auto",
+            "entonnoir"
+          ]
+        }
+      ],
+      "tags": [
+        "classement",
+        "mots-entiers",
+        "categorie-auto",
+        "entonnoir"
+      ]
+    },
+    "pilote/entonnoir/classer/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 18:58:22",
+          "action": "modifie",
+          "detail": "Entree amincie : la main du createur passe brute a classer_mission, le metier tranche (proposition + gardes). Import categorie_par_defaut devenu inutilise : retire.",
+          "tags": [
+            "classement",
+            "entonnoir"
+          ]
+        }
+      ],
+      "tags": [
+        "classement",
+        "entonnoir"
+      ]
+    },
+    "matrice-readme.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 19:04:13",
+          "action": "modifie",
+          "detail": "Relecture M-029 : table Sections + ligne pilote/ ; etat du pilote passe de squelette POSE a VIVANT (lot, checklists auto, tresse, puisage auto, M-001 a M-028) ; indices 6 -> 7 (M-025) ; 3 lignes ajoutees a l'etat : marbres verifiables + corriger-ascii (M-008 a M-011), veille-flux avec boucle detection -> mission fermee (M-012 + M-020), entonnoir en echelon + puisage auto (M-018 a M-023, M-026/M-027).",
+          "tags": [
+            "contrat",
+            "relecture",
+            "matrice-readme"
+          ]
+        }
+      ],
+      "tags": [
+        "contrat",
+        "relecture",
+        "matrice-readme"
+      ]
+    },
+    "data/data-readme.md": {
+      "modifications": [
+        {
+          "date": "2026-09-06 19:04:13",
+          "action": "modifie",
+          "detail": "Relecture M-029 : qui ecrit lecons.json corrige (outil bdd-lecons + pilote, la preuve L-011 a ete ecrite par la porte unique de l'outil). Les 7 BDD, leurs outils et le plan 7/7 etaient deja exacts.",
+          "tags": [
+            "contrat",
+            "relecture",
+            "data-readme"
+          ]
+        }
+      ],
+      "tags": [
+        "contrat",
+        "relecture",
+        "data-readme"
+      ]
+    },
+    "templates/outil-bdd/": {
+      "modifications": [
+        {
+          "date": "2026-09-06 19:18:00",
+          "action": "cree",
+          "detail": "Moule a jetons de l'outil BDD conforme (10 fichiers .moule + README) : modele-mere bdd-lecons, jetons __NOM_OUTIL__/__NOM_BDD__/__PREFIXE_ID__/__CLE_LISTE__/__CHAMP__/__HUMAIN__ ; ne s'execute jamais seul, consomme par dupliquer-template.",
+          "tags": [
+            "templates",
+            "moule",
+            "contrat"
+          ]
+        }
+      ],
+      "tags": [
+        "templates",
+        "moule",
+        "contrat"
+      ]
+    },
+    "data/outils/dupliquer-template/": {
+      "modifications": [
+        {
+          "date": "2026-09-06 19:18:00",
+          "action": "cree",
+          "detail": "Generateur conforme : traduction EN MEMOIRE, verification avant ecriture (py_compile + ASCII + jeton residuel par source, puis clone executable), refus nom invalide (code 2), refus double generation / jamais d'ecrasement (code 2). Preuve : bdd-remarques genere (10 fichiers) et teste en reel (ajout, refus orpheline, lire, filtre tag, verifier vert).",
+          "tags": [
+            "templates",
+            "generateur",
+            "proto-5"
+          ]
+        },
+        {
+          "date": "2026-09-06 19:37:00",
+          "action": "modifie",
+          "detail": "Generateur multi-moules : --moule (defaut outil-bdd), validation PAR MOULE (motifs bdd-* et theme-*, moule inconnu code 2), table de jetons par moule, controle du main.py.moule contre le TEMPLATE (bug attrape par le test : il etait verifie contre le clone, verdict faux). Preuves reelles : theme-vivier genere code 0 (10 fichiers), TH-001 ajoutee, doublon VIVIER refuse code 2, BDD survive a la suppression du dossier outil.",
+          "tags": [
+            "templates",
+            "generateur",
+            "multi-moules",
+            "dag"
+          ]
+        }
+      ],
+      "tags": [
+        "templates",
+        "generateur",
+        "proto-5",
+        "multi-moules",
+        "dag"
+      ]
+    },
+    "templates/theme-bdd/": {
+      "modifications": [
+        {
+          "date": "2026-09-06 19:37:00",
+          "action": "cree",
+          "detail": "Deuxieme moule (10 fichiers a jetons) : registre de THEMES de mission, semantique modele-mere = themes de l'operateur (nom, but, nom_affiche). Garantie du code genere : unicite du nom (casse ignoree, doublon refuse code 2), empreinte SHA-256, ecriture atomique.",
+          "tags": [
+            "templates",
+            "theme-bdd",
+            "moule"
+          ]
+        },
+        {
+          "date": "2026-09-06 20:50:54",
+          "action": "modifie",
+          "detail": "categorie retirer posee (entry+fonctions, 12 sources) : sortie du registre par id ou nom, gardes usage/absent code 2 ; clone theme-vivier regenere (BDD survivee), temoin TH-001 retire, 8 themes reels fondes M-001-M-038 (TH-002 BDD a TH-009 REPARATION)",
+          "tags": [
+            "moule",
+            "theme-bdd",
+            "retirer",
+            "vivier"
+          ]
+        }
+      ],
+      "tags": [
+        "templates",
+        "theme-bdd",
+        "moule",
+        "retirer",
+        "vivier"
+      ]
+    },
+    "data/outils/bdd-remarques/": {
+      "modifications": [
+        {
+          "date": "2026-09-06 19:54:55",
+          "action": "supprime",
+          "detail": "Decision M-032 (sort des clones de preuve) : bdd-remarques PURGE (preuve pure M-030, R-001 factice, non surveillee, regenerable en une commande par le moule) - outil + remarques.json + empreinte. theme-vivier GARDE : devient l'infrastructure reelle du raccord themes -> pilote (demande createur), verifier vert, TH-001 conservee.",
+          "tags": [
+            "decision",
+            "purge",
+            "clones",
+            "doctrine"
+          ]
+        }
+      ],
+      "tags": [
+        "decision",
+        "purge",
+        "clones",
+        "doctrine"
+      ]
+    },
+    "pilote/fin/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 20:33:46",
+          "action": "modifie",
+          "detail": "E-008 livre : apres un fin HORS lot, preparer_injection est rejouee automatiquement (priorite lot -> file -> tresse : relance depuis la file M-035 temoin, puisage tresse M-036 <- E-018, sortie propre quand tout est vide). Le comportement lot (enchainement k/n + RETOUR consolide + desamorcage) reste intact. Garde anti double-REFUS : preparer_injection refuse en serie stricte, echec non bloquant pour la fin.",
+          "tags": [
+            "tresse",
+            "relance-auto",
+            "e-008",
+            "fin"
+          ]
+        }
+      ],
+      "tags": [
+        "tresse",
+        "relance-auto",
+        "e-008",
+        "fin"
+      ]
+    },
+    "pilote/constants.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 20:38:56",
+          "action": "modifie",
+          "detail": "M-037 : NOM_THEMES + CHEMIN_THEMES (vivier-themes.json dans data/) - zero valeur en dur.",
+          "tags": [
+            "themes",
+            "pilote"
+          ]
+        }
+      ],
+      "tags": [
+        "themes",
+        "pilote"
+      ]
+    },
+    "routines/espion-integrite/constants.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 20:50:54",
+          "action": "modifie",
+          "detail": "vivier-themes.json entre au registre de l'espion-integrite (8e BDD surveillee) ; passe tour verte",
+          "tags": [
+            "espion",
+            "vivier",
+            "bdd"
+          ]
+        }
+      ],
+      "tags": [
+        "espion",
+        "vivier",
+        "bdd"
+      ]
+    },
+    "matrice/pilote/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 21:18:35",
+          "action": "modifie",
+          "detail": "champ theme FERME : valider_theme + charger_themes_autorises (source unique commun.py, CHEMIN_THEMES) ; refus code 2 + liste hors vivier, canonisation casse-ignoree, degradation non-bloquante si vivier absent/vide",
+          "tags": [
+            "pilote",
+            "theme-ferme",
+            "vivier"
+          ]
+        },
+        {
+          "date": "2026-09-07 19:15:38",
+          "action": "modifie",
+          "detail": "M-059 : garde defcon_bloque_theme pose dans pilote/commun.py, branche sur charger, transformer et injecter ; a defcon 5 seules les missions themees DEFCON restent injectables (jamais bloquant si classeur illisible)",
+          "tags": [
+            "m059",
+            "defcon",
+            "pilote",
+            "garde"
+          ]
+        }
+      ],
+      "tags": [
+        "pilote",
+        "theme-ferme",
+        "vivier",
+        "m059",
+        "defcon",
+        "garde"
+      ]
+    },
+    "matrice/pilote/file/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 21:18:35",
+          "action": "modifie",
+          "detail": "3 portes branchees : charger / lot / transformer valident le theme avant ecriture ; preuves : JEU et INVENTE refuses code 2, pilote->PILOTE, lot pilote,bdd canonise, temoin M-043 + lot-ok M-044/M-045",
+          "tags": [
+            "pilote",
+            "theme-ferme",
+            "portes"
+          ]
+        }
+      ],
+      "tags": [
+        "pilote",
+        "theme-ferme",
+        "portes"
+      ]
+    },
+    "matrice/routines/vie/": {
+      "modifications": [
+        {
+          "date": "2026-09-06 21:39:51",
+          "action": "cree",
+          "detail": "activateur de vie de la Matrice : lancement DETACHE des boucles veille-flux + espion-integrite (survivent a la session), etat (ARRET/ACTIVE/fantome nettoye), garde de double lancement respecte, PID fantome nettoye automatiquement ; veille PERMANENTE activee (M-046)",
+          "tags": [
+            "vie",
+            "activateur",
+            "veille-permanente"
+          ]
+        }
+      ],
+      "tags": [
+        "vie",
+        "activateur",
+        "veille-permanente"
+      ]
+    },
+    "matrice/routines/veille-flux/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-06 21:39:51",
+          "action": "corrige",
+          "detail": "bug de routage attrape en reel : 'veille arret' routait vers passe (une passe parasite courait, le drapeau n'etait jamais pose, la boucle ne s'arretait pas) ; route maintenant vers boucle ; arret cooperatif prouve sur les 2 boucles",
+          "tags": [
+            "veille-flux",
+            "bugfix",
+            "arret"
+          ]
+        }
+      ],
+      "tags": [
+        "veille-flux",
+        "bugfix",
+        "arret"
+      ]
+    },
+    "veille-flux/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-07 06:50:24",
+          "action": "corrige",
+          "detail": "M-047 : test bout en bout prouve - fichier casse (ASCII pur) -> detection veille (py_compile, re-test confirme) -> alerte-grave (boite Matrice + anti-spam) -> E-022 au vrac (bloquante, source veille) ; retour vert apres suppression ; E-022 classee reparation/routine (incident deja resolu)",
+          "tags": [
+            "veille",
+            "test",
+            "preuve"
+          ]
+        },
+        {
+          "date": "2026-09-07 07:25:15",
+          "action": "cree",
+          "detail": "M-051 : purger_signatures_mortes() dans commun.py + branchee en tete de passe (passe/entry.py) - signatures python-compile dont la cible n'existe plus retirees a CHAQUE passe ; autres signatures conservees ; jamais bloquant (incident-purge journalise) ; preuves : morte purgee (1), vivante conservee, marbre conserve, JSON corrompu non-bloquant ; DESCRIPTION mise a jour (etape 1 de la passe)",
+          "tags": [
+            "veille",
+            "purge",
+            "auto",
+            "preuve"
+          ]
+        },
+        {
+          "date": "2026-09-07 08:19:38",
+          "action": "cree",
+          "detail": "M-052 : purge des alertes-grave fantomes de la boite Matrice - purger_alertes_fantomes() retire les alertes python-compile dont le fichier cible n'existe plus ; cible non-fichier (py_compile) jamais declaree morte ; autres messages intouchables ; jamais bloquant (incident-purge-boite journalise) ; preuve par la boucle permanente (purge-boite: 1 puis passe planifiee 0 purge, alerte py_compile epargnee)",
+          "tags": [
+            "veille",
+            "purge",
+            "intercom",
+            "preuve"
+          ]
+        }
+      ],
+      "tags": [
+        "veille",
+        "test",
+        "preuve",
+        "purge",
+        "auto",
+        "intercom"
+      ]
+    },
+    "veille-flux/alertes-emises.json": {
+      "modifications": [
+        {
+          "date": "2026-09-07 07:06:23",
+          "action": "supprime",
+          "detail": "M-047 (suite) : purge des 2 signatures obsoletes (routine-cassee-m047.py, routine-cassee-test.py - cibles supprimees) ; fichier vide {} au format de enregistrer_alerte_emise ; une signature morte bloquerait la future alerte si la cible etait recreee",
+          "tags": [
+            "veille",
+            "purge",
+            "anti-spam"
+          ]
+        }
+      ],
+      "tags": [
+        "veille",
+        "purge",
+        "anti-spam"
+      ]
+    },
+    "data/lecons.json": {
+      "modifications": [
+        {
+          "date": "2026-09-07 08:48:12",
+          "action": "cree",
+          "detail": "M-054 : lecon L-012 gravee (code zombie - un processus vivant garde le code de son lancement, toute boucle modifiee doit etre redemarree) via la porte unique bdd-lecons, source M-052, tags boucle/redemarrage/zombie/processus/veille",
+          "tags": [
+            "lecon",
+            "contrat",
+            "preuve"
+          ]
+        }
+      ],
+      "tags": [
+        "lecon",
+        "contrat",
+        "preuve"
+      ]
+    },
+    "pilote/entonnoir/listes.py": {
+      "modifications": [
+        {
+          "date": "2026-09-07 09:31:59",
+          "action": "modifie",
+          "detail": "M-055 : type revision ajoute aux listes fermees (TYPES, CATEGORIES avec marbre/contrat/regle/protocole, mots-cles revision/reviser, mots categories protocole/regle) + checklist/listes.py synchronise (TYPES + etapes revision) + indices.md a jour ; decision createur 2026-09-07",
+          "tags": [
+            "entonnoir",
+            "revision",
+            "liste-fermee",
+            "preuve"
+          ]
+        }
+      ],
+      "tags": [
+        "entonnoir",
+        "revision",
+        "liste-fermee",
+        "preuve"
+      ]
+    },
+    "pilote/entonnoir/retirer/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-07 09:50:32",
+          "action": "cree",
+          "detail": "M-058 : verbe retirer au vrac - retirer_du_vrac(etat, id) -> (code, message) ; sortie propre avec historique horodate ; garde inconnue code 1 (alignee classer) ; deja classee jamais touchee ; category retireer/ complete + main.py route + contrats",
+          "tags": [
+            "entonnoir",
+            "vrac",
+            "retirer",
+            "preuve"
+          ]
+        }
+      ],
+      "tags": [
+        "entonnoir",
+        "vrac",
+        "retirer",
+        "preuve"
+      ]
+    },
+    "matrice/data/outils/machine-defcon/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-07 19:15:38",
+          "action": "cree",
+          "detail": "M-059 : outil machine-defcon complet (lire/monter/descendre/valider), echelle fermee 5-4-3-2 (1 reserve), journal defcon-historique.jsonl, niveau courant = cle defcon du classeur (id conserve, empreinte maintenue)",
+          "tags": [
+            "m059",
+            "defcon",
+            "outil"
+          ]
+        }
+      ],
+      "tags": [
+        "m059",
+        "defcon",
+        "outil"
+      ]
+    },
+    "matrice/data/outils/bilan-periode/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-07 19:23:06",
+          "action": "cree",
+          "detail": "M-061 : outil bilan-periode (lecture seule) -- bilan des BDD horodatees sur periode fermee 1h/heures(6h)/24h/3j/semaine/mois ; sources : historiques-missions, usages, activites-recentes, defcon-historique ; periodes fermees (refus code 2 hors liste) ; porte de la demande [bilan]",
+          "tags": [
+            "m061",
+            "bilan",
+            "outil"
+          ]
+        }
+      ],
+      "tags": [
+        "m061",
+        "bilan",
+        "outil"
+      ]
+    },
+    "_operateur/optimus-prime/conventions/convention-crochets.md": {
+      "modifications": [
+        {
+          "date": "2026-09-07 19:26:11",
+          "action": "cree",
+          "detail": "M-062 : convention des demandes a crochets -- 6 mots fermes ([mission] entonnoir deposer, [question] lot pilote 4 parts th\u00e9m\u00e9es, [audit], [revision], [alerte=defcon:N] machine-defcon, [bilan] bilan-periode) + echelle defcon fermee 5-4-3-2 (1 reserve) + transitions (montree libre, descente stricte, valider clot def3)",
+          "tags": [
+            "m062",
+            "crochets",
+            "convention",
+            "defcon"
+          ]
+        }
+      ],
+      "tags": [
+        "m062",
+        "crochets",
+        "convention",
+        "defcon"
+      ]
+    },
+    "_operateur/optimus-prime/protocoles/proto-6-route-mission.md": {
+      "modifications": [
+        {
+          "date": "2026-09-07 20:03:41",
+          "action": "cree",
+          "detail": "M-070 : protocole 6 route-mission (7 etapes) + protocole 7 route-bdd (5 etapes, porte unique) + protocole 8 route-reparation-veille (6 etapes) ; les 3 routes frequentes gravees comme pre-requis du mode direct cameleon ; index protocoles-readme complet (8 protocoles) ; marbre conforme",
+          "tags": [
+            "m070",
+            "protocoles",
+            "routes",
+            "cameleon"
+          ]
+        }
+      ],
+      "tags": [
+        "m070",
+        "protocoles",
+        "routes",
+        "cameleon"
+      ]
+    },
+    "_operateur/optimus-prime/protocoles/proto-7-route-bdd.md": {
+      "modifications": [
+        {
+          "date": "2026-09-07 20:12:48",
+          "action": "corrige",
+          "detail": "M-071 relecture avant GO : reference morte corrigee (indices data/data.md -> data/indices.md + data-readme.md) ; proto-6 et proto-8 verifies exacts sur disque (L-012, L-013, anti-spam purge seul, arret cooperatif, charger vs lot) ; marbre re-vert",
+          "tags": [
+            "m071",
+            "relecture",
+            "protocoles"
+          ]
+        }
+      ],
+      "tags": [
+        "m071",
+        "relecture",
+        "protocoles"
+      ]
+    },
+    "matrix/agents/cameleon/cameleon.md": {
+      "modifications": [
+        {
+          "date": "2026-09-07 21:03:27",
+          "action": "cree",
+          "detail": "M-072 : fiche camelon posee dans matrix/agents/cameleon (session-matrix, gere_par matrice/pilote, perimetre lecture+ecriture matrix/ seul, 3 personnalites vivant au vivier TH-017..TH-021) ; deplacee depuis freelance/ apres recadrage (L-014) ; ni parcours ni profils locaux : la Matrice fournit la fiche de chaque mission",
+          "tags": [
+            "m072",
+            "cameleon",
+            "matrice",
+            "v3"
+          ]
+        },
+        {
+          "date": "2026-09-07 21:08:57",
+          "action": "corrige",
+          "detail": "M-073 relecture avant GO : 3 residus du modele v2 supprimes (mention profils ce dossier -> personnalites vivier ; parcours/profils/profils-readme.md -> mappage ferme dans la fiche ; profils -> personnalites du vivier en regle 5) ; coherence fiche<->vivier verifiee (TH-017..TH-021, mappage 5 types) ; ASCII 0 octet ; 0 residu freelance",
+          "tags": [
+            "m073",
+            "relecture",
+            "cameleon"
+          ]
+        }
+      ],
+      "tags": [
+        "m072",
+        "cameleon",
+        "matrice",
+        "v3",
+        "m073",
+        "relecture"
+      ]
+    },
+    "matrice/data/outils/theme-vivier/constants.py": {
+      "modifications": [
+        {
+          "date": "2026-09-07 21:03:27",
+          "action": "modifie",
+          "detail": "M-072 : vivier categorise -- categories fermees SYSTEME/PERSONNALITE/QUESTION/GOUVERNANCE ; verbe categoriser (19 themes migr\u00e9s) ; ajouter exige --categorie ; lire filtre --categorie ; gardes testees (inconnu 1, inventee 1, sans option 2)",
+          "tags": [
+            "m072",
+            "vivier",
+            "categories"
+          ]
+        }
+      ],
+      "tags": [
+        "m072",
+        "vivier",
+        "categories"
+      ]
+    },
+    "cerveau-projet/freelance/cameleon": {
+      "modifications": [
+        {
+          "date": "2026-09-07 21:03:27",
+          "action": "supprime",
+          "detail": "M-072 : domicile errone supprime (freelance/ = v2) ; l'agent unique de la Matrice vit dans matrix/agents/cameleon (recadrage createur, lecon L-014)",
+          "tags": [
+            "m072",
+            "cameleon",
+            "recadrage"
+          ]
+        }
+      ],
+      "tags": [
+        "m072",
+        "cameleon",
+        "recadrage"
+      ]
+    },
+    "matrice/data/outils/editer-agents-md/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-07 21:34:13",
+          "action": "cree",
+          "detail": "M-074 : outil editer-agents-md -- la Matrice a SON outil pour modifier AGENTS.md dans SON encart (comme activer-agent-principal v1 et jarvis v2) ; bloc delimite session-matrix idempotent, garde structurelle (hors bloc octet par octet preserve sinon REFUS), ecriture atomique + empreinte etalon data/agents-md-empreinte.txt, detection racine par remontee (L-013) ; encart pose en reel : session-matrix / nom-llm glm5 / agent cameleon / flux v3",
+          "tags": [
+            "m074",
+            "agents-md",
+            "session-matrix",
+            "v3"
+          ]
+        }
+      ],
+      "tags": [
+        "m074",
+        "agents-md",
+        "session-matrix",
+        "v3"
+      ]
+    },
+    "matrix/_operateur/optimus-prime/conventions/convention-karpathy.md": {
+      "modifications": [
+        {
+          "date": "2026-09-07 21:44:29",
+          "action": "cree",
+          "detail": "M-075 : convention karpathy (4 reflexes : penser avant de coder, simplicite d'abord, changement chirurgical, executer par objectifs) fondee sur les preuves matrice (L-014, M-074 garde octet-par-octet, proto-4/5/6/8) ; accents autocorriges par la veille permanente (preuve du flux auto-correction) ; index conventions-readme a jour",
+          "tags": [
+            "m075",
+            "karpathy",
+            "convention"
+          ]
+        }
+      ],
+      "tags": [
+        "m075",
+        "karpathy",
+        "convention"
+      ]
+    },
+    "matrice/data/commun/racine.py": {
+      "modifications": [
+        {
+          "date": "2026-09-07 22:43:48",
+          "action": "cree",
+          "detail": "Motif unique detecter_racine : l'UNIQUE definition du pattern AGENTS.md (M-076, 5 duplications supprimees)",
+          "tags": [
+            "m076",
+            "motif-unique"
+          ]
+        }
+      ],
+      "tags": [
+        "m076",
+        "motif-unique"
+      ]
+    },
+    "matrice/data/commun/sac_a_dos.py": {
+      "modifications": [
+        {
+          "date": "2026-09-07 22:43:48",
+          "action": "cree",
+          "detail": "Sac a dos embarque : envelopper() note code+duree via bdd-usages (porte unique), bdd-usages exclu",
+          "tags": [
+            "m076",
+            "sac-a-dos"
+          ]
+        }
+      ],
+      "tags": [
+        "m076",
+        "sac-a-dos"
+      ]
+    },
+    "matrice/data/outils/*": {
+      "modifications": [
+        {
+          "date": "2026-09-07 22:43:48",
+          "action": "modifie",
+          "detail": "15 outils equipes : constants.py consomment le motif racine partage ; 14 main.py portent le sac a dos (bdd-usages exclu)",
+          "tags": [
+            "m076",
+            "sac-a-dos",
+            "motif-unique"
+          ]
+        }
+      ],
+      "tags": [
+        "m076",
+        "sac-a-dos",
+        "motif-unique"
+      ]
+    },
+    "matrice/templates/*": {
+      "modifications": [
+        {
+          "date": "2026-09-07 22:46:13",
+          "action": "modifie",
+          "detail": "Moules outil-bdd et theme-bdd : enfants nes equipes (motif racine + sac a dos)",
+          "tags": [
+            "m076",
+            "templates"
+          ]
+        }
+      ],
+      "tags": [
+        "m076",
+        "templates"
+      ]
+    },
+    "matrice/data/outils/bilan-periode/bilan/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-07 23:00:54",
+          "action": "modifie",
+          "detail": "Usages du bilan enrichis : repartition des codes + duree moy/max par outil-commande (sac-a-dos, M-077)",
+          "tags": [
+            "m077",
+            "bilan-periode",
+            "sac-a-dos"
+          ]
+        }
+      ],
+      "tags": [
+        "m077",
+        "bilan-periode",
+        "sac-a-dos"
+      ]
+    },
+    "matrice/data/outils/journal-multi-encarts/": {
+      "modifications": [
+        {
+          "date": "2026-09-08 09:53:55",
+          "action": "modifie",
+          "detail": "M-079 : outil journal-multi-encarts (construire/lire --encart, 8 encarts ordre ferme, sac-a-dos + racine embarques)",
+          "tags": [
+            "m079",
+            "journal",
+            "outil"
+          ]
+        }
+      ],
+      "tags": [
+        "m079",
+        "journal",
+        "outil"
+      ]
+    },
+    "matrice/journal-multi-encarts.md": {
+      "modifications": [
+        {
+          "date": "2026-09-08 09:53:55",
+          "action": "modifie",
+          "detail": "M-079 : journal multi-encarts v3 genere (visuel des metriques, jamais edite a la main)",
+          "tags": [
+            "m079",
+            "journal",
+            "visuel"
+          ]
+        }
+      ],
+      "tags": [
+        "m079",
+        "journal",
+        "visuel"
+      ]
+    },
+    "data/outils/pause-session/": {
+      "modifications": [
+        {
+          "date": "2026-09-09 08:27:04",
+          "action": "modifie",
+          "detail": "Outil pause-session complet (M-080, E-053) : pause/reprendre/etat/perimetre/journal, sauvegarde a la pause, notifications cameleon etanchees, perimetre reductible",
+          "tags": [
+            "matrice",
+            "outil",
+            "pause",
+            "defcon"
+          ]
+        }
+      ],
+      "tags": [
+        "matrice",
+        "outil",
+        "pause",
+        "defcon"
+      ]
+    },
+    "data/outils/journal-multi-encarts/": {
+      "modifications": [
+        {
+          "date": "2026-09-09 08:27:04",
+          "action": "modifie",
+          "detail": "Journal enrichi (retours createur M-080) : encart cameleon, tableaux Entree/Heure/Date separees, ligne de FLUX par encart, heures PID mtime + vrac deposee_le, perimetre-cameleon explicite, bug filtre routines corrige + bug nom PID espion corrige",
+          "tags": [
+            "matrice",
+            "outil",
+            "journal"
+          ]
+        }
+      ],
+      "tags": [
+        "matrice",
+        "outil",
+        "journal"
+      ]
+    },
+    "pilote/commun.py + injection + fin": {
+      "modifications": [
+        {
+          "date": "2026-09-09 08:27:04",
+          "action": "modifie",
+          "detail": "Garde session_en_pause (M-080) : REFUS injection/enchainement/relance pendant une pause session-matrix",
+          "tags": [
+            "matrice",
+            "pilote",
+            "pause"
+          ]
+        }
+      ],
+      "tags": [
+        "matrice",
+        "pilote",
+        "pause"
+      ]
+    },
+    "data/outils/machine-defcon/monter/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-09 08:27:05",
+          "action": "modifie",
+          "detail": "Defcon 5 declenche AUTOMATIQUEMENT la pause session-matrix (porte pause-session, jamais bloquant)",
+          "tags": [
+            "matrice",
+            "defcon",
+            "pause"
+          ]
+        }
+      ],
+      "tags": [
+        "matrice",
+        "defcon",
+        "pause"
+      ]
+    }
+  }
+}

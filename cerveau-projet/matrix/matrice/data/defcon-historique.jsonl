@@ -1,0 +1,12 @@
+{"quand": "2026-09-07 18:51:05", "de": 2, "vers": 5, "raison": "test M-059 mise en securite totale", "source": "machine-defcon monter"}
+{"quand": "2026-09-07 18:51:06", "de": 5, "vers": 4, "raison": "test M-059 passage en suivi", "source": "machine-defcon descendre"}
+{"quand": "2026-09-07 18:51:23", "de": 4, "vers": 3, "raison": "test M-059 passage en surveillance", "source": "machine-defcon descendre"}
+{"quand": "2026-09-07 18:51:23", "de": 3, "vers": 2, "raison": "test M-059 periode validee", "source": "machine-defcon valider"}
+{"quand": "2026-09-07 19:16:53", "de": 2, "vers": 5, "raison": "test du garde M-059 : mise en securite, optimus-prime reveille", "source": "machine-defcon monter"}
+{"quand": "2026-09-07 19:19:00", "de": 5, "vers": 4, "raison": "test M-059/M-060 termine, passage en suivi de bout en bout", "source": "machine-defcon descendre"}
+{"quand": "2026-09-07 19:19:01", "de": 4, "vers": 3, "raison": "periode de surveillance ouverte apres le test du garde", "source": "machine-defcon descendre"}
+{"quand": "2026-09-07 19:19:01", "de": 3, "vers": 2, "raison": "periode de surveillance validee : aucune detection, garde prouve de bout en bout", "source": "machine-defcon valider"}
+{"quand": "2026-09-09 07:32:53", "de": 2, "vers": 5, "raison": "test M-080 pause automatique defcon 5", "source": "machine-defcon monter"}
+{"quand": "2026-09-09 07:33:10", "de": 5, "vers": 4, "raison": "fin test M-080", "source": "machine-defcon descendre"}
+{"quand": "2026-09-09 07:33:10", "de": 4, "vers": 3, "raison": "fin test M-080", "source": "machine-defcon descendre"}
+{"quand": "2026-09-09 07:33:10", "de": 3, "vers": 2, "raison": "fin test M-080", "source": "machine-defcon valider"}

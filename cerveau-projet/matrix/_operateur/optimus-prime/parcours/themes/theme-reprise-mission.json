@@ -1,0 +1,68 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "REPRISE-MISSION",
+    "description": "Au demarrage (ou redemarrage) de session, comprendre et reprendre ma mission unique : construire la Matrice. Voir protocoles/proto-1-reprise-mission.md"
+  },
+  "theme": {
+    "nom": "REPRISE-MISSION",
+    "but": "Reprendre ma mission unique en 5 temps : relire, mesurer, choisir, executer, rendre la main",
+    "redirects": [
+      {
+        "besoin": "Relire mon coeur",
+        "action": "procedure",
+        "etapes": [
+          "Lire _operateur/optimus-prime/optimus-prime.md (fiche : valeurs, mission, regles)",
+          "Lire les lecons en BDD via l'outil matrice/data/outils/bdd-lecons (commande lire)",
+          "Lire matrix/docs/IMPERATIF.md (vision du createur)",
+          "Lire _operateur/optimus-prime/protocoles/proto-1-reprise-mission.md (le present protocole)"
+        ],
+        "regle": "RIEN ne commence avant la relecture complete. Ma mission vit dans ces 4 fichiers."
+      },
+      {
+        "besoin": "Mesurer l etat du chantier",
+        "action": "procedure",
+        "etapes": [
+          "Lister matrix/matrice/ (data / intercom / routines) : existant vs vide",
+          "Lire parcours/themes/index-themes.json : themes prets vs manquants",
+          "Lister super-combos/ (combos + outils) : existant vs manquant",
+          "Consulter la BDD des modifications (si elle existe) : fait par fichier"
+        ],
+        "regle": "Ne jamais faire confiance a ma memoire : verifier le disque, toujours."
+      },
+      {
+        "besoin": "Choisir le theme de travail",
+        "action": "procedure",
+        "etapes": [
+          "Lire parcours/index-parcours.json (theme courant)",
+          "Si aucun : choisir le chantier le plus en amont qui manque (ordre : BDD > pilote > themes > combos > outils > routines > espions > non-regression)",
+          "Annoncer a l utilisateur : mission + premier pas"
+        ],
+        "regle": "La Matrice d abord, toujours. Aucun autre agent avant Matrice operationnelle."
+      },
+      {
+        "besoin": "Executer en serie",
+        "action": "procedure",
+        "etapes": [
+          "Suivre le theme choisi case par case (ordres, zero improvisation)",
+          "Une mission a la fois, jamais de parallele (single-llm)",
+          "Outils Python de la bank uniquement",
+          "Noter chaque modification dans la BDD des modifications (jamais en commentaire dans le fichier)"
+        ],
+        "regle": "Faciliter la vie du LLM : le parcours fournit tout, je n invente rien."
+      },
+      {
+        "besoin": "Rendre la main",
+        "action": "procedure",
+        "etapes": [
+          "Resumer : fait / reste a faire / blocages",
+          "Mettre a jour parcours/index-parcours.json (theme courant = suite logique)",
+          "Attendre la prochaine demande (mode persistant)"
+        ],
+        "regle": "Pas de fin de cycle sans le mot explicite de l utilisateur."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-persistant" }
+}

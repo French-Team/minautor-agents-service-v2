@@ -1,11 +1,11 @@
 {
  "agent": "clio",
- "parcours": "agents/clio/parcours/arbre-clio.json",
+ "parcours": "../None",
  "case_courante": null,
- "mission_type": "maj",
- "mission": "Fin mission 5c301d82 (grosse MAJ README) : lecon + terminaison + fin vers ORACLE",
- "historise_debut": true,
- "precedent": "oracle",
- "etape": "fin",
- "historise_fin": true
+ "mission_type": "rediger",
+ "mission": "init",
+ "historise_debut": false,
+ "precedent": null,
+ "etape": "debut",
+ "historise_fin": false
 }

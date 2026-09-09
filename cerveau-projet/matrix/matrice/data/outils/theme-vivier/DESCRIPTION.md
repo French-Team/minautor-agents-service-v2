@@ -1,0 +1,38 @@
+# OUTIL -- theme-vivier
+
+> Registre de THEMES de mission (genere depuis le moule templates/theme-bdd
+> par dupliquer-template). Modele-mere semantique : les themes de
+> l'operateur (nom, but, redirects, fin).
+
+## Options
+
+```
+python main.py ajouter --nom "NOM DU THEME" --but "..." [--description "..."]
+python main.py lire    [--nom "NOM"]
+python main.py retirer --id "TH-XXX" (ou --nom "NOM DU THEME")
+python main.py verifier
+```
+
+- `--nom` : nom du theme (obligatoire, stocke en MAJUSCULES, unicite casse-ignoree).
+- `--but` : le but du theme en une phrase (obligatoire).
+- `--description` : detail facultatif.
+- `retirer` : sortie du registre par id exact ou par nom (casse ignoree).
+
+## Garanties
+
+- UNICITE du nom : un doublon (casse ignoree) est refuse, code 2.
+- Registre JSON empreinte : `{"identite", "themes": [{"id", "date", "nom", "nom_affiche", "but", "description"}]}`.
+- Integrite SHA-256 (etalon-or), ecriture atomique LF.
+
+## Architecture (convention-architecture-outils)
+
+| Piece | Role |
+|---|---|
+| DESCRIPTION.md | la facade (ce fichier) |
+| main.py | point d'entree global : DIRIGE |
+| constants.py | chemins, valeurs |
+| commun.py | charger, enregistrer (atomique, LF), empreinte, options |
+| ajouter/ | ajouter un theme (unicite du nom) |
+| lire/ | lister (tout ou par nom) |
+| retirer/ | sortie du registre (par id ou nom) |
+| verifier/ | integrite SHA-256 |

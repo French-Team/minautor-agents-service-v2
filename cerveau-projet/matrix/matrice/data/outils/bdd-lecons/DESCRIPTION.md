@@ -1,0 +1,41 @@
+# OUTIL -- bdd-lecons
+
+> Outil Python dedie a la BDD `lecons.json` (3/7). Le pilote y pioche les
+> dernieres lecons TAGUEES pour les injecter dans ses missions
+> (regles-immuables/injections-ordonnees.md).
+
+## Options
+
+```
+python main.py ajouter --lecon "..." --tags "tag1,tag2" [--source "..."]
+python main.py lire    [--tag <tag>]
+python main.py verifier
+```
+
+- `--lecon` : la lecon elle-meme (obligatoire).
+- `--tags` : liste separee par des virgules -- le pilote filtre par tag (obligatoire).
+- `--source` : mission, outil ou fichier d'origine (facultatif).
+- `lire --tag X` : filtre les lecons portant le tag X.
+
+## Format de la BDD
+
+`{"identite": {...}, "lecons": [{"id", "date", "lecon", "tags", "source"}, ...]}`
+C'est le format que le pilote consomme deja (charger_lecons_utiles).
+
+## Architecture (convention-architecture-outils)
+
+| Piece | Role |
+|---|---|
+| DESCRIPTION.md | la facade (ce fichier) |
+| main.py | point d'entree global : DIRIGE |
+| constants.py | chemins, valeurs |
+| commun.py | fonctions communes : charger, enregistrer (atomique, LF), empreinte, options |
+| ajouter/ | ajouter une lecon taguee |
+| lire/ | lister (tout ou par tag) |
+| verifier/ | integrite SHA-256 (etalon-or) |
+
+## Protections
+
+- Ecriture atomique (tmp + remplacement), fins de ligne LF forcees (determinisme).
+- Empreinte SHA-256 recalculee et enregistree A CHAQUE ecriture.
+- Lecon et tags obligatoires : pas de lecons orphelines sans tag (ininjectables).

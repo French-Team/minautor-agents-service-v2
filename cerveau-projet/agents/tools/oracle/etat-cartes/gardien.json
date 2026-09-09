@@ -1,12 +1,11 @@
 {
  "agent": "gardien",
- "parcours": "agents/gardien/parcours/arbre-gardien.json",
+ "parcours": "../None",
  "case_courante": null,
- "mission_type": "verifier",
- "mission": "PROPOSER l ajout dans AGENTS.md des regles permanentes (volet 3/3, decision utilisateur 2026-09-05) : ajouter la regle TRAVAIL EN SERIE OBLIGATOIRE en mode single-llm (un seul agent incarne a la fois, jamais de relais parallele de 2 missions). Zone MARBRE constitution : GARDIEN est le SEUL a PROPOSER la modification des zones protegees, l UTILISATEUR valide. Proposition seule (ne pas appliquer sans validation). A la fin : suis TA carte (Pattern 13).",
- "historise_debut": true,
+ "mission_type": "garder",
+ "mission": "init",
+ "historise_debut": false,
  "precedent": null,
- "etape": "fin",
- "historise_fin": true,
- "theme_courant": null
+ "etape": "debut",
+ "historise_fin": false
 }

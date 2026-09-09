@@ -1,0 +1,78 @@
+---
+identite:
+  type: convention
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# CONVENTION -- LES DEMANDES A CROCHETS
+
+> Source : decision createur du 2026-09-07 (mission M-062), amendee M-080
+> (crochets v3 : [alerte] remplace [alerte=defcon:N], [pause] ajoute). Les
+> demandes de
+> l'operateur qui commencent par un MOT ENTRE CROCHETS declenchent un
+> traitement officiel. La liste des mots est FERMEE : tout autre mot-crochet
+> n'est pas reconnu et doit d'abord faire evoluer CETTE convention
+> (decision createur, puis mise a jour de l'index).
+
+## La regle
+
+1. Le mot-crochet est place EN DEBUT de demande : `[mot] le reste de la demande`.
+2. Le mot est reconnu EXACTEMENT (liste fermee ci-dessous) ; sans crochet,
+   la demande suit le dialogue normal (pas de traitement automatique).
+3. Chaque mot a UNE porte officielle : la demande est traitee par la porte,
+   jamais a la main (doctrine de la porte unique).
+
+## Les mots reconnus (liste fermee)
+
+| Mot | Porte officielle | Effet |
+|---|---|---|
+| [mission] | entonnoir, verbe `deposer` | verse une nouvelle mission au vrac (AMONT) ; classement, tresse et injection suivent le cycle normal ; historiques-missions reste l'AVAL (journal des missions finies) |
+| [question] | pilote, verbe `lot` | suit le theme en 4 parts de LOT : analyse -> recherche approfondie (+ web si besoin) -> contre-analyse (Nemesis incarne en THEME, pas un agent) -> rapport pour/contre ; le pilote charge optimus-prime pour CHAQUE part, avec SON theme du vivier |
+| [audit] | entonnoir `deposer` (type audit) | lance un audit sur le sujet donne |
+| [revision] | entonnoir `deposer` (type revision) | lance une revision sur le sujet donne |
+| [alerte] | outil `machine-defcon` | met la Matrice en securite : defcon 5 (mise en pause de la session-matrix, cameleon stoppe, optimus reveille) ; variante detaillee possible `[alerte=defcon:N]` |
+| [pause] | outil `pause-session`, verbe `pause` | ouvre la MAINTENANCE avec optimus (pause manuelle user, hors defcon) : session-matrix en pause, cameleon notifie (raison "maintenance"), reprise par `reprendre` |
+| [bilan] | outil `bilan-periode` | bilan de la derniere heure, des dernieres heures (6 h), des dernieres 24 h, des 3 derniers jours, de la semaine ou du mois |
+
+## L'echelle defcon (liste fermee, N de 1 a 5, 5 = le plus grave)
+
+| Niveau | Nom | Comportement |
+|---|---|---|
+| 5 | mise en securite totale | l'agent unique (cameleon) est STOPPE : la session-matrix est mise EN PAUSE (protocole M-080, outil pause-session -- cameleon notifie "maintenance", jamais la raison) et optimus-prime est REVEILLE pour reprendre le controle avec le createur ; seules les missions themees DEFCON restent injectables (gardes posees dans le pilote) |
+| 4 | suivi | suivi des problemes a resoudre, de bout en bout |
+| 3 | surveiller | surveiller (temps a definir) puis valider : la periode de validation definitive CLOT def3 |
+| 2 | normal | etat normal de la Matrice |
+| 1 | reserve | non defini par l'operateur ; jamais atteint (la descente s'arrete a 2) |
+
+## Les transitions defcon (outil machine-defcon)
+
+- MONTREE libre (sauts permis, avec raison obligatoire) : 2 -> 3/4/5.
+- DESCENTE stricte UN echelon a la fois : 5 -> 4, 4 -> 3.
+- La descente 3 -> 2 passe UNIQUEMENT par `valider` (la validation clot la
+  periode de surveillance de def3).
+- Chaque transition est journalisee dans `data/defcon-historique.jsonl` ;
+  le niveau courant vit dans le classeur-variables (cle `defcon`).
+
+## Le protocole de pause session-matrix (M-080, outil pause-session)
+
+- CYCLE : defcon 5 (auto) OU [pause] (manuel) -> cameleon arrete + mission
+  sauvegardee A LA PAUSE SEULEMENT (etat serialise data/session-matrix-etat.json,
+  retiree de la file du pilote) -> notification cameleon "maintenance" (JAMAIS
+  la raison) -> maintenance par optimus + createur -> `reprendre` -> mission
+  restoree A L'IDENTIQUE (meme place dans la file) + notification
+  "maintenance terminee" (sans detail).
+- PERIMETRE REDUCTIBLE : la Matrice seule reduit le perimetre de lecture du
+  cameleon (verbe `perimetre --zones "..."` ; cle `perimetre-cameleon` du
+  classeur-variables ; regle matrice-utilise-cameleon).
+- PENDANT la pause : aucune injection, aucun enchainement, aucune relance
+  automatique (gardes session_en_pause posees dans le pilote).
+
+## Les indices
+
+- Les themes des chains `[question]` (ANALYSE, RECHERCHE, CONTRE-ANALYSE,
+  RAPPORT) seront ajoutes au vivier a la premiere demande [question]
+  (porte : outil theme-vivier) -- le theme DEFCON existe deja (TH-012).
+- Le defcon 5 reveille optimus-prime ET met la session-matrix en pause :
+  tant que l'agent cameleon n'est pas branche, c'est l'agent incarne qui
+  assume ce role (decision createur).

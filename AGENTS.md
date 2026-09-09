@@ -23,25 +23,35 @@ identite:
 | Champ | Valeur |
 |---|---|
 | **Nom LLM** | glm5 |
-| **Nom Agent** | oracle |
-| **Role Agent** | Coordinateur de l'equipe v1 (session-admin) -- traite les alertes de coordination (processus fantomes, serveurs morts, roulage messages) + controle processus |
-| **Derniere mise a jour** | 2026-09-05 |
-| **Fiche** | [cerveau-projet/agents/oracle/oracle.md](cerveau-projet/agents/oracle/oracle.md) |
-| **Corrections** | [cerveau-projet/agents/oracle/corrections.md](cerveau-projet/agents/oracle/corrections.md) |
-| **Active par** | Cerberus (automatique) |
-| **Raison** | RETOUR CLIO : GROSSE MAJ DES README (point 2/3, mission 5c301d82) TERMINEE. Livrables : (1) README public coherent : table 'Mes agents' complete (22 agents, roles concis canoniques : Ferrari v1 specialise freelance, Nemesis Analyste en Chef, Oracle coordinateur), narratifs 22 agents / 97 tests, lignes orphelines 3 colonnes en fin de Vocabulaire supprimees. (2) readme-dev : section 4 complete (Ferrari/Nemesis/Oracle ajoutes), section 1 (22 agents, 177 outils/41 categories, 22 arbres v2, 97 tests), tableau section 6 reconstruit et verifie. (3) OUTIL mettre-a-jour-readme REPARE ET RECONSTRUIT en 0.4.8 (py + sh + md) : le verifier/maj cherchait les agents dans tout le fichier (mentions narratives et orphelins masquaient les absents de la table) -> verification restreinte a la region '## Mes agents', insertion 2 colonnes en fin de table ; badges Outils/Agents alignes affichage+href ; readme-dev corrige par --maj (tableau section 6 + synthese section 1) ; exclusion __pycache__ du compte outils ; parite .sh (cache compteurs + bash pur, migration v2 arbre). INCIDENT TRANSPARENT : un 'git checkout' sur le dossier outil (artefact .pyc tracke) avait restaure l outil en 0.4.5 -- reconstruction complete re-appliquee et validee (verifier vert, idempotence md5, parite py/sh sur copie defectueuse, ASCII OK). Point 3/3 restant : discussion du dossier 'matrix' (plan utilisateur). |
-
-DEMARRAGE OBLIGATOIRE (v2) : lance ton arbre des decisions avec :
-python3 cerveau-projet/agents/tools/guider/guider-arbre/guider-arbre.py \
-  cerveau-projet/agents/oracle/parcours/arbre-oracle.json
-(racine : choisis TON theme selon ta mission, puis suis les besoins /
-procedures du theme ; Oracle te pilote via l arbre ;
-si tu reprends apres une interruption, relance l arbre et poursuis).
+| **Nom Agent** | Cerberus |
+| **Role Agent** | Gardien de l'entree -- analyse et active les agents |
+| **Derniere mise a jour** | 2026-09-06 |
+| **Fiche** | [cerveau-projet/agents/cerberus/cerberus.md](cerveau-projet/agents/cerberus/cerberus.md) |
+| **Corrections** | [cerveau-projet/agents/cerberus/corrections.md](cerveau-projet/agents/cerberus/corrections.md) |
+| **Active par** | oracle (retour de mission) |
+| **Raison** | Retour fin de chaine: round optimisation optimus |
 ## Sessions connues
 
 | Session | Nom LLM | Agent actif | Derniere activite |
 |---|---|---|---|
-| session-admin | glm5 | oracle | 2026-09-05 23:06:10.887 |
+| session-admin | glm5 | Cerberus | 2026-09-06 07:27:58.685 |
+<!-- session-matrix:DEBUT (v3, gere par l'outil matrice editer-agents-md) -->
+
+### Session : session-matrix (v3 / Matrice)
+
+| Champ | Valeur |
+|---|---|
+| **Nom LLM** | glm5 |
+| **Agent actif** | cameleon |
+| **Role Agent** | agent unique de la Matrice (personnalite fournie par le vivier) |
+| **Derniere mise a jour** | 2026-09-07 21:33:34 |
+| **Raison** | GO createur : encart session-matrix pose (M-074), l'agent unique de la Matrice en attente de branchement |
+
+Flux v3 : la Matrice accueille au demarrage -> l'operateur fait sa demande ->
+la Matrice lance le cameleon pour sa mission (serial stricte).
+
+<!-- session-matrix:FIN -->
+
 ## Configuration Active
 <!-- MARBRE:DEBUT constitution -->
 ### Regles specifiques a Cerberus

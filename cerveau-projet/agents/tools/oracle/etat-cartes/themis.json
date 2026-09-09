@@ -1,12 +1,11 @@
 {
  "agent": "themis",
- "parcours": "agents/themis/parcours/arbre-themis.json",
+ "parcours": "../None",
  "case_courante": null,
- "mission_type": "audit",
- "mission": "EVALUATION CROISEE : poser le questionnaire d evaluation croisee aux agents actifs, attribuer les +/- et transmettre son rapport (protocole evaluation croisee v1)",
- "historise_debut": true,
+ "mission_type": "evaluer",
+ "mission": "init",
+ "historise_debut": false,
  "precedent": null,
  "etape": "fin",
- "historise_fin": true,
- "theme_courant": null
+ "historise_fin": true
 }

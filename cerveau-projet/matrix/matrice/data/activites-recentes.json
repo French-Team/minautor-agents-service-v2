@@ -1,0 +1,851 @@
+{
+  "identite": {
+    "type": "bdd-activites",
+    "version": 1
+  },
+  "sections": {
+    "missions": [
+      {
+        "date": "2026-09-06 16:33:45",
+        "detail": "M-015 en cours : bdd-activites construite et testee (rotation prouvee)",
+        "tags": [
+          "m-015",
+          "bdd"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:29",
+        "detail": "activite de rotation 52",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:29",
+        "detail": "activite de rotation 51",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:29",
+        "detail": "activite de rotation 50",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:29",
+        "detail": "activite de rotation 49",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:29",
+        "detail": "activite de rotation 48",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:29",
+        "detail": "activite de rotation 47",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:29",
+        "detail": "activite de rotation 46",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 45",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 44",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 43",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 42",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 41",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 40",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 39",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 38",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 37",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 36",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 35",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 34",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 33",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 32",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 31",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 30",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 29",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 28",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 27",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 26",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 25",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 24",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 23",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 22",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 21",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 20",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 19",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 18",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 17",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 16",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 15",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 14",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 13",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 12",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 11",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 10",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:24",
+        "detail": "activite de rotation 9",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:24",
+        "detail": "activite de rotation 8",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:24",
+        "detail": "activite de rotation 7",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:24",
+        "detail": "activite de rotation 6",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:24",
+        "detail": "activite de rotation 5",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:24",
+        "detail": "activite de rotation 4",
+        "tags": [
+          "test-rotation"
+        ]
+      }
+    ],
+    "alertes": [],
+    "passes": [
+      {
+        "date": "2026-09-09 08:50:45",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 08:45:42",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 08:40:40",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 08:35:37",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 08:30:33",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 08:25:29",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 08:23:38",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 08:20:24",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 08:15:20",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 08:10:16",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 08:05:12",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 08:00:07",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 07:55:03",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 07:49:58",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 07:48:28",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 07:44:54",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 07:39:50",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 07:34:46",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 07:29:42",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 07:24:37",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 07:19:33",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 07:14:29",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 07:09:25",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 07:04:20",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 06:59:17",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 06:54:13",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 06:49:10",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 06:44:06",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 06:39:03",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 06:33:59",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 06:28:55",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 06:23:52",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 06:18:48",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 06:13:45",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 06:08:41",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 06:03:38",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 05:58:34",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 05:53:30",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 05:48:27",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 05:43:23",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 05:38:20",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 05:33:16",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 05:28:13",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 05:23:10",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 05:18:06",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 05:13:03",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 05:07:59",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 05:02:56",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 04:57:52",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-09-09 04:52:49",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      }
+    ],
+    "decisions": [
+      {
+        "date": "2026-09-06 19:55:17",
+        "detail": "Doctrine appliquee aux clones de preuve : ce qui ne sert plus est purge (bdd-remarques, regenerable par le moule), ce qui devient infrastructure est garde (theme-vivier, futur registre de themes du pilote).",
+        "tags": [
+          "doctrine",
+          "decision",
+          "clones"
+        ]
+      },
+      {
+        "date": "2026-09-06 18:33:51",
+        "detail": "Raccord fin->injection (demande createur) depose au vrac comme E-008 (urgence haute) : toute demande vit desormais son cycle par l'entonnoir, y compris celle qui a fait naitre le bilan.",
+        "tags": [
+          "entonnoir",
+          "decision",
+          "boucle"
+        ]
+      },
+      {
+        "date": "2026-09-06 18:12:14",
+        "detail": "M-022 close sur verification : la mission-r\u00e9paration E-006 a traverse le cycle complet (classer -> tisser -> consommer -> injecter -> fin) sans reparation requise, l'incident etant deja resolu par le menage M-020. La preuve M-019 (sortie de file-type a la consommation) est desormais courue en reel.",
+        "tags": [
+          "tresse",
+          "cycle-complet",
+          "decision"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:31:02",
+        "detail": "sections pre-declarees refusees hors liste",
+        "tags": [
+          "m-015",
+          "decision"
+        ]
+      }
+    ]
+  }
+}

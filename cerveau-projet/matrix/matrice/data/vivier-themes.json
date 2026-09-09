@@ -1,0 +1,180 @@
+{
+  "identite": {
+    "type": "vivier-themes.json",
+    "version": 1
+  },
+  "themes": [
+    {
+      "id": "TH-002",
+      "date": "2026-09-06 20:47:35",
+      "nom": "BDD",
+      "nom_affiche": "VIVIER",
+      "but": "construire, raccorder ou reparer une BDD du sac-a-dos (preuves : M-002, M-009 a M-011, M-021)",
+      "description": "",
+      "categorie": "SYSTEME"
+    },
+    {
+      "id": "TH-003",
+      "date": "2026-09-06 20:47:35",
+      "nom": "OUTIL",
+      "nom_affiche": "VIVIER",
+      "but": "construire ou reparer un outil dedie (preuves : M-003 a M-005, M-008, M-030, M-031)",
+      "description": "",
+      "categorie": "SYSTEME"
+    },
+    {
+      "id": "TH-004",
+      "date": "2026-09-06 20:47:35",
+      "nom": "ROUTINE",
+      "nom_affiche": "VIVIER",
+      "but": "poser ou faire evoluer les routines de la veille-flux (preuves : M-007, M-012, M-020)",
+      "description": "",
+      "categorie": "SYSTEME"
+    },
+    {
+      "id": "TH-005",
+      "date": "2026-09-06 20:47:41",
+      "nom": "INDICES",
+      "nom_affiche": "VIVIER",
+      "but": "poser ou mettre a jour les indices d'une zone (preuves : M-006, M-025, M-029)",
+      "description": "",
+      "categorie": "SYSTEME"
+    },
+    {
+      "id": "TH-006",
+      "date": "2026-09-06 20:47:41",
+      "nom": "CONTRATS",
+      "nom_affiche": "VIVIER",
+      "but": "relire et reparer les contrats (readme, DESCRIPTION, manuel) contre l'etat reel (preuves : M-014, M-029)",
+      "description": "",
+      "categorie": "SYSTEME"
+    },
+    {
+      "id": "TH-007",
+      "date": "2026-09-06 20:47:42",
+      "nom": "PILOTE",
+      "nom_affiche": "VIVIER",
+      "but": "faire evoluer le pilote : injection, fin, lot, tresse, checklists (preuves : M-015, M-016, M-022 a M-028, M-036)",
+      "description": "",
+      "categorie": "SYSTEME"
+    },
+    {
+      "id": "TH-008",
+      "date": "2026-09-06 20:47:51",
+      "nom": "TEMPLATES",
+      "nom_affiche": "VIVIER",
+      "but": "poser ou faire evoluer les moules et dupliquer-template (preuves : M-030, M-031)",
+      "description": "",
+      "categorie": "SYSTEME"
+    },
+    {
+      "id": "TH-009",
+      "date": "2026-09-06 20:47:51",
+      "nom": "REPARATION",
+      "nom_affiche": "VIVIER",
+      "but": "reparer un ecart detecte par la veille-flux ou l'espion-integrite (preuves : M-008, M-011, M-013, boucle de detection en M-020)",
+      "description": "",
+      "categorie": "SYSTEME"
+    },
+    {
+      "id": "TH-011",
+      "date": "2026-09-07 09:24:02",
+      "nom": "ENTONNOIR",
+      "nom_affiche": "VIVIER",
+      "but": "Missions sur l'entonnoir : echelons, files-types, tresse, listes fermees",
+      "description": "",
+      "categorie": "SYSTEME"
+    },
+    {
+      "id": "TH-012",
+      "date": "2026-09-07 18:45:35",
+      "nom": "DEFCON",
+      "nom_affiche": "VIVIER",
+      "but": "Piloter les periodes de mise en securite de la Matrice : echelle 5 (bloque tout sauf optimus-prime), 4 (suivi de bout en bout), 3 (surveiller puis valider), 2 (normal). Le theme DEFCON est le seul injectable quand defcon=5",
+      "description": "",
+      "categorie": "GOUVERNANCE"
+    },
+    {
+      "id": "TH-013",
+      "date": "2026-09-07 19:33:34",
+      "nom": "ANALYSE",
+      "nom_affiche": "VIVIER",
+      "but": "Part 1 d'une [question] : analyser le sujet pose, poser les termes et les hypotheses",
+      "description": "",
+      "categorie": "QUESTION"
+    },
+    {
+      "id": "TH-014",
+      "date": "2026-09-07 19:33:34",
+      "nom": "RECHERCHE",
+      "nom_affiche": "VIVIER",
+      "but": "Part 2 d'une [question] : recherche approfondie (codebase + web si besoin), faits et preuves",
+      "description": "",
+      "categorie": "QUESTION"
+    },
+    {
+      "id": "TH-015",
+      "date": "2026-09-07 19:33:34",
+      "nom": "CONTRE-ANALYSE",
+      "nom_affiche": "VIVIER",
+      "but": "Part 3 d'une [question] : avis contradictoire a la Nemesis (incarne en THEME, jamais un agent) : attaquer l'analyse, chercher les cas limites",
+      "description": "",
+      "categorie": "QUESTION"
+    },
+    {
+      "id": "TH-016",
+      "date": "2026-09-07 19:33:34",
+      "nom": "RAPPORT",
+      "nom_affiche": "VIVIER",
+      "but": "Part 4 d'une [question] : rapport consolide pour/contre, decision rendue au createur",
+      "description": "",
+      "categorie": "QUESTION"
+    },
+    {
+      "id": "TH-017",
+      "date": "2026-09-07 20:49:31",
+      "nom": "CONSTRUCTEUR",
+      "nom_affiche": "VIVIER",
+      "but": "Executer les missions dev : construire par les portes officielles, un changement a la fois, teste avant livraison (proto-6 + proto-7)",
+      "description": "Personnalite dev de cameleon. Route : proto-6 (mission) + proto-7 (BDD). Regles : jamais d'interface inventee, action minimale (pas de code fantome), zero valeur en dur, py_compile, tests positif et negatif, note BDD par fichier, bilan substantiel.",
+      "categorie": "PERSONNALITE"
+    },
+    {
+      "id": "TH-018",
+      "date": "2026-09-07 20:49:31",
+      "nom": "REDACTEUR",
+      "nom_affiche": "VIVIER",
+      "but": "Executer les missions doc : ecrire des contrats qui disent la verite du systeme, chaque phrase verifiee sur disque (proto-6)",
+      "description": "Personnalite doc de cameleon. Relecture = auto-audit sur disque ; francais ASCII pour les fichiers matrice ; index a jour ; marbre re-verifie ; un contrat qui ment est un ecart grave.",
+      "categorie": "PERSONNALITE"
+    },
+    {
+      "id": "TH-019",
+      "date": "2026-09-07 20:49:31",
+      "nom": "AUDITEUR",
+      "nom_affiche": "VIVIER",
+      "but": "Executer les missions audit : constat factuel LECTURE SEULE sur 3 axes - cas limites, optimisation, securite (proto-3 + proto-4)",
+      "description": "Personnalite audit de cameleon. Preuves sur disque ligne par ligne ; verdict pour/contre/a valider ; recommandations deposees au vrac ; l'auditeur signale, il ne repare jamais.",
+      "categorie": "PERSONNALITE"
+    },
+    {
+      "id": "TH-020",
+      "date": "2026-09-07 20:49:31",
+      "nom": "REVISEUR",
+      "nom_affiche": "VIVIER",
+      "but": "Executer les missions revision : relire un sujet EN ENTIER sur disque et proposer les changements - decision du createur obligatoire (proto-6)",
+      "description": "Personnalite revision de cameleon. Jamais de memoire : le disque fait foi ; chaque changement propose avec impact ; jamais de modification d'une regle sans decision du createur.",
+      "categorie": "PERSONNALITE"
+    },
+    {
+      "id": "TH-021",
+      "date": "2026-09-07 20:49:31",
+      "nom": "REPARATEUR",
+      "nom_affiche": "VIVIER",
+      "but": "Executer les missions reparation apres alerte : reproduire, diagnostiquer a la racine, reparer un changement minimum, retour vert (proto-8)",
+      "description": "Personnalite reparation de cameleon. Reproduire avant de reparer (pas a l'aveugle) ; pas de rustine ; jamais supprimer pour faire taire ; arret cooperatif (L-012) ; hors perimetre -> signaler optimus-prime.",
+      "categorie": "PERSONNALITE"
+    }
+  ],
+  "compteur": 21
+}

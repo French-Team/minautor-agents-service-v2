@@ -1,0 +1,29 @@
+{
+  "identite": {
+    "type": "index-themes",
+    "appartient_a": "optimus-prime"
+  },
+  "themes": [
+    {
+      "nom": "REPRISE-MISSION",
+      "fichier": "theme-reprise-mission.json",
+      "protocole": "../../protocoles/proto-1-reprise-mission.md",
+      "statut": "pret",
+      "description": "Reprendre ma mission unique au demarrage : relire, mesurer, choisir, executer, rendre la main"
+    },
+    {
+      "nom": "AUTO-EVOLUTION",
+      "fichier": "theme-auto-evolution.json",
+      "protocole": "../../protocoles/proto-2-auto-evolution.md",
+      "statut": "pret",
+      "description": "Grandir en travaillant : detecter, qualifier, cibler, modifier, valider -- un changement reversible a la fois"
+    },
+    {
+      "nom": "CONTRE-ANALYSE",
+      "fichier": "theme-contre-analyse.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Part 3 d'une [question] : Nemesis incarnee en THEME -- avis contradictoire sur 3 axes (cas limites, optimisation, securite), lecture seule"
+    }
+  ]
+}

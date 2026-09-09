@@ -1,0 +1,31 @@
+"""Categorie ajouter : orchestre l'enregistrement d'un theme.
+
+Interface entre main.py et les fonctions simples (ajouter/fonctions.py).
+"""
+from commun import charger_bdd, enregistrer_bdd, extraire_options
+from ajouter.fonctions import ajouter_theme
+
+NOMS_OPTIONS = ("nom", "but", "description")
+
+
+def executer(arguments):
+    options = extraire_options(arguments, NOMS_OPTIONS)
+    nom = options.get("nom", "")
+    but = options.get("but", "")
+    description = options.get("description", "")
+
+    if not nom or not but:
+        print('Usage : python main.py ajouter --nom "NOM" --but "..." [--description "..."]')
+        return 2
+
+    donnees = charger_bdd()
+    entree, doublon = ajouter_theme(donnees, nom, but, description)
+    if doublon:
+        print("ECART : un theme porte deja ce nom (unicite du nom, casse ignoree).")
+        return 2
+    empreinte = enregistrer_bdd(donnees)
+    print(
+        "Theme " + entree["id"] + " (" + entree["nom"] + ") enregistre -- empreinte : "
+        + empreinte[:16] + "..."
+    )
+    return 0

@@ -43762,3 +43762,7 @@ chec rc=1 :
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
 [ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
 [ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
+[ROUTINES-SERVER] top3-urgences : [TOP3-URGENCES] 0 ligne(s) critique(s), alerte=False
+[ROUTINES-SERVER] routine 'citations' : echec rc=1 : 
