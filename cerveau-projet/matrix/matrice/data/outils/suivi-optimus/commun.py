@@ -11,6 +11,7 @@ import os
 from constants import (
     CHEMIN_BDD,
     CHEMIN_EMPREINTE,
+    CHEMIN_INBOX,
     ENCODAGE,
     NOM_BDD_TMP,
     TAILLE_BLOC_LECTURE,
@@ -30,6 +31,23 @@ def lire_evenements():
             try:
                 evenements.append(json.loads(ligne))
             except ValueError:
+                continue
+    return evenements
+
+
+def lire_inbox():
+    """Retourne la liste des evenements de l'inbox (vide si absent)."""
+    if not CHEMIN_INBOX.exists():
+        return []
+    evenements = []
+    with open(CHEMIN_INBOX, "r", encoding=ENCODAGE) as flux:
+        for ligne in flux:
+            ligne = ligne.strip()
+            if not ligne:
+                continue
+            try:
+                evenements.append(json.loads(ligne))
+            except json.JSONDecodeError:
                 continue
     return evenements
 

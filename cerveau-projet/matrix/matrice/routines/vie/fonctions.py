@@ -6,23 +6,45 @@ from constants import NOM_PID_VEILLE, ENCODAGE
 
 
 def processus_vivant(pid):
-    """True si un processus porte ce PID (Windows : OpenProcess, sinon os.kill sonde 0)."""
+    """True si un processus porte ce PID.
+
+    Sur WSL, os.kill(pid, 0) peut echouer (pid Linux vs pid Windows).
+    On utilise d'abord os.kill, puis ctypes OpenProcess (win32), puis
+    un test via subprocess + ps en dernier recours.
+    """
     if pid is None or pid <= 0:
         return False
-    if os.name == "nt":
-        import ctypes
-
-        kernel32 = ctypes.windll.kernel32
-        handle = kernel32.OpenProcess(0x00100000, False, pid)  # PROCESS_QUERY_LIMITED_INFORMATION
-        if handle:
-            kernel32.CloseHandle(handle)
-            return True
-        return False
+    # Methode 1 : os.kill (marche sur Linux pur et sur les pid WSL visibles)
     try:
         os.kill(pid, 0)
         return True
     except OSError:
-        return False
+        pass
+    # Methode 2 : ctypes OpenProcess (Windows natif)
+    if sys.platform == "win32" or os.name == "nt":
+        try:
+            import ctypes
+            kernel32 = ctypes.windll.kernel32
+            handle = kernel32.OpenProcess(0x00100000, False, pid)
+            if handle:
+                kernel32.CloseHandle(handle)
+                return True
+        except Exception:
+            pass
+    # Methode 3 : test via ps (marche aussi sur WSL avec les pid Windows)
+    try:
+        import subprocess
+        r = subprocess.run(
+            ["ps", "-p", str(pid)],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            timeout=2,
+        )
+        if r.returncode == 0:
+            return True
+    except Exception:
+        pass
+    return False
 
 
 def lire_pid(chemin_pid):

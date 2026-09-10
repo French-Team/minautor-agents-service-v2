@@ -2295,3 +2295,661 @@
 {"date": "2026-09-09 21:42:15", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3}
 {"date": "2026-09-09 21:42:15", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
 {"date": "2026-09-09 21:42:16", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-09 21:45:35", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 21:45:36", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 474, "detail": "0 detection(s)"}
+{"date": "2026-09-09 21:45:36", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 21:50:36", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 79, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 21:50:36", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 480, "detail": "0 detection(s)"}
+{"date": "2026-09-09 21:50:36", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 21:55:37", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 21:55:37", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 479, "detail": "0 detection(s)"}
+{"date": "2026-09-09 21:55:37", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 22:00:37", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 22:00:38", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 479, "detail": "0 detection(s)"}
+{"date": "2026-09-09 22:00:38", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 22:05:38", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 22:05:38", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 477, "detail": "0 detection(s)"}
+{"date": "2026-09-09 22:05:38", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 22:10:39", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 22:10:39", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 479, "detail": "0 detection(s)"}
+{"date": "2026-09-09 22:10:39", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 22:15:39", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 83, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 22:15:40", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 483, "detail": "0 detection(s)"}
+{"date": "2026-09-09 22:15:40", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 22:20:40", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 22:20:40", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 479, "detail": "0 detection(s)"}
+{"date": "2026-09-09 22:20:40", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 22:25:40", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 22:25:41", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 479, "detail": "0 detection(s)"}
+{"date": "2026-09-09 22:25:41", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 22:30:41", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 22:30:41", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 474, "detail": "0 detection(s)"}
+{"date": "2026-09-09 22:30:42", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 22:35:42", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 22:35:42", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 481, "detail": "0 detection(s)"}
+{"date": "2026-09-09 22:35:42", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 22:40:42", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 22:40:43", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 473, "detail": "0 detection(s)"}
+{"date": "2026-09-09 22:40:43", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 22:45:43", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 22:45:43", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 475, "detail": "0 detection(s)"}
+{"date": "2026-09-09 22:45:44", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 22:50:44", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 22:50:44", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 474, "detail": "0 detection(s)"}
+{"date": "2026-09-09 22:50:44", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 22:55:44", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 22:55:45", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 478, "detail": "0 detection(s)"}
+{"date": "2026-09-09 22:55:45", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 23:00:45", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 83, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 23:00:45", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 483, "detail": "0 detection(s)"}
+{"date": "2026-09-09 23:00:45", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 23:05:46", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 23:05:46", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 479, "detail": "0 detection(s)"}
+{"date": "2026-09-09 23:05:46", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 23:10:46", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 23:10:47", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 474, "detail": "0 detection(s)"}
+{"date": "2026-09-09 23:10:47", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 23:15:47", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 83, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 23:15:47", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 479, "detail": "0 detection(s)"}
+{"date": "2026-09-09 23:15:47", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 23:20:48", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 23:20:48", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 481, "detail": "0 detection(s)"}
+{"date": "2026-09-09 23:20:48", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 23:25:48", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 79, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 23:25:49", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 478, "detail": "0 detection(s)"}
+{"date": "2026-09-09 23:25:49", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 23:30:49", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 23:30:49", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 475, "detail": "0 detection(s)"}
+{"date": "2026-09-09 23:30:49", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 23:35:50", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 23:35:50", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 477, "detail": "0 detection(s)"}
+{"date": "2026-09-09 23:35:50", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 23:40:50", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 23:40:51", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 473, "detail": "0 detection(s)"}
+{"date": "2026-09-09 23:40:51", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 23:45:51", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 79, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 23:45:51", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 482, "detail": "0 detection(s)"}
+{"date": "2026-09-09 23:45:51", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 23:50:51", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 23:50:52", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 475, "detail": "0 detection(s)"}
+{"date": "2026-09-09 23:50:52", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-09 23:55:52", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-09 23:55:52", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 479, "detail": "0 detection(s)"}
+{"date": "2026-09-09 23:55:53", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 00:00:53", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 00:00:53", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 472, "detail": "0 detection(s)"}
+{"date": "2026-09-10 00:00:53", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 00:05:53", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 00:05:54", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 475, "detail": "0 detection(s)"}
+{"date": "2026-09-10 00:05:54", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 00:10:54", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 00:10:54", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 478, "detail": "0 detection(s)"}
+{"date": "2026-09-10 00:10:54", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 00:15:55", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 86, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 00:15:55", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 481, "detail": "0 detection(s)"}
+{"date": "2026-09-10 00:15:55", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 00:20:55", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 00:20:56", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 476, "detail": "0 detection(s)"}
+{"date": "2026-09-10 00:20:56", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 00:25:56", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 00:25:56", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 477, "detail": "0 detection(s)"}
+{"date": "2026-09-10 00:25:56", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:17:17", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 127, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:17:18", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 553, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:17:18", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:22:18", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 79, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:22:18", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 480, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:22:18", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:23:17", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:23:18", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 485, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:23:18", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:24:24", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:24:25", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 484, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:24:25", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:27:19", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:27:19", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 479, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:27:19", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:28:18", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:28:18", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 484, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:28:18", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:29:25", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:29:25", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 480, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:29:25", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:32:19", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:32:20", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 481, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:32:20", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:33:18", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:33:19", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 478, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:33:19", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:34:25", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:34:26", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 478, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:34:26", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:37:20", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:37:20", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 492, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:37:20", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:38:19", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:38:19", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 480, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:38:20", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:39:26", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:39:26", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 483, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:39:27", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:42:20", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 83, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:42:21", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 485, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:42:21", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:43:20", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:43:20", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 482, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:43:20", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:44:27", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:44:27", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 478, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:44:27", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:47:21", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:47:21", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 478, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:47:22", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:48:20", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 78, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:48:21", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 473, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:48:21", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:49:27", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 79, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:49:28", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 472, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:49:28", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:52:22", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:52:22", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 482, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:52:22", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:53:21", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 79, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:53:21", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 490, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:53:22", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:54:28", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 79, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:54:28", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 483, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:54:28", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:57:22", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:57:23", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 483, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:57:23", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:58:22", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:58:22", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 482, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:58:22", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 07:59:29", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 07:59:29", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 491, "detail": "0 detection(s)"}
+{"date": "2026-09-10 07:59:29", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:02:23", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:02:23", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 483, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:02:24", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:03:22", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:03:23", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 481, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:03:23", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:04:29", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 84, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:04:30", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 487, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:04:30", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:05:34", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:07:24", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:07:24", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 489, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:07:24", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:08:23", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 79, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:08:23", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 482, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:08:23", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:09:30", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 83, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:09:30", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 495, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:09:30", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:11:15", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:11:25", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:12:24", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:12:25", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 487, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:12:25", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:13:24", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:13:24", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 489, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:13:24", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:13:45", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:14:31", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 83, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:14:31", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 504, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:14:31", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:14:42", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:17:25", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 89, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:17:25", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 503, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:17:26", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:18:24", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:18:25", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 483, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:18:25", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:19:31", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:19:32", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 488, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:19:32", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:21:20", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:21:45", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:22:03", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:22:26", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 83, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:22:26", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 486, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:22:26", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:23:25", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:23:25", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 500, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:23:25", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:24:32", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:24:32", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 497, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:24:32", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:27:26", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:27:27", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 489, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:27:27", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:28:26", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:28:26", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 489, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:28:26", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:29:33", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:29:33", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 493, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:29:33", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:30:35", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:31:14", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:32:27", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:32:27", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 490, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:32:27", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:33:26", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:33:27", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 491, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:33:27", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:34:33", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:34:34", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 487, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:34:34", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:36:49", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:37:28", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:37:28", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 488, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:37:28", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:38:27", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:38:27", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 483, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:38:27", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:39:34", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:39:34", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 494, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:39:34", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:42:28", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:42:29", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 488, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:42:29", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:42:45", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:43:28", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:43:28", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 490, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:43:28", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:44:35", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:44:35", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 495, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:44:35", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:46:03", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:47:29", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:47:29", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 484, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:47:29", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:47:46", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:47:46", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:47:46", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 499, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:47:46", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:48:17", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:48:17", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:48:17", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:48:28", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:48:29", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 486, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:48:29", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:48:47", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:49:09", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:49:35", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:49:36", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 513, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:49:36", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:49:47", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:49:48", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 505, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:49:48", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:50:46", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:50:47", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:50:47", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:50:47", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3}
+{"date": "2026-09-10 08:50:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:03", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:51:17", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:51:17", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:31", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:31", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:35", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:51:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:51:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:46", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:51:47", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:51:48", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:51:48", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:48", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4}
+{"date": "2026-09-10 08:51:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:03", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:52:17", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:52:30", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:52:30", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 514, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:52:30", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:31", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:52:32", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:32", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:52:35", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:52:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:52:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:46", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:52:46", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 83, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:52:47", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:52:47", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 494, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:52:47", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:47", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:48", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:48", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:48", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:52:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:03", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:53:17", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:53:29", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:53:29", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 509, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:53:29", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:31", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:53:32", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:53:32", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:32", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:35", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:53:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:53:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:53:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:53:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:46", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:53:47", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:53:48", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:53:48", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:48", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:53:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:53:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:53:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:53:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:03", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:18", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:54:31", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:54:32", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:32", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:32", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:32", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:35", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:36", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:54:36", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 484, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:54:36", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 08:54:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:54:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:54:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:43", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:46", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:47", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:54:48", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:48", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:48", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:48", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:54:48", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 85, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:54:49", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 516, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:54:49", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:54", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:54:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:54:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:55:03", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:55:31", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:56", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:56:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:56:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:57", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:58", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:58", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:58", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:58", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:58", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:58", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:58", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:58", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:59", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:59", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:56:59", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:56:59", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:59", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:56:59", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:56:59", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:59", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:56:59", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:00", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:00", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:00", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:00", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:00", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:00", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:00", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:00", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:01", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:01", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:01", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:01", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:01", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:01", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:01", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:01", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:01", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:02", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:02", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:02", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:02", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:02", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:02", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:02", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:02", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:03", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:03", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:03", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:03", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:03", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:03", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:03", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:03", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:03", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:04", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:04", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:04", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:04", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:04", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:04", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:04", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:04", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:05", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:05", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:57:05", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:05", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:05", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:05", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:05", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:05", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:05", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:06", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:30", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:57:31", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 486, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:57:31", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:47", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 83, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:57:47", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 499, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:57:47", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:57:48", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:58:30", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 84, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:58:30", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 508, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:58:30", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:58:53", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0}
+{"date": "2026-09-10 08:59:37", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:59:37", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 505, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:59:37", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 08:59:49", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 08:59:49", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 489, "detail": "0 detection(s)"}
+{"date": "2026-09-10 08:59:49", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:02:31", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:02:31", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 498, "detail": "0 detection(s)"}
+{"date": "2026-09-10 09:02:31", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:02:48", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:02:48", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 491, "detail": "0 detection(s)"}
+{"date": "2026-09-10 09:02:48", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:03:30", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:03:31", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 497, "detail": "0 detection(s)"}
+{"date": "2026-09-10 09:03:31", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:04:37", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 80, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:04:38", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 485, "detail": "0 detection(s)"}
+{"date": "2026-09-10 09:04:38", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:04:50", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:04:50", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 490, "detail": "0 detection(s)"}
+{"date": "2026-09-10 09:04:50", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:07:32", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:07:32", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 488, "detail": "0 detection(s)"}
+{"date": "2026-09-10 09:07:32", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:07:48", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:07:49", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 489, "detail": "0 detection(s)"}
+{"date": "2026-09-10 09:07:49", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 09:08:31", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:08:31", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 498, "detail": "0 detection(s)"}
+{"date": "2026-09-10 09:08:31", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:09:38", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:09:40", "outil": "veille-flux", "commande": "passe-relax", "code": 1, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 2503, "detail": "1 detection(s)"}
+{"date": "2026-09-10 09:09:40", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:09:50", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:09:53", "outil": "veille-flux", "commande": "passe-relax", "code": 1, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 2488, "detail": "1 detection(s)"}
+{"date": "2026-09-10 09:09:53", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:12:32", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:12:35", "outil": "veille-flux", "commande": "passe-relax", "code": 1, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 2483, "detail": "1 detection(s)"}
+{"date": "2026-09-10 09:12:35", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:12:49", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:12:51", "outil": "veille-flux", "commande": "passe-relax", "code": 1, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 2490, "detail": "1 detection(s)"}
+{"date": "2026-09-10 09:12:51", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 09:13:32", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 83, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:13:34", "outil": "veille-flux", "commande": "passe-relax", "code": 1, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 2484, "detail": "1 detection(s)"}
+{"date": "2026-09-10 09:13:34", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:14:41", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:14:43", "outil": "veille-flux", "commande": "passe-relax", "code": 1, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 2483, "detail": "1 detection(s)"}
+{"date": "2026-09-10 09:14:43", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:14:53", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:14:55", "outil": "veille-flux", "commande": "passe-relax", "code": 1, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 2495, "detail": "1 detection(s)"}
+{"date": "2026-09-10 09:14:55", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:16:07", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:17:35", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 87, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:17:37", "outil": "veille-flux", "commande": "passe-relax", "code": 1, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 2501, "detail": "1 detection(s)"}
+{"date": "2026-09-10 09:17:37", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:17:52", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:17:54", "outil": "veille-flux", "commande": "passe-relax", "code": 1, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 2503, "detail": "1 detection(s)"}
+{"date": "2026-09-10 09:17:54", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:18:34", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 81, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:18:37", "outil": "veille-flux", "commande": "passe-relax", "code": 1, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 2483, "detail": "1 detection(s)"}
+{"date": "2026-09-10 09:18:37", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:19:43", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:19:46", "outil": "veille-flux", "commande": "passe-relax", "code": 1, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 2486, "detail": "1 detection(s)"}
+{"date": "2026-09-10 09:19:46", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2}
+{"date": "2026-09-10 09:19:56", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:19:58", "outil": "veille-flux", "commande": "passe-relax", "code": 1, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 2487, "detail": "1 detection(s)"}
+{"date": "2026-09-10 09:19:58", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}

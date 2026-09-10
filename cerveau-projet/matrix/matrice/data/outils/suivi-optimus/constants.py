@@ -51,3 +51,6 @@ RACINE = detecter_racine(REPERTOIRE_OUTIL)
 REPERTOIRE_MATRICE = RACINE / "cerveau-projet" / "matrix" / "matrice"
 NOM_VUE = "suivi-optimus.md"
 CHEMIN_VUE = REPERTOIRE_MATRICE / NOM_VUE
+
+# Chemin vers l'inbox (pour les missions en attente).
+CHEMIN_INBOX = REPERTOIRE_MATRICE.parent / "intercom" / "matrice" / "inbox.jsonl"

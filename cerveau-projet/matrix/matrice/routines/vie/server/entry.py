@@ -9,7 +9,7 @@ instance (garde PID), lancement par la porte officielle ci-dessous :
 from constants import ENCODAGE
 from pathlib import Path
 
-from fonctions import lire_pid, processus_vivant
+from fonctions import lire_pid, processus_vivant  # noqa: E402
 
 REPERTOIRE_SERVER = Path(__file__).resolve().parent
 NOM_PID_SERVER = "server-matrice.pid"

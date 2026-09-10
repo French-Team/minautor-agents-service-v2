@@ -1829,3 +1829,245 @@
 {"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 21:35:34"}
 {"type": "passe-debut", "mode": "relax", "date": "2026-09-09 21:40:34"}
 {"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 21:40:35"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 21:45:35"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 21:45:36"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 21:50:36"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 21:50:36"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 21:55:36"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 21:55:37"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 22:00:37"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 22:00:38"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 22:05:38"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 22:05:38"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 22:10:38"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 22:10:39"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 22:15:39"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 22:15:39"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 22:20:40"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 22:20:40"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 22:25:40"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 22:25:41"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 22:30:41"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 22:30:41"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 22:35:42"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 22:35:42"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 22:40:42"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 22:40:43"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 22:45:43"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 22:45:43"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 22:50:44"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 22:50:44"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 22:55:44"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 22:55:45"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 23:00:45"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 23:00:45"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 23:05:45"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 23:05:46"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 23:10:46"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 23:10:47"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 23:15:47"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 23:15:47"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 23:20:47"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 23:20:48"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 23:25:48"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 23:25:49"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 23:30:49"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 23:30:49"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 23:35:49"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 23:35:50"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 23:40:50"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 23:40:50"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 23:45:51"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 23:45:51"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 23:50:51"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 23:50:52"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-09 23:55:52"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-09 23:55:52"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 00:00:53"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 00:00:53"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 00:05:53"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 00:05:54"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 00:10:54"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 00:10:54"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 00:15:55"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 00:15:55"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 00:20:55"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 00:20:56"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 00:25:56"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 00:25:56"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:17:17"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:17:18"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:22:18"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:22:18"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:23:17"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:23:17"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:24:24"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:24:24"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:27:18"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:27:19"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:28:18"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:28:18"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:29:25"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:29:25"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:32:19"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:32:19"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:33:18"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:33:19"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:34:25"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:34:26"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:37:20"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:37:20"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:38:19"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:38:19"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:39:26"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:39:26"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:42:20"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:42:21"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:43:20"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:43:20"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:44:27"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:44:27"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:47:21"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:47:21"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:48:20"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:48:21"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:49:27"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:49:28"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:52:22"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:52:22"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:53:21"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:53:21"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:54:28"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:54:28"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:57:22"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:57:23"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:58:22"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:58:22"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 07:59:29"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 07:59:29"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:02:23"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:02:23"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:03:22"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:03:23"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:04:29"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:04:30"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:07:24"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:07:24"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:08:23"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:08:23"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:09:30"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:09:30"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:12:24"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:12:25"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:13:23"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:13:24"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:14:30"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:14:31"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:17:25"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:17:25"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:18:24"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:18:25"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:19:31"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:19:32"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:22:26"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:22:26"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:23:25"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:23:25"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:24:32"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:24:32"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:27:26"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:27:27"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:28:25"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:28:26"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:29:32"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:29:33"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:32:27"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:32:27"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:33:26"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:33:27"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:34:33"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:34:34"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:37:28"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:37:28"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:38:27"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:38:27"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:39:34"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:39:34"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:42:28"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:42:29"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:43:27"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:43:28"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:44:34"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:44:35"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:47:29"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:47:29"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:47:45"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:47:46"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:48:28"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:48:29"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:49:35"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:49:36"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:49:47"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:49:48"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:52:29"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:52:30"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:52:46"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:52:47"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:53:29"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:53:29"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:54:36"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:54:36"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:54:48"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:54:49"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:57:30"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:57:31"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:57:47"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:57:47"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:58:29"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:58:30"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:59:36"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:59:37"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 08:59:49"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 08:59:49"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:02:31"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 09:02:31"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:02:47"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 09:02:48"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:03:30"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 09:03:31"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:04:37"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 09:04:38"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:04:49"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 09:04:50"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:07:31"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 09:07:32"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:07:48"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 09:07:49"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:08:31"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-09-10 09:08:31"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:09:38"}
+{"type": "alerte", "etat": "python-compile", "cible": "Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\suivi-optimus\\vue\\commun.py", "date": "2026-09-10 09:09:40"}
+{"type": "mission-vrac", "cible": "Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\suivi-optimus\\vue\\commun.py", "date": "2026-09-10 09:09:40"}
+{"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 1, "date": "2026-09-10 09:09:40"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:09:50"}
+{"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 0, "date": "2026-09-10 09:09:53"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:12:32"}
+{"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 0, "date": "2026-09-10 09:12:35"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:12:49"}
+{"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 0, "date": "2026-09-10 09:12:51"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:13:31"}
+{"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 0, "date": "2026-09-10 09:13:34"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:14:41"}
+{"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 0, "date": "2026-09-10 09:14:43"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:14:53"}
+{"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 0, "date": "2026-09-10 09:14:55"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:17:35"}
+{"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 0, "date": "2026-09-10 09:17:37"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:17:51"}
+{"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 0, "date": "2026-09-10 09:17:54"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:18:34"}
+{"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 0, "date": "2026-09-10 09:18:37"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:19:43"}
+{"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 0, "date": "2026-09-10 09:19:46"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:19:55"}
+{"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 0, "date": "2026-09-10 09:19:58"}
