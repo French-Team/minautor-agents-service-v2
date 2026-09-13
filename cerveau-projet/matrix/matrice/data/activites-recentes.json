@@ -360,6 +360,15 @@
     "alertes": [],
     "passes": [
       {
+        "date": "2026-09-10 09:38:47",
+        "detail": "Passe relax : 1 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
         "date": "2026-09-10 09:38:05",
         "detail": "Passe relax : 1 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
@@ -793,15 +802,6 @@
       },
       {
         "date": "2026-09-10 08:57:47",
-        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
-        "tags": [
-          "veille-flux",
-          "passe",
-          "auto"
-        ]
-      },
-      {
-        "date": "2026-09-10 08:57:31",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",

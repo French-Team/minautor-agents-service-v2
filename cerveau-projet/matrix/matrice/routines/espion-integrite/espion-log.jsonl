@@ -95841,3 +95841,63 @@
 {"type": "observation", "chapitre": 1, "bdd": "conventions-matrice.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:32"}
 {"type": "observation", "chapitre": 1, "bdd": "protocoles-matrice.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:32"}
 {"type": "passe", "chapitres": [1, 2], "bdds_surveillees": 14, "ecarts": [], "date": "2026-09-10 09:38:32"}
+{"type": "observation", "chapitre": 1, "bdd": "modifications-par-fichier.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:43"}
+{"type": "observation", "chapitre": 1, "bdd": "historiques-missions.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:43"}
+{"type": "observation", "chapitre": 1, "bdd": "lecons.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:43"}
+{"type": "observation", "chapitre": 1, "bdd": "classeur-variables.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:43"}
+{"type": "observation", "chapitre": 1, "bdd": "usages-outils-combos.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:43"}
+{"type": "observation", "chapitre": 1, "bdd": "activites-recentes.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:43"}
+{"type": "observation", "chapitre": 1, "bdd": "historique-bdd.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:43"}
+{"type": "observation", "chapitre": 1, "bdd": "vivier-themes.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:43"}
+{"type": "observation", "chapitre": 1, "bdd": "defcon-historique.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:43"}
+{"type": "observation", "chapitre": 1, "bdd": "pauses-session-matrix.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:43"}
+{"type": "observation", "chapitre": 1, "bdd": "suivi-optimus.jsonl", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:43"}
+{"type": "observation", "chapitre": 1, "bdd": "regles-matrice.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:43"}
+{"type": "observation", "chapitre": 1, "bdd": "conventions-matrice.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:43"}
+{"type": "observation", "chapitre": 1, "bdd": "protocoles-matrice.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:43"}
+{"type": "passe", "chapitres": [1, 2], "bdds_surveillees": 14, "ecarts": [], "date": "2026-09-10 09:38:43"}
+{"type": "observation", "chapitre": 1, "bdd": "modifications-par-fichier.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:45"}
+{"type": "observation", "chapitre": 1, "bdd": "historiques-missions.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:45"}
+{"type": "observation", "chapitre": 1, "bdd": "lecons.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:45"}
+{"type": "observation", "chapitre": 1, "bdd": "classeur-variables.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:45"}
+{"type": "observation", "chapitre": 1, "bdd": "usages-outils-combos.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:45"}
+{"type": "observation", "chapitre": 1, "bdd": "activites-recentes.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:45"}
+{"type": "observation", "chapitre": 1, "bdd": "historique-bdd.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:45"}
+{"type": "observation", "chapitre": 1, "bdd": "vivier-themes.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:45"}
+{"type": "observation", "chapitre": 1, "bdd": "defcon-historique.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:45"}
+{"type": "observation", "chapitre": 1, "bdd": "pauses-session-matrix.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:45"}
+{"type": "observation", "chapitre": 1, "bdd": "suivi-optimus.jsonl", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:45"}
+{"type": "observation", "chapitre": 1, "bdd": "regles-matrice.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:45"}
+{"type": "observation", "chapitre": 1, "bdd": "conventions-matrice.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:45"}
+{"type": "observation", "chapitre": 1, "bdd": "protocoles-matrice.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:45"}
+{"type": "passe", "chapitres": [1, 2], "bdds_surveillees": 14, "ecarts": [], "date": "2026-09-10 09:38:45"}
+{"type": "observation", "chapitre": 1, "bdd": "modifications-par-fichier.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:46"}
+{"type": "observation", "chapitre": 1, "bdd": "historiques-missions.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:46"}
+{"type": "observation", "chapitre": 1, "bdd": "lecons.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:46"}
+{"type": "observation", "chapitre": 1, "bdd": "classeur-variables.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:46"}
+{"type": "observation", "chapitre": 1, "bdd": "usages-outils-combos.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:46"}
+{"type": "observation", "chapitre": 1, "bdd": "activites-recentes.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:46"}
+{"type": "observation", "chapitre": 1, "bdd": "historique-bdd.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:46"}
+{"type": "observation", "chapitre": 1, "bdd": "vivier-themes.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:46"}
+{"type": "observation", "chapitre": 1, "bdd": "defcon-historique.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:46"}
+{"type": "observation", "chapitre": 1, "bdd": "pauses-session-matrix.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:46"}
+{"type": "observation", "chapitre": 1, "bdd": "suivi-optimus.jsonl", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:46"}
+{"type": "observation", "chapitre": 1, "bdd": "regles-matrice.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:46"}
+{"type": "observation", "chapitre": 1, "bdd": "conventions-matrice.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:46"}
+{"type": "observation", "chapitre": 1, "bdd": "protocoles-matrice.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:46"}
+{"type": "passe", "chapitres": [1, 2], "bdds_surveillees": 14, "ecarts": [], "date": "2026-09-10 09:38:46"}
+{"type": "observation", "chapitre": 1, "bdd": "modifications-par-fichier.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:48"}
+{"type": "observation", "chapitre": 1, "bdd": "historiques-missions.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:48"}
+{"type": "observation", "chapitre": 1, "bdd": "lecons.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:48"}
+{"type": "observation", "chapitre": 1, "bdd": "classeur-variables.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:48"}
+{"type": "observation", "chapitre": 1, "bdd": "usages-outils-combos.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:48"}
+{"type": "observation", "chapitre": 1, "bdd": "activites-recentes.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:48"}
+{"type": "observation", "chapitre": 1, "bdd": "historique-bdd.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:48"}
+{"type": "observation", "chapitre": 1, "bdd": "vivier-themes.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:48"}
+{"type": "observation", "chapitre": 1, "bdd": "defcon-historique.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:48"}
+{"type": "observation", "chapitre": 1, "bdd": "pauses-session-matrix.jsonl", "etat": "INFO", "detail": "pas d'etalon pose pour cette BDD (journal en ajout seul, sans empreinte)", "date": "2026-09-10 09:38:48"}
+{"type": "observation", "chapitre": 1, "bdd": "suivi-optimus.jsonl", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:48"}
+{"type": "observation", "chapitre": 1, "bdd": "regles-matrice.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:48"}
+{"type": "observation", "chapitre": 1, "bdd": "conventions-matrice.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:48"}
+{"type": "observation", "chapitre": 1, "bdd": "protocoles-matrice.json", "etat": "ok", "detail": "integrite verifiee", "date": "2026-09-10 09:38:48"}
+{"type": "passe", "chapitres": [1, 2], "bdds_surveillees": 14, "ecarts": [], "date": "2026-09-10 09:38:48"}

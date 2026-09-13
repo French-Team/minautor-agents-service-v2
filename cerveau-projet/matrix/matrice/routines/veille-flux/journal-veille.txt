@@ -2121,3 +2121,5 @@
 {"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:38:02"}
 {"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 0, "date": "2026-09-10 09:38:03"}
 {"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 0, "date": "2026-09-10 09:38:05"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-09-10 09:38:45"}
+{"type": "passe-fin", "mode": "relax", "detections": 1, "alertes": 0, "date": "2026-09-10 09:38:47"}

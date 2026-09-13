@@ -3028,3 +3028,6 @@
 {"date": "2026-09-10 09:38:04", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
 {"date": "2026-09-10 09:38:05", "outil": "veille-flux", "commande": "passe-relax", "code": 1, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 2485, "detail": "1 detection(s)"}
 {"date": "2026-09-10 09:38:05", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
+{"date": "2026-09-10 09:38:45", "outil": "corriger-ascii", "commande": "corriger", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 82, "detail": "Probleme plus grave -> decision du createur (aucune perte de donnees)."}
+{"date": "2026-09-10 09:38:47", "outil": "veille-flux", "commande": "passe-relax", "code": 1, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 2483, "detail": "1 detection(s)"}
+{"date": "2026-09-10 09:38:47", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1}
