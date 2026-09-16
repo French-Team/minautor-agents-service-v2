@@ -10,14 +10,20 @@ Usage :
     python main.py veille --boucle --vigile
     python main.py veille --boucle --intervalle <secondes>
     python main.py veille arret        (drapeau d'arret cooperatif, zero processus tue)
+    python main.py rotation            (borne journal-veille.txt en ARCHIVANT ses anciens)
 """
 import sys
 
 from boucle.entry import executer as boucle_executer
 from passe.entry import executer as passe_executer
+from rotation.entry import executer as rotation_executer
 
 
 def principal(arguments):
+    if arguments and arguments[0] == "rotation":
+        # Verbe de la categorie rotation : il ne fait pas une passe, il borne le
+        # journal en deplacant ses evenements anciens dans une archive datee.
+        return rotation_executer(arguments[1:])
     if not arguments or arguments[0] != "veille":
         print(__doc__)
         return 2

@@ -1,30 +1,78 @@
 # OUTIL -- espion-integrite
 
 > Routine espion de la Matrice : surveille l'INTEGRITE DE TOUTES LES BDD,
-> a intervalle regulier. Mode tour (une passe, retour au shell) ou mode boucle
-> (veille en arriere-plan, arret propre).
+> a intervalle regulier. Mode tour (une passe, retour au shell), mode boucle
+> (veille en arriere-plan, arret propre), mode verifier (diagnostic SANS ecriture)
+> et mode rotation (borne le journal en archivant ses evenements anciens).
 
 ## Options
 
 ```
 python main.py tour
+python main.py verifier
+python main.py rotation [--racine <matrix>] [--seuil <octets>] [--gardes <n>] [--force]
 python main.py boucle [--interval <secondes>]
 python main.py boucle arret
 ```
 
 - `tour` : une passe de surveillance (Chapitre 1 : integrite, Chapitre 2 : presence),
-  journalise dans espion-log.jsonl et rend la main.
+  journalise dans espion-log.jsonl et rend la main. Les chapitres ANNONCES sont
+  CALCULES du registre : le chapitre 2 n'est annonce que s'il reste au moins une
+  BDD a-construire (sinon l'annonce serait un canal declare mais vide -- MO-072).
+  Depuis MO-081, les 14 OBSERVATIONS ne partent au journal que si le TABLEAU DES
+  BDD CHANGE (le tableau complet repart alors au journal) : l'integrite d'une BDD
+  est un ETAT, il vit dans espion-etat-bdds.json. La ligne `passe`, elle, reste
+  ecrite a CHAQUE tour -- c'est le TEMOIN DE VIE (lecon L-026).
+- `verifier` : le MEME verdict, SANS ecrire une seule ligne. C'est le mode des
+  routes de diagnostic (cockpit `/sante`, en lecture seule declaree) et des
+  suites : un appel a la demande qui journalise fait grossir un journal en ajout
+  seul sans rien apporter a la surveillance (la boucle, elle, journalise ses passes).
+- `rotation` : borne le journal en DEPLACANT ses evenements les plus anciens dans
+  une archive datee (`espion-log-archive-AAAAMMJJ.jsonl`). JAMAIS de suppression.
+  Seuil en octets et nombre d'evenements gardes : constantes de constants.py. Le
+  moteur est PARTAGE (`matrice/data/commun/rotation_journal.py`, M-076) : les
+  quatre routines de la Matrice s'en servent, l'espion ne declare que ses valeurs.
+  Une rotation qui serait prise de vitesse par un ecrivain est REFUSEE (le journal
+  n'est pas ecrase) ; le contenu de l'archive fait partie du "deja connu", donc
+  une reprise apres arret ne cree pas de jumeau (lecon L-040).
 - `boucle` : tourne en arriere-plan, passe toutes les N secondes (defaut : 300),
   note son PID dans espion.pid, refuse un second lancement (zero double espion).
+  La cadence EFFECTIVE est publiee dans espion-etat.json (etat court, ecrase a
+  chaque demarrage) ET journalisee ; la rotation est verifiee AVANT chaque passe.
 - `boucle arret` : pose un drapeau d'arret -- la boucle s'arrete ELLE-MEME apres
   sa passe en cours (arret cooperatif : zero processus tue, zero fantome).
 
+## Fichiers
+
+| Fichier | Role |
+|---|---|
+| espion-log.jsonl | le JOURNAL (ajout seul, rotationne : l'histoire) |
+| espion-log-archive-*.jsonl | les evenements ANCIENS deplaces (rien n'est supprime) |
+| espion-etat.json | l'ETAT COURT de la CADENCE : intervalle et PID du demarrage en cours |
+| espion-etat-bdds.json | l'ETAT COURT du CONTROLE : le tableau des 14 BDD, ecrit a chaque passe et ECRASE (MO-081) |
+| espion.pid | le PID de la boucle vivante |
+| boucle-arret.txt | le drapeau d'arret cooperatif |
+
 ## Regles respectees
 
-- Registre des 7 BDD dans constants.py (zero valeur en dur dans la logique).
-- Une BDD a-construire = INFO (presente ou pas), jamais une fausse alerte.
+- Registre des 14 BDD dans constants.py (zero valeur en dur dans la logique).
+- Une BDD a-construire = INFO (presente ou pas), jamais une fausse alerte : c'est
+  la SEULE source du chapitre 2. Registre sans a-construire = chapitre 2 eteint
+  et NON annonce (aucune annonce sans production).
 - Une BDD faite avec empreinte fausse = ECART (code de sortie 1).
-- Journal en ajout seul (espion-log.jsonl), une ligne par passe.
+- HISTOIRE et ETAT (MO-081) : espion-log.jsonl est en ajout seul et ne recoit que
+  des FAITS -- les 14 observations quand le tableau CHANGE, et une ligne `passe` a
+  CHAQUE tour (temoin de vie, avec le nombre de passes absorbees avant elle). Le
+  TABLEAU COURANT des BDD est un etat : il vit dans espion-etat-bdds.json, ecrase
+  a chaque passe. Mesure d'origine : 504 134 observations pour 36 000 passes --
+  93 % du journal -- et il fallait lire 14 lignes pour trouver la seule qui dise
+  quelque chose. Fins de ligne LF.
+- Une passe sans changement n'ecrit AUCUNE observation, mais l'etat est ecrit
+  quand meme et son compteur de passes absorbees AVANCE : la redondance supprimee
+  est TRACEE, et l'etat distingue "rien a ecrire" de "la routine est morte".
+- Un etat se lit dans un FICHIER D'ETAT, une histoire se lit dans un JOURNAL : la
+  cadence vit dans espion-etat.json pour qu'un controle ne devienne pas aveugle
+  apres une rotation (lecon L-040).
 - Protections ouverture/fermeture propres (regles-immuables/python-seul.md).
 
 ## Architecture (convention-architecture-outils)
@@ -33,7 +81,8 @@ python main.py boucle arret
 |---|---|
 | DESCRIPTION.md | la facade (ce fichier) |
 | main.py | point d'entree global : DIRIGE |
-| constants.py | registre des 7 BDD, valeurs de la boucle |
-| commun.py | fonctions communes : empreinte, journal, PID |
-| tour/ | passe de surveillance (entry + fonctions) |
+| constants.py | registre des 14 BDD, valeurs de la boucle et de la rotation |
+| commun.py | fonctions communes : empreinte, journal, lecture bornee, etat, PID |
+| tour/ | passe de surveillance + diagnostic sans ecriture (entry + fonctions) |
+| rotation/ | bornage du journal par archivage (cablage mince sur le moteur PARTAGE `data/commun/rotation_journal.py`, M-076) |
 | boucle/ | veille en arriere-plan + arret propre (entry + fonctions) |

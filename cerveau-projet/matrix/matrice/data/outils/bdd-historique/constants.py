@@ -16,6 +16,11 @@ if REPERTOIRE_DATA.name != "data":
 NOM_BDD = "historique-bdd.jsonl"
 CHEMIN_BDD = REPERTOIRE_DATA / NOM_BDD
 
+# Prefixe de CE proprietaire d'ids (regle CV-009 : attribue depuis ses
+# constantes, jamais recopie dans la logique). Controle : le contrat
+# fondamental refuse un prefixe ecrit en dur.
+PREFIXE_ID = "H-"
+
 # Type des lignes de marquage obsolete (ajout seul : un marqueur vise un id).
 TYPE_MARQUEUR = "obsolete"
 

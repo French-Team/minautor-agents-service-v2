@@ -4,13 +4,14 @@ Interface entre main.py et les fonctions simples (checklist/stockage.py).
 """
 from commun import charger_file
 from checklist.stockage import fabrique_checklist
+from constants import PREFIXE_ID
 
 
 def executer(arguments):
     options = extraire_options(arguments, ("id",))
     identifiant = options.get("id", "")
     if not identifiant:
-        print("Usage : python main.py checklist --id M-XXX")
+        print("Usage : python main.py checklist --id " + PREFIXE_ID + "XXX")
         return 2
     file_missions = charger_file()
     mission = next((m for m in file_missions.get("missions", []) if m.get("id") == identifiant), None)

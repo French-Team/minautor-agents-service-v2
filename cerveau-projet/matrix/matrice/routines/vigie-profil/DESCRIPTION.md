@@ -1,0 +1,99 @@
+# OUTIL -- vigie-profil
+
+> Routine de la Matrice (Flux 1, famille orchestration) : verifie si la fiche
+> `matrice/USER-PROFIL.md` est REMPLIE et, sinon, depose une ALERTE dans
+> l'inbox de la Matrice par la porte officielle `signaler`. La Matrice route
+> l'alerte vers la maintenance ; le pilote guide ensuite l'agent sur le
+> parcours `USER-PROFIL` (theme dedie) pour remplir la fiche avec l'utilisateur.
+> Mode tour (une passe, retour au shell) ou mode boucle (veille, arret propre).
+
+## Options
+
+```
+python main.py tour
+python main.py rotation [--racine <matrix>] [--seuil <octets>] [--gardes <n>] [--force]
+python main.py boucle [--interval <secondes>]
+python main.py boucle arret
+```
+
+- `tour` : une passe (etat de la fiche, alerte si incomplete) et rend la main.
+  La passe est un ETAT : elle s'ecrit a CHAQUE tour dans
+  `vigie-profil-etat-passes.json` (ecrase) ; le journal `vigie-profil-log.jsonl`
+  ne la recoit que si ce qu'elle a VU a change (MO-082).
+- `rotation` : borne le journal en DEPLACANT ses evenements les plus anciens
+  dans une archive datee (`vigie-profil-archive-AAAAMMJJ.jsonl`) -- jamais de
+  suppression. Moteur PARTAGE `matrice/data/commun/rotation_journal.py` (motif
+  unique M-076), seuil et nombre d'evenements gardes en constantes ; une course
+  pendant la rotation est REFUSEE plutot qu'ecrasee.
+- `boucle` : tourne en arriere-plan, passe toutes les N secondes (defaut : 900),
+  note son PID dans `vigie-profil.pid`, refuse un second lancement. Elle verifie
+  la rotation AVANT chaque passe (le declenchement se LIT : une taille).
+- `boucle arret` : pose un drapeau d'arret -- la boucle s'arrete ELLE-MEME apres
+  sa passe en cours (arret cooperatif : zero processus tue, zero fantome).
+
+## Ce qui declenche l'alerte
+
+- Un champ ATTENDU vide (sections Informations Personnelles + Preferences).
+  Les sections Contact et Notes sont OPTIONNELLES (la fiche dit "aucun champ
+  n'est obligatoire") : elles sont signalees en information, jamais en alerte.
+- La fiche ABSENTE est une alerte (le parcours doit la recreer).
+
+## Regles respectees
+
+- ANTI-BRUIT, BORNE PAR MISSION (correction MO-070, 2026-09-13) : tant qu'une
+  alerte est OUVERTE pour une fiche incomplete, aucune nouvelle alerte n'est
+  posee -- MEME si des champs se remplissent entre-temps. Seule la fiche
+  COMPLETE ferme l'episode et remet la memoire a zero ; un futur retour a
+  l'incompletude ouvre un nouvel episode. Un plancher de temps
+  (`ANTI_SPAM_SECONDES`, 900 s) ne s'applique qu'a l'OUVERTURE d'un episode : il
+  retarde une alerte pour une fiche qui clignote, il ne la supprime jamais.
+  Pourquoi : l'ancienne regle re-alertait des que la SIGNATURE d'etat changeait,
+  or la fiche du createur se remplit un champ a la fois -- 4 depots mesures en
+  3 minutes pendant le questionnaire (un depot par champ rempli, au lieu d'un
+  par mission). Chaque passe JOURNALISE sa decision (`depot` + `motif` :
+  `depot`, `episode-ouvert`, `plancher`, `profil-complet`), donc rien n'est
+  supprime en silence.
+- PORTE UNIQUE : l'alerte passe par l'outil `signaler` (jamais une ecriture
+  directe dans l'inbox), avec `--expediteur routine` (le signal dit qui parle).
+- Aucun contenu prive n'est lu : la routine lit `matrice/USER-PROFIL.md` et
+  ecrit dans sa propre zone (journal, etat, PID).
+- Journal en ajout seul, ROTATIONNE (MO-078) : rien ne se perd, l'archive fait
+  partie du "deja connu" (lecon L-040 : une reprise apres arret n'ecrit aucun
+  jumeau), et une course est refusee plutot qu'ecrasee. Une rotation refusee
+  n'empeche jamais la passe (lecon L-026).
+- ETAT et HISTOIRE (correction MO-082, 2026-09-14) : la passe journalisait la
+  MEME ligne a chaque tour -- mesure : 194 lignes identiques sur 330 (58,8 %),
+  une par tour de 900 s. Le remplissage de la fiche est un ETAT, il part dans
+  `vigie-profil-etat-passes.json` (ecrit a CHAQUE passe, ECRASE, avec la
+  signature de la derniere passe journalisee, le motif de la decision anti-spam
+  et le nombre de passes absorbees) ; l'HISTOIRE (`vigie-profil-log.jsonl`) ne
+  recoit la passe que si la fiche a CHANGE. Le MOTIF de la decision anti-spam
+  vit dans cet etat : la ligne repetee disparait, pas la decision. Aucun
+  controle ne lit ces lignes (leur cadence se lit dans `vigie-profil-cadence.json`
+  depuis MO-078), donc aucun temoin de vie n'a a etre conserve ici. La decision
+  (signature + absorption) vient du moteur PARTAGE `data/commun/etat_histoire.py`.
+- ANNEAU DE PASSES et cadence MESUREE (friction 28, MO-084) : l'etat court
+  porte aussi `dernieres_passes` -- les `PASSES_GARDEES_ETAT` derniers
+  horodatages de passe, fabriques par le moteur PARTAGE
+  `data/commun/battement.py` (la vigie ne declare QUE sa longueur). C'est ce qui
+  rend le battement REEL mesurable par `verifier-cadence`, en ECART MEDIAN.
+  POURQUOI PAS UNE MOYENNE : le premier temoin calculait
+  `(date - derniere_ecriture) / passes_absorbes` et a lu 450,5 s puis 600,3 s
+  pour cette cadence de 900 s -- pourtant prouvee par le journal et avec un
+  compteur juste (3 -> 4 en une passe). Une moyenne ne decrit AUCUN intervalle
+  reel des qu'une passe n'est pas a l'heure (redemarrage, passe a la demande),
+  et une valeur fausse mais DANS la tolerance ne crie pas.
+- Etat ecrit de facon atomique (tmp + remplacement), journal en LF (L-001).
+- Protections ouverture/fermeture propres (regles-immuables/python-seul.md).
+
+## Architecture (convention-architecture-outils)
+
+| Piece | Role |
+|---|---|
+| DESCRIPTION.md | la facade (ce fichier) |
+| main.py | point d'entree global : DIRIGE |
+| constants.py | fiche surveillee, champs attendus/optionnels, porte signaler |
+| commun.py | fonctions communes : journal, etat atomique, lecture de la fiche, PID |
+| tour/ | passe de vigie (entry + fonctions) |
+| rotation/ | bornage du journal par archivage (cablage mince sur le moteur partage) |
+| boucle/ | veille en arriere-plan + arret propre (entry + fonctions) |

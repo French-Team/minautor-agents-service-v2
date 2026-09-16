@@ -7,6 +7,7 @@ informations, vers ou elles vont (tracabilite, demande createur).
 """
 import json
 import re
+
 from constants import (
     CHEMIN_ALERTES,
     CHEMIN_BDD_LECONS,
@@ -19,6 +20,12 @@ from constants import (
     CHEMIN_INBOX_MATRICE,
     ENCODAGE,
 )
+
+# data/commun (motif unique M-076) : la LECTURE BORNEE d'un journal est partagee,
+# jamais recopiee -- elle vient avec le moteur de rotation (MO-078). L'import est
+# VOLONTAIREMENT apres celui de constants : c'est constants qui installe
+# data/commun dans sys.path (ne pas trier alphabetiquement).
+from rotation_journal import lire_queue_journal, octets_queue_du_journal  # noqa: E402
 
 # Horodatage Matrice (YYYY-MM-DD HH:MM:SS) extrait des lignes brutes.
 MOTIF_DATE = re.compile(r"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})")
@@ -178,13 +185,17 @@ def lire_pid(chemin):
 
 
 def entrees_routines():
-    """Encart routines : dernieres passes de la veille, horodatees."""
+    """Encart routines : dernieres passes de la veille, horodatees.
+
+    LECTURE BORNEE (MO-078) : ce lecteur balayait le journal EN ENTIER (3,85 Mo /
+    44 050 lignes mesures le 2026-09-13) pour n'en garder que 5 evenements. On
+    lit la QUEUE, ce qui rend le cout constant quelle que soit la taille.
+    """
     from constants import REPERTOIRE_MATRICE
     chemin = REPERTOIRE_MATRICE / "routines" / "veille-flux" / "journal-veille.txt"
-    try:
-        lignes = chemin.read_text(encoding=ENCODAGE).splitlines()
-    except OSError:
-        return []
+    # MO-099 : la fenetre est demandee AU JOURNAL LU (sa borne declaree), jamais
+    # recopiee -- la veille declare 2 Mo de rotation, donc on lit au moins 2 Mo.
+    lignes = lire_queue_journal(chemin, octets_queue_du_journal(chemin))
     dernieres = [l for l in lignes if '"passe' in l][-5:]
     entrees = []
     for l in dernieres:

@@ -1,47 +1,73 @@
-# routines : VIE DE LA MATRICE
+# routines : VIE DE LA MATRICE (DOUBLE FLUX)
 
-> Routines de vie de la Matrice. A revoir avec le createur (IMPERATIF).
+> Routines de vie de la Matrice. Deux flux distincts, doctrine createur
+> 2026-09-12 : Flux 1 (cameleon GUIDE) vs Flux 2 (Optimus SURVEILLE).
 
-## Familles prevues
+## Familles par flux (doctrine dual flux 2026-09-12)
 
-| Famille | Dossier prevu | Role |
-|---|---|---|
-| vie | routines/vie/ | demarrage et arret PROPRES de la Matrice (zero processus fantome, zero machine instablee) |
-| securite | routines/securite/ | garde-fous : verification d'integrite SHA-256, controles de perimetre d'ecriture, etats des BDD |
-| orchestration | routines/orchestration/ | chargement des themes, file de missions en SERIE stricte, transmission au pilote |
-| observateurs | routines/observateurs/ | espions : pistage temps/tokens, surveillance du FLUX (non-regression flux, pas fichiers) |
+| Flux | Famille | Dossier prevu | Role | Surveille |
+|---|---|---|---|---|
+| **1. CAMELEON** | vie | routines/vie/ | demarrage et arret PROPRES de la Matrice (zero processus fantome, zero machine instablee) | perennite des boucles cameleon |
+| **1. CAMELEON** | securite | routines/securite/ | garde-fous FLUX 1 : verification d'integrite SHA-256, perimetre d'ecriture `matrix/`, etats des BDD | FLUX 1 (pilote, injections, processus fantomes) |
+| **1. CAMELEON** | orchestration | routines/orchestration/ | chargement des themes du vivier, file en SERIE stricte, transmission au pilote | non-regression du FLUX cameleon |
+| **1. CAMELEON** | observateurs FLUX 1 | routines/observateurs/ | espions cameleon : pistage temps/tokens, surveillance du FLUX (non-regression flux, pas fichiers) | performance et flux cameleon |
+| **2. OPTIMUS** | surveillance OPTIMUS | `_operateur/optimus-prime/espions/` + `remorque/` + `suivi-optimus` | espions qui SIGNALENT Optimus (jamais reparent), trace append-only, inventaire | OPTIMUS dans son flux reserve et verrouille |
 
 > Premier espion POSE le 2026-09-06 : `espion-integrite/` (tour + boucle, integrite
 > de toutes les BDD du registre, journal en ajout seul, arret cooperatif par drapeau).
 > Il vit directement dans routines/ ; les familles ci-dessus accueillront les suivantes.
 
-## Regles
+## Regles (communes aux deux flux, serie stricte partout)
 
 1. Chaque routine = un outil Python avec protections d'ouverture/fermeture propres
-   (regles-immuables/python-seul.md).
+   (regles-immuables/python-seul.md) -- `tmp + replace`, LF forces, PID + arret cooperatif.
 2. Non-regression : les suites surveillent le FLUX (pilote qui ne fonctionne plus,
    Matrice qui ne demarre plus, processus fantomes), pas les fichiers un par un
-   (source : IMPERATIF).
+   (source : IMPERATIF). Flux 1 : non-regression du FLUX cameleon ; Flux 2 :
+   espions signalent Optimus (integrite 71, activite, remorque 45).
 3. Securite AVANT le reste : une routine qui detecte un defaut d'integrite signale
-   et bloque, elle ne repare pas en douceur.
-4. Demarrage dedie : `demarrer-optimus-prime.md` (racine) restera le point d'entree
-   de l'operateur ; les routines de vie s'y raccrocheront plus tard (revue commune).
+   et bloque, elle ne repare pas en douceur (Flux 1 comme Flux 2).
+4. Demarrage dedie : `demarrer-optimus-prime.md` (racine) reste le point d'entree
+   Flux 2 (Optimus, hors sessions). Le Flux 1 demarre via la Matrice
+   (`routines/vie/main.py activer` -> `server_matrice.py`), jamais depuis
+   le pilote.
+5. Dual flux jamais melange : une routine/donnee/outil d'un flux n'est
+   jamais importee ni lue comme ressource de l'autre sans porte officielle.
+   Les espions d'un flux ne corrigent jamais l'autre.
 
-## Statut : EN CONSTRUCTION (3 routines posees, veille PERMANENTE)
+## Statut : DOUBLE FLUX POSE (2026-09-12, M-126) -- veille PERMANENTE ACTIVE
 
-Faits : espion-integrite (surveillance BDD), veille-flux (veille en arriere-plan :
-corriger-ascii + py_compile, marbre en VIGILE, alertes graves -> intercom, correction
-sans interrompre le LLM -- doctrine auto-correction). Chaque passe veille-flux se note
-elle-meme dans la BDD usages-outils-combos (outil bdd-usages) et se depose dans la
-section passes des activites-recentes (outil bdd-activites) -- tags veille-flux,passe,auto.
-Prochaines routines prevues : garde-fous de securite, orchestration des themes,
-espions temps/tokens.
+### Flux 1 : CAMELEON (Matrice GUIDE)
 
-VIE (2026-09-06, M-046) : `vie/` -- activateur des boucles de fond. Lancement
-DETACHE (survit a la session), etat (ARRET/ACTIVE/fantome nettoye), garde de
-double lancement (chaque routine porte SON PID et refuse le second), arret
-cooperatif par drapeau (zero processus tue). La veille-flux + l'espion
-sont ACTIVEES EN PERMANENT : `python vie/main.py activer` au demarrage de la
-Matrice (raccord `demarrer-optimus-prime.md` a poser par le createur). Le bug
-de routage `veille arret` (routait vers passe, le drapeau n'etait jamais pose)
-a ete attrape et repare au passage (M-046).
+Faits : `vigie-portes` (2026-09-13, MO-056 : surveille les PORTES et ceux qui
+les utilisent -- recette, sante, verbes, MOTEUR DE RECHERCHE temoin, usage,
+citations ; alerte par la porte `signaler`, anti-spam par signature), `espion-integrite` (surveillance BDD matrice), `veille-flux`
+(veille en arriere-plan : corriger-ascii + py_compile, marbre en VIGILE,
+alertes graves -> intercom, correction sans interrompre le LLM --
+doctrine auto-correction). Chaque passe `veille-flux` se note elle-meme
+dans `usages-outils-combos` et dans `activites-recentes` (section passes)
+-- tags `veille-flux,passe,auto`.
+Prochaines routines FLUX 1 : garde-fous de securite, orchestration des
+themes du vivier, espions temps/tokens du cameleon.
+
+### Flux 2 : OPTIMUS (Matrice SURVEILLE, flux reserve et verrouille)
+
+Faits : `espions-optimus/` (integrite 71 fichiers `_operateur/` +
+activite : file, frictions, verrous) + `remorque` (45 equipements) +
+`suivi-optimus` (trace append-only, vue regeneree, etancheite cameleon).
+Tous vivent en `_operateur/optimus-prime/` (jamais `matrice/`), SIGNALENT
+seulement (correction M-113 domiciliation respecte, convention
+`separation-cameleon-optimus` dual flux).
+
+### Socle commun : VIE
+
+`vie/` -- activateur des boucles de fond (commun aux deux flux pour le
+lancement). Lancement DETACHE (survit a la session), etat
+(ARRET/ACTIVE/fantome nettoye), garde double lancement (chaque routine
+porte SON PID et refuse le second), arret cooperatif par drapeau (zero
+processus tue). La `veille-flux`, l'`espion-integrite`, la `vigie-profil`, `suivi-sync` et la
+`vigie-portes` sont ACTIVEES EN
+PERMANENT : `python vie/main.py activer` au demarrage de la Matrice
+(raccord `demarrer-optimus-prime.md` a poser par le createur). Bug de
+routage `veille arret` (routait vers passe, le drapeau n'etait jamais
+pose) attrape et repare au passage (M-046).

@@ -18,12 +18,16 @@ from constants import (
 )
 
 
-def lire_evenements():
-    """Retourne la liste des evenements du journal (vide si absent)."""
-    if not CHEMIN_BDD.exists():
+def lire_evenements(chemin=None):
+    """Retourne la liste des evenements d'un journal jsonl (vide si absent).
+
+    chemin facultatif : le journal de la BDD par defaut, ou un autre (cobaye).
+    """
+    chemin = chemin or CHEMIN_BDD
+    if not chemin.exists():
         return []
     evenements = []
-    with open(CHEMIN_BDD, "r", encoding=ENCODAGE) as flux:
+    with open(chemin, "r", encoding=ENCODAGE) as flux:
         for ligne in flux:
             ligne = ligne.strip()
             if not ligne:
@@ -57,7 +61,7 @@ def ajouter_ligne(evenement):
 
     Protections : tmp + remplacement d'un coup (lecon M-018, jamais de
     journal a moitie ecrit), fins de ligne LF forcees (determinisme),
-    empreinte SHA-256 recalculee A CHAQUE ajout (etalon-or C-003).
+    empreinte SHA-256 recalculee A CHAQUE ajout (etalon-or CV-003).
     """
     ancien = b""
     if CHEMIN_BDD.exists():

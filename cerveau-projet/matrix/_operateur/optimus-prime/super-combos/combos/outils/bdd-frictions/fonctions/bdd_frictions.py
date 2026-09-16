@@ -1,0 +1,193 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+bdd-frictions/fonctions/bdd_frictions.py -- Fonctions atomiques BDD frictions
+"""
+
+import sqlite3
+from datetime import datetime
+from pathlib import Path
+from typing import Optional, List, Dict, Any
+
+# --- Vocabulaire des STATUTS : UN seul domicile (la ou le schema les declare) ---
+#
+# Mesure MO-126 : les statuts REELS de la BDD sont 'active',
+# 'archivee_validee' et 'archivee_annulee', mais la porte n'offrait que
+# 'active' / 'archivee' et comparait `statut = ?` en Egalite : 'archivee' ne
+# correspondait donc a AUCUNE ligne, et la porte repondait "Aucune friction
+# trouvee" sur une BDD qui en portait 44. Une reparation est INVISIBLE si la
+# porte qui la cherche ne regarde pas au bon endroit -- et une porte muette sur
+# un filtre se lit comme une BDD vide (meme mode de panne que la friction 41).
+STATUT_ACTIVE = "active"
+STATUT_ARCHIVEE_VALIDEE = "archivee_validee"
+STATUT_ARCHIVEE_ANNULEE = "archivee_annulee"
+
+# Un FILTRE demande -> les statuts REELS qu'il vise. C'est CETTE table qui
+# traduit le vocabulaire de l'appelant vers celui du schema.
+FILTRES_STATUT = {
+    STATUT_ACTIVE: (STATUT_ACTIVE,),
+    "archivee": (STATUT_ARCHIVEE_VALIDEE, STATUT_ARCHIVEE_ANNULEE),
+    "validee": (STATUT_ARCHIVEE_VALIDEE,),
+    "annulee": (STATUT_ARCHIVEE_ANNULEE,),
+    "toutes": (STATUT_ACTIVE, STATUT_ARCHIVEE_VALIDEE, STATUT_ARCHIVEE_ANNULEE),
+}
+# Les valeurs REELLES sont aussi acceptees comme filtre exact (usage technique).
+FILTRES_STATUT[STATUT_ARCHIVEE_VALIDEE] = (STATUT_ARCHIVEE_VALIDEE,)
+FILTRES_STATUT[STATUT_ARCHIVEE_ANNULEE] = (STATUT_ARCHIVEE_ANNULEE,)
+
+
+def filtres_disponibles() -> List[str]:
+    """Les filtres offerts par la porte (ordre stable : celui de la table)."""
+    return list(FILTRES_STATUT)
+
+
+def statuts_pour(filtre: str) -> Optional[tuple]:
+    """Les statuts REELS vises par un filtre, ou None si le filtre est inconnu."""
+    return FILTRES_STATUT.get(filtre)
+
+
+def init_db(db_path: Path):
+    """Initialiser la BDD frictions"""
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+    with sqlite3.connect(db_path) as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS frictions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                date TEXT NOT NULL,
+                mission_id TEXT,
+                phrase TEXT NOT NULL,
+                type TEXT NOT NULL,
+                gravite TEXT NOT NULL,
+                frequence TEXT NOT NULL,
+                statut TEXT NOT NULL DEFAULT 'active',
+                raison_archivage TEXT,
+                date_archivage TEXT
+            )
+        """)
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_frictions_mission ON frictions(mission_id)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_frictions_statut ON frictions(statut)")
+        conn.commit()
+
+
+def ajouter_friction(
+    db_path: Path,
+    phrase: str,
+    type_: str,
+    gravite: str,
+    frequence: str,
+    mission_id: Optional[str] = None,
+) -> int:
+    """Ajouter une friction, retourner l'ID"""
+    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    with sqlite3.connect(db_path) as conn:
+        cur = conn.execute(
+            """
+            INSERT INTO frictions (date, mission_id, phrase, type, gravite, frequence, statut)
+            VALUES (?, ?, ?, ?, ?, ?, 'active')
+            """,
+            (date, mission_id, phrase, type_, gravite, frequence),
+        )
+        conn.commit()
+        return cur.lastrowid
+
+
+def lister_frictions(
+    db_path: Path,
+    mission_id: Optional[str] = None,
+    statut: str = STATUT_ACTIVE,
+    limite: int = 20,
+) -> List[Dict[str, Any]]:
+    """Lister les frictions visant un FILTRE de statut (MO-126).
+
+    Le filtre est TRADUIT en statuts reels (FILTRES_STATUT) : un filtre
+    inconnu LEVE une erreur claire au lieu de rendre une liste vide -- une
+    liste vide ressemble a une BDD vide, et c'etait exactement le defaut
+    mesure ('archivee' ne correspondait a aucune ligne).
+    """
+    statuts = statuts_pour(statut)
+    if statuts is None:
+        raise ValueError(
+            "Filtre de statut inconnu : " + str(statut) + " (filtres admis : "
+            + ", ".join(filtres_disponibles()) + ")"
+        )
+    marques = ", ".join("?" for _ in statuts)
+    with sqlite3.connect(db_path) as conn:
+        conn.row_factory = sqlite3.Row
+        query = "SELECT * FROM frictions WHERE statut IN (" + marques + ")"
+        params: List[Any] = list(statuts)
+        if mission_id:
+            query += " AND mission_id = ?"
+            params.append(mission_id)
+        query += " ORDER BY date DESC LIMIT ?"
+        params.append(limite)
+        cur = conn.execute(query, params)
+        return [dict(row) for row in cur.fetchall()]
+
+
+def archiver_friction(db_path: Path, friction_id: int, statut: str, raison: str = ""):
+    """Archiver une friction (valide ou annule)"""
+    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    nouveau_statut = "archivee_validee" if statut == "valide" else "archivee_annulee"
+    with sqlite3.connect(db_path) as conn:
+        conn.execute(
+            """
+            UPDATE frictions
+            SET statut = ?, raison_archivage = ?, date_archivage = ?
+            WHERE id = ?
+            """,
+            (nouveau_statut, raison, date, friction_id),
+        )
+        conn.commit()
+
+
+def stats_frictions(db_path: Path, mission_id: Optional[str] = None) -> Dict[str, Any]:
+    """Statistiques sur les frictions"""
+    with sqlite3.connect(db_path) as conn:
+        conn.row_factory = sqlite3.Row
+        where = "WHERE mission_id = ?" if mission_id else "WHERE 1=1"
+        params = [mission_id] if mission_id else []
+
+        total = conn.execute(f"SELECT COUNT(*) as c FROM frictions {where}", params).fetchone()["c"]
+        actives = conn.execute(f"SELECT COUNT(*) as c FROM frictions {where} AND statut = ?", params + [STATUT_ACTIVE]).fetchone()["c"]
+        validees = conn.execute(f"SELECT COUNT(*) as c FROM frictions {where} AND statut = ?", params + [STATUT_ARCHIVEE_VALIDEE]).fetchone()["c"]
+        annulees = conn.execute(f"SELECT COUNT(*) as c FROM frictions {where} AND statut = ?", params + [STATUT_ARCHIVEE_ANNULEE]).fetchone()["c"]
+
+        par_type = dict(conn.execute(f"SELECT type, COUNT(*) as c FROM frictions {where} GROUP BY type", params).fetchall())
+        par_gravite = dict(conn.execute(f"SELECT gravite, COUNT(*) as c FROM frictions {where} GROUP BY gravite", params).fetchall())
+
+        # Durees detection -> validation (archivees avec les 2 dates)
+        rows = conn.execute(
+            f"SELECT date, date_archivage FROM frictions {where} AND date_archivage IS NOT NULL",
+            params,
+        ).fetchall()
+        durees_min = []
+        for r in rows:
+            try:
+                d1 = datetime.strptime(r["date"], "%Y-%m-%d %H:%M:%S.%f")
+                d2 = datetime.strptime(r["date_archivage"], "%Y-%m-%d %H:%M:%S.%f")
+                durees_min.append((d2 - d1).total_seconds() / 60)
+            except (ValueError, TypeError):
+                continue
+
+        # Recidives : meme phrase (normalisee) revenue >1 fois
+        phrases = conn.execute(f"SELECT phrase FROM frictions {where}", params).fetchall()
+        norm_counts: Dict[str, int] = {}
+        for r in phrases:
+            k = " ".join(r["phrase"].lower().split())
+            norm_counts[k] = norm_counts.get(k, 0) + 1
+        recidives = {k: v for k, v in norm_counts.items() if v > 1}
+
+    traitees = validees + annulees
+    return {
+        "total": total,
+        "actives": actives,
+        "validees": validees,
+        "annulees": annulees,
+        "taux_valide": round(100 * validees / traitees, 1) if traitees else None,
+        "taux_annule": round(100 * annulees / traitees, 1) if traitees else None,
+        "par_type": par_type,
+        "par_gravite": par_gravite,
+        "duree_mediane_min": round(sorted(durees_min)[len(durees_min) // 2], 1) if durees_min else None,
+        "duree_max_min": round(max(durees_min), 1) if durees_min else None,
+        "recidives": recidives,
+    }

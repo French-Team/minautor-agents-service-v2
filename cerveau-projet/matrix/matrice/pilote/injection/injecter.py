@@ -1,0 +1,282 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+injecter.py -- Moteur du CATALOGUE d'injections (porte `injection/`)
+
+Rend le contenu des sources du catalogue `config.json` : injections de DEMARRAGE
+et de PHASE. L'injection de MISSION (ordonnee, filtree L-016, pesee en tokens)
+est faite par `injection/fonctions.py` -- les deux vivent dans la MEME porte.
+
+Usage:
+  python injecter.py <categorie> [--format texte|json|markdown]
+  python injecter.py --categories
+
+Les CATEGORIES viennent du CATALOGUE (aucune liste en dur ici) ; `mission` sert
+les trois phases de mission d'un coup.
+
+Doctrine "jamais de degradation silencieuse" (2026-09-13) :
+  source absente + obligatoire: true   -> REFUS nomme   (code 2)
+  source absente + obligatoire: false  -> ALERTE nommee (code 0, on continue)
+  `obligatoire` non declare            -> traite comme OBLIGATOIRE (prudence) + alerte
+  `type` inconnu du moteur             -> REFUS nomme   (code 2)
+  `section` demandee et introuvable    -> REFUS nomme   (code 2)
+Aucune cle du catalogue n'est ignoree : elle est SERVIE, ou SIGNALEE.
+"""
+
+import sys
+import json
+from pathlib import Path
+from datetime import datetime
+
+PILOTE = "cameleon"                     # cachet de sortie (nomme l'agent servi)
+
+BASE = Path(__file__).resolve().parent
+RACINE = BASE.parent                    # le pilote : ancrage des sources du catalogue
+CONFIG_PATH = BASE / "config.json"
+
+TYPES_FICHIER = ("fichier",)
+TYPES_JSON = ("json", "bdd")
+TYPES_DOSSIER = ("dossier",)
+TYPES_OUTIL = ("outil",)                # fichier -> lu, dossier -> liste
+FORMATS = ("texte", "json", "markdown")
+CODE_OK = 0
+CODE_REFUS = 2
+CATEGORIE_MISSION = "mission"
+PHASES_MISSION = ("avant-mission", "pendant-mission", "apres-mission")
+
+
+def charger_catalogue():
+    """Lit le catalogue. Absent ou mal forme = REFUS nomme, jamais un vide muet."""
+    if not CONFIG_PATH.is_file():
+        return None, "catalogue absent : " + str(CONFIG_PATH)
+    try:
+        donnees = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as erreur:
+        return None, "catalogue illisible : " + str(CONFIG_PATH) + " (" + str(erreur) + ")"
+    injections = donnees.get("injections")
+    if not isinstance(injections, dict) or not injections:
+        return None, "catalogue vide ou mal forme : " + str(CONFIG_PATH)
+    return injections, None
+
+
+def lire_fichier(chemin):
+    return chemin.read_text(encoding="utf-8")
+
+
+def lire_dossier(chemin):
+    return sorted(p.name for p in chemin.iterdir())
+
+
+def lire_json(chemin):
+    return json.loads(chemin.read_text(encoding="utf-8"))
+
+
+def filtrer_par_categorie(donnee, categorie):
+    """Filtre un registre {"themes": [...]} sur le champ `categorie` des items."""
+    if isinstance(donnee, dict) and "themes" in donnee:
+        retenus = [t for t in donnee["themes"] if t.get("categorie") == categorie]
+        return {"themes": retenus}
+    return donnee
+
+
+def extraire_section(texte, nom):
+    """Extrait la section markdown `nom` : de son titre au titre de niveau <= au sien.
+
+    Rend None si la section est introuvable (l'appelant en fait un REFUS).
+    """
+    lignes = texte.splitlines()
+    cible = nom.strip().lower()
+    debut = None
+    niveau = 0
+    for i, ligne in enumerate(lignes):
+        if not ligne.startswith("#"):
+            continue
+        titre = ligne.lstrip("#").strip().lower()
+        profondeur = len(ligne) - len(ligne.lstrip("#"))
+        if debut is None:
+            if cible in titre:
+                debut = i
+                niveau = profondeur
+        elif profondeur <= niveau:
+            return "\n".join(lignes[debut:i]).rstrip()
+    if debut is None:
+        return None
+    return "\n".join(lignes[debut:]).rstrip()
+
+
+def formater(entree, contenu, format_sortie):
+    titre = entree["description"]
+    if format_sortie == "markdown":
+        if isinstance(contenu, (dict, list)):
+            contenu = json.dumps(contenu, ensure_ascii=False, indent=2)
+        return "## " + titre + "\n\n" + contenu + "\n"
+    if format_sortie == "json":
+        if isinstance(contenu, str):
+            contenu = {"contenu": contenu}
+        return json.dumps({
+            "id": entree["id"],
+            "description": titre,
+            "donnees": contenu,
+        }, ensure_ascii=False, indent=2)
+    if isinstance(contenu, (dict, list)):
+        contenu = json.dumps(contenu, ensure_ascii=False, indent=2)
+    return "=== " + titre + " ===\n" + contenu + "\n"
+
+
+def servir(entree, format_sortie):
+    """Rend (texte, alertes, refus) pour UNE entree du catalogue."""
+    alertes = []
+    refus = []
+    for cle in ("id", "description", "source", "type"):
+        if not entree.get(cle):
+            refus.append("entree mal formee : cle `" + cle + "` absente")
+    if refus:
+        return "", alertes, refus
+
+    identifiant = entree["id"]
+    if "obligatoire" not in entree:
+        alertes.append(identifiant + " : `obligatoire` non declare -> traite comme OBLIGATOIRE")
+        obligatoire = True
+    else:
+        obligatoire = bool(entree["obligatoire"])
+
+    type_ = entree["type"]
+    if type_ not in TYPES_FICHIER + TYPES_JSON + TYPES_DOSSIER + TYPES_OUTIL:
+        return "", alertes, [identifiant + " : type inconnu du moteur -> `" + str(type_) + "`"]
+
+    source = (RACINE / entree["source"]).resolve()
+    if type_ in TYPES_DOSSIER:
+        present = source.is_dir()
+    elif type_ in TYPES_OUTIL:
+        present = source.is_file() or source.is_dir()
+    else:
+        present = source.is_file()
+
+    if not present:
+        message = (identifiant + " : source " + ("OBLIGATOIRE" if obligatoire else "optionnelle")
+                   + " absente -> " + str(source))
+        if obligatoire:
+            refus.append(message)
+        else:
+            alertes.append(message)
+        return "", alertes, refus
+
+    try:
+        if type_ in TYPES_FICHIER:
+            contenu = lire_fichier(source)
+        elif type_ in TYPES_JSON:
+            contenu = lire_json(source)
+            if entree.get("categorie"):
+                contenu = filtrer_par_categorie(contenu, entree["categorie"])
+                items = contenu.get("themes") if isinstance(contenu, dict) else None
+                if isinstance(items, list) and not items:
+                    alertes.append(identifiant + " : filtre `" + str(entree["categorie"])
+                                   + "` -> 0 item servi (contenu VIDE)")
+        elif type_ in TYPES_DOSSIER:
+            contenu = lire_dossier(source)
+        else:                                   # outil : fichier -> lu, dossier -> liste
+            contenu = lire_fichier(source) if source.is_file() else lire_dossier(source)
+    except (OSError, ValueError) as erreur:
+        return "", alertes, [identifiant + " : lecture impossible (" + str(erreur) + ")"]
+
+    if "section" in entree:
+        if not isinstance(contenu, str):
+            return "", alertes, [identifiant + " : `section` declaree sur une source non textuelle"]
+        extrait = extraire_section(contenu, entree["section"])
+        if extrait is None:
+            return "", alertes, [identifiant + " : section `" + str(entree["section"])
+                                 + "` introuvable dans " + source.name]
+        contenu = extrait
+
+    return formater(entree, contenu, format_sortie), alertes, refus
+
+
+def injecter(categorie, format_sortie):
+    """Sert une categorie entiere. Rend CODE_OK ou CODE_REFUS."""
+    catalogue, refus_catalogue = charger_catalogue()
+    if catalogue is None:
+        print("REFUS : " + str(refus_catalogue))
+        return CODE_REFUS
+
+    if categorie == CATEGORIE_MISSION:
+        entrees = [(phase, entree) for phase in PHASES_MISSION
+                   for entree in catalogue.get(phase, [])]
+    else:
+        entrees = [(categorie, entree) for entree in catalogue.get(categorie, [])]
+
+    if not entrees:
+        print("REFUS : categorie `" + categorie + "` absente du catalogue (" + CONFIG_PATH.name + ")")
+        print("(categories : " + ", ".join(sorted(catalogue)) + ", " + CATEGORIE_MISSION + ")")
+        return CODE_REFUS
+
+    print("=== INJECTIONS " + PILOTE.upper() + " - " + categorie.upper() + " ===")
+    print("Horodatage: " + datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    print("Format: " + format_sortie)
+    print()
+
+    alertes = []
+    refus = []
+    servies = 0
+    phase_courante = None
+    for phase, entree in entrees:
+        if phase != categorie and phase != phase_courante:
+            print("--- phase : " + phase + " ---")
+            phase_courante = phase
+        texte, ses_alertes, ses_refus = servir(entree, format_sortie)
+        for message in ses_alertes:
+            alertes.append(message)
+            print("  ALERTE : " + message)
+        for message in ses_refus:
+            refus.append(message)
+            print("  REFUS  : " + message)
+        if texte:
+            servies += 1
+            print(texte)
+            print()
+
+    print("--- " + str(servies) + " source(s) servie(s), " + str(len(alertes))
+          + " alerte(s), " + str(len(refus)) + " refus ---")
+    if refus:
+        print("REFUS : le catalogue n'est pas entier -- reparer la source avant de continuer.")
+        return CODE_REFUS
+    return CODE_OK
+
+
+def main():
+    arguments = sys.argv[1:]
+    catalogue, refus_catalogue = charger_catalogue()
+    if catalogue is None:
+        print("REFUS : " + str(refus_catalogue))
+        return CODE_REFUS
+
+    categories = sorted(catalogue)
+    if not arguments:
+        print(__doc__)
+        print("Categories du catalogue : " + ", ".join(categories) + " (+ " + CATEGORIE_MISSION + ")")
+        return CODE_REFUS
+    if arguments[0] == "--categories":
+        for nom in categories:
+            print(nom + " : " + str(len(catalogue[nom])) + " injection(s)")
+        print(CATEGORIE_MISSION + " : les 3 phases de mission d'un coup")
+        return CODE_OK
+
+    categorie = arguments[0]
+    format_sortie = "texte"
+    if "--format" in arguments:
+        position = arguments.index("--format")
+        if position + 1 >= len(arguments):
+            print("REFUS : --format attend une valeur (" + "|".join(FORMATS) + ")")
+            return CODE_REFUS
+        format_sortie = arguments[position + 1]
+    if format_sortie not in FORMATS:
+        print("REFUS : format inconnu `" + format_sortie + "` (" + "|".join(FORMATS) + ")")
+        return CODE_REFUS
+    if categorie != CATEGORIE_MISSION and categorie not in categories:
+        print("REFUS : categorie inconnue `" + categorie + "`")
+        print("(categories du catalogue : " + ", ".join(categories) + ", " + CATEGORIE_MISSION + ")")
+        return CODE_REFUS
+    return injecter(categorie, format_sortie)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

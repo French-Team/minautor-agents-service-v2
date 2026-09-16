@@ -23,6 +23,7 @@ from constants import (
     NIVEAU_DEFCON_MAX,
     NOM_ENTONNOIR,
     NOM_FILE,
+    PREFIXE_ID,
     STATUT_EN_ATTENTE,
     STATUT_EN_COURS,
     THEME_DEFCON,
@@ -182,9 +183,14 @@ def mission_en_cours(file_missions):
 
 
 def prochain_id(file_missions):
-    """Calcule l'identifiant de la prochaine mission (compteur incremente)."""
+    """Calcule l'identifiant de la prochaine mission (compteur incremente).
+
+    Le prefixe vient de constants.py PREFIXE_ID (M-), jamais recopie : c'est
+    la meme regle que le pilote d'Optimus (MO-), et la meme source que celle
+    qui a manque le 2026-09-13 quand une mission d'Optimus est partie en M-.
+    """
     file_missions["compteur"] = file_missions["compteur"] + 1
-    return "M-" + str(file_missions["compteur"]).zfill(3)
+    return PREFIXE_ID + str(file_missions["compteur"]).zfill(3)
 
 
 def annoncer(type_message, mission, extra=None):

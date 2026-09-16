@@ -15,12 +15,18 @@ def executer(arguments):
     source = options.get("source", "")
     tags = separer_tags(options.get("tags", ""))
 
-    if not cle or not valeur or not tags:
+    if not cle or not tags:
         print('Usage : python main.py definir --cle <nom> --valeur "<valeur>" [--source "..."] --tags "a,b"')
+        print('        (valeur vide acceptee pour la mise a jour d\'une cle existante : MO-093)')
         return 2
 
     donnees = charger_bdd()
     entree, creee = definir_variable(donnees, cle, valeur, source, tags)
+    if creee and not valeur:
+        # Une variable NOUVELLE sans valeur n'a pas de sens (MO-093 : c'est
+        # ce cas vide qui poussait pause-session a ecrire hors porte).
+        print("Refus : une variable NOUVELLE exige une valeur non vide (cle : " + cle + ")")
+        return 2
     empreinte = enregistrer_bdd(donnees)
     action = "creee" if creee else "mise a jour"
     print(

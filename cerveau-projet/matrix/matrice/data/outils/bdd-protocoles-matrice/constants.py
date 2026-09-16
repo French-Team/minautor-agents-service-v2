@@ -18,6 +18,11 @@ NOM_BDD_TMP = NOM_BDD + ".tmp"
 CHEMIN_BDD = REPERTOIRE_DATA / NOM_BDD
 CHEMIN_EMPREINTE = REPERTOIRE_DATA / (NOM_BDD + ".sha256")
 
+# Prefixe de CE proprietaire d'ids (regle CV-009 : attribue depuis ses
+# constantes, jamais recopie dans la logique). Controle : le contrat
+# fondamental refuse un prefixe ecrit en dur.
+PREFIXE_ID = "P-"
+
 ENCODAGE = "utf-8"
 INDENTATION_JSON = 2
 TAILLE_BLOC_LECTURE = 65536

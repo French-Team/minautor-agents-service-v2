@@ -1,0 +1,480 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+verifier-historique-non-redondant.py -- Garde : un journal consigne des FAITS, pas un etat
+
+Pourquoi (2026-09-14, MO-080) : le journal du routeur de maintenance ecrivait une
+ligne a CHAQUE passe. Mesure du 2026-09-14 : sur 512 lignes, 510 etaient le MEME
+tableau a la date pres (99,4 %), parce que les 11 anomalies `alerte-grave` non
+routees etaient recomptees et recopiees toutes les 30 s -- environ 150 Ko par jour
+pour rien. Un journal qui repete un etat n'est plus une histoire : c'est un
+battement de coeur qui noie les faits sans rien apprendre, et il faut lire 500
+lignes pour trouver la seule qui dit quelque chose.
+
+La reparation separe DEUX objets aux durees de vie differentes :
+
+  - l'ETAT   (routeur-etat.json) : le tableau COURANT des boites, ecrit a CHAQUE
+    passe et ECRASE. C'est lui qui distingue "rien a ecrire" de "la routine est
+    morte", et il porte le nombre de passes absorbees ;
+  - l'HISTOIRE (routeur-historique.jsonl) : une suite de FAITS. On n'y ecrit que
+    si du courrier a ete ROUTE, ou si le tableau des ANOMALIES a change.
+
+CE QUE CE GARDE EXIGE
+  1. la DECISION est PURE (`fait_notable`) : elle se teste sans disque ;
+  2. une passe SANS CHANGEMENT n'ecrit AUCUNE ligne d'histoire -- mais l'ETAT est
+     ecrit quand meme, et le nombre de passes absorbees AVANCE (la redondance
+     supprimee est TRACEE : une suppression silencieuse serait un mensonge) ;
+  3. un FAIT n'est JAMAIS absorbe : courrier route, anomalie qui apparait,
+     anomalie qui evolue, anomalie qui disparait ;
+  4. le trafic NORMAL qui remplit l'inbox (fin-mission, retour-lot) ne doit pas
+     faire grossir l'histoire : c'est un etat, il va dans l'ETAT.
+
+CE QU'IL NE FAIT PAS : il ne touche JAMAIS les fichiers de service. Ses cobayes
+vivent dans le dossier temporaire du systeme, et il s'AUTOTESTE en rejouant
+l'ANCIENNE regle (ecrire des qu'il y a du routage OU une anomalie) : si elle
+revenait, le garde doit l'ACCUSER (lecon L-032 : un controle qu'on ne peut pas
+pieger ne prouve rien).
+
+Usage: python verifier-historique-non-redondant.py [--racine <path>]
+  code 0 = sain, 1 = ecart (liste et nomme), 2 = racine introuvable.
+"""
+
+import argparse
+import contextlib
+import importlib.util
+import io
+import json
+import shutil
+import sys
+import tempfile
+import time
+from pathlib import Path
+
+# --- REFERENCES (aucune valeur en dur dans la logique) ----------------------
+ROUTINE = "routeur-maintenance"
+NOM_SCRIPT = "routeur.py"
+NOM_HISTORIQUE = "routeur-historique.jsonl"
+NOM_ETAT = "routeur-etat.json"
+# Passes SANS CHANGEMENT eprouvees : assez pour que l'absorption soit visible
+# (une passe absorbee pourrait passer pour un hasard).
+PASSES_ABSORBEES = 5
+
+# Les trois messages du decor : un signal a ROUTER, du trafic NORMAL, et une
+# anomalie (`alerte-grave` = un type que le routeur ne sait pas router, celui qui
+# disparaissait autrefois sans trace).
+MESSAGE_A_ROUTER = {"type": "signaler", "niveau": "haute", "outil": "cobaye", "expediteur": "routine"}
+MESSAGE_NORMAL = {"type": "fin-mission", "id": "MO-COBAYE"}
+MESSAGE_ANORMAL = {"type": "alerte-grave", "outil": "cobaye"}
+
+RESULTATS = []
+
+
+def trouver_matrix(racine):
+    """Retourne le dossier matrix/, ou None."""
+    candidats = [racine / "cerveau-projet" / "matrix", racine / "matrix"]
+    if racine.name == "matrix":
+        candidats.insert(0, racine)
+    for candidat in candidats:
+        if (candidat / "matrice").is_dir():
+            return candidat
+    return None
+
+
+def controler(nom, condition, detail=""):
+    RESULTATS.append((nom, bool(condition), detail))
+    print("[" + ("OK" if condition else "KO") + "] " + nom + " : " + detail)
+    return bool(condition)
+
+
+def charger_routeur(matrix):
+    """Charge le routeur PAR SON CHEMIN (jamais un import devine).
+
+    Le nom du module est UNIQUE : quatre routines du projet ont un module
+    `constants` homonyme, et un nom generique les ferait se marcher dessus
+    (lecon L-029).
+    """
+    chemin = matrix / "matrice" / "routines" / ROUTINE / NOM_SCRIPT
+    if not chemin.is_file():
+        return None
+    specification = importlib.util.spec_from_file_location("routeur_epreuve", str(chemin))
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    return module
+
+
+def ecrire_inbox(chemin, messages):
+    """Ecrit une boite inbox (JSONL, LF forces, ASCII : convention du depot)."""
+    chemin.parent.mkdir(parents=True, exist_ok=True)
+    with open(str(chemin), "w", encoding="utf-8", newline="\n") as flux:
+        for message in messages:
+            flux.write(json.dumps(message, ensure_ascii=True) + "\n")
+    return chemin
+
+
+def lignes_histoire(chemin):
+    """Lignes non vides du journal (liste de chaines)."""
+    if not chemin.is_file():
+        return []
+    with open(str(chemin), "r", encoding="utf-8", errors="replace") as flux:
+        return [ligne.rstrip("\r\n") for ligne in flux if ligne.strip()]
+
+
+def lire_etat(chemin):
+    """L'etat de passe, ou {} (jamais d'exception dans un garde)."""
+    try:
+        return json.loads(chemin.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def ancienne_regle_faut_ecrire(routes, anormaux):
+    """L'ANCIENNE regle, telle quelle : ecrire des qu'il y a du routage OU une anomalie.
+
+    Rejouee par l'autotest : c'est ELLE qui a produit 99,4 % de lignes identiques,
+    et le garde doit savoir l'accuser si elle revenait.
+    """
+    return routes > 0 or anormaux > 0
+
+
+def _passer(routeur, boite, maintenance, historique, etat):
+    """Joue UNE passe sur les fichiers du cobaye. Rend (routes, anormaux).
+
+    Les quatre chemins sont poses sur le module AVANT l'appel : c'est la seule
+    facon d'eprouver la porte REELLE sans toucher au service (lecon L-032).
+    """
+    routeur.BOITE_MATRICE_IN = boite
+    routeur.BOITE_MAINTENANCE_IN = maintenance
+    routeur.HISTORIQUE = historique
+    routeur.CHEMIN_ETAT = etat
+    # La passe REELLE raconte ce qu'elle route : le cobaye se TAIT, sinon ses
+    # dizaines de lignes noieraient la sortie du garde (un garde illisible finit
+    # ignore -- lecon L-054). Ce qui compte ici, c'est la decision, pas le recit.
+    with contextlib.redirect_stdout(io.StringIO()):
+        routes = routeur.tour()
+    etat_courant = lire_etat(etat)
+    return routes, int(etat_courant.get("anormaux") or 0)
+
+
+# --------------------------------------------------------------------------- 1
+def controler_decision_pure(routeur, erreurs):
+    """La decision rend la meme reponse pour les memes nombres, sans disque."""
+    if not callable(getattr(routeur, "fait_notable", None)):
+        erreurs.append("la decision `fait_notable` n'existe pas : la regle n'est pas separable")
+        controler("decision-pure", False, "fait_notable ABSENTE")
+        return
+    normal = {"fin-mission": 2}
+    anormal = {"fin-mission": 2, "alerte-grave": 1}
+    signature_normal = routeur.signature_fait(normal)
+    signature_anormal = routeur.signature_fait(anormal)
+    cas = [
+        ("courrier route = fait", routeur.fait_notable(1, normal, signature_normal), True),
+        ("anomalie nouvelle = fait", routeur.fait_notable(0, anormal, signature_normal), True),
+        ("anomalie disparue = fait", routeur.fait_notable(0, normal, signature_anormal), True),
+        ("anomalie plus nombreuse = fait", routeur.fait_notable(0, {"alerte-grave": 3}, signature_anormal), True),
+        ("rien de neuf = absorbe", routeur.fait_notable(0, anormal, signature_anormal), False),
+        ("premiere passe = fait", routeur.fait_notable(0, normal, None), True),
+        # Le compteur de courrier ne doit PAS etre dans la signature : sinon le
+        # simple RETOUR a zero apres une passe qui a route passe pour un fait.
+        ("retour a zero absorbe", routeur.fait_notable(0, anormal, signature_anormal), False),
+    ]
+    echecs = [nom for nom, obtenu, attendu in cas if obtenu != attendu]
+    controler(
+        "decision-pure",
+        not echecs,
+        str(len(cas)) + " cas" + ("" if not echecs else " : ECHECS " + str(echecs)),
+    )
+    if echecs:
+        erreurs.append("decision de journalisation fausse : " + str(echecs))
+    # Le trafic NORMAL ne doit PAS entrer dans la signature : sans cela, l'inbox
+    # qui se remplit ferait grossir l'histoire (c'est le defaut d'origine, deplace).
+    signature_stable = (
+        routeur.signature_fait({"fin-mission": 2})
+        == routeur.signature_fait({"fin-mission": 99})
+    )
+    controler(
+        "trafic-normal-hors-signature",
+        signature_stable,
+        "2 ou 99 fin-mission : meme signature (l'inbox est un etat, pas un fait)",
+    )
+    if not signature_stable:
+        erreurs.append("le trafic normal entre dans la signature : l'histoire suivrait l'inbox")
+
+
+# --------------------------------------------------------------------------- 2
+def controler_cobaye(routeur, dossier, erreurs):
+    """Passe reelle sur un cobaye : rien de neuf = rien d'ecrit, mais tout est TRACE."""
+    boite = dossier / "inbox.jsonl"
+    maintenance = dossier / "maintenance.jsonl"
+    historique = dossier / "historique.jsonl"
+    etat = dossier / "etat.json"
+    ecrire_inbox(boite, [MESSAGE_A_ROUTER, MESSAGE_NORMAL, MESSAGE_NORMAL, MESSAGE_ANORMAL])
+
+    # 1. Premiere passe : le courrier est route, l'anomalie est vue -> UN fait.
+    routes, anormaux = _passer(routeur, boite, maintenance, historique, etat)
+    apres_1 = lignes_histoire(historique)
+    controler(
+        "passe-initiale-ecrite",
+        routes == 1 and len(apres_1) == 1 and anormaux == 1,
+        str(routes) + " route(s), " + str(len(apres_1)) + " ligne(s) d'histoire, "
+        + str(anormaux) + " anomalie(s)",
+    )
+    if len(apres_1) != 1:
+        erreurs.append("la premiere passe n'a pas laisse exactement un fait")
+
+    # 2. Cinq passes SANS CHANGEMENT : aucune ligne d'histoire nouvelle.
+    for _ in range(PASSES_ABSORBEES):
+        _passer(routeur, boite, maintenance, historique, etat)
+    apres_2 = lignes_histoire(historique)
+    controler(
+        "passe-sans-changement-absorbee",
+        len(apres_2) == len(apres_1),
+        "5 passes identiques -> " + str(len(apres_2)) + " ligne(s) d'histoire (inchange)",
+    )
+    if len(apres_2) != len(apres_1):
+        erreurs.append("une passe sans changement a ecrit une ligne : la redondance est revenue")
+
+    # 3. L'ETAT, lui, est ecrit a CHAQUE passe et AVANCE : c'est lui qui dit que la
+    #    routine vit et combien de passes ont ete absorbees (jamais silencieux).
+    etat_courant = lire_etat(etat)
+    controler(
+        "etat-ecrit-et-avance",
+        etat_courant.get("type") == "passe"
+        and int(etat_courant.get("passes_absorbes") or 0) == PASSES_ABSORBEES
+        and bool(etat_courant.get("date"))
+        and etat_courant.get("ignores") == 3,
+        "etat : " + str(PASSES_ABSORBEES) + " passe(s) absorbe(s), ignores="
+        + str(etat_courant.get("ignores")) + ", date=" + str(etat_courant.get("date")),
+    )
+    if int(etat_courant.get("passes_absorbes") or 0) != PASSES_ABSORBEES:
+        erreurs.append("l'etat n'avance pas : la redondance supprimee serait invisible")
+
+    # 4. Une ANOMALIE en plus = un fait, et la ligne DIT combien de passes ont ete
+    #    absorbees avant elle (la suppression est tracee, pas silencieuse).
+    ecrire_inbox(
+        boite,
+        [MESSAGE_NORMAL, MESSAGE_NORMAL, MESSAGE_ANORMAL, MESSAGE_ANORMAL,
+         {"type": "signaler", "niveau": "haute", "outil": "cobaye", "expediteur": "routine",
+          "traite_par_routeur": True}],
+    )
+    _passer(routeur, boite, maintenance, historique, etat)
+    apres_3 = lignes_histoire(historique)
+    derniere = json.loads(apres_3[-1]) if apres_3 else {}
+    controler(
+        "anomalie-ecrite-et-absorbee-tracee",
+        len(apres_3) == len(apres_2) + 1 and int(derniere.get("passes_absorbes") or 0) == PASSES_ABSORBEES,
+        "anomalie nouvelle -> 1 ligne, portant passes_absorbes=" + str(derniere.get("passes_absorbes")),
+    )
+    if len(apres_3) != len(apres_2) + 1:
+        erreurs.append("une anomalie nouvelle n'a pas laisse de fait")
+    if int(derniere.get("passes_absorbes") or 0) != PASSES_ABSORBEES:
+        erreurs.append("la ligne ecrite ne dit pas combien de passes avaient ete absorbees")
+
+    # 5. Du trafic NORMAL en plus = AUCUN fait : l'inbox est un etat.
+    ecrire_inbox(
+        boite,
+        [MESSAGE_NORMAL, MESSAGE_NORMAL, MESSAGE_NORMAL, MESSAGE_NORMAL,
+         MESSAGE_ANORMAL, MESSAGE_ANORMAL,
+         {"type": "signaler", "niveau": "haute", "outil": "cobaye", "expediteur": "routine",
+          "traite_par_routeur": True}],
+    )
+    _passer(routeur, boite, maintenance, historique, etat)
+    apres_4 = lignes_histoire(historique)
+    controler(
+        "inbox-qui-se-remplit-absorbee",
+        len(apres_4) == len(apres_3),
+        "4 fin-mission en plus -> " + str(len(apres_4)) + " ligne(s) d'histoire (inchange)",
+    )
+    if len(apres_4) != len(apres_3):
+        erreurs.append("l'inbox qui se remplit a fait grossir l'histoire : c'est l'etat d'origine")
+
+    # 6. Un message A ROUTER reste TOUJOURS un fait, meme seule anomalie inchangee.
+    ecrire_inbox(
+        boite,
+        [MESSAGE_NORMAL, MESSAGE_NORMAL, MESSAGE_NORMAL, MESSAGE_NORMAL,
+         MESSAGE_ANORMAL, MESSAGE_ANORMAL, MESSAGE_A_ROUTER],
+    )
+    routes_final, _ = _passer(routeur, boite, maintenance, historique, etat)
+    apres_5 = lignes_histoire(historique)
+    controler(
+        "courrier-route-toujours-ecrit",
+        routes_final == 1 and len(apres_5) == len(apres_4) + 1,
+        str(routes_final) + " route(s) -> " + str(len(apres_5)) + " ligne(s) d'histoire",
+    )
+    if len(apres_5) != len(apres_4) + 1:
+        erreurs.append("du courrier route n'a pas laisse de fait")
+
+    # Le courrier route a bien atteint la boite d'aval : un fait ne remplace pas
+    # l'action, il la TRACE.
+    controler(
+        "routage-effectif",
+        len(lignes_histoire(maintenance)) >= 2,
+        str(len(lignes_histoire(maintenance))) + " message(s) arrives en maintenance",
+    )
+    return len(apres_1), len(apres_5), len(apres_5) - len(apres_1)
+
+
+# --------------------------------------------------------------------------- 3
+def controler_autotest():
+    """Le garde doit ACCUSER l'ancienne regle (lecon L-032).
+
+    Sequence du cobaye : 1 passe avec du courrier, 5 passes identiques, une
+    anomalie nouvelle, une passe de trafic normal, un courrier. L'ancienne regle
+    ecrit une ligne a CHAQUE passe qui voit une anomalie -- c'est exactement le
+    defaut mesure en MO-080. Si elle ne produisait pas PLUS de lignes que la
+    nouvelle, c'est que ce garde ne saurait pas voir une redondance.
+    """
+    passes = [
+        (1, 1),  # courrier route + une anomalie
+        (0, 1), (0, 1), (0, 1), (0, 1), (0, 1),  # cinq passes sans changement
+        (0, 2),  # une anomalie de plus
+        (0, 2),  # trafic normal seul
+        (1, 2),  # courrier route
+    ]
+    anciennes = sum(1 for routes, anormaux in passes if ancienne_regle_faut_ecrire(routes, anormaux))
+    nouvelles = sum(
+        1 for index, (routes, anormaux) in enumerate(passes)
+        if index == 0 or routes > 0 or anormaux != passes[index - 1][1]
+    )
+    controler(
+        "autotest-ancienne-regle-accusee",
+        anciennes > nouvelles,
+        "ancienne regle : " + str(anciennes) + " ligne(s) ; nouvelle : " + str(nouvelles)
+        + " sur la meme sequence" + ("" if anciennes > nouvelles else " -- NON ACCUSEE"),
+    )
+    return anciennes > nouvelles
+
+
+# --------------------------------------------------------------------------- 4
+def controler_fabrique(matrix, erreurs):
+    """La routine DECLARE ses constantes et sa decision (lues dans la source)."""
+    source = matrix / "matrice" / "routines" / ROUTINE / NOM_SCRIPT
+    texte = source.read_text(encoding="utf-8", errors="replace") if source.is_file() else ""
+    manquants = [nom for nom in ("NOM_ETAT", "CHEMIN_ETAT", "def fait_notable", "def publier_etat")
+                 if nom not in texte]
+    controler(
+        "fabrique-declaree",
+        not manquants,
+        "etat et decision declares dans " + NOM_SCRIPT
+        if not manquants else "MANQUANT : " + ", ".join(manquants),
+    )
+    if manquants:
+        erreurs.append("la routine ne declare pas : " + ", ".join(manquants))
+
+    # --- Le journal de SERVICE : ce que le code REPARE y a ecrit ----------------
+    # On ne mesure PAS un ratio global de lignes repetees : le journal porte
+    # encore le bloc LEGACY ecrit AVANT la reparation (510 lignes identiques a la
+    # date pres). Ce bloc est de l'HISTOIRE (il a eu lieu) : le juger ici rendrait
+    # le garde rouge pour toujours, sans rien dire de la regle EN VIGUEUR. La
+    # reparation ne le reecrit pas -- elle l'empeche de s'allonger.
+    etat = matrix / "matrice" / "routines" / ROUTINE / NOM_ETAT
+    historique = matrix / "matrice" / "routines" / ROUTINE / NOM_HISTORIQUE
+    lignes = lignes_histoire(historique)
+    legacy = 0
+    faits = []
+    for ligne in lignes:
+        try:
+            evenement = json.loads(ligne)
+        except ValueError:
+            continue
+        if "routes" in evenement and "passes_absorbes" not in evenement:
+            legacy += 1
+        elif "passes_absorbes" in evenement:
+            faits.append(
+                json.dumps(
+                    {cle: valeur for cle, valeur in evenement.items() if cle != "date"},
+                    sort_keys=True,
+                    ensure_ascii=True,
+                )
+            )
+
+    # 1. L'ETAT est ecrit a CHAQUE passe : il porte la vie de la routine ET le
+    #    compte des passes absorbees (la redondance supprimee, TRACEE).
+    etat_service = lire_etat(etat)
+    controler(
+        "etat-de-service-present",
+        bool(etat_service) and etat_service.get("type") == "passe"
+        and "passes_absorbes" in etat_service and bool(etat_service.get("date")),
+        "routeur-etat.json : " + str(etat_service.get("date")) + ", ignores="
+        + str(etat_service.get("ignores")) + ", " + str(etat_service.get("passes_absorbes"))
+        + " passe(s) absorbe(s), derniere ecriture : " + str(etat_service.get("derniere_ecriture")),
+    )
+    if not etat_service:
+        erreurs.append("l'etat de passe du routeur est absent ou illisible")
+
+    # 2. La PREUVE sur le service, sans jamais le toucher : l'etat affiche au moins
+    #    une passe ABSORBEE. C'est exactement la propriete -- une passe sans fait
+    #    n'ecrit aucune ligne -- mesuree sur le journal REEL.
+    absorbees = int(etat_service.get("passes_absorbes") or 0)
+    controler(
+        "passe-absorbee-sur-le-service",
+        absorbees >= 1,
+        str(absorbees) + " passe(s) sans fait absorbe(s) depuis la derniere ligne ; "
+        + str(legacy) + " ligne(s) legacy au journal (bloc d'avant la reparation)",
+    )
+    if absorbees < 1:
+        erreurs.append(
+            "aucune passe absorbee sur le service : la routine tourne-t-elle le code repare ?"
+        )
+
+    # 3. Les FAITS ecrits par le code repare ne se repetent pas.
+    if faits:
+        controler(
+            "faits-toujours-distincts",
+            len(faits) == len(set(faits)),
+            str(len(faits)) + " fait(s) ecrit(s), " + str(len(set(faits)))
+            + " contenu(s) distinct(s)",
+        )
+        if len(faits) != len(set(faits)):
+            erreurs.append("deux faits identiques ont ete ecrits : un fait ne se repete pas")
+    else:
+        # NON-CHECK assume, jamais un faux vert : tant qu'aucun fait n'a ete
+        # ecrit, il n'y a RIEN a verifier ici (le cobaye, lui, a eprouve la regle).
+        print(
+            "[--] faits-toujours-distincts : aucun fait ecrit depuis la reparation"
+            " (rien a verifier sur le service -- voir le cobaye)"
+        )
+    _ = time.time()
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Garde : un journal consigne des FAITS, l'etat absorbe les passes sans changement"
+    )
+    parser.add_argument("--racine", default=".", help="Racine projet (defaut: cwd)")
+    arguments = parser.parse_args()
+
+    matrix = trouver_matrix(Path(arguments.racine).resolve())
+    if matrix is None:
+        print("Dossier matrix/ introuvable sous " + str(arguments.racine))
+        return 2
+    routeur = charger_routeur(matrix)
+    if routeur is None:
+        print("Routeur introuvable : " + str(matrix / "matrice" / "routines" / ROUTINE / NOM_SCRIPT))
+        return 2
+
+    print("VERIFIER HISTORIQUE NON REDONDANT -- des faits dans l'histoire, un etat dans l'etat")
+
+    dossier = Path(tempfile.mkdtemp(prefix="garde-historique-"))
+    erreurs = []
+    try:
+        controler_decision_pure(routeur, erreurs)
+        controler_cobaye(routeur, dossier, erreurs)
+        controler_autotest()
+        controler_fabrique(matrix, erreurs)
+    finally:
+        shutil.rmtree(dossier, ignore_errors=True)
+
+    echecs = [nom for nom, ok, _ in RESULTATS if not ok]
+    if erreurs or echecs:
+        for ecart in erreurs:
+            print("ECART : " + ecart)
+        print("")
+        print("VERDICT KO : l'historique du routeur recopie un etat au lieu de consigner des faits.")
+        return 1
+    print("")
+    print("VERDICT OK : l'histoire ne porte que des faits, l'etat absorbe le reste et le trace.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -6,17 +6,20 @@ Aucune logique metier ici (convention-architecture-outils).
 Usage :
     python main.py noter --outil <nom> --commande <verbe> --code <n> [--duree <ms>] --tags "a,b"
     python main.py lire [--outil <nom>] [--tag <tag>]
+    python main.py rotation [--racine <matrix>] (borne le journal en ARCHIVANT ses anciens)
     python main.py verifier
 """
 import sys
 
 from lire.entry import executer as lire_executer
 from noter.entry import executer as noter_executer
+from rotation.entry import executer as rotation_executer
 from verifier.entry import executer as verifier_executer
 
 COMMANDES = {
     "noter": noter_executer,
     "lire": lire_executer,
+    "rotation": rotation_executer,
     "verifier": verifier_executer,
 }
 

@@ -1,0 +1,100 @@
+"""Moteur partage : la DERNIERE session d'une BDD sessions (M-076, MO-092).
+
+Un moteur se PARTAGE, il ne se recopie pas (lecon L-029) : le pilote
+(injection/cycle.py, reprise de session) et l'outil bdd-sessions (lire
+--derniere) lisent la meme fonction, jamais deux copies.
+
+Le contrat de ce moteur est le FORMAT des entrees de data/sessions.json
+(id, date, session, tags, source), pas son chemin : chaque lecteur charge
+son propre fichier et passe la liste des entrees.
+
+MO-125 -- L'ORDRE DES ENTREES EST DEPARTAGE : la cle de recence est
+(horodatage, rang d'append). Le rang vient de la POSITION dans le fichier --
+la BDD est en ajout seul, donc l'entree ECRITE APRES est la plus recente. Sans
+ce departage, deux entrees a la MEME SECONDE s'inversaient selon l'ordre de
+lecture : l'accident S-052/S-053 de MO-119 (une cloture et une ouverture a la
+meme seconde) faisait trancher la reprise pour la CLOTURE, et la seule
+reparation possible etait de RE-NOTER l'entree. Chaque lecteur passe donc la
+liste DANS L'ORDRE DU FICHIER.
+"""
+from datetime import datetime
+
+# Le FORMAT de l'horodatage appartient au contrat de trace (MO-121/MO-124) :
+# celui qui ECRIT, celui qui RE-DATE et celui qui LIT partagent la MEME
+# constante (data/commun/trace_session.py) -- deux formats qui divergent,
+# c'est le trou que MO-121 a ferme (L-029 : un contrat se declare a UN domicile).
+from trace_session import FORMAT_HORODATAGE  # noqa: E402
+
+FORMAT_DATE = FORMAT_HORODATAGE
+TAG_OUVERTURE = "session-ouverte"
+TAG_FERMETURE = "session-fermee"
+
+
+def _parse_date(valeur):
+    """Retourne la date exploitable d'une entree, ou None (jamais d'exception).
+
+    Une donnee corrompue ne doit pas tuer la reprise : l'entree est ignoree.
+    """
+    if not isinstance(valeur, str):
+        return None
+    try:
+        return datetime.strptime(valeur, FORMAT_DATE)
+    except ValueError:
+        return None
+
+
+def derniere_session(entrees):
+    """Fonction PURE : la derniere session fermee, sinon la derniere ouverte.
+
+    Retourne (entree, etat) avec etat in {"fermee", "ouverte", "aucune"} :
+      - "fermee" : la derniere session a avoir ete cloturee proprement ;
+      - "ouverte" : aucune cloture, ou une ouverture PLUS RECENTE que la
+        derniere cloture (session precedente jamais fermee -- le cas de la
+        session interrompue, a annoncer BIEN VISIBLE a la reprise).
+    Une entree sans date exploitable est ignoree, pas une exception.
+    """
+    fermee = None
+    ouverte = None
+    for entree in entrees:
+        tags = entree.get("tags", [])
+        date = _parse_date(entree.get("date"))
+        if date is None:
+            continue
+        if TAG_FERMETURE in tags:
+            if fermee is None or date > (_parse_date(fermee.get("date")) or date):
+                fermee = entree
+        elif TAG_OUVERTURE in tags:
+            if ouverte is None or date > (_parse_date(ouverte.get("date")) or date):
+                ouverte = entree
+    if fermee is not None:
+        derniere_ouverture = _parse_date(ouverte.get("date")) if ouverte else None
+        if derniere_ouverture and derniere_ouverture > _parse_date(fermee.get("date")):
+            return ouverte, "ouverte"
+        return fermee, "fermee"
+    if ouverte is not None:
+        return ouverte, "ouverte"
+    return None, "aucune"
+
+def entrees_apres(entrees, entree):
+    """Les entrees PLUS RECENTES que `entree` (la trace a-t-elle avance ?).
+
+    Retourne (nombre, derniere) : le nombre d'entrees posterieures et la
+    derniere d'entre elles, ou (0, None). Une entree sans date exploitable
+    est ignoree, jamais une exception.
+
+    Ce moteur sert le GARDE DE RETARD (MO-121) : une porte qui rend la
+    derniere SESSION TAGUEE peut annoncer une session vieille de plusieurs
+    missions quand des faits plus recents existent -- elle doit le DIRE.
+    """
+    date_reference = _parse_date((entree or {}).get("date"))
+    if date_reference is None:
+        return 0, None
+    posterieures = []
+    for candidate in entrees:
+        date = _parse_date(candidate.get("date"))
+        if date is not None and date > date_reference:
+            posterieures.append(candidate)
+    if not posterieures:
+        return 0, None
+    derniere = max(posterieures, key=lambda element: _parse_date(element.get("date")))
+    return len(posterieures), derniere

@@ -186,7 +186,1148 @@
         "philosophie"
       ],
       "source": "correction-philosophie"
+    },
+    {
+      "id": "L-017",
+      "date": "2026-09-11 12:30:00",
+      "lecon": "Round auto-evolution ROUND-AUTO-001 (auto-valide, risque FAIBLE) : dossiers outils a tiret ne sont pas des packages Python -> main.py importe entry en direct, entry charge fonctions via importlib ; tester-theme accepte redirects vers dossier et auto-reference avec case ; SQL stats utilise WHERE 1=1. Preuve : tests passes (theme 0 erreur, CLIs OK).",
+      "tags": [
+        "auto-evolution",
+        "auto-valide",
+        "outils",
+        "ROUND-AUTO-001"
+      ],
+      "source": "auto-evolution"
+    },
+    {
+      "id": "L-018",
+      "date": "2026-09-11 18:48:16",
+      "lecon": "Perimetre scripts temporaires : comme en v1 (tmp-<agent>/, suppression fin mission), les scripts/cobayes Optimus vont dans matrix/tmp-optimus/ et ceux du cameleon dans matrix/tmp-cameleon/ (WRITE=matrix/ oblige). Contre-exemple : cobaye M-090 ecrit dans AppData Temp hors perimetre. DB_PATH des outils = parents[6]/matrice/data (compte depuis entry.py), jamais de chaine parent.*.* a l aveugle : verifier par execution.",
+      "tags": [
+        "auto-evolution",
+        "perimetre",
+        "tmp"
+      ],
+      "source": "M-091"
+    },
+    {
+      "id": "L-019",
+      "date": "2026-09-11 19:00:38",
+      "lecon": "Convention [mission] : porte officielle = entonnoir deposer -> vrac AMONT (convention-crochets preexistante respecte, pas de doublon). Suivi file via journal mission-creee/mission-terminee. Preuve : E-063 (M-095) et E-064 (M-096) deposees au vrac via la porte. Missions vues avec le createur = enchainables sans redemander (M-096, serie stricte, stop si CRITIQUE/echec).",
+      "tags": [
+        "convention",
+        "mission",
+        "entonnoir",
+        "chainage"
+      ],
+      "source": "M-095"
+    },
+    {
+      "id": "L-020",
+      "date": "2026-09-11 22:04:33",
+      "lecon": "Marbre suivi-optimus (decrete createur 2026-09-11) : Optimus declare debut/fin lui-meme via la porte, vue regeneree apres chaque mission, jamais edite a la main, zero mission fantome. Vue fige = violation.",
+      "tags": [
+        "marbre",
+        "suivi-optimus",
+        "createur"
+      ],
+      "source": "marbre"
+    },
+    {
+      "id": "L-021",
+      "date": "2026-09-12 10:11:26",
+      "lecon": "Doctrine double flux (M-126, decrete createur 2026-09-12) : Flux 1 CAMELEON = Matrice GUIDE le cameleon (themes, pilote, injections, non-regression du FLUX) ; Flux 2 MAINTENANCE = Matrice SURVEILLE Optimus dans flux reserve et verrouille (espions-optimus integrite/activite + remorque + suivi-optimus marbre + BDD modifications/stockage verrouille). Deux flux jamais melanges, jamais brises, serie stricte partout, seul point commun = La Matrice.",
+      "tags": [
+        "double-flux",
+        "flux-1",
+        "flux-2",
+        "surveillance",
+        "cameleon",
+        "optimus",
+        "M-126"
+      ],
+      "source": "M-126 double flux"
+    },
+    {
+      "id": "L-022",
+      "date": "2026-09-12 10:19:16",
+      "lecon": "Deux demarrages miroirs = deux flux verrouilles : demarrer-cameleon.md (Flux 1 COMMUNICATION, id=cameleon, Matrice guide via pilote, cameleon ignore qu'il est dirige) et demarrer-optimus-prime.md (Flux 2 maintenance reservee, id=optimus-prime, Matrice surveille Optimus, hors pilote). Une seule Matrice, deux portes, jamais melangees. L'allowlist WRITE s'ouvre a 2 : {demarrer-optimus-prime.md, demarrer-cameleon.md} (garde-perimetre + regle perimetre-write). Invisibilite L-016 : le demarrage cameleon ne nomme jamais _operateur/optimus.",
+      "tags": [
+        "demarrage",
+        "flux",
+        "cameleon",
+        "matrice",
+        "perimetre",
+        "invisibilite"
+      ],
+      "source": "M-127 demarrer-cameleon"
+    },
+    {
+      "id": "L-023",
+      "date": "2026-09-12 13:04:27",
+      "lecon": "Cockpit verrouille (M-129) : quand la Matrice survit aux [pause], l'operateur a besoin d'un espace de verification en lecture seule (pas d'ecriture, pas de drapeau) -- sinon il relit les fichiers a la main et casse le marbre. Solution : Matrice comme serveur distant, routes privees /etat /sante /flux1 /flux2 /metriques agregees via les portes officielles (vie/server/pause/defcon + marbre/BDD + pilote + espions), domicile _operateur invisible cameleon (perimetre maintenance,_operateur, filtre L-016).",
+      "tags": [
+        "cockpit",
+        "server-distant",
+        "flux2",
+        "lecture-seule",
+        "m-129"
+      ],
+      "source": "M-129 cockpit-matrice"
+    },
+    {
+      "id": "L-024",
+      "date": "2026-09-12 13:52:54",
+      "lecon": "Optimus doit s'auto-declencher sur 3 capteurs : A=friction 3/3 (pendant mission) -> auto-evolution, B=metrique > seuil (entre missions, cockpit metriques) -> PERFORMANCE, C=sante rouge (verifier coherence/marbre/SHA) -> REPARATION. Le rituel FIN DE MISSION (noter fin + vue + verifier + lire frictions + cockpit metriques) est le declencheur principal, enferme dans theme-reprise-mission. Le fichier est secondaire : c'est OPTIMUS qui est corrige pour que ca n'arrive plus (verifier coherence + garde anti-fin-orpheline + sync theme).",
+      "tags": [
+        "declencheurs",
+        "auto-evolution",
+        "performance",
+        "rituel",
+        "marbre"
+      ],
+      "source": "M-130"
+    },
+    {
+      "id": "L-025",
+      "date": "2026-09-13 09:05:38",
+      "lecon": "Prefixe mission Flux 2 : les missions Optimus sont MO-xxx (pilote/constants.py PREFIXE_ID), JAMAIS M- (cameleon - une mission M- part dans son entonnoir). Cause racine MO-030 : les sources de demarrage enseignaient M-XXX. Repare : 8 sources corrigees + garde AVERTISSEMENT M- dans suivi-optimus noter. Corollaire marbre L-020 : le pilote ne note RIEN dans suivi-optimus, appeler_suivi_optimus supprime des 2 portes (doublon MO-030 attrape par verifier).",
+      "tags": [
+        "prefixe",
+        "mo",
+        "m030",
+        "L020",
+        "flux2"
+      ],
+      "source": "MO-030"
+    },
+    {
+      "id": "L-026",
+      "date": "2026-09-13 09:25:37",
+      "lecon": "Une passe (ou une boucle) qui journalise son DEBUT sans jamais journaliser sa FIN est MORTE EN SILENCE : le superviseur la relance sans fin et la surveillance disparait reellement, sans aucune alerte. Regle : 1) tout sous-processus est protege contre OSError -- une commande qui ne peut pas se lancer est une DETECTION journalisee, jamais une exception qui tue la passe (symetrie des gardes entre etapes) ; 2) sur Windows la ligne de commande est plafonnee (~32767 caracteres) : une longue liste de fichiers se passe PAR LOTS, jamais d'un bloc (WinError 206 = nom de fichier ou extension trop long) ; 3) la sante d'une routine se lit sur ses FIN (passe-fin), pas sur la presence d'un PID -- un PID absent avec des debuts reguliers = boucle qui crashe a chaque passe ; 4) une porte qui ne couvre qu'une partie du reel (retirer seulement le vrac, jamais les files) fait pourrir les donnees : la porte manquante est un ecart a reparer, pas un contournement a faire a la main.",
+      "tags": [
+        "veille-flux",
+        "routine",
+        "sous-processus",
+        "windows",
+        "erreur-silencieuse",
+        "porte-manquante",
+        "mo-035"
+      ],
+      "source": "MO-035"
+    },
+    {
+      "id": "L-027",
+      "date": "2026-09-13 09:37:58",
+      "lecon": "Un fichier Python au nom TIRE (ex : detecteur-mots-cles.py) n'est JAMAIS importable par un import classique : il se charge PAR CHEMIN (importlib.util.spec_from_file_location) ou s'appelle en sous-processus. Un import impossible au chargement tue TOUT le point d'entree : le pilote du cameleon ne demarrait plus du tout (ModuleNotFoundError sur from detecteur_mots_cles import ...), et la panne etait invisible parce que RIEN ne testait la porte reelle -- les suites ne regardaient que les fichiers. Regle : 1) tout ajout dans un dossier qui a un main.py se teste en lancant le main.py (pas le fichier ajoute) ; 2) une non-regression de FLUX (imperatif 62) parcourt la chaine maillon par maillon et nomme le maillon rompu : c'est elle qui a trouve la panne en un appel ; 3) ne jamais renommer un fichier au nom tire pour 'arranger' un import : on corrige l'import.",
+      "tags": [
+        "import-tiret",
+        "pilote",
+        "flux",
+        "non-regression",
+        "imperatif-62",
+        "erreur-silencieuse",
+        "e-095"
+      ],
+      "source": "MO-038 / E-095"
+    },
+    {
+      "id": "L-028",
+      "date": "2026-09-13 10:06:50",
+      "lecon": "Un controle dont la racine est passee a l'interieur d'une zone exclue ne voit RIEN (faux vert). Les exclusions doivent etre RELATIVES a la racine controlee (chemin.relative_to(racine).parts), jamais evaluees sur le chemin ABSOLU : sinon un --racine pointant dans tmp-* (ou tout cobaye) est ignore en silence. Regle generale : tout controle doit D'ABORD prouver qu'il detecte un ecart connu (cobaye negatif), jamais seulement afficher 'OK'.",
+      "tags": [
+        "test",
+        "negatif",
+        "faux-vert",
+        "controle",
+        "chemin"
+      ],
+      "source": "MO-042 verifier-contrat-fondamental"
+    },
+    {
+      "id": "L-029",
+      "date": "2026-09-13 10:52:29",
+      "lecon": "COLLISION DE NOM ENTRE UN MODULE PARTAGE ET UNE CATEGORIE DE PILOTE : un module place dans un dossier PARTAGE pose dans sys.path (data/commun, motif M-076) et qui porte le nom d'un dossier-categorie importable d'un pilote (pilote/profil/) TUE ce pilote -- Python resout le MODULE et masque le PAQUET (ModuleNotFoundError: 'profil' is not a package). Le pilote meurt SANS UN MOT (aucun test unitaire ne le voit : seule la non-regression du FLUX le voit). Creer un module partage = verifier d'abord que son nom n'est le nom d'aucune categorie importable ; nommer le module par ce qu'il EST (fiche_profil.py), jamais par le dossier qu'il sert. Controle automatique : verifier-contrat-fondamental.py collisions.",
+      "tags": [
+        "nommage",
+        "collision",
+        "module",
+        "partage",
+        "pilote",
+        "sys.path",
+        "imports"
+      ],
+      "source": "MO-043 regression 2026-09-13 (data/commun/profil.py a tue le pilote maintenance)"
+    },
+    {
+      "id": "L-030",
+      "date": "2026-09-13 10:52:34",
+      "lecon": "RENOMMER N'EST PAS DEPLACER : renommer un objet vivant (combo, dossier, module) laisse MUETS tous ceux qui l'avaient RECOPIE -- la remorque (inventaire.json), le registre d'empreintes (espion-integrite), les README, l'historique BDD. Renommer = 1) migrer le disque, 2) RE-GENERER les inventaires et registres par leur porte (inventorier / enregistrer), 3) NOTER le renommage dans la BDD modifications (action supprime sur l'ancien chemin + cree sur le nouveau : le vocabulaire n'accepte pas 'renomme', le detail porte le lien ancien -> nouveau), 4) controler par la non-regression. Un renommage non note laisse l'historique menteur : le fichier n'a ni fin ni origine.",
+      "tags": [
+        "renommage",
+        "migration",
+        "inventaire",
+        "registre",
+        "bdd",
+        "tracabilite"
+      ],
+      "source": "MO-043 renommage des combos numerotes 2026-09-13"
+    },
+    {
+      "id": "L-031",
+      "date": "2026-09-13 11:12:29",
+      "lecon": "UN PREFIXE PARTAGE ENTRE DEUX FAMILLES EST UN BUG QUI ATTEND SON HEURE : deux nomenclatures qui prennent la meme lettre (conventions C- et champ constat C-) rendent toute citation AMBIGUE -- un lecteur, un agent ou un log ne peut plus dire de quoi parle C-008, et l'ambiguite survit des annees parce qu'aucun outil ne se plaint. Regle (CV-009) : chaque famille a SON prefixe, et on tranche ainsi -- le namespace VIVANT prend le prefixe propre ; l'HISTORIQUE fige (journal en ajout seul) ne se reecrit jamais POUR RIEN, mais une VALEUR DE CHAMP peut etre migree si on le fait par un outil garde et qu'on laisse la trace (cas resolu MO-046 : le champ constat est passe de C- a CT-, les 32 valeurs migrees gardant leur origine dans constat_legacy ; les conventions, elles, sont passees de C- a CV-). Corollaire : renommer un id se fait par la PORTE (verbe renommer, trace ancien_id), jamais dans un editeur -- et toute porte de BDD doit offrir renommer + modifier des le premier jour (CV-010).",
+      "tags": [
+        "prefixe",
+        "id",
+        "nomenclature",
+        "collision",
+        "migration",
+        "renommer",
+        "porte"
+      ],
+      "source": "MO-045 et MO-046 (C- -> CV- et CT-)"
+    },
+    {
+      "id": "L-032",
+      "date": "2026-09-13 11:18:11",
+      "lecon": "UN COBAYE NEGATIF QUI SORT VERT EST UN COBAYE SUSPECT, PAS UN CONTROLE VALIDE : avant de conclure qu'un garde-fou fonctionne, verifier que la donnee piegee est plantee exactement la ou le controle la cherche (racine et chemin relatifs). Pendant MO-046, les 3 cobayes du controle 'prefixes' sortaient tous 'OK : aucun ecart' -- non pas parce que le controle etait bon, mais parce que leur racine avait un niveau 'matrix/' en trop : le controle ne trouvait aucun fichier de famille et concluait sainement... sur du vide. Le controle n'a ete prouve qu'apres avoir relu l'arbre des cobayes et corrige la racine invoquee (sain 0, partage 2 ecarts, mort 2 ecarts). Recette : un cobaye negatif se valide EN VERIFIANT QU'IL DETECTE, jamais en constatant qu'il ne dit rien.",
+      "tags": [
+        "cobaye",
+        "test",
+        "garde-fou",
+        "racine",
+        "verification",
+        "mo-046"
+      ],
+      "source": "MO-046"
+    },
+    {
+      "id": "L-033",
+      "date": "2026-09-13 11:29:46",
+      "lecon": "UNE MISSION MENEE HORS FILE LAISSE LE COMPTEUR D'IDS EN ARRIERE : le pilote attribue les identifiants par un simple compteur (prochain_id = compteur + 1). Une mission menee directement (sans charger/injecter) ne fait PAS avancer ce compteur -- la charge suivante reprend donc un identifiant DEJA PRIS. Cas reel du 2026-09-13 : MO-043 close et MO-045/MO-046 menees hors file -> compteur bloque a 44 -> la prochaine mission chargee aurait ete MO-045, en double du journal. Recette : apres toute mission menee hors file, l'enregistrer (verbe 'enregistrer' du pilote) pour remettre le compteur a niveau, JAMAIS seulement la declarer au journal.",
+      "tags": [
+        "pilote",
+        "id",
+        "compteur",
+        "file",
+        "hors-file",
+        "mo-047"
+      ],
+      "source": "MO-047"
+    },
+    {
+      "id": "L-034",
+      "date": "2026-09-13 11:29:46",
+      "lecon": "UNE FICHE QUI DECRIT UNE AUTOMATISATION RETIREE EST UN PIEGE A AGENTS : quand on retire un comportement du code, il faut corriger SA FICHE dans le meme geste. La DESCRIPTION du pilote annoncait encore que le pilote notait lui-meme le suivi-optimus (DEBUT apres injecter, FIN apres fin, 'l'agent n'a plus a le faire manuellement') alors que ce comportement avait ete retire le 2026-09-11 (marbre L-020 : le pilote ne note RIEN, il rafraichit seulement la VUE). Consequence reelle : c'est cette fiche qui a fait croire que le pilote mettait a jour suivi-optimus, et qui a fait chercher le bug au mauvais endroit. Un code juste avec une fiche fausse produit un agent qui doute du code.",
+      "tags": [
+        "doc",
+        "fiche",
+        "pilote",
+        "verite",
+        "marbre",
+        "mo-047"
+      ],
+      "source": "MO-047"
+    },
+    {
+      "id": "L-035",
+      "date": "2026-09-13 11:39:37",
+      "lecon": "DEUX TRACES ECRITES PAR DEUX ACTEURS DIVERGENT EN SILENCE : le pilote ecrit la FILE (charger/injecter/fin), c'est l'AGENT qui declare au JOURNAL (marbre L-020 : le pilote ne note RIEN). Deux fichiers vivants, aucun outil ne les croisait -- donc MO-043 est restee 'en-cours' dans la file 40 minutes apres sa fin declaree, et le compteur est reste a 44 alors que MO-045 et MO-046 existaient deja (la charge suivante aurait repris un id PRIS). Recette : quand une meme realite est ecrite par DEUX acteurs a DEUX endroits, la divergence est STRUCTURELLE, pas accidentelle -- ecrire le controle qui CROISE les deux traces, et le prouver sur un cobaye (un controle qu'on ne peut pas pieger n'est pas un controle, L-032).",
+      "tags": [
+        "coherence",
+        "pilote",
+        "journal",
+        "controle",
+        "id",
+        "mo-048"
+      ],
+      "source": "MO-048"
+    },
+    {
+      "id": "L-036",
+      "date": "2026-09-13 11:47:53",
+      "lecon": "UN CHAMP FERME QU'UN SEUL CHEMIN VALIDE EST UN CHAMP OUVERT : le theme d'une mission etait garde par 'charger' / 'transformer' (valider_theme), mais l'ENTONNOIR accepte un theme en TEXTE LIBRE et l'injection ne verifiait que le defcon. Resultat : 9 missions ont porte un theme hors vivier ('MATRICE', qui n'est pas un role mais l'objet du travail) sans qu'aucune porte ne s'en plaigne -- un role inexistant, donc aucune identite et aucun sens. Recette : un champ ferme se garde au POINT DE PASSAGE UNIQUE (l'injection, par ou passe TOUT : entonnoir, charger, file modifiee a la main) -- garder chaque porte separement laisse toujours une porte derobee, et dupliquer la lecture du referentiel cree une deuxieme source de verite (le drift qu'on vient de supprimer avec CV-009/CV-011). Corollaire : la correction a besoin de SA porte ('retiqueter', qui accepte tout statut et garde la trace theme_avant), sinon on ne peut reparer que ce qui n'est pas encore commence.",
+      "tags": [
+        "pilote",
+        "theme",
+        "champ-ferme",
+        "entonnoir",
+        "porte",
+        "mo-049"
+      ],
+      "source": "MO-049"
+    },
+    {
+      "id": "L-037",
+      "date": "2026-09-13 11:47:53",
+      "lecon": "UN GARDE-FOU QUI PEUT ETRE VIDE EST UN GARDE-FOU ABSENT : 'fabrique_checklist' rendait une liste VIDE pour tout type hors des 5 types fermes (dev/reparation/doc/audit/revision), avec l'intention affichee de forcer le passage par l'entonnoir. Consequence reelle : MO-043 a MO-048 ont tourne SANS AUCUN garde-fou -- ni tests reels, ni py_compile, ni ASCII, ni fin par le pilote -- et personne ne l'a vu, parce qu'un garde-fou vide ne dit rien (il ne dit pas 'je manque', il dit 'rien'). Recette : un garde-fou a un PLANCHER obligatoire (les garde-fous COMMUNS valent pour toute mission, ils ne dependent pas du type) ; ce qui depend du type reste une EXTENSION qui, si elle manque, s'ANNONCE (ECART a l'injection).",
+      "tags": [
+        "checklist",
+        "garde-fou",
+        "pilote",
+        "mo-049"
+      ],
+      "source": "MO-049"
+    },
+    {
+      "id": "L-038",
+      "date": "2026-09-13 11:50:31",
+      "lecon": "UN JOURNAL QUI ACCUEILLE TOUT LE MONDE NE TRACE PLUS PERSONNE : le journal suivi-optimus est la trace d'OPTMUS, mais il a recemporte le 2026-09-12 la totalite des missions du CAMELEON (90 ids M-) et des libelles d'entonnoir (E-089, AUDIT-NEMESIS) -- 184 evenements sur 242. Consequence : une vue qui affiche 4 fois plus d'evenements qu'il n'en existe, des compteurs fausses, et un croisement file <-> journal incapable de crier juste (la dette etait signalee, mais noyee). Recette : un perimetre se GARDE (un controle qui croise le prefixe -- c'est ce qui l'a rendu visible) et se NETTOIE par une porte qui ARCHIVE et non qui supprime (la valeur d'un journal d'historique vient de sa completude). Corollaire : quand une trace est partagee, le partage doit etre explicitement declare (champ ou prefixe), jamais subi par accident d'import.",
+      "tags": [
+        "suivi-optimus",
+        "perimetre",
+        "journal",
+        "archivage",
+        "mo-050"
+      ],
+      "source": "MO-050"
+    },
+    {
+      "id": "L-039",
+      "date": "2026-09-13 11:58:20",
+      "lecon": "Un fichier que sa porte ne trouve pas est un fichier MORT : il traverse les relectures, les gardes-fous et les inventaires sans jamais etre execute, et personne ne voit qu'il ne sert a rien. Le questionnaire du profil en etait la preuve : la porte le cherchait dans profil/ alors qu'il vivait un cran plus haut, et son chemin calcule en comptant les parents pointait un fichier mythique -- deux morts dans le meme fichier.",
+      "tags": [
+        "porte",
+        "fichier-mort",
+        "chemin",
+        "questionnaire"
+      ],
+      "source": "MO-051"
+    },
+    {
+      "id": "L-040",
+      "date": "2026-09-13 12:01:02",
+      "lecon": "Une porte et le garde-fou qui la surveille peuvent se NEUTRALISER : archiver rend un evenement ABSENT du journal, et un garde anti-doublon qui ne connait que le journal actif le reimporte aussitot. Un nettoyage qui n'inclut pas ce qu'il a deplace dans 'deja connu' est un nettoyage qui s'annule tout seul -- et il s'annule en silence, par un processus de fond, apres que tout a ete verifie.",
+      "tags": [
+        "porte",
+        "garde-fou",
+        "neutralisation",
+        "archive",
+        "routine"
+      ],
+      "source": "MO-052"
+    },
+    {
+      "id": "L-041",
+      "date": "2026-09-13 12:05:11",
+      "lecon": "Un mode diagnostic qui partage le fichier d'etat du service qu'il observe le fait MENTIR : une passe --once ecrivait puis effacait le PID du demon, et la supervision annoncait 'ARRET' pendant que la routine tournait. Un outil de diagnostic ne doit pas laisser de trace dans l'etat du service -- sinon on cherche le probleme dans le mauvais processus.",
+      "tags": [
+        "diagnostic",
+        "etat",
+        "pid",
+        "demon",
+        "supervision"
+      ],
+      "source": "MO-053"
+    },
+    {
+      "id": "L-042",
+      "date": "2026-09-13 12:07:51",
+      "lecon": "Une porte qui n'ecrit que la MOITIE d'un fait fabrique elle-meme l'incoherence qu'un autre controle devra signaler : enregistrer un fait dans une trace et pas dans l'autre, c'est creer un ecart a chaque appel -- et l'ecart tombe sur l'agent, qui n'a rien fait de mal. Quand deux traces decrivent le meme fait, la porte qui en ecrit une doit ecrire l'autre.",
+      "tags": [
+        "porte",
+        "coherence",
+        "deux-traces",
+        "moitie"
+      ],
+      "source": "MO-054"
+    },
+    {
+      "id": "L-043",
+      "date": "2026-09-13 12:19:14",
+      "lecon": "Une porte qui ne repond RIEN et une porte qui va bien se ressemblent : 'aucun resultat' ne distingue pas 'il n'y a rien' de 'je suis aveugle'. Il faut un TEMOIN -- une requete dont on connait la reponse -- sinon la panne la plus grave (le moteur qui ne voit plus rien) est indiscernable du fonctionnement normal. Et le temoin doit etre rejoue a chaque passe : c'est ce que fait la vigie-portes.",
+      "tags": [
+        "porte",
+        "temoin",
+        "aveugle",
+        "moteur",
+        "surveillance"
+      ],
+      "source": "MO-055/MO-056"
+    },
+    {
+      "id": "L-044",
+      "date": "2026-09-13 14:03:43",
+      "lecon": "PREFIXE D'UNE COPIE : une COPIE d'un meme outil dans un autre flux cree une FAMILLE d'identifiants de plus -- elle n'herite pas du prefixe de l'original. Cas reel (MO-058) : les DEUX entonnoirs (cameleon Flux 1 / Optimus Flux 2) emettaient E- avec DEUX compteurs separes, donc le meme id designait deux items et les plages se recouvraient (E-084..E-089 emis des deux cotes) ; la declarations CV-011 ne listait qu'UNE famille 'items d entonnoir E-', et le controle des prefixes ne lisait pas l'entonnoir du tout -- rien ne pouvait le voir. Remede : l'entonnoir d'Optimus prend EO- (PREFIXE_ITEM dans son listes.py, jamais recopie) et les deux familles entrent dans FAMILLES_IDS. Corollaire : un prefixe se declare la ou il est ATTRIBUE, et un controle qui ne regarde que les familles declarees est aveugle a la famille qu'on a oublie de declarer -- exactement comme un garde-fou vide.",
+      "tags": [
+        "prefixe",
+        "id",
+        "entonnoir",
+        "collision",
+        "contrat",
+        "copie",
+        "quotas"
+      ],
+      "source": "MO-058 (2026-09-13) : separation E- / EO-"
+    },
+    {
+      "id": "L-045",
+      "date": "2026-09-13 14:10:30",
+      "lecon": "SURVEILLER LA FABRIQUE DE L'ID, pas seulement les ids emis. Un controle des prefixes qui ne lit que les DONNEES est aveugle a la CAUSE d'une fuite : le code qui fabrique l'identifiant. Cas reel (MO-059) : le pilote du cameleon attribuait ses ids par un prefixe LITTERAL concatene au compteur, alors que le pilote d'Optimus, LUI, lisait PREFIXE_ID de ses constantes -- deux copies du meme code, une seule regle respectee, et un agent a pu croire que le prefixe du cameleon etait celui de la Matrice (missions d'Optimus parties en M-). Remede : (1) chaque proprietaire d'ids DECLARE son prefixe dans ses constantes (constants.py PREFIXE_ID, listes.py PREFIXE_ITEM) et le CONSOMME -- sept portes corrigees d'un coup (M- H- L- P- R- V- TH-) ; (2) le controle des prefixes gagne une detection de la FABRIQUE : un litteral prefixe concatene sur une ligne qui apparie un remplissage de zeros = ECART bloquant. Piege a connaitre : la detection lit du TEXTE, donc un exemple du motif fautif cite dans un commentaire... est signale -- il faut decrire le motif sans l'ecrire.",
+      "tags": [
+        "prefixe",
+        "id",
+        "controle",
+        "contrat",
+        "source-de-verite",
+        "copie"
+      ],
+      "source": "MO-059 (2026-09-13) : prefixe depuis les constantes + controle de la fabrique"
+    },
+    {
+      "id": "L-046",
+      "date": "2026-09-13 14:35:23",
+      "lecon": "Une valeur qui sert DEUX roles finit par etre recopiee partout : le 60 s etait la cadence de supervision du server ET la cadence imposee aux routines -- celles-ci declaraient 300/300/900/900 et tournaient toutes a 60. Deux roles = deux valeurs. Pire qu'un ordre absent : un ordre DECLARE mais jamais consomme (COMMANDE_VEILLE/ESPION/VIGIE_PROFIL, commander_suivi_sync) fait croire que la regle est appliquee.",
+      "tags": [
+        "cadence",
+        "server",
+        "routines",
+        "doublon"
+      ],
+      "source": "MO-061"
+    },
+    {
+      "id": "L-047",
+      "date": "2026-09-13 14:35:23",
+      "lecon": "Un consommateur qui filtre sur UN SEUL type de message et compte ses ignores SANS les nommer ne protege rien : le routeur ecrivait 'ignores: 106' en anonyme, donc 10 alertes graves et 8 signalements sont restes bloques une journee sans qu'aucune alerte ne le dise. Ce qui n'est pas route doit etre COMPTE et NOMME, et un type inattendu doit laisser une trace meme sans routage.",
+      "tags": [
+        "alerte",
+        "routeur",
+        "silence",
+        "garde-fou"
+      ],
+      "source": "MO-061"
+    },
+    {
+      "id": "L-048",
+      "date": "2026-09-13 14:35:23",
+      "lecon": "Un chemin ABSOLU PERSISTE (signature anti-spam, theme de mission) ne vaut que sur la machine qui l'a ecrit : un 'Z:/...' dans une donnee, et un projet deplace declare mortes des cibles vivantes. On persiste du RELATIF a la racine DETECTEE, on resout a l'usage.",
+      "tags": [
+        "portabilite",
+        "chemin",
+        "absolu",
+        "persistance"
+      ],
+      "source": "MO-061"
+    },
+    {
+      "id": "L-049",
+      "date": "2026-09-13 15:16:48",
+      "lecon": "VERIFIER N'EST PAS ATTENDRE : une cadence se LIT (la routine la publie a l'allumage), elle ne se prouve pas en patientant 900 s. Et toute attente longue doit etre DECOUPEE pour que l'arret soit vu en quelques secondes.",
+      "tags": [
+        "verification",
+        "routines"
+      ],
+      "source": "createur 2026-09-13 / MO-062"
+    },
+    {
+      "id": "L-050",
+      "date": "2026-09-13 15:16:49",
+      "lecon": "Le PID file est la VERITE PARTAGEE d'une routine : l'autorite (le serveur) doit le REPUBLIER a chaque cycle des qu'elle trouve une routine vivante sans lui -- sinon l'etat et le flux la croient morte pendant que le serveur la croit vivante (deux verites, orphelin durable).",
+      "tags": [
+        "serveur",
+        "routines",
+        "pid"
+      ],
+      "source": "MO-062"
+    },
+    {
+      "id": "L-051",
+      "date": "2026-09-13 15:16:49",
+      "lecon": "Un inventaire d'EQUIPEMENTS ne ramasse jamais l'ETAT d'un processus (PID, drapeau, journal) : il crierait INATTENDU tant que le processus vit, puis MANQUANT quand il meurt. Un equipement est permanent ; l'etat ne l'est pas.",
+      "tags": [
+        "inventaire",
+        "remorque"
+      ],
+      "source": "MO-062"
+    },
+    {
+      "id": "L-052",
+      "date": "2026-09-13 15:16:49",
+      "lecon": "Un chemin d'insertion MORT ne se revele que le jour ou on en a besoin : suivi-sync montait d'un cran de trop (matrice/routines/data/commun) et son sys.path.insert ne levait rien. On VERIFIE l'existence du dossier partage, on ne se contente pas d'inserer.",
+      "tags": [
+        "chemins",
+        "suivi-sync"
+      ],
+      "source": "MO-062"
+    },
+    {
+      "id": "L-053",
+      "date": "2026-09-13 15:16:49",
+      "lecon": "Un cobaye ne se pose JAMAIS sur une entite EN SERVICE : mon premier essai a efface le PID de l'espion vivant et fabrique un orphelin. Copier l'entite dans un dossier d'essai, et rendre l'etat dans un finally quoi qu'il arrive.",
+      "tags": [
+        "cobaye",
+        "honnetete"
+      ],
+      "source": "MO-062"
+    },
+    {
+      "id": "L-054",
+      "date": "2026-09-13 17:44:14",
+      "lecon": "Un garde qui echoue TOUJOURS pour la meme fausse raison (ici un dossier courant) est un garde deja mort : on apprend a l'ignorer. Un controle doit crier quand la chose est cassee, pas quand on le lance d'un autre dossier.",
+      "tags": [
+        "garde-fous",
+        "non-regression"
+      ],
+      "source": "MO-062"
+    },
+    {
+      "id": "L-055",
+      "date": "2026-09-13 15:23:47",
+      "lecon": "Un cobaye JETABLE ne protege rien : une preuve de mission doit devenir un GARDE RECURRENT (outil + etape bloquante), sinon la panne revient des la session suivante sans que personne ne la voie. Et ce garde doit etre PIEGE : on prouve qu'il DETECTE (fautes plantees) ET qu'il EPARGNE (zero faux positif) -- un detecteur jamais vu se declencher ne prouve rien.",
+      "tags": [
+        "garde-fous",
+        "cobaye",
+        "perennite"
+      ],
+      "source": "MO-064"
+    },
+    {
+      "id": "L-056",
+      "date": "2026-09-13 15:23:47",
+      "lecon": "Un garde recurrent ne touche JAMAIS une entite en service (lecon L-053) : 'verifier sans attendre' est en LECTURE SEULE -- il lit la porte, il lit les journaux, il eprouve le mecanisme d'attente sur son propre drapeau, et son cobaye vit HORS du projet (dossier temporaire du systeme). Un harnais qui laisse un residu fait crier le garde des residus.",
+      "tags": [
+        "garde-fous",
+        "cobaye"
+      ],
+      "source": "MO-064"
+    },
+    {
+      "id": "L-057",
+      "date": "2026-09-13 15:56:36",
+      "lecon": "UN DOSSIER HORS DE LA TABLE D'ARCHITECTURE EST UN INTRUS : le 2026-09-13, matrice/pilote contenait DEUX dossiers d'injection -- injection/ (la porte, SEULE citee dans la table d'architecture de DESCRIPTION.md) et injections/ (moteur de catalogue ne la veille, jamais committe, absent de la table). Quatre symptomes mesures, tous de la meme famille : 1) deux namespace packages voisins sans __init__.py -> le nom ne determine plus le fichier ; 2) trois champs declares et JAMAIS lus (obligatoire, section, et le type outil declare 6 fois) -> autant de gardes neutralises ; 3) 11/11 sources du catalogue Optimus mortes, mais le moteur imprimait [FICHIER INTRUVABLE: ...] et rendait code 0 -> degradation silencieuse ; 4) un README qui affirmait un branchement inexistant vers demarrer-cameleon.md. REGLE : avant de creer un dossier, le chercher dans la table d'architecture (le nom qui fait foi est celui de la table) ; tout champ declare dans une donnee doit etre SERVI ou SIGNALE, jamais ignore ; une source obligatoire absente doit crier, pas imprimer un vide.",
+      "tags": [
+        "architecture",
+        "imports",
+        "doublon",
+        "garde-neutralise",
+        "injection"
+      ],
+      "source": "fix injection/injections 2026-09-13"
+    },
+    {
+      "id": "L-058",
+      "date": "2026-09-13 16:10:16",
+      "lecon": "UNE PORTE NE REFUSE PAS UN FAIT REEL : mesure du 2026-09-13 -- j'avais ajoute au verbe noter un refus sec du 2e debut/fin pour empecher le doublon MO-061. Or le controle verifier admet un doublon VOLONTAIRE DOCUMENTE (REPRISES_DOUBLON_OK : meme mission menee sur 2 sessions, 2 debut + 2 fin legitimes). Une porte qui refuse ce que le controle qui la juge considere legitime, c'est la paire porte/garde-fou qui se neutralise -- et l'agent se retrouve BLOQUE pour enregistrer un fait vrai. Le refus a ete retire : la porte NOTE ce que l'agent declare, c'est verifier qui JUGE la trace. Le vrai coupable n'etait pas la porte mais le verbe enregistrer du pilote, qui FABRIQUAIT un 2e debut (il notait un debut sans regarder le journal, alors que la porte cree deja le debut manquant quand une fin arrive seule). Corriger le FABRICANT, pas le recepteur.",
+      "tags": [
+        "porte",
+        "garde-fou",
+        "trace",
+        "doublon",
+        "mo-066"
+      ],
+      "source": "MO-066 (reparation de l'ecart MO-061 detecte par verifier)"
+    },
+    {
+      "id": "L-059",
+      "date": "2026-09-13 16:55:54",
+      "lecon": "Un module DEPLACE garde ses hypotheses de profondeur : tout chemin derive de __file__ doit etre RECALIBRE a sa nouvelle position, sinon il fabrique des effets invisibles (dossier fantome, fichier d'etat a cote, injection muette). Lecon liee : une preuve qui n'entre PAS dans la branche ne prouve rien -- lancer la porte de l'exterieur (cwd etranger, EXIT=0) n'a jamais execute l'injection de debut de mission, seul le RITUEL l'a revelee. Corollaire : quand un module change de dossier, ses constantes de chemin sont dans le perimetre du changement, pas dans un nettoyage ulterieur.",
+      "tags": [
+        "chemin",
+        "imports",
+        "preuve",
+        "deplacement",
+        "dag"
+      ],
+      "source": "MO-057 (desenchevetrement de la porte injection : cycle.py deplace dans injection/)"
+    },
+    {
+      "id": "L-060",
+      "date": "2026-09-13 17:53:28",
+      "lecon": "UN LIVRABLE QUE SON SEUL TEMOIN APPELLE EST UN LIVRABLE NON PROUVE : le moteur de recherche a tourne des semaines avec 8 defauts MESURES (sortie machine qui crashe, cecite muette sur 67k lignes, option de filtre sans effet, granularite par section, source inconnue silencieuse, periode non filtrante, branche jamais courue) et personne ne l'a vu : il n'avait qu'UN appelant, une sonde de veille. Regles : 1) brancher un livrable sur un usage REEL (la ou le travail se fait a la main), jamais seulement sur un temoin technique ; 2) une option de FILTRE qui ne retire rien n'est pas un filtre ; 3) une limite de lecture muette est une cecite -- la lever ou la DIRE ; 4) un binaire lu comme du texte empoisonne les resultats (U+FFFD) et casse les sorties machine -- exclure par extension ; 5) une branche jamais courue ne prouve rien -- le code mort se retire ; 6) tout reglage se prouve par la MESURE de l'audit rejouee, et un cobaye qui rougit sur du vide se corrige avant l'outil (le cobaye de cette mission a d'abord accuse le moteur a tort).",
+      "tags": [
+        "moteur",
+        "recherche",
+        "test",
+        "preuve",
+        "couverture",
+        "filtre",
+        "binaire"
+      ],
+      "source": "MO-069"
+    },
+    {
+      "id": "L-061",
+      "date": "2026-09-13 17:54:33",
+      "lecon": "UN ITEM D'ENTONNOIR N'A PAS DE ROLE : la tresse transporte le TITRE de l'item dans son champ theme (texte libre, ex : 'reparer vigie-profil : anti-spam desaccorde'), et le garde du champ ferme le REFUSE a l'injection -- la mission est laissee EN ATTENTE avec le message 'retiquette-la'. Le garde a RAISON (un theme hors vivier ne donne aucune identite) : c'est le CHEMIN qui manque. Consequence a connaitre : une mission qui vient de la TRESSE n'est pas injectable telle quelle, il faut lui donner son ROLE (retiqueter, trace gardee) ; a l'inverse une mission chargee a la main avec 'charger --theme <role>' l'a deja. Recette : quand un garde refuse une donnee produite par une AUTRE porte du meme systeme, le defaut n'est pas le garde -- c'est l'absence de passage de role entre les deux portes ; le signaler comme un trou du parcours plutot que de desactiver le garde.",
+      "tags": [
+        "entonnoir",
+        "tresse",
+        "pilote",
+        "theme",
+        "champ-ferme",
+        "retiqueter",
+        "parcours"
+      ],
+      "source": "MO-069 (relance automatique)"
+    },
+    {
+      "id": "L-062",
+      "date": "2026-09-13 18:06:43",
+      "lecon": "UN ANTI-SPAM QUI COMPTE LES ETATS CHANGEANTS N'EST PAS UN ANTI-SPAM : l'anti-bruit de vigie-profil comparait la SIGNATURE de l'etat et considerait legitime toute alerte des que la signature changeait. Or la fiche du createur se remplit UN CHAMP A LA FOIS : chaque champ rempli change la signature, donc chaque champ rempli meritait une alerte -- 4 depots mesures en 3 minutes pendant le questionnaire, alors que la regle affichait 'eviter de noyer l'inbox toutes les 15 min'. La mesure (4 depots en 3 min au lieu de 1) ne se voyait nulle part : la routine faisait exactement ce que son contrat disait, c'est le CONTRAT qui se trompait de dimension. Recette : un depot s'anti-spamme par MISSION (episode incomplet = un seul depot, ferme par le retour a l'etat sain), jamais par changement d'etat ; et si une dimension TEMPS est utile, elle se compte en secondes MURALES (jamais en tours de boucle), car la cadence reelle est decidee par le serveur et peut valoir 60 s quand la routine declare 900. Corollaire : la decision doit etre une fonction PURE (etat + memoire + maintenant) pour que le cobaye rejoue l'incident a heure fixe sans toucher au disque ni a l'horloge. Jumeau a surveiller : vigie-portes utilise la meme signature-par-etats (exposition moindre -- ses alertes ne se remplissent pas champ par champ -- mais meme structure).",
+      "tags": [
+        "anti-spam",
+        "bruit",
+        "routine",
+        "motif",
+        "mesure",
+        "mo-070",
+        "vigie-profil",
+        "fonction-pure"
+      ],
+      "source": "MO-070 vigie-profil (4 depots en 3 min mesures dans intercom/matrice/inbox.jsonl)"
+    },
+    {
+      "id": "L-063",
+      "date": "2026-09-13 18:18:24",
+      "lecon": "UN CHAMP DECLARE QUE PERSONNE NE LIT EST UN CHAMP MORT -- ET IL CACHE SOUVENT LA PANNE : le registre des super-combos declarait pourtant 'usage' par objet (le verbe de lancement y etait ecrit noir sur blanc), mais lancer-super-combos.py ecrivait 'executer' EN DUR. Resultat mesure : sc-002, qui est un CYCLE A PHASES (detecter/qualifier/cibler/...), etait INLANCABLE par son propre lanceur ('Phase inconnue: executer') depuis sa naissance. Recette : 1) le contrat d'un objet (COMMENT il se lance) se declare a UN SEUL endroit, se LIT par l'outil qui l'emploie, et se VERIFIE a la porte qui l'enregistre ; 2) une uniformite imposee d'en haut ('tout le monde expose executer') fabrique un verbe FAUX quand les objets ne font pas le meme metier -- mieux vaut un champ VIDE qui dit 'cet objet n'a pas d'entree unique' qu'un verbe invente, et un refus NOMME (code 2 + la liste des verbes acceptes) plutot qu'un echec muet ; 3) un lanceur doit pouvoir TRANSMETTRE les arguments qu'il ne connait pas (parse_known_args), sinon les objets a options propres restent inlan\u00e7ables meme avec le bon verbe ; 4) le test qui prouve tout cela interdit d'executer l'objet : on intercepte le lancement (subprocess.run remplace) et on capture la commande construite -- un cobaye qui lance vraiment auto-correction/auto-evolution modifierait le depot.",
+      "tags": [
+        "champ-mort",
+        "contrat",
+        "registre",
+        "lanceur",
+        "uniformite",
+        "faux-verbe",
+        "refus-nomme",
+        "cobaye",
+        "mo-071"
+      ],
+      "source": "MO-071 / EO-114 (sc-002 inlancable par son propre lanceur)"
+    },
+    {
+      "id": "L-064",
+      "date": "2026-09-13 18:28:03",
+      "lecon": "UN ANTI-SPAM QUI COMPTE TOUT COMPTE TROP -- ET IL SE MUTE LUI-MEME : l'anti-bruit de vigie-portes comparait la signature de TOUTES les alertes (y compris les observations 'basses' : portes muettes, noms inconnus) alors que le depot ne part qu'avec les alertes NOTABLES (critique/haute/moyenne). Deux consequences invisibles : 1) n'importe quel mouvement d'usage reposait un depot IDENTIQUE dans l'inbox ; 2) pire, la passe SANS alerte notable ecrivait quand meme alerte_le = maintenant, donc repoussait le plancher a chaque mouvement -- un vrai incident survenant derriere etait RETENU indefiniment : la vigie se rendait muette elle-meme, exactement la panne qu'elle est censee reperer. Recette : l'anti-spam doit porter sur ce qui est REELLEMENT DEPOSE (sinon il compte du bruit), l'horodatage d'un depot ne s'ecrit QUE si un depot a eu lieu, et le plancher de temps se compte en secondes MURALES (la cadence reelle est decidee par le serveur). Corollaire de trace : quand on change la BASE d'une signature, l'ancien etat est incompatible -- la premiere passe apres la correction peut deposer une fois de plus (ou dire 'resolu' a tort) : fonder le 'resolu' sur les alertes REELLEMENT stockees, pas sur la seule presence d'une signature.",
+      "tags": [
+        "anti-spam",
+        "bruit",
+        "depot-borne",
+        "plancher",
+        "muet",
+        "vigie-portes",
+        "signature",
+        "mo-073"
+      ],
+      "source": "MO-073 vigie-portes (jumelle de MO-070 vigie-profil)"
+    },
+    {
+      "id": "L-065",
+      "date": "2026-09-13 20:07:30",
+      "lecon": "UNE ANNONCE STATIQUE D'UN CANAL CONDITIONNEL EST UN MENSONGE STRUCTUREL : la passe de l'espion-integrite annoncait 'chapitres: [1, 2]' en dur, alors que le chapitre 2 (presence) ne peut produire une ligne que pour une BDD marquee a-construire au registre -- et le registre n'avait plus que des True depuis le 2026-09-06 (mesure : 81 lignes chapitre 2 sur 504 008 observations, la derniere le 2026-09-06 16:22:16). Un canal declare mais structurellement vide fait croire a une surveillance qui n'existe pas : c'est PIRE que pas de canal, car le lecteur du journal (et le cockpit) comptent dessus. La regle : quand ce qui est ANNONCE depend d'une CONDITION, l'annonce doit etre CALCULEE de la meme source que la condition (ici chapitres_produits(bdds)), jamais recopiee en dur. Corollaire : un tel canal doit se RALLUMER SEUL le jour ou la condition redevient vraie -- une annonce calculee preserve la capacite, la retirer du code l'aurait detruite.",
+      "tags": [
+        "annonce",
+        "canal",
+        "conditionnel",
+        "log",
+        "passe",
+        "honnetete"
+      ],
+      "source": "MO-072 / EO-102"
+    },
+    {
+      "id": "L-066",
+      "date": "2026-09-13 20:14:20",
+      "lecon": "UNE EXEMPTION MUETTE EST UN ANGLE MORT QU'ON CROIT COUVERT : corriger-ascii ecartait en SILENCE tout fichier portant un etalon .sha256 (et ne ciblait pas les .jsonl) -- aucun motif, aucune trace, aucun compte. Resultat mesure : 545 fichiers reecrivables annonces quand l'outil en VOYAIT 577 ; l'angle mort de 32 fichiers (8 BDD empreintees + les journaux) etait invisible, et il portait precisement les fichiers que l'on croyait les plus surveilles. Une exclusion doit etre NOMMEE (une fonction de classement qui rend les exemptes AVEC leur motif) et RAPPORTEE (chaque fichier cite dans le rapport), meme -- surtout -- quand il n'y a rien a corriger : c'est la que la couverture se mesure. Corollaire de test (L-015) : ne JAMAIS conclure 'jamais reecrit' sur une empreinte avant/apres pour un fichier VIVANT (journal en ajout seul) -- la veille y ecrit pendant le test. Il faut une preuve STRUCTURELLE (la chaine d'ecriture ne voit que des cibles) et, pour l'empreinte, une ATTRIBUTION (tout changement doit etre un append d'un autre acteur) ; sinon on accuse l'outil pour l'ecriture d'un autre.",
+      "tags": [
+        "exemption",
+        "angle-mort",
+        "rapport",
+        "corriger-ascii",
+        "veille",
+        "honnetete"
+      ],
+      "source": "MO-075 / EO-103"
+    },
+    {
+      "id": "L-067",
+      "date": "2026-09-13 20:23:10",
+      "lecon": "UN GARDE SANS AMONT EST UNE IMPASSE -- IL TRANSFORME CHAQUE ITEM EN BLOCAGE MANUEL : le pilote gardait (a juste titre) le champ 'theme' d'une mission contre le vivier, mais l'ENTONNOIR qui fournit les missions ne connaissait AUCUN role -- un item transportait son TITRE en texte libre et rien d'autre. A la relance automatique (fin de mission -> tete du brin -> file du pilote), la mission naissait avec un titre pour theme, le garde la refusait, et il fallait retiqueter A LA MAIN (4 blocages mesures en une seule session : MO-070, MO-071, MO-072, MO-075). Lecon generale : quand une porte refuse une valeur, il faut verifier que l'AMONT peut PRODUIRE une valeur acceptable -- sinon le refus n'est pas une securite, c'est une impasse ; le controle est juste, c'est le chemin qui manque. Recette : l'identite se pose la ou l'identite se decide (le classement), avec une table COMPLETE et verifiee au chargement (un trou CRIE, L-037), une porte pour reparer ce qui est ne avant (retiqueter), et un refus qui NOMME la porte de reparation -- une erreur doit designer le geste qui la repare. Corollaire : un refus doit aussi dire OU est la faute (mission d'entonnoir -> porte de l'entonnoir, jamais la mission, qui serait re-ecrasee au puisage suivant).",
+      "tags": [
+        "garde",
+        "amont",
+        "champ-ferme",
+        "identite",
+        "entonnoir",
+        "role",
+        "impasse"
+      ],
+      "source": "MO-076 / L-061"
+    },
+    {
+      "id": "L-068",
+      "date": "2026-09-13 20:38:20",
+      "lecon": "UN ETAT SE LIT DANS UN FICHIER D'ETAT, UNE HISTOIRE SE LIT DANS UN JOURNAL. En bornant le journal de l'espion (rotation par archivage, MO-077), on a decouvert que la cadence EFFECTIVE du demarrage etait publiee DANS LE JOURNAL : la premiere rotation aurait emporte l'evenement que le controle cherchait, et le controle serait devenu AVEUGLE -- c'est-a-dire neutralise par le nettoyage qu'il surveille (L-040, transpose). Deux consequences pratiques : (1) une rotation ne se contente pas de deplacer des lignes, elle doit aussi verifier QUELS LECTEURS dependent de ce qu'elle deplace ; (2) un controle qui lit une donnee VIVANTE dans un fichier qui peut etre rotationne doit lire l'etat COURT (fichier d'etat ecrase a chaque demarrage), jamais l'histoire. Corollaire mesure : la lecture d'un journal doit etre BORNEE (queue de 256 Ko) et CHRONOMETREE a chaque execution -- 0,154 s balayant 535 611 lignes contre 0,001 s bornees (x180), et un cout qui ne grandit plus avec l'age du journal.",
+      "tags": [
+        "rotation",
+        "journal",
+        "lecture-bornee",
+        "neutralisation",
+        "mo-077"
+      ],
+      "source": "MO-077 / EO-115"
+    },
+    {
+      "id": "L-069",
+      "date": "2026-09-13 21:05:02",
+      "lecon": "UN MOTEUR CRITIQUE SE PARTAGE, IL NE SE RECOPIE PAS. En etendant la rotation a trois journaux de plus (MO-078), la tentation etait de recopier le code sur qui marchait pour l'espion : quatre copies auraient diverge quatre fois (lecon L-029), et la plus dangereuse des operations -- REECRIRE un journal en ajout seul -- aurait vecu dans quatre variantes dont trois non eprouvees. Le moteur vit donc dans data/commun/rotation_journal.py (motif unique M-076) : il porte les trois invariants (archiver d'abord/reecrire ensuite/controler apres ; l'archive dans le deja connu -- L-040 ; la course refusee), et chaque routine ne declare que SES constantes (seuil, gardes, prefixe) avec un cablage mince. Consequence pour les gardes : le cobaye eprouve LE MOTEUR une fois, et le controle verifie la VERITE DE CHAQUE PORTE sur SON journal (subprocess, seuil borne a l'infini pour ne jamais ecrire dans le service) + la presence des constantes lues DANS LA SOURCE -- jamais en important quatre modules constants homonymes. Un moteur partage se prouve par le moteur + N portes, pas par N copies.",
+      "tags": [
+        "moteur-partage",
+        "rotation",
+        "journal",
+        "garde",
+        "mo-078"
+      ],
+      "source": "MO-078 / MO-077"
+    },
+    {
+      "id": "L-070",
+      "date": "2026-09-14 06:29:12",
+      "lecon": "ETENDRE UNE BORNE A UN JOURNAL, C'EST AUSSI MIGRER CE QUE LES CONTROLES Y LISENT. Le routeur-maintenance etait le DERNIER journal de routine sans borne, et le controle de cadence (verifier-sans-attendre) y cherchait le demarrage DANS LE JOURNAL : la premiere rotation aurait emporte cet evenement dans l'archive et le controle serait devenu AVEUGLE -- c'est-a-dire neutralise par le nettoyage qu'il surveille (lecon L-040). Avant de rotationner un journal, on recense donc TOUT ce qui s'y lit et on migre ces lectures vers un etat COURT (routeur-cadence.json) publie par la routine elle-meme : un etat se lit dans un fichier d'etat, une histoire dans un journal. Corollaire pour les gardes : une table qui enumere N journaux avec UN SEUL patron de script (main.py) exclut silencieusement les routines qui n'en ont pas -- la table doit porter le SCRIPT et le FICHIER DE CONSTANTES par routine, sinon la borne ne couvre qu'en apparence.",
+      "tags": [
+        "rotation",
+        "journal",
+        "cadence",
+        "controle",
+        "MO-079"
+      ],
+      "source": "MO-079"
+    },
+    {
+      "id": "L-071",
+      "date": "2026-09-14 06:39:21",
+      "lecon": "UN JOURNAL CONSIGNE DES FAITS, UN ETAT SE LIT DANS UN FICHIER D'ETAT -- ET LA DIFFERENCE SE MESURE. Le routeur de maintenance ecrivait une ligne a chaque passe : 510 lignes identiques a la date pres sur 512 (99,4 %), une toutes les 30 s. La passe recopiait un ETAT (le tableau courant des boites) dans un journal en AJOUT SEUL : le journal grossissait de ~150 Ko par jour sans qu'un seul fait nouveau n'y entre, et il fallait lire 500 lignes pour trouver la seule qui dise quelque chose. La reparation separe deux objets aux durees de vie differentes : l'ETAT est ecrit a chaque passe et ECRASE (il porte la vie de la routine et le compte des passes absorbees) ; l'HISTOIRE n'accepte que des FAITS (courrier route ; tableau des anomalies qui change). Deux pieges attrapes en chemin : (1) le COMPTEUR de la passe ne doit PAS entrer dans la signature -- son simple retour a zero faisait passer deux passes consecutives (1 route puis 0 route) pour deux faits, donc une ligne de trop a chaque rafale ; le cobaye l'a attrape. (2) Ce qui remplit l'inbox (fin-mission, retour-lot) est un ETAT : l'inclure dans la signature ferait suivre l'histoire par la boite au lieu des faits. Regle generale : avant d'ecrire une ligne, demander si elle porte un FAIT ou si elle repete un ETAT ; et quand on supprime une ecriture, la TRACER (ici passes_absorbes), sinon la suppression devient un silence.",
+      "tags": [
+        "journal",
+        "redondance",
+        "etat",
+        "fait",
+        "MO-080"
+      ],
+      "source": "MO-080"
+    },
+    {
+      "id": "L-072",
+      "date": "2026-09-14 06:46:42",
+      "lecon": "DANS UN JOURNAL DE SURVEILLANCE, LE TABLEAU EST UN ETAT ET LA LIGNE passe EST UN FAIT -- ET LA CONFUSION COUTE DANS LES DEUX SENS. L'espion-integrite journalisait 14 observations (une par BDD) a chaque passe : 504 134 observations pour 36 000 passes, 93 % du journal, et il fallait lire 14 lignes pour trouver la seule qui dise quelque chose. Le tableau des BDD est parti dans un etat court (ecrit chaque passe, ecrase) et l'histoire ne recoit les observations que si le tableau change. MAIS la ligne passe reste ecrite a CHAQUE tour : elle est le TEMOIN DE VIE que lit la non-regression du flux (L-026), et un temoin n'a pas le droit de devenir aveugle -- supprimer le tableau ET le temoin aurait ete une deuxieme faute. Deux consequences a traiter AVANT de debouncer une ecriture : (1) tout controle qui lit ce qu'on supprime doit etre MIGRE vers l'etat, sinon il mesure une production vide et devient aveugle a ce qu'il surveille (ici le garde des chapitres espion) ; (2) ce controle doit pouvoir jouer une passe COMPLETE (etat neuf a chaque cobaye), sinon il ne mesure plus rien. Corollaire : la signature d'un fait ne doit contenir QUE ce qui en est un -- l'ORDRE du registre a d'abord ete traite comme un changement par mon propre cobaye, alors qu'un dictionnaire reordonne ne change rien ; un cobaye qui ne peut pas vous contredire ne prouve rien (L-032).",
+      "tags": [
+        "journal",
+        "etat",
+        "fait",
+        "temoin-de-vie",
+        "MO-081"
+      ],
+      "source": "MO-081"
+    },
+    {
+      "id": "L-073",
+      "date": "2026-09-14 06:58:39",
+      "lecon": "QUAND ON SUPPRIME LA REPETITION D'UN JOURNAL, ON DOIT AUSSI DEMENAGER CE QUE LA LIGNE SUPPRIMEE PORTAIT. Les deux vigies ecrivaient la MEME ligne passe a chaque tour (vigie-profil 194 fois sur 330, 58,8 % ; vigie-portes 105 sur 204, 51,5 %) -- mais cette ligne portait AUSSI le MOTIF de la decision anti-spam, la seule trace de ce que la vigie avait decide a chaque tour. Supprimer la repetition sans deplacer le motif aurait rendu l'anti-spam MUET : exactement le piege du demarrage dans le journal (L-040) et de la route /sante qui ecrivait (L-041), transpose a une ligne de passe. La reparation pose donc l'ETAT COURT (vigie-<nom>-etat-passes.json : signature du dernier fait journalise, motif, mode, passes absorbees) AVANT de supprimer quoi que ce soit. Regle : avant de retirer une ligne d'un journal, lister ce qu'elle portait et ou cela se lit desormais.",
+      "tags": [
+        "MO-082",
+        "etat-histoire",
+        "journal",
+        "vigie",
+        "anti-spam"
+      ],
+      "source": "MO-082 / garde verifier-passes-non-redondantes.py"
+    },
+    {
+      "id": "L-074",
+      "date": "2026-09-14 06:58:39",
+      "lecon": "UN MOTIF TROUVE QUATRE FOIS N'EST PLUS UNE COINCIDENCE : C'EST UN MOTEUR QUI MANQUE. Le defaut etat/histoire a ete decouvert sur le routeur de maintenance (MO-080, 99,4 % de lignes identiques), puis sur l'espion (MO-081, 93,2 % du journal), puis sur les DEUX vigies (MO-082, 58,8 % et 51,5 %) -- quatre reecritures du meme code : une signature comparable, une decision pure, un etat court qui trace les passes absorbees. A la quatrieme, la bonne reponse n'etait plus une quatrieme copie (lecon L-029 : un moteur recopie quatre fois diverge quatre fois) mais le moteur PARTAGE data/commun/etat_histoire.py (signature_fait / decision_fait), auquel les quatre sites s'adressent. Les deux premiers y DELEGUENT : leurs cobayes ont prouve que la sortie ne bouge pas d'un octet, ce qui est exactement ce qu'un cobaye sert a prouver. Regle : a la deuxieme copie on note, a la troisieme on surveille, a la quatrieme on centralise.",
+      "tags": [
+        "MO-082",
+        "moteur-partage",
+        "etat-histoire",
+        "L-029"
+      ],
+      "source": "MO-082 / data/commun/etat_histoire.py"
+    },
+    {
+      "id": "L-075",
+      "date": "2026-09-14 07:32:43",
+      "lecon": "UN CONTROLE QUI LANCE UNE DONNEE COMME UN PROGRAMME NE PEUT PAS ECHOUER. sc-001 executait ses six themes par 'python theme-X.json' : or un theme n'est PAS un programme, c'est l'ARBRE DE DECISION (JSON) que lit l'agent -- et en Python ce JSON est un LITTERAL DE DICTIONNAIRE, une expression valide SANS EFFET qui sort en code 0. Mesure du 2026-09-14 : '--fichier /chemin/qui/n/existe/pas.py --mission MO-999' rendait '6/6 themes, 0 echec, TOUS LES THEMES ONT REUSSI' -- le vert ne dependait ni de la cible, ni de la mission, ni de l'etat des themes. Recette : (1) un controle doit etre relie a une porte qui PEUT ECHOUER (ici tester-theme.py, la porte officielle du theme, celle que sc-002 emploie deja) ; (2) le succes se constate sur un TEMOIN POSITIF, jamais sur un code de sortie nu -- 'code 0 et rien dit' est une impossibilite de conclure, donc ACCUSE, parce qu'une porte qui ne repond rien et une porte qui va bien se ressemblent (lecon du temoin de vigie-portes) ; (3) quand on remplace une verification, rejouer l'ANCIEN mecanisme dans un auto-test et EXIGER qu'il soit accuse -- sinon on a change le code sans changer le mensonge (L-032). Corollaire : une DONNEE (JSON, arbre, fiche) n'est jamais un programme ; si un outil doit 'executer' une donnee, c'est qu'il lui manque sa porte.",
+      "tags": [
+        "MO-083",
+        "sc-001",
+        "controle",
+        "faux-vert",
+        "temoin",
+        "super-combo"
+      ],
+      "source": "MO-083 sc-001 (mesure : fichier inexistant -> 6/6 succes, 2026-09-14)"
+    },
+    {
+      "id": "L-076",
+      "date": "2026-09-14 07:42:26",
+      "lecon": "UNE MOYENNE NE MESURE PAS UN INTERVALLE, ET UN TEMOIN FAUX MAIS DANS LA TOLERANCE EST PIRE QU'UN TEMOIN ABSENT. Le premier garde de cadence (friction 28) lisait le battement d'une routine comme (date - derniere_ecriture) / passes_absorbes : une MOYENNE. Or une moyenne ne decrit AUCUN intervalle reel des qu'une passe n'est pas a l'heure (redemarrage, passe A LA DEMANDE). Mesure sur vigie-profil, dont le journal PROUVE la cadence a 900 s et dont le compteur est juste (prouve : 3 -> 4 en une passe) : la MEME cadence a ete lue 450,5 s puis 600,3 s. Et la tolerance (0,5x a 3x) a laisse passer LES DEUX -- un temoin faux mais DANS la tolerance ne crie pas : c'est le pire des temoins, il rassure. Recette : un BATTEMENT se mesure sur une SERIE d'horodatages et se resume par un ecart MEDIAN (un redemarrage deplace la mediane d'un cran, il ne divise pas le resultat par deux) ; l'anneau qui porte la serie est BORNE (un etat ne grandit pas : sinon c'est un journal) et vit dans un moteur PARTAGE (data/commun/battement.py, comme rotation_journal.py et etat_histoire.py) que les routines appellent au lieu de recopier le decoupage. Corollaire 1 : quand on remplace un temoin, l'auto-test doit REJOUER LA MEME SERIE et exiger que le nouveau rende l'intervalle REEL la ou l'ancien rendait une valeur qui ne decrit AUCUN intervalle de la serie (ici 900 s contre 645 s) -- sans quoi on a change le code sans changer le mensonge (L-032). Corollaire 2 : un etat ECRIT SANS la donnee qui le rend mesurable n'est pas un manque de recul, c'est un ECART -- sinon le garde affiche [--] pour toujours et un controle muet passe pour un vert. Corollaire 3 : DECLARER, PUBLIER et MESURER sont trois choses differentes ; une routine qui declare sa cadence et la publie peut encore la manquer d'un facteur 50 (veille-flux, 6,0 s contre 300 s pendant deux jours).",
+      "tags": [
+        "MO-084",
+        "friction28",
+        "cadence",
+        "mediane",
+        "temoin",
+        "battement"
+      ],
+      "source": "MO-084 (friction 28) : mesure sur vigie-profil, cadence 900 s lue 450,5 s puis 600,3 s, 2026-09-14"
+    },
+    {
+      "id": "L-077",
+      "date": "2026-09-14 07:55:25",
+      "lecon": "UN CONTROLE QUI JUGE L'ETAT D'ENTREE D'UNE SUITE DOIT PARLER AVANT L'ACTION COUTEUSE, PAS APRES. Deux fois le 2026-09-14, la non-regression a parcouru TOUTES ses etapes (py_compile, themes, cartographe, garde-ascii, flux, attente, trace, anti-spam, chapitres, exemptions, rotation, historique, observations, passes, sc-001) avant d'echouer sur les trois controles qui repondent a 'ai-je mis a jour ce que la suite va lire ?' (fichier modifie non trace, friction non qualifiee, equipement non attelle) : on corrigeait alors, puis on RELANCAIT -- la meme correction etait payee DEUX fois. Le controle n'etait pas en tort, il avait raison : c'est sa PLACE qui etait fausse. Recette : pour chaque controle d'une suite, se demander 's'il echoue, ai-je perdu le travail des autres ?' -- si oui, il passe DEVANT, en PRE-VOL. Et un PRE-VOL doit NOMMER QUOI mettre a jour ET PAR QUELLE PORTE (un KO nu oblige a chercher le remede, donc a faire des actions inutiles : c'est le meme defaut, deplace dans le message). Corollaire : le PRE-VOL qui echoue n'execute RIEN -- c'est ce qui rend l'ordre (modifier le code, mettre a jour ce que la suite lit, lancer, et si ca passe continuer) respecte par CONSTRUCTION et non par discipline.",
+      "tags": [
+        "friction29",
+        "MO-085",
+        "pre-vol",
+        "ordre",
+        "non-regression",
+        "controle"
+      ],
+      "source": "friction 29 (2026-09-14, deux constats dans la meme journee : sc-001 puis le garde de cadence)"
+    },
+    {
+      "id": "L-078",
+      "date": "2026-09-14 08:12:54",
+      "lecon": "UNE REGLE CABLEE DANS LE CODE N'EST PAS UNE REGLE LUE. MO-062/MO-064 avaient rendu 'attendre n'est pas verifier' permanente dans les BOUCLES des routines (garde verifier-sans-attendre) et gravee en invariant C.2 n.9 du journal de preparation -- mais NULLE PART ou l'AGENT la relit. Deux attentes de ~10 min ont donc eu lieu le 2026-09-14 pour 'voir' un anneau de passes s'emplir, alors que la preuve (cadence declaree + etat publie) se lisait en une commande -- et l'anneau s'est rempli SEUL pendant la mission (median lu : 900,0 s et 911,0 s pour 900 declarees). Recette : une doctrine a TROIS jambes -- (1) le code qui la PORTE, (2) les documents que l'agent RELIT (fiche, index des regles immuables, protocole injecte), (3) le GARDE qui surveille que ces documents la disent ENCORE (controle regle-lue-a-l-allumage, cobaye 3/3, plus preuve reelle : regle retiree du disque -> KO nomme). Corollaire : un temoin qui a besoin de N passes pour parler ne doit JAMAIS inviter a patienter -- il s'annonce 'recul insuffisant' et se replie sur la valeur DECLAREE, en DISANT de ne pas attendre.",
+      "tags": [
+        "attente",
+        "regle-immuable",
+        "agent",
+        "garde",
+        "doctrine",
+        "mo-086"
+      ],
+      "source": "MO-086 (createur 2026-09-14)"
+    },
+    {
+      "id": "L-079",
+      "date": "2026-09-14 08:22:10",
+      "lecon": "UN THEME ECRIT N'EST PAS UN THEME ROUTE (et un controle qui PLANTE ne dit rien). Le catalogue d'Optimus declarait DOUZE themes 'pret' quand son PARCOURS n'en routait que CINQ : sept themes ECRITS, testes par tester-theme, et JAMAIS ATTEIGNABLES -- personne ne s'en plaignait, car aucun controle ne croisait les deux index. La lacune a ete vue en construisant la chaine [purification] (demande -> audit -> nemesis -> decision -> ajouter) : la case [decision] etait 'a creer', et une case qu'on ne route pas n'existe pas. Recette : quand une chose vit dans DEUX index (catalogue + parcours, fichier + BDD, annonce + production), ecrire le controle qui les CROISE et le PIEGER (theme orphelin, route morte) -- jamais se fier a la coherence supposee. Corollaire : un outil de controle qui rencontre une entree MAL FORMEE doit ACCUSER, jamais planter (tester-theme tombait en AttributeError sur un 'vers' en chaine) : un controle qui crashe ne dit RIEN.",
+      "tags": [
+        "parcours",
+        "index",
+        "garde",
+        "theme",
+        "l-032",
+        "mo-087"
+      ],
+      "source": "MO-087 (sc-001 + audit Optimus + suite de purification)"
+    },
+    {
+      "id": "L-080",
+      "date": "2026-09-14 08:27:22",
+      "lecon": "UNE DETTE QUE PERSONNE NE REGARDE EST UN CHEMIN FAUX QUI ATTEND SON HEURE. Neuf sites de la zone comptaient leurs chemins a la main (parents[2], parents[6]) ; le contrat fondamental les signalait comme DETTES et non comme ecarts, et la non-regression ne lancait que le controle des PREFIXES -- donc rien ne les regardait. Une dette invisible n'est pas une dette, c'est un bogue arme : le jour ou la profondeur de dossier change, le chemin devient faux ET SILENCIEUX (L-013 interdit deja de compter les chemins a la main). Tous les sites sont desormais ancres sur le MARQUEUR PARTAGE (matrice/data/commun/racine.py, M-076) : la racine se DETECTE, elle ne se compte pas, et son echec se DIT (RuntimeError) au lieu de rendre un chemin faux. Recette : quand un controle distingue ECART et DETTE, la dette doit avoir SON maillon de suite, en mode strict (maillon 20 'chemins') -- sinon elle ne se paiera qu'au demain. Preuve : 9 dettes -> 0, et la suite passe de 19 a 20 maillons.",
+      "tags": [
+        "chemins",
+        "ancrage",
+        "dette",
+        "contrat-fondamental",
+        "l-013",
+        "mo-088"
+      ],
+      "source": "MO-088 (createur : corriger les 9 dettes parents[N])"
+    },
+    {
+      "id": "L-081",
+      "date": "2026-09-14 08:31:35",
+      "lecon": "UN DOCUMENT SANS CARTE D'IDENTITE NE PEUT PAS ETRE INJECTE AU BON MOMENT. Sur 65 documents de la zone Optimus, VINGT-SIX n'avaient AUCUNE carte d'identite (surtout des README et des index) et rien ne s'en plaignait : les trois verificateurs du marbre (regles, protocoles, conventions) ne regardent que matrice/data/ -- la zone de l'operateur n'etait couverte par AUCUN controle d'identite. Or tout le projet repose sur le PILOTE qui injecte la bonne doctrine au bon moment : il ne peut pas choisir un document qui ne dit pas QUOI il est. Trois ecarts trouves le meme jour : un  en CHEMIN au lieu d'un nom, et trois  hors vocabulaire (journal-preparation, preparation-readme, outil-pilote-optimus). Recette : un champ d'identite est un CONTRAT -- cles obligatoires (type, appartient_a, commun), appartenance en NOM, type en VOCABULAIRE FERME (un type neuf se DECLARE, il ne s'invente pas) ; et chaque zone doit avoir SON garde, car le controle d'une zone ne voit jamais l'autre. Preuve : 26 cartes ajoutees, 65/65 conformes, garde cobaye 4/4, maillon 21 bloquant.",
+      "tags": [
+        "cartes-identite",
+        "audit",
+        "injection",
+        "pilote",
+        "garde",
+        "mo-089"
+      ],
+      "source": "MO-089 (audit createur : cartes d'identite)"
+    },
+    {
+      "id": "L-082",
+      "date": "2026-09-14 08:38:27",
+      "lecon": "UN ROLE DONNE N'EST PAS UN ROLE INJECTE. Le cameleon recoit UNE personnalite par mission (categorie PERSONNALITE du vivier, choisie par la Matrice, jamais par lui) ; Optimus n'en recevait AUCUNE -- ses missions ne portaient qu'un theme de CHANTIER (REPARATION, OUTIL, PILOTE... : le QUOI toucher, jamais le QUI conduit) et le catalogue lui DERVERSAIT la fiche ENTIERE (220 lignes) au demarrage. Un agent sans posture improvise sa conduite : la posture doit etre PORTEE PAR LE PILOTE (table fermee type -> PERSONNALITE, COMPLETE sur les types de l'entonnoir, verifiee AU CHARGEMENT, qui exige la categorie PERSONNALITE -- un theme de chantier ne peut pas se faire passer pour un QUI) et INJECTEE avant la mission, sur les DEUX chemins (simple ET lot). Le role porte alors DEUX champs NOMMES : la posture (QUI) et le chantier (QUOI).",
+      "tags": [
+        "roles",
+        "posture",
+        "pilote",
+        "personnalite",
+        "injection",
+        "maillon-2"
+      ],
+      "source": "MO-090 (MAILLON 2/5 de la revision, 2026-09-14)"
+    },
+    {
+      "id": "L-083",
+      "date": "2026-09-14 09:41:23",
+      "lecon": "Le verbe enregistrer du pilote note DEJA debut+fin au journal suivi-optimus (mission menee hors file, L-033) : si l'agent redeclare ensuite sa fin a la porte noter, verifier accuse un doublon (2 fins pour une mission). Recette : apres enregistrer, NE PAS redeclarer la fin -- la trace complete existe ; si le doublon arrive, le reparer par la porte archiver --doublons (premier evenement fait foi, archive en ajout seul, jamais supprime), MO-091.",
+      "tags": [
+        "suivi-optimus",
+        "enregistrer",
+        "doublon",
+        "mo-091"
+      ],
+      "source": "MO-091"
+    },
+    {
+      "id": "L-084",
+      "date": "2026-09-15 19:12:41",
+      "lecon": "UN CONTROLE QUE PERSONNE NE BRANCHE N'EXISTE PAS : le croisement file du pilote <-> journal suivi-optimus (ecrit en MO-048, sept fautes detectees) etait juste, mesure et prouve -- mais appele NULLE PART : ni par le verbe verifier, ni par la route /sante du cockpit. Resultat : MO-095 (2026-09-15) a ete menee de bout en bout SANS jamais entrer dans le marbre, sous un verifier VERT -- il ne juge que la coherence INTERNE du journal, ou une mission jamais declaree est invisible par construction. Recette : 1) brancher chaque controle la ou l'agent REGARDE vraiment (la sante du reveil), pas seulement la ou il a ete ecrit ; 2) une route de sante se termine par un VERDICT GLOBAL (N PORTE(S) EN ECHEC, porte nommee) -- un code=1 noye au milieu de vingt blocs ne se lit pas ; 3) pour chaque porte branchee, deux temoins : un qui ACCUSE (cobaye negatif, L-032) et un qui se TAIT. Corollaire : le verifier d'une BDD et le croisement entre deux traces sont DEUX controles distincts -- l'un ne remplace jamais l'autre.",
+      "tags": [
+        "controle",
+        "branchement",
+        "faux-vert",
+        "coherence",
+        "suivi-optimus",
+        "cockpit",
+        "mo-096"
+      ],
+      "source": "MO-096 (reparation de la trace MO-095)"
+    },
+    {
+      "id": "L-085",
+      "date": "2026-09-15 19:19:35",
+      "lecon": "UN SEUIL COMPARE DOIT APPARTENIR A L'OBJET MESURE : le cockpit comparait la duree de la veille-flux a un 600 ms ecrit chez LUI, alors que la routine ne declarait AUCUN budget et que son contrat est de compiler GLOBALEMENT les .py (435 fichiers) -- la comparaison etait donc fausse par construction, et elle a crie chaque jour sur une passe stable (289 passes, 1665-1800 ms, pour une cadence de 300 s, soit 0,6 % du temps). Recette : 1) la valeur de reference se DECLARE chez l'objet mesure et se PUBLIE dans son etat court (le cockpit LIT, il n'ecrit pas un nombre qui ne lui appartient pas) ; 2) quand la publication manque, le controle le DIT ('budget NON PUBLIE') au lieu d'utiliser un repli muet ; 3) une optimisation se mesure AVANT/APRES sur des chiffres reels : la contrainte du lotissement etait la LONGUEUR de la ligne de commande (garde Windows MO-035), pas un nombre fixe de 40 fichiers -- 11 lots devenus 3, py_compile 1406 -> 794 ms, passe 1739 -> 1138 ms, couverture identique. Corollaire : un temoin qui exige plusieurs passes doit comparer la JEUNESSE de son etat a la cadence DECLAREE et annoncer 'recul insuffisant' -- sinon tout redemarrage cooperatif legitime (L-012) le fait accuser a tort.",
+      "tags": [
+        "seuil",
+        "declaration",
+        "performance",
+        "veille-flux",
+        "recul",
+        "temoin",
+        "mo-097"
+      ],
+      "source": "MO-097 (declencheur proto-2 B : veille-flux 1703 ms contre seuil en dur 600 ms)"
+    },
+    {
+      "id": "L-086",
+      "date": "2026-09-15 19:27:30",
+      "lecon": "UNE VALEUR SE DEMANDE A SON PROPRIETAIRE, ELLE NE SE RECOPIE PAS : la fenetre de lecture d'une queue de journal (256 Ko) existait dans ONZE fichiers, alors que chaque journal DECLARE sa propre borne de rotation (SEUIL_OCTETS_JOURNAL : 2 Mo veille, 8 Mo espion, 512 Ko vigies). Consequence double : cinq de ces copies n'avaient AUCUN lecteur (4 routines + un verifier ou la seule reference etait '_ = OCTETS_QUEUE', ligne morte qui faisait croire a un usage), et la fenetre reelle n'etait reliee a AUCUNE borne declaree -- une rotation pouvait donc cacher au lecteur des evenements qu'elle gardait. Recette : 1) UNE seule source pour la regle, dans le moteur partage (data/commun/rotation_journal.py) : planCHER + octets_queue(borne) + octets_queue_du_journal(journal) ; 2) la borne se LIT chez son proprietaire (lire_constante_declaree, evaluateur d'expressions d'entiers sans eval -- le motif reel est '2 * 1024 * 1024') ; 3) un paramETRE D'EPREUVE (la fenetre du verifier de rotation, qui doit rester petite pour que le cobaye la depasse) n'est PAS une fenetre de lecture : il se nomme comme tel ; 4) preuve unitaire avant la suite : la fonction doit rendre la valeur declaree (2 Mo, 8 Mo, 512 Ko) et le planCHER quand rien n'est declare. Corollaire : 'aucun lecteur' est un etat a verifier (grep) avant de declarer une constante partagee.",
+      "tags": [
+        "duplication",
+        "moteur-partage",
+        "valeur-morte",
+        "fenetre-queue",
+        "rotation",
+        "mo-099"
+      ],
+      "source": "MO-099 (P4 de la revue MO-098)"
+    },
+    {
+      "id": "L-087",
+      "date": "2026-09-15 19:31:14",
+      "lecon": "Un seuil qui mesure un objet appartient a l'OBJET : il le DECLARE chez lui (constants), le PUBLIE (etat court pour une routine, sortie stable pour un outil), et l'observateur se contente de le LIRE ; si la publication manque, l'observateur le DIT au lieu de se rabattre sur un nombre ecrit chez lui. Et une valeur que personne ne lit n'est pas un seuil : elle rassure sans rien surveiller (py_compile_ms).",
+      "tags": [
+        "seuils",
+        "observateur",
+        "auto-evolution",
+        "p1",
+        "p2"
+      ],
+      "source": "MO-100 (suite MO-097/MO-098)"
+    },
+    {
+      "id": "L-088",
+      "date": "2026-09-15 19:40:47",
+      "lecon": "La capacite d'un journal se DEDUIT de son PLUS LONG LECTEUR (bilan-periode lit 30 jours : la rotation doit donc garder 30 jours), se DECLARE chez le PROPRIETAIRE du journal, se PUBLIE dans la porte de lecture de ce proprietaire, et se LIE a la rotation. Un seuil ecrit chez l'observateur plus une rotation ponctuelle sans lien ne bornent RIEN : ils donnent l'illusion d'une borne.",
+      "tags": [
+        "capacite",
+        "journal",
+        "rotation",
+        "p3",
+        "observateur"
+      ],
+      "source": "MO-101 (revue MO-098, P3)"
+    },
+    {
+      "id": "L-089",
+      "date": "2026-09-15 20:20:15",
+      "lecon": "Un compte rendu se calcule AVANT la mutation qui le rend incalculable : la cloture d'une mission passait le statut en terminee AVANT d'annoncer, et la position dans le lot exige une mission en-cours -- donc chaque FIN de round partait MUETTE alors que chaque DEBUT disait 1/3, 2/3. Regle jumelle : une valeur recopiee sur un objet qui ne la met jamais a jour (lot.position=0 pendant le round 3/3) est une valeur qui ment -- la position se LIT sur l'objet vivant.",
+      "tags": [
+        "compte-rendu",
+        "mutation",
+        "valeur-morte",
+        "lot",
+        "pilote"
+      ],
+      "source": "MO-102 (verification de la chaine du lot REVUE-MO-098)"
+    },
+    {
+      "id": "L-090",
+      "date": "2026-09-15 21:08:20",
+      "lecon": "Une regle gravee pour un PERIMETRE se verifie par le CONTRAT de la zone, pas par son contenu : un dossier temporaire PRESENT sans son README est l ecart detectable (controle executable), alors que le contenu vide en fin de mission ne se prouve que par la note de fin -- une discipline ne se garde pas, et une regle doit dire ELLE-MEME ce que sa garde ne voit pas. Corollaire : graver une regle qu on est en train d enfreindre est un mensonge -- l ecart reel se repare DANS la mission de gravure. Et un cobaye negatif d un controle garde par un NOM de dossier (garde-tmp exige une racine nommee matrix/) doit planter une racine AVEC ce nom : sinon le KO vient de la porte d entree (code 2), pas de la detection, et l on croit le controle casse.",
+      "tags": [
+        "regle-immuable",
+        "perimetre",
+        "garde",
+        "controle",
+        "cobaye",
+        "verifiable",
+        "mo-104"
+      ],
+      "source": "MO-104"
+    },
+    {
+      "id": "L-091",
+      "date": "2026-09-15 21:23:22",
+      "lecon": "Un champ FERME ne suffit pas a decrire une mission : un lot arme avec un THEME MERE (PERFORMANCE) faisait naitre des missions valides par le theme et VIDES par le type -- donc sans posture et avec une checklist reduite aux garde-fous communs. Recette : toute porte qui FABRIQUE une mission doit exiger TOUS les champs dont l'injection a besoin (ici un type ferme par mission), sinon le defaut n'apparait qu'a l'injection, un cran plus loin, et il se vit comme une simple alerte au lieu d'un refus. Corollaire : le THEME et le TYPE sont deux axes distincts -- le chantier et la nature ; un theme mere decrit le premier, jamais le second.",
+      "tags": [
+        "pilote",
+        "lot",
+        "type",
+        "posture",
+        "champ-ferme",
+        "eo-118",
+        "mo-106"
+      ],
+      "source": "MO-106"
+    },
+    {
+      "id": "L-092",
+      "date": "2026-09-16 07:01:46",
+      "lecon": "Une trace taguee par convention n'est lisible que si le TAG est pose : une session notee 'travail' est INVISIBLE de la porte de reprise, et le trou ne crie pas (il annonce une session perimee comme si c'etait la verite). Une convention de tag sans GARDE ne protege rien (motif attente-ne-prouve-rien) : la meme exigence vaut pour tout vocabulaire ferme (type de mission, tag de session, categorie).",
+      "tags": [
+        "sessions",
+        "reprise",
+        "tag",
+        "vocabulaire"
+      ],
+      "source": "MO-119"
+    },
+    {
+      "id": "L-093",
+      "date": "2026-09-16 07:02:38",
+      "lecon": "Un composant ne doit JAMAIS ecrire une trace avec un vocabulaire que le composant qui la LIT ne connait pas : le pilote notait 'travail' quand la reprise ne lit que 'session-*' -- deux moities du meme chantier (MO-092), deux vocabulaires, un trou silencieux qui a couvert 19 missions. Avant de poser une trace, on nomme son LECTEUR et le vocabulaire partage (contrat ECRIT / LU).",
+      "tags": [
+        "trace",
+        "reprise",
+        "vocabulaire",
+        "pilote"
+      ],
+      "source": "MO-120"
+    },
+    {
+      "id": "L-094",
+      "date": "2026-09-16 07:11:26",
+      "lecon": "Un garde se pose sur la CONDITION EXACTE ou le defaut existe, mesuree des deux cotes : le garde de retard ne parle que sur une session FERMEE (sur une session ouverte, les faits suivants sont normaux), sinon il crie a chaque fin de mission, s'use, et un garde use n'est plus lu. Corollaire : quand une porte peut repondre une valeur PERIMEE, elle doit DIRE son retard -- une reponse en retard qui se tait passe pour la verite.",
+      "tags": [
+        "garde",
+        "reprise",
+        "session",
+        "vocabulaire"
+      ],
+      "source": "MO-121"
+    },
+    {
+      "id": "L-095",
+      "date": "2026-09-16 07:12:55",
+      "lecon": "Une BDD qui ne sait que CREER ne sait pas REPARER : tant qu'aucune porte ne permet de corriger un tag, une entree notee hors vocabulaire est un angle mort DEFINITIF (le marbre interdit l'ecriture a la main du fichier). La capacite de correction fait partie du contrat d'une trace : ajouter, lire ET retiqueter -- avec la trace de l'ancien etat, pour que la reparation soit auditable.",
+      "tags": [
+        "auto-valide",
+        "friction:40",
+        "sessions",
+        "porte"
+      ],
+      "source": "MO-122"
+    },
+    {
+      "id": "L-096",
+      "date": "2026-09-16 07:17:56",
+      "lecon": "Deux mecanismes OFFICIELS peuvent se contredire sans qu'aucun garde ne les lise ensemble : le point de restauration d'une porte d'ecriture et la regle du perimetre des temporaires fabriquaient 14 ecarts par session d'ecriture, et l'agent payait et repareait a la main (le seul temoin etait un garde qui criait juste -- apres coup). Sortie : l'exemption se declare a UN endroit, BORNEE par un motif (tout ce qui ressemble n'est PAS couvert) et VISIBLE dans le rapport (chaque element epargne est nomme et compte). Une exemption muette est un angle mort ; une exemption large l'est aussi.",
+      "tags": [
+        "auto-valide",
+        "friction:42",
+        "regle",
+        "exemption",
+        "contrat"
+      ],
+      "source": "MO-123"
+    },
+    {
+      "id": "L-097",
+      "date": "2026-09-16 07:26:40",
+      "lecon": "Un temps qu'on ne peut pas CORRIGER oblige a AJOUTER un fait : quand retiqueter ne corrigeait que les tags, la seule reparation d'une collision a la seconde etait de RE-NOTER l'entree (S-053) -- un fait de plus au lieu d'un ordre repare. Une porte de reparation doit pouvoir reparer TOUT ce qui fait la verite de l'entree, pas seulement la moitie qu'on a pensee d'abord ; et reparer un ordre ne doit pas pouvoir en creer un autre : le re-datage REFUSE une seconde deja occupee et NOMME l'occupant (un refus qui explique vaut mieux qu'un doublon silencieux).",
+      "tags": [
+        "auto-valide",
+        "friction:43",
+        "contrat-ecrit-lu",
+        "re-datage"
+      ],
+      "source": "MO-124"
+    },
+    {
+      "id": "L-098",
+      "date": "2026-09-16 07:28:16",
+      "lecon": "Le rang d'append appartient a la verite d'une entree au meme titre que sa date : quand deux entrees portent la MEME SECONDE, la seule chose qui les distingue est l'ORDRE D'ECRITURE -- un lecteur qui ne s'en sert pas n'a pas une lecture ambigue, il a une lecture FAUSSE (il annonce la cloture quand la session est ouverte). Un departage ne se devine pas, il se DECLARE dans le moteur partage avec son contrat (la liste est passee dans l'ordre du fichier), sinon chaque lecteur reinvente son hasard -- et le hasard qui se tait passe pour la verite.",
+      "tags": [
+        "auto-valide",
+        "friction:44",
+        "contrat-ecrit-lu",
+        "departage"
+      ],
+      "source": "MO-125"
+    },
+    {
+      "id": "L-099",
+      "date": "2026-09-16 07:29:03",
+      "lecon": "Un garde se verifie sur le PERIMETRE OU L'ON A ECRIT, pas sur celui que l'on livre : mes cobayes vivaient dans tmp-optimus, saisi par le garde-ascii du workspace, alors que je ne lancais le controle que sur matrice/ -- vert d'un cote, rouge de l'autre, et c'est le rouge qui compte (c'est lui que /sante lit). Corollaire : quand deux portees de verification existent (cible large / cible etroite), c'est la LARGE qui fait foi pour la veture finale -- l'etroite sert a travailler vite, jamais a conclure.",
+      "tags": [
+        "auto-valide",
+        "audit",
+        "garde-ascii",
+        "perimetre"
+      ],
+      "source": "MO-125"
+    },
+    {
+      "id": "L-100",
+      "date": "2026-09-16 07:32:27",
+      "lecon": "Un filtre qui ne correspond a RIEN se lit comme une base VIDE : la porte bdd-frictions repondait 'Aucune friction trouvee' parce qu'elle comparait le statut en EGALITE avec un vocabulaire declare (active / archivee) qui n'etait pas celui du schema (active / archivee_validee / archivee_annulee). Deux regles : le vocabulaire d'un ETAT se declare a UN domicile, la ou le schema le definit, et celui qui FILTRE traduit (filtre -> statuts reels) au lieu de recopier ; et une reponse vide doit NOMMER ce qu'elle a cherche, sinon elle est indiscernable d'une donnee absente (meme mode de panne que la friction 41).",
+      "tags": [
+        "auto-valide",
+        "friction:45",
+        "bdd-frictions",
+        "statuts"
+      ],
+      "source": "MO-126"
+    },
+    {
+      "id": "L-101",
+      "date": "2026-09-16 07:32:27",
+      "lecon": "Une assertion qui FIGE une donnee vivante devient fausse des le premier ajout : mon cobaye attendait '0 active / 44 au total' dans la BDD reelle -- vrai une minute plus tot, faux apres la friction 45 que je venais d'ajouter dans la meme commande, et le cobaye a crie 'echec' sur du code JUSTE. Une preuve se compare a la VERITE lue au moment du test (compter la base, pas memoriser un chiffre) : un chiffre fige dans un test finit par accuser le code d'un changement venu des donnees.",
+      "tags": [
+        "auto-valide",
+        "cobaye",
+        "preuve",
+        "verite-vivante"
+      ],
+      "source": "MO-126"
+    },
+    {
+      "id": "L-102",
+      "date": "2026-09-16 07:36:27",
+      "lecon": "Une lecon tiree d'un CAS doit se chercher dans TOUT le projet AVANT d'etre declaree acquise : en corrigeant le vocabulaire des statuts des frictions (MO-126), j'ai ecrit noir sur blanc la regle 'le vocabulaire d'un etat se declare a UN domicile' -- alors que le MEME defaut existait juste a cote, dans la BDD des modifications (5 copies + 1 dans l'espion). La lecon etait juste, son PERIMETRE etait faux. Corollaire : apres avoir trouve un defaut de CLASSE (vocabulaire recopie, egalite au lieu de traduction, porte muette sur un filtre), balaver le projet par une recherche et traiter la CLASSE -- sinon la recidive est certaine et elle se paie deux fois.",
+      "tags": [
+        "auto-valide",
+        "friction:46",
+        "recidive",
+        "perimetre",
+        "lecon"
+      ],
+      "source": "MO-127"
+    },
+    {
+      "id": "L-103",
+      "date": "2026-09-16 07:38:21",
+      "lecon": "Un OBSERVATEUR doit CONSOMMER ce qu'il surveille, jamais le recopier : un espion qui ecrit 'active' et 'verrouille' en dur devient une copie de plus des BDD qu'il controle -- le jour ou un statut change ou qu'un domicile se deplace, l'espion est le PREMIER a mentir, et personne ne le voit puisque c'est lui qui surveille. Et quand sa source de verite manque, il doit le SIGNALER : un zero silencieux se lit comme une base saine (lecon L-100) -- ici le domicile illisible produit une alerte nommee, jamais un '0 friction active' rassurant.",
+      "tags": [
+        "auto-valide",
+        "friction:47",
+        "espion",
+        "vocabulaire",
+        "observateur"
+      ],
+      "source": "MO-128"
     }
   ],
-  "compteur": 16
+  "compteur": 103
 }

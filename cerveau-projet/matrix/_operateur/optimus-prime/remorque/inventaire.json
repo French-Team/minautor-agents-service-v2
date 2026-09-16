@@ -1,0 +1,431 @@
+{
+  "date": "2026-09-15 09:59:38",
+  "total": 85,
+  "equipements": [
+    {
+      "nom": "theme-auto-audit-nemesis",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-auto-audit-nemesis.json"
+    },
+    {
+      "nom": "theme-auto-correction",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-auto-correction.json"
+    },
+    {
+      "nom": "theme-auto-evolution",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-auto-evolution.json"
+    },
+    {
+      "nom": "theme-auto-optimisation",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-auto-optimisation.json"
+    },
+    {
+      "nom": "theme-auto-performance",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-auto-performance.json"
+    },
+    {
+      "nom": "theme-auto-testing",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-auto-testing.json"
+    },
+    {
+      "nom": "theme-contre-analyse",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-contre-analyse.json"
+    },
+    {
+      "nom": "theme-creer-outil",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-creer-outil.json"
+    },
+    {
+      "nom": "theme-fichier",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-fichier.json"
+    },
+    {
+      "nom": "theme-preparation",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-preparation.json"
+    },
+    {
+      "nom": "theme-purification",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-purification.json"
+    },
+    {
+      "nom": "theme-reprise-mission",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-reprise-mission.json"
+    },
+    {
+      "nom": "theme-user-profil",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-user-profil.json"
+    },
+    {
+      "nom": "proto-1-reprise-mission",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-1-reprise-mission.md"
+    },
+    {
+      "nom": "proto-2-auto-evolution",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-2-auto-evolution.md"
+    },
+    {
+      "nom": "proto-3-debug-dag",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-3-debug-dag.md"
+    },
+    {
+      "nom": "proto-4-auto-audit-3-axes",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-4-auto-audit-3-axes.md"
+    },
+    {
+      "nom": "proto-5-auto-amelioration",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-5-auto-amelioration.md"
+    },
+    {
+      "nom": "proto-6-route-mission",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-6-route-mission.md"
+    },
+    {
+      "nom": "proto-7-route-bdd",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-7-route-bdd.md"
+    },
+    {
+      "nom": "proto-8-route-reparation-veille",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-8-route-reparation-veille.md"
+    },
+    {
+      "nom": "proto-9-mini-missions-inter-round",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-9-mini-missions-inter-round.md"
+    },
+    {
+      "nom": "convention-architecture-outils",
+      "type": "convention",
+      "chemin": "conventions\\convention-architecture-outils.md"
+    },
+    {
+      "nom": "convention-auto-correction",
+      "type": "convention",
+      "chemin": "conventions\\convention-auto-correction.md"
+    },
+    {
+      "nom": "convention-chemins-liens-noms-flags",
+      "type": "convention",
+      "chemin": "conventions\\convention-chemins-liens-noms-flags.md"
+    },
+    {
+      "nom": "convention-crochets",
+      "type": "convention",
+      "chemin": "conventions\\convention-crochets.md"
+    },
+    {
+      "nom": "convention-indices",
+      "type": "convention",
+      "chemin": "conventions\\convention-indices.md"
+    },
+    {
+      "nom": "convention-integrite-sha256",
+      "type": "convention",
+      "chemin": "conventions\\convention-integrite-sha256.md"
+    },
+    {
+      "nom": "convention-karpathy",
+      "type": "convention",
+      "chemin": "conventions\\convention-karpathy.md"
+    },
+    {
+      "nom": "convention-nommage-numerote",
+      "type": "convention",
+      "chemin": "conventions\\convention-nommage-numerote.md"
+    },
+    {
+      "nom": "convention-py-compile",
+      "type": "convention",
+      "chemin": "conventions\\convention-py-compile.md"
+    },
+    {
+      "nom": "convention-separation-cameleon-optimus",
+      "type": "convention",
+      "chemin": "conventions\\convention-separation-cameleon-optimus.md"
+    },
+    {
+      "nom": "convention-tmp-optimus-cameleon",
+      "type": "convention",
+      "chemin": "conventions\\convention-tmp-optimus-cameleon.md"
+    },
+    {
+      "nom": "convention-zero-valeurs-en-dur",
+      "type": "convention",
+      "chemin": "conventions\\convention-zero-valeurs-en-dur.md"
+    },
+    {
+      "nom": "ajouter-case-theme.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\ajouter-case-theme.py"
+    },
+    {
+      "nom": "ajouter-redirect-theme.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\ajouter-redirect-theme.py"
+    },
+    {
+      "nom": "audit-invisibilite.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\audit-invisibilite.py"
+    },
+    {
+      "nom": "banque-combos-bdd.json",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\banque-combos-bdd.json"
+    },
+    {
+      "nom": "bdd-frictions",
+      "type": "outil-dossier",
+      "chemin": "super-combos\\combos\\outils\\bdd-frictions"
+    },
+    {
+      "nom": "bdd-lecons-matrice",
+      "type": "outil-dossier",
+      "chemin": "super-combos\\combos\\outils\\bdd-lecons-matrice"
+    },
+    {
+      "nom": "bdd-modifs",
+      "type": "outil-dossier",
+      "chemin": "super-combos\\combos\\outils\\bdd-modifs"
+    },
+    {
+      "nom": "bilan-matrice.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\bilan-matrice.py"
+    },
+    {
+      "nom": "calculer-hash.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\calculer-hash.py"
+    },
+    {
+      "nom": "cartographe-matrice.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\cartographe-matrice.py"
+    },
+    {
+      "nom": "creer-combo.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\creer-combo.py"
+    },
+    {
+      "nom": "creer-outil.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\creer-outil.py"
+    },
+    {
+      "nom": "demarrer-watchdog.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\demarrer-watchdog.py"
+    },
+    {
+      "nom": "dry-run.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\dry-run.py"
+    },
+    {
+      "nom": "garde-ascii.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\garde-ascii.py"
+    },
+    {
+      "nom": "garde-flux2.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\garde-flux2.py"
+    },
+    {
+      "nom": "garde-perimetre-write.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\garde-perimetre-write.py"
+    },
+    {
+      "nom": "garde-tmp.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\garde-tmp.py"
+    },
+    {
+      "nom": "lanceur-non-regression-flux.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\lanceur-non-regression-flux.py"
+    },
+    {
+      "nom": "lanceur-non-regression.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\lanceur-non-regression.py"
+    },
+    {
+      "nom": "lire-fichier-complet.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\lire-fichier-complet.py"
+    },
+    {
+      "nom": "outils-readme.md",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\outils-readme.md"
+    },
+    {
+      "nom": "revert-fichier.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\revert-fichier.py"
+    },
+    {
+      "nom": "revert-periode.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\revert-periode.py"
+    },
+    {
+      "nom": "scan-valeurs-en-dur.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\scan-valeurs-en-dur.py"
+    },
+    {
+      "nom": "test-reel.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\test-reel.py"
+    },
+    {
+      "nom": "tester-theme.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\tester-theme.py"
+    },
+    {
+      "nom": "verifier-anti-spam-missions.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-anti-spam-missions.py"
+    },
+    {
+      "nom": "verifier-cadence.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-cadence.py"
+    },
+    {
+      "nom": "verifier-cartes-identite.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-cartes-identite.py"
+    },
+    {
+      "nom": "verifier-chapitres-espion.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-chapitres-espion.py"
+    },
+    {
+      "nom": "verifier-contrat-fondamental.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-contrat-fondamental.py"
+    },
+    {
+      "nom": "verifier-exemptions-visibles.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-exemptions-visibles.py"
+    },
+    {
+      "nom": "verifier-historique-non-redondant.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-historique-non-redondant.py"
+    },
+    {
+      "nom": "verifier-observations-non-redondantes.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-observations-non-redondantes.py"
+    },
+    {
+      "nom": "verifier-parcours.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-parcours.py"
+    },
+    {
+      "nom": "verifier-passes-non-redondantes.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-passes-non-redondantes.py"
+    },
+    {
+      "nom": "verifier-roles.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-roles.py"
+    },
+    {
+      "nom": "verifier-rotation-journal.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-rotation-journal.py"
+    },
+    {
+      "nom": "verifier-sans-attendre.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-sans-attendre.py"
+    },
+    {
+      "nom": "watchdog-flux2-bg.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\watchdog-flux2-bg.py"
+    },
+    {
+      "nom": "watchdog-flux2.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\watchdog-flux2.py"
+    },
+    {
+      "nom": "c-001-lecons",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-001-lecons"
+    },
+    {
+      "nom": "c-002-variables",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-002-variables"
+    },
+    {
+      "nom": "c-003-historique",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-003-historique"
+    },
+    {
+      "nom": "c-004-modifications",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-004-modifications"
+    },
+    {
+      "nom": "c-005-usages",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-005-usages"
+    },
+    {
+      "nom": "c-006-activites",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-006-activites"
+    },
+    {
+      "nom": "c-007-frictions",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-007-frictions"
+    },
+    {
+      "nom": "sc-001-auto-xxx",
+      "type": "super-combo",
+      "chemin": "super-combos\\sc-001-auto-xxx"
+    },
+    {
+      "nom": "sc-002-auto-evolution",
+      "type": "super-combo",
+      "chemin": "super-combos\\sc-002-auto-evolution"
+    }
+  ]
+}

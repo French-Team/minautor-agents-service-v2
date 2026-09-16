@@ -7,12 +7,23 @@ from datetime import datetime
 from pathlib import Path
 
 from constants import (
+    BUDGET_PASSE_MS,
     CHEMIN_BOITE_MATRICE_IN,
+    CHEMIN_CADENCE,
     CHEMIN_ENTONNOIR,
     CHEMIN_ETAT_ALERTES,
     CHEMIN_JOURNAL,
     CHEMIN_PID,
+    CHEMIN_SIGNALER,
     ENCODAGE,
+    ETATS_TESTES,
+    EXPEDITEUR_SIGNAL,
+    LONGUEUR_MAX_COMMANDE,
+    LOT_PY_COMPILE_MAX,
+    MISSION_SIGNAL,
+    NIVEAU_DEFAUT,
+    NIVEAU_PAR_ETAT,
+    OUTIL_SIGNAL,
     REPERTOIRE_MATRIX,
     TIMEOUT_COMBO_SECONDES,
     THEME_REPARATION,
@@ -28,11 +39,40 @@ def horodater():
 
 
 def journaliser(entree):
-    """Ajoute UNE ligne au journal (en ajout seul, jamais modifie a posteriori)."""
+    """Ajoute UNE ligne au journal (en ajout seul, jamais modifie a posteriori).
+
+    Fins de ligne LF FORCEES (lecon L-001, convention-integrite-sha256) : sans
+    cela Windows ecrit du CRLF et le journal melange les deux fins de ligne des
+    qu'une rotation le reecrit -- une empreinte qui derive sans difference
+    logique, et un journal qui ne se compare plus a lui-meme.
+    """
     entree = dict(entree)
     entree["date"] = horodater()
-    with open(CHEMIN_JOURNAL, "a", encoding=ENCODAGE) as flux:
+    with open(CHEMIN_JOURNAL, "a", encoding=ENCODAGE, newline="\n") as flux:
         flux.write(json.dumps(entree, ensure_ascii=True) + "\n")
+
+
+def publier_cadence(intervalle, mode=None):
+    """Publie la cadence EFFECTIVE dans un etat COURT (veille-cadence.json).
+
+    Pourquoi un fichier a part (lecon L-040, mesuree en MO-077/MO-078) : le
+    journal est ROTATIONNE -- un jour, l'evenement de demarrage quitte le journal
+    actif pour l'archive, et un controle qui cherche la cadence DANS LE JOURNAL
+    devient AVEUGLE, c'est-a-dire neutralise par le nettoyage qu'il surveille.
+    Un etat se lit dans un fichier d'etat, une histoire se lit dans un journal.
+    """
+    donnees = {"type": "demarrage", "intervalle": intervalle, "pid": os.getpid(), "date": horodater()}
+    if mode:
+        donnees["mode"] = mode
+    # Budget declare (MO-097) : publie ICI pour que le cockpit LISE le budget de
+    # la routine au lieu de comparer a un seuil en dur. Etat court PUBLIE, comme
+    # la cadence (doctrine : une valeur declaree se lit, elle ne se devine pas).
+    donnees["budget_passe_ms"] = BUDGET_PASSE_MS
+    temporaire = CHEMIN_CADENCE.with_name(CHEMIN_CADENCE.name + ".tmp")
+    with open(str(temporaire), "w", encoding=ENCODAGE, newline="\n") as flux:
+        flux.write(json.dumps(donnees, ensure_ascii=True, sort_keys=True) + "\n")
+    os.replace(str(temporaire), str(CHEMIN_CADENCE))
+    return CHEMIN_CADENCE
 
 
 def ecrire_pid(pid):
@@ -54,19 +94,44 @@ def supprimer_pid():
         os.remove(CHEMIN_PID)
 
 
+def relativiser(chemin):
+    """Retourne le chemin RELATIF a matrix/ (portabilite) ; inchange si dehors.
+
+    py_compile cite des chemins ABSOLUS. Les PERSISTER (signature anti-spam,
+    theme de mission) les rendrait faux des que le projet change de racine -- et
+    `cible_fichier_morte` les declarerait MORTS a tort sur une autre machine.
+    On stocke donc du relatif et on resout a l'usage (doctrine : chemin
+    DETECTE, jamais suppose). `as_posix()` garde des `/` valables partout.
+    """
+    try:
+        return Path(chemin).resolve().relative_to(REPERTOIRE_MATRIX.resolve()).as_posix()
+    except (ValueError, OSError):
+        return chemin
+
+
+def resoudre(chemin):
+    """Resout un chemin de signature : relatif a matrix/ s'il est relatif."""
+    chemin = Path(chemin)
+    if chemin.is_absolute():
+        return chemin
+    return REPERTOIRE_MATRIX / chemin
+
+
 def cible_fichier_morte(signature):
     """True si la signature porte une cible fichier qui n'existe plus (M-051/M-052).
 
     Seules les signatures python-compile portent une cible fichier ; toute
-    autre signature (ou cible non-fichier comme 'py_compile') n'est jamais
-    declaree morte.
+autre signature (ou cible non-fichier comme 'py_compile') n'est jamais
+declaree morte. La cible peut etre RELATIVE (matrix/...) : on la resout sur la
+racine detectee, sinon un projet deplace ferait declarer mortes des cibles
+vivantes (et l'alerte serait purgee a tort).
     """
     if not signature.startswith("python-compile:"):
         return False
     cible = signature.split(":", 1)[1]
     if not ("\\" in cible or "/" in cible):
         return False
-    return not Path(cible).exists()
+    return not resoudre(cible).exists()
 
 
 def purger_signatures_mortes():
@@ -99,6 +164,49 @@ def purger_signatures_mortes():
         journaliser({"type": "incident-purge", "detail": str(erreur)})
         return
     journaliser({"type": "purge-signatures", "purgees": purges})
+
+
+def purger_signatures_resolues(mode, detections):
+    """Retire les signatures dont l'etat est re-teste et n'est plus detecte.
+
+    Le garde-fou d'anti-spam (une alerte par signature) devient un piege quand
+    plus rien ne purge : une signature `ascii-non-convertible:U+XXXX` dont le
+    caractere a disparu du disque restait "vivante" POUR TOUJOURS -- 5 des 9
+    signatures de l'etat -- et bloquait silencieusement toute alerte future du
+    meme caractere. On ne purge QUE les etats que ce mode RE-TESTE vraiment
+    (voir ETATS_TESTES) : `marbre` n'est teste qu'en VIGILE, le purger en RELAX
+    relancerait l'alerte a chaque passe VIGILE (fausse boucle).
+    Jamais bloquant : tout incident est journalise et la passe continue.
+    """
+    etats_testes = ETATS_TESTES.get(mode, ())
+    if not etats_testes:
+        return
+    try:
+        etat = charger_alertes_emises()
+    except Exception as erreur:
+        journaliser({"type": "incident-purge", "detail": str(erreur)})
+        return
+    vivantes = set(str(detection["etat"]) + ":" + str(detection["cible"]) for detection in detections)
+    resolues = [
+        signature for signature in etat
+        if signature.split(":", 1)[0] in etats_testes and signature not in vivantes
+    ]
+    if not resolues:
+        return
+    for signature in resolues:
+        del etat[signature]
+    try:
+        CHEMIN_ETAT_ALERTES.write_text(
+            json.dumps(etat, ensure_ascii=True, indent=2, sort_keys=True) + "\n",
+            encoding=ENCODAGE,
+        )
+    except Exception as erreur:
+        journaliser({"type": "incident-purge", "detail": str(erreur)})
+        return
+    journaliser({
+        "type": "purge-signatures-resolues", "mode": mode,
+        "purgees": len(resolues), "signatures": resolues,
+    })
 
 
 def purger_alertes_fantomes():
@@ -156,25 +264,52 @@ def enregistrer_alerte_emise(signature):
     )
 
 
-def alerte_grave(etat, cible, detail):
-    """Depose UNE alerte grave dans la boite de la Matrice (une seule fois par signature).
+def niveau_pour_etat(etat):
+    """Retourne le niveau d'alerte d'un etat (NIVEAU_DEFAUT si l'etat est inconnu)."""
+    return NIVEAU_PAR_ETAT.get(etat, NIVEAU_DEFAUT)
 
-    Retourne True si l'alerte est NOUVELLE (emise), False si deja emise avant.
+
+def deposer_signal(etat, cible, detail):
+    """Depose UNE alerte par la PORTE OFFICIELLE `signaler` (jamais en direct).
+
+    La boite de la Matrice a DEUX consommateurs (routeur-maintenance puis
+    maintenir) et tous deux ne routent que `type == "signaler"`. La porte tient
+    ce format ; une ecriture directe en `alerte-grave` etait une porte PIRATE :
+    comptee en `ignores` anonymes, jamais vue par personne. Retourne (code, sortie).
+    """
+    description = OUTIL_SIGNAL + " : " + etat + " | " + cible + " | " + detail
+    arguments = [
+        "signaler",
+        "--outil", OUTIL_SIGNAL,
+        "--niveau", niveau_pour_etat(etat),
+        "--description", description,
+        "--mission", MISSION_SIGNAL,
+        "--expediteur", EXPEDITEUR_SIGNAL,
+    ]
+    return lancer_combo(CHEMIN_SIGNALER, arguments)
+
+
+def alerte_grave(etat, cible, detail):
+    """Depose UNE alerte grave par la porte `signaler` (une seule fois par signature).
+
+    Retourne True si l'alerte est NOUVELLE (emise), False sinon.
+    Si la porte est injoignable, la signature n'est PAS marquee : la passe
+    suivante reessaiera (jamais d'alerte perdue en silence).
     """
     signature = etat + ":" + cible
     if signature in charger_alertes_emises():
         return False
-    message = {
-        "type": "alerte-grave",
-        "date": horodater(),
-        "etat": etat,
-        "cible": cible,
-        "detail": detail,
-        "action": "mission-reparation",
-    }
-    CHEMIN_BOITE_MATRICE_IN.parent.mkdir(parents=True, exist_ok=True)
-    with open(CHEMIN_BOITE_MATRICE_IN, "a", encoding=ENCODAGE) as flux:
-        flux.write(json.dumps(message, ensure_ascii=True) + "\n")
+    try:
+        code, sortie = deposer_signal(etat, cible, detail)
+    except OSError as erreur:
+        journaliser({"type": "incident-signal", "etat": etat, "cible": cible, "detail": str(erreur)})
+        return False
+    if code != 0:
+        journaliser({
+            "type": "incident-signal", "etat": etat, "cible": cible,
+            "code": code, "detail": sortie[:200],
+        })
+        return False
     enregistrer_alerte_emise(signature)
     journaliser({"type": "alerte", "etat": etat, "cible": cible})
     deposer_mission_vrac(etat, cible, detail)
@@ -205,13 +340,24 @@ def deposer_mission_vrac(etat, cible, detail):
 
 
 def charger_base_acceptee():
-    """Retourne l'ensemble des codes Unicode acceptes (base-acceptee.json), ou set() vide."""
+    """Retourne l'ensemble des codes Unicode acceptes (base-acceptee.json), ou set() vide.
+
+    Garde (classe MO-035) : une base ILLISIBLE (JSON corrompu, disque) ne doit
+    JAMAIS tuer la passe -- ce serait une mort silencieuse entre `passe-debut`
+    et `passe-fin`, exactement le mode de panne qui a rendu la veille muette
+    pendant 11 heures. Une base illisible est traitee comme une base ABSENTE
+    (comportement deja en place) et l'incident est JOURNALISE.
+    """
     from constants import CHEMIN_BASE
 
     if not CHEMIN_BASE.exists():
         return set()
-    donnees = json.loads(CHEMIN_BASE.read_text(encoding=ENCODAGE))
-    return set(donnees.get("acceptes", ()))
+    try:
+        donnees = json.loads(CHEMIN_BASE.read_text(encoding=ENCODAGE))
+        return set(donnees.get("acceptes", ()))
+    except (OSError, ValueError) as erreur:
+        journaliser({"type": "incident-base-acceptee", "detail": str(erreur)})
+        return set()
 
 
 def lancer_combo(chemin_outil, arguments):
@@ -251,14 +397,15 @@ def lister_fichiers_python():
     return sorted(fichiers)
 
 
-def lancer_py_compile(fichiers=None):
-    """Compile les .py de matrix/. Retourne (code, sortie).
+def compiler_lot(fichiers):
+    """Compile UN seul lot de .py (une ligne de commande). Retourne (code, sortie).
 
     Garde E-045 : meme timeout que les combos (l'incident est journalise).
+    Garde Windows MO-035 : tout OSError de lancement (dont WinError 206 --
+    ligne de commande trop longue) devient une detection journalisee, jamais
+    une exception qui remonte et tue la passe.
     """
-    if fichiers is None:
-        fichiers = lister_fichiers_python()
-    commande = [chemin_python(), "-m", "py_compile"] + fichiers
+    commande = [chemin_python(), "-m", "py_compile"] + list(fichiers)
     try:
         termine = subprocess.run(
             commande,
@@ -273,7 +420,62 @@ def lancer_py_compile(fichiers=None):
         journaliser({"type": "incident-py-compile-bloquant",
                      "timeout": TIMEOUT_COMBO_SECONDES})
         return 124, "py_compile tue par timeout " + str(TIMEOUT_COMBO_SECONDES) + "s"
+    except OSError as erreur:
+        journaliser({"type": "incident-py-compile-lancement", "detail": str(erreur)})
+        return 1, "py_compile impossible a lancer : " + str(erreur)
     return termine.returncode, (termine.stdout or "") + (termine.stderr or "")
+
+
+def decouper_lots(fichiers, longueur_max=LONGUEUR_MAX_COMMANDE, max_fichiers=LOT_PY_COMPILE_MAX):
+    """Decoupe les fichiers en lots tenant sous la LONGUEUR de commande declaree.
+
+    MO-097 : le lot etait un NOMBRE fixe (40) -- un plancher tres prudent qui
+    multipliait les demarrages d'interpreteur : 435 .py = 11 lots = 11 processus,
+    ~460 ms de pure tare par passe (mesure du 2026-09-15). La contrainte REELLE
+    est la longueur de la ligne de commande (plafond Windows ~32767, garde
+    MO-035) : on accumule donc les chemins jusqu'au budget DECLARE, avec un
+    plafond de securite en nombre. Couverture INCHANGEE : tous les fichiers
+    passent, dans l'ordre, et un chemin plus long que le budget part seul (il ne
+    peut pas etre reparti).
+    """
+    lots = []
+    courant = []
+    longueur = 0
+    for fichier in fichiers:
+        taille = len(str(fichier)) + 1
+        if courant and (longueur + taille > longueur_max or len(courant) >= max_fichiers):
+            lots.append(courant)
+            courant = []
+            longueur = 0
+        courant.append(fichier)
+        longueur += taille
+    if courant:
+        lots.append(courant)
+    return lots
+
+
+def lancer_py_compile(fichiers=None):
+    """Compile les .py de matrix/ PAR LOTS. Retourne (code, sortie).
+
+    MO-035 : compiler les 352 .py en UNE commande depassait la limite de la
+    ligne de commande Windows (WinError 206) et tuait la passe. Les sorties de
+    lots sont concatenees : le contrat d'extraction des fichiers en erreur est
+    inchange. Code retourne : 0 si tous les lots passent, sinon le PREMIER code
+    d'echec (1 = ecart confirme, 124 = lot tue par timeout).
+    MO-097 : les lots se decoupent sur la LONGUEUR de commande (decouper_lots),
+    pas sur un nombre fixe de fichiers -- moins de processus, donc moins de tare.
+    """
+    if fichiers is None:
+        fichiers = lister_fichiers_python()
+    fichiers = list(fichiers)
+    code_global = 0
+    sorties = []
+    for lot in decouper_lots(fichiers):
+        code, sortie = compiler_lot(lot)
+        sorties.append(sortie)
+        if code != 0 and code_global == 0:
+            code_global = code
+    return code_global, "".join(sorties)
 
 
 def sortie_en_crash(sortie):

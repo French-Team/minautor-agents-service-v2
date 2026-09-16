@@ -1,61 +1,53 @@
-"""Categorie activer : orchestre le lancement des boucles de fond de la Matrice.
+"""Categorie activer : porte unique vers le server matrice.
 
-Interface entre main.py et les fonctions simples (fonctions.py).
-Le lancement est DETACHE : la boucle survit a la session qui l'a demarree.
-Le garde de double lancement vit dans CHAQUE routine (leur propre PID) :
-l'activateur le respecte, il ne le contourne jamais.
+Le server matrice est l'unique proprietaire du cycle de vie des routines.
+Cette commande ne lance plus directement une routine : elle demarre le server,
+qui adopte les routines existantes et lance les absentes.
+La LISTE de ces routines vit dans `constants.py` (BOUCLES) et nulle part
+ailleurs : l'enumerer ici serait une deuxieme table, donc une deuxieme verite.
 """
-from constants import (
-    BOUCLES,
-    COMMANDE_ESPION,
-    COMMANDE_VEILLE,
-    NOM_PID_ESPION,
-    NOM_PID_VEILLE,
-)
-from fonctions import etat_boucle, lancer_detache
+from constants import ENCODAGE
+from fonctions import processus_vivant
+from lancement import lancer_invisible
+from pathlib import Path
 
 
-def verifier_avant_lancement(nom, pid):
-    """Refuse si une boucle du meme nom vit deja (protection locale confirmee)."""
-    if pid is not None:
-        print("REFUS : " + nom + " vit deja (PID " + str(pid) + "). Une seule boucle par routine.")
-        return False
-    return True
+REPERTOIRE_VIE = Path(__file__).resolve().parent
+CHEMIN_PID_SERVER = REPERTOIRE_VIE / "server" / "server-matrice.pid"
+NOM_DRAPEAU_SERVER = "server-matrice-arret.txt"
+CHEMIN_DRAPEAU_SERVER = REPERTOIRE_VIE / "server" / NOM_DRAPEAU_SERVER
 
 
 def executer(arguments):
-    options = {}
-    index = 0
-    while index < len(arguments):
-        morceau = arguments[index]
+    """Demarre le server matrice s'il n'est pas deja actif."""
+    intervalle = None
+    for index, morceau in enumerate(arguments):
         if morceau == "--intervalle" and index + 1 < len(arguments):
-            options["intervalle"] = arguments[index + 1]
-            index += 2
-        else:
-            index += 1
-    intervalle = options.get("intervalle")
+            intervalle = arguments[index + 1]
 
-    lancees = []
-    for nom, chemin_routine in BOUCLES:
-        if nom == "veille-flux":
-            nom_pid, commande = NOM_PID_VEILLE, COMMANDE_VEILLE
-        else:
-            nom_pid, commande = NOM_PID_ESPION, COMMANDE_ESPION
-        ligne, pid = etat_boucle(nom, chemin_routine, nom_pid)
-        if not verifier_avant_lancement(nom, pid):
-            continue
-        arguments_boucle = [commande]
-        if nom == "veille-flux":
-            arguments_boucle.append("--boucle")
-            if intervalle:
-                arguments_boucle += ["--intervalle", intervalle]
-        elif intervalle:
-            arguments_boucle += ["--interval", intervalle]
-        pid_nouveau, duree_ms = lancer_detache(chemin_routine, arguments_boucle)
-        lancees.append(nom + " (PID " + str(pid_nouveau) + ", lance en " + str(duree_ms) + " ms)")
+    if CHEMIN_PID_SERVER.exists():
+        try:
+            pid = int(CHEMIN_PID_SERVER.read_text(encoding=ENCODAGE).strip())
+        except (ValueError, OSError):
+            pid = None
+        if processus_vivant(pid):
+            print("Server matrice deja actif (PID " + str(pid) + ").")
+            return 0
+        CHEMIN_PID_SERVER.unlink()
 
-    if lancees:
-        print("Boucles lancees en detache (survivent a la session) : " + ", ".join(lancees))
-    else:
-        print("Aucune boucle lancee (toutes deja actives ou refusees).")
+    if CHEMIN_DRAPEAU_SERVER.exists():
+        CHEMIN_DRAPEAU_SERVER.unlink()
+
+    arguments_server = []
+    if intervalle:
+        arguments_server += ["--interval", intervalle]
+    pid, duree_ms = lancer_invisible(
+        REPERTOIRE_VIE,
+        arguments_server,
+        script="server_matrice.py",
+    )
+    print(
+        "Server matrice lance (PID " + str(pid) + ", "
+        + str(duree_ms) + " ms). Il possede les routines de BOUCLES."
+    )
     return 0

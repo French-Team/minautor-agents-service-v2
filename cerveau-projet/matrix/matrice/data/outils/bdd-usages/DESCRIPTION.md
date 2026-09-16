@@ -37,3 +37,31 @@
 - Zero valeur en dur : la logique CONSOMME constants.py.
 - Qui ecrit (contrat data-readme) : les espions embarques (sac a dos, M-014+),
   et pour l'instant les passes de la veille et l'agent.
+
+## Audit sac-a-dos (2026-09-10)
+
+### Total usages
+3060 usages enregistres.
+
+### Repartition par outil
+| Outil | Usages | % |
+|---|---|---|
+| veille-flux | 1058 | 34.6% |
+| corriger-ascii | 734 | 24.0% |
+| bdd-activites | 731 | 23.9% |
+| suivi-optimus | 322 | 10.5% |
+| bdd-modifications | 69 | 2.3% |
+| autres | 146 | 4.8% |
+
+### Repartition par code
+| Code | Count | Signification |
+|---|---|---|
+| 0 | 2242 | Succes (73.3%) |
+| 1 | 786 | Refus (25.7%) - detection veille, probleme corriger-ascii, etc. |
+| 2 | 32 | Refus technique (1.0%) - commande inconnue, etc. |
+
+### Refus (code != 0)
+- Total refus : 818 (26.7% des usages)
+- Principaux types de refus :
+  - veille-flux/passe-relax : code 1, "1 detection(s)" - detection d'ecart par veille-flux
+  - corriger-ascii/corriger : code 1, "Probleme plus grave -> decision du createur (aucune perte de donnees)" - probleme non-auto-correctible

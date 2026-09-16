@@ -2,6 +2,8 @@
 
 Chaque fonction fait UNE chose (convention-architecture-outils).
 Tout est tolerant : une source absente ou cassee est juste vide (jamais bloquant).
+Lecture optimisee (M-130) : les journaux JSONL append-only sont tries par date
+-> parcours inverse avec break precoce (TH-023, 4.4x sur 6h).
 """
 import json
 from datetime import datetime, timedelta
@@ -49,6 +51,44 @@ def lire_jsonl(chemin):
             entrees.append(json.loads(ligne))
         except json.JSONDecodeError:
             continue
+    return entrees
+
+
+def lire_jsonl_depuis(chemin, borne, cle_date="date"):
+    """Retourne les entrees dont cle_date >= borne (optimise, M-130).
+
+    Le journal est append-only et trie par date croissante : on parcourt
+    en sens INVERSE et on s'arrete a la premiere entree trop ancienne.
+    Lignes cassees ou dates malformees = ignorees (jamais bloquant).
+    Resultat garde l'ordre chronologique (ancien -> recent).
+    """
+    if not chemin.exists():
+        return []
+    try:
+        lignes = chemin.read_text(encoding=ENCODAGE).splitlines()
+    except OSError:
+        return []
+    entrees = []
+    for ligne in reversed(lignes):
+        brute = ligne.strip()
+        if not brute:
+            continue
+        try:
+            entree = json.loads(brute)
+        except json.JSONDecodeError:
+            continue
+        chaine = entree.get(cle_date)
+        if not chaine:
+            continue
+        try:
+            moment = datetime.strptime(chaine, FORMAT_DATE)
+        except ValueError:
+            continue
+        if moment >= borne:
+            entrees.append(entree)
+        else:
+            break
+    entrees.reverse()
     return entrees
 
 

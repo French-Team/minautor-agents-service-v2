@@ -1,0 +1,133 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+bdd-frictions/entry.py -- Orchestrateur categorie frictions
+"""
+
+import sys
+import argparse
+from datetime import datetime
+from pathlib import Path
+
+# Charger les fonctions depuis le fichier (nom dossier avec tiret = pas un package)
+import importlib.util as _ilu
+
+_fonc_path = Path(__file__).parent / "fonctions" / "bdd_frictions.py"
+_spec = _ilu.spec_from_file_location("bdd_frictions_fonc", str(_fonc_path))
+_fonc = _ilu.module_from_spec(_spec)
+_spec.loader.exec_module(_fonc)
+
+init_db = _fonc.init_db
+ajouter_friction = _fonc.ajouter_friction
+lister_frictions = _fonc.lister_frictions
+archiver_friction = _fonc.archiver_friction
+stats_frictions = _fonc.stats_frictions
+# Le vocabulaire des statuts vient du domicile (fonctions/bdd_frictions.py) :
+# la porte ne recopie ni les filtres admis, ni le defaut (MO-126).
+filtres_disponibles = _fonc.filtres_disponibles
+statuts_pour = _fonc.statuts_pour
+STATUT_ACTIVE = _fonc.STATUT_ACTIVE
+
+
+# Racine matrix/ DETECTEE par le marqueur partage (M-076 : matrice/data/commun/racine.py),
+# jamais comptee a la main (L-013).
+BORNES_REMONTEE = 30
+_courant = Path(__file__).resolve().parent
+for _ in range(BORNES_REMONTEE):
+    if (_courant / "matrice" / "data" / "commun" / "racine.py").is_file():
+        break
+    _courant = _courant.parent
+else:
+    raise RuntimeError("Racine matrix/ introuvable en remontant.")
+DB_PATH = _courant / "matrice" / "data" / "frictions.db"
+
+
+def run(commande, args):
+    """Point d'entree de la categorie frictions"""
+    init_db(DB_PATH)
+
+    if commande == "ajouter":
+        return cmd_ajouter(args)
+    elif commande == "lister":
+        return cmd_lister(args)
+    elif commande == "archiver":
+        return cmd_archiver(args)
+    elif commande == "stats":
+        return cmd_stats(args)
+    else:
+        print(f"Sous-commande inconnue: {commande}")
+        return 1
+
+
+def cmd_ajouter(args):
+    parser = argparse.ArgumentParser(description="Ajouter une friction")
+    parser.add_argument("phrase", help="Phrase complete: Quand <situation>, <probleme>, car <cause>")
+    parser.add_argument("--type", required=True, choices=["ordre", "outil", "theme", "protocole", "combo", "regle", "convention"])
+    parser.add_argument("--gravite", required=True, choices=["mineure", "majeure", "bloquante"])
+    parser.add_argument("--frequence", required=True, choices=["ponctuelle", "recurrente"])
+    parser.add_argument("--mission-id", help="ID de la mission (optionnel)")
+    parsed = parser.parse_args(args)
+
+    friction_id = ajouter_friction(
+        DB_PATH,
+        parsed.phrase,
+        parsed.type,
+        parsed.gravite,
+        parsed.frequence,
+        parsed.mission_id,
+    )
+    print(f"Friction ajoutee: ID={friction_id}")
+    return 0
+
+
+def cmd_lister(args):
+    parser = argparse.ArgumentParser(description="Lister les frictions")
+    parser.add_argument("--mission-id", help="Filtrer par mission")
+    parser.add_argument("--statut", choices=["active", "archivee"], default="active")
+    parser.add_argument("--n", type=int, default=20, help="Nombre max (defaut: 20)")
+    parsed = parser.parse_args(args)
+
+    frictions = lister_frictions(DB_PATH, parsed.mission_id, parsed.statut, parsed.n)
+    if not frictions:
+        print("Aucune friction trouvee.")
+        return 0
+
+    for f in frictions:
+        print(f"  ID={f['id']} | {f['date']} | mission={f['mission_id'] or 'N/A'} | type={f['type']} | gravite={f['gravite']} | freq={f['frequence']} | statut={f['statut']}")
+        print(f"    {f['phrase']}")
+    return 0
+
+
+def cmd_archiver(args):
+    parser = argparse.ArgumentParser(description="Archiver une friction")
+    parser.add_argument("--id", type=int, required=True)
+    parser.add_argument("--statut", required=True, choices=["valide", "annule"])
+    parser.add_argument("--raison", default="")
+    parsed = parser.parse_args(args)
+
+    archiver_friction(DB_PATH, parsed.id, parsed.statut, parsed.raison)
+    print(f"Friction {parsed.id} archivee avec statut={parsed.statut}")
+    return 0
+
+
+def cmd_stats(args):
+    parser = argparse.ArgumentParser(description="Statistiques frictions")
+    parser.add_argument("--mission-id", help="Filtrer par mission")
+    parsed = parser.parse_args(args)
+
+    stats = stats_frictions(DB_PATH, parsed.mission_id)
+    print(f"Total: {stats['total']}")
+    print(f"  Actives: {stats['actives']}")
+    print(f"  Archivees (validees): {stats['validees']}")
+    print(f"  Archivees (annulees): {stats['annulees']}")
+    print(f"  Taux valide: {stats['taux_valide']}% | Taux annule: {stats['taux_annule']}%")
+    print(f"  Par type: {stats['par_type']}")
+    print(f"  Par gravite: {stats['par_gravite']}")
+    print(f"  Duree detection->validation (min): mediane={stats['duree_mediane_min']} max={stats['duree_max_min']}")
+    if stats["recidives"]:
+        print(f"  RECIDIVES ({len(stats['recidives'])}):")
+        for k, v in stats["recidives"].items():
+            print(f"    x{v}: {k[:100]}")
+    else:
+        print("  Recidives: 0")
+    return 0

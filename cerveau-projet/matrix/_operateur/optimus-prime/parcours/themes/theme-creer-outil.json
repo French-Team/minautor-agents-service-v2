@@ -1,0 +1,68 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "CREER-OUTIL",
+    "description": "Parcours de creation d un outil matrice de bout en bout : cadrer, squelette, adapter, preuves, cloturer. Capitalise M-089..M-108. Voir protocoles/proto-9-mini-missions-inter-round.md"
+  },
+  "theme": {
+    "nom": "CREER-OUTIL",
+    "but": "Livrer un outil fonctionnel du 1er coup en 5 mini-missions serie, preuves a chaque etape",
+    "redirects": [
+      {
+        "besoin": "Cadrer le besoin",
+        "action": "procedure",
+        "etapes": [
+          "Nommer l outil (tiret, ex bdd-xxx) + une phrase de besoin",
+          "Lister ses commandes (verbes) et leurs arguments",
+          "BDD existante reutilisable ou nouvelle ? (porte unique : jamais 2 stockages, lecon M-091)",
+          "Noter friction bdd-frictions + debut suivi-optimus"
+        ],
+        "regle": "Pas de code avant cadrage ecrit. Un outil = un besoin."
+      },
+      {
+        "besoin": "Generer le squelette",
+        "action": "procedure",
+        "etapes": [
+          "Lancer creer-outil.py <nom> --description (squelette sain : NOTE L-017 incluses)",
+          "Verifier : main.py (import direct), entry.py (importlib), fonctions, README"
+        ],
+        "regle": "JAMAIS ecrire le squelette a la main : creer-outil est la porte."
+      },
+      {
+        "besoin": "Adapter le squelette",
+        "action": "procedure",
+        "etapes": [
+          "Remplacer <commande1/2> par les vrais verbes (main.py + entry.py run)",
+          "Brancher fonctions reelles (JSON existant ou SQLite nouveau)",
+          "DB_PATH = parents[6]/matrice/data (compte depuis entry.py, lecon M-091) ; verifier par execution",
+          "Relire le fichier cible EN ENTIER avant chaque edit (proto-2)"
+        ],
+        "regle": "Adapter, pas reecrire : garder l architecture main/entry/fonctions."
+      },
+      {
+        "besoin": "Prouver (4 preuves)",
+        "action": "procedure",
+        "etapes": [
+          "Preuve 1 : CLI repond du 1er coup (cas nominal, donnees reelles)",
+          "Preuve 2 : cas d erreur (mauvais args, cible absente) -> message propre, code != 0",
+          "Preuve 3 : py_compile OK sur tous les .py",
+          "Preuve 4 : garde-ascii OK"
+        ],
+        "regle": "Pas de preuve = pas d acquis (proto-9). Echec -> revert, 1 retry, sinon escalade."
+      },
+      {
+        "besoin": "Cloturer",
+        "action": "procedure",
+        "etapes": [
+          "Archiver friction (valide) + modif BDD (fichier, hashes, raison, friction-id)",
+          "Noter fin suivi-optimus (bilan une phrase + preuve)",
+          "Lecon BDD via bdd-lecons-matrice si regle generale",
+          "Mission-terminee au journal + BDD modifications-par-fichier"
+        ],
+        "regle": "Tracabilite totale : chaque cloture laisse 4 traces (friction, modif, suivi, journal)."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "../fins.json", "case": "fin-persistant" }
+}

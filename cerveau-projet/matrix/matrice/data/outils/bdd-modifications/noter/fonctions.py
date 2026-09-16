@@ -28,6 +28,9 @@ def ajouter_modification(donnees, chemin_fichier, action, detail, tags):
     fiche = donnees.setdefault("fichiers", {}).setdefault(
         chemin_fichier, {"modifications": [], "tags": []}
     )
+    # Resilience : anciens fichiers sans cle tags (avant migration).
+    fiche.setdefault("tags", [])
+    fiche.setdefault("modifications", [])
     fiche["modifications"].append(entree)
     for tag in tags:
         if tag not in fiche["tags"]:

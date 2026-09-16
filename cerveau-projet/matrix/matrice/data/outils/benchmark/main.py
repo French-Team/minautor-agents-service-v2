@@ -1,0 +1,56 @@
+"""Point d'entree principal de l'outil benchmark.
+
+Sac a dos : guide l'outil dans tous les cas d'usage.
+Dispatch : benchmark | --help | sans arg.
+"""
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+
+def afficher_aide():
+    """Affiche l'aide de l'outil."""
+    print("Outil BENCHMARK -- Mise a l'epreuve (9 epreuves par fichier)")
+    print("")
+    print("Verbes :")
+    print("  benchmark  --fichier <chemin> [--json] [--attendu existe|absent]")
+    print("  benchmark  --dossier <chemin> [--recursif] [--filtre *.py] [--json]")
+    print("  benchmark  --integration [--json]")
+    print("")
+    print("9 epreuves : perimetre, lf, sha, validation, ascii, bdd, relecture, bak, invisibilite")
+    print("Codes retour : 0=tout passe, 1=echec, 2=refus perimetre")
+    print("")
+    print("Doctrine : toute mission qui cree/modifie/supprime un fichier")
+    print("passe benchmark AVANT fin --bilan.")
+
+
+def main():
+    """Point d'entree : sac a dos + dispatch."""
+    arguments = sys.argv[1:]
+
+    if not arguments:
+        afficher_aide()
+        return 0
+
+    premier = arguments[0]
+
+    if premier in ("--help", "-h", "help"):
+        afficher_aide()
+        return 0
+
+    if premier == "benchmark":
+        from benchmark.entry import benchmark
+        return benchmark(arguments[1:])
+
+    if premier.startswith("--"):
+        from benchmark.entry import benchmark
+        return benchmark(arguments)
+
+    print(f"ERREUR : verbe inconnu '{premier}'. Verbs : benchmark")
+    print("Usage : python3 main.py benchmark --fichier <chemin>")
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())

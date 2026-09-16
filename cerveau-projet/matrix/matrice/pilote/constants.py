@@ -14,6 +14,25 @@ if REPERTOIRE_MATRICE.name != "matrice":
 REPERTOIRE_DATA = REPERTOIRE_MATRICE / "data"
 REPERTOIRE_INTERCOM = REPERTOIRE_MATRICE / "intercom"
 
+# data/commun (motif unique M-076) : le dossier PARTAGE est installe dans
+# sys.path. tokens.py y vit : l'espion de POIDS des injections (E-097,
+# imperatif 56) et le sac-a-dos. Garde-fou L-006 : le dossier cible est
+# verifie avant d'etre installe (jamais un chemin devine).
+import sys as _sys
+
+REPERTOIRE_COMMUN = REPERTOIRE_DATA / "commun"
+if REPERTOIRE_COMMUN.name == "commun" and (REPERTOIRE_COMMUN / "tokens.py").is_file():
+    _sys.path.insert(0, str(REPERTOIRE_COMMUN))
+
+# Prefixe des missions de CE pilote (regle CV-009 : une famille = un prefixe,
+# attribue depuis ses constantes, jamais recopie). M- = missions du CAMELEON
+# (Flux 1) ; les missions d'Optimus (Flux 2) sont MO- et vivent dans
+# _operateur/optimus-prime/pilote/constants.py PREFIXE_ID.
+# Historique : c'est ce "M-" code en dur qui a produit la fuite du 2026-09-13
+# (des missions d'Optimus declarees M- et donc rangees du mauvais cote) --
+# la constante existait chez Optimus, pas ici.
+PREFIXE_ID = "M-"
+
 NOM_FILE = "file-missions.json"
 CHEMIN_FILE = REPERTOIRE_PILOTE / NOM_FILE
 

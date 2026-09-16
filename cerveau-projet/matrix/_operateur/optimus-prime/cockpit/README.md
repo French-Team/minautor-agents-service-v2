@@ -1,0 +1,71 @@
+---
+identite:
+  type: readme
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# COCKPIT PRIVE D'OPTIMUS -- MATRICE COMME SERVEUR DISTANT
+
+> Espace **prive et verrouille** d'Optimus Prime. La Matrice y est vue
+> comme un **serveur distant** : Optimus ne lit jamais ses fichiers a la
+> main, il passe par des **routes privees** (CLI) qui consultent la Matrice
+> via ses portes officielles. Le cameleon n'y a JAMAIS acces.
+
+## Doctrine (dual flux 2026-09-12)
+
+| Flux | Image | Acces |
+|---|---|---|
+| **Flux 1 CAMELEON** | Matrice = centre qui GUIDE via pilote | pilote, vivier, injections (cameleon ignore) |
+| **Flux 2 MAINTENANCE** | Matrice = **serveur distant** que Matrice SURVEILLE | **cockpit** (ce dossier) = routes privees verrouillees d'Optimus |
+
+*La Matrice survit aux `[pause]` (server 9368 + 3 boucles) : le cockpit
+l'interroge meme cameleon en pause. Seul point commun des flux : la Matrice.*
+
+## Routes privees (lecture seule, jamais d'ecriture)
+
+| Route | Ce que tu consultes | Sous-jacent (portes officielles) |
+|---|---|---|
+| `/etat` | Sante du serveur + session | `vie etat` + `server etat` + `pause-session etat/journal` + `machine-defcon lire` + `classeur perimetre/defcon` |
+| `/sante` | Integrite du marbre + BDD | `espion-integrite verifier` (diagnostic sans ecriture, MO-077) + `verifier-conventions/regles/protocoles` + `bdd-regles/conventions/protocoles verifier` + `bdd-modifications/suivi-optimus verifier` |
+| `/flux1` | Flux Cameleon (Matrice guide) | `pilote file` + `entonnoir file/tresse` + `intercom pilote/cameleon` + `veille journal` |
+| `/flux2` | Flux Maintenance (Matrice te surveille) | `espion-integrite-optimus` + `espion-activite-optimus` + `remorque etat` + `suivi-optimus lire/verifier` |
+| `/metriques` | Performances + activite | `bilan-periode` + `bilan-matrice --rapide` + `journal-multi-encarts` + `usages` |
+| `/chercher` | Chercher une mission, une lecon, un fichier (porte unique branchee, EO-112) | `matrice/data/outils/rechercher/main.py rechercher --requete <texte> --dans tous --json` |
+| `/complet` | Tout en une passe | les 6 ci-dessus en serie |
+
+> Toutes les routes sont **lecture seule**. Aucune ne pose de drapeau,
+> n'ecrit, ne tue un processus. La reparation reste hors cockpit
+> (outils dedies, proto-8, theme REPARATION).
+
+## Outil
+
+```
+python cockpit-matrice.py --route <etat|sante|flux1|flux2|chercher|metriques|complet> [--json] [--racine .] [--requete <texte>]
+```
+
+- `--json` : sortie machine (JSON) pour chaine.
+- `--requete` : route `/chercher` seulement -- cherche pour de vrai dans toute la
+  Matrice ; sans elle, un temoin prouve que le moteur repond (porte vivante).
+- Sans option : humain, sections separees, codes visibles.
+- Verrou : vit dans `_operateur/optimus-prime/cockpit/` -- zone
+  `maintenance,_operateur` du `perimetre-cameleon` (24 zones) ;
+  `filtrer_pour_cameleon` retire toute lecon `cockpit/optimus/_operateur`
+  des injections.
+
+## Perimetre verrouille
+
+- Domicile : `_operateur/optimus-prime/cockpit/` (jamais `matrice/`).
+- Lecture : Optimus seul (hors pilote, Flux 2).
+- Ecriture : Optimus seul vers `matrix/` via BDD (pas depuis cockpit).
+- Invisibilite : `audit-invisibilite` vert (0 fuite `optimus/_operateur`
+  vers cameleon, filtre L-016).
+
+## Quand l'utiliser
+
+- Au reveil (`demarrer-optimus-prime.md` ORDRE 4) : `/etat` + `/sante` avant chantier.
+- Avant `reprendre` (fin de maintenance) : `/complet` pour certifier que la Matrice est verte.
+- En diagnostic : `/flux1` ou `/flux2` cible.
+
+---
+*Ce dossier est la seule porte d'observation du serveur distant. Pour agir, sors du cockpit et passe par les outils dedies.*

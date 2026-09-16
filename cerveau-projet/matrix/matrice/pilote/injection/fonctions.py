@@ -28,6 +28,32 @@ from constants import (
     STATUT_EN_COURS,
 )
 
+try:
+    from tokens import peser_tokens
+except ImportError:  # jamais bloquant : sans le motif, l'injection part sans poids
+    peser_tokens = None
+
+# Espion de POIDS des injections (E-097, imperatif 56) : le sac-a-dos remis a
+# l'agent est pese -- on voit combien de contexte la Matrice lui demande de lire
+# (objectif + checklist + lecons + themes). Champs fermes : liste unique.
+CHAMPS_PESES = ("objectif", "checklist", "lecons_utiles", "themes_utiles")
+
+
+def poids_injection(injection):
+    """Retourne le poids estime (tokens) du sac-a-dos remis a l'agent.
+
+    0 si le motif tokens est absent : une injection n'echoue JAMAIS parce que
+    l'espion manque (doctrine : jamais bloquant).
+    """
+    if peser_tokens is None:
+        return 0
+    morceaux = [
+        json.dumps(injection.get(champ), ensure_ascii=True)
+        for champ in CHAMPS_PESES
+        if injection.get(champ)
+    ]
+    return peser_tokens(*morceaux)
+
 
 def afficher_statut(file_missions):
     """Affiche l'etat de la mission en cours (ou l'absence de mission en cours)."""
@@ -79,6 +105,7 @@ def preparer_injection(charger_file):
         "lecons_utiles": charger_lecons_utiles(),
         "themes_utiles": charger_themes_utiles(),
     }
+    injection["poids_tokens"] = poids_injection(injection)
     deposer_message(BOITE_PILOTE_OUT, injection)
 
     mission["statut"] = STATUT_EN_COURS
@@ -125,6 +152,7 @@ def enchainer(charger_file):
         "lecons_utiles": charger_lecons_utiles(),
         "themes_utiles": charger_themes_utiles(),
     }
+    injection["poids_tokens"] = poids_injection(injection)
     deposer_message(BOITE_PILOTE_OUT, injection)
 
     mission["statut"] = STATUT_EN_COURS
@@ -136,11 +164,38 @@ def enchainer(charger_file):
     return 0
 
 
+def filtrer_pour_cameleon(items):
+    """Filtre L-016/invisibilite : retire tout item lisible par le cameleon qui nomme l'invisible.
+
+    L'invisible = Optimus et ses zones (_operateur, suivi-optimus, remorque, espions-optimus,
+    tmp-optimus). Le filtre est case-insensitive et porte sur lecon+tags+source (ou but+description
+    pour les themes). Un item qui contient un mot interdit est invisible pour le cameleon : on le retire
+    de l'injection (la Matrice GUIDE sans reveler ses coulisses). Liste fermee dans audit-invisibilite.py.
+    """
+    interdits = ("optimus", "_operateur", "suivi-optimus", "tmp-optimus", "remorque", "espions-optimus", "optimus-prime")
+    filtres = []
+    for it in items:
+        texte = " ".join([
+            it.get("lecon", ""),
+            it.get("but", ""),
+            it.get("description", ""),
+            it.get("nom", ""),
+            " ".join(it.get("tags", [])),
+            it.get("source", ""),
+        ]).lower()
+        if any(m in texte for m in interdits):
+            continue
+        filtres.append(it)
+    return filtres
+
+
 def charger_lecons_utiles():
     """Charge les lecons de la BDD lecons.json (liste vide si absente ou illisible).
 
     BDD en cours de construction : jamais de faux blocage, jamais de type surprenant.
     Format prevu (contrat data) : {"lecons": [{...tags...}, ...]}.
+    Filtre L-016 : les lecons qui nomment l'invisible sont retirees de l'injection
+    (le cameleon ne doit jamais lire _operateur/optimus/suivi-optimus -- audit-invisibilite).
     """
     chemin_lecons = REPERTOIRE_DATA / "lecons.json"
     if not chemin_lecons.exists():
@@ -148,7 +203,8 @@ def charger_lecons_utiles():
     try:
         with open(chemin_lecons, "r", encoding=ENCODAGE) as flux:
             donnees = json.load(flux)
-        return donnees.get("lecons", []) if isinstance(donnees, dict) else []
+        lecons = donnees.get("lecons", []) if isinstance(donnees, dict) else []
+        return filtrer_pour_cameleon(lecons)
     except (OSError, ValueError):
         return []
 
@@ -158,12 +214,14 @@ def charger_themes_utiles():
 
     Meme doctrine que lecons_utiles : garde jamais bloquant, type toujours sur.
     Format (moule theme-bdd) : {"themes": [{"id", "nom", "but", ...}, ...]}.
+    Filtre L-016 : un theme qui nommerait l'invisible est retire (meme regle que lecons).
     """
     if not CHEMIN_THEMES.exists():
         return []
     try:
         with open(CHEMIN_THEMES, "r", encoding=ENCODAGE) as flux:
             donnees = json.load(flux)
-        return donnees.get("themes", []) if isinstance(donnees, dict) else []
+        themes = donnees.get("themes", []) if isinstance(donnees, dict) else []
+        return filtrer_pour_cameleon(themes)
     except (OSError, ValueError):
         return []

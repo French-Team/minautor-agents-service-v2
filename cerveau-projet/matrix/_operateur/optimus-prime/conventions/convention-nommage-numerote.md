@@ -1,0 +1,138 @@
+---
+identite:
+  type: convention
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# Convention CV-008 -- Nommage numerote des combos et super-combos
+
+> Decision createur **2026-09-13**. Enregistree dans la BDD `conventions-matrice`
+> sous l'id **CV-008** (renomme depuis `C-008` le 2026-09-13, MO-045 : le
+> prefixe `C-` etait partage avec un autre usage, voir la regle CV-009).
+> Perimetre : `_operateur/optimus-prime/super-combos/`.
+
+## Prefixes : une famille = un prefixe (regles CV-009 et CV-011)
+
+Le doublon qui avait cree l'ambiguite est **resolu** -- chaque famille a SON
+prefixe, et `C-` (nu) est **mort** :
+
+| Prefixe | Proprietaire | Vit dans |
+|---|---|---|
+| `M-NNN` | missions du cameleon (Flux 1) | `historiques-missions.jsonl` |
+| `MO-NNN` | missions d'Optimus (Flux 2) | `historiques-missions-optimus.jsonl` |
+| `E-NNN` | items de l'entonnoir du **cameleon** (Flux 1) | `matrice/pilote/entonnoir-files.json` |
+| `EO-NNN` | items de l'entonnoir d'**Optimus** (Flux 2) | `_operateur/optimus-prime/pilote/entonnoir-files-optimus.json` |
+| `L-NNN` | lecons | `matrice/data/lecons.json` |
+| `TH-NNN` | themes | `vivier-themes.json` |
+| `CV-NNN` | **conventions** (celle-ci est CV-008) | `matrice/data/conventions-matrice.json` |
+| `CT-NNN` | **constats** de revue createur (ex `C-NNN`, migres) | champ `constat` de `historiques-missions.jsonl` |
+| `P-NNN` / `R-NNN` | protocoles / regles | `bdd-protocoles-matrice`, `bdd-regles-matrice` |
+| `H-NNN` | entrees de l'historique BDD | `historique-bdd.jsonl` |
+| `N-NNN` | items numerotes de la revue createur | `docs/conversation-unslot-gemma-4.md` |
+| `c-NNN` / `sc-NNN` | **combos et super-combos** (objets numerotes, minuscules) | `sc-NNN` dans `super-combos/`, `c-NNN` dans `super-combos/combos/` -- un `registry.json` par famille |
+
+**MORTS / INTERDITS** : `C-` nu (vestige du lot 2026-09-11, migre en `CT-` le
+2026-09-13) et tout prefixe deja porte par une autre famille.
+
+> **Correction du 2026-09-13 (MO-058)** : ce tableau declarait `E-NNN` pour
+> *l'entonnoir* au singulier, en pointant `matrice/pilote/entonnoir*` -- or les
+> **deux** entonnoirs (cameleon Flux 1, Optimus Flux 2) emettaient `E-`, chacun
+> avec **son** compteur (89 cote cameleon, 101 cote Optimus) : les deux plages se
+> recouvraient (`E-084`..`E-089` emis des deux cotes) et un meme id designait
+> deux items differents. C'est **exactement** la faute de `M-` (une mission
+> d'Optimus portant le prefixe du cameleon), corrigee en `MO-`. Meme remede :
+> l'entonnoir du cameleon **garde** `E-` (ses ids vivent dans des journaux en
+> ajout seul : les renommer les ferait mentir), l'entonnoir d'Optimus prend
+> **`EO-`** (`listes.py` `PREFIXE_ITEM`, jamais recopie dans le code).
+
+Regles : **un namespace vivant ne partage jamais son prefixe** ; la casse est
+signifiante (`c-001` = objet combo, `CV-001` = convention, `CT-001` = constat) ;
+avant de nommer une nouvelle famille on **rejoue l'inventaire** (jamais un
+prefixe choisi de memoire). Les conventions sont enregistrees par la porte
+`bdd-conventions-matrice`, qui attribue un id `CV-NNN` (le prefixe vit dans
+`constants.py`, jamais recopie).
+
+## La regle
+
+**Un super-combo et un combo portent TOUJOURS un numero, visible dans leur nom.**
+
+| Regle | Valeur |
+|---|---|
+| Super-combo | dossier `sc-001-<slug>/` -- id `sc-001` |
+| Combo | dossier `c-001-<slug>/` -- id `c-001` |
+| Largeur du numero | 3 chiffres, zero-paddes |
+| Reutilisation d'un numero | **JAMAIS** (le compteur ne redescend pas, meme apres suppression) |
+| Source de verite | **une par famille** : `super-combos/registry.json` (section `super-combos` + compteur `sc`) et `super-combos/combos/registry.json` (section `combos` + compteur `c`) |
+| Outils (`combos/outils/`) | ne sont **PAS** des combos : aucun numero |
+
+Le prefixe dit la **nature** de l'objet : `sc-` = super-combo, `c-` = combo.
+C'est ce qui leve l'ambiguite de l'ancien nommage (les deux vivaient cote a
+cote sous des noms libres, sans moyen de les distinguer).
+
+## Pourquoi le numero est dans le nom
+
+- **Identifier sans ambiguite** : `c-003-historique` se lit seul, sans ouvrir
+  le registre ni deviner la nature de l'objet.
+- **Adresser par ID** : un texte, un prompt, une mission cite `c-003` ou
+  `sc-001`, jamais un chemin recopie (le chemin recopie derive des qu'un
+  dossier bouge -- lecon payee du renommage).
+- **Tracer un usage** : la piste `usages-outils-combos` porte l'ID, stable
+  meme si le slug change.
+
+## Reference (texte, script, prompt)
+
+> Un objet numerote se reference par son **ID** (`sc-001`, `c-001`, en
+> minuscules), jamais par un chemin recopie. Le chemin se deduit du registre
+> au moment du besoin.
+
+## Portes officielles
+
+```bash
+# Banque des BDD disponibles
+python combos/outils/creer-combo.py banque
+
+# Generer un combo numerote (le numero suivant est attribue par le registre)
+python combos/outils/creer-combo.py creer <slug> --bdd <id>
+
+# Controler un combo (numero + main + README + compile + ASCII + registre)
+python combos/outils/creer-combo.py verifier c-001-lecons
+
+# Etat numerote du disque vs registre, compteurs (0 ecart attendu)
+python combos/outils/creer-combo.py lister
+
+# Lancer un super-combo par son numero (le lanceur vit avec SES objets)
+python super-combos/lancer-super-combos.py --numero sc-001 [--fichier <fichier>]
+```
+
+## Controle
+
+- `creer-combo.py verifier <nom>` : refuse un nom non numerote
+  (`nom non numerote : attendu c-<NNN>-<slug>`).
+- `creer-combo.py lister` : compare disque et registre, affiche les compteurs.
+- `lancer-super-combos.py` : signale un super-combo du registre dont un champ
+  obligatoire manque, au lieu de planter (trou attrape le 2026-09-13).
+
+## Etat migre (2026-09-13)
+
+| Avant | Apres |
+|---|---|
+| `combos/auto-xxx/` | `super-combos/sc-001-auto-xxx/` (sc-001) |
+| `combos/auto-evolution/` | `super-combos/sc-002-auto-evolution/` (sc-002) |
+| `combos/lecons/` ... `combos/frictions/` (7) | `combos/c-001-lecons/` ... `combos/c-007-frictions/` (c-001 a c-007) |
+| `combos/outils/` | inchange (boite a outils, non numerotee) |
+
+Compteurs apres migration : `sc=2`, `c=7`.
+
+> **Rangement corrige le 2026-09-13 (MO-067, decision createur).** Le contrat
+> ci-dessus a d'abord ete applique EN PLACE : les `sc-` sont restes ranges avec
+> les `c-` dans `combos/`, si bien que le dossier nomme `super-combos/` ne
+> contenait aucun super-combo et que le dossier nomme `combos/` en contenait
+> deux. Mesure de la cecite avant correction : la **remorque** (inventaire des
+> equipements) etiquetait `sc-001` et `sc-002` en type `combo` -- le prefixe qui
+> dit la nature etait nie par le rangement. Cible retenue (modele du createur :
+> *un super-combo peut contenir des combos qui contiennent des outils*) :
+> `super-combos/` porte SES objets (`sc-*`), SON lanceur et SON registre ;
+> `combos/` porte les `c-*`, la boite a outils et SON registre. Le registre est
+> donc SCINDE par famille, et `creer-combo.py lister` juge chaque famille contre
+> sa propre source de verite.

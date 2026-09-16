@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+bdd-frictions -- BDD des frictions (auto-evolution Optimus Prime)
+
+Point d'entree global. Dirige vers la categorie demandee.
+"""
+
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from entry import run as run_frictions
+
+
+def main():
+    if len(sys.argv) < 2:
+        print(__doc__)
+        print("\nUsage:")
+        print("  bdd-frictions ajouter \"<phrase>\" --type <type> --gravite <g> --frequence <f> [--mission-id <id>]")
+        print("  bdd-frictions lister [--mission-id <id>] [--statut <statut>] [--n <nb>]")
+        print("  bdd-frictions archiver --id <id> --statut <valide|annule> [--raison <txt>]")
+        print("  bdd-frictions stats [--mission-id <id>]")
+        return 1
+
+    cmd = sys.argv[1]
+    args = sys.argv[2:]
+
+    if cmd == "ajouter":
+        return run_frictions("ajouter", args)
+    elif cmd == "lister":
+        return run_frictions("lister", args)
+    elif cmd == "archiver":
+        return run_frictions("archiver", args)
+    elif cmd == "stats":
+        return run_frictions("stats", args)
+    else:
+        print(f"Commande inconnue: {cmd}")
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

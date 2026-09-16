@@ -210,7 +210,16 @@
       "categorie": "SYSTEME",
       "but": "Analyser / optimiser / ameliorer les SERVEURS et boucles de fond (server-matrice, activateur de vie, serveurs futurs) : cycles de surveillance, latence de relance, consommation. ANALYSER avec les traces du sac-a-dos, OPTIMISER sur cibles chiffrees, AMELIORER avec preuve avant/apres.",
       "description": ""
+    },
+    {
+      "id": "TH-026",
+      "date": "2026-09-12 10:15:54",
+      "nom": "COMMUNICATION",
+      "nom_affiche": "VIVIER",
+      "categorie": "SYSTEME",
+      "but": "Accueil v3 (Flux 1) : le cameleon se presente une fois, presente la Matrice et dialogue avec l'operateur sans conscience que la Matrice le dirige via le pilote",
+      "description": "Theme d'accueil au lancement v3 via demarrer-cameleon.md. Le cameleon : 1) se presente (identite cameleon, agent unique, personnalite fournie par la Matrice), 2) presente la Matrice (centre de controle total, deux flux, pilote serie stricte, BDD, espions), 3) dialogue ensuite en mode communication pure (questions/reponses) comme s'il etait autonome, alors que chaque mission passe par Matrice->pilote->injection. Usage : premiere mission apres demarrer-cameleon.md, jamais en maintenance Flux 2."
     }
   ],
-  "compteur": 25
+  "compteur": 26
 }

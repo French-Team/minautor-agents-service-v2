@@ -1,7 +1,7 @@
 """Fonctions simples de la categorie noter : une seule tache chacune."""
 from datetime import datetime
 
-from constants import TYPE_MARQUEUR
+from constants import PREFIXE_ID, TYPE_MARQUEUR
 
 
 def separer_tags(chaine_tags):
@@ -12,16 +12,21 @@ def separer_tags(chaine_tags):
 
 
 def prochain_id(lignes):
-    """Retourne le prochain identifiant H-XXX (maximum existant + 1)."""
+    """Retourne le prochain identifiant H-XXX (maximum existant + 1).
+
+    Le prefixe vient de constants.py PREFIXE_ID (CV-009), et la lecture d'un id
+    existant se fait sur la MEME longueur que lui : recopier "H-" et "[2:]" a
+    cote d'une constante, c'est deux verites qui peuvent diverger.
+    """
     maximum = 0
     for ligne in lignes:
         identifiant = ligne.get("id", "")
-        if isinstance(identifiant, str) and identifiant.startswith("H-"):
+        if isinstance(identifiant, str) and identifiant.startswith(PREFIXE_ID):
             try:
-                maximum = max(maximum, int(identifiant[2:]))
+                maximum = max(maximum, int(identifiant[len(PREFIXE_ID):]))
             except ValueError:
                 continue
-    return "H-" + str(maximum + 1).zfill(3)
+    return PREFIXE_ID + str(maximum + 1).zfill(3)
 
 
 def ids_obsoletes(lignes):

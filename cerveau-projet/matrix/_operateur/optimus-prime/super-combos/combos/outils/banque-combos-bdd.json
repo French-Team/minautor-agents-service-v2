@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "note": "Banque des combos dedies aux BDD (imperatif 46). Chaque entree decrit UNE bdd : son outil reel, sa commande de lecture, son filtre par tags. creer-combo.py lit cette banque, jamais une valeur en dur (convention-zero-valeurs-en-dur).",
+  "banque": [
+    {
+      "id": "lecons",
+      "titre": "Lecons (lecons.json)",
+      "outil": "matrice/data/outils/bdd-lecons/main.py",
+      "commande_lire": "lire",
+      "option_filtre": "--tag",
+      "tags_exemple": "lecon,regle,piege",
+      "description": "Lecons gravees (L-XXX) : le pilote peut injecter les dernieres lecons qui concernent la mission, triees par tags."
+    },
+    {
+      "id": "variables",
+      "titre": "Classeur des variables (classeur-variables.json)",
+      "outil": "matrice/data/outils/bdd-variables/main.py",
+      "commande_lire": "lire",
+      "option_filtre": "--tag",
+      "tags_exemple": "defcon,perimetre",
+      "description": "Classeur des variables : valeurs vivantes de la Matrice (defcon, perimetre-cameleon, etc.), lues par cle ou par tag."
+    },
+    {
+      "id": "historique",
+      "titre": "Historiques des missions (historiques-missions.jsonl)",
+      "outil": "matrice/data/outils/bdd-historique/main.py",
+      "commande_lire": "lire",
+      "option_filtre": "--tag",
+      "tags_exemple": "mission,correction",
+      "description": "Historique des missions : trace append-only des missions finies, filtrable par type, tag ou date."
+    },
+    {
+      "id": "modifications",
+      "titre": "Modifications par fichier (modifications-par-fichier.json)",
+      "outil": "matrice/data/outils/bdd-modifications/main.py",
+      "commande_lire": "lire",
+      "option_filtre": "--tag",
+      "tags_exemple": "optimus,reparation",
+      "description": "Modifications par fichier + tags : savoir en une lecture ce qui a ete fait sur un fichier (hash avant/apres, raison)."
+    },
+    {
+      "id": "usages",
+      "titre": "Usages des outils et combos (usages-outils-combos.jsonl)",
+      "outil": "matrice/data/outils/bdd-usages/main.py",
+      "commande_lire": "lire",
+      "option_filtre": "--tag",
+      "tags_exemple": "outil,combo",
+      "description": "Utilisation des outils et combos : pistage (code, duree, tokens avant/apres) filtrable par outil ou par tag."
+    },
+    {
+      "id": "activites",
+      "titre": "Activites recentes (activites-recentes.json)",
+      "outil": "matrice/data/outils/bdd-activites/main.py",
+      "commande_lire": "lire",
+      "option_filtre": "--tag",
+      "tags_exemple": "missions,alertes",
+      "description": "Activites recentes par section (missions, alertes, passes, decisions), filtrables par tag."
+    },
+    {
+      "id": "frictions",
+      "titre": "Frictions detectees (frictions.db)",
+      "outil": "_operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/main.py",
+      "commande_lire": "lister",
+      "option_filtre": "--mission-id",
+      "tags_exemple": "ordre,outil,frequence",
+      "description": "BDD des frictions : ce qui se repete et coute du temps, qualifie (type, gravite, frequence) pour cibler les corrections."
+    }
+  ]
+}

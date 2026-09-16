@@ -1,0 +1,220 @@
+{"type": "alerte", "portes": 31, "signature": "b63f3e5dfbaad08ce4bbf638b0a8940f0c07fb836b252f1bed7509c7f189e6cb", "depot_code": null, "alertes": ["orpheline:benchmark", "orpheline:dialoguer", "orpheline:maintenir", "muette:rechercher", "muette:selecteur-flux", "muette:signaler", "recette:benchmark", "recette:bilan-periode", "recette:editer-agents-md", "recette:journal-multi-encarts", "recette:machine-defcon", "recette:pause-session", "recette:selecteur-flux", "refus:bdd-historique", "refus:dupliquer-template", "refus:ecrire", "refus:editer-agents-md", "refus:lister"], "date": "2026-09-13 12:12:24"}
+{"type": "alerte", "portes": 31, "signature": "79f2984fe2b9a054a9162219fd3e4687ac784340b728b0c22bd336d5969d0a57", "depot_code": null, "alertes": ["muette:benchmark", "muette:dialoguer", "muette:maintenir", "muette:rechercher", "muette:selecteur-flux", "muette:signaler", "recette:benchmark", "recette:bilan-periode", "recette:editer-agents-md", "recette:journal-multi-encarts", "recette:machine-defcon", "recette:pause-session", "recette:selecteur-flux", "refus:bdd-historique", "refus:dupliquer-template", "refus:ecrire", "refus:editer-agents-md", "refus:lister"], "date": "2026-09-13 12:12:44"}
+{"type": "alerte", "portes": 31, "signature": "95adfc845eef301f6071212df836cdf539937afddee18cabebb273a586cc5380", "depot_code": null, "alertes": ["muette-observation:bdd-historique", "muette-observation:benchmark", "muette-observation:dialoguer", "muette-observation:editer-agents-md", "muette-observation:executer", "muette-observation:maintenir", "muette-observation:rechercher", "muette-observation:selecteur-flux", "muette-observation:signaler", "muette-vivante:bdd-historique", "muette-vivante:editer-agents-md", "muette-vivante:rechercher", "muette-vivante:selecteur-flux", "muette-vivante:signaler", "orpheline:benchmark", "orpheline:dialoguer", "orpheline:maintenir", "recette:benchmark", "recette:bilan-periode", "recette:editer-agents-md", "recette:journal-multi-encarts", "recette:machine-defcon", "recette:pause-session", "recette:selecteur-flux"], "date": "2026-09-13 12:13:39"}
+{"type": "alerte", "portes": 31, "signature": "77712640ef60a2e1fd9a10db8e366887233342f7adb09cc59ca89f8f45050d0f", "depot_code": null, "alertes": ["muette-observation:bdd-historique", "muette-observation:benchmark", "muette-observation:dialoguer", "muette-observation:editer-agents-md", "muette-observation:executer", "muette-observation:maintenir", "muette-observation:rechercher", "muette-observation:selecteur-flux", "muette-observation:signaler", "muette-vivante:bdd-historique", "muette-vivante:editer-agents-md", "muette-vivante:rechercher", "muette-vivante:selecteur-flux", "muette-vivante:signaler", "orpheline:benchmark", "orpheline:dialoguer", "orpheline:maintenir", "fantome:bdd-suivi-optimus", "fantome:c-001-lecons", "fantome:c-007-frictions", "fantome:combo-lecons", "fantome:veille-flux", "recette:benchmark", "recette:bilan-periode", "recette:editer-agents-md", "recette:journal-multi-encarts", "recette:machine-defcon", "recette:pause-session", "recette:selecteur-flux"], "date": "2026-09-13 12:14:18"}
+{"type": "alerte", "portes": 31, "signature": "d0e69c04bd8fe6d11f86e44522383ec6636b6c7bb2509360552511a5577e2068", "depot_code": null, "alertes": ["muette-observation:bdd-historique", "muette-observation:benchmark", "muette-observation:dialoguer", "muette-observation:editer-agents-md", "muette-observation:executer", "muette-observation:maintenir", "muette-observation:rechercher", "muette-observation:selecteur-flux", "muette-observation:signaler", "muette-vivante:bdd-historique", "muette-vivante:editer-agents-md", "muette-vivante:rechercher", "muette-vivante:selecteur-flux", "muette-vivante:signaler", "nom-inconnu:bdd-suivi-optimus", "nom-inconnu:c-001-lecons", "nom-inconnu:c-007-frictions", "nom-inconnu:combo-lecons", "orpheline:benchmark", "orpheline:dialoguer", "orpheline:maintenir", "recette:benchmark", "recette:bilan-periode", "recette:editer-agents-md", "recette:journal-multi-encarts", "recette:machine-defcon", "recette:pause-session", "recette:selecteur-flux"], "date": "2026-09-13 12:14:52"}
+{"type": "passe-blanche", "portes": 31, "alertes": 28, "signature": "d0e69c04bd8fe6d11f86e44522383ec6636b6c7bb2509360552511a5577e2068", "date": "2026-09-13 12:16:00"}
+{"type": "alerte", "portes": 31, "signature": "d0e69c04bd8fe6d11f86e44522383ec6636b6c7bb2509360552511a5577e2068", "depot_code": 0, "alertes": ["muette-observation:bdd-historique", "muette-observation:benchmark", "muette-observation:dialoguer", "muette-observation:editer-agents-md", "muette-observation:executer", "muette-observation:maintenir", "muette-observation:rechercher", "muette-observation:selecteur-flux", "muette-observation:signaler", "muette-vivante:bdd-historique", "muette-vivante:editer-agents-md", "muette-vivante:rechercher", "muette-vivante:selecteur-flux", "muette-vivante:signaler", "nom-inconnu:bdd-suivi-optimus", "nom-inconnu:c-001-lecons", "nom-inconnu:c-007-frictions", "nom-inconnu:combo-lecons", "orpheline:benchmark", "orpheline:dialoguer", "orpheline:maintenir", "recette:benchmark", "recette:bilan-periode", "recette:editer-agents-md", "recette:journal-multi-encarts", "recette:machine-defcon", "recette:pause-session", "recette:selecteur-flux"], "date": "2026-09-13 12:17:54"}
+{"type": "alerte", "portes": 31, "signature": "d0e69c04bd8fe6d11f86e44522383ec6636b6c7bb2509360552511a5577e2068", "depot_code": 0, "alertes": ["muette-observation:bdd-historique", "muette-observation:benchmark", "muette-observation:dialoguer", "muette-observation:editer-agents-md", "muette-observation:executer", "muette-observation:maintenir", "muette-observation:rechercher", "muette-observation:selecteur-flux", "muette-observation:signaler", "muette-vivante:bdd-historique", "muette-vivante:editer-agents-md", "muette-vivante:rechercher", "muette-vivante:selecteur-flux", "muette-vivante:signaler", "nom-inconnu:bdd-suivi-optimus", "nom-inconnu:c-001-lecons", "nom-inconnu:c-007-frictions", "nom-inconnu:combo-lecons", "orpheline:benchmark", "orpheline:dialoguer", "orpheline:maintenir", "recette:benchmark", "recette:bilan-periode", "recette:editer-agents-md", "recette:journal-multi-encarts", "recette:machine-defcon", "recette:pause-session", "recette:selecteur-flux"], "date": "2026-09-13 12:18:42"}
+{"type": "alerte", "portes": 31, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "depot_code": 0, "alertes": ["muette-observation:bdd-historique", "muette-observation:benchmark", "muette-observation:dialoguer", "muette-observation:editer-agents-md", "muette-observation:executer", "muette-observation:maintenir", "muette-observation:rechercher", "muette-observation:selecteur-flux", "muette-observation:signaler", "muette-vivante:bdd-historique", "muette-vivante:benchmark", "muette-vivante:editer-agents-md", "muette-vivante:rechercher", "muette-vivante:selecteur-flux", "muette-vivante:signaler", "nom-inconnu:bdd-suivi-optimus", "nom-inconnu:c-001-lecons", "nom-inconnu:c-007-frictions", "nom-inconnu:combo-lecons", "orpheline:dialoguer", "orpheline:maintenir", "recette:benchmark", "recette:bilan-periode", "recette:editer-agents-md", "recette:journal-multi-encarts", "recette:machine-defcon", "recette:pause-session", "recette:selecteur-flux"], "date": "2026-09-13 12:19:05"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:20:15"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:21:26"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:22:36"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:23:47"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:24:58"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:26:08"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:27:19"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:28:30"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:29:40"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:30:51"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:32:01"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:33:12"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:34:23"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:35:33"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:36:44"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:37:55"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:39:05"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:40:16"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:41:27"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:42:37"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:43:48"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:44:58"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:46:09"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:47:20"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:48:30"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:49:41"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:50:52"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:52:02"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:53:13"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:54:23"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:55:34"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:56:44"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:57:55"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 12:59:06"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:00:16"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:01:27"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:02:38"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:03:48"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:04:59"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:06:09"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:07:20"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:08:31"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:09:41"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:10:52"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:12:02"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:13:13"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:14:24"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:15:34"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:16:45"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:17:55"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:19:06"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:20:17"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:21:27"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:22:38"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:23:48"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:24:59"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:26:10"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:27:20"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:28:31"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:29:41"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:30:52"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:32:03"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:33:13"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:34:24"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:35:35"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:36:45"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:37:56"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:39:07"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:40:17"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:41:28"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:42:38"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:43:49"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:45:00"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:46:10"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:47:21"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:48:32"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:49:42"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:50:53"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:52:03"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:53:14"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:54:25"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:55:36"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:56:46"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:57:57"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 13:59:08"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:00:18"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:01:29"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:02:40"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:03:51"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:05:01"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:06:12"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:07:23"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:08:34"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:09:44"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:10:55"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:12:06"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:13:17"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:14:27"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:15:38"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:16:49"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:18:00"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:19:11"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:20:21"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:21:32"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-13 14:21:32"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "71aa35fe6d5a4a1238fa69fe6a8de7b0d5915f2db5cb35fa2ef9dbc5f9772eaf", "date": "2026-09-13 14:22:09"}
+{"type": "alerte", "portes": 31, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "depot_code": 0, "alertes": ["muette-observation:bdd-historique", "muette-observation:benchmark", "muette-observation:dialoguer", "muette-observation:editer-agents-md", "muette-observation:executer", "muette-observation:maintenir", "muette-observation:rechercher", "muette-observation:selecteur-flux", "muette-observation:signaler", "muette-vivante:bdd-historique", "muette-vivante:benchmark", "muette-vivante:editer-agents-md", "muette-vivante:maintenir", "muette-vivante:rechercher", "muette-vivante:selecteur-flux", "muette-vivante:signaler", "nom-inconnu:bdd-suivi-optimus", "nom-inconnu:c-001-lecons", "nom-inconnu:c-007-frictions", "nom-inconnu:combo-lecons", "orpheline:dialoguer", "recette:benchmark", "recette:bilan-periode", "recette:editer-agents-md", "recette:journal-multi-encarts", "recette:machine-defcon", "recette:pause-session", "recette:selecteur-flux"], "date": "2026-09-13 14:37:20"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "date": "2026-09-13 14:52:31"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-13 14:52:31"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-13 15:07:36"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "date": "2026-09-13 15:07:47"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-13 15:13:39"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-13 15:14:11"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "date": "2026-09-13 15:14:21"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-13 15:22:12"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-13 15:22:33"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "date": "2026-09-13 15:22:44"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-13 15:22:56"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-13 15:23:00"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "date": "2026-09-13 15:23:11"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "date": "2026-09-13 15:38:22"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "date": "2026-09-13 15:53:33"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "date": "2026-09-13 16:08:44"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "date": "2026-09-13 16:23:55"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "date": "2026-09-13 16:39:06"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "date": "2026-09-13 16:54:18"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "date": "2026-09-13 17:09:29"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "date": "2026-09-13 17:24:40"}
+{"type": "passe", "portes": 31, "alertes": 28, "signature": "56a875921cb4124c66bb9c019afa4fbc144b619c29d13d3cf3e581ae20b15400", "date": "2026-09-13 17:39:51"}
+{"type": "passe-blanche", "portes": 31, "alertes": 29, "signature": "e1bcbde6ff134c425d92f3f7240e0402431d1071a51a5bd5b8c92e6b34259c4b", "date": "2026-09-13 17:52:47"}
+{"type": "passe-blanche", "portes": 31, "alertes": 29, "signature": "e1bcbde6ff134c425d92f3f7240e0402431d1071a51a5bd5b8c92e6b34259c4b", "date": "2026-09-13 17:52:58"}
+{"type": "alerte", "portes": 31, "signature": "e1bcbde6ff134c425d92f3f7240e0402431d1071a51a5bd5b8c92e6b34259c4b", "depot_code": 0, "alertes": ["muette-observation:bdd-historique", "muette-observation:benchmark", "muette-observation:dialoguer", "muette-observation:editer-agents-md", "muette-observation:executer", "muette-observation:maintenir", "muette-observation:rechercher", "muette-observation:selecteur-flux", "muette-observation:signaler", "muette-vivante:bdd-historique", "muette-vivante:benchmark", "muette-vivante:editer-agents-md", "muette-vivante:executer", "muette-vivante:maintenir", "muette-vivante:rechercher", "muette-vivante:selecteur-flux", "muette-vivante:signaler", "nom-inconnu:bdd-suivi-optimus", "nom-inconnu:c-001-lecons", "nom-inconnu:c-007-frictions", "nom-inconnu:combo-lecons", "orpheline:dialoguer", "recette:benchmark", "recette:bilan-periode", "recette:editer-agents-md", "recette:journal-multi-encarts", "recette:machine-defcon", "recette:pause-session", "recette:selecteur-flux"], "date": "2026-09-13 17:55:02"}
+{"type": "passe", "portes": 31, "alertes": 29, "signature": "e1bcbde6ff134c425d92f3f7240e0402431d1071a51a5bd5b8c92e6b34259c4b", "date": "2026-09-13 18:10:13"}
+{"type": "passe", "portes": 31, "alertes": 29, "signature": "e1bcbde6ff134c425d92f3f7240e0402431d1071a51a5bd5b8c92e6b34259c4b", "date": "2026-09-13 18:25:24"}
+{"type": "passe-blanche", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "date": "2026-09-13 18:25:46"}
+{"type": "alerte", "portes": 31, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "depot_code": 0, "motif": "depot", "alertes": ["recette:benchmark", "recette:bilan-periode", "recette:editer-agents-md", "recette:journal-multi-encarts", "recette:machine-defcon", "recette:pause-session", "recette:selecteur-flux"], "date": "2026-09-13 18:25:57"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-13 18:26:26"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-13 18:27:06"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 18:27:16"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 18:42:27"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 18:57:38"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 19:12:49"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 19:28:00"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 19:43:11"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 19:58:22"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 20:13:33"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 20:28:44"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 20:43:55"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-13 20:55:03"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-13 20:55:12"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 20:55:22"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 21:10:33"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-13 21:11:51"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-13 21:12:13"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 21:12:24"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-13 21:17:36"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-13 21:18:14"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 21:18:25"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 21:33:35"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 21:48:46"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 22:03:56"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 22:19:07"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 22:34:17"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 22:49:28"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 23:04:38"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 23:19:49"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 23:34:59"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-13 23:50:10"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 00:05:21"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 00:20:31"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 00:35:42"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 00:50:52"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 01:06:03"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 01:21:13"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 01:36:24"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 01:51:34"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 02:06:45"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 02:21:55"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 02:37:06"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 02:52:16"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 03:07:27"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 03:22:37"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 03:37:48"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 03:52:59"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 04:08:09"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 04:23:20"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 04:38:31"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 04:53:41"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 05:08:52"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 05:24:03"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 05:39:13"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 05:54:24"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 06:09:34"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 06:24:45"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 06:39:56"}
+{"type": "passe", "portes": 31, "alertes": 29, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "motif": "deja-signale", "date": "2026-09-14 06:55:07"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-14 06:55:13"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-14 06:55:28"}
+{"type": "passe", "portes": 31, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "alertes": 29, "motif": "deja-signale", "mode": "changement", "passes_absorbes": 0, "date": "2026-09-14 06:55:38"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-14 07:10:23"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-14 07:10:30"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-14 07:38:19"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-14 07:38:31"}
+{"type": "passe", "portes": 32, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "alertes": 29, "motif": "deja-signale", "mode": "changement", "passes_absorbes": 12, "date": "2026-09-14 09:55:19"}
+{"type": "passe", "portes": 33, "notables": 7, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "alertes": 47, "motif": "deja-signale", "mode": "changement", "passes_absorbes": 93, "date": "2026-09-15 09:43:18"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-15 19:18:02"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-15 19:18:09"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-15 19:26:55"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-15 19:26:58"}
+{"type": "alerte", "portes": 33, "signature": "2aa7e23919bbcd334f4b680a2db9f56f4d766861d9068bbae2091cebb05fbff5", "depot_code": 0, "motif": "depot", "alertes": ["recette:benchmark", "recette:bilan-periode", "recette:editer-agents-md", "recette:journal-multi-encarts", "recette:machine-defcon", "recette:pause-session", "recette:selecteur-flux", "refus:ecrire"], "date": "2026-09-16 07:06:47"}
+{"type": "alerte", "portes": 33, "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598", "depot_code": 0, "motif": "depot", "alertes": ["recette:benchmark", "recette:bilan-periode", "recette:editer-agents-md", "recette:journal-multi-encarts", "recette:machine-defcon", "recette:pause-session", "recette:selecteur-flux"], "date": "2026-09-16 07:21:58"}

@@ -1,0 +1,76 @@
+{
+  "injections": {
+    "demarrage": [
+      {
+        "id": "fiche",
+        "description": "Fiche d'identite du Cameleon",
+        "source": "../../agents/cameleon/cameleon.md",
+        "type": "fichier",
+        "obligatoire": true
+      },
+      {
+        "id": "matrice-readme",
+        "description": "Documentation de la Matrice",
+        "source": "../matrice-readme.md",
+        "type": "fichier",
+        "obligatoire": true
+      }
+    ],
+    "avant-mission": [
+      {
+        "id": "personnalite",
+        "description": "Personnalite de la mission",
+        "source": "../data/vivier-themes.json",
+        "type": "json",
+        "obligatoire": true,
+        "categorie": "PERSONNALITE"
+      },
+      {
+        "id": "protocoles-route",
+        "description": "Protocoles de route (P-001, P-002, P-003)",
+        "source": "../data/protocoles-matrice.json",
+        "type": "json",
+        "obligatoire": true
+      },
+      {
+        "id": "theme-actif",
+        "description": "Theme de la mission",
+        "source": "../data/vivier-themes.json",
+        "type": "json",
+        "obligatoire": true
+      },
+      {
+        "id": "lecons-utiles",
+        "description": "Lecons utiles a la mission",
+        "source": "../data/lecons.json",
+        "type": "bdd",
+        "obligatoire": false
+      }
+    ],
+    "pendant-mission": [
+      {
+        "id": "checklist",
+        "description": "Checklist de la mission",
+        "source": "../data/protocoles-matrice.json",
+        "type": "json",
+        "obligatoire": true
+      },
+      {
+        "id": "outils-disponibles",
+        "description": "Liste des outils",
+        "source": "../data/outils",
+        "type": "dossier",
+        "obligatoire": true
+      }
+    ],
+    "apres-mission": [
+      {
+        "id": "bilan-protocol",
+        "description": "Protocole de fin de mission",
+        "source": "../data/protocoles-matrice.json",
+        "type": "json",
+        "obligatoire": true
+      }
+    ]
+  }
+}

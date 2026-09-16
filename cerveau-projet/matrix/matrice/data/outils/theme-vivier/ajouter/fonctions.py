@@ -1,6 +1,8 @@
 """Fonctions simples de la categorie ajouter : une seule tache chacune."""
 from datetime import datetime
 
+from constants import PREFIXE_ID
+
 
 def normaliser_nom(nom):
     """Retourne le nom du theme en majuscules, avec espaces serres (forme canonique)."""
@@ -20,7 +22,7 @@ def ajouter_theme(donnees, nom, but, description, categorie):
         return None, True
     donnees["compteur"] = donnees.get("compteur", 0) + 1
     entree = {
-        "id": "TH-" + str(donnees["compteur"]).zfill(3),
+        "id": PREFIXE_ID + str(donnees["compteur"]).zfill(3),
         "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "nom": normaliser_nom(nom),
         "nom_affiche": "VIVIER",

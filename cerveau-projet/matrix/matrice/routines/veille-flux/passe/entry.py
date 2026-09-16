@@ -12,6 +12,7 @@ from commun import (
     lancer_combo,
     purger_alertes_fantomes,
     purger_signatures_mortes,
+    purger_signatures_resolues,
 )
 from constants import CHEMIN_BDD_ACTIVITES, CHEMIN_BDD_USAGES, SECTION_PASSES, TAGS_PASSE
 from passe.fonctions import executer_passe
@@ -62,6 +63,9 @@ def executer(arguments):
     debut = time.time()
     detections = executer_passe(vigile)
     duree_ms = int((time.time() - debut) * 1000)
+    # Une signature re-testee et non re-detectee est RESOLUE : anti-spam reconcilie
+    # (sinon une alerte morte bloque pour toujours la suivante de meme signature).
+    purger_signatures_resolues(mode, detections)
     nouvelles = 0
     for detection in detections:
         if alerte_grave(detection["etat"], detection["cible"], detection["detail"]):

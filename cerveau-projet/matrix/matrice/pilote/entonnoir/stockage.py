@@ -17,14 +17,29 @@ if REPERTOIRE_PILOTE.name != "pilote":
     )
 
 try:
-    from listes import NOM_ENTONNOIR
+    from listes import NOM_ENTONNOIR, PREFIXE_ITEM
 except ImportError:  # importe comme paquet (depuis le pilote) : chemin complet
-    from entonnoir.listes import NOM_ENTONNOIR
+    from entonnoir.listes import NOM_ENTONNOIR, PREFIXE_ITEM
 
 CHEMIN_ENTONNOIR = REPERTOIRE_PILOTE / NOM_ENTONNOIR
 
 ENCODAGE = "utf-8"
 INDENTATION_JSON = 2
+
+
+def verifier_famille(identifiant):
+    """Refuse un id qui n'appartient PAS a la famille de CET entonnoir (CV-009).
+
+    Meme garde que l'entonnoir d'Optimus : un id etranger (EO- cote cameleon)
+    est un ECART, pas un oubli de saisie.
+    """
+    if identifiant.startswith(PREFIXE_ITEM):
+        return 0, ""
+    return 2, (
+        "Identifiant hors famille : " + repr(identifiant) + " (attendu "
+        + PREFIXE_ITEM + "NNN pour cet entonnoir) -- un item de l'autre "
+        "entonnoir ne se manipule pas ici."
+    )
 
 
 def charger_entonnoir():

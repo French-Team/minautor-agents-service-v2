@@ -27,6 +27,21 @@
 **Protections** : porte unique des lecons (corrections.md est supprime), tags obligatoires, ecriture atomique LF, empreinte.
 **Quand** : fin d'une evolution validee (proto-2), apres chaque lecon reelle ; le pilote consomme ces lecons taguees dans ses injections.
 
+## 2bis. bdd-sessions -- `matrice/data/outils/bdd-sessions/`
+
+| Commande | Usage |
+|---|---|
+| `ajouter` | `python main.py ajouter --session "..." --tags "a,b" [--source "..."]` |
+| `lire` | `python main.py lire [--tag X]` |
+| `resume` | `python main.py resume --derniere` (la DERNIERE session, lecture bornee via `data/commun/derniere_session.py` ; GARDE DE RETARD MO-121 : le retard est DIT des qu'une session FERMEE est plus ancienne que des entrees presentes -- une reponse en retard qui se tait passe pour la verite) |
+| `etat` | `python main.py etat` (l'ETAT SEUL, une ligne : `SESSION : ouverte\|fermee\|aucune` -- format partage declare dans `data/commun/trace_session.py`, MO-121) |
+| `retiqueter` | `python main.py retiqueter --id S-0XX [--tags "a,b"] [--horodatage "AAAA-MM-JJ HH:MM:SS"] [--motif "..."]` (CORRIGE les tags ET/OU la DATE d'une entree existante, TRACE conservee : `tags_avant`, `horodatage_avant`, `retiquete_le`/`re_date_le`, `motif_retiquetage` ; le texte n'est jamais touche -- MO-122) ; depuis MO-124 le RE-DATAGE refuse une seconde DEJA OCCUPEE (nommee) et un horodatage illisible -- dans les deux cas RIEN n'est ecrit |
+| `verifier` | `python main.py verifier` |
+
+**Ordre des entrees (MO-125)** : la recence d'une entree se mesure sur `(horodatage, rang d'append)` -- a la MEME SECONDE, l'entree ECRITE APRES est la plus recente (la BDD est en ajout seul). Le departage est fait par le moteur PARTAGE `data/commun/derniere_session.py` pour `etat`, `resume` et le garde de retard ; il remplace l'ancien "la cloture gagne a la seconde" qui pouvait annoncer l'INVERSE de la verite (accident S-052/S-053). Une entree peut en plus etre RE-DATEE par `retiqueter --horodatage` (MO-124).
+**Contrat ECRIT/LU (MO-121)** : le vocabulaire et le format vivent a UN domicile, `data/commun/trace_session.py` -- celui qui ECRIT et celui qui LIT importent le meme module au lieu de se recopier. Mesure d'origine : le pilote notait `travail` quand la reprise ne lisait que `session-*` (19 missions couvertes par le silence, friction 41).
+**Quand** : ouverture/fermeture de session, fait notable pendant une mission ; lecture obligatoire a la reprise (proto-1 ETAPE 0).
+
 ## 3. pilote -- `matrice/pilote/`
 
 | Commande | Usage |
@@ -49,12 +64,14 @@
 
 | Commande | Usage |
 |---|---|
-| `tour` | `python main.py tour` (une passe : integrite + presence des 7 BDD) |
+| `tour` | `python main.py tour` (une passe : integrite des 14 BDD + presence des a-construire, journalisee) |
+| `verifier` | `python main.py verifier` (meme verdict, ZERO ligne ecrite : diagnostic des routes en lecture seule) |
+| `rotation` | `python main.py rotation` (borne le journal en ARCHIVANT ses evenements anciens -- jamais de suppression) |
 | `boucle` | `python main.py boucle` (surveillance a intervalle, refus de double lancement) |
 | `boucle arret` | `python main.py boucle arret` (arret cooperatif par drapeau) |
 
-**Protections** : ne repare JAMAIS (signale ECART, code 1), a-construire = INFO (pas de fausse alerte), PID + drapeau (zero processus fantome), journal en ajout seul.
-**Quand** : `tour` apres chaque mission (passe finale) ; `boucle` en surveillance continue si demande.
+**Protections** : rotation du journal par le moteur PARTAGE `data/commun/rotation_journal.py` (le meme pour les QUATRE journaux de routines -- espion, veille, vigies -- seuil en constantes, archive datee, jamais de suppression, l'archive est dans le "deja connu" et une course est refusee), ne repare JAMAIS (signale ECART, code 1), a-construire = INFO (pas de fausse alerte, seule source du chapitre 2), chapitres ANNONCES calculees du registre (aucun canal declare sans production), PID + drapeau (zero processus fantome), journal en ajout seul et ROTATIONNE (archive datee, rien ne se perd, l'archive est dans le "deja connu" -- L-040 -- et une course est refusee plutot qu'ecrasee), cadence publiee dans un ETAT COURT (espion-etat.json) pour survivre a une rotation.
+**Quand** : `tour` apres chaque mission (passe finale) ; `verifier` pour tout diagnostic (jamais `tour` : une route en lecture seule ne doit pas ecrire) ; `boucle` en surveillance continue si demande (elle verifie la rotation avant chaque passe).
 
 ## 5. verifier-conventions -- `matrice/data/outils/verifier-conventions/`
 
@@ -94,6 +111,7 @@
 | `corriger --appliquer` | `python main.py corriger --appliquer` (convertit, ecriture atomique LF) |
 
 **Protections** : UN FICHIER SOUS ETALON .sha256 n'est JAMAIS reecrit ; .jsonl (histoire) hors cibles ; caracteres inconnus laisses et signales (jamais de perte) ; affichage console = points de code (jamais de caractere non-ASCII brut).
+**Exemptions VISIBLES (MO-075)** : les fichiers hors du champ de reecriture (BDD sous etalon + journaux .jsonl) sont NOMMES en fin de rapport, chacun avec son motif -- l'exclusion n'est jamais muette (mesure : 546 reecrivables contre 578 vus). Le rapport ne cite aucun point de code pour eux (la veille extrait les U+XXXX de la sortie d'un combo : un code cite pour un exempte deviendrait une fausse alerte).
 **Racine** : DETECTEE par remontee jusqu'a AGENTS.md.
 **Quand** : declenche par la veille-flux (M-012) sur les fichiers modifies ; conversion initiale docs/ effectuee (961 caracteres, 53 emojis signales, validation createur).
 
@@ -106,8 +124,9 @@
 | `veille --boucle` | (surveillance continue a intervalle, refus de double lancement) |
 | `veille --boucle --vigile --intervalle <s>` | (mode et intervalle combinables) |
 | `veille arret` | (drapeau d'arret cooperatif, zero processus tue) |
+| `rotation` | `python main.py rotation` (borne journal-veille.txt en ARCHIVANT ses anciens -- jamais de suppression) |
 
-**Protections** : BDD empreintees intouchables (via corriger-ascii) ; base-acceptee.json (les caracteres acceptes du createur ne produisent JAMAIS d'alerte) ; anti-spam (une seule alerte par signature, `alertes-emises.json`) ; re-test apres pause (fichier en cours d'ecriture = pas de fausse alerte) ; crash de sous-processus JAMAIS confondu avec un verdict (la signature de crash fait foi) ; timeout=120s sur chaque sous-processus (E-045 : un combo bloquant est tue, code 124, incident journalise -- la boucle ne pend jamais) ; alertes graves dans `intercom/matrice/inbox.jsonl` -> missions de reparation.
+**Protections** : journal ROTATIONNE (MO-078 : archive datee par le moteur PARTAGE `data/commun/rotation_journal.py`, l'archive fait partie du "deja connu" -- L-040 -- et une course est refusee plutot qu'ecrasee ; la boucle verifie la rotation avant chaque passe) ; BDD empreintees intouchables (via corriger-ascii) ; base-acceptee.json (les caracteres acceptes du createur ne produisent JAMAIS d'alerte) ; anti-spam (une seule alerte par signature, `alertes-emises.json`) ; re-test apres pause (fichier en cours d'ecriture = pas de fausse alerte) ; crash de sous-processus JAMAIS confondu avec un verdict (la signature de crash fait foi) ; timeout=120s sur chaque sous-processus (E-045 : un combo bloquant est tue, code 124, incident journalise -- la boucle ne pend jamais) ; alertes graves dans `intercom/matrice/inbox.jsonl` -> missions de reparation.
 **Racine** : DETECTEE par remontee jusqu'a AGENTS.md (pattern v1).
 **Quand** : `veille` apres chaque mission ; `veille --boucle` en surveillance continue ; VIGILE apres toute modification du marbre (conventions/regles/protocoles). Chaque passe se depose aussi dans la section passes des activites-recentes (M-017).
 
@@ -174,9 +193,18 @@
 
 ## 15. Outils de l'operateur -- `_operateur/optimus-prime/super-combos/combos/outils/`
 
-Aucun pour l'instant (l'outil ajouter-lecon a ete supprime avant naissance :
-sa cible corrections.md est retiree -- proto-5, jamais deux portes).
-Les futurs outils operateur s'ajoutent ICI avec leur fiche.
+La boite a outils transverses de l'operateur : gardes (ascii, tmp, perimetre
+write, flux2), lanceurs de non-regression, generateurs (creer-outil,
+creer-combo), outils de BDD de travail (bdd-modifs, bdd-lecons-matrice,
+bdd-frictions) et espions annexes. Leur fiche de reference est
+`outils/outils-readme.md`, posee A COTE d'eux -- le manuel ne la recopie pas
+(jamais deux portes pour la meme verite).
+
+> Cette section annoncait "Aucun pour l'instant" alors que le dossier en
+> portait 30 : corrige le 2026-09-13 (MO-067). Les outils ne sont NI des combos
+> NI des super-combos : ils ne portent aucun numero (contrat CV-008). Les
+> super-combos vivent dans `super-combos/` et les combos dans
+> `super-combos/combos/`, chacun avec SON `registry.json`.
 
 ## 16. dupliquer-template -- `matrice/data/outils/dupliquer-template/`
 
@@ -188,7 +216,24 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 **Quand** : chaque nouvelle BDD-registre de la Matrice (entrees taguees + empreinte) -- plus jamais de recopie a la main d'un outil existant.
 **Suites attendues** : fiche du clone dans ce manuel, BDD au registre de l'espion-integrite, premiere entree par la porte du clone.
 
-## 17. theme-vivier -- `matrice/data/outils/theme-vivier/`
+## 17. bdd-conservation -- `matrice/data/outils/bdd-conservation/`
+
+> Registre de conservation de la Matrice v3. Il classe les elements avant toute decision et prepare les archives reversibles. Il ne supprime jamais.
+
+| Verbe | Commande |
+|---|---|
+| `proposer` | `python main.py proposer --source <chemin> --categorie <categorie> --raison <raison> --tags <a,b> [--mission MO-XXX]` |
+| `classer` | `python main.py classer --id K-XXX --categorie <categorie> --raison <raison>` |
+| `decider` | `python main.py decider --id K-XXX --verdict <conserver|archiver|reparer|dette|signaler> --preuve <preuve> [--destination <chemin>]` |
+| `lire` | `python main.py lire [--id K-XXX] [--categorie X] [--statut X] [--verdict X] [--tag X]` |
+| `verifier` | `python main.py verifier` |
+
+**Categories fermees** : VIVANT, STRUCTUREL, GENERE, HISTORIQUE, OBSOLETE, COBAYE, ORPHELIN, HORS-PERIMETRE.
+**Statuts** : propose -> classe -> decide -> archive/conserve/repare/dette/signale/restaure.
+**Protections** : source, raison et tags obligatoires ; lecteurs et ecrivains conserves ; archivage avec destination et preuve ; ecriture atomique LF ; empreinte SHA ; aucune suppression.
+**Quand** : avant toute purification reelle, pour classer et decider sans perdre l historique. Flux 1 et cameleon restent en lecture/protection.
+
+## 18. theme-vivier -- `matrice/data/outils/theme-vivier/`
 
 > Registre des THEMES de mission de la Matrice (genere depuis le moule
 > templates/theme-bdd). Le vocabulaire canonique que le pilote embarque
@@ -208,7 +253,7 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 **Consommation pilote** : depuis M-042, le champ theme du pilote est FERME sur ce vivier (charger / lot / transformer refusent hors vivier) -- le vivier devient la source canonique des themes de mission.
 **Quand** : avant de charger une mission (choisir SON theme dans le vivier), a chaque nouveau type de mission recurrent (l'ajouter au vivier fonde sur ses preuves).
 
-## 18. machine-defcon -- `matrice/data/outils/machine-defcon/`
+## 19. machine-defcon -- `matrice/data/outils/machine-defcon/`
 
 > Machine d'etats defcon (M-059) : le niveau courant vit dans le classeur-variables
 > (cle `defcon`, id V-002 conserve). Echelle FERMEE : 5 = stop agent unique /
@@ -228,7 +273,7 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 **Protections** : la descente 3 -> 2 passe UNIQUEMENT par `valider` (la validation clot la periode de surveillance) ; descente stricte UN echelon a la fois ; `--raison` obligatoire ; ecriture atomique + empreinte du classeur maintenue ; journal des transitions `defcon-historique.jsonl` (append-only, surveille par l'espion).
 **Quand** : a la reception d'une demande `[alerte]` (variante detaillee `[alerte=defcon:N]`, convention des crochets v3), pour suivre la mise en securite (def4 = suivi de bout en bout), et pour clore une periode de surveillance (`valider`).
 
-## 19. bilan-periode -- `matrice/data/outils/bilan-periode/`
+## 20. bilan-periode -- `matrice/data/outils/bilan-periode/`
 
 > Bilan LECTURE SEULE des BDD horodatees sur une periode fermee (M-061).
 > Sources : historiques-missions, usages-outils-combos, activites-recentes,
@@ -243,7 +288,7 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 **Protections** : periode FERMEE (refus code 2 hors liste) ; lecture seule (n'ecrit jamais, aucune empreinte touchee) ; source absente ou cassee = section vide (jamais bloquant) ; lignes cassees des journaux ignorees.
 **Quand** : a la reception d'une demande `[bilan]`, avant une revision strategique, pour verifier ce que la Matrice a fait sur une periode.
 
-## 20. editer-agents-md -- `matrice/data/outils/editer-agents-md/`
+## 21. editer-agents-md -- `matrice/data/outils/editer-agents-md/`
 
 > L'outil de la session-matrix (v3) : comme la v1 (activer-agent-principal)
 > et la v2 (jarvis) ont leurs outils pour modifier AGENTS.md dans leur encart,
@@ -259,7 +304,7 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 
 **Flux v3 grave dans l'encart** : la Matrice accueille au demarrage -> l'operateur fait sa demande -> la Matrice lance le cameleon pour sa mission (serie stricte). L'outil detecte AGENTS.md par remontee (motif unique `data/commun/racine.py`, L-013) et ecrit de facon atomique (tmp + remplacement, LF).
 
-## 21. Modules partages -- `matrice/data/commun/` (M-076)
+## 22. Modules partages -- `matrice/data/commun/` (M-076)
 
 > Pas un outil (pas de main.py) : les DEUX briques que tout outil de la Matrice
 > consomme. Le motif racine et le sac a dos vivent ICI -- jamais recopies
@@ -270,10 +315,11 @@ Les futurs outils operateur s'ajoutent ICI avec leur fiche.
 | `racine.py` | L'UNIQUE `detecter_racine(depart)` : remonte jusqu'au dossier portant AGENTS.md (pattern v1, L-013) | dans un `constants.py` : `sys.path.insert(0, str(REPERTOIRE_DATA / "commun"))` puis `from racine import detecter_racine` et `RACINE = detecter_racine(REPERTOIRE_OUTIL)` |
 | `sac_a_dos.py` | `envelopper(principal, arguments)` : chronometre, execute, puis note l'usage (outil, verbe, code, duree ms) dans la BDD usages PAR L'OUTIL bdd-usages (porte unique). Echec de notation jamais bloquant. Garde : bdd-usages ne se note jamais lui-meme | dans un `main.py` : `sys.exit(envelopper(principal, sys.argv[1:]))` |
 | `lancement.py` | `lancer_invisible(chemin, arguments, script="main.py")` : lancement DETACHE SANS AUCUNE FENETRE (E-056 : Windows CREATE_NO_WINDOW + SW_HIDE, POSIX start_new_session), retourne (pid, duree_ms). L'UNIQUE facon de lancer un processus de fond -- fini les fenetres qui clignotent | dans un relanceur : `from lancement import lancer_invisible` (voir routines/vie) |
+| `trace_session.py` | Le VOCABULAIRE de la trace de session (MO-121) : tags fermes (`session-ouverte`, `travail`, `session-fermee`), etats (`ouverte`/`fermee`/`aucune`) et FORMAT STABLE (`SESSION : `, `RETARD DE TRACE : `). Un contrat ECRIT/LU se declare a UN domicile (L-029, L-093) : celui qui ECRIT la trace et celui qui la LIT importent ce module | dans un lecteur/ecrivain de session : `from trace_session import ETAT_OUVERTE, MARQUEUR_ETAT` |
 
 **Regle de naissance** : tout nouvel outil (y compris via `dupliquer-template`) nait EQUIPE -- le motif et le sac a dos sont dans les moules `templates/outil-bdd` et `templates/theme-bdd`. Une note sans tag `sac-a-dos` dans la BDD usages = ecriture directe hors porte (ecart).
 
-## 22. Activateur de vie + server matrice -- `matrice/routines/vie/` (M-081)
+## 23. Activateur de vie + server matrice -- `matrice/routines/vie/` (M-081)
 
 > Le server de demarrage a 2 etages (E-056) : **server matrice**
 > (`server_matrice.py`, boucle de fond invisible) possede le lancement de
@@ -296,7 +342,7 @@ SONDE le PID (motif `processus_vivant` partage avec les boucles) : un fantome
 est signale et nettoye. Le server matrice a ete demarre et sa relance auto
 prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 
-## 23. journal-multi-encarts -- `matrice/data/outils/journal-multi-encarts/` (M-079)
+## 24. journal-multi-encarts -- `matrice/data/outils/journal-multi-encarts/` (M-079)
 
 > Le VISUEL des metriques de la Matrice (v3, E-049) : un NOUVEAU fichier
 > `matrice/journal-multi-encarts.md`, propre a la v3 -- il ne remplace rien
@@ -308,11 +354,13 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 | `construire` | `python main.py construire` (regenere le journal complet, ordre ferme des encarts) |
 | `lire` | `python main.py lire` (journal entier) ; `python main.py lire --encart <nom>` (UN encart ; inconnu -> code 2) |
 
+**Lecture BORNEE (MO-078)** : l'encart routines lisait `journal-veille.txt` EN ENTIER (mesure du 2026-09-13 : 3,85 Mo / 44 050 lignes) pour n'afficher que 5 evenements ; il lit desormais la QUEUE (256 Ko) par le lecteur PARTAGE `data/commun/rotation_journal.py` -- cout constant quelle que soit la taille du journal.
+
 **Encarts (ordre ferme, jamais en vrac)** : matrice (defcon + boucles), missions (en cours + vrac/files/brin), routines (dernieres passes veille), alertes (veille + intercom), cameleon (messages RECUS par le cameleon, M-080), usages (8 derniers appels), modifications (5 derniers fichiers), lecons (5 dernieres), variables (classeur).
 > PAS d'encart optimus (decision createur 2026-09-09) : optimus reste INVISIBLE --
 > son suivi vit UNIQUEMENT dans son fichier dedie `matrice/suivi-optimus.md`. Chaque encart est present meme vide -- aucune entree en vrac. Format createur (M-080) : chaque encart porte SA ligne de FLUX (d'ou viennent les infos, vers ou elles vont) + un TABLEAU `| Entree | Heure | Date |` (heure et date separees, format HH:MM:SS JJ/MM/AAAA, jamais en debut de ligne).
 
-## 24. pause-session -- `matrice/data/outils/pause-session/` (M-080)
+## 25. pause-session -- `matrice/data/outils/pause-session/` (M-080)
 
 > Protocole de pause session-matrix (decisions createur) : LA MATRICE UTILISE
 > LE CAMELEON, jamais l'inverse (regle `matrice/regles/matrice-utilise-cameleon.md`).
@@ -333,7 +381,7 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 **Etancheite des sorties (audit protections 2026-09-09)** : aucune sortie console de la Matrice (pause-session, machine-defcon, pilote, verifier-*) ne revele le nom de l'entite interne -- terme neutre "maintenance" uniquement. La zone `perimetre-cameleon` du classeur porte la zone NEUTRE `maintenance` ; `lire_perimetre` la RESOUT vers les chemins reels a exclure (le classeur ne fuit jamais le nom).
 **Quand** : demande `[pause]` (maintenance manuelle), defcon 5 (mise en securite totale), ou reprise apres maintenance.
 
-## 25. trio marbre BDD -- `matrice/data/outils/bdd-{regles,conventions,protocoles}-matrice/` (M-082)
+## 26. trio marbre BDD -- `matrice/data/outils/bdd-{regles,conventions,protocoles}-matrice/` (M-082)
 
 > Domiciliation du marbre Matrice (E-051) : les regles, conventions et protocoles
 > DE LA MATRICE vivent en 3 BDD separees (un outil par BDD, nes du moule
@@ -344,16 +392,22 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 | Outil | BDD | Contenu |
 |---|---|---|
 | `bdd-regles-matrice` | `data/bdd-regles-matrice.json` | R-001/R-002/R-003 (matrice-utilise-cameleon, perimetre, langue) |
-| `bdd-conventions-matrice` | `data/bdd-conventions-matrice.json` | C-001..C-005 (0 valeur en dur, ascii, outils structure, sac-a-dos, crochets) |
+| `bdd-conventions-matrice` | `data/bdd-conventions-matrice.json` | CV-001..CV-010 (0 valeur en dur, ascii, outils structure, sac-a-dos, crochets, nommage numerote, prefixes) |
 | `bdd-protocoles-matrice` | `data/bdd-protocoles-matrice.json` | P-001..P-003 (routes cameleon, protocoles 6-7-8) |
 
 **Interface** (identique pour les 3) : `ajouter --entree "..." --tags "..."` / `modifier --id R-XXX --entree "..."` (ou `--regle`/`--convention`/`--protocole`, correction qui garde l'id) / `lire [--tag ...]` / `verifier`. Espion : les 3 BDD sont surveillees (registre integrite).
+> **bdd-conventions-matrice en plus (MO-045)** : `renommer --id <ancien> --vers <nouveau>`
+> (change l'ID seul, trace `ancien_id` + `renomme_le` dans l'entree) et
+> `modifier ... [--tags "a,b"]` (corrige aussi les tags). Recette d'une porte de
+> BDD : `ajouter` + `renommer` + `modifier` + `lire` + `verifier` (CV-010).
+> Prefixe des ids : `CV-` (regle CV-009 : une famille = un prefixe ; `C-` seul
+> n'est plus qu'un vestige fige, le champ `constat` de historiques-missions).
 > Le verbe `modifier` existe parce que ces BDD gravees sont LUS par le cameleon :
 > toute correction de contenu (ex : retirer une mention interdite) passe par la
 > porte, jamais par reecriture manuelle (porte unique).
 **Quand** : toute nouvelle regle/convention/protocole de la Matrice passe par ces outils (plus aucun fichier markdown de marbre dans `matrice/`).
 
-## 26. suivi-optimus -- `matrice/data/outils/suivi-optimus/` (M-084)
+## 27. suivi-optimus -- `matrice/data/outils/suivi-optimus/` (M-084)
 
 > Trace de suivi d'optimus-prime (GO createur) : le createur ne peut pas le
 > voir travailler (optimus invisible dans la v3), cette trace note L'AGENT
@@ -368,8 +422,70 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 | `lire` | `python main.py lire [--mission M] [--action a] [--n N]` (filtres + n derniers) |
 | `vue` | `python main.py vue` (genere le markdown dedie `matrice/suivi-optimus.md`, tous les evenements) |
 | `verifier` | `python main.py verifier` (integrite SHA-256, etalon-or) |
+| `coherence` | `python main.py coherence [--racine <matrix>]` (croise la file du pilote et ce journal) |
+| `archiver` | `python main.py archiver [--racine <matrix>]` (sort du journal les evenements hors perimetre OPTIMUS en les ARCHIVANT dans `suivi-optimus-hors-perimetre.jsonl` ; journal reecrit, empreinte recalculee, idempotent) -- `--doublons` sort les 2e debut / 2e fin d'une meme mission (l'ECART que `verifier` remonte) vers `suivi-optimus-doublons.jsonl`, le PREMIER evenement faisant foi |
 
 **Actions fermees (enum, anti-bruit par EVENEMENT)** : `debut`, `fin`, `porte`, `depot`, `decision`, `decouverte`, `bilan` -- hors enum refusee (code 2). Format d'une ligne : `date, mission, theme, action, detail, fichiers[], portes[], duree_s`.
 **Vue** : `vue` genere le fichier markdown dedie `matrice/suivi-optimus.md` avec UN TABLEAU PAR ACTION (sections fermees dans l'ordre de l'enum) -- decision createur 2026-09-09 : optimus n'a PAS d'encart au journal multi-encarts (il reste invisible), SON fichier est la seule vue de son travail. Le fichier est genere, jamais edite a la main.
-**Etancheite (philosophie d'invisibilite, C-006/L-016)** : le cameleon n'accede JAMAIS a cette trace ; la zone `suivi-optimus` (et `suivi-optimus.md`) est exclue du perimetre-cameleon.
+**Etancheite (philosophie d'invisibilite, CV-006/L-016)** : le cameleon n'accede JAMAIS a cette trace ; la zone `suivi-optimus` (et `suivi-optimus.md`) est exclue du perimetre-cameleon.
 **Quand** : a chaque action significative d'optimus (GO/arbitrage, fin de mission, porte utilisee, depot au vrac, decouverte d'audit, bilan).
+**Coherence (verbe `coherence`, MO-048)** : le pilote ecrit la FILE, l'agent declare au JOURNAL (marbre L-020 : le pilote ne note RIEN) -- deux traces separees que rien ne compare. Le verbe les croise : un ECART est une divergence a reparer (code 1 : mission close dans la file sans fin declaree, fin declaree sans cloture, mission du journal inconnue de la file, serie stricte violee, COMPTEUR en retard sur le plus grand id utilise -- donc un id sur le point d'etre reattribue) ; une DETTE est un etat transitoire legitime ou un residu hors perimetre (`en-cours` sans debut au journal = fenetre d'injection ; identifiants non `MO-` au journal = residus du cameleon), signalee sans bloquer. Cable comme MAILLON 9 de `lanceur-non-regression-flux.py` : un ecart fait tomber le flux.
+
+## 28. lire -- `matrice/data/outils/lire/` (MO-001)
+
+> Porte unique de lecture (remplace `read_files` natif). Lecture seule, jamais d'ecriture. Annonce `total/lu` a chaque lecture, SHA-256 optionnel, perimetre `matrix/` seul (allowlist `AGENTS.md`/`demarrer-*.md`).
+
+| Verbe | Commande |
+|---|---|
+| `lire` | `python main.py lire --fichier <chemin> [--lignes debut:fin] [--hash]` |
+|  | `python main.py lire --fichiers <c1,c2> [--lignes debut:fin] [--hash]` |
+|  | `python main.py lire --dossier <chemin> [--filtre *.py] [--recursif] [--hash]` |
+
+**Protections** : perimetre `matrix/` seul (hors perimetre = code 2, allowlist racine) ; fichier absent = code 1 ; tranche `--lignes` hors bornes = tronquee annoncee ; non-UTF8/binaire = code 1 ; BOM/CRLF detectes et signales ; 2e canal L-009 (relecture croisee si doute) ; lecture seule (jamais de tmp/empreinte).
+**Benchmark** : 5000 lignes lues `5000/5000` (0.4ms direct, vs natif tronque a 2000 sans alerte) ; 1000 lignes <1ms.
+**Quand** : toute lecture de fichier par Optimus -- remplace `read_files` natif (0.4ms vs 2000 lignes tronquees silencieusement).
+
+## 29. ecrire -- `matrice/data/outils/ecrire/` (MO-002)
+
+> Porte unique d ecriture (remplace `write_file` + `str_replace` natifs). Atomique, LF, .bak, SHA, validation.
+
+| Verbe | Commande |
+|---|---|
+| `ecrire` | `python main.py ecrire --fichier <chemin> --contenu "<texte|@fichier>" [--mode creer|remplacer|ajouter]` |
+|  | `python main.py ecrire --fichier <chemin> --contenu-fichier <chemin-source> [--mode creer|remplacer|ajouter]` |
+| `editer` | `python main.py editer --fichier <chemin> --ancien "<old|@fichier>" --nouveau "<new|@fichier>"` |
+|  | `python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fichier <chemin>` |
+
+**Protections** : perimetre `matrix/` seul (hors = code 2, allowlist `AGENTS.md`/`demarrer-*.md`) ; `--mode` ferme `creer|remplacer|ajouter` ; `creer` refuse si existe (code 2) ; `editer` exige 1 occurrence unique (0 ou >1 = code 2) ; validation `.py` (`py_compile`) et `.json` (`json.load`) -- echec = code 1 mais ecrit + `.bak` ; LF forces (L-001) ; `.bak` horodate ; SHA avant/apres ; ASCII signale ; `@file` anti-heredoc (`--contenu @chemin` ou `--contenu-fichier`) ; ecriture atomique `tmp+os.replace`.
+**Benchmark** : 1000 lignes <30ms ; LF pur verifie (CRLF 0).
+**Quand** : toute ecriture ou edition par Optimus -- remplace `write_file`/`str_replace` natifs (non atomiques, pas de revert).
+
+## 30. lister -- `matrice/data/outils/lister/` (MO-003)
+
+> Porte unique de listage (remplace `glob` + `list_directory` natifs). 1 porte, tri mtime, filtre L-016.
+
+| Verbe | Commande |
+|---|---|
+| `lister` | `python main.py lister --dossier <chemin> [--filtre <glob>] [--recursif] [--json]` |
+
+**Protections** : perimetre `matrix/` seul (hors = code 2, allowlist `AGENTS.md`/`demarrer-*.md`) ; dossier absent = code 1 ; `__pycache__/.git` exclus ; zones L-016 (`_operateur/tmp-optimus/suivi-optimus`) exclues (0 fuite) ; tri mtime deterministe ; 1 porte couvre `glob+list_directory`.
+**Benchmark** : `matrix/` recursif 464 entrees en 174ms ; `outils` recursif `.py` 182 fichiers.
+**Quand** : tout listage par Optimus -- remplace `glob`/`list_directory` natifs (exposaient structure privee).
+
+## 31. rechercher -- `matrice/data/outils/rechercher/` (MO-004, corrige MO-069)
+
+> Porte unique de RECHERCHE (fichiers + 8 BDD en un appel). Lecture seule. C'est ici qu'on cherche une mission, une lecon, un fichier -- plus de recherche a la main.
+
+| Verbe | Commande |
+|---|---|
+| `rechercher` | `python main.py rechercher --requete <texte> [--dans fichiers\|bdd\|tous]` |
+|  | `[--tag <tag>] [--mot-cle <texte>] [--source <nom>] [--periode 7j\|30j\|3m\|1a]` |
+|  | `[--json] [--limite N]` |
+| `indexer` | palier 2 (FTS5) -- non implemente |
+| `schema` | affiche les options |
+
+**Protections** : perimetre `matrix/` seul ; zones L-016 filtrees ; fichiers BINAIRES exclus par extension (`.db`, `.pyc`...) ; une option illisible est REFUSEE (code 2) : `--source` inconnue nomme les sources valides, `--periode` hors forme `<nombre><j\|m\|a>`, `--limite` non entiere ; `--tag`/`--mot-cle`/`--source` refuses avec `--dans fichiers` (ils ne filtreraient rien) ; sortie `--json` en ASCII pur.
+**Contrat (MO-069)** : un FILTRE filtre (`--tag`, `--mot-cle`, `--source`, `--periode` RETIRENT des resultats) ; **un hit = une ENTREE** (jamais une section : `lecons/L-054`) ; une coupe ou un ecart est DIT (`tronque`, `ecartes_sans_date`).
+**Benchmark** : scan BDD complet ~0,3 s sur les 8 sources (usages 67k lignes lues SANS troncature muette) ; limite 50 resultats par defaut.
+**Branchement** : vigie-portes (sonde de cecite a chaque tour) + cockpit prive route `/chercher` (`cockpit-matrice.py --route chercher --requete "<texte>"`).
+**Quand** : des qu'il faut retrouver une mission, une lecon, un fichier ou un usage -- ne jamais chercher a la main ni par le natif (pas de BDD, pas de tags).

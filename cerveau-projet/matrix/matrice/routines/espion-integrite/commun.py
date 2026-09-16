@@ -1,4 +1,4 @@
-"""Fonctions communes de l'espion : empreinte, journal, PID.
+"""Fonctions communes de l'espion : empreinte, journal, PID, etat.
 
 Chaque fonction fait UNE chose (convention-architecture-outils).
 """
@@ -9,6 +9,8 @@ from datetime import datetime
 
 from constants import (
     BDDS,
+    CHEMIN_ETAT,
+    CHEMIN_ETAT_BDDS,
     CHEMIN_JOURNAL,
     CHEMIN_PID,
     ENCODAGE,
@@ -55,12 +57,114 @@ def horodater():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
-def journaliser(entree):
-    """Ajoute UNE ligne au journal (en ajout seul, jamais modifie a posteriori)."""
+def journaliser(entree, chemin=None):
+    """Ajoute UNE ligne au journal (en ajout seul, jamais modifie a posteriori).
+
+    `chemin` est facultatif : le journal de service par defaut, ou celui d'une
+    AUTRE racine (cobaye). Un cobaye ecrit dans SON journal, jamais dans celui du
+    service (lecon L-015 : un test ne laisse aucune trace dans un append-only).
+    """
+    chemin = chemin or CHEMIN_JOURNAL
     entree = dict(entree)
     entree["date"] = horodater()
-    with open(CHEMIN_JOURNAL, "a", encoding=ENCODAGE) as flux:
+    # Fins de ligne LF FORCEES (convention-integrite-sha256 / lecon L-001) : sans
+    # cela, Windows ecrit du CRLF et le journal melange les deux fins de ligne
+    # des qu'une rotation l'a reecrit -- une empreinte derivante sans difference
+    # logique, et un journal qui ne se compare plus a lui-meme.
+    with open(str(chemin), "a", encoding=ENCODAGE, newline="\n") as flux:
         flux.write(json.dumps(entree, ensure_ascii=True) + "\n")
+
+
+def lire_lignes_journal(chemin=None):
+    """Retourne les lignes BRUTES du journal (sans fin de ligne, vides ecartees).
+
+    Lecture complete : reservee a la ROTATION, qui doit tout voir pour ne rien
+    perdre. Les suites, elles, lisent la QUEUE (lire_queue_journal).
+    """
+    chemin = chemin or CHEMIN_JOURNAL
+    if not chemin.exists():
+        return []
+    with open(str(chemin), "r", encoding=ENCODAGE, errors="replace") as flux:
+        return [ligne.rstrip("\r\n") for ligne in flux if ligne.strip()]
+
+
+def lire_queue_journal(chemin, octets):
+    """Retourne les DERNIERES lignes d'un journal, sans balayer l'historique.
+
+    On lit les `octets` de la fin du fichier ; la premiere ligne lue peut etre
+    TRONQUEE (on a coupe au milieu) et n'est donc gardee que si la lecture a
+    commence au debut du fichier. C'est ce qui rend le cout constant : que le
+    journal pese 1 Mo ou 1 Go, on ne lit que la queue.
+    """
+    if not chemin.is_file():
+        return []
+    try:
+        taille = chemin.stat().st_size
+    except OSError:
+        return []
+    debut = max(0, taille - octets)
+    try:
+        with open(str(chemin), "rb") as flux:
+            flux.seek(debut)
+            bloc = flux.read()
+    except OSError:
+        return []
+    lignes = bloc.decode(ENCODAGE, errors="replace").splitlines()
+    if debut > 0 and lignes:
+        lignes = lignes[1:]
+    return [ligne for ligne in lignes if ligne.strip()]
+
+
+def empreinte_fichier(chemin):
+    """Retourne (taille en octets, mtime en nanosecondes) ; (None, None) si absent.
+
+    Sert a la rotation : la taille est un VERSIONNAGE bon marche du journal (un
+    ajout la fait bouger) et c'est ce qui permet de refuser d'ecraser ce qui a
+    ete ecrit pendant la rotation.
+    """
+    try:
+        etat = os.stat(str(chemin))
+    except OSError:
+        return None, None
+    return etat.st_size, etat.st_mtime_ns
+
+
+def ecrire_etat(donnees, chemin=None):
+    """Ecrit un ETAT COURT (une ligne JSON), de facon ATOMIQUE.
+
+    `chemin` est facultatif : l'etat de CADENCE par defaut (ecrit au demarrage),
+    ou l'etat DU CONTROLE -- le tableau des BDD (MO-081). Ecrase a chaque appel :
+    ce n'est pas une histoire, c'est un etat. UNE SEULE LIGNE et une ecriture
+    atomique, pour qu'un lecteur de journal puisse le lire ligne par ligne sans
+    jamais tomber sur un fichier tronque.
+    """
+    chemin = chemin or CHEMIN_ETAT
+    contenu = json.dumps(donnees, ensure_ascii=True, sort_keys=True) + "\n"
+    temporaire = chemin.with_name(chemin.name + ".tmp")
+    with open(str(temporaire), "w", encoding=ENCODAGE, newline="\n") as flux:
+        flux.write(contenu)
+    os.replace(str(temporaire), str(chemin))
+    return chemin
+
+
+def ecrire_etat_bdds(donnees, chemin=None):
+    """Ecrit l'ETAT COURT du CONTROLE : le tableau des BDD vues par la passe.
+
+    C'est un etat, pas une histoire : il est ECRASE a chaque passe et porte le
+    tableau COMPLET, la signature du dernier tableau ECRIT au journal et le
+    nombre de passes absorbees depuis -- de quoi distinguer "rien a ecrire" de
+    "la routine est morte" (le compteur AVANCE a chaque tour).
+    """
+    return ecrire_etat(donnees, chemin or CHEMIN_ETAT_BDDS)
+
+
+def lire_etat_bdds(chemin=None):
+    """Lit l'etat du controle ; {} si absent ou illisible (jamais de crash)."""
+    chemin = chemin or CHEMIN_ETAT_BDDS
+    try:
+        return json.loads(chemin.read_text(encoding=ENCODAGE))
+    except (OSError, ValueError):
+        return {}
 
 
 def ecrire_pid(pid):

@@ -1,0 +1,146 @@
+"""Entree du verbe maintenir : Optimus traite les signalements."""
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from commun import (
+    lire_signalements,
+    marquer_traite,
+    enregistrer_traitement,
+    formater_signal,
+    extraire_options,
+)
+from constants import NOMS_OPTIONS, BOITE_MAINTENANCE_IN, HISTORIQUE
+
+
+def maintenir(arguments):
+    """Verbe maintenir : --lister | --traiter | --etat [--json]
+    
+    Codes retour :
+      0 = succes
+      1 = rien a traiter
+      2 = erreur
+    """
+    options = extraire_options(arguments, NOMS_OPTIONS)
+    mode_json = "json" in options
+
+    # Mode etat
+    if "etat" in options:
+        return _etat(options, mode_json)
+
+    # Mode traiter
+    if "traiter" in options:
+        return _traiter(options, mode_json)
+
+    # Mode lister (defaut)
+    return _lister(options, mode_json)
+
+
+def _lister(options, mode_json):
+    """Liste les signalements en attente."""
+    messages = lire_signalements()
+
+    if mode_json:
+        import json
+        sortie = {
+            "total": len(messages),
+            "signaux": messages,
+        }
+        print(json.dumps(sortie, ensure_ascii=False, indent=2))
+    else:
+        print(f"Signalements en attente : {len(messages)}")
+        print("")
+        if not messages:
+            print("  Aucun signalement.")
+        for i, msg in enumerate(messages, 1):
+            print(formater_signal(msg, i))
+            print("")
+
+    return 0 if messages else 1
+
+
+def _traiter(options, mode_json):
+    """Traite le signalement le plus critique."""
+    messages = lire_signalements()
+
+    if not messages:
+        print("Aucun signalement a traiter.")
+        return 1
+
+    # Prend le plus critique (premier apres tri)
+    msg = messages[0]
+    outil = msg.get("outil", "?")
+    niveau = msg.get("niveau", "?")
+    description = msg.get("description", "")
+
+    print(f"=== TRAITEMENT : {niveau.upper()} {outil} ===")
+    print(f"Description : {description[:200]}")
+    print("")
+
+    # Ici, Optimus pourrait executer la reparation
+    # Pour l'instant, on enregistre le constat
+    action = "constat"
+    resultat = f"Signalement {niveau} recu pour {outil}. A traiter manuellement ou via MO."
+
+    enregistrer_traitement(msg, action, resultat)
+
+    # Marque comme traite dans l'inbox
+    # (recherche l'index du message)
+    if BOITE_MAINTENANCE_IN.is_file():
+        lignes = BOITE_MAINTENANCE_IN.read_text(encoding="utf-8").splitlines()
+        for i, ligne in enumerate(lignes):
+            try:
+                import json
+                m = json.loads(ligne)
+                if (m.get("date") == msg.get("date")
+                        and m.get("outil") == msg.get("outil")
+                        and not m.get("traite_par_optimus")):
+                    marquer_traite(i)
+                    break
+            except json.JSONDecodeError:
+                continue
+
+    if mode_json:
+        import json
+        print(json.dumps({"traite": True, "outil": outil, "niveau": niveau}, indent=2))
+    else:
+        print(f"Resultat : {resultat}")
+        print(f"Enregistre dans : {HISTORIQUE}")
+
+    return 0
+
+
+def _etat(options, mode_json):
+    """Affiche l'etat de la maintenance."""
+    # Compte les signalements
+    messages = lire_signalements()
+    par_niveau = {}
+    for m in messages:
+        n = m.get("niveau", "?")
+        par_niveau[n] = par_niveau.get(n, 0) + 1
+
+    # Historique
+    nb_traites = 0
+    if HISTORIQUE.is_file():
+        for ligne in HISTORIQUE.read_text(encoding="utf-8").splitlines():
+            if ligne.strip():
+                nb_traites += 1
+
+    if mode_json:
+        import json
+        sortie = {
+            "en_attente": len(messages),
+            "par_niveau": par_niveau,
+            "traites": nb_traites,
+        }
+        print(json.dumps(sortie, ensure_ascii=False, indent=2))
+    else:
+        print("=== ETAT MAINTENANCE ===")
+        print(f"En attente : {len(messages)}")
+        for n in ["critique", "haute", "moyenne", "basse"]:
+            if n in par_niveau:
+                print(f"  {n} : {par_niveau[n]}")
+        print(f"Traites : {nb_traites}")
+
+    return 0

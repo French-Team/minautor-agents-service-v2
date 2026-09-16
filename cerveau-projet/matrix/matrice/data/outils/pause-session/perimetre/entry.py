@@ -21,7 +21,8 @@ def executer(arguments):
         return 2
 
     zones = normaliser_zones(options["zones"])
-    ecrire_perimetre(zones)
+    preuve = ecrire_perimetre(zones)
+    print("[porte bdd-variables] " + preuve)
     if zones:
         print("Perimetre cameleon REDUIT (cle '" + CLE_PERIMETRE + "' du classeur) :")
         for zone in zones:

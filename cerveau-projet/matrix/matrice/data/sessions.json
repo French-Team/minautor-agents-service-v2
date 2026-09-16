@@ -1,0 +1,724 @@
+{
+  "identite": {
+    "type": "sessions.json",
+    "version": 1
+  },
+  "sessions": [
+    {
+      "id": "S-001",
+      "date": "2026-09-14 09:57:31",
+      "session": "Session du 2026-09-14 : MO-091 (files purgees + porte archiver reparee), MO-092 en cours (BDD sessions). Reste : maillons 3/4/5 revision + purification.",
+      "tags": [
+        "session-fermee",
+        "test"
+      ],
+      "source": "MO-092"
+    },
+    {
+      "id": "S-002",
+      "date": "2026-09-14 09:57:31",
+      "session": "Nouvelle session : reprise apres MO-091/MO-092, chantier = purification + revision maillons restants.",
+      "tags": [
+        "session-ouverte",
+        "test"
+      ],
+      "source": "MO-092"
+    },
+    {
+      "id": "S-003",
+      "date": "2026-09-14 10:07:18",
+      "session": "Mission MO-092 terminee hors file (theme OUTIL) : MO-092 terminee : (1) OUTIL bdd-sessions genere depuis le moule outil-bdd (dupliquer-template) + categorie resume/--derniere ajoutee (lecteur BORNE, moteur partage data/commun/derniere_session.py) ; PREFIXE_ENTREE declare dans constants.py (CV-009, le controle des prefixes accuse le S- en dur sinon) ; (2) PILOTE branche : commun.noter_session (porte bdd-sessions, non bloquant) + commun.annoncer_reprise (resume --derniere) + cycle.demarrer imprime la REPRISE DE SESSION (etat fermee/ouverte bien visible) + enregistrer et fin alimentent la BDD au tag travail ; (3) PARCOURS : proto-1 ETAPE 0 (relire la session precedente AVANT tout, verifier coherence, reprendre ou c'est arrete) + ETAPE 5 (fermer la session dans la BDD) + theme-reprise-mission meme doctrine + demarrer-optimus-prime.md ORDRE 2 annonce le resume ; (4) SURVEILLANCE : sessions.json au registre de l'espion-integrite (ok), manuel-outils 2bis ; (5) PREUVES : py_compile 10 fichiers, cobayes moteur (4 cas x egalite d'horodatage), resume reel (S-001 fermee), verifier empreinte OK, ASCII 0 violation, L-016 grep 0 fuite, espion-integrite-optimus re-arme 105 empreintes.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-092"
+    },
+    {
+      "id": "S-004",
+      "date": "2026-09-14 21:44:09",
+      "session": "Session du 2026-09-14 : MO-091 (files purgees + porte archiver reparee), MO-092 (BDD sessions + reprise) close. Reste : serie purification, audit cartes d'identite/moteur. Test de reprise en cours.",
+      "tags": [
+        "session-ouverte"
+      ],
+      "source": "test-reprise-MO-092"
+    },
+    {
+      "id": "S-005",
+      "date": "2026-09-14 21:45:01",
+      "session": "Session du 2026-09-14 FERMEE : MO-091 + MO-092 closes (BDD sessions + reprise testee REELLEMENT : injecter annonce le resume, defauts repares = faux positif du verificateur observations + codec console du helper + porte ajouter assainie ASCII). Reste a faire : serie purification, audit cartes d'identite/moteur de recherche.",
+      "tags": [
+        "session-fermee"
+      ],
+      "source": "test-reprise-MO-092"
+    },
+    {
+      "id": "S-006",
+      "date": "2026-09-15 06:38:54",
+      "session": "MO-093 PURIFICATION : demande caporee (theme purification, jamais supprimer - archivage ou signalement). Perimetre : fichiers, BDD, journaux, registres de matrix/. Objectif chiffre : liste d'ecarts avec preuves par garde, chaque ecart avec UN verdict (purger/reparer/dette), gardes verts, 0 suppression.",
+      "tags": [
+        "travail",
+        "MO-093",
+        "purification"
+      ],
+      "source": "pilote charger MO-093"
+    },
+    {
+      "id": "S-007",
+      "date": "2026-09-15 08:20:46",
+      "session": "Mission MO-093 terminee (theme PURIFICATION) : MO-093 PURIFICATION terminee : audit lecture seule puis 8 ecarts verdictes. V-003 repare par la porte bdd-variables (id V-003, statut [OK], tags complets) ; porte definir durcie (max+1, soin des champs manquants, valeur vide explicite pour une cle existante) ; pause-session perimetre desynchronisee vers bdd-variables ; tmp-optimus nettoye ; usages-outils-combos tourne par rotation_journal : 69519 deplaces, 500 gardes, 0 jumeau, 70019 conserves. BDD modifications tracee, dettes 30/31 qualifiees puis archivees. E7/E8 signales, aucun fichier Flux 1 touche. Preuves : non-regression verte, 46 compilations, ASCII 0, contrat fondamental 0 ecart, BDD variables/usages/sessions/modifications verts. Reste : traiter la dette machine-defcon et la precision du scan-valeurs-en-dur dans une mission dediee.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-093"
+    },
+    {
+      "id": "S-008",
+      "date": "2026-09-15 08:23:00",
+      "session": "Session du 2026-09-15 FERMEE : MO-093 PURIFICATION terminee. Faits : audit 20 gardes et 10 BDD ; V-003 repare par sa porte ; pause-session perimetre desynchronisee vers bdd-variables ; usages tourne et archive datee (69519 deplaces, 500 actifs, 70019 conserves) ; tmp-optimus nettoye ; dettes 30/31 qualifiees et archivees ; non-regression verte. Reste-a-faire : traiter machine-defcon et precision scan-valeurs-en-dur ; poursuivre ensuite l'audit cartes d'identite et moteur de recherche. Prochain pas : charger la prochaine mission par le pilote, en serie stricte.",
+      "tags": [
+        "session-fermee",
+        "MO-093",
+        "purification"
+      ],
+      "source": "MO-093 fin pilote"
+    },
+    {
+      "id": "S-009",
+      "date": "2026-09-15 09:19:15",
+      "session": "MO-094 PREPARATION-CONSERVATION ouverte : concevoir la BDD de conservation, les categories, les statuts, les manifestes, la restauration et l extension du parcours PURIFICATION. Perimetre toute la Matrice v3 ; Flux 1 et cameleon proteges ; aucune suppression.",
+      "tags": [
+        "session-ouverte",
+        "travail",
+        "reprise"
+      ],
+      "source": "MO-094"
+    },
+    {
+      "id": "S-010",
+      "date": "2026-09-15 09:26:26",
+      "session": "Mission MO-094 terminee (theme PREPARATION) : MO-094 PREPARATION-CONSERVATION terminee : plan-conservation.md cree ; choix createur integres (toute Matrice v3, Flux 1 et cameleon proteges, classer avant decider, BDD conservation dediee, automatisation routeur apres mesure) ; theme PURIFICATION etendu de 5 a 9 cases : demande->cartographie->classification->audit->nemesis->decision->execution-par-porte->verification->bilan ; bdd-modifications et suivi-optimus traces ; JSON, ASCII, integrite et coherence verts ; aucune BDD conservation creee, aucun fichier existant deplace ou supprime, aucune ecriture Flux 1/cameleon. Prochaine mission : MO-095 creer bdd-conservation par le moule.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-094"
+    },
+    {
+      "id": "S-011",
+      "date": "2026-09-15 09:27:28",
+      "session": "Session du 2026-09-15 FERMEE : MO-094 PREPARATION-CONSERVATION terminee. Plan de conservation cree ; theme PURIFICATION etendu a 9 cases ; choix createur integres pour toute la Matrice v3. Aucun element existant deplace ou supprime ; Flux 1 et cameleon proteges. Reste-a-faire : MO-095 creer bdd-conservation par le moule, puis cartographier et classer avant toute decision d archivage. Automatisation routeur seulement apres mesure.",
+      "tags": [
+        "session-fermee",
+        "travail",
+        "reprise"
+      ],
+      "source": "MO-094 fin pilote"
+    },
+    {
+      "id": "S-012",
+      "date": "2026-09-15 09:35:55",
+      "session": "MO-095 CREER-OUTIL ouverte : creer bdd-conservation par le moule outil-bdd pour preparer le classement et l archivage reversible de toute la Matrice v3. Aucun element existant ne sera deplace ou supprime.",
+      "tags": [
+        "session-ouverte",
+        "travail",
+        "reprise"
+      ],
+      "source": "MO-095"
+    },
+    {
+      "id": "S-013",
+      "date": "2026-09-15 10:48:29",
+      "session": "Mission MO-095 terminee (theme CREER-OUTIL) : MO-095 terminee : bdd-conservation creee depuis le moule puis renforcee par les portes proposer, classer, decider, lire, manifeste et verifier. BDD conservation.json initialisee avec K-001 COBAYE de plomberie uniquement ; empreinte SHA-256 verifiee. Manifeste deterministe en lecture seule ajoute et porte routee. Moteur rechercher raccorde a la source conservation (9 sources) et documentation alignee. Type plan-preparation-conservation declare dans le vocabulaire ferme des cartes. Tests : recherche K-001 par source, manifeste, verifier empreinte, tests negatifs categories/transitions, 46 compilations, non-regression zone+flux VERDICT OK 22/22, ASCII/cartes/roles/parcours/integrite verts. Aucun element reel de la Matrice archive, deplace ou supprime ; Flux 1 et cameleon non ecrits. Prochaine mission : MO-096 cartographier toute la Matrice v3.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-095"
+    },
+    {
+      "id": "S-014",
+      "date": "2026-09-15 10:50:09",
+      "session": "Session du 2026-09-15 FERMEE : MO-095 CREER-OUTIL terminee. BDD conservation creee et verifiee ; portes proposer, classer, decider, lire, manifeste, verifier ; moteur recherche raccorde a conservation ; cartes et non-regression 22/22 vertes ; aucun element reel deplace ou supprime. Reste-a-faire : MO-096 cartographier toute la Matrice v3, puis classer avant toute decision d archivage. Flux 1 et cameleon proteges ; automatisation routeur apres mesure.",
+      "tags": [
+        "session-fermee",
+        "travail",
+        "reprise"
+      ],
+      "source": "MO-095 fin pilote"
+    },
+    {
+      "id": "S-015",
+      "date": "2026-09-15 19:14:29",
+      "session": "Mission MO-096 terminee (theme REPARATION) : MO-096 (REPARATION) terminee : (1) TRACE REPAREE -- MO-095, reellement tenue le 2026-09-15 de 09:35 a 10:50, etait ABSENTE du marbre : declaree tardivement par la porte noter, cause et source ecrites dans le detail. (2) RACINE FERMEE -- le croisement FILE du pilote <-> JOURNAL (categorie coherence, MO-048 : ecrit, juste, JAMAIS appele) est desormais branche (a) dans la route /sante du cockpit, qui se termine par un VERDICT global nommant toute porte en echec, et (b) dans l'etape 9bis BLOQUANTE de la non-regression -- aux DEUX endroits ou l'agent regarde ; le trou a survecu parce qu'un code=1 noye parmi vingt blocs ne se lit pas. (3) PREUVES -- cobaye negatif tmp-optimus/cobaye-mo096-coherence.py 4/4, /sante 13 portes vertes, coherence reelle 0 ecart 0 dette, non-regression verte, py_compile OK, ASCII OK. (4) TRACES -- 6 notes bdd-modifications, friction 32 (3/3) validee car l'evolution a ete delivree DANS cette mission, lecon L-084. File/journal d'accord, compteur aligne a 96. Aucune donnee de mission modifiee ni supprimee ; Flux 1 et cameleon non ecrits.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-096"
+    },
+    {
+      "id": "S-016",
+      "date": "2026-09-15 19:14:44",
+      "session": "Session du 2026-09-15 19h OUVERTE (Flux 2, Optimus) : reprise apres la session S-014. Objet : MO-096 REPARATION -- reparer la trace du marbre (MO-095 menee sans declaration) puis fermer la racine du faux vert (le croisement file<->journal existait mais n'etait branche nulle part).",
+      "tags": [
+        "session-ouverte",
+        "travail",
+        "reprise"
+      ],
+      "source": ""
+    },
+    {
+      "id": "S-017",
+      "date": "2026-09-15 19:14:44",
+      "session": "Session du 2026-09-15 19h FERMEE : MO-096 REPARATION terminee. (1) MO-095 declaree tardivement (debut + fin) et la trace est coherente ; (2) le croisement file du pilote <-> journal est BRANCHE dans la route /sante (avec VERDICT global nommant toute porte en echec) et dans l'etape 9bis bloquante de la non-regression ; (3) preuves : cobaye negatif 4/4, /sante 13 portes vertes, coherence 0 ecart 0 dette, non-regression verte ; friction 32 (3/3) validee, lecon L-084. RESTE-A-FAIRE : MO-097 cartographier toute la Matrice v3 (case 2 du theme PURIFICATION) puis classer avant toute decision d'archivage ; DETTE SIGNALEE : la metrique veille-flux (1703 ms) depasse le seuil proto-2 (600 ms) -> 1 PERFORMANCE-ROUTINES (TH-024) a declencher entre deux missions. PROCHAIN PAS : au choix du createur, PERFORMANCE-ROUTINES ou MO-097 cartographie.",
+      "tags": [
+        "session-fermee",
+        "travail",
+        "reprise"
+      ],
+      "source": ""
+    },
+    {
+      "id": "S-018",
+      "date": "2026-09-15 19:19:54",
+      "session": "Mission MO-097 terminee (theme PERFORMANCE-ROUTINES) : MO-097 (PERFORMANCE-ROUTINES) terminee : DECLENCHEUR proto-2 B traite -- la veille-flux etait comparee a un seuil EN DUR de 600 ms ecrit dans le cockpit, alors qu'aucune routine n'avait jamais promis ce budget et que le contrat de la veille est de compiler GLOBALEMENT les .py (435 fichiers). (1) MESURE reelle : passe relax 1739 ms = corriger-ascii 341 ms + py_compile 1406 ms, tare d'un interpreteur 42 ms ; 289 passes stables (1665-1800 ms) pour une cadence DECLAREE de 300 s, soit 0,6 % du temps -- AUCUNE derive, donc l'alarme etait fausse par construction. (2) OPTIMISATION, un seul element : LOT_PY_COMPILE (nombre fixe 40) remplace par un budget de LONGUEUR de ligne de commande (LONGUEUR_MAX_COMMANDE=20000, plafond de securite 250) -- la contrainte reelle est le plafond Windows (garde MO-035), pas un compte de fichiers ; 11 lots -> 3, py_compile 1406 -> 794 ms, passe 1739 -> 1138 ms (-35 %), COUVERTURE IDENTIQUE (435 fichiers, memes sorties concatenees). (3) SEUIL DECLARE : la routine declare BUDGET_PASSE_MS=2000 et le PUBLIE dans son etat court (veille-cadence.json), le cockpit LIT cette publication (_budget_declare) ; le seuil en dur 600 ms est supprime ; publication absente = 'BUDGET NON PUBLIE' dit, jamais un repli muet. (4) BOUCLE RELANCEE par la porte officielle (server arret cooperatif + activer) : code neuf vivant (L-012), 6 routines ACTIVE, budget publie ; nouvelle passe mesuree a 1165 ms. (5) TEMOIN REPARE : passe-absorbee-sur-le-service annonce RECUL INSUFFISANT quand l'etat est plus jeune que la cadence declaree, au lieu d'accuser un service sain apres un redemarrage legitime (regle immuable attente-ne-prouve-rien). (6) PREUVES : /metriques ne crie plus (aucun seuil depasse) ; non-regression VERTE ; py_compile OK ; coherence 0 ecart 0 dette ; 2 frictions 3/3 (33, 34) validees car l'evolution a ete livree dans cette mission ; lecon L-085. Aucune donnee de mission modifiee ni supprimee ; Flux 1 et cameleon non ecrits.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-097"
+    },
+    {
+      "id": "S-019",
+      "date": "2026-09-15 19:20:00",
+      "session": "Session du 2026-09-15 19h20 (Flux 2) OUVERTE : seconde mission de la session, MO-097 PERFORMANCE-ROUTINES -- traiter le declencheur proto-2 B (veille-flux 1703 ms contre un seuil en dur de 600 ms).",
+      "tags": [
+        "session-ouverte",
+        "travail",
+        "reprise"
+      ],
+      "source": ""
+    },
+    {
+      "id": "S-020",
+      "date": "2026-09-15 19:20:00",
+      "session": "Session du 2026-09-15 19h20 FERMEE : MO-097 PERFORMANCE-ROUTINES terminee. Mesure : passe veille-flux 1739 ms (corriger-ascii 341 + py_compile 1406), 289 passes stables, cadence declaree 300 s (0,6 % du temps) -> l'alarme etait fausse. Optimisation d'UN element : lots par LONGUEUR de ligne de commande (la contrainte reelle est le plafond Windows) ; 11 lots -> 3, py_compile 1406 -> 794 ms, passe 1739 -> 1138 ms (-35 %), couverture identique. Seuil DECLARE par la routine (BUDGET_PASSE_MS=2000) et PUBLIE (veille-cadence.json) ; le cockpit LIT au lieu de comparer a un nombre qui ne lui appartient pas. Boucle relancee par la porte officielle (arret cooperatif + activer, L-012) : nouvelle passe a 1165 ms. Temoin passe-absorbee-sur-le-service repare (RECUL INSUFFISANT au lieu d'accuser apres un redemarrage legitime). Non-regression verte, /metriques ne crie plus, 2 frictions 3/3 validees, lecon L-085. RESTE-A-FAIRE : MO-098 cartographier toute la Matrice v3 (case 2 du theme PURIFICATION), puis classer avant toute decision d'archivage. PROCHAIN PAS : MO-098.",
+      "tags": [
+        "session-fermee",
+        "travail",
+        "reprise"
+      ],
+      "source": ""
+    },
+    {
+      "id": "S-021",
+      "date": "2026-09-15 19:22:57",
+      "session": "Mission MO-098 terminee (theme PERFORMANCE) : MO-098 (PERFORMANCE) terminee -- REVUE des seuils du cockpit, constat seul, AUCUNE valeur modifiee. Livrable : _operateur/optimus-prime/cockpit/revue-seuils-cockpit.md (type 'analyse', vocabulaire ferme respecte). Constat en 4 classes : (A) DECLARES PAR L'OBJET, le bon motif -- budget de passe veille-flux (MO-097), cadence des routines (lue par vie etat et verifier-cadence), echelle defcon (machine-defcon + classeur V-002), perimetre cameleon (classeur V-003) ; (B) ECRITS CHEZ L'OBSERVATEUR -- duree du bilan-periode (500 ms au cockpit contre 114 ms mesures, l'outil ne declare aucun budget) et fenetre de queue (256 Ko copiee dans ONZE fichiers alors que chaque routine declare SA borne de rotation : 2 Mo veille, 8 Mo espion, 512 Ko vigies) ; (C) POLITIQUES LEGITIMES a nommer -- volume du journal usages (50000 lignes, AUCUNE capacite declaree sur disque, alors que la rotation du 15/09 a garde 500 lignes), delais de sous-processus (120 s dans 5 fichiers), seuils d'affichage du cockpit ; (D) VALEUR MORTE -- 'py_compile_ms: 400' au cockpit : aucun code ne la lit (grep : sa seule declaration), donc qui lit ce fichier croit la compilation surveillee a 400 ms alors que la compilation reelle de la veille a ete mesuree a 1406 ms puis 794 ms. 6 propositions classees par cout (P1 supprimer/brancher la valeur morte, P2 declarer le budget du bilan-periode selon le motif de MO-097, P3 domicilier la capacite des usages, P4 sortir 256 Ko dans un module partage et le relier a la borne declaree, P5 un seul delai declare, P6 nommer les politiques d'affichage). AUCUNE proposition engagee : le createur decide. Note de tracabilite : aucune friction n'est notee pour cette mission car le createur a demande un CONSTAT et non une evolution -- les defauts trouves vivent dans la revue et dans les 6 propositions, pas dans une auto-evolution silencieuse. Preuves : garde-ascii 0 violation (649 fichiers), cartes d'identite OK, non-regression VERTE, py_compile OK, coherence 0 ecart 0 dette. Aucune donnee de mission modifiee ni supprimee ; Flux 1 et cameleon non ecrits.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-098"
+    },
+    {
+      "id": "S-022",
+      "date": "2026-09-15 19:23:04",
+      "session": "Session du 2026-09-15 19h30 (Flux 2) OUVERTE : troisieme mission -- MO-098 REVUE des seuils du cockpit (demande createur : lesquels sont en dur chez l'observateur plutot que declares par l'objet mesure). Constat seul.",
+      "tags": [
+        "session-ouverte",
+        "travail",
+        "reprise"
+      ],
+      "source": ""
+    },
+    {
+      "id": "S-023",
+      "date": "2026-09-15 19:23:04",
+      "session": "Session du 2026-09-15 19h30 FERMEE : MO-098 terminee -- revue deposee (_operateur/optimus-prime/cockpit/revue-seuils-cockpit.md). Constat : motif A (declare par l'objet) pour 4 seuils dont le budget veille de MO-097 ; motif B (en dur chez l'observateur) pour la duree du bilan-periode (500 ms contre 114 ms mesures) et la fenetre de queue 256 Ko copiee 11 fois ; motif C (politique a nommer) pour les usages (50000 lignes, aucune capacite declaree) et les delais de sous-processus (120 s dans 5 fichiers) ; motif D VALEUR MORTE pour py_compile_ms=400 (aucun lecteur). 6 propositions classees par cout, AUCUNE engagee (decision createur). Non-regression verte, ASCII 0 violation, coherence 0 ecart 0 dette, /metriques sans seuil depasse. RESTE-A-FAIRE : MO-099 cartographier toute la Matrice v3 (case 2 du theme PURIFICATION) puis classer avant toute decision d'archivage ; decisions sur les propositions P1 a P6 de la revue. PROCHAIN PAS : MO-099 ou arbitrage des propositions.",
+      "tags": [
+        "session-fermee",
+        "travail",
+        "reprise"
+      ],
+      "source": ""
+    },
+    {
+      "id": "S-024",
+      "date": "2026-09-15 19:27:39",
+      "session": "Mission MO-099 terminee (theme PERFORMANCE) : MO-099 (PERFORMANCE) terminee -- P4 de la revue MO-098 APPLIQUE : la fenetre de lecture d'une queue de journal est sortie du code recopie et RELIEE a la borne declaree. (1) CONSTAT DE DEPART : 256 Ko existait dans ONZE fichiers, et CINQ de ces copies n'avaient AUCUN lecteur (les 4 routines : veille-flux, espion-integrite, vigie-portes, vigie-profil ; plus verifier-observations, ou la seule reference etait la ligne morte '_ = OCTETS_QUEUE'). (2) REGLE UNIQUE dans le moteur PARTAGE (data/commun/rotation_journal.py) : OCTETS_QUEUE_PLANCHER (256 Ko), octets_queue(borne), octets_queue_du_journal(journal) qui LIT la borne que le journal lu declare chez lui, et lire_constante_declaree (evaluateur d'expressions d'entiers, SANS eval -- le motif reel est '2 * 1024 * 1024'). Regle : la fenetre n'est JAMAIS plus petite que la borne declaree, sinon une rotation cacherait au lecteur des evenements qu'elle garde. (3) MIGRATION : 12 fichiers -- 5 declarations retirees (dont 4 mortes), 6 sites d'appel reliES au journal lu (journal-multi-encarts, verifier-cadence par domaine, verifier-sans-attendre, lanceur-non-regression-flux), et la fenetre du verifier de rotation RENOMMEE OCTETS_QUEUE_EPREUVE car c'est un PARAMETRE D'EPREUVE (il doit rester petit et connu pour que le cobaye le depasse), pas une fenetre de lecture. (4) PREUVES : preuve unitaire de la regle (aucune borne -> 262144 ; veille -> 2097152 ; espion -> 8388608 ; vigie -> 524288 ; journal etranger -> 262144) ; 12 fichiers py_compile OK ; 5 outils verts (verifier-cadence, verifier-rotation-journal 5 portes, verifier-sans-attendre, journal-multi-encarts, non-regression du FLUX 9/9 maillons) ; non-regression ZONE+FLUX verte ; routines relancees par la porte officielle (server arret cooperatif + activer, L-012) et Matrice vivante (serveur + 6 routines) ; 12 notes bdd-modifications ; friction 35 (3/3) validee car l'evolution a ete livree DANS cette mission ; lecon L-086 ; revue mise a jour. Aucune donnee de mission modifiee ni supprimee ; Flux 1 et cameleon non ecrits.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-099"
+    },
+    {
+      "id": "S-025",
+      "date": "2026-09-15 19:27:46",
+      "session": "Session du 2026-09-15 19h50 (Flux 2) OUVERTE : quatrieme mission -- MO-099, P4 de la revue MO-098 (redirection du createur : P1+P2 remplaces par P4 avant tout travail).",
+      "tags": [
+        "session-ouverte",
+        "travail",
+        "reprise"
+      ],
+      "source": ""
+    },
+    {
+      "id": "S-026",
+      "date": "2026-09-15 19:27:46",
+      "session": "Session du 2026-09-15 19h50 FERMEE : MO-099 PERFORMANCE terminee -- P4 de la revue APPLIQUE. La fenetre de lecture d'une queue de journal (256 Ko) existait dans 11 fichiers et 5 de ces copies etaient MORTES (aucun lecteur). Regle unique dans le moteur partage data/commun/rotation_journal.py : planCHER 256 Ko, mais la fenetre n'est JAMAIS plus petite que la borne de rotation que le journal lu DECLARE chez lui (2 Mo veille, 8 Mo espion, 512 Ko vigies) ; la borne se lit par lire_constante_declaree (evaluateur d'expressions d'entiers, sans eval). 12 fichiers migres, 6 sites d'appel relies au journal lu, la fenetre du verifier de rotation renommee PARAMETRE D'EPREUVE. Preuves : preuve unitaire (262144 / 2097152 / 8388608 / 524288), 12 py_compile OK, 5 outils verts, non-regression ZONE+FLUX verte, routines relancees (Matrice vivante, serveur + 6 routines), friction 35 (3/3) validee, lecon L-086, revue mise a jour. RESTE-A-FAIRE : MO-100 cartographier toute la Matrice v3 (case 2 du theme PURIFICATION) puis classer avant toute decision d'archivage ; propositions P1, P2, P3, P5, P6 de la revue encore ouvertes. PROCHAIN PAS : MO-100 ou arbitrage des propositions.",
+      "tags": [
+        "session-fermee",
+        "travail",
+        "reprise"
+      ],
+      "source": ""
+    },
+    {
+      "id": "S-027",
+      "date": "2026-09-15 19:31:50",
+      "session": "Mission MO-100 terminee (theme PERFORMANCE) : MO-100 (PERFORMANCE) terminee -- P1 + P2 de la revue MO-098 appliques. P1 : valeur morte py_compile_ms SUPPRIMEE du cockpit (aucun lecteur ; la brancher telle quelle aurait fait crier a tort : compilation reelle 1406 puis 794 ms). P2 : le budget du bilan-periode est DECLARE chez l'objet (bilan-periode/constants.py BUDGET_PASSE_MS=500), PUBLIE dans la sortie de l'outil (format stable 'Budget declare de l'outil : <n> ms'), LU par le cockpit ; publication absente => le cockpit DIT 'BUDGET NON PUBLIE par l'outil' (aucun repli muet). Le cockpit ne possede plus aucun seuil de mesure (SEUILS_PERFS = politique usages_lignes uniquement, P3 en attente). Preuves : cobaye 6/6 (3 pieges : publication absente, budget depasse, budget respecte), /metriques sans seuil depasse (veille-flux=2000 | bilan-periode=500 ms), non-regression ZONE+FLUX VERTE, ASCII 0 violation, py_compile OK, coherence 0 ecart 0 dette, 6 notes bdd-modifications, friction 36 (3/3) validee, lecon L-087, revue mise a jour (lignes 5 et 7, P1 et P2 marquees FAIT).",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-100"
+    },
+    {
+      "id": "S-028",
+      "date": "2026-09-15 19:32:10",
+      "session": "Session du 2026-09-15 19h35 (Flux 2) OUVERTE : cinquieme mission -- MO-100, P1 + P2 de la revue MO-098 (le createur a demande d'appliquer les deux : supprimer ou brancher la valeur morte py_compile_ms, et declarer le budget du bilan-periode chez l'outil).",
+      "tags": [
+        "session",
+        "optimus-prime",
+        "flux2",
+        "MO-100"
+      ],
+      "source": "pilote maintenance"
+    },
+    {
+      "id": "S-029",
+      "date": "2026-09-15 19:32:10",
+      "session": "Session du 2026-09-15 19h35 FERMEE : MO-100 PERFORMANCE terminee -- P1 + P2 APPLIQUES. P1 : la valeur morte py_compile_ms (400 ms, AUCUN lecteur) est SUPPRIMEE du cockpit ; la brancher telle quelle aurait fait crier a tort (compilation reelle de la veille : 1406 ms puis 794 ms, MO-097). P2 : le budget du bilan-periode MIGRE chez l'OBJET -- declare dans matrice/data/outils/bilan-periode/constants.py (BUDGET_PASSE_MS = 500, mesure reelle 114 ms pour --periode heures), PUBLIE par l'outil dans sa sortie sous un format stable ('Budget declare de l'outil : <n> ms'), puis LU par le cockpit qui compare sa 'duree moy' a CE budget ; si la publication manque, le cockpit DIT 'BUDGET NON PUBLIE par l'outil' au lieu de se rabattre sur un nombre ecrit chez lui (motif MO-097). Consequence : le cockpit ne possede plus AUCUN seuil de mesure, SEUILS_PERFS ne porte plus qu'une politique (usages_lignes 50000, en attente de P3). Preuves : cobaye 6/6 (publication lue ; PIEGE publication absente -> BUDGET NON PUBLIE ; PIEGE budget depasse -> crie PERFORMANCE-OUTILS ; PIEGE budget respecte -> silence ; valeur morte absente ; l'outil reel publie une ligne coherente avec ce que le cockpit lit), /metriques sans seuil depasse ('Seuils de POLITIQUE du cockpit : usages_lignes=50000' + 'Budgets declares par les objets mesures : veille-flux=2000 | bilan-periode=500 ms'), py_compile OK, ASCII 0 violation, non-regression ZONE+FLUX VERTE, coherence file<->journal 0 ecart 0 dette, 6 notes bdd-modifications, friction 36 (3/3) validee car livree dans la mission, lecon L-087, revue mise a jour (lignes 5 et 7, P1 et P2 marquees FAIT + en-tete). RESTE-A-FAIRE : P3 (domicilier la capacite du journal usages et lier la rotation), P5 (un seul delai de sous-processus), P6 (nommer les politiques d'affichage du cockpit) ; et MO-101 cartographier toute la Matrice v3 (case 2 du theme PURIFICATION), l'objectif initial de MO-099 reste annonce au marbre. PROCHAIN PAS : arbitrage du createur sur P3/P5/P6 ou cartographie.",
+      "tags": [
+        "session",
+        "optimus-prime",
+        "flux2",
+        "MO-100",
+        "performance"
+      ],
+      "source": "pilote maintenance"
+    },
+    {
+      "id": "S-030",
+      "date": "2026-09-15 19:41:10",
+      "session": "Mission MO-101 terminee (theme PERFORMANCE) : MO-101 (PERFORMANCE / lot REVUE-MO-098, round 1/3) terminee -- P3 de la revue MO-098 applique : la capacite du journal usages est declaree chez son proprietaire (bdd-usages : SEUIL_OCTETS_JOURNAL 16 Mo, EVENEMENTS_GARDES_JOURNAL 40000, deduits du plus long lecteur = bilan-periode 30 jours), la rotation y est LIEE (moteur partage appele apres chaque ecriture depassee, jamais la note tuee), la capacite est PUBLIEE par bdd-usages lire et LUE par le cockpit qui compare la taille REELLE du journal ; SEUILS_PERFS est vide (le cockpit ne possede plus aucun seuil de mesure). Preuves : cobaye 7/7 dont 4 pieges (rotation liee -- 40000 gardees, 1000 archivees, 0 perdu ; depassement -> la rotation n'a pas tourne ; capacite absente -> CAPACITE NON PUBLIEE ; sous la capacite -> silence), non-regression ZONE+FLUX verte, /sante OK 13 portes, /metriques sans seuil depasse, friction 37 (3/3), lecon L-088, revue mise a jour.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-101"
+    },
+    {
+      "id": "S-031",
+      "date": "2026-09-15 19:41:35",
+      "session": "Session du 2026-09-15 19h40 (Flux 2) OUVERTE : cinquieme round -- lot REVUE-MO-098 arme (3 missions) apres le constat que les propositions P3/P5/P6 de la revue MO-098 n'etaient PAS dans la file du pilote (lot vide) : chaque P etait ouvert a la main, un par un, donc aucun enchainement. Round 1/3 = MO-101 (P3, capacite du journal).",
+      "tags": [
+        "session",
+        "optimus-prime",
+        "flux2",
+        "lot",
+        "MO-101"
+      ],
+      "source": "pilote maintenance"
+    },
+    {
+      "id": "S-032",
+      "date": "2026-09-15 19:41:35",
+      "session": "Session du 2026-09-15 19h40 : MO-101 (P3) TERMINEE -- la capacite du journal usages est chez son proprietaire (bdd-usages : 16 Mo de declencheur, 40000 evenements gardes, bornes DEDUITES du plus long lecteur = bilan-periode 30 jours), la rotation y est LIEE (moteur partage, verifiee apres chaque ecriture depassee), la capacite est PUBLIEE par bdd-usages lire et LUE par le cockpit qui compare la taille REELLE du journal ; SEUILS_PERFS est VIDE (plus aucun seuil de mesure chez l'observateur). Preuves : cobaye 7/7 dont 4 pieges, non-regression ZONE+FLUX verte, /sante OK (13 portes), /metriques aucun seuil depasse, friction 37 (3/3), lecon L-088, revue mise a jour, 9 notes bdd-modifications. METHODE : le lot REVUE-MO-098 est arme et le pilote ENCHAINE -- il a annonce DEBUT mission MO-102 (round 2/3) a la fin de MO-101, sans intervention. RESTE-A-FAIRE DU LOT : MO-102 = P5 (un seul delai de sous-processus declare, en cours), MO-103 = P6 (nommer les politiques d'affichage du cockpit). HORS LOT : MO-104 cartographier toute la Matrice v3 (case 2 du theme PURIFICATION).",
+      "tags": [
+        "session",
+        "optimus-prime",
+        "flux2",
+        "MO-101",
+        "p3",
+        "lot"
+      ],
+      "source": "pilote maintenance"
+    },
+    {
+      "id": "S-033",
+      "date": "2026-09-15 20:09:44",
+      "session": "Mission MO-102 terminee (theme PERFORMANCE) : MO-102 (PERFORMANCE / lot REVUE-MO-098, round 2/3) terminee -- P5 de la revue MO-098 APPLIQUE, et la chaine du lot VERIFIEE ET REPAREE. (1) P5 : le plafond d'un sous-processus (120 s) etait ecrit a SIX endroits. Il a desormais UN domicile : matrice/data/commun/lancement.py -- DELAI_SOUS_PROCESSUS_SECONDES + delai_sous_processus(); c'est le module qui LANCE les fils qui declare leur plafond. Copies supprimees : 3 constantes d'observateurs (verifier-anti-spam-missions, verifier-exemptions-visibles, verifier-passes-non-redondantes), 2 delais EN DUR (verifier-rotation-journal dans l'appel de porte, verifier-sans-attendre dans la passe de la porte vie etat) et la constante de la routine veille-flux (TIMEOUT_COMBO_SECONDES). data/commun est installe dans le main() des observateurs (motif M-076) et la valeur est lue a la source; executer garde SON TIMEOUT_DEFAUT, c'est son objet. Preuves : py_compile 7/7 ; valeur lue a la source (routine 120 == proprietaire 120) ; grep des delais recopies = VIDE ; les 5 observateurs rendent VERDICT OK en reel (rotation-journal, sans-attendre, anti-spam, exemptions, passes non redondantes). (2) VERIFICATION DE LA CHAINE (question du createur) : la chaine a bien tire une fois -- MO-101 terminee 19:41:10, MO-102 injectee 19:41:11, debut-mission 2/3 annonce; mais l'intercom reel montrait debut 1/3 et 2/3 annonces et FIN MUETTE, plus un lot qui portait position 0 alors qu'il etait au round 3/3. Deux defauts reels, repares DANS cette mission : la cloture bascule le statut AVANT d'annoncer et portee_lot exige une mission en-cours, donc la FIN ne pouvait pas dire son round -- la cloture capture desormais la portee AVANT la bascule (commun.annoncer_fin accepte la portee) ; et le champ lot['position'], ecrit a 0 et jamais mis a jour, est retire (la position se LIT sur la mission en cours). cycle-state.json reste ecrit par le module de cycle et n'est lu par AUCUN outil : il annoncait phase=pret alors que le lot etait au round 2/3 -- signale a la revue, non refactorise (decision createur). (3) PREUVES de la reparation : cobaye tmp-optimus/cobaye-mo102-chaine-du-lot.py 7/7 avec PIEGE -- sans portee la FIN ne dit AUCUNE position (defaut reproduit), avec portee elle dit 2/3; lot arme sans position morte; lot_termine False a 2/3 et True a 3/3; bilan consolide porte les trois missions; hors lot aucune portee; garde L-015 respectee (deposer_message remplace par un enregistreur, 0 ecriture reelle dans l'intercom). La FIN de CETTE mission en est l'epreuve vivante : l'intercom portera fin-mission MO-102 position 2/3. (4) ETAT : non-regression ZONE+FLUX VERTE (pre-vol integrite repose : 105 empreintes), coherence file<->journal 0 ecart 0 dette, valeur morte purgee du disque par la porte du pilote, revue MO-098 mise a jour (P5 FAIT). 9 notes bdd-modifications. Aucune donnee de mission modifiee ni supprimee ; Flux 1 et cameleon non ecrits.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-102"
+    },
+    {
+      "id": "S-034",
+      "date": "2026-09-15 20:17:56",
+      "session": "Mission MO-103 terminee (theme PERFORMANCE) : MO-103 (PERFORMANCE / lot REVUE-MO-098, round 3/3) terminee -- P6 de la revue MO-098 APPLIQUE, ET audit des restes-a-faire qui vivent hors file. (1) P6 : la POLITIQUE D'AFFICHAGE du cockpit est NOMMEE -- 13 nombres nus ([:300], [:30], [:2000], [:3000], [:4000], [:6000], hits[:5], queue 20) deviennent 11 constantes nommees et commentees, regroupees sous un en-tete qui dit ce qu'elles sont : le confort de lecture de l'operateur, JAMAIS une surveillance. Aucune n'entre dans SEUILS_PERFS (qui est VIDE : le cockpit ne possede plus aucun seuil de mesure). /metriques affiche desormais deux lignes distinctes : 'Seuils de MESURE du cockpit : aucun (tout seuil est declare par l'objet mesure)' et 'Politique d'AFFICHAGE du cockpit (confort de lecture, JAMAIS une mesure) : limite=10 extraits=300 sorties=2000/3000/4000/6000 lignes=20/30/20 hits=5'. Preuves : py_compile OK ; /metriques rend les deux lignes ; /sante 13 portes ; grep des nombres nus d'affichage = VIDE ; non-regression ZONE+FLUX VERTE. (2) AUDIT DEMANDE PAR LE CREATEUR -- les restes-a-faire hors file : la file du pilote n'avait AUCUNE mission en attente et l'entonnoir etait VIDE. Trois trouvailles REELLES, deposees et TISSEES dans la machine (porte officielle) : (a) EO-116 (haute, dev/outil, CONSTRUCTEUR) -- le journal de preparation porte un GO COMPLET du createur (2026-09-13) d'un chantier de 10 pas (garde de resolution, perimetre declare et LU, atelier.py, chemin.py, fichier.py, horloge.py, execution.py, texte.py, empreinte.py, migration des sys.path.insert) : approuve, gate sur une preuve par pas, et INVISIBLE de la file ; (b) EO-117 (reparation/pilote, REPARATEUR) -- cycle-state.json est ecrit par le module de cycle, lu par AUCUN outil, et il annoncait phase=pret quand le lot etait au round 2/3 (le meme mensonge que la position morte) ; (c) EO-118 (dev/pilote, PILOTE) -- le verbe lot accepte un THEME MERE, donc des missions naissent sans type ferme et sans posture (le pilote l'a crie deux fois en injectant MO-103). Le brin tissee porte les trois, classes et ordonnes par urgence. (3) UN DOCUMENT QUI MENT, CORRIGE : le tableau du GO disait le pas 0 'A FAIRE (bloque le pas 1)' alors que MO-057 est terminee et que la coherence mesure 0 ecart / 0 dette -- un prealable satisfait annoncait une porte fermee ; la ligne porte maintenant le FAIT mesure et une note de tracabilite pointe vers EO-116 : un plan GO ne vit plus seulement dans un document. Deux faux positifs ecartes et nommes (une regle 'NE PAS LA FAIRE', une etape de protocole 'resumer fait / reste a faire'). Une proposition au createur reste EN ATTENTE DE DECISION, volontairement non deposee (elle exige sa validation avant ecriture) : graver une regle immuable de perimetre des dossiers tmp (convention-tmp-optimus-cameleon.md). (4) ETAT : non-regression ZONE+FLUX VERTE (pre-vol integrite repose, 105 empreintes), coherence file<->journal 0 ecart / 0 dette, revue MO-098 mise a jour. Aucune donnee de mission modifiee ni supprimee ; Flux 1 et cameleon non ecrits.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-103"
+    },
+    {
+      "id": "S-035",
+      "date": "2026-09-15 20:20:15",
+      "session": "MO-102 (round 2/3 lot REVUE-MO-098) : P5 applique (domicile unique du plafond de sous-processus, 6 copies supprimees, 5 observateurs verts) + la chaine du lot VERIFIEE puis REPAREE : la FIN dit son round (portee capturee avant la bascule), plus de position morte dans le lot, cobaye 7/7 avec piege ; non-regression verte ; reste-a-faire : cycle-state.json orphelin (EO-117 depuis MO-103).",
+      "tags": [
+        "mo-102",
+        "performance",
+        "p5",
+        "pilote",
+        "chaine-du-lot"
+      ],
+      "source": "session-matrix Flux 2"
+    },
+    {
+      "id": "S-036",
+      "date": "2026-09-15 20:20:15",
+      "session": "MO-103 (round 3/3 + RETOUR consolide du lot REVUE-MO-098) : P6 applique (politique d'affichage du cockpit nommee, 13 nombres nus -> 11 constantes, /metriques distingue MESURE et AFFICHAGE) + AUDIT des restes-a-faire hors file : file et entonnoir VIDES alors qu'un GO de 10 pas dormait dans un journal -- trois missions deposees et TISSEES (EO-116 chantier natif GO, EO-117 cycle-state orphelin et menteur, EO-118 le lot accepte un theme mere sans type) ; deux faux positifs ecartes ; une proposition attend la decision du createur (regle immuable de perimetre tmp). RETOUR consolide emis vers la Matrice, lot desarme.",
+      "tags": [
+        "mo-103",
+        "performance",
+        "p6",
+        "audit",
+        "hors-file",
+        "retour-lot"
+      ],
+      "source": "session-matrix Flux 2"
+    },
+    {
+      "id": "S-037",
+      "date": "2026-09-15 21:07:49",
+      "session": "Mission MO-104 terminee hors file (theme MATRICE) : MO-104 (MATRICE) terminee -- la proposition restee en attente depuis MO-103 est DECIDEE et GRAVEE : une REGLE IMMUABLE de perimetre des fichiers temporaires existe desormais (regles-immuables/perimetre-tmp.md), sur GO createur complet. (1) DECISION : j ai d abord refuse la version proposee par la convention (un simple fichier) et impose trois corrections -- le domicile unique (la regle se declare DECLINAISON de perimetre-write.md : une seule maison par idee, L-029), les QUATRE points de relecture nommes (fichier + index + REGLES ABSOLUES de la fiche + proto-1 ETAPE 1 : une regle que personne ne relit ne protege rien, motif attente-ne-prouve-rien), et l aveu de la LIMITE de la garde. Le createur a arbitre la forme de la fin de mission : zone PERMANENTE avec README toujours present et CONTENU vide (plutot que dossier supprime), parce que c est le seul choix VERIFIABLE -- supprimer le dossier rendait un oubli indiscernable d un etat normal. (2) LA CONTRADICTION TRANCHEE : la convention demandait de supprimer le dossier en fin de mission, alors que le marbre ET la BDD modifications CITENT et EMPREINTENT les cobayes comme preuves. La regle gravee tranche : la preuve d un cobaye est son RESULTAT, lu a l execution -- le fichier qui dort n est plus une preuve -- et toute suppression se TRACE (7 suppressions notees en BDD dans cette mission). (3) L ECART REEL, trouve AVANT d ecrire : la garde garde-tmp (M-100) ne regardait que les residus HORS tmp-* ; sur disque, tmp-optimus avait perdu son README et portait 6 fichiers de missions passees que RIEN ne signalait. Graver une regle qu on est en train d enfreindre aurait ete un mensonge : la zone a ete nettoyee dans la meme mission (contenu vide, README restaure ; les deux zones n ont plus que leur README). (4) LA GARDE RENDUE REELLE : garde-tmp accuse desormais une zone tmp-* privee de son README et, par le controle regle-lue-a-l-allumage, la disparition de la regle d un de ses 4 points ; il INFORME du nombre de fichiers par zone sans jamais accuser (des cobayes vivent legitimement dans la zone pendant une mission) ; le controle de regle est ignore quand le domicile de l operateur est absent, pour ne pas fabriquer de faux positif sur une racine de cobaye. Le contenu vide en fin de mission reste une DISCIPLINE, non verifiable : la regle le dit noir sur blanc. (5) PREUVES LUES, pas attendues : le garde a ACCUSE l ecart reel AVANT nettoyage (code 1, tmp-optimus sans README) puis rendu VERT apres ; cobaye 6/6 avec 3 PIEGES (zone sans README, regle retiree d un point de relecture, index disparu, residu hors zone) et un temoin de NON faux positif sur racine de cobaye ; le cobaye a d abord rendu 0/6 -- KO utile : le garde exige une racine NOMMEE matrix/, donc le cobaye plantait mal sa racine (corrige le cobaye, jamais le garde, L-006/L-032) ; espion d integrite : la derive avant re-enregistrement etait EXACTEMENT mon changement (1 nouveau + 6 modifies, rien d autre), puis 106 empreintes conformes ; garde-ascii 645 fichiers 0 violation ; marbres conventions/regles/protocoles conformes ; cartes d identite OK ; garde-perimetre-write sain ; coherence file<->journal 0 ecart apres enregistrement ; non-regression ZONE verte (22 blocs ; les deux seules portes rouges etaient l ecart de coherence ferme par enregistrer). 15 notes bdd-modifications (8 modifications + 7 suppressions tracees). Aucune donnee de mission modifiee ni supprimee ; Flux 1 et cameleon non ecrits.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-104"
+    },
+    {
+      "id": "S-038",
+      "date": "2026-09-15 21:21:43",
+      "session": "Mission MO-105 terminee (theme CONSTRUCTEUR) : MO-105 (CONSTRUCTEUR, pas 1 du chantier natif I-00 -> I-06) terminee -- le GARDE DE RESOLUTION est livre, par la decision S-3 (arbitrage createur : ETENDRE verifier-contrat-fondamental.py plutot que creer une seconde porte pour un meme contrat, L-029 ; consequence assumee : la remorque ne bouge pas au pas 1, la projection du GO est corrigee). (1) LES 4 CONTROLES : B-1 resolution (tout import par NOM NU qui atteint un module ou un dossier du projet), B-2 insertions (sys.path.insert/append hors amorce, chemin CALCULE, DETTE AVOUEE pour un argument non resolvable -- jamais devine), B-3 collisions ETENDU aux 38 dossiers-categories des OUTILS (le trou mesure de la fiche : le controle ne regardait que les pilotes), B-4 imports (l'amorce SE DIT inactive jusqu'au pas 2 : jamais de garde muet). (2) LE BLOCAGE SUIT LE PERIMETRE DECLARE : PERIMETRE MIGRE declare dans les constantes et VIDE tant qu'aucun fichier n'est migre (la migration est le pas A, etalee) ; ailleurs l'occurrence est une DETTE CHIFFREE qui ne remonte JAMAIS (S-4 : sans cela le garde ne pourrait pas s'allumer avant d'avoir tout migre). Aucun fichier fantome n'est lu avant le pas P. (3) LE DOCUMENT CORRIGE PAR LA MESURE : les chiffres de la fiche etaient perimes -- 390 fichiers -> 434 mesures, 133 imports par nom nu -> 465, 65 insertions -> 79 (le premier comptage lisait 97 : il comptait aussi les insert de listes), couche data/commun 6 -> 10 modules ; projection corrigee 73 -> 85 aujourd'hui et 87 -> 102 en fin de serie. Le pas 1 passe a FAIT dans le tableau du GO. (4) PREUVES : cobaye 9/9 avec 3 PIEGES (deux constants.py atteignables -> ECART nommant fichier:ligne ; insertions hors amorce et chemin calcule ; import a tirets ; collision avec une categorie d'OUTIL) + 1 PIEGE INVERSE (un fichier conforme n'est jamais nomme) + DETTE non remontante (deux passes identiques : noms-nus=465, insertions=79) ; 0 ECART sur l'arbre reel (aucun faux positif) ; le perimetre force sur la couche NOMME sac_a_dos.py:28 -- le premier fichier a migrer ; MAILLON 23 BLOQUANT ajoute a la non-regression, ZONE+FLUX verte (23 maillons) ; ASCII 0 violation (645 fichiers) ; py_compile OK ; remorque conforme (85 equipements, inchangee : outil etendu, pas de naissance) ; espion d'integrite re-arme (106 empreintes) ; 4 notes bdd-modifications ; cobaye purge (zone tmp-optimus : README seul). Mes deux premiers KO de cobaye etaient des ARTEFACTS de mes assertions, jamais du garde -- corrige le cobaye. DONE : les 10 familles sont vertes. RESTE A DEPOSER : pas 1-P -> pas 8 + migration A (le GO se consomme un pas a la fois, un pas ne s'ouvre que sur la PREUVE du precedent). Aucune donnee de mission modifiee ni supprimee ; Flux 1 et cameleon non ecrits.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-105"
+    },
+    {
+      "id": "S-039",
+      "date": "2026-09-15 21:23:23",
+      "session": "Mission MO-106 terminee (theme PILOTE) : MO-106 (PILOTE, EO-118) terminee -- le verbe lot EXIGE desormais un TYPE FERME par mission. (1) LE DEFAUT, MESURE : armer un lot avec --theme PERFORMANCE (theme MERE) faisait naitre des missions SANS champ type ; l'injection le criait DEUX fois (ECART sans type ferme -> checklist reduite aux garde-fous communs ; ALERTE posture ABSENTE) et le pilote l'a vecu en injectant MO-103. Un THEME decrit un CHANTIER, il ne dit pas la NATURE de la mission : les confondre laissait partir des missions sans conduite. (2) LE FIX : --type t1,t2 est exige, un par mission ; il est valide contre la liste FERMEE de l'entonnoir (TYPES : dev, reparation, doc, audit, revision -- importee, jamais recopiee) et ECRIT dans la mission, d'ou la posture se deduit a l'injection. REFUS code 2 si le type manque, est inconnu, ou si le compte ne correspond pas ; le theme reste un champ ferme du vivier (le type ne l'a pas remplace). (3) PREUVES : cobaye 6/6 -- refus sans type (aucune mission ne nait), type inconnu refuse, un type par mission, PIEGE INVERSE (theme hors vivier toujours refuse), cas REEL (theme mere PERFORMANCE + --type dev -> la mission porte type ET posture, 0 ecart), et DEFAUT REPRODUIT (une mission sans type crie POSTURE ABSENTE). L-015 respectee : enregistrer_file remplace par un enregistreur, la vraie file n'est jamais touchee. py_compile OK, ASCII 0 violation (cobaye purge), pilote operationnel (file lue), lecon L-091. Aucune donnee de mission modifiee ni supprimee ; Flux 1 et cameleon non ecrits.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-106"
+    },
+    {
+      "id": "S-040",
+      "date": "2026-09-15 21:28:40",
+      "session": "Mission MO-107 terminee (theme REPARATEUR) : EO-117 (etat de cycle) : perimetre mesure -- cycle.py 335 lignes, 5 sites d'appel, mission courante dupliquant la file, miroir Flux 1 hors perimetre. Reparation NON livree : le reste-a-faire est rendu au brin pour reprise. Cote L-020 : trou comble (MO-108), le pilote declare ses bornes.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-107"
+    },
+    {
+      "id": "S-041",
+      "date": "2026-09-15 21:29:40",
+      "session": "Mission MO-108 terminee (theme REPARATEUR) : Mission faite HORS file et deja declaree au marbre (MO-108, 2026-09-15) : le pilote declare desormais ses bornes (mode --si-absent oui). Cobaye 7/7, non-regression verte 23 maillons. Ici l'epreuve est INVERSE : les deux bornes existent deja -> le pilote ne doit RIEN doubler.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-108"
+    },
+    {
+      "id": "S-042",
+      "date": "2026-09-15 21:29:52",
+      "session": "Mission MO-109 terminee (theme AUDITEUR) : EPREUVE VIVANTE REUSSIE : bornes declarees par le pilote sans action de l'agent (MO-109 debut 184->185). PIEGE REFERME : MO-108 avait ses bornes deja au marbre -> injection et cloture SANS aucune ligne ajoutee (184->184, zero doublon : le defaut MO-030 ne peut plus revenir). Idempotence tierce verifiee (declaration volontaire de l'agent -> SI-ABSENT).",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-109"
+    },
+    {
+      "id": "S-043",
+      "date": "2026-09-15 21:31:47",
+      "session": "Mission MO-111 terminee hors file (theme REPARATEUR) : Porte enregistrer sous le garde --si-absent : la fin n'est ecrite que si elle manque, le debut implicite suit la meme regle. Preuve : MO-111 declaree AVANT d'etre enregistree -> enregistrer n'a RIEN ajoute au marbre (compte inchange), et le journal a ete dit 'fin DEJA presente'.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-111"
+    },
+    {
+      "id": "S-044",
+      "date": "2026-09-15 21:36:30",
+      "session": "Mission MO-112 terminee hors file (theme REPARATEUR) : Charge simple : --type EXIGE (helper valider_type_ferme, domicile unique avec le lot). retiqueter accepte --type (reparation de l'existant, quel que soit le statut, avec trace type_avant + motif). 3 missions dont la nature est un fait ont ete reparees (MO-108, MO-109, MO-111). Cobaye 7/7 : refus sans type et sur type inconnu, type porte par la mission, ECART reproduit sans type puis disparu, posture '' -> AUDITEUR. Non-regression verte.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-112"
+    },
+    {
+      "id": "S-045",
+      "date": "2026-09-15 21:38:52",
+      "session": "Mission MO-113 terminee hors file (theme AUDITEUR) : 41 missions sans type inventoriees. Methode : trace (objectif + bilan + marbre 87 details + fichiers touches), jamais le theme (lecon EO-118). Limite MESUREE et dite : la proposition automatique est un compteur de mots-cles -- verifiee sur les 9 cas 'audit', elle s'est trompee 8 fois ; ces 9 ont donc ete LUS et corriges. Livrable : preparation/inventaire-types-a-valider.md. Aucun type applique : on declare, on n'invente pas.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-113"
+    },
+    {
+      "id": "S-046",
+      "date": "2026-09-15 21:42:31",
+      "session": "Mission MO-114 terminee hors file (theme AUDITEUR) : 41 missions lues une par une (objectif + bilan + marbre), regle unique et explicite : le type decrit la NATURE DU LIVRABLE (dev=artefact neuf, reparation=defaut de l'existant, revision=optimisation sans defaut, audit=constat sans modification, doc=texte normatif). Le theme n'entre jamais dans la decision (lecon EO-118). Repartition : 29 reparation, 8 dev, 2 doc, 1 revision, 1 audit. Couverture verifiee par la machine : 41 verdictees, 0 sans verdict, 0 orphelin. Aucun type applique : validation createur attendue.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-114"
+    },
+    {
+      "id": "S-047",
+      "date": "2026-09-15 21:45:24",
+      "session": "Mission MO-115 terminee hors file (theme REPARATEUR) : DECISION : le type est ACCEPTE EN OPTION, JAMAIS exige. 1) une porte de REPARATION ne doit jamais pouvoir refuser de reparer : un champ exige rendrait inenregistrable une mission dont la nature est perdue, donc creerait l'ecart qu'elle existe pour fermer ; 2) c'est le raisonnement deja tenu pour le THEME (un fait historique ne se juge pas) ; 3) mais un fait se nomme dans le VOCABULAIRE FERME quand il est donne, et la porte le DIT quand il manque (elle nomme retiqueter --type). Cobaye 6/6 : refus si type hors vocabulaire (0 ecriture), accepte sans type SANS cle 'type' (une cle absente dit 'nature inconnue', une cle vide dirait 'nature vide'), message SANS TYPE, fiche typee quand donne, meme videur que charger.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-115"
+    },
+    {
+      "id": "S-048",
+      "date": "2026-09-15 21:48:42",
+      "session": "Mission MO-116 terminee hors file (theme REPARATEUR) : prochain_id prend desormais le plus haut des DEUX (compteur de file ET plus haut numero vu au marbre) plus un : jamais un numero deja pris. numero_id deplace dans commun.py (un seul domicile, il y avait une copie dans file/fonctions.py). Marbre illisible -> 0 sans exception, mais SIGNALE (L-037). Les ids d'un autre flux (M- du cameleon) sont ignores volontairement. Cobaye 6/6 : compteur en retard 107 -> MO-116 (jamais MO-108, la collision d'origine), compteur en avance inchange, 3 charges de suite sans id deja vu, marbre illisible tolere et dit, numero_id un seul domicile, rien ecrit.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-116"
+    },
+    {
+      "id": "S-049",
+      "date": "2026-09-15 21:50:34",
+      "session": "Mission MO-117 terminee hors file (theme REPARATEUR) : 41 missions sans type -> 41 missions typees, PAR LA PORTE (jamais une ecriture directe du JSON) : chaque mission porte desormais son type + sa trace (type_avant=None + motif issu du tableau). Preuves : couverture 41/41 avant (refus du script sinon), application 41/41, relecture 0 sans type / 0 type faux / 41 traces completes. Repartition : 29 reparation, 8 dev, 2 doc, 1 revision, 1 audit. Document renomme inventaire-types.md (il ne dit plus 'a valider').",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-117"
+    },
+    {
+      "id": "S-050",
+      "date": "2026-09-15 21:56:37",
+      "session": "Mission MO-110 terminee (theme REPARATEUR) : MO-110 (EO-119) : l'ETAT DE CYCLE DISPARAIT, l'HISTORIQUE EST ARCHIVE. cycle.py ne tient plus d'etat : la PHASE est LUE sur la file (commun.mission_en_cours) et l'historique vit dans cycle-historique-archive.json EN AJOUT SEUL (ecriture atomique). cycle-state.json a ete supprime APRES archivage et RELECTURE de ses 60 entrees (phase, mission courante -- qui DUPLIQUAIT la file et annoncait 'pret' quand MO-110 etait en cours -- et dernier injection). Les injections du CATALOGUE ne sont pas touchees (la conduite n'a pas ete perdue avec l'etat). Preuves : cobaye 7/7 (phase derivee 'mission'/'pret', REFUS sans mission en cours, ajout seul 2 fins = 2 entrees, plus aucune methode d'etat, ecriture atomique sans .tmp, catalogue toujours lance, vrai historique intact) ; non-regression VERTE ; coherence 0 orpheline / 0 doublon. HORS PERIMETRE, SIGNALE : le miroir Flux 1 (matrice/pilote/injection/cycle.py) porte le MEME defaut -- non touche, il exige l'arbitrage createur.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-110"
+    },
+    {
+      "id": "S-051",
+      "date": "2026-09-15 22:17:00",
+      "session": "Mission MO-118 terminee hors file (theme REPARATEUR) : MO-118 : LE MIROIR FLUX 1 EST ALIGNE -- et mon erreur de MO-110 est corrigee. (1) LA DECISION : j'avais ecrit en MO-110 que le miroir etait 'hors perimetre'. Faux par la regle immuable (perimetre-write.md : je n'ECRIS que dans cerveau-projet/matrix/, et matrice/pilote y est) ; ce qui etait vrai est que la MISSION EO-119 visait le Flux 2. La seule contrainte reelle est L-016 (aucun contenu d'Optimus lisible par le cameleon) : la reparation vit donc DANS le domicile du cameleon, avec SES outils (commun.mission_en_cours), zero import de _operateur. (2) LE MENSONGE MESURE : cycle-state.json du cameleon annoncait phase=mission et une mission M-CAM 'en cours' depuis le 2026-09-13T06:30:20, alors que sa file portait 0 mission (compteur 89) et que M-CAM n'existe dans AUCUN journal (147 lignes relues) ; il etait de plus tronque EN SILENCE a ses 100 dernieres entrees, et son demarrer EFFACAIT la mission courante. (3) LIVRE : cycle.py reecrit SANS ETAT -- la PHASE est DEDUITE de la file, l'historique vit dans matrice/pilote/cycle-historique-archive.json EN AJOUT SEUL (ecriture atomique, temoignage du fantome conserve avec la verite mesuree), et la declaration d'un debut dont l'id n'est pas la mission en cours de la file est REFUSEE (garde anti M-CAM : c'est ainsi que le fantome est ne). La fin se rattache a la file (mission en cours, sinon derniere terminee) et le rattachement est DIT. Etat supprime APRES archivage et relecture ; API preservee pour injection/entry.py. (4) PREUVES : cobaye 13/13, 7 pieges (refus du fantome sans injection ni ecriture ; phase deduite dans les deux sens ; ajout seul 120 -> 121 sans troncature ; aucun .tmp residuel ; L-016 prouve par AST -- seuls imports commun et constants ; API preservee ; catalogue toujours lance, espionne et non execute ; L-015 archive reelle 3 -> 3). EPREUVE VIVANTE : la declaration reelle du debut de M-CAM est REFUSEE (code 1, archive 3 -> 3), la phase reelle se lit 'pret (deduite de la file)', et la porte main.py statut est verte de bout en bout. (5) DOC QUI MENTAIT, CORRIGE : _operateur/optimus-prime/pilote/README-cycle.md annoncait encore 'les gestionnaires sauvegardent leur etat dans cycle-state.json' -- reste de MO-110 que je n'avais pas vu ; il dit desormais la verite des DEUX flux. (6) ETAT : non-regression ZONE+FLUX verte ; coherence 2 ecarts AVANT enregistrement (MO-118 declaree au journal sans fiche, compteur 117 < 118) et 0 apres ; 4 notes BDD. Aveu utile : mon cobaye a d'abord echoue sur T9/T10 parce qu'il lisait la PROSE du docstring -- corrige le cobaye, jamais le code.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-118"
+    },
+    {
+      "id": "S-052",
+      "date": "2026-09-16 07:01:00",
+      "session": "Session du 2026-09-15 (Flux 2, Optimus) FERMEE -- cloture NOTEE TARDIVEMENT par MO-119 : la fermeture reelle du 2026-09-15 n'avait JAMAIS ete tracee (entrees S-030 a S-051 taguees 'travail' seulement, aucune avec session-fermee), ce qui rendait la porte de reprise AVEUGLE -- elle annoncait S-026 / MO-099 (19:27) au lieu du dernier travail reel MO-118 (22:17). DERNIER TRAVAIL REEL : MO-100 a MO-118 livres (P1 a P6 de la revue MO-098 sur les seuils du cockpit ; EO-116 pas 1 garde de resolution ; EO-117 etat de cycle supprime puis miroir Flux 1 aligne, MO-110 et MO-118 ; EO-118 le verbe lot exige un TYPE ferme ; retiquetage des 41 missions sans type, MO-113 a MO-117). RESTE-A-FAIRE : EO-116 pas 1-P a pas 8 + migration des sys.path.insert (un pas ne s'ouvre que sur la preuve du precedent) ; case 2 du theme PURIFICATION JAMAIS executee (cartographier toute la Matrice v3 avant tout classement) ; file, lot et tresse du pilote VIDES (aucune mission en attente). PROCHAIN PAS : EO-116 ou cartographie PURIFICATION.",
+      "tags": [
+        "session-fermee",
+        "travail",
+        "reprise"
+      ],
+      "source": "MO-119 reparation de la trace de reprise"
+    },
+    {
+      "id": "S-053",
+      "date": "2026-09-16 07:01:00",
+      "session": "Session du 2026-09-16 (Flux 2, Optimus) OUVERTE : reprise apres la session S-051 (MO-118). Objet : MO-119 REPARATION -- rendre la porte de reprise VERIDIQUE (ecart ETAPE 0 mesure : resume --derniere annoncait S-026 / MO-099 alors que 34 entrees sur 51 ne portent aucun tag de session).",
+      "tags": [
+        "session-ouverte",
+        "travail",
+        "reprise"
+      ],
+      "source": "MO-119 reparation de la trace de reprise"
+    },
+    {
+      "id": "S-054",
+      "date": "2026-09-16 07:02:02",
+      "session": "Mission MO-119 terminee hors file (theme REPARATEUR) : MO-119 (REPARATION) terminee : la porte de reprise dit la verite (S-052 = vraie fermeture du 2026-09-15 avec le vrai reste-a-faire ; 34 entrees sur 51 sans tag de session ; friction 40 ; lecon L-092 ; limite de granularite a la seconde mesuree et dite).",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-119"
+    },
+    {
+      "id": "S-055",
+      "date": "2026-09-16 07:02:10",
+      "session": "Session du 2026-09-16 (Flux 2, Optimus) OUVERTE -- RE-NOTEE par MO-119 : la note S-053 portait la MEME SECONDE que la cloture S-052 (07:01:00) et le moteur partage derniere_session.py tranche a la FERMETURE en cas d'egalite, donc l'ouverture restait invisible. La re-note est la SEULE reparation possible par la porte (friction 40 : aucune categorie ne re-tique ni ne re-date une entree). Objet de la session : MO-119 REPARATION de la porte de reprise, puis reprise du chantier.",
+      "tags": [
+        "session-ouverte",
+        "travail",
+        "reprise"
+      ],
+      "source": "MO-119 reparation de la trace de reprise"
+    },
+    {
+      "id": "S-056",
+      "date": "2026-09-16 07:02:46",
+      "session": "Mission MO-120 terminee hors file (theme AUDITEUR) : MO-120 (AUDITEUR) terminee : la trace AUTOMATIQUE du pilote (tag 'travail') est invisible de la porte de reprise (qui ne lit que session-ouverte / session-fermee) -- les deux moities du chantier MO-092 ne partagent pas de vocabulaire ; la reparation de MO-119 est un pansement tant que le contrat ECRIT/LU n'est pas aligne ; friction 41, lecon L-093.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-120"
+    },
+    {
+      "id": "S-057",
+      "date": "2026-09-16 07:11:27",
+      "session": "Mission MO-121 terminee hors file (theme AUTO-EVOLUTION) : MO-121 (AUTO-EVOLUTION) terminee : contrat ECRIT/LU aligne -- domicile unique du vocabulaire (data/commun/trace_session.py), categorie etat (lecture bornee), ouvrir_session au demarrage (jamais double), garde de retard qui DIT le retard sur session fermee, fin du faux 'BDD vide'. Cobaye 18/18 (5 pieges), preuve vivante 'session deja ouverte : rien a doubler' (56 -> 56 entrees), 0 ecart au contrat fondamental, ASCII sain, remorque 85. Friction 41 validee ; friction 42 notee (les .bak de ecrire hors zone).",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-121"
+    },
+    {
+      "id": "S-058",
+      "date": "2026-09-16 07:13:11",
+      "session": "Mission MO-122 terminee hors file (theme AUTO-EVOLUTION) : MO-122 (AUTO-EVOLUTION) terminee : categorie retiqueter livree (tags_avant + retiquete_le + motif, texte jamais touche), cobaye 11/11 dont 4 pieges prouvant l'effet sur le lecteur, refus sans ecriture, friction 40 validee, lecon L-095, 0 ecart au contrat fondamental, ASCII sain, remorque 85.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-122"
+    },
+    {
+      "id": "S-059",
+      "date": "2026-09-16 07:17:57",
+      "session": "Mission MO-123 terminee hors file (theme AUTO-EVOLUTION) : MO-123 (AUTO-EVOLUTION) terminee : exemption du point de restauration de porte -- motif borne .bak.<horodatage> + exemption VISIBLE (nommee et comptee) dans le contrat fondamental, regle immuable perimetre-tmp amendee (4 points de relecture intacts), cobaye 6/6 dont 3 pieges, friction 42 validee, lecon L-096, 0 ecart, marbre regles conforme, ASCII sain.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-123"
+    },
+    {
+      "id": "S-060",
+      "date": "2026-09-16 07:21:31",
+      "session": "Session du 2026-09-16 (Flux 2, Optimus) FERMEE : la CHAINE DE LA TRACE DE SESSION est reparee, puis DEUX RACINES fermees, sous arbitrage createur. FAITS : (1) MO-119 REPARATION -- la porte de reprise annoncait S-026 / MO-099 quand le dernier travail reel etait MO-118 (19 missions de retard) ; cause mesuree : 34 entrees sur 51 sans AUCUN tag de session, le moteur partage ne retenant que les entrees taguees ; reparation par la porte (S-052 fermeture REELLE notee tardivement, S-053/S-055 ouverture). (2) MO-120 AUDITEUR -- cause racine exacte : le pilote notait 'travail' quand la reprise ne lit que session-* (contrat ECRIT/LU non aligne, deux moities du chantier MO-092 deux vocabulaires) ; frictions 40/41, lecons L-092/L-093. (3) MO-121 AUTO-EVOLUTION -- CONTRAT ECRIT/LU ALIGNE : domicile UNIQUE du vocabulaire (matrice/data/commun/trace_session.py : tags, etats, formats stables), categorie etat (l'etat en UNE ligne, lecture bornee), ouvrir_session() au demarrage du cycle (jamais double : l'etat est LU avant d'ecrire ; la fermeture reste un acte de l'agent), GARDE DE RETARD (une session FERMEE plus ancienne que des entrees presentes est DITE au lieu de passer pour la verite), fin du faux 'BDD vide' quand la BDD est pleine sans session taguee ; cobaye 18/18 (5 pieges) + epreuve vivante 'session deja ouverte : rien a doubler' ; L-094. (4) MO-122 AUTO-EVOLUTION -- PORTE MANQUANTE posee : categorie retiqueter (--id + --tags, trace tags_avant / retiquete_le / motif_retiquetage, texte JAMAIS touche) ; cobaye 11/11 (4 pieges, dont le fait invisible qui devient le retenu du lecteur) ; friction 40 validee ; L-095. (5) MO-123 AUTO-EVOLUTION -- ARBITRAGE CREATEUR sur la friction 42 : le point de restauration .bak RESTE a cote de sa cible et le CONTRAT FONDAMENTAL l'accepte par une exemption BORNEE (.bak.<horodatage>, un horodatage incomplet reste un ECART) et VISIBLE (fichier + motif rendus, compte au verdict) ; regle immuable perimetre-tmp AMENDEE (4 points de relecture intacts) ; cobaye 6/6 (3 pieges) ; friction 42 validee ; L-096. ETAT DE FIN DE SESSION : non-regression ZONE 23/23 VERTE et FLUX 9/9 SAIN ; /sante OK 13 portes ; coherence file <-> journal 0 ecart / 0 dette (compteur 123) ; frictions 0 active / 42 validees / 0 annulee ; contrat fondamental 0 ecart ; garde-ascii 0 violation ; remorque 85 equipements ; tmp-optimus purge (70 -> 1 fichier, README seul, suppression tracee) ; /metriques sans seuil depasse. RESTE-A-FAIRE : (a) EO-116 chantier natif GO -- pas 1 livre par MO-105, restent pas 1-P a pas 8 + migration des sys.path.insert (un pas ne s'ouvre que sur la PREUVE du precedent) ; (b) case 2 du theme PURIFICATION JAMAIS executee : cartographier toute la Matrice v3 (fichiers, BDD, journaux, lecteurs, ecrivains, portes, dependances) avant tout classement ou archivage ; (c) sujet OUVERT : retiqueter corrige les TAGS mais ne RE-DATE pas (collision a la seconde S-052/S-053, reparee par une re-note) ; (d) incident de trace MO-122 consigne en 'decouverte' (segments entre accents graves absorbes par l'interpreteur), marbre append-only respecte. PROCHAIN PAS : EO-116 pas suivant, ou cartographie PURIFICATION.",
+      "tags": [
+        "session-fermee",
+        "travail",
+        "reprise",
+        "contrat-ecrit-lu",
+        "auto-evolution"
+      ],
+      "source": "MO-123 cloture de session"
+    },
+    {
+      "id": "S-061",
+      "date": "2026-09-16 07:23:34",
+      "session": "Session du 2026-09-16 (Flux 2, Optimus) OUVERTE : mission demandee par le createur -- fermer le sujet laisse ouvert a la cloture S-060 : retiqueter corrige les tags mais ne RE-DATE pas, et deux entrees a la MEME SECONDE ne sont departagees par rien (l'accident S-052/S-053 de MO-119). Seront traites : la porte de re-datage (avec garde de collision) puis le departage par rang d'append du lecteur.",
+      "tags": [
+        "session-ouverte",
+        "travail",
+        "re-datage",
+        "contrat-ecrit-lu"
+      ],
+      "source": "session courante 2026-09-16"
+    },
+    {
+      "id": "S-062",
+      "date": "2026-09-16 07:26:54",
+      "session": "Mission MO-124 terminee hors file (theme AUTO-EVOLUTION) : La porte retiqueter accepte --horodatage (re-datage trace : horodatage_avant + re_date_le) et REFUSE une seconde deja occupee en NOMMANT l'occupant, sans rien ecrire ; le format d'horodatage a UN domicile (data/commun/trace_session.py) consomme par le lecteur. Preuves : cobaye 37/37 (0 echec) + porte reelle intacte + ASCII/py_compile ; friction 43 validee, lecon L-097.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-124"
+    },
+    {
+      "id": "S-063",
+      "date": "2026-09-16 07:28:16",
+      "session": "Mission MO-125 terminee hors file (theme AUTO-EVOLUTION) : Le moteur partage data/commun/derniere_session.py mesure la recence sur (horodatage, rang d'append) pour derniere_session ET entrees_apres : l'accident S-052/S-053 rend desormais OUVERTE (la verite) au lieu de FERMEE. Preuves : cobaye 20/20 (0 echec, 3 pieges) + etalon sur la BDD reelle en lecture seule + ASCII 0 violation (apres refus du garde et correction) ; friction 44 validee, lecon L-098.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-125"
+    },
+    {
+      "id": "S-064",
+      "date": "2026-09-16 07:29:38",
+      "session": "Session du 2026-09-16 (Flux 2, Optimus) FERMEE : le SUJET OUVERT a la cloture S-060 est clos -- retiqueter ne savait que corriger les TAGS et rien ne departageait deux entrees a la MEME SECONDE. FAITS : (1) MO-124 AUTO-EVOLUTION -- la porte retiqueter RE-DATE une entree (--horodatage) : trace horodatage_avant + re_date_le + motif_retiquetage, le TEXTE n'est jamais touche, et le GARDE DE COLLISION refuse une seconde DEJA OCCUPEE en NOMMANT l'occupant (le re-datage ne peut pas CREER la collision qu'il repare) ; tags et date se corrigent dans la MEME ecriture ; trois refus qui n'ecrivent RIEN (entree inconnue, correction vide = code 2, seconde occupee = code 1) ; le FORMAT d'horodatage a UN domicile (data/commun/trace_session.py, FORMAT_HORODATAGE) consomme par le lecteur au lieu d'etre recopie ; cobaye 37 assertions / 0 echec (dont 4 pieges) + preuve d'isolement (empreinte de data/sessions.json inchangee) ; friction 43 validee, lecon L-097. (2) MO-125 AUTO-EVOLUTION -- le LECTEUR departage : la recence d'une entree est desormais (horodatage, RANG D'APPEND) dans le moteur partage data/commun/derniere_session.py, pour derniere_session ET pour entrees_apres (le garde de retard ne doit pas etre aveugle dans le cas ou l'ordre est le plus douteux) ; l'accident S-052/S-053 (cloture et ouverture a la meme seconde, qui faisait gagner la CLOTURE par hasard de lecture) rend desormais OUVERTE -- la VERITE -- sans re-noter quoi que ce soit ; une entree sans date reste ignoree, une copie d'entree garde son rang par son id ; cobaye 20/20 (dont 3 pieges) + etalon en LECTURE SEULE sur la BDD reelle (S-061 ouverte) ; friction 44 validee, lecon L-098. INCIDENT HONNETE (decouverte au journal, lecon L-099) : mon propre cobaye portait une variable accentuee et rendait le garde-ascii ROUGE au niveau WORKSPACE alors que mon controle cible (garde-ascii matrice/) etait vert -- je verifiais le perimetre que je LIVRE, pas celui ou j'ai ECRIT ; repare dans la mission (0 violation sur 653 fichiers). ETAT DE FIN : /sante OK 13 portes ; non-regression ZONE 23/23 VERTE (zone + flux) et FLUX 9/9 SAIN ; coherence file <-> journal 0 ecart / 0 dette (file 58+67, compteur 125) ; frictions 0 active / 44 validees / 0 annulee ; garde-ascii 0 violation ; porte de reprise : SESSION : ouverte (S-061) avant cette cloture ; metriques sans seuil depasse ; zone tmp-optimus purge (24 -> 1, README seul, suppression tracee). RESTE-A-FAIRE : (a) EO-116 chantier natif GO -- pas 1 livre par MO-105, restent pas 1-P a pas 8 + migration des sys.path.insert (un pas ne s'ouvre que sur la PREUVE du precedent) ; (b) case 2 du theme PURIFICATION JAMAIS executee : cartographier toute la Matrice v3 avant tout classement ; (c) dette mineure SIGNALEE : l'outil bdd-frictions (combos) ne sait pas lister les frictions archivees -- ses statuts reels sont archivee_validee / archivee_annulee alors que --statut n'accepte que active / archivee (lister --statut archivee ne rend rien) ; (d) les .bak deposes par la porte ecrire restent a cote de leur cible (arbitrage createur MO-123) : 7 nouveaux dans cette session. PROCHAIN PAS : EO-116 pas suivant, ou cartographie PURIFICATION.",
+      "tags": [
+        "session-fermee",
+        "travail",
+        "re-datage",
+        "departage",
+        "contrat-ecrit-lu",
+        "auto-evolution"
+      ],
+      "source": "MO-125 cloture de session"
+    },
+    {
+      "id": "S-065",
+      "date": "2026-09-16 07:32:26",
+      "session": "Session du 2026-09-16 (Flux 2, Optimus) OUVERTE pour la mission demandee apres la cloture S-064 : la porte bdd-frictions ne savait ni VOIR ni FILTRER ses archives (statuts reels archivee_validee / archivee_annulee, filtres annonces active / archivee en egalite stricte -> 0 resultat sur 44 archivees). Sujet clos par MO-126, session fermee dans la foulee.",
+      "tags": [
+        "session-ouverte",
+        "travail",
+        "bdd-frictions",
+        "statuts"
+      ],
+      "source": "session courante 2026-09-16 (MO-126)"
+    },
+    {
+      "id": "S-066",
+      "date": "2026-09-16 07:32:28",
+      "session": "Mission MO-126 terminee hors file (theme AUTO-EVOLUTION) : La porte bdd-frictions voit et filtre ses archives : statuts a un seul domicile, filtres active|archivee|validee|annulee|toutes traduits en statuts reels, filtre inconnu = erreur claire, reponse vide qui nomme le filtre. Preuves : cobaye 28/28 (4 pieges) + porte reelle en lecture seule (frictions.db inchangee) + compteurs egaux a la verite de la base ; friction 45 validee, lecons L-100/L-101.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-126"
+    },
+    {
+      "id": "S-067",
+      "date": "2026-09-16 07:33:33",
+      "session": "Session du 2026-09-16 (Flux 2, Optimus) FERMEE : dette mineure de la cloture S-064 SOLDEE. FAIT : MO-126 AUTO-EVOLUTION -- la porte bdd-frictions VOIT et FILTRE ses archives. Cause racine mesuree : les statuts REELS du schema sont 'active' / 'archivee_validee' / 'archivee_annulee' et etaient recopies a TROIS endroits, tandis que la porte n'offrait que 'active' / 'archivee' et comparait en EGALITE STRICTE -- 'archivee' ne correspondait donc a AUCUNE ligne et la porte repondait 'Aucune friction trouvee' sur une BDD de 44 archivees (une fiche invisible se lit comme une fiche inexistante : meme mode de panne que la friction 41). Correctifs : (1) le vocabulaire des statuts a UN domicile (fonctions/bdd_frictions.py : STATUT_* + FILTRES_STATUT, la table qui TRADUIT un filtre en statuts reels) ; (2) lister_frictions compare en IN (...) et LEVE une erreur claire sur un filtre inconnu au lieu de rendre une liste vide ; (3) la porte offre les filtres reels (active | archivee | validee | annulee | toutes, plus les valeurs brutes) et une reponse VIDE NOMME le filtre, les statuts vises et propose --statut toutes ; (4) stats_frictions consomme les constantes au lieu de les recopier ; (5) usage du point d'entree mis a jour. Preuves : cobaye 28 assertions / 0 echec (4 pieges dont un filtre inconnu, la non-confusion vide/erreur et les filtres combines) + porte reelle en LECTURE SEULE (empreinte de frictions.db inchangee) + compteurs compares a la VERITE de la base + non-regression du defaut 'active' et du consommateur c-007 ; la friction 44 redevient lisible (lister --statut validee --n 1 -> ID=44) ; ASCII 0 violation, py_compile OK. Deux KO initiaux du cobaye etaient des ATTENTES FIGEES (0 active / 44 au total) devenues fausses par la friction 45 creee dans la meme commande : corrigees en lisant la base -- lecon L-101. FRICTION 45 validee, lecons L-100/L-101. INCIDENT d'outillage TRACE : le pre-vol de la suite ZONE a REFUSE de lancer (integrite KO sur bdd-frictions/main.py) tant que les fichiers modifies n'etaient pas traces PUIS la reference reposee (espion-integrite-optimus enregistrer, 106 empreintes) -- ordre prescrit respecte, puis ZONE verte : le garde a fait son travail. ETAT DE FIN : /sante OK 13 portes ; non-regression ZONE 23/23 VERTE (zone + flux) et FLUX 9/9 SAIN ; coherence file <-> journal 0 ecart / 0 dette (file 59+67, compteur 126) ; integrite Optimus saine (106 fichiers) ; frictions 0 active / 45 validees / 0 annulee ; garde-ascii 0 violation (651 fichiers) ; zone tmp-optimus purgee (15 -> 1, README seul, suppression tracee). RESTE-A-FAIRE : (a) EO-116 chantier natif GO -- pas 1 livre par MO-105, restent pas 1-P a pas 8 + migration des sys.path.insert ; (b) case 2 du theme PURIFICATION JAMAIS executee : cartographier toute la Matrice v3 avant tout classement ; (c) DETTE SIGNALEE (non corrigee, hors perimetre) : espion-activite-optimus.py interroge la BDD en statut = 'active' en dur -- la valeur est juste, mais elle appartient desormais au domicile du vocabulaire ; (d) les .bak deposes par la porte ecrire restent a cote de leur cible (arbitrage createur MO-123) : 3 nouveaux ici. PROCHAIN PAS : EO-116 pas suivant, ou cartographie PURIFICATION.",
+      "tags": [
+        "session-fermee",
+        "travail",
+        "bdd-frictions",
+        "statuts",
+        "auto-evolution"
+      ],
+      "source": "MO-126 cloture de session"
+    },
+    {
+      "id": "S-068",
+      "date": "2026-09-16 07:36:28",
+      "session": "Mission MO-127 terminee hors file (theme AUTO-EVOLUTION) : Statuts declares avec le schema (STATUT_VERROUILLE / VALIDE / ANNULE / STATUTS) et consommes par le DEFAULT du schema, l'INSERT, les deux UPDATE, lister_modifs et la porte ; filtre inconnu = erreur claire, reponse vide qui nomme le filtre. Preuves : cobaye 20/20, BDD reelle en lecture seule, ASCII/py_compile ; friction 46 validee, lecon L-102.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-127"
+    },
+    {
+      "id": "S-069",
+      "date": "2026-09-16 07:38:22",
+      "session": "Mission MO-128 terminee hors file (theme AUTO-EVOLUTION) : L'espion charge les domiciles bdd-frictions et bdd-modifs et interroge les BDD avec leurs constantes ; un domicile illisible est signale (code 1) au lieu de produire un zero rassurant. Preuves : cobaye 17/17 (dont 3 verifications independantes du code de production et le piege du domicile illisible), empreintes des deux BDD inchangees, ASCII/py_compile ; friction 47 validee, lecon L-103.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-128"
+    },
+    {
+      "id": "S-070",
+      "date": "2026-09-16 07:38:54",
+      "session": "Session du 2026-09-16 (Flux 2, Optimus) FERMEE : la DETTE SIGNALEE a la cloture S-067 est SOLDEE, et la CLASSE est traitee (lecon L-102 : on ne declare pas une lecon acquise sans balaver tout le projet). TROIS MISSIONS EN SERIE : (1) MO-127 AUTO-EVOLUTION -- le vocabulaire des statuts de la BDD modifications a un DOMICILE (STATUT_VERROUILLE / STATUT_VALIDE / STATUT_ANNULE / STATUTS declares avec le schema) et il est CONSOMME par le DEFAULT du schema, l'INSERT, les deux UPDATE, lister_modifs et les choix de la porte ; lister_modifs LEVE une erreur claire sur un filtre inconnu au lieu de rendre une liste vide ; cobaye 20/20 (DEFAULT verifie par insertion brute, verrou deja pose refuse, filtres reels compares aux comptes de la base) + BDD reelle en lecture seule ; friction 46 validee ; lecon L-102. (2) MO-128 AUTO-EVOLUTION -- l'espion d'activite CONSOMME les vocabulaires au lieu de les recopier : il charge les domiciles bdd-frictions et bdd-modifs par leur chemin (importlib + spec, comme leurs portes) et interroge avec STATUT_ACTIVE / STATUT_VERROUILLE ; un domicile introuvable est SIGNALE et l'espion ne dit PAS 'saine' (code 1) au lieu de produire un zero rassurant ; cobaye 17/17 dont 3 verifications INDEPENDANTES du code de production (aucun litteral 'active'/'verrouille' dans le source, le fichier domicile identifie par __file__, comptages egaux a une requete SQL ecrite dans le test) + piege du domicile illisible + empreintes des deux BDD inchangees ; friction 47 validee ; lecon L-103. (3) Outillage -- le pre-vol de la suite ZONE a de nouveau REFUSE de lancer (integrite KO) tant que les fichiers modifies n'etaient pas TRACES puis la reference REPOSEE (espion-integrite-optimus enregistrer, 106 empreintes) : ordre prescrit respecte, ZONE verte ensuite. HONNETETE : 4 KO de cobayes dans ces deux missions etaient TOUS des erreurs de MES tests (attente figee sur une donnee vivante en MO-126, et ici une comprehension fausse de verrouiller_fichier qui SIGNALE un verrou sans l'inserer + une table interrogee sur la mauvaise base) -- corriges DANS LES COBAYES, jamais dans le code ; le piege a chaque fois rattrape avant de toucher au code de production. ETAT DE FIN : /sante OK 13 portes ; non-regression ZONE 23/23 VERTE (zone + flux) et FLUX 9/9 SAIN ; coherence file <-> journal 0 ecart / 0 dette (file 60+67, compteur 128) ; integrite Optimus saine (106 fichiers) ; frictions 0 active / 47 validees / 0 annulee ; garde-ascii 0 violation ; metriques sans seuil depasse ; zone tmp purgee (30 -> 1, README seul, suppression tracee) ; l'espion d'activite rend 'Activite Optimus saine : file vide, 0 friction active, 0 verrou'. RESTE-A-FAIRE : (a) EO-116 chantier natif GO -- pas 1 livre par MO-105, restent pas 1-P a pas 8 + migration des sys.path.insert ; (b) case 2 du theme PURIFICATION JAMAIS executee : cartographier toute la Matrice v3 avant tout classement ; (c) la CLASSE 'domicile du vocabulaire' est desormais traitee pour les TROIS BDD a statuts (frictions, modifications, sessions) et pour l'espion : reste a verifier lors d'un prochain audit qu'aucun NOUVEAU consommateur ne recopie (recherche de classe a relancer au besoin) ; (d) les .bak deposes par la porte ecrire restent a cote de leur cible (arbitrage createur MO-123) : 6 nouveaux ici. PROCHAIN PAS : EO-116 pas suivant, ou cartographie PURIFICATION.",
+      "tags": [
+        "session-fermee",
+        "travail",
+        "vocabulaire",
+        "statuts",
+        "espion",
+        "auto-evolution"
+      ],
+      "source": "MO-128 cloture de session"
+    }
+  ],
+  "compteur": 70
+}

@@ -7,28 +7,59 @@ from constants import (
     DOSSIERS_EXCLUS,
     ENCODAGE,
     EXTENSIONS_CIBLES,
+    EXTENSIONS_JOURNAUX,
+    MOTIF_BDD_EMPREINTE,
+    MOTIF_JOURNAL,
+    SUFFIXE_ETALON,
     SUFFIXES_EXCLUS,
 )
 
 
-def lister_fichiers_cibles():
-    """Retourne la liste triee des fichiers cibles (extensions, exclusions, etalons)."""
+def classer_fichiers_cibles():
+    """Retourne (fichiers_cibles, fichiers_exemptes).
+
+    Un EXEMPTE est un fichier de contenu que l'outil voit mais ne reecrit JAMAIS :
+      - BDD empreintee : un etalon `.sha256` garde son contenu (toute reecriture
+        ferait crier l'espion d'integrite) ;
+      - journal en ajout seul (`.jsonl`) : jamais reecrit non plus.
+    L'exemption est NOMMEE (chemin + motif) pour que le rapport la MONTRE au lieu
+    de la taire : une exclusion muette est un angle mort qu'aucune suite ne voit.
+    """
     cibles = []
+    exemptes = []
     for dossier in DOSSIERS_CIBLES:
         if not dossier.exists():
             continue
         for racine, dossiers, fichiers in os.walk(dossier):
             dossiers[:] = [d for d in dossiers if d not in DOSSIERS_EXCLUS]
             for nom in fichiers:
-                if not nom.endswith(EXTENSIONS_CIBLES):
-                    continue
                 if nom.endswith(SUFFIXES_EXCLUS):
                     continue
                 chemin = os.path.join(racine, nom)
-                if os.path.exists(chemin + ".sha256"):
-                    continue  # BDD empreintee : JAMAIS reecrite
+                # L'ETALON passe AVANT le journal : un .jsonl empreinte
+                # (suivi-optimus.jsonl) est une BDD a part entiere, et son motif
+                # doit dire la protection la plus forte qui le couvre.
+                if os.path.exists(chemin + SUFFIXE_ETALON):
+                    exemptes.append((chemin, MOTIF_BDD_EMPREINTE))
+                    continue
+                if nom.endswith(EXTENSIONS_JOURNAUX):
+                    exemptes.append((chemin, MOTIF_JOURNAL))
+                    continue
+                if not nom.endswith(EXTENSIONS_CIBLES):
+                    continue
                 cibles.append(chemin)
-    return sorted(cibles)
+    return sorted(cibles), sorted(exemptes)
+
+
+def lister_fichiers_cibles():
+    """Retourne la liste triee des fichiers cibles (extensions, exclusions, etalons).
+
+    Vue COURTE de `classer_fichiers_cibles` : les appelants qui n'ont besoin que
+    des cibles reecrivables ne changent pas. Le rapport, lui, passe par la vue
+    complete (il doit MONTRER les exemptes).
+    """
+    cibles, _ = classer_fichiers_cibles()
+    return cibles
 
 
 def lire_texte(chemin):

@@ -1,26 +1,21 @@
 """Fonctions simples de l'activateur de vie : une seule tache chacune."""
+import importlib.util
 import os
 import sys
 
-from constants import NOM_PID_VEILLE, ENCODAGE
+from constants import CADENCE_PAR_NOM, NOM_PID_VEILLE, ENCODAGE
 
 
 def processus_vivant(pid):
     """True si un processus porte ce PID.
 
-    Sur WSL, os.kill(pid, 0) peut echouer (pid Linux vs pid Windows).
-    On utilise d'abord os.kill, puis ctypes OpenProcess (win32), puis
-    un test via subprocess + ps en dernier recours.
-    """
+Sur Windows natif, la sonde Win32 est prioritaire : os.kill() et ps peuvent
+voir une couche Git/WSL differente et produire un faux negatif. Sur POSIX,
+os.kill() reste la sonde principale avec ps en secours.
+"""
     if pid is None or pid <= 0:
         return False
-    # Methode 1 : os.kill (marche sur Linux pur et sur les pid WSL visibles)
-    try:
-        os.kill(pid, 0)
-        return True
-    except OSError:
-        pass
-    # Methode 2 : ctypes OpenProcess (Windows natif)
+
     if sys.platform == "win32" or os.name == "nt":
         try:
             import ctypes
@@ -31,7 +26,13 @@ def processus_vivant(pid):
                 return True
         except Exception:
             pass
-    # Methode 3 : test via ps (marche aussi sur WSL avec les pid Windows)
+        return False
+
+    try:
+        os.kill(pid, 0)
+        return True
+    except OSError:
+        pass
     try:
         import subprocess
         r = subprocess.run(
@@ -40,11 +41,9 @@ def processus_vivant(pid):
             stderr=subprocess.DEVNULL,
             timeout=2,
         )
-        if r.returncode == 0:
-            return True
+        return r.returncode == 0
     except Exception:
-        pass
-    return False
+        return False
 
 
 def lire_pid(chemin_pid):
@@ -68,6 +67,37 @@ def etat_boucle(nom, chemin_routine, nom_pid):
     if pid is not None:
         return nom + " : ACTIVE (PID " + str(pid) + ")", pid
     return nom + " : ARRET", None
+
+
+def cadence_declaree(nom, chemin_routine):
+    """Retourne la cadence DECLAREE par la routine, sans la lancer ni l'attendre.
+
+    Pourquoi (2026-09-13) : attendre 900 s pour savoir si une routine bat a son
+    rythme est une fausse verification -- si c'est casse, on a attendu pour
+    rien. On LIT donc la valeur declaree chez la routine (voix unique : elle
+    n'est jamais recopiee ici) via la table `CADENCE_PAR_NOM`, qui indique
+    seulement OU la lire.
+
+    Le module est charge sous un nom UNIQUE (`cadence_<routine>`) : six fichiers
+    s'appellent `constants.py`, les importer sous leur nom se mascheraient
+    mutuellement. Retourne None si la lecture echoue (on l'AVOUE a l'affichage).
+    """
+    source = CADENCE_PAR_NOM.get(nom)
+    if source is None:
+        return None
+    fichier, nom_constante = source
+    chemin = chemin_routine / fichier
+    if not chemin.is_file():
+        return None
+    nom_module = "cadence_" + nom.replace("-", "_")
+    try:
+        specification = importlib.util.spec_from_file_location(nom_module, str(chemin))
+        module = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(module)
+    except Exception:
+        return None
+    valeur = getattr(module, nom_constante, None)
+    return valeur if isinstance(valeur, int) else None
 
 
 def lancer_detache(chemin_routine, arguments):

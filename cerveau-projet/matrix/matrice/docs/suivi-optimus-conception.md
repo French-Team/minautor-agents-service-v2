@@ -19,7 +19,7 @@
 |---|---|
 | Fichier | `matrice/data/suivi-optimus.jsonl` (append-only, LF, une ligne par evenement) |
 | Format ligne | JSON : `date`, `mission`, `theme`, `action`, `detail`, `fichiers[]`, `portes[]`, `duree_s` (optionnel) |
-| Ecriture | via l'outil dedie SEUL (porte unique, jamais d'echo direct) ; empreinte SHA-256 (C-003) -> registre espion |
+| Ecriture | via l'outil dedie SEUL (porte unique, jamais d'echo direct) ; empreinte SHA-256 (CV-003) -> registre espion |
 | Lecture | verbe `lire` a la demande + verbe `vue` qui genere `matrice/suivi-optimus.md` (fichier dedie, UN TABLEAU PAR ACTION) -- PAS d'encart au journal multi-encarts (invisibilite) |
 
 ## 2. Exemple de ligne
@@ -67,7 +67,7 @@ regle gravee dans la fiche cameleon, regle 9).
 > attrape en reel : `bdd-variables lire` plantait (KeyError) sur l'entree
 > perimetre-cameleon sans champ `id` -- corrige (defaut V-???).
 
-## 5bis. Philosophie d'invisibilite (C-006 / L-016, decision createur 2026-09-09)
+## 5bis. Philosophie d'invisibilite (CV-006 / L-016, decision createur 2026-09-09)
 
 Si optimus est invisible aux yeux du cameleon, il ne doit JAMAIS etre nomme
 (nom, domicile, trace, zone exclue) dans CE QUE LE CAMELEON LIT : fiche,

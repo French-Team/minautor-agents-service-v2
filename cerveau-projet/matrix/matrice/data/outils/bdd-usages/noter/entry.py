@@ -5,7 +5,14 @@ Interface entre main.py et les fonctions simples (noter/fonctions.py).
 from commun import ajouter_ligne, extraire_options
 from noter.fonctions import fabriquer_entree, separer_tags
 
-NOMS_OPTIONS = ("outil", "commande", "code", "duree", "detail", "tags")
+# Espion tokens (E-097) : options optionnelles, jamais requises.
+NOMS_OPTIONS = ("outil", "commande", "code", "duree", "detail", "tags",
+                "tokens-avant", "tokens-apres")
+
+
+def lire_entier_option(texte):
+    """Retourne l'entier d'une option, ou None si absente ou non numerique."""
+    return int(texte) if texte and texte.isdigit() else None
 
 
 def executer(arguments):
@@ -18,12 +25,14 @@ def executer(arguments):
     tags = separer_tags(options.get("tags", ""))
 
     if not outil or not commande or not code_texte.isdigit() or not tags:
-        print('Usage : python main.py noter --outil <nom> --commande <verbe> --code <n> [--duree <ms>] --tags "a,b"')
+        print('Usage : python main.py noter --outil <nom> --commande <verbe> --code <n> [--duree <ms>] [--tokens-avant <n>] [--tokens-apres <n>] --tags "a,b"')
         return 2
 
     code = int(code_texte)
-    duree = int(duree_texte) if duree_texte.isdigit() else None
-    entree = fabriquer_entree(outil, commande, code, duree, detail, tags)
+    duree = lire_entier_option(duree_texte)
+    tokens_avant = lire_entier_option(options.get("tokens-avant", ""))
+    tokens_apres = lire_entier_option(options.get("tokens-apres", ""))
+    entree = fabriquer_entree(outil, commande, code, duree, detail, tags, tokens_avant, tokens_apres)
     ajouter_ligne(entree)
     print(
         "Usage note : " + entree["outil"] + "/" + entree["commande"]

@@ -1,0 +1,37 @@
+{
+  "identite": {
+    "type": "bdd-conservation",
+    "version": 1
+  },
+  "compteur": 1,
+  "elements": [
+    {
+      "id": "K-001",
+      "date": "2026-09-15 09:43:51",
+      "mission": "MO-095",
+      "source": "MO-095 test prepare",
+      "destination": "",
+      "categorie": "COBAYE",
+      "statut": "decide",
+      "verdict": "conserver",
+      "raison": "test negatif controle",
+      "lecteurs": [],
+      "ecrivains": [],
+      "index": [],
+      "sha_avant": "",
+      "sha_apres": "",
+      "octets_avant": "",
+      "octets_apres": "",
+      "lignes_avant": "",
+      "lignes_apres": "",
+      "restaurable": false,
+      "operation": "decider",
+      "archive": "",
+      "preuve": "test structurel",
+      "tags": [
+        "test",
+        "prepare"
+      ]
+    }
+  ]
+}

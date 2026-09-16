@@ -9,6 +9,13 @@ Amelioration (audit protections 2026-09-09, decision createur) : quand l'outil
 REFUSE (code != 0), le message de protection (lignes REFUS) est note en DETAIL
 dans la BDD -- le sac a dos devient le journal des protections declenchees
 (raison tracee, pas seulement le code). La sortie console reste inchangee.
+
+Espion tokens (E-097, imperatif 56) : chaque appel note aussi le POIDS du
+contexte -- tokens AVANT (l'ordre donne a l'outil : sa commande et ses
+arguments) et tokens APRES (la sortie que le LLM devra lire). Estimation
+DETERMINISTE (1 token ~ 4 caracteres) via data/commun/tokens.py : la Matrice ne
+voit pas la tokenisation du LLM, elle mesure un POIDS. L'ecart avant/apres
+designe les outils bavards, exactement ce qu'un centre de controle veut voir.
 """
 import contextlib
 import io
@@ -16,6 +23,11 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+
+try:
+    from tokens import estimer_tokens, peser_tokens
+except ImportError:  # importe comme paquet (chemin complet)
+    from commun.tokens import estimer_tokens, peser_tokens
 
 REPERTOIRE_COMMUN = Path(__file__).resolve().parent
 REPERTOIRE_DATA = REPERTOIRE_COMMUN.parent
@@ -41,8 +53,12 @@ def extraire_protection(sortie):
     return ""
 
 
-def noter_usage(arguments, code, duree_ms, detail=""):
-    """Note UN usage via bdd-usages (porte unique). Echec jamais bloquant."""
+def noter_usage(arguments, code, duree_ms, detail="", tokens_avant=0, tokens_apres=0):
+    """Note UN usage via bdd-usages (porte unique). Echec jamais bloquant.
+
+    Porte aussi le poids du contexte (espion E-097) : tokens avant (l'ordre)
+    et tokens apres (la sortie).
+    """
     nom_outil = Path(sys.argv[0]).resolve().parent.name
     if nom_outil == OUTIL_EXCLU:
         return
@@ -51,6 +67,7 @@ def noter_usage(arguments, code, duree_ms, detail=""):
         sys.executable, "main.py", "noter",
         "--outil", nom_outil, "--commande", commande,
         "--code", str(code), "--duree", str(duree_ms),
+        "--tokens-avant", str(tokens_avant), "--tokens-apres", str(tokens_apres),
         "--tags", TAGS_SAC_A_DOS,
     ]
     if detail:
@@ -80,6 +97,8 @@ def envelopper(principal, arguments):
     protection est note en detail dans la BDD usages.
     """
     debut = time.monotonic()
+    # Espion tokens (E-097) : AVANT = l'ordre donne (la commande et ses arguments).
+    tokens_avant = peser_tokens(" ".join(str(morceau) for morceau in arguments))
     tampon = io.StringIO()
     with contextlib.redirect_stdout(tampon):
         code = principal(arguments)
@@ -87,6 +106,8 @@ def envelopper(principal, arguments):
     sortie = tampon.getvalue()
     if sortie:
         sys.stdout.write(sortie)
+    # APRES = la sortie produite (ce que le LLM devra lire).
+    tokens_apres = estimer_tokens(sortie)
     detail = extraire_protection(sortie) if code != 0 else ""
-    noter_usage(arguments, code, duree_ms, detail)
+    noter_usage(arguments, code, duree_ms, detail, tokens_avant, tokens_apres)
     return code

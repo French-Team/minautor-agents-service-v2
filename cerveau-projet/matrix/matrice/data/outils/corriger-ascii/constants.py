@@ -28,6 +28,7 @@ RACINE = detecter_racine(REPERTOIRE_OUTIL)
 REPERTOIRE_MATRIX = RACINE / "cerveau-projet" / "matrix"
 
 EXTENSIONS_CIBLES = (".md", ".py", ".json")
+EXTENSIONS_JOURNAUX = (".jsonl",)
 DOSSIERS_CIBLES = (
     REPERTOIRE_MATRIX / "matrice",
     REPERTOIRE_MATRIX / "_operateur",
@@ -38,6 +39,13 @@ SUFFIXES_EXCLUS = (".sha256", ".tmp")
 
 # Un fichier possedant un etalon .sha256 n'est JAMAIS reecrit (BDD empreintee).
 # Les fichiers .jsonl (journaux en ajout seul) ne sont pas cibles.
+# MO-075 : ces deux exclusions etaient MUETTES -- le rapport ne disait pas qu'il
+# excluait, donc 8 BDD et tous les journaux sortaient du champ SANS que personne
+# ne le voie (540 fichiers scannes contre 569 pour garde-ascii). Elles sont
+# desormais NOMMEES et RAPPORTEES (chacune avec son motif), sans etre reecrites.
+SUFFIXE_ETALON = ".sha256"
+MOTIF_BDD_EMPREINTE = "BDD empreintee (.sha256) -- jamais reecrite"
+MOTIF_JOURNAL = "journal en ajout seul (.jsonl) -- non cible"
 
 # Carte de conversion : caractere non-ASCII -> ASCII (echappements Unicode
 # explicites, inalterables par l'edition). Tout caractere absent de la carte

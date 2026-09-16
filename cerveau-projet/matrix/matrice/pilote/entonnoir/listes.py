@@ -67,5 +67,12 @@ MOTS_CLES_CATEGORIES = (
     ("regle", "regle"),
 )
 
+# Prefixe des ITEMS de CET entonnoir (regle CV-009 : une famille = un prefixe,
+# jamais partage). E- appartient a l'entonnoir du CAMELEON (Flux 1) : ses ids
+# vivent dans des journaux en AJOUT SEUL (historiques-missions.jsonl), donc la
+# famille ne peut PAS etre renommee -- c'est l'entonnoir d'Optimus qui a pris
+# le sien (EO-, listes.py de _operateur/optimus-prime) le 2026-09-13.
+PREFIXE_ITEM = "E-"
+
 # Chemin du fichier des files de l'entonnoir (a cote de file-missions.json).
 NOM_ENTONNOIR = "entonnoir-files.json"

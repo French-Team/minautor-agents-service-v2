@@ -1,3 +1,10 @@
+---
+identite:
+  type: readme
+  appartient_a: optimus-prime
+  commun: false
+---
+
 # protocoles : INDEX
 
 > Protocoles de l'operateur. Relis celui qui correspond a la situation,
@@ -13,6 +20,7 @@
 | 6. Route mission | proto-6-route-mission.md | A CHAQUE mission du pilote : injection -> reconnaissance -> execution -> controles -> note -> fin (coeur du mode direct cameleon) |
 | 7. Route BDD | proto-7-route-bdd.md | A chaque ecriture vers une BDD : porte unique, atomique, empreinte |
 | 8. Route reparation veille | proto-8-route-reparation-veille.md | A chaque mission bloquante deposee par la veille : reproduire, diagnostiquer, reparer, retour vert |
+| 9. Mini-missions + inter-round | proto-9-mini-missions-inter-round.md | Decoupage 2-5 minis en serie + inter-round (serie, une preuve par mini, revert 1 retry -> escalade) |
 
 | Ressource | Fichier |
 |---|---|

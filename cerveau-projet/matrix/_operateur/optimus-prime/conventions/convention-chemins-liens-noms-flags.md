@@ -1,0 +1,183 @@
+---
+identite:
+  type: convention
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# CONTRAT -- PROBLEMES FONDAMENTAUX (CHEMIN, LIEN, NOM, FLAG)
+
+> Source : docs/IMPERATIF.md ligne 24 (les 4 problemes qui se repetent tout
+> au long du dev : lien, chemin, nom, usage des flags). Mission MO-042.
+>
+> BUT : l'agent ne RELIT PAS l'arbre pour se rassurer. L'indice pointe,
+> le contrat fait foi, l'agent obeit. Chaque regle ci-dessous est nee d'un
+> bug REEL de la Matrice (episodes cites), pas d'une theorie.
+
+## 0. La regle des 4 familles
+
+Tout fichier Python de la Matrice respecte les 4 familles suivantes dans
+CET ORDRE (les chemins d'abord, les flags en dernier). Une regle non
+respectee est un ecart a signaler, jamais une preference.
+
+| Famille | Question a laquelle le contrat repond |
+|---|---|
+| CHEMIN | Ou est le fichier, et comment le code le TROUVE sans compter ses `../` ? |
+| LIEN | Comment ce fichier parle-t-il a un AUTRE fichier (porte, constante, import) ? |
+| NOM | Comment la chose s'appelle-t-elle, et a-t-elle UN SEUL nom ? |
+| FLAG | Comment l'agent lance-t-il la commande, sans deviner ? |
+
+## 1. CHEMIN -- ancrer, garder, detecter (jamais compter)
+
+### 1.1 Ancre sur le fichier, jamais sur le cwd
+
+- OBLIGATOIRE : `REPERTOIRE_OUTIL = Path(__file__).resolve().parent`.
+- INTERDIT : `Path(".")`, `Path.cwd()`, `os.getcwd()` pour localiser un
+  fichier de la Matrice (le cwd depend de QUI lance).
+
+### 1.2 Garde structurelle obligatoire
+
+Tout dossier deduit d'une remontee porte une GARDE qui valide son NOM :
+
+```python
+REPERTOIRE_OUTIL = Path(__file__).resolve().parent
+REPERTOIRE_DATA = REPERTOIRE_OUTIL.parent.parent
+if REPERTOIRE_DATA.name != "data":
+    raise RuntimeError(
+        "Structure inattendue : " + str(REPERTOIRE_DATA) + " n'est pas le dossier data/"
+    )
+```
+
+- La garde transforme une erreur SILENCIEUSE en erreur BRUYANTE.
+- Sans garde, un niveau de trop ecrit dans un dossier FANTOME.
+- Episode : `selecteur-flux` ecrivait dans `data/data/selecteur-flux.json`
+  (dossier fantome) et le garde `verifier-selecteur` validait ce fantome
+  (corrige MO-030).
+
+### 1.3 Jamais `parents[N]` nu
+
+- INTERDIT : `Path(__file__).parents[5] / "matrice" / "data" / ...`
+- Un `parents[N]` compte a la main casse au premier deplacement de fichier,
+  et se decale d'UN cran sans rien dire (le bug le plus paye de la Matrice).
+- AUTORISE : la REMONTEE AVEC GARDE jusqu'a un marqueur stable :
+
+```python
+_courant = REPERTOIRE_OUTIL
+for _ in range(BORNES_REMONTEE):
+    if (_courant / "matrice" / "data" / "commun" / "racine.py").is_file():
+        break
+    _courant = _courant.parent
+else:
+    raise RuntimeError("Racine matrix/ introuvable en remontant.")
+RACINE_MATRICE = _courant
+```
+
+- Episodes : pilote cameleon (`parents[6]`), `verifier-selecteur` (racine un
+  cran trop haut), `suivi-optimus` (`CHEMIN_FILE_PILOTE` et
+  `CHEMIN_JOURNAL_MISSIONS` pointaient sur les fichiers du CAMELEON).
+
+### 1.4 Le motif racine est PARTAGE, jamais recopie
+
+- Le seul detecteur de racine est `matrice/data/commun/racine.py`
+  (`detecter_racine`, motif L-013 : remontee jusqu'a `AGENTS.md`).
+- Les `constants.py` l'IMPORTENT ; ils ne le recopient jamais (M-076).
+- Tout chemin de fichier partage est declare dans `constants.py`, en
+  MAJUSCULES, avec son nom logique :
+
+```python
+NOM_BDD = "conventions-matrice.json"
+CHEMIN_BDD = REPERTOIRE_DATA / NOM_BDD
+CHEMIN_EMPREINTE = REPERTOIRE_DATA / (NOM_BDD + ".sha256")
+```
+
+### 1.5 Ecriture : atomique, LF, empreinte
+
+- Ecriture = tmp dans le MEME dossier + remplacement (`Path.replace`),
+  jamais d'ecriture directe (fichier tronque si interruption).
+- LF forces ; toute BDD deterministe maintient son `.sha256` (CV-003).
+
+## 2. LIEN -- une porte, ou une constante nommee (jamais un chemin coupe)
+
+- Pour UTILISER un autre composant : passer par sa PORTE OFFICIELLE
+  (l'outil, son `main.py`), jamais lire ses fichiers internes en douce.
+- Pour DECLARER une dependance : une constante nommee dans `constants.py`
+  de l'appelant (ex. `OUTIL_USAGES_REL`), jamais un chemin au milieu d'une
+  fonction.
+- Un dossier a tiret n'est pas un package (L-017) : import DIRECT
+  (`from entry import run`) pour un `main.py`, `importlib` pour un module
+  dont le nom contient un tiret.
+- Interdit entre flux : aucun contenu cameleon ne sert de ressource de
+  construction a Optimus (et inversement) sans porte officielle
+  (convention-separation-cameleon-optimus, L-016).
+
+## 3. NOM -- un seul nom canonique par chose
+
+- Forme des OBJETS de la Matrice (dossiers, outils, combos, BDD,
+  documents) : minuscules, mots separes par des TIRETS (`theme-fichier.json`,
+  `creer-combo.py`), jamais d'underscore ni de majuscule.
+- EXCEPTION -- les MODULES Python importables gardent l'underscore, car un
+  identifiant Python ne peut pas contenir de tiret (`fonctions/bdd_frictions.py`,
+  `constants_suivi_sync.py`, `sac_a_dos.py`). Un dossier a tiret n'etant pas
+  un package (L-017), les modules SEULS portent l'underscore.
+- REGLE DURE -- un fichier que l'on IMPORTE porte des UNDERSCORES ; un
+  fichier a TIRETS est un SCRIPT (point d'entree execute, ou charge par
+  `importlib`). `import mon_module` ne trouvera JAMAIS `mon-module.py` : le
+  tiret ne produit aucune erreur a l'ecriture, seulement un
+  `ModuleNotFoundError` a l'execution (cameleon pilote tue, MO-038).
+  Controle automatique : verbe `imports` de
+  `verifier-contrat-fondamental.py` (signale l'import qui vise un fichier a
+  tirets).
+- EXCEPTIONS de nommage admises : `_*` en tete (zone privee/invisible,
+  ex. `_operateur`), `__pycache__`, et les documents a nom impose
+  (`README.md`, `DESCRIPTION.md`, `AGENTS.md`, `IMPERATIF.md`,
+  `USER-PROFIL.md`, `MOTS-CLES.md`, `*.moule`).
+- Un objet Optimus porte le suffixe `-optimus` quand un homologue cameleon
+  existe (`file-missions-optimus.json` / `file-missions.json`).
+- Le nom d'un objet vit dans UNE SEULE constante. Deux constantes pour la
+  meme chose = deux verites = une derive.
+- Episode : `entonnoir/listes.py` declarait encore le nom LEGACY
+  (`entonnoir-files.json`) pendant que le pilote lisait
+  `entonnoir-files-optimus.json` : tout ce qui etait depose etait invisible
+  au pilote (corrige MO-033).
+- Renommer = MIGRER + ARCHIVER l'ancien nom, jamais laisser deux noms
+  vivants cote a cote.
+- COLLISION INTERDITE -- un module d'un dossier PARTAGE pose dans `sys.path`
+  (motif de racine M-076 : `matrice/data/commun/`) ne doit JAMAIS porter le
+  nom d'un dossier-categorie importable d'un pilote (`pilote/X/`). Python
+  resout alors le MODULE et masque le PAQUET : le pilote meurt en
+  `ModuleNotFoundError: ... is not a package`, sans un mot.
+- Episode : `data/commun/profil.py` a tue le pilote maintenance alors que
+  `pilote/profil/` existait (les deux importables, le module gagne toujours).
+  Renomme en `data/commun/fiche_profil.py` (2026-09-13, MO-043).
+
+## 4. FLAG -- declaratif, ferme, kebab-case
+
+- Tout outil passe par `argparse` ; aucun `sys.argv` lu a la main pour une
+  option.
+- Forme des flags : minuscules kebab-case (`--mission-id`), jamais
+  `--missionId` ni `--MissionId`.
+- Valeurs FERMEES declarees a cote : `choices=(...)` ou contrainte
+  documentee. Une valeur acceptee implicitement est une valeur devinable.
+- Un verbe est une SOUS-COMMANDE (`noter`, `lire`, `verifier`), pas un
+  flag.
+- Un flag obligatoire est `required=True` : il ne se devine pas.
+- Usage : les flags vont APRES le verbe, dans l'ordre onde --cle valeur.
+
+## 5. L'ARBRE -- l'indice pointe, le contrat fait foi
+
+- L'agent ne parcourt PAS l'arbre pour savoir quoi faire : il lit
+  `indices.md` (tete de lecture), qui pointe vers le contrat, le manuel et
+  l'arbre des decisions. Le contrat est la source, l'arbre est la carte.
+- Un agent qui doit re-lire l'arbre pour etre sur a un ecart d'indice, pas
+  un probleme de volonte : corriger l'INDICE.
+
+## 6. Controle
+
+- Le controle automatique de ce contrat est
+  `super-combos/combos/outils/verifier-contrat-fondamental.py`
+  (verbes `chemins`, `noms`, `flags`, `collisions`, `tout`).
+- Le controle est un SIGNALEMENT : il ne repare jamais (doctrine de
+  l'espion).
+
+-----
+Genere par MO-042 (E-099 / imperatif 24) le 2026-09-13.

@@ -1,0 +1,41 @@
+{
+  "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598",
+  "alerte_le": "2026-09-16 07:21:58",
+  "alertes": [
+    {
+      "cle": "recette:benchmark",
+      "niveau": "moyenne",
+      "detail": "recette incomplete : DESCRIPTION.md absent (CV-010)"
+    },
+    {
+      "cle": "recette:bilan-periode",
+      "niveau": "moyenne",
+      "detail": "recette incomplete : DESCRIPTION.md absent (CV-010)"
+    },
+    {
+      "cle": "recette:editer-agents-md",
+      "niveau": "moyenne",
+      "detail": "recette incomplete : DESCRIPTION.md absent (CV-010)"
+    },
+    {
+      "cle": "recette:journal-multi-encarts",
+      "niveau": "moyenne",
+      "detail": "recette incomplete : DESCRIPTION.md absent (CV-010)"
+    },
+    {
+      "cle": "recette:machine-defcon",
+      "niveau": "moyenne",
+      "detail": "recette incomplete : DESCRIPTION.md absent (CV-010)"
+    },
+    {
+      "cle": "recette:pause-session",
+      "niveau": "moyenne",
+      "detail": "recette incomplete : DESCRIPTION.md absent (CV-010)"
+    },
+    {
+      "cle": "recette:selecteur-flux",
+      "niveau": "moyenne",
+      "detail": "recette incomplete : DESCRIPTION.md absent (CV-010)"
+    }
+  ]
+}

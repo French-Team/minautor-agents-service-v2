@@ -1,0 +1,172 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "FICHIER",
+    "description": "Theme fichier executant (imperatifs 66-83) : l'agent qui doit toucher un fichier de la Matrice suit TOUJOURS le meme parcours -- extension (.py/.json/.md) puis action (ajouter/modifier/corriger) -- et chaque case lui donne la porte officielle, la preuve a produire et la regle. Objectif : l'agent n'a jamais besoin d'inventer, on lui fournit tout."
+  },
+  "theme": {
+    "nom": "FICHIER",
+    "but": "Traiter tout fichier de la Matrice sans jamais improviser : detecter le type, choisir l'action, appliquer la procedure dediee, produire les preuves, consigner en BDD",
+    "redirects": [
+      {
+        "besoin": "Toucher un fichier de la Matrice (entree du parcours)",
+        "action": "procedure",
+        "etapes": [
+          "Nommer le fichier EXACT (chemin complet) : sans chemin, la case s'arrete",
+          "Detecter l'EXTENSION : .py -> case 3, .json -> case 4, .md -> case 5 ; autre -> demander au createur",
+          "Detecter l'ACTION demandee : ajouter -> case 6, modifier -> case 8, corriger -> case 9",
+          "Noter la mission AVANT de toucher le fichier : suivi-optimus noter --action debut (marbre L-020)",
+          "Annoncer en une phrase : fichier, extension, action, porte qui sera utilisee"
+        ],
+        "regle": "Aucune ecriture avant d'avoir nomme fichier + extension + action. Un fichier touche sans mission notee = mission fantome."
+      },
+      {
+        "besoin": "Prendre le fichier en main (preuve AVANT)",
+        "action": "procedure",
+        "etapes": [
+          "Verrou exclusif : super-combos outils > bdd-modifs verrouiller --fichier <chemin>",
+          "Preuve avant : calculer-hash.py <chemin> (SHA256) et garder le resultat pour le bilan",
+          "Lecture complete avant toute ecriture : lire-fichier-complet.py <chemin> (encodage UTF-8 controle)",
+          "Verifier la cible n'est PAS une BDD empreintee (.sha256) : si oui, seule la PORTE de cette BDD ecrit"
+        ],
+        "regle": "Jamais de modification sans preuve avant (hash) ni sans lecture complete du fichier. Une BDD empreintee ne se modifie JAMAIS a la main."
+      },
+      {
+        "besoin": "Type .py (code python) -- ce que la case garantit",
+        "action": "procedure",
+        "etapes": [
+          "Structure obligatoire (voir convention-architecture-outils) : main.py DIRIGE, <categorie>/entry.py INTERFACE, <categorie>/fonctions.py METIER, constants.py VALEURS, DESCRIPTION.md",
+          "Aucune valeur en dur dans la logique : tout passe par constants.py (convention-zero-valeurs-en-dur)",
+          "Nouvel outil : passer par creer-outil.py (squelette conforme), jamais a la main",
+          "Imports au nom TIRE impossibles : un fichier detecteur-mots-cles.py se charge PAR CHEMIN (importlib), jamais par import (lecon L-027)",
+          "Preuve obligatoire : py_compile sur le fichier + faire tourner le POINT D'ENTREE (main.py), jamais le fichier ajoute seul"
+        ],
+        "regle": "Un .py sans constantes separees, sans point d'entree ni py_compile n'est PAS livrable. Tester le main.py, pas le fichier touche."
+      },
+      {
+        "besoin": "Type .json (bdd, theme, index, classeur)",
+        "action": "procedure",
+        "etapes": [
+          "Identite obligatoire : bloc identite avec type + appartient_a (+ nom pour un theme)",
+          "BDD (lecons, modifications, regles, conventions, protocoles, frictions) : la porte unique de CETTE bdd ecrit, jamais une edition a la main",
+          "Ecriture atomique : fichier .tmp puis remplacement (os.replace), fins de ligne LF forces, JSON valide apres coup",
+          "Registre : tout fichier .json nouveau s'inscrit dans SON index (index-themes.json pour un theme, etc.)",
+          "Preuve obligatoire : json.load du fichier + tester-theme.py s'il s'agit d'un theme",
+          "Si la BDD porte une empreinte .sha256 : l'empreinte se recompose PAR la porte, jamais a la main"
+        ],
+        "regle": "Un .json sans identite ou absent de son index est un orphelin : il ne sera jamais trouve par la Matrice."
+      },
+      {
+        "besoin": "Type .md (doc, protocole, convention, fiche)",
+        "action": "procedure",
+        "etapes": [
+          "Front-matter identite obligatoire (type + appartient_a) : verifier-conventions le controle et refuse sinon",
+          "Enregistrement dans l'index du dossier (conventions-readme.md, protocoles-readme.md, etc.) : un .md absent de l'index = ecart de marbre",
+          "ASCII strict (aucun accent) : garde-ascii.py sur le fichier",
+          "Jamais de commentaire de modification DANS le fichier : l'historique va en BDD modifications (regle de non-surcharge)",
+          "Preuve obligatoire : verifier-conventions + garde-ascii"
+        ],
+        "regle": "Un .md de la Matrice est en ASCII strict, porte son identite et figure dans son index. L'historique ne vit JAMAIS dans le document."
+      },
+      {
+        "besoin": "Action AJOUTER (les 3 extensions)",
+        "action": "procedure",
+        "etapes": [
+          "Verifier que le fichier n'existe PAS deja (sinon, c'est modifier -> case 8)",
+          "Choisir le NOM selon la convention du dossier (tiret pour les scripts, theme-<nom>.json pour un theme, <nom>.md pour un doc)",
+          "Poser le squelette complet (outil : creer-outil.py ; theme : copier la structure identite + theme + fin ; doc : front-matter + titre)",
+          "Inscrire le fichier dans SON index/registre (jamais d'ajout orphelin)",
+          "Preuves : py_compile (.py), json.load (.json), verifier-conventions (.md) + garde-ascii",
+          "Noter en BDD modifications : fichier, action cree, detail, tags"
+        ],
+        "regle": "Ajouter = squelette complet + inscription dans l'index + preuve. Un ajout sans index est une dette immediate."
+      },
+      {
+        "besoin": "Action AJOUTER en .py (head / fonction / verbe)",
+        "action": "procedure",
+        "etapes": [
+          "Head : imports en tete, docstring du module avec Usage, puis valeurs importees de constants.py -- jamais de chemin ecrit a la main",
+          "Fonction : UNE fonction = UNE tache, nom explicite en francais, docstring courte (role + retour)",
+          "Verbe (nouvelle commande) : 1 ligne dans le routeur (main.py) + 1 entree dans DESCRIPTION.md ; le routeur ne contient AUCUNE logique metier",
+          "Preuve : py_compile + appel reel du nouveau verbe (nominal) + appel d'un cas faux (negatif)"
+        ],
+        "regle": "Un ajout en .py se prouve par un appel reel du verbe. Un verbe non appele n'existe pas."
+      },
+      {
+        "besoin": "Action MODIFIER",
+        "action": "procedure",
+        "etapes": [
+          "Relire la case AVANT (jamais de modification de memoire) et relire qui consomme le fichier (code_search sur le nom)",
+          "Changer UNE chose a la fois : la plus petite modification qui repond au besoin",
+          "Ne JAMAIS grossir le fichier de commentaires de modification : l'historique va en BDD modifications",
+          "Conserver le style du fichier (naming, structure, fins de ligne du fichier : L-001)",
+          "Preuves : hash apres + py_compile / json.load / verifier-conventions selon l'extension + non-regression",
+          "Noter en BDD modifications : fichier, action modifie, detail, tags, hash avant/apres si disponible"
+        ],
+        "regle": "Une modification = un changement, une preuve, une note BDD. Deux changements melanges = deux missions, jamais une."
+      },
+      {
+        "besoin": "Action CORRIGER (bug detecte)",
+        "action": "procedure",
+        "etapes": [
+          "Trouver la CAUSE RACINE avant d'ecrire : reproduire le bug, lire le message d'erreur en entier, remonter au fichier fautif",
+          "Corriger la cause, pas le symptome (un try/except qui masque un bug est interdit)",
+          "Corriger a la SOURCE, pas chez l'appelant : tous les appelants doivent gagner la correction",
+          "Test NEGATIF obligatoire : rejouer le cas qui cassait + le cas nominal (lecon L-026 : une erreur silencieuse est pire qu'un verdict KO)",
+          "Verifier qu'aucun autre fichier ne porte le meme defaut (recherche du motif sur toute la zone, pas seulement le fichier signale)",
+          "Noter en BDD modifications + lecon si la regle est generale"
+        ],
+        "regle": "Une correction sans test negatif n'est pas une correction : c'est une esperance."
+      },
+      {
+        "besoin": "Verifier AVANT de rendre (obligatoire, les 3 extensions)",
+        "action": "procedure",
+        "etapes": [
+          ".py -> py_compile sur le fichier ET lancement du point d'entree ; .json -> json.load + tester-theme si theme ; .md -> verifier-conventions + garde-ascii",
+          "Non-regression de la ZONE : lanceur-non-regression.py (zone + flux)",
+          "Flux : lanceur-non-regression-flux.py si le fichier touche un maillon de la chaine (pilote, routine, serveur, entonnoir)",
+          "Zone Optimus : si un fichier de _operateur/ a bouge, re-sceller registre (espion-integrite-optimus enregistrer) + inventaire (remorque-optimus inventorier) APRES avoir valide chaque fichier en drift",
+          "Noter fin de mission : suivi-optimus noter --action fin --detail + vue (verifier doit rester vert)"
+        ],
+        "regle": "On ne rend JAMAIS un fichier sans ses preuves. Un scellement ne se fait qu'apres validation : on scelle ce qui est prouve sain, jamais l'inconnu."
+      },
+      {
+        "besoin": "Lire la structure obligatoire d'un outil .py",
+        "action": "redirect",
+        "vers": { "type": "convention", "fichier": "conventions/convention-architecture-outils.md" }
+      },
+      {
+        "besoin": "Verifier la regle zero valeur en dur",
+        "action": "redirect",
+        "vers": { "type": "convention", "fichier": "conventions/convention-zero-valeurs-en-dur.md" }
+      },
+      {
+        "besoin": "Verifier la regle py_compile",
+        "action": "redirect",
+        "vers": { "type": "convention", "fichier": "conventions/convention-py-compile.md" }
+      },
+      {
+        "besoin": "Verifier la regle d'integrite SHA256",
+        "action": "redirect",
+        "vers": { "type": "convention", "fichier": "conventions/convention-integrite-sha256.md" }
+      },
+      {
+        "besoin": "Ecrire dans une BDD par sa porte (route BDD)",
+        "action": "redirect",
+        "vers": { "type": "protocole", "fichier": "protocoles/proto-7-route-bdd.md" }
+      },
+      {
+        "besoin": "Ou poser un fichier temporaire de travail",
+        "action": "redirect",
+        "vers": { "type": "convention", "fichier": "conventions/convention-tmp-optimus-cameleon.md" }
+      },
+      {
+        "besoin": "Lancer la non-regression de la zone et du flux",
+        "action": "redirect",
+        "vers": { "type": "outil", "fichier": "super-combos/combos/outils/lanceur-non-regression.py" }
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "../fins.json", "case": "fin-persistant" }
+}

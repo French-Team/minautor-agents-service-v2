@@ -1,0 +1,116 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "AUTO-AUDIT-NEMESIS",
+    "description": "Avant TOUTE validation, audit en 3 axes : cas limites, optimisation, securite. Reponse TOUJOURS 'Oui, mais...'. Jamais de validation sans preuve de robustesse. Inspire de Nemesis (v1)."
+  },
+  "theme": {
+    "nom": "AUTO-AUDIT-NEMESIS",
+    "but": "Audit en 3 axes avant validation : cas limites, optimisation, securite -- TOUJOURS repondre 'Oui, mais...' avec amelioration necessaire",
+    "redirects": [
+      {
+        "besoin": "Phase 1 -- Rechercher (lecture complete)",
+        "action": "procedure",
+        "etapes": [
+          "Lire le livrable EN ENTIER (pas de resume, pas d'extraits)",
+          "Lire les dependances (fichiers lies, imports, BDD concernees)",
+          "Lire les lecons BDD similaires (meme type de mission precedente)",
+          "Poser la question : 'As-tu EN MEMOIRE ta fiche et tes regles ?' Si NON -> RELIRE avant de continuer"
+        ],
+        "regle": "Jamais de validation sans lecture complete. La memoire n'est PAS une preuve."
+      },
+      {
+        "besoin": "Phase 2a -- Audit des cas limites",
+        "action": "procedure",
+        "etapes": [
+          "Pour CHAQUE fonction/outil : qu'est-ce qui casse ?",
+          "Fichier vide ? Fichier de 1 Go ? Chemin inexistant ? Permission refusee ?",
+          "Entree inattendue (None, liste vide, dict vide, type faux) ?",
+          "Concurrence (deux instances en meme temps) ?",
+          "Interruption au milieu (timeout, kill, crash) ?",
+          "Pour CHAQUE BDD : corruption, doublon, empreinte cassee ?",
+          "Pour CHAQUE fichier modifie : perte de donnees si revert ?"
+        ],
+        "regle": "Si un cas limite n'est pas gere = ECART CRITIQUE. Pas de 'ca marche en general'."
+      },
+      {
+        "besoin": "Phase 2b -- Audit de l'optimisation",
+        "action": "procedure",
+        "etapes": [
+          "Complexite : O(n) ? O(n^2) ? Y a-t-il mieux ?",
+          "Memoire : charge-t-il tout en RAM ? Peut-on streamer ?",
+          "Temps : est-ce < seuils cockpit ? Sinon pourquoi ?",
+          "Doublons : meme logique copiee 2+ fois ?",
+          "Dependances : importe-t-il des choses inutiles ?",
+          "Simplicite : peut-on faire plus simple SANS perdre de fonctionnalite ?"
+        ],
+        "regle": "Optimisation = mesurer, pas deviner. Si pas de mesure = ECART."
+      },
+      {
+        "besoin": "Phase 2c -- Audit de la securite/integrite",
+        "action": "procedure",
+        "etapes": [
+          "Injection : l'outil accepte-t-il du code arbitraire ?",
+          "Chemin : sort-il du perimetre matrix/ ?",
+          "Ecriture : ecrase-t-il un fichier sans backup ?",
+          "BDD : operations atomiques ? Empreinte avant/apres ?",
+          "Revert : annule-t-on proprement en cas d'echec ?",
+          "Processus : laisse-t-il des zombies ?",
+          "ASCII : contenu strictement ASCII ?"
+        ],
+        "regle": "Si une faille de securite = ECART CRITIQUE. Jamais de 'ca arrive rarement'."
+      },
+      {
+        "besoin": "Phase 3 -- Croiser les 3 axes",
+        "action": "procedure",
+        "etapes": [
+          "Lister TOUS les ecarts trouves (critiques + moyens + mineurs)",
+          "Pour chaque ecart : severity (CRITIQUE/MAJEUR/MINEUR) + impact",
+          "Si 1+ CRITIQUE : NE PAS VALIDER, corriger d'abord",
+          "Si MAJEURS uniquement : valider avec reservation + plan de correction",
+          "Si MINEURS uniquement : valider + noter en BDD"
+        ],
+        "regle": "Un seul ecart critique = blocage total. Pas d'exception."
+      },
+      {
+        "besoin": "Phase 4 -- Repondre 'Oui, mais...'",
+        "action": "procedure",
+        "etapes": [
+          "Formuler : 'Oui, [le livrable fonctionne], MAIS [ecart] -> [amelioration necessaire]'",
+          "Si 0 ecart : 'Oui, sans reservation. Aucun risque identifie.'",
+          "Si ecart mineur : 'Oui, mais [mineur] -> corriger en prochaine iteration'",
+          "Si ecart majeur : 'Oui, mais [majeur] -> corriger AVANT validation finale'",
+          "Si ecart critique : 'NON, [critique] -> bloquer jusqu'a resolution'"
+        ],
+        "regle": "Jamais de 'oui' sans examen. Le 'mais' EST la valeur de l'audit."
+      },
+      {
+        "besoin": "Phase 5 -- Consigner l'audit",
+        "action": "procedure",
+        "etapes": [
+          "Noter en BDD suivi-optimus : fin avec bilan incluant les ecarts",
+          "Noter en BDD modifications-par-fichier : audit X axes, N ecarts (C/M/m)",
+          "Si ecarts corriges : noter correction + preuve",
+          "Si ecarts acceptes : noter risque accepte + justification"
+        ],
+        "regle": "Chaque audit = historique. Tracabilite totale."
+      },
+      {
+        "besoin": "Detection -- reflexe Nemesis",
+        "action": "procedure",
+        "etapes": [
+          "Avant chaque 'mission terminee' ou 'validation OK' : STOP",
+          "Appliquer les 3 axes systematiquement",
+          "Si j'ai dit 'c'est bon' sans audit = ECART auto-detecte"
+        ],
+        "regle": "Le reflexe Nemesis = ne JAMAIS se fier a soi-meme sans verification externe."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

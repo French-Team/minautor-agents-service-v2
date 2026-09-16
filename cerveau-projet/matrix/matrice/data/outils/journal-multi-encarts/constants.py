@@ -20,6 +20,13 @@ from racine import detecter_racine  # noqa: E402
 RACINE = detecter_racine(REPERTOIRE_OUTIL)
 REPERTOIRE_MATRICE = RACINE / "cerveau-projet" / "matrix" / "matrice"
 
+# Lecture BORNEE des journaux de routines (MO-078) : cet outil lisait
+# journal-veille.txt EN ENTIER (3,85 Mo / 44 050 lignes mesures le 2026-09-13)
+# pour n'en afficher que les 5 derniers evenements de passe. Une queue de 256 Ko
+# suffit largement et rend le cout constant. La FENETRE ne se declare plus ici
+# (MO-099) : elle vient du moteur PARTAGE (data/commun/rotation_journal.py), qui
+# la DEDUIT de la borne que le journal lu declare lui-meme.
+
 # Journal v3 : NOUVEAU fichier propre a la v3, dans matrix/ (jamais les fichiers v1/v2).
 NOM_JOURNAL = "journal-multi-encarts.md"
 CHEMIN_JOURNAL = REPERTOIRE_MATRICE / NOM_JOURNAL

@@ -6,20 +6,24 @@ instance (garde PID), lancement par la porte officielle ci-dessous :
   arret cooperatif : python main.py server arret
   etat             : python main.py server etat
 """
-from constants import ENCODAGE
+from constants import ENCODAGE, NOM_DRAPEAU_SERVER, NOM_PID_SERVER
 from pathlib import Path
 
 from fonctions import lire_pid, processus_vivant  # noqa: E402
 
 REPERTOIRE_SERVER = Path(__file__).resolve().parent
-NOM_PID_SERVER = "server-matrice.pid"
 CHEMIN_PID_SERVER = REPERTOIRE_SERVER / NOM_PID_SERVER
-NOM_DRAPEAU_ARRET = "server-matrice-arret.txt"
-CHEMIN_DRAPEAU_ARRET = REPERTOIRE_SERVER / NOM_DRAPEAU_ARRET
+CHEMIN_DRAPEAU_ARRET = REPERTOIRE_SERVER / NOM_DRAPEAU_SERVER
 
 
 def executer(arguments):
     if arguments and arguments[0] == "arret":
+        pid = lire_pid(CHEMIN_PID_SERVER)
+        if pid is None or not processus_vivant(pid):
+            if CHEMIN_PID_SERVER.exists():
+                CHEMIN_PID_SERVER.unlink()
+            print("server matrice deja arrete.")
+            return 0
         CHEMIN_DRAPEAU_ARRET.write_text("arret demande\n", encoding=ENCODAGE)
         print("Drapeau d'arret pose : le server matrice s'arretera apres son cycle courant.")
         return 0

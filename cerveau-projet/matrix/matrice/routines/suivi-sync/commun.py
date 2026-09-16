@@ -4,17 +4,56 @@ Lecture de l'inbox, synchronisation vers suivi-optimus (append-only,
 pas de duplication si l'entree existe deja dans le suivi).
 """
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 from datetime import datetime, timezone
 
+from battement import ajouter_passe, lire_anneau
 from constants import (
+    CHEMIN_ETAT,
     CHEMIN_INBOX,
+    CLE_ANNEAU_PASSES,
+    ENCODAGE,
+    ENCODAGE_ETAT,
+    FORMAT_HORODATAGE,
+    PASSES_GARDEES_ETAT,
     REPERTOIRE_OUTIL_SUIVI,
     TYPES_INTERESSANTS,
-    ENCODAGE,
 )
+
+
+def publier_passe(nombre, messages):
+    """Ecrit l'ETAT COURT de la passe : ce que la routine a fait, et QUAND.
+
+    Le battement REEL d'une routine est un ETAT (friction 28, 2026-09-14 : un
+    override de cadence a 5 s a vecu 3 jours sans que rien ne le voie) : il
+    s'ecrit ici, a CHAQUE passe et ECRASE, jamais dans un journal.
+
+    L'etat garde les PASSES_GARDEES_ETAT derniers horodatages -- assez pour un
+    ecart MEDIAN (un redemarrage ou une passe en retard ne doivent pas faire
+    croire a une derive), et BORNE pour rester un etat. C'est ce que lit
+    `verifier-cadence`, qui le compare a la cadence DECLAREE.
+
+    La fabrique de l'anneau et sa lecture vivent dans le moteur PARTAGE
+    `data/commun/battement.py` : la routine ne recopie pas le decoupage qui
+    borne la suite (L-029).
+    """
+    passe = datetime.now().strftime(FORMAT_HORODATAGE)
+    donnees = {
+        "type": "passe",
+        "date": passe,
+        "synchronisees": nombre,
+        "messages": len(messages or []),
+        CLE_ANNEAU_PASSES: ajouter_passe(lire_anneau(CHEMIN_ETAT, CLE_ANNEAU_PASSES),
+                                        passe, PASSES_GARDEES_ETAT),
+    }
+    temporaire = CHEMIN_ETAT.with_name(CHEMIN_ETAT.name + ".tmp")
+    with open(str(temporaire), "w", encoding=ENCODAGE_ETAT, newline="\n") as flux:
+        flux.write(json.dumps(donnees, ensure_ascii=True, sort_keys=True) + "\n")
+    os.replace(str(temporaire), str(CHEMIN_ETAT))
+    return CHEMIN_ETAT
 
 
 def lire_inbox():
@@ -37,25 +76,45 @@ def lire_inbox():
     return evenements
 
 
-def dernier_date_suivi():
-    """Retourne la date du dernier evenement dans le suivi-optimus, ou None."""
-    chemin_suivi = REPERTOIRE_OUTIL_SUIVI.parent.parent / "suivi-optimus.jsonl"
-    if not chemin_suivi.exists():
-        return None
+def lire_missions(chemin):
+    """Missions citees par un journal jsonl (ensemble), ou vide si absent/illisible."""
+    connues = set()
+    if not chemin.exists():
+        return connues
     try:
-        lignes = chemin_suivi.read_text(encoding=ENCODAGE).splitlines()
+        lignes = chemin.read_text(encoding=ENCODAGE).splitlines()
     except OSError:
-        return None
-    for ligne in reversed(lignes):
+        return connues
+    for ligne in lignes:
         ligne = ligne.strip()
         if not ligne:
             continue
         try:
-            d = json.loads(ligne)
-            return d.get("date", "")
+            mission = json.loads(ligne).get("mission", "")
         except json.JSONDecodeError:
             continue
-    return None
+        if mission:
+            connues.add(mission)
+    return connues
+
+
+def missions_connues(chemin_journal):
+    """Missions deja connues : le journal ACTIF **et ses archives**.
+
+    MO-052 -- lecon apprise en reel : ce garde anti-doublon ne regardait que le
+    journal actif, or la porte `archiver` sort justement des evenements DU
+    journal actif. Resultat : chaque archivage etait ANNULE a la passe suivante,
+    la routine reimportant tout ce qu'on venait de deplacer (178 evenements
+    reimportes d'un coup, 144 `noter` en 8 secondes). "Deja connu" doit inclure
+    ce qu'on a archive, sinon la porte et cette routine se neutralisent.
+
+    Les archives sont trouvees par MOTIF (`suivi-optimus-*.jsonl`) pour ne pas
+    recopier ici le nom declare par l'outil suivi-optimus (une seule verite).
+    """
+    connues = lire_missions(chemin_journal)
+    for archive in sorted(chemin_journal.parent.glob(chemin_journal.stem + "-*.jsonl")):
+        connues |= lire_missions(archive)
+    return connues
 
 
 def synchroniser():
@@ -64,31 +123,15 @@ def synchroniser():
     Retourne (nombre_evenements_synchro, messages).
     """
     import sys
-    sys.path.insert(0, str(REPERTOIRE_OUTIL_SUIVI.parent.parent / "data" / "commun"))
+    # Insertion MORTE retiree (elle visait `matrice/data/data/commun`, inexistant,
+    # et rien ici n'importe le module partage : la suite passe par subprocess).
 
     evenements_inbox = lire_inbox()
     if not evenements_inbox:
         return 0, ["inbox vide"]
 
-    synchronisees = set()
-    if dernier_date_suivi():
-        chemin_suivi = REPERTOIRE_OUTIL_SUIVI.parent.parent / "suivi-optimus.jsonl"
-        if chemin_suivi.exists():
-            try:
-                lignes_suivi = chemin_suivi.read_text(encoding=ENCODAGE).splitlines()
-                for ligne in reversed(lignes_suivi):
-                    ligne = ligne.strip()
-                    if not ligne:
-                        continue
-                    try:
-                        d = json.loads(ligne)
-                        mission = d.get("mission", "")
-                        if mission:
-                            synchronisees.add(mission)
-                    except json.JSONDecodeError:
-                        continue
-            except OSError:
-                pass
+    chemin_suivi = REPERTOIRE_OUTIL_SUIVI.parent.parent / "suivi-optimus.jsonl"
+    synchronisees = missions_connues(chemin_suivi)
 
     nouveaux = []
     for ev in evenements_inbox:
@@ -103,11 +146,27 @@ def synchroniser():
         theme = ""
         if typ == "fin-mission":
             mission = ev.get("mission", "")
+            theme = (ev.get("theme", "") or "").strip()
             # Protection contre la duplication : si la mission est deja synchronisee, on skip.
             if mission in synchronisees:
                 continue
             synchronisees.add(mission)
             bilan = ev.get("bilan", "")
+            # Theme : on prefere l'inbox, sinon historique pilote (sinon SUIVI-OPTIMUS par defaut).
+            if not theme:
+                try:
+                    from constants import REPERTOIRE_OUTIL_SUIVI as _RO
+                    _chemin_hist = _RO.parent.parent / "historiques-missions.jsonl"
+                    _derniere = ""
+                    if _chemin_hist.exists():
+                        for _ligne in _chemin_hist.read_text(encoding=ENCODAGE).splitlines():
+                            _j = json.loads(_ligne) if _ligne.strip() else None
+                            if _j and _j.get("id") == mission and _j.get("type") == "mission-terminee":
+                                _derniere = _j.get("theme", "")
+                        if _derniere:
+                            theme = _derniere
+                except Exception:
+                    pass
             nouveaux.append(
                 (
                     mission,
@@ -120,6 +179,7 @@ def synchroniser():
         elif typ == "retour-lot":
             lot = ev.get("lot", [])
             bilan_consolide = ev.get("bilan_consolide", "")
+            theme_lot = (ev.get("theme", "") or "").strip()
             # Pour un retour-lot, on cree une entree par mission du lot.
             for m in lot:
                 if m in synchronisees:
@@ -128,7 +188,7 @@ def synchroniser():
                 nouveaux.append(
                     (
                         m,
-                        theme,
+                        theme_lot or theme or "SUIVI-OPTIMUS",
                         typ,
                         bilan_consolide,
                         ev.get("date", ""),
@@ -177,7 +237,7 @@ def synchroniser():
 def noter_boot_check(messages_boot):
     """Note une entree 'decision' dans le suivi-optimus pour un demarrage du serveur."""
     import sys
-    sys.path.insert(0, str(REPERTOIRE_OUTIL_SUIVI.parent.parent / "data" / "commun"))
+    # Meme insertion morte que dans synchroniser() : retiree.
 
     detail = (
         "Demarrage du serveur matrice (boot-check) : "

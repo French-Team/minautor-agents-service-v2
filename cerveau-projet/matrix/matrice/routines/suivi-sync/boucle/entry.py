@@ -6,7 +6,12 @@ import sys
 from pathlib import Path
 
 REPERTOIRE_ROUTINE = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPERTOIRE_ROUTINE.parent / "data" / "commun"))
+# Meme cran de trop que dans constants.py (`matrice/routines/data/commun`
+# n'existe pas) : l'import de `lancement` juste en dessous ne pouvait pas
+# aboutir. Ce module n'est appele par personne (voir le rapport) : son chemin
+# est repare pour ne pas rester un piege.
+REPERTOIRE_COMMUN = REPERTOIRE_ROUTINE.parent.parent / "data" / "commun"
+sys.path.insert(0, str(REPERTOIRE_COMMUN))
 
 
 def executer(arguments):

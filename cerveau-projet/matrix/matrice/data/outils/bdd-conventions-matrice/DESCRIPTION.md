@@ -7,11 +7,15 @@
 
 ```
 python main.py ajouter --convention "..." --tags "tag1,tag2" [--source "..."]
+python main.py renommer --id <ancien> --vers <nouveau>   (ex : --id CV-011 --vers CV-012)
+python main.py modifier --id CV-XXX --convention "..." [--source "..."]
 python main.py lire    [--tag <tag>]
 python main.py verifier
 ```
 
-- `--convention` : le contenu de l'la convention (obligatoire).
+- `--convention` : le contenu de la convention (obligatoire).
+- `renommer` : change l'IDENTIFIANT seul (migration de prefixe, numero errone) ;
+  le numero n'est JAMAIS reutilise et l'entree garde `ancien_id` + `renomme_le`.
 - `--tags` : liste separee par des virgules -- obligatoire : pas d'la convention orpheline.
 - `--source` : mission, outil ou fichier d'origine (facultatif).
 - `lire --tag X` : filtre les entrees portant le tag X.
@@ -29,11 +33,23 @@ python main.py verifier
 | constants.py | chemins, valeurs |
 | commun.py | fonctions communes : charger, enregistrer (atomique, LF), empreinte, options |
 | ajouter/ | ajouter une la convention taguee |
+| renommer/ | renommer l'IDENTIFIANT d'une convention (jamais son contenu) |
+| modifier/ | corriger le TEXTE d'une convention (elle garde son id) |
 | lire/ | lister (tout ou par tag) |
 | verifier/ | integrite SHA-256 (etalon-or) |
+
+## Prefixe des ids (regle CV-009 : une famille = un prefixe)
+
+- Cette BDD porte le prefixe **`CV-`** (`PREFIXE_ID` dans `constants.py`, jamais recopie).
+- Le prefixe `C-` SEUL est reserve au champ `constat` de
+  `historiques-missions.jsonl` (reste fige du lot 2026-09-11, ni ecrit ni lu
+  par aucun outil) : ne JAMAIS le re-emettre.
+- Un id renomme garde la trace de son origine (`ancien_id`, `renomme_le`).
 
 ## Protections
 
 - Ecriture atomique (tmp + remplacement), fins de ligne LF forcees (determinisme).
 - Empreinte SHA-256 recalculee et enregistree A CHAQUE ecriture.
 - Contenu et tags obligatoires : pas d'entree orpheline sans tag.
+- Renommage refuse si : forme invalide, id identique, id source inconnu,
+  id cible deja pris (jamais d'ecrasement).

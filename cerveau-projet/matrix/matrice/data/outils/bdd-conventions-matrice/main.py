@@ -5,6 +5,8 @@ Aucune logique metier ici (convention-architecture-outils).
 
 Usage :
     python main.py ajouter --convention "..." --tags "a,b" [--source "..."]
+    python main.py renommer --id <ancien> --vers <nouveau>   (ex : CV-011 -> CV-012)
+    python main.py modifier --id CV-XXX --convention "..." [--source "..."]
     python main.py lire [--tag <tag>]
     python main.py verifier
 """
@@ -12,10 +14,14 @@ import sys
 
 from ajouter.entry import executer as ajouter_executer
 from lire.entry import executer as lire_executer
+from modifier.entry import executer as modifier_executer
+from renommer.entry import executer as renommer_executer
 from verifier.entry import executer as verifier_executer
 
 COMMANDES = {
     "ajouter": ajouter_executer,
+    "renommer": renommer_executer,
+    "modifier": modifier_executer,
     "lire": lire_executer,
     "verifier": verifier_executer,
 }

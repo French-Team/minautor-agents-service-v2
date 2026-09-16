@@ -1,0 +1,51 @@
+"""Point d'entree principal de l'outil maintenir.
+
+Optimus traite les signalements maintenance du cameleon.
+"""
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+
+def afficher_aide():
+    """Affiche l'aide de l'outil."""
+    print("Outil MAINTENIR -- Traiter les signalements maintenance")
+    print("")
+    print("Verbes :")
+    print("  maintenir  --lister                   Liste les signalements en attente")
+    print("  maintenir  --traiter                  Traite le plus critique")
+    print("  maintenir  --etat                     Etat de la maintenance")
+    print("  Options : [--json]")
+    print("")
+    print("Codes retour : 0=succes, 1=rien a traiter, 2=erreur")
+
+
+def main():
+    """Point d'entree : sac a dos + dispatch."""
+    arguments = sys.argv[1:]
+
+    if not arguments:
+        afficher_aide()
+        return 0
+
+    premier = arguments[0]
+
+    if premier in ("--help", "-h", "help"):
+        afficher_aide()
+        return 0
+
+    if premier == "maintenir":
+        from maintenir.entry import maintenir
+        return maintenir(arguments[1:])
+
+    if premier.startswith("--"):
+        from maintenir.entry import maintenir
+        return maintenir(arguments)
+
+    print(f"ERREUR : verbe inconnu '{premier}'. Verbs : maintenir")
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())

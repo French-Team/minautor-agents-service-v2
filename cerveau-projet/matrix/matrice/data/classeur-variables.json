@@ -31,8 +31,14 @@
     {
       "cle": "perimetre-cameleon",
       "valeur": "maintenance,_operateur,pilote/file-missions.json,data/historiques-missions.jsonl,data/modifications-par-fichier.json,data/usages-outils-combos.jsonl,data/activites-recentes.json,data/defcon-historique.jsonl,data/classeur-variables.json,data/manuel-outils.md,journal-multi-encarts.md,matrice-readme.md,routines/routines-readme.md,routines/vie/DESCRIPTION.md,routines/espion-integrite,intercom/pilote/outbox.jsonl,intercom/matrice/inbox.jsonl,docs/IMPERATIF.md,templates/theme-bdd/README.md,data/outils/pause-session,data/outils/machine-defcon,data/outils/verifier-regles,data/outils/verifier-protocoles,data/outils/verifier-conventions",
-      "source": "pause-session perimetre",
-      "date": "2026-09-09 21:30:07"
+      "source": "MO-093 reparation porte",
+      "date": "2026-09-15 07:43:10",
+      "tags": [
+        "cameleon",
+        "perimetre"
+      ],
+      "statut": "[OK]",
+      "id": "V-003"
     }
   ]
 }

@@ -4,7 +4,7 @@ Une seule tache chacune (convention-architecture-outils).
 """
 from listes import CATEGORIES, CATEGORIES_DEFAUT, MOTS_CLES_CATEGORIES, TYPES
 from mots import mot_parcourt, mots_de
-from stockage import horodater
+from stockage import horodater, verifier_famille
 
 
 def proposer_categorie(theme, objectif):
@@ -39,6 +39,9 @@ def classer_mission(etat, identifiant, type_cible, categorie_explicite):
     """
     if type_cible not in TYPES:
         return 2, "Type inconnu : " + repr(type_cible) + " (types fermes : " + ", ".join(TYPES) + ")"
+    code, message = verifier_famille(identifiant)
+    if code != 0:
+        return code, message
     categories_du_type = CATEGORIES.get(type_cible, ())
     if categorie_explicite:
         categorie_cible = categorie_explicite

@@ -40,5 +40,9 @@
       }
     ]
   },
-  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-persistant" }
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
 }

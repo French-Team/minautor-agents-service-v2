@@ -1,0 +1,41 @@
+"""Categorie retiqueter : interface entre main.py et retiqueter/fonctions.py (MO-122).
+
+Une porte de REPARATION ne refuse pas de reparer (raisonnement tenu en MO-115
+pour le TYPE d'une mission) : elle accepte toute entree, quel que soit son
+etat, et laisse une TRACE. Elle refuse en revanche deux choses -- une entree
+inconnue (rien a corriger) et une correction VIDE (aucun tag : elle ne sait
+pas ce que l'appelant veut dire).
+"""
+from ajouter.fonctions import assainir_ascii, separer_tags
+from commun import charger_bdd, enregistrer_bdd, extraire_options
+from retiqueter.fonctions import retiqueter_entree, trouver
+
+NOMS_OPTIONS = ("id", "tags", "motif")
+
+
+def executer(arguments):
+    options = extraire_options(arguments, NOMS_OPTIONS)
+    identifiant = assainir_ascii(options.get("id", ""))
+    tags = [assainir_ascii(t) for t in separer_tags(options.get("tags", ""))]
+    motif = assainir_ascii(options.get("motif", ""))
+
+    if not identifiant or not tags:
+        print('Usage : python main.py retiqueter --id S-0XX --tags "a,b" [--motif "..."]')
+        return 2
+
+    donnees = charger_bdd()
+    entree = trouver(donnees, identifiant)
+    if entree is None:
+        print("ECART : entree " + identifiant + " inconnue de la BDD (rien ecrit).")
+        return 1
+
+    avant = list(entree.get("tags", []))
+    retiqueter_entree(entree, tags, motif)
+    empreinte = enregistrer_bdd(donnees)
+    print(
+        "Entree " + identifiant + " retiquee (tags : " + ", ".join(tags)
+        + " | avant : " + (", ".join(avant) if avant else "aucun")
+        + ") -- motif : " + (motif if motif else "non donne")
+        + " -- empreinte : " + empreinte[:16] + "..."
+    )
+    return 0

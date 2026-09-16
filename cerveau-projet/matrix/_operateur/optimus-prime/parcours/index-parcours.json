@@ -3,7 +3,7 @@
     "type": "index-parcours",
     "appartient_a": "optimus-prime"
   },
-  "theme_courant": "REPRISE-MISSION",
+  "theme_courant": "PURIFICATION",
   "parcours": [
     {
       "ordre": 1,
@@ -13,14 +13,74 @@
     },
     {
       "ordre": 2,
+      "theme": "FICHIER",
+      "fichier": "themes/theme-fichier.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 3,
       "theme": "AUTO-EVOLUTION",
       "fichier": "themes/theme-auto-evolution.json",
       "statut": "pret"
     },
     {
-      "ordre": 3,
+      "ordre": 4,
       "theme": "CONTRE-ANALYSE",
       "fichier": "themes/theme-contre-analyse.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 5,
+      "theme": "PREPARATION",
+      "fichier": "themes/theme-preparation.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 6,
+      "theme": "CREER-OUTIL",
+      "fichier": "themes/theme-creer-outil.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 7,
+      "theme": "AUTO-CORRECTION",
+      "fichier": "themes/theme-auto-correction.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 8,
+      "theme": "AUTO-TESTING",
+      "fichier": "themes/theme-auto-testing.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 9,
+      "theme": "AUTO-OPTIMISATION",
+      "fichier": "themes/theme-auto-optimisation.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 10,
+      "theme": "AUTO-PERFORMANCE",
+      "fichier": "themes/theme-auto-performance.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 11,
+      "theme": "AUTO-AUDIT-NEMESIS",
+      "fichier": "themes/theme-auto-audit-nemesis.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 12,
+      "theme": "AUTO-XXX",
+      "fichier": "super-combos/sc-001-auto-xxx/main.py",
+      "statut": "pret"
+    },
+    {
+      "ordre": 13,
+      "theme": "PURIFICATION",
+      "fichier": "themes/theme-purification.json",
       "statut": "pret"
     }
   ]

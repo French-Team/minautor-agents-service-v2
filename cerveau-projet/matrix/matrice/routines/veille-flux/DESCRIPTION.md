@@ -53,6 +53,26 @@ mission via le pilote.
     python main.py veille --boucle   (surveillance continue, refus de double lancement via PID)
     python main.py veille --boucle --vigile
     python main.py veille arret      (drapeau d'arret cooperatif, zero processus tue)
+    python main.py rotation          (borne journal-veille.txt en ARCHIVANT ses anciens)
+
+## Rotation du journal (MO-078)
+
+`journal-veille.txt` est le PLUS GROS des journaux de la Matrice (mesure du
+2026-09-13 : 3,85 Mo / 44 050 lignes, environ 0,5 Mo par jour, aucune borne).
+Un troisieme lecteur entier avait ete mesure : l'outil `journal-multi-encarts`
+en lisait 3,85 Mo pour n'en afficher que 5 evenements.
+
+- Le moteur est PARTAGE (`matrice/data/commun/rotation_journal.py`, motif unique
+  M-076) : la veille ne declare que SES constantes (seuil en octets, nombre
+  d'evenements gardes, prefixe d'archive). La rotation DEPLACE les evenements
+  anciens dans `journal-veille-archive-AAAAMMJJ.jsonl` -- jamais de suppression.
+- ARCHIVER d'abord, reecrire ensuite, controler apres ; l'archive fait partie du
+  "deja connu" (lecon L-040 : une reprise apres arret n'ecrit aucun jumeau) ;
+  une COURSE est REFUSEE en le nommant, le journal n'est jamais ecrase.
+- La boucle verifie la rotation AVANT chaque passe, et un refus ne tue jamais la
+  passe (lecon L-026).
+- Les lecteurs (garde de flux, garde d'attente, encart routines) lisent la QUEUE
+  du journal (256 Ko), jamais tout l'historique.
 
 ## Frontiere absolue
 

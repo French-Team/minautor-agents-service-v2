@@ -3,7 +3,7 @@
 
 | Derniere mise a jour | Total evenements | Missions en attente | Missions finies |
 |---|---|---|---|
-| 2026-09-10 08:57:06 | 93 | 0 | 87 |
+| 2026-09-16 07:38:21 | 226 | 0 | 109 |
 
 > VISUEL GENERE depuis data/suivi-optimus.jsonl -- jamais edite a la main.
 > Regenerer : python3 matrice/data/outils/suivi-optimus/main.py vue
@@ -15,28 +15,43 @@ Flux : optimus (via l'outil suivi-optimus) -> data/suivi-optimus.jsonl -> VUE le
 
 ## Action : debut
 
-(aucun evenement)
+| Heure | Date | Mission | Detail | Portes | Fichiers | Duree |
+|---|---|---|---|---|---|---|
+| 07:37:40 | 2026-09-16 | MO-128 | L'espion d'activite CONSOMME le vocabulaire des statuts au lieu de le recopier : il charge les domiciles bdd-frictions et bdd-modifs par leur chemin (importlib, comme leurs portes), interroge les BDD  | espion-activite-optimus | _operateur/optimus-prime/espions/espion-activite-optimus.py | - |
+| 07:35:36 | 2026-09-16 | MO-127 | Donner un DOMICILE au vocabulaire des statuts de la BDD modifications (STATUT_VERROUILLE / STATUT_VALIDE / STATUT_ANNULE / STATUTS declares avec le schema) et le faire CONSOMMER partout dans son propr | bdd-modifs lister, bdd-modifs verrouiller, bdd-modifs annuler | _operateur/optimus-prime/super-combos/combos/outils/bdd-modifs/fonctions/bdd_modifs.py, _operateur/optimus-prime/super-combos/combos/outils/bdd-modifs/entry.py | - |
+| 07:31:45 | 2026-09-16 | MO-126 | Rendre la porte bdd-frictions capable de VOIR et de FILTRER ce que la BDD contient : les statuts reels (active / archivee_validee / archivee_annulee) sont declares a UN domicile (fonctions/bdd_frictio | bdd-frictions lister, bdd-frictions stats | _operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/fonctions/bdd_frictions.py, _operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/entry.py, _operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/main.py | - |
+| 07:27:48 | 2026-09-16 | MO-125 | Departager deux entrees a la meme seconde par l'ORDRE D'ECRITURE (rang d'append) dans le moteur partage data/commun/derniere_session.py : la recence devient (horodatage, rang), pour derniere_session E | bdd-sessions etat, bdd-sessions resume | matrice/data/commun/derniere_session.py, matrice/data/manuel-outils.md | - |
+| 07:24:13 | 2026-09-16 | MO-124 | Fermer le sujet ouvert a la cloture S-060 : retiqueter corrige les tags mais ne RE-DATE pas, et deux entrees a la MEME SECONDE ne sont departagees par rien. MO-124 livre la porte de re-datage (--horod | bdd-sessions retiqueter | matrice/data/outils/bdd-sessions/retiqueter/fonctions.py, matrice/data/outils/bdd-sessions/retiqueter/entry.py, matrice/data/commun/trace_session.py | - |
+| 07:15:43 | 2026-09-16 | MO-123 | MO-123 (AUTO-EVOLUTION, friction 42, ARBITRAGE CREATEUR du 2026-09-16) : le point de restauration .bak de la porte ecrire RESTE a cote de sa cible ; le CONTRAT FONDAMENTAL est etendu pour l'accepter ( | ecrire ecrire, verifier-contrat-fondamental, suivi-optimus noter | - | - |
+| 07:12:02 | 2026-09-16 | MO-122 | MO-122 (AUTO-EVOLUTION, friction 40) : LA PORTE MANQUANTE. La BDD sessions offrait ajouter/lire/resume/verifier mais AUCUNE facon de CORRIGER les tags d'une entree : une entree notee hors vocabulaire  | ecrire ecrire, bdd-sessions retiqueter, suivi-optimus noter | - | - |
+| 07:04:47 | 2026-09-16 | MO-121 | MO-121 (AUTO-EVOLUTION, friction 41) : ALIGNER LE CONTRAT ECRIT/LU de la trace de session. ECRIT : commun.noter_session declare 3 tags fermes (session-ouverte, travail, session-fermee) mais AUCUN appe | bdd-sessions ajouter, bdd-sessions resume, suivi-optimus noter | matrice/data/outils/bdd-sessions/etat/entry.py, matrice/data/outils/bdd-sessions/etat/fonctions.py, matrice/data/outils/bdd-sessions/main.py, matrice/data/outils/bdd-sessions/resume/fonctions.py, matrice/_operateur/optimus-prime/pilote/commun.py, matrice/_operateur/optimus-prime/pilote/injection/cycle.py, matrice/data/manuel-outils.md | - |
+| 07:02:38 | 2026-09-16 | MO-120 | MO-120 (AUDITEUR) : qualifier la CAUSE RACINE exacte de l'ecart de reprise de MO-119. Constat mesure : le pilote note lui-meme la session a chaque fin de mission (commun.noter_session appele par fin/f | bdd-frictions ajouter, bdd-lecons ajouter | - | - |
+| 07:00:30 | 2026-09-16 | MO-119 | MO-119 (REPARATION) : rendre la porte de reprise VERIDIQUE. Ecart mesure a l'ETAPE 0 : bdd-sessions resume --derniere annonce S-026 / MO-099 (2026-09-15 19:27) alors que le dernier travail reel est MO | bdd-sessions ajouter | - | - |
+
+*99 evenement(s) supplementaire(s) non affiches (voir data/suivi-optimus.jsonl).
 
 ## Action : fin
 
 | Heure | Date | Mission | Detail | Portes | Fichiers | Duree |
 |---|---|---|---|---|---|---|
-| 08:57:06 | 2026-09-10 | M-083 | M-083 soldee (E-055) : 4 themes PERFORMANCE graves au vivier (TH-022 mere + TH-023 OUTILS / TH-024 ROUTINES / TH-025 SERVEURS, categorie SYSTEME), cycle ANALYSER -> OPTIMISER -> AMELIORER pose dans ch | - | - | 0 |
-| 08:57:05 | 2026-09-10 | M-075 | M-075 livree : convention-karpathy.md gravee (4 reflexes anti-derive, chacun fonde sur une preuve payee de la Matrice ; les 2 questions finales de Karpathy : trop complique ? simplifier ; chaque ligne | - | - | 0 |
-| 08:57:05 | 2026-09-10 | M-076 | M-076 (E-036) : motif racine UNIQUE dans data/commun/racine.py (5 duplications supprimees : corriger-ascii, verifier-protocoles, verifier-regles, editer-agents-md, veille-flux) ; sac a dos embarque (d | - | - | 0 |
-| 08:57:05 | 2026-09-10 | M-077 | M-077 : bilan-periode connecte aux stats sac-a-dos -- la section usages des 6 periodes porte appels, repartition des codes et duree moy/max par outil-commande (24h : veille-flux passe-relax x299, 0 x2 | - | - | 0 |
-| 08:57:05 | 2026-09-10 | M-078 | M-078 (cloture E-047) soldee : le timeout=120s (E-045) vit en reel sur la veille-flux (constants TIMEOUT_COMBO_SECONDES, lancer_combo + lancer_py_compile avec TimeoutExpired -> code 124 + incident jou | - | - | 0 |
-| 08:57:05 | 2026-09-10 | M-079 | M-079 soldee : journal-multi-encarts livre (outil construire/lire --encart, 8 encarts ordre ferme : matrice/missions/routines/alertes/usages/modifications/lecons/variables) ; journal-multi-encarts.md  | - | - | 0 |
-| 08:57:05 | 2026-09-10 | M-080 | Protocole de pause session-matrix livre (E-053) : outil pause-session 5 verbes (pause/reprendre/etat/perimetre/journal), sauvegarde SEULEMENT a la pause preuve par hash file identique avant/apres repr | - | - | 0 |
-| 08:57:05 | 2026-09-10 | M-081 | Server de demarrage livre (E-056) : motif UNIQUE de lancement invisible data/commun/lancement.py (CREATE_NO_WINDOW + SW_HIDE Windows / start_new_session POSIX, duree mesuree) ; server matrice server_m | - | - | 0 |
-| 08:57:05 | 2026-09-10 | M-082 | M-082 soldee (E-051) : marbre Matrice domicilie en 3 BDD separees - bdd-regles-matrice (3 R), bdd-conventions-matrice (5 C), bdd-protocoles-matrice (3 P), outils nes du moule outil-bdd, 3 BDD au regis | - | - | 0 |
-| 08:57:04 | 2026-09-10 | M-066 | RAPPORT (4/4) pour/contre consolide. CONTRE 'cameleon reflechit comme l'agent-dev' : double cout, re-decisions possiblement contradictoires entre missions, lenteur. CONTRE 'cameleon purement direct sa | - | - | 0 |
+| 07:38:21 | 2026-09-16 | MO-128 | LIVRE : l'espion d'activite consomme les vocabulaires (bdd-frictions / bdd-modifs charges par chemin) au lieu de recopier les statuts ; un domicile illisible est SIGNALE et l'espion ne dit pas 'saine' | espion-activite-optimus, ecrire | _operateur/optimus-prime/espions/espion-activite-optimus.py | - |
+| 07:36:27 | 2026-09-16 | MO-127 | LIVRE : le vocabulaire des statuts de la BDD modifications a un domicile (STATUT_VERROUILLE / STATUT_VALIDE / STATUT_ANNULE / STATUTS) et il est consomme par le DEFAULT du schema, l'INSERT, les deux U | bdd-modifs lister, bdd-modifs verrouiller, bdd-modifs annuler, ecrire | _operateur/optimus-prime/super-combos/combos/outils/bdd-modifs/fonctions/bdd_modifs.py, _operateur/optimus-prime/super-combos/combos/outils/bdd-modifs/entry.py, _operateur/optimus-prime/super-combos/combos/outils/bdd-modifs/main.py | - |
+| 07:32:27 | 2026-09-16 | MO-126 | LIVRE : la porte bdd-frictions VOIT et FILTRE ses archives -- statuts reels a un seul domicile, filtres active\|archivee\|validee\|annulee\|toutes (+ valeurs brutes) traduits en statuts reels par IN ( | bdd-frictions lister, bdd-frictions stats, ecrire | _operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/fonctions/bdd_frictions.py, _operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/entry.py, _operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/main.py | - |
+| 07:28:16 | 2026-09-16 | MO-125 | LIVRE : le moteur partage departage deux entrees a la MEME SECONDE par l'ORDRE D'ECRITURE -- recence = (horodatage, rang d'append) dans derniere_session ET entrees_apres. Preuves : cobaye 20 assertion | bdd-sessions etat, bdd-sessions resume | matrice/data/commun/derniere_session.py, matrice/data/manuel-outils.md | - |
+| 07:26:41 | 2026-09-16 | MO-124 | LIVRE : la porte retiqueter peut RE-DATER une entree (--horodatage) et refuse d'ecrire une collision. Preuves : cobaye 37 assertions / 0 echec (4 pieges : seconde occupee refusee ET nommee sans ecritu | bdd-sessions retiqueter, ecrire | matrice/data/commun/trace_session.py, matrice/data/commun/derniere_session.py, matrice/data/outils/bdd-sessions/retiqueter/fonctions.py, matrice/data/outils/bdd-sessions/retiqueter/entry.py, matrice/data/outils/bdd-sessions/main.py, matrice/data/manuel-outils.md | - |
+| 07:17:57 | 2026-09-16 | MO-123 | MO-123 (AUTO-EVOLUTION, friction 42, ARBITRAGE CREATEUR) terminee : LE POINT DE RESTAURATION ENTRE DANS LE CONTRAT. (1) LA CONTRADICTION MESUREE (dans la mission precedente) : la porte ecrire depose s | ecrire editer, bdd-frictions archiver, bdd-modifications noter, bdd-lecons ajouter, suivi-optimus noter, verifier-contrat-fondamental, verifier-regles, verifier-cartes-identite, garde-tmp, garde-ascii | _operateur/optimus-prime/super-combos/combos/outils/verifier-contrat-fondamental.py, _operateur/optimus-prime/regles-immuables/perimetre-tmp.md | - |
+| 07:13:11 | 2026-09-16 | MO-122 | MO-122 (AUTO-EVOLUTION, friction 40) terminee : LA PORTE MANQUANTE EST POSEE. (1) LE DEFAUT : la BDD sessions offrait ajouter/lire/resume/verifier et AUCUNE facon de corriger les tags d'une entree --  | ecrire ecrire, bdd-sessions retiqueter, bdd-modifications noter, bdd-frictions archiver, bdd-lecons ajouter, verifier-contrat-fondamental, garde-ascii, remorque etat | matrice/data/outils/bdd-sessions/retiqueter/fonctions.py, matrice/data/outils/bdd-sessions/retiqueter/entry.py, matrice/data/outils/bdd-sessions/main.py, matrice/data/manuel-outils.md | - |
+| 07:11:26 | 2026-09-16 | MO-121 | MO-121 (AUTO-EVOLUTION, friction 41) terminee : LE CONTRAT ECRIT/LU DE LA TRACE DE SESSION EST ALIGNE. (1) LE DEFAUT : commun.noter_session declare 3 tags fermes mais AUCUN appelant du pilote n'ecrit  | ecrire ecrire, bdd-sessions etat, bdd-sessions resume, bdd-sessions ajouter, bdd-frictions ajouter, bdd-frictions archiver, bdd-lecons ajouter, bdd-modifications noter, pilote injecter, garde-ascii, verifier-contrat-fondamental, remorque etat | matrice/data/commun/trace_session.py, matrice/data/commun/derniere_session.py, matrice/data/outils/bdd-sessions/etat/fonctions.py, matrice/data/outils/bdd-sessions/etat/entry.py, matrice/data/outils/bdd-sessions/main.py, matrice/data/outils/bdd-sessions/resume/fonctions.py, matrice/data/manuel-outils.md, _operateur/optimus-prime/pilote/constants.py, _operateur/optimus-prime/pilote/commun.py, _operateur/optimus-prime/pilote/injection/cycle.py | - |
+| 07:02:45 | 2026-09-16 | MO-120 | MO-120 (AUDITEUR) terminee : CAUSE RACINE EXACTE de l'ecart de reprise declaree. (1) LE FAIT MESURE : commun.noter_session est appele a chaque fin de mission par fin/fonctions.py (ligne 77, tag 'trava | suivi-optimus noter, bdd-frictions ajouter, bdd-lecons ajouter | matrice/_operateur/optimus-prime/pilote/commun.py, matrice/_operateur/optimus-prime/pilote/fin/fonctions.py, matrice/_operateur/optimus-prime/pilote/file/fonctions.py, matrice/data/commun/derniere_session.py | - |
+| 07:01:58 | 2026-09-16 | MO-119 | MO-119 (REPARATION) terminee : la PORTE DE REPRISE DIT LA VERITE. (1) ECART MESURE a l'ETAPE 0 : bdd-sessions resume --derniere annoncait S-026 / MO-099 (2026-09-15 19:27) alors que le dernier travail | bdd-sessions ajouter, bdd-sessions resume, bdd-sessions verifier, bdd-modifications noter, bdd-frictions ajouter, bdd-lecons ajouter | matrice/data/sessions.json | - |
 
-*75 evenement(s) supplementaire(s) non affiches (voir data/suivi-optimus.jsonl).
+*99 evenement(s) supplementaire(s) non affiches (voir data/suivi-optimus.jsonl).
 
 ## Action : porte
 
-(aucun evenement)
+| Heure | Date | Mission | Detail | Portes | Fichiers | Duree |
+|---|---|---|---|---|---|---|
+| 09:25:02 | 2026-09-15 | MO-094 | Preparation validee : plan-conservation redige ; theme PURIFICATION etendu ; aucune BDD creee, aucun deplacement, aucune suppression ; prochaine mission MO-095 = creer bdd-conservation par le moule | bdd-modifications noter, suivi-optimus noter | _operateur/optimus-prime/purification/plan-conservation.md, _operateur/optimus-prime/parcours/themes/theme-purification.json, _operateur/optimus-prime/parcours/themes/index-themes.json | - |
 
 ## Action : depot
 
@@ -46,19 +61,18 @@ Flux : optimus (via l'outil suivi-optimus) -> data/suivi-optimus.jsonl -> VUE le
 
 | Heure | Date | Mission | Detail | Portes | Fichiers | Duree |
 |---|---|---|---|---|---|---|
-| 21:42:15 | 2026-09-09 | AUDIT-PROTECTIONS | Audit protections etendu (suite sac-a-dos) : sac-a-dos trace la raison des refus, server etat sonde le PID reel, server matrice demarre et relance les boucles mortes (preuve reelle) | - | - | - |
-| 21:31:25 | 2026-09-09 | AUDIT-PROTECTIONS | Audit protections execute (3 mesures) : sorties console neutralisees (maintenance), perimetre-cameleon etendu a 24 zones (zone neutre maintenance resolue en chemins reels), bug bdd-variables lire corr | - | - | - |
-| 20:28:58 | 2026-09-09 | - | Correction philosophique : l'entite invisible n'est jamais nommee dans ce que le cameleon lit. 4 fuites corrigees (fiche, TH-012, TH-021, R-002) + L-016 reecrite sans nom + portes modifier ajoutees (b | pause-session, bdd-regles-matrice, theme-vivier, bdd-lecons, journal-multi-encarts, suivi-optimus | - | - |
-| 19:58:37 | 2026-09-09 | - | Vue markdown dediee ajoutee au suivi-optimus (verbe vue, fichier matrice/suivi-optimus.md genere) -- reponse a la demande createur de voir un fichier lisible | suivi-optimus | - | - |
-| 19:54:16 | 2026-09-09 | - | Frictions traitees : reference morte corrections.md corrigee dans demarrer-optimus-prime.md (ORDRE 2.2 -> bdd-lecons) ; index-parcours re-synchronise (CONTRE-ANALYSE ordre 3) ; commit du travail en co | bdd-modifications, demarrer | - | - |
-| 19:52:56 | 2026-09-09 | E-057 | E-057 cloturee : deja couvert (corriger-ascii v3 scanne .md/.py/.json, preuve test reel + audit 0 restant) ; vrai angle mort residuel = .jsonl (exclus par conception), extension possible sur GO create | entonnoir, corriger-ascii | - | - |
-| 19:35:29 | 2026-09-09 | M-084 | GO createur : construire suivi-optimus | - | - | - |
+| 19:24:22 | 2026-09-15 | MO-099 | REDIRECTION DU CREATEUR (2026-09-15 19h4x) : l'objectif initial 'P1 + P2' est remplace par 'P4' AVANT tout travail -- aucune modification de code n'avait ete faite sous MO-099 (seule la declaration de | - | - | - |
+| 07:29:59 | 2026-09-15 | MO-093 | Audit lecture seule passe : 20 gardes + 10 BDD verifiers + contrat fondamental (0 ecart). 8 ecarts preuves mesurees, UN verdict chacun : E1 PURGER journal usages 11.7 Mo / 69970 lignes (rotation M-076 | - | - | - |
 
 ## Action : decouverte
 
 | Heure | Date | Mission | Detail | Portes | Fichiers | Duree |
 |---|---|---|---|---|---|---|
-| 19:43:57 | 2026-09-09 | M-084 | Espion tournait avec l'ancien code (L-012, faux ecart session-matrix-etat) et server matrice mort (PID fantome 8688) : redemarrage requis pour faire vivre le nouveau registre ; bug import lancement da | vie, espion | - | - |
+| 07:29:03 | 2026-09-16 | MO-125 | Mon propre cobaye (variable 'repare' accentuee) a rendu le garde-ascii ROUGE au niveau WORKSPACE alors que mon run cible (garde-ascii matrice/) etait vert : je verifiais le perimetre que je LIVRE, pas | - | - | - |
+| 07:13:38 | 2026-09-16 | MO-122 | INCIDENT DE TRACE (declare, pas cache) : lors de la declaration de la fin de MO-122, deux segments places entre crochets obliques inverses ont ete ABSORBES par l'interpreteur de commandes avant d'atte | suivi-optimus noter | - | - |
+| 21:23:54 | 2026-09-15 | MO-107 | MO-107 (EO-117) DEMARREE, perimetre MESURE, NON LIVREE dans cette session -- la reprise repart d'ici. MESURE : (1) cycle.py = 335 lignes, machine a etats complete (phase, mission courante, dernier inj | - | - | - |
+| 21:46:14 | 2026-09-14 | MO-092 | Test REEL de la reprise (demande createur) : session ouverte (S-004) -> pilote injecter -> annonce REPRISE DE SESSION -> session fermee (S-005). Le test a attrape 2 vrais defauts, repares a leur porte | bdd-sessions ajouter, pilote injecter | cerveau-projet/matrix/_operateur/optimus-prime/pilote/commun.py, cerveau-projet/matrix/matrice/data/outils/bdd-sessions/ajouter/fonctions.py | - |
+| 21:09:51 | 2026-09-14 | MO-092 | Verifier observations-non-redondantes : faux positif tranche sur les FAITS du journal reel. 3 passes motif=changement (06:44, 10:04, 10:09) avaient 0... en realite 14-15 observations precedentes dans  | super-combo verifier-observations-non-redondantes | cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-observations-non-redondantes.py | - |
 
 ## Action : bilan
 

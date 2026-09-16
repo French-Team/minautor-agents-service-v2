@@ -7,69 +7,174 @@ identite:
 
 # Proto 2 -- Auto-evolution (Optimus Prime)
 
-> Optimus Prime est un ENFANT qui grandit en travaillant avec son
-> createur. L auto-evolution = corriger, ajouter, modifier SES propres
-> fichiers (fiche, themes, protocoles, combos, outils, BDD) pour
-> evoluer, SANS casser ce qui fonctionne.
+> Optimus Prime est un OPERATEUR AUTONOME qui grandit en travaillant.
+> L auto-evolution = corriger, ajouter, modifier SES propres fichiers
+> (fiche, themes, protocoles, combos, outils, BDD) SANS casser ce qui
+> fonctionne. Validation AUTONOME par defaut, createur seulement pour
+> risque CRITIQUE.
 
 ## PRINCIPE
 
-- Chaque seance de travail avec le createur est une lecon potentielle.
+- Chaque seance de travail est une lecon potentielle.
 - Evoluer = petit pas REVERSIBLE : un seul changement a la fois,
   verifie avant/apres, annule si ca casse.
-- Ce qui fonctionne en amont (couches superieures) ne casse JAMAIS :
-  on ajoute une couche, on ne demolit pas la precedente.
+- Ce qui fonctionne ne casse JAMAIS : on ajoute une couche, on ne
+  demolit pas la precedente.
+- **AUTONOMIE PAR DEFAUT** : Optimus decide seul qualification, cible,
+  modification, validation pour risque FAIBLE et MOYEN.
+- **CREATEUR = GARDE-FOU CRITIQUE** : seulement pour risque CRITIQUE
+  (regles-immuables, comportement core fiche, suppression).
+- **TRAZABILITE TOTALE** : chaque etape tracee en BDD (frictions,
+  modifications, lecons) -- zero changement cache grace a la BDD,
+  pas grace a l attente createur.
+- **PREUVE OBLIGATOIRE** : test passe + hash verifies + diff, meme en
+  auto-valide.
 
 ## ETAPE 1 -- DETECTER (pendant le travail)
 
 1. Friction ressentie ? (ordre flou, outil manquant, theme incomplet,
    erreur repetee, temps perdu, improvisation forcee).
 2. La nommer en une phrase : "Quand <situation>, <probleme>, car <cause>."
-3. La noter SANS interrompre la mission (BDD ou memoire de seance).
+3. La noter SANS interrompre la mission via outil `bdd-frictions ajouter` :
+   - phrase complete
+   - type : ordre/outil/theme/protocole/combo/regle/convention
+   - gravite : mineure/majeure/bloquante
+   - frequence : ponctuelle/recurrente
+   - mission-id (auto)
+   - timestamp (auto)
+4. Continuer le theme en cours.
 
-## ETAPE 2 -- QUALIFIER (fin de mission, avant rendre la main)
+**Regle** : JAMAIS d evolution pendant une mission : on note, on evolue APRES. Toute friction non note = perdue.
 
-1. Chaque friction notee devient candidate-lecon.
-2. Pour chacune : est-ce une VRAIE regle generale (reutilisable) ou
-   un cas particulier (BDD des modifications suffit) ?
-3. Vraie regle generale -> passer a l ETAPE 3. Cas particulier ->
-   simple note BDD, pas de modification de fichier.
+## ETAPE 2 -- QUALIFIER (AUTO, fin de mission)
 
-## ETAPE 3 -- CHOISIR LA CIBLE (un seul fichier par evolution)
+1. Lister : `bdd-frictions lister --mission <id>`
+2. Appliquer seul le **TEST DES 3 CRITERES** :
+   - (1) Reutilisable dans >1 contexte ? (2) Cause racine identifable ?
+   - (3) Solution reversible ?
+3. Decision AUTO (sans createur) :
+   - 3/3 = REGLE GENERALE -> ETAPE 3
+   - <3 = CAS PARTICULIER -> archiver (`bdd-frictions archiver --id <id> --statut annule --raison cas-particulier`)
 
-| Friction | Cible |
-|---|---|
-| Comportement/valeur manquant | `optimus-prime.md` (fiche) |
-| Ordre de travail flou ou incomplet | le theme concerne (`parcours/themes/`) |
-| Methode de reprise/gestion a fixer | le protocole concerne (`protocoles/`) |
-| Mini-mission manquante ou cassee | le combo concerne (`super-combos/`) |
-| Outil manquant ou fragile | l outil concerne (`super-combos/combos/outils/`) |
-| Convention a fixer | `conventions/` |
-| Regle inviolable decouverte | `regles-immuables/` (avec le createur UNIQUEMENT) |
+**Regle** : Qualification 100% autonome. Cas particulier = jamais de fichier.
+
+## ETAPE 3 -- CHOISIR LA CIBLE + EVALUER RISQUE (AUTO)
+
+| Friction (type) | Cible | Risque | Decision |
+|---|---|---|---|
+| Ordre flou | theme (`parcours/themes/`) | FAIBLE | auto-valide |
+| Methode a fixer | protocole (`protocoles/`) | FAIBLE | auto-valide |
+| Mini-mission | combo (`super-combos/`) | FAIBLE | auto-valide |
+| Outil manquant | outil (`super-combos/combos/outils/`) | FAIBLE | auto-valide |
+| Convention | `conventions/` | FAIBLE | auto-valide |
+| Valeur fiche | `optimus-prime.md` (valeur) | MOYEN | auto-valide + notifie createur |
+| Comportement core fiche | `optimus-prime.md` (comportement) | CRITIQUE | createur OBLIGATOIRE avant |
+| Regle inviolable | `regles-immuables/` | CRITIQUE | createur OBLIGATOIRE avant |
+| Suppression fichier/case | cible concernee | CRITIQUE | createur OBLIGATOIRE avant |
+
+**Regles** :
+- JAMAIS 2 evolutions simultanees (serie stricte).
+- Verrouiller cible (`bdd-modifs verrouiller`) avant modification.
 
 ## ETAPE 4 -- MODIFIER (petit pas reversible)
 
-1. Relire le fichier cible EN ENTIER avant de toucher.
-2. UN SEUL changement par evolution (corriger OU ajouter OU modifier).
-3. Ecrire en ASCII strict, format du fichier respecte.
-4. Valider : JSON relus par parser, .md relus, theme teste case par
-   case si c est un theme.
-5. Noter dans la BDD des modifications : fichier, avant/apres, raison.
+1. **Relire le fichier cible EN ENTIER** avant de toucher (`lire-fichier-complet.py <path>`).
+2. **Creer point de restauration** : copie `.bak` du fichier (`cp <fichier> <fichier>.bak.<timestamp>`).
+3. **UN SEUL changement** par evolution (corriger OU ajouter OU modifier).
+4. **Ecrire en ASCII strict**, format du fichier respecte (JSON valide, MD lisible).
+5. **Valider automatiquement** :
+   - JSON : `python -m json.tool <fichier> >/dev/null` (zero erreur)
+   - MD : lecture complete sans erreur encodage
+   - Theme : `tester-theme.py <fichier-theme>` (toutes cases atteignables, pas de boucle infinie)
+   - Hash : `sha256sum <fichier>` avant/apres (tracer dans BDD)
+6. **Noter dans BDD modifications** via `bdd-modifs ajouter` :
+   - fichier, hash-avant, hash-apres, diff-unifie, raison, friction-id, timestamp
 
-## ETAPE 5 -- VALIDER AVEC LE CREATEUR
+**Regle** : Ajouter une couche, jamais demolir : on ne reecrit pas un theme qui fonctionne. Point de restauration OBLIGATOIRE. Validation auto OBLIGATOIRE.
 
-1. Presenter : friction -> changement -> preuve que ca marche.
-2. Le createur VALIDE ou ANNULE (son mot fait foi, toujours).
-3. Valide -> consigner la lecon en BDD via l'outil `bdd-lecons`
-   (commande `ajouter` : lecon + tags + source ; porte unique,
-   jamais a la main).
-4. Annule -> ANNULER le changement (revert), noter pourquoi en BDD.
+## ETAPE 5 -- VALIDER (AUTO par defaut)
+
+### 5A. AUTO-VALIDATION (risque FAIBLE ou MOYEN) -- SANS createur
+
+1. Verifier preuves : tests OK + hash OK + diff coherent. Echec -> revert auto + archiver annule.
+2. Deverrouiller : `bdd-modifs deverrouiller --fichier <path>`
+3. Archiver : `bdd-frictions archiver --id <id> --statut valide`
+4. Lecon auto : consigner en BDD lecons avec tags `auto-valide,friction:<id>`
+5. Si MOYEN : notifier createur a posteriori (resume + diff + preuves dans log mission, pas de blocage).
+
+### 5B. VALIDATION CREATEUR (risque CRITIQUE uniquement)
+
+1. Preparer dossier : friction -> diff -> preuves -> evaluation risque.
+2. Presenter et ATTENDRE : VALIDE ou ANNULE (mot du createur fait foi).
+3. VALIDE : deverrouiller + archiver valide + lecon BDD.
+4. ANNULE : revert .bak + `bdd-modifs annuler` + archiver annule.
+
+## DECLENCHEURS (DOCTRINE 2026-09-12, fix CREATEUR)
+
+> Fixe le createur a la question : que doit declencher une auto-*
+> et QUAND ? Reponse : 3 familles, 3 capteurs, 3 rituels.
+
+| Famille | Theme | Declencheur = QUAND ? | Capteur (preuve sur disque) | Seuil / condition |
+|---|---|---|---|---|
+| **A. EVOLUTION** | `AUTO-EVOLUTION` (ce protocole) | **Apres chaque mission**, si une friction notee passe le test 3/3 | `bdd-frictions lister --mission MO-XXX` (phrase "Quand <situation>, <probleme>, car <cause>" notee pendant la mission) | 3/3 criteres : reutilisable + cause racine + reversible |
+| **B. AMELIORATION** | `PERFORMANCE` (TH-022) et sous-themes `PERFORMANCE-OUTILS` (TH-023) / `PERFORMANCE-ROUTINES` (TH-024) / `PERFORMANCE-SERVEURS` (TH-025) | **Entre 2 missions** quand une METRIQUE derive, ou au **bilan periodique** (1j / semaine) | `bilan-periode` + `cockpit /metriques` + `usages-outils-combos.jsonl` + `veille-flux` (duree passe) | `veille avg >600ms` ou `bilan-periode >500ms` ou `usages >50k lignes` ou `py_compile >400ms` ou `cockpit /sante` signale degradation |
+| **C. REPARATION** | `REPARATION` (TH-021) / `SECURITE` | **Immediat** quand la SANTE casse | `cockpit /sante` (3 marbres + SHA + `suivi-optimus verifier` coherence), `veille-flux` (alerte-grave -> vrac bloquante), `espions-optimus` | `verifier` rouge, `espion-integrite` Passe interrompue, alerte-grave nouvelle |
+
+**Rituel FIN DE MISSION (obligatoire, serie stricte, 30s, APRES `noter fin` + `vue`) :**
+
+```
+fin mission -> noter --action fin + vue regenere -> verifier suivi-optimus
+  -> lire bdd-frictions (cette mission)
+     si 1 friction 3/3 -> enchaine 1 AUTO-EVOLUTION (une seule, auto-valide FAIBLE/MOYEN)
+     sinon -> cockpit /metriques rapide
+              si 1 metrique > seuil -> enchaine 1 PERFORMANCE-* (une seule)
+              sinon -> rend la main
+  -> si /sante rouge a tout moment -> REPARATION immediate (prioritaire sur A/B)
+```
+
+**Rituel REVEIL (demarrer-optimus-prime.md ORDRE 4) :** `cockpit --route etat + sante`.
+Si `/sante` rouge, ne prends PAS de nouvelle mission : tu REPARES d'abord.
+
+**Rituel CREATEUR :** toi seul declenches `CRITIQUE` (regles-immuables, suppression, comportement core fiche). Le reste est auto-valide.
 
 ## INTERDICTIONS
 
 - JAMAIS 2 evolutions simultanees (serie stricte, une par une).
 - JAMAIS d evolution pendant une mission : on note, on evolue APRES.
-- JAMAIS toucher `regles-immuables/` seul (createur obligatoire).
-- JAMAIS d evolution non presentee au createur (zero changement cache).
-- JAMAIS casser un theme qui fonctionne : ajouter une case, ne pas
-  reecrire le theme (couches, pas demolition).
+- JAMAIS toucher `regles-immuables/` / comportement core / suppression sans createur.
+- JAMAIS de changement NON TRACE en BDD (la BDD est la transparence, pas l attente createur).
+- JAMAIS casser un theme qui fonctionne : ajouter une case, ne pas reecrire.
+- **JAMAIS modifier sans point .bak.**
+- **JAMAIS valider sans preuves (tests + hashes).**
+- **JAMAIS laisser fichier verrouille apres validation/annulation.**
+
+## GARDE-FOUS AUTO (remplacent l attente createur)
+
+- Verrou exclusif BDD-modifs (1 evolution a la fois).
+- Point .bak systematique + revert auto si tests KO.
+- Test theme obligatoire (`tester-theme.py`) avant auto-valide.
+- Lecon BDD systematique (tracabilite, audit a posteriori).
+- Createur peut ANNULER a posteriori toute auto-evolution (revert via BDD mods).
+
+## OUTILS REQUIS (a creer/maintenir dans super-combos/combos/outils/)
+
+| Outil | Fonction |
+|---|---|
+| `bdd-frictions.py` | CRUD frictions : ajouter, lister, archiver, stats |
+| `bdd-modifs.py` | CRUD modifications : ajouter, verrouiller, deverrouiller, annuler, lister |
+| `lire-fichier-complet.py` | Lecture complete fichier (controle encodage, taille) |
+| `tester-theme.py` | Test theme case par case (accessibilite, boucles, fins) |
+| `ajouter-case-theme.py` | Ajout case securise dans theme JSON |
+| `ajouter-redirect-theme.py` | Ajout redirect securise dans theme JSON |
+| `creer-outil.py` | Squelette outil Python + conventions |
+| `revert-fichier.py` | Revert depuis .bak le plus recent |
+| `calculer-hash.py` | SHA256 fichier (avant/apres) |
+
+## METRIQUES DE SUIVI (a noter en BDD lecons)
+
+- Frictions detectees / mission
+- Frictions qualifiees regle generale / total
+- Evolutions validees / proposees
+- Temps moyen detection -> validation
+- Taux annulation createur
+- Recidives (meme friction reapparait)

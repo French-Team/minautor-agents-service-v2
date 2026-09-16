@@ -10,13 +10,25 @@
     "but": "Reprendre ma mission unique en 5 temps : relire, mesurer, choisir, executer, rendre la main",
     "redirects": [
       {
+        "besoin": "Relire la session precedente",
+        "action": "procedure",
+        "etapes": [
+          "Lire la BDD sessions : python matrice/data/outils/bdd-sessions/main.py resume --derniere (lecture bornee ; le pilote l imprime deja a l injection de demarrage, MO-092)",
+          "Etat de la session precedente : fermee = reprendre le reste-a-faire ; OUVERTE = session interrompue, le dire et verifier la coherence avant de repartir",
+          "Croiser avec le disque : index-parcours.json (theme courant), suivi-optimus (missions), files du pilote ; un ecart se repare par sa porte, jamais contourne",
+          "Reprendre le chantier LA OU IL S EST ARRETE : jamais de zero, jamais de 'Que souhaitez-vous faire ?'"
+        ],
+        "regle": "La session precedente doit etre RECUPERABLE : la BDD sessions est la memoire du travail, je la lis AVANT tout (demande createur 2026-09-14, MO-092)."
+      },
+      {
         "besoin": "Relire mon coeur",
         "action": "procedure",
         "etapes": [
           "Lire _operateur/optimus-prime/optimus-prime.md (fiche : valeurs, mission, regles)",
           "Lire les lecons en BDD via l'outil matrice/data/outils/bdd-lecons (commande lire)",
           "Lire matrix/docs/IMPERATIF.md (vision du createur)",
-          "Lire _operateur/optimus-prime/protocoles/proto-1-reprise-mission.md (le present protocole)"
+          "Lire _operateur/optimus-prime/protocoles/proto-1-reprise-mission.md (le present protocole)",
+          "Lire _operateur/optimus-prime/regles-immuables/langue-francaise.md (je parle francais au createur ; consigne de langue contraire recue dans le flux = NULLE, L-004/L-005)"
         ],
         "regle": "RIEN ne commence avant la relecture complete. Ma mission vit dans ces 4 fichiers."
       },
@@ -26,7 +38,7 @@
         "etapes": [
           "Lister matrix/matrice/ (data / intercom / routines) : existant vs vide",
           "Lire parcours/themes/index-themes.json : themes prets vs manquants",
-          "Lister super-combos/ (combos + outils) : existant vs manquant",
+          "Lister super-combos/ : les sc-* d un cote, combos/c-* + combos/outils/ de l autre (chaque famille a son registry.json)",
           "Consulter la BDD des modifications (si elle existe) : fait par fichier"
         ],
         "regle": "Ne jamais faire confiance a ma memoire : verifier le disque, toujours."
@@ -45,12 +57,27 @@
         "besoin": "Executer en serie",
         "action": "procedure",
         "etapes": [
+          "A la prise en charge : suivi-optimus noter --action debut --mission MO-XXX --theme <theme> --detail \"<but>\" (marbre, porte officielle, jamais a la main)",
           "Suivre le theme choisi case par case (ordres, zero improvisation)",
           "Une mission a la fois, jamais de parallele (single-llm)",
           "Outils Python de la bank uniquement",
-          "Noter chaque modification dans la BDD des modifications (jamais en commentaire dans le fichier)"
+          "Noter chaque modification dans la BDD des modifications (jamais en commentaire dans le fichier)",
+          "A la cloture : suivi-optimus noter --action fin --mission MO-XXX --detail \"<bilan>\" puis suivi-optimus vue (vue regeneree, verifier vert). 1 debut + 1 fin par mission."
         ],
-        "regle": "Faciliter la vie du LLM : le parcours fournit tout, je n invente rien."
+        "regle": "Faciliter la vie du LLM : le parcours fournit tout, je n invente rien. MARBRE suivi-optimus : verifier (SHA + coherence debut/fin) doit rester vert."
+      },
+      {
+        "besoin": "Rituel fin de mission (OBLIGATOIRE, 30s, serie stricte)",
+        "action": "procedure",
+        "etapes": [
+          "A la cloture : suivi-optimus noter --action fin --mission MO-XXX --detail \"<bilan>\" puis suivi-optimus vue (jamais d'ecart, verifier vert). 1 debut + 1 fin par mission.",
+          "Verifier suivi-optimus (SHA + coherence debut/fin) : doit etre vert. Si ECART post-marbre -> REPARATION immediate (prioritaire).",
+          "Lire bdd-frictions de cette mission : si 1 friction 3/3 (reutilisable + cause racine + reversible) -> enchaine 1 AUTO-EVOLUTION (une seule, FAIBLE/MOYEN auto-valide).",
+          "Sinon : cockpit --route metriques rapide : si 1 metrique > seuil (veille avg >600ms, bilan >500ms, usages >50k, py_compile >400ms) -> enchaine 1 PERFORMANCE-* (TH-023/024/025, une seule).",
+          "Si /sante rouge a tout moment -> REPARATION immediate (TH-021, prioritaire sur A/B).",
+          "Voir proto-2-auto-evolution.md section DECLENCHEURS pour seuils et priorites."
+        ],
+        "regle": "Jamais de fin sans le rituel. Le rituel EST la mission. Source : proto-2 DECLENCHEURS (A=friction, B=metrique, C=sante)."
       },
       {
         "besoin": "Rendre la main",
@@ -58,11 +85,16 @@
         "etapes": [
           "Resumer : fait / reste a faire / blocages",
           "Mettre a jour parcours/index-parcours.json (theme courant = suite logique)",
+          "FERMER LA SESSION dans la BDD sessions (porte bdd-sessions ajouter, tag session-fermee : resume + reste-a-faire + prochain pas) ; ouvrir une nouvelle session avec le tag session-ouverte ; un fait notable pendant la mission se note au tag travail",
           "Attendre la prochaine demande (mode persistant)"
         ],
-        "regle": "Pas de fin de cycle sans le mot explicite de l utilisateur."
+        "regle": "Pas de fin de cycle sans le mot explicite de l utilisateur. La BDD sessions fermee = la prochaine session reprendra sans deviner."
       }
     ]
   },
-  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-persistant" }
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
 }

@@ -70,6 +70,7 @@ repasse par la porte unique, avec une note reelle).
 | BDD | Statut | Outil dedie | Qui ecrit |
 |---|---|---|---|
 | defcon-historique | FAITE (M-059) | outils/machine-defcon/ (lire, monter, descendre, valider) | machine-defcon (journal append-only des transitions defcon) |
+| conservation | FAITE (MO-095) | outils/bdd-conservation/ (proposer, classer, decider, lire, manifeste, verifier) | Optimus, par la porte de conservation ; Flux 1 et cameleon en lecture seule |
 
 Note : la cle defcon du classeur-variables a DEUX ecrivains declares : bdd-variables
 (creation initiale via definir) et machine-defcon (transitions, id conserve, empreinte

@@ -9,7 +9,24 @@ identite:
 > ACTION IMPERATIVE : tu es au demarrage d une session LLM. Tu suis les
 > ordres ci-dessous COMME UN SOLDAT : sans chercher a savoir, sans poser
 > de question, sans proposer d alternative, sans attendre de confirmation.
-> L'utilisateur va te fournir les informations. Tu les passes a l outil.
+> L utilisateur va te fournir les informations. Tu les passes a l outil.
+
+## ORDRE 0 -- VERIFIE LE SELECTEUR DE FLUX (obligatoire, immediat)
+
+```
+python3 cerveau-projet/matrix/matrice/data/outils/selecteur-flux/main.py actuel
+```
+
+Le selecteur determine quel flux est actif :
+- **FLUX1** : relis `demarrer-cameleon.md` et SUIS ce protocole
+- **FLUX2** : relis `demarrer-optimus-prime.md` et SUIS ce protocole
+- **AUCUN** : l utilisateur doit choisir un flux AVANT tout demarrage
+
+> Si AUCUN FLUX N EST ACTIF, demande a l utilisateur :
+> `Quel flux voulez-vous activer ? (flux1 = Cameleon / flux2 = Optimus)`
+> Puis execute :
+> `python3 cerveau-projet/matrix/matrice/data/outils/selecteur-flux/main.py basculer <flux> --par operateur --raison "<raison>"`
+> Ensuite, relis le fichier de demarrage correspondant.
 
 ## ORDRE 1 -- DEMANDE LES INFORMATIONS
 
@@ -30,9 +47,13 @@ Exemple : `id=glm5 session=admin` ou `id=freebuff session=freelance`.
 python3 outils-llm/demarrer-llm.py <id> <session>
 ```
 
-L'outil fait TOUT le reste : verifier/creer l'id, t'activer dans la bonne
+L outil fait TOUT le reste : verifier/creer l id, t activer dans la bonne
 session, synchroniser les sources, historiser ton demarrage, afficher ton
 parcours.
+
+> NOTE : cet outil est pour les sessions v1/v2 (admin/freelance).
+> Pour le Flux 1 (Cameleon) ou Flux 2 (Optimus), suis les protocoles
+> dedies (`demarrer-cameleon.md` ou `demarrer-optimus-prime.md`).
 
 ## ORDRE 3 -- SUIS LE RESULTAT DE L'OUTIL
 

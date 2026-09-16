@@ -1,0 +1,19 @@
+{
+  "portes": 33,
+  "notables": 7,
+  "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598",
+  "date": "2026-09-16 07:37:10",
+  "alertes": 27,
+  "motif": "deja-signale",
+  "mode": "absorbee",
+  "signature_passe": "{\"notables\": 7, \"portes\": 33, \"signature\": \"686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598\"}",
+  "passes_absorbes": 85,
+  "derniere_ecriture": "2026-09-15 09:43:18",
+  "dernieres_passes": [
+    "2026-09-16 06:05:57",
+    "2026-09-16 06:21:10",
+    "2026-09-16 06:36:23",
+    "2026-09-16 06:51:35",
+    "2026-09-16 07:37:10"
+  ]
+}

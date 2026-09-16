@@ -3,63 +3,300 @@
     "type": "theme",
     "appartient_a": "optimus-prime",
     "nom": "AUTO-EVOLUTION",
-    "description": "Comme un enfant, je grandis en travaillant : detecter les frictions, evoluer petit pas reversible, valider avec mon createur. Voir protocoles/proto-2-auto-evolution.md"
+    "description": "Comme un enfant, je grandis en travaillant : detecter les frictions, evoluer petit pas reversible. Validation AUTONOME par defaut, createur seulement pour risques critiques. Voir protocoles/proto-2-auto-evolution.md"
   },
   "theme": {
     "nom": "AUTO-EVOLUTION",
-    "but": "Evoluer en 5 temps : detecter, qualifier, cibler, modifier, valider -- un seul changement reversible a la fois",
+    "but": "Evoluer en 5 temps : detecter, qualifier, cibler, modifier, valider -- validation AUTONOME si risque faible, createur si risque critique",
     "redirects": [
       {
         "besoin": "Detecter les frictions",
         "action": "procedure",
         "etapes": [
           "Pendant le travail, noter chaque friction en une phrase : Quand <situation>, <probleme>, car <cause>",
-          "Ne pas interrompre la mission : noter en BDD ou memoire de seance, continuer le theme en cours"
+          "Ne pas interrompre la mission : noter en BDD via outil bdd-frictions (ajouter) ou memoire de seance, continuer le theme en cours",
+          "Taguer la friction : type (ordre/outil/theme/protocole/combo/regle/convention), gravite (mineure/majeure/bloquante), frequence (ponctuelle/recurrente)"
         ],
-        "regle": "JAMAIS d evolution pendant une mission : on note, on evolue APRES."
+        "regle": "JAMAIS d evolution pendant une mission : on note, on evolue APRES. Toute friction non note = perdue."
       },
       {
-        "besoin": "Qualifier les frictions",
-        "action": "procedure",
-        "etapes": [
-          "En fin de mission, relire les frictions notees",
-          "Pour chacune : regle generale reutilisable (evolution) ou cas particulier (simple note BDD) ?",
-          "Ne garder que les vraies regles generales"
-        ],
-        "regle": "Un cas particulier ne modifie JAMAIS un fichier : BDD des modifications suffit."
+        "besoin": "Detecter -- friction ordre de travail flou",
+        "action": "redirect",
+        "vers": {
+          "type": "theme",
+          "fichier": "theme-reprise-mission.json",
+          "case": "relire-fiche"
+        },
+        "condition": "si friction = 'Quand je reprends une mission, je ne sais pas par ou commencer, car ordre non explicite'"
       },
       {
-        "besoin": "Choisir la cible",
-        "action": "procedure",
-        "etapes": [
-          "UN SEUL fichier par evolution (voir tableau friction -> cible du protocole)",
-          "regles-immuables/ : avec le createur UNIQUEMENT, jamais seul"
-        ],
-        "regle": "JAMAIS 2 evolutions simultanees : serie stricte, une par une."
+        "besoin": "Detecter -- friction outil manquant",
+        "action": "redirect",
+        "vers": {
+          "type": "combo",
+          "fichier": "super-combos/combos/outils/outils-readme.md",
+          "case": "creer-outil"
+        },
+        "condition": "si friction = 'Quand je dois <action>, aucun outil ne le fait, car inexistant'"
       },
       {
-        "besoin": "Modifier petit pas reversible",
-        "action": "procedure",
-        "etapes": [
-          "Relire le fichier cible EN ENTIER avant de toucher",
-          "UN SEUL changement (corriger OU ajouter OU modifier), ASCII strict, format respecte",
-          "Valider : parser les JSON, relire les .md, tester le theme case par case",
-          "Noter dans la BDD des modifications : fichier, avant/apres, raison"
-        ],
-        "regle": "Ajouter une couche, jamais demolir : on ne reecrit pas un theme qui fonctionne."
+        "besoin": "Detecter -- friction theme incomplet",
+        "action": "redirect",
+        "vers": {
+          "type": "theme",
+          "fichier": "theme-auto-evolution.json",
+          "case": "ajouter-case"
+        },
+        "condition": "si friction = 'Quand je suis le theme, une etape manque, car case absente'"
       },
       {
-        "besoin": "Valider avec mon createur",
+        "besoin": "Detecter -- friction erreur repetee",
+        "action": "redirect",
+        "vers": {
+          "type": "protocole",
+          "fichier": "protocoles/proto-4-auto-audit-3-axes.md",
+          "case": "auditer"
+        },
+        "condition": "si friction = 'Quand je fais <action>, j oublie <verification>, car pas dans protocole'"
+      },
+      {
+        "besoin": "Qualifier les frictions (auto)",
         "action": "procedure",
         "etapes": [
-          "Presenter : friction -> changement -> preuve que ca marche",
-          "Le mot du createur fait foi : VALIDE ou ANNULE",
-          "Valide : consigner la lecon en BDD via l'outil bdd-lecons (ajouter : lecon + tags + source)",
-          "Annule : revert immediat + noter pourquoi en BDD"
+          "En fin de mission, relire les frictions notees via bdd-frictions (lister --mission <id>)",
+          "Pour chacune : appliquer le TEST DES 3 CRITERES (auto) :",
+          "  (1) Reutilisable dans >1 contexte different ?",
+          "  (2) Cause racine identifable et non conjoncturelle ?",
+          "  (3) Solution reversible sans casse ?",
+          "Decision AUTO : 3/3 = REGLE GENERALE -> choisir-cible | <3 = CAS PARTICULIER -> archiver BDD"
         ],
-        "regle": "JAMAIS de changement cache : toute evolution est presentee, zero exception."
+        "regle": "Qualification AUTONOME. Cas particulier ne modifie JAMAIS un fichier : BDD suffit. Friction non qualifiee = archivee."
+      },
+      {
+        "besoin": "Qualifier -- regle generale detectee (auto)",
+        "action": "redirect",
+        "vers": {
+          "type": "procedure",
+          "etape": "choisir-cible"
+        },
+        "condition": "si 3/3 criteres valides (auto, sans createur)"
+      },
+      {
+        "besoin": "Qualifier -- cas particulier (auto)",
+        "action": "redirect",
+        "vers": {
+          "type": "bdd",
+          "action": "archiver-friction",
+          "raison": "cas-particulier"
+        },
+        "condition": "si <3 criteres valides"
+      },
+      {
+        "besoin": "Choisir la cible + evaluer risque (auto)",
+        "action": "procedure",
+        "etapes": [
+          "Mapper friction.type -> cible (tableau protocole)",
+          "Evaluer NIVEAU DE RISQUE du changement :",
+          "  RISQUE FAIBLE (auto-valide) : theme, protocole, combo, outil, convention -> AJOUT case/redirect, correction mineure",
+          "  RISQUE MOYEN (createur informe a posteriori) : fiche (valeurs), modification existante",
+          "  RISQUE CRITIQUE (createur OBLIGATOIRE avant) : regles-immuables/, fiche (comportement core), suppression",
+          "Verrouiller fichier (bdd-modifs verrouiller) -- serie stricte"
+        ],
+        "regle": "Risque FAIBLE = validation AUTONOME immediate. Risque MOYEN = auto-valide + notification createur. Risque CRITIQUE = attente createur."
+      },
+      {
+        "besoin": "Choisir -- cible theme (ordre incomplet) -> RISQUE FAIBLE",
+        "action": "redirect",
+        "vers": {
+          "type": "theme",
+          "dossier": "parcours/themes/",
+          "risque": "faible",
+          "auto_valide": true
+        },
+        "condition": "si friction type = ordre"
+      },
+      {
+        "besoin": "Choisir -- cible protocole (methode a fixer) -> RISQUE FAIBLE",
+        "action": "redirect",
+        "vers": {
+          "type": "protocole",
+          "dossier": "protocoles/",
+          "risque": "faible",
+          "auto_valide": true
+        },
+        "condition": "si friction type = protocole"
+      },
+      {
+        "besoin": "Choisir -- cible combo (mini-mission) -> RISQUE FAIBLE",
+        "action": "redirect",
+        "vers": {
+          "type": "combo",
+          "dossier": "super-combos/",
+          "risque": "faible",
+          "auto_valide": true
+        },
+        "condition": "si friction type = combo"
+      },
+      {
+        "besoin": "Choisir -- cible outil (outil manquant/fragile) -> RISQUE FAIBLE",
+        "action": "redirect",
+        "vers": {
+          "type": "outil",
+          "dossier": "super-combos/combos/outils/",
+          "risque": "faible",
+          "auto_valide": true
+        },
+        "condition": "si friction type = outil"
+      },
+      {
+        "besoin": "Choisir -- cible convention -> RISQUE FAIBLE",
+        "action": "redirect",
+        "vers": {
+          "type": "convention",
+          "dossier": "conventions/",
+          "risque": "faible",
+          "auto_valide": true
+        },
+        "condition": "si friction type = convention"
+      },
+      {
+        "besoin": "Choisir -- cible fiche (valeur) -> RISQUE MOYEN",
+        "action": "redirect",
+        "vers": {
+          "type": "fiche",
+          "fichier": "optimus-prime.md",
+          "risque": "moyen",
+          "auto_valide": true,
+          "notify_createur": true
+        },
+        "condition": "si friction type = valeur"
+      },
+      {
+        "besoin": "Choisir -- cible fiche (comportement core) -> RISQUE CRITIQUE",
+        "action": "redirect",
+        "vers": {
+          "type": "fiche",
+          "fichier": "optimus-prime.md",
+          "risque": "critique",
+          "createur_obligatoire": true
+        },
+        "condition": "si friction type = comportement"
+      },
+      {
+        "besoin": "Choisir -- cible regle immuable -> RISQUE CRITIQUE",
+        "action": "redirect",
+        "vers": {
+          "type": "regle",
+          "dossier": "regles-immuables/",
+          "risque": "critique",
+          "createur_obligatoire": true
+        },
+        "condition": "si friction type = regle"
+      },
+      {
+        "besoin": "Modifier petit pas reversible (auto-valide si risque faible)",
+        "action": "procedure",
+        "etapes": [
+          "Relire le fichier cible EN ENTIER (lire-fichier-complet)",
+          "Creer point .bak (horodate)",
+          "UN SEUL changement (corriger OU ajouter OU modifier), ASCII strict",
+          "Valider auto : JSON parser OK + MD lisible + theme test OK (si theme) + hash avant/apres",
+          "Enregistrer en BDD mods (fichier, hash-avant, hash-apres, diff, raison, friction-id, risque, auto_valide=T/F)",
+          "SI risque FAIBLE : AUTO-VALIDER immediatement (deverrouiller, archiver friction valide, lecon BDD)",
+          "SI risque MOYEN : AUTO-VALIDER + notifier createur (resume + diff + preuves)",
+          "SI risque CRITIQUE : ATTENDRE createur (presenter dossier, bloquer jusqu'a VALIDE/ANNULE)"
+        ],
+        "regle": "Ajouter couche, jamais demolir. Point .bak OBLIGATOIRE. Preuves (tests+hash) OBLIGATOIRES. Auto-valide par defaut."
+      },
+      {
+        "besoin": "Modifier -- ajouter case dans theme (auto)",
+        "action": "redirect",
+        "vers": {
+          "type": "outil",
+          "fichier": "super-combos/combos/outils/ajouter-case-theme.py"
+        },
+        "condition": "si modification = ajout case theme"
+      },
+      {
+        "besoin": "Modifier -- ajouter redirect dans theme (auto)",
+        "action": "redirect",
+        "vers": {
+          "type": "outil",
+          "fichier": "super-combos/combos/outils/ajouter-redirect-theme.py"
+        },
+        "condition": "si modification = ajout redirect theme"
+      },
+      {
+        "besoin": "Modifier -- creer nouvel outil (auto)",
+        "action": "redirect",
+        "vers": {
+          "type": "combo",
+          "fichier": "super-combos/combos/outils/outils-readme.md",
+          "case": "creer-outil"
+        },
+        "condition": "si modification = nouvel outil"
+      },
+      {
+        "besoin": "Auto-valider (risque FAIBLE/MOYEN) -- SANS createur",
+        "action": "procedure",
+        "etapes": [
+          "Verifier preuves : tests passes + hash verifies + diff coherent",
+          "Deverrouiller fichier (bdd-modifs deverrouiller)",
+          "Archiver friction : bdd-frictions archiver --id <id> --statut valide",
+          "Consigner lecon auto : bdd-lecons ajouter --lecon \"<regle>\" --agent optimus-prime --categorie auto-evolution --mots-cles auto-valide,friction:<id> --source auto-evolution",
+          "SI risque MOYEN : notifier createur (log BDD + resume mission)"
+        ],
+        "regle": "Auto-validation = decision par defaut. Createur informe a posteriori pour risque moyen. Zero attente."
+      },
+      {
+        "besoin": "Valider avec createur (risque CRITIQUE uniquement)",
+        "action": "procedure",
+        "etapes": [
+          "Presenter dossier complet : friction -> changement (diff) -> preuves (tests+hash) -> evaluation risque",
+          "Createur decide : VALIDE ou ANNULE (son mot fait foi)",
+          "VALIDE : deverrouiller + archiver friction valide + lecon BDD",
+          "ANNULE : revert via .bak + bdd-modifs annuler + archiver friction annule"
+        ],
+        "regle": "Createur UNIQUEMENT pour risque CRITIQUE (regles-immuables, comportement core fiche, suppression). Pour tout le reste : auto-valide."
+      },
+      {
+        "besoin": "Auto-valider -- evolution confirmee",
+        "action": "redirect",
+        "vers": {
+          "type": "bdd",
+          "action": "lecons-ajouter",
+          "source": "auto-evolution",
+          "tags": "auto-valide"
+        },
+        "condition": "si risque = faible OU (risque = moyen ET auto_valide = true)"
+      },
+      {
+        "besoin": "Valider createur -- evolution validee",
+        "action": "redirect",
+        "vers": {
+          "type": "bdd",
+          "action": "lecons-ajouter",
+          "source": "auto-evolution"
+        },
+        "condition": "si risque = critique ET createur = VALIDE"
+      },
+      {
+        "besoin": "Annuler (auto ou createur)",
+        "action": "redirect",
+        "vers": {
+          "type": "outil",
+          "fichier": "super-combos/combos/outils/revert-fichier.py",
+          "parametres": {
+            "depuis_bak": true
+          }
+        },
+        "condition": "si (auto: tests echouent) OU (createur = ANNULE)"
       }
     ]
   },
-  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-persistant" }
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
 }

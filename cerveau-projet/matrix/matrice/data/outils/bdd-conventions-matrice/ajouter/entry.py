@@ -2,8 +2,8 @@
 
 Interface entre main.py et les fonctions simples (ajouter/fonctions.py).
 """
-from commun import charger_bdd, enregistrer_bdd, extraire_options
-from ajouter.fonctions import ajouter_entree, separer_tags
+from commun import charger_bdd, enregistrer_bdd, extraire_options, separer_tags
+from ajouter.fonctions import ajouter_entree
 
 NOMS_OPTIONS = ("convention", "tags", "source")
 

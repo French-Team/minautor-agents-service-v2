@@ -7,6 +7,23 @@ d'encart dans journal-multi-encarts.md, SON fichier est la seule vue.
 """
 
 
+import unicodedata
+
+
+def vers_ascii(texte):
+    """Ramene un texte a l'ASCII : la VUE est un artefact du perimetre ASCII.
+
+    `suivi-optimus.jsonl` peut porter des accents (le detail est du texte libre,
+    et le JSON les echange en `\\uXXXX`). Les recopier tels quels faisait de la
+    VUE le SEUL fichier non-ASCII du depot (mesure 2026-09-14, MO-079 : 1/594),
+    alors qu'elle est generee et jamais editee a la main. La frontiere se pose
+    donc ICI, une fois : un generateur qui ecrit du non-ASCII rend le garde ASCII
+    aveugle a sa propre sortie.
+    """
+    decompose = unicodedata.normalize("NFKD", str(texte))
+    return decompose.encode("ascii", "ignore").decode("ascii")
+
+
 def echapper_pipe(texte):
     """Echappe les barres verticales pour garder le tableau markdown intact."""
     return str(texte).replace("|", "\\|")
@@ -25,7 +42,7 @@ def composer_ligne(evenement):
     if date_complete and " " in date_complete:
         heure = date_complete.split(" ")[1]
         date_complete = date_complete.split(" ")[0]
-    return "| " + " | ".join([
+    return vers_ascii("| " + " | ".join([
         echapper_pipe(heure or "-"),
         echapper_pipe(date_complete or "-"),
         mission,
@@ -33,7 +50,7 @@ def composer_ligne(evenement):
         portes,
         fichiers,
         str(duree),
-    ]) + " |"
+    ]) + " |")
 
 
 def composer_section(action, evenements):
@@ -58,7 +75,43 @@ def composer_section(action, evenements):
     return lignes + [""]
 
 
-def composer_vue(evenements, actions, inbox_evenements=None):
+def lire_attente_pilote(chemin_file):
+    """Retourne les ids des missions en attente/en cours dans la file du pilote."""
+    import json
+    try:
+        with open(str(chemin_file), "r", encoding="utf-8") as flux:
+            file_missions = json.load(flux)
+    except (OSError, ValueError):
+        return []
+    return [m.get("id", "") for m in file_missions.get("missions", [])
+            if m.get("statut") in ("en-attente", "en-cours") and m.get("id")]
+
+
+def lire_attente_journal(chemin_journal):
+    """Retourne les ids mission-creee sans mission-terminee (file Optimus)."""
+    import json
+    try:
+        with open(str(chemin_journal), "r", encoding="utf-8") as flux:
+            lignes = flux.readlines()
+    except OSError:
+        return []
+    crees, terminees = [], set()
+    for ligne in lignes:
+        ligne = ligne.strip()
+        if not ligne:
+            continue
+        try:
+            e = json.loads(ligne)
+        except ValueError:
+            continue
+        if e.get("type") == "mission-creee" and e.get("id"):
+            crees.append(e["id"])
+        elif e.get("type") == "mission-terminee" and e.get("id"):
+            terminees.add(e["id"])
+    return [i for i in crees if i not in terminees]
+
+
+def composer_vue(evenements, actions, attente_pilote=None):
     """Retourne les lignes du fichier markdown (entete + tableau recaps + sections par action).
 
     Ordre ferme des sections : celui des actions (constants.ACTIONS).
@@ -76,19 +129,15 @@ def composer_vue(evenements, actions, inbox_evenements=None):
         if dates:
             derniere_date = max(dates)
 
-    # Missions en attente (dans l'inbox mais pas encore synchronisees).
+    # Missions en attente = file du pilote OPTIMUS (en-attente/en-cours) +
+    # journal OPTIMUS (mission-creee sans terminee). L'inbox n'entre PAS dans
+    # ce compte : elle porte des NOTIFICATIONS (fin-mission, signaler), pas une
+    # file de missions. Correction MO-032 : l'ancien compte lisait l'inbox du
+    # cameleon et presentait des clotures comme des missions "en attente".
     missions_en_attente = []
-    if inbox_evenements:
-        for ev in inbox_evenements:
-            typ = ev.get("type", "")
-            if typ not in ("fin-mission", "retour-lot"):
-                continue
-            mission = ev.get("mission", "")
-            if typ == "retour-lot":
-                lot = ev.get("lot", [])
-                missions_en_attente.extend(lot)
-            elif mission:
-                missions_en_attente.append(mission)
+    for mission_id in (attente_pilote or []):
+        if mission_id not in missions_en_attente:
+            missions_en_attente.append(mission_id)
 
     # Missions finies (dans le suivi-optimus).
     missions_finies = set()

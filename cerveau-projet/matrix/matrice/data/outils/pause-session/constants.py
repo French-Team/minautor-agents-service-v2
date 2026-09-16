@@ -38,6 +38,11 @@ MESSAGE_REPRISE = "Maintenance terminee : ta mission reprend ou elle avait ete l
 NOM_JOURNAL = "pauses-session-matrix.jsonl"
 CHEMIN_JOURNAL = REPERTOIRE_DATA / NOM_JOURNAL
 
+# Porte d'ecriture du classeur-variables (MO-093 : PORTE UNIQUE bdd-variables).
+CHEMIN_OUTIL_BDD_VARIABLES = REPERTOIRE_DATA / "outils" / "bdd-variables"
+RAISON_PERIMETRE = "pause-session perimetre"
+TAGS_PERIMETRE = "cameleon,perimetre"
+
 # Perimetre du cameleon (cle du classeur-variables, zones exclues de SA lecture).
 # Regle matrice-utilise-cameleon : la Matrice seule reduit ce perimetre.
 CLE_PERIMETRE = "perimetre-cameleon"
@@ -65,7 +70,7 @@ NIVEAU_PAUSE_AUTO = 5
 STATUT_EN_COURS = "en-cours"
 ENCODAGE = "utf-8"
 INDENTATION_JSON = 2
-TAILLE_BLOC_LECTURE = 65536
+TAILLE_BLOC_LECTURE = 65536  # lecture seule du classeur (empreinte lecture)
 
 # data/commun (motif unique M-076) : installe le dossier partage dans sys.path.
 _courant = REPERTOIRE_OUTIL

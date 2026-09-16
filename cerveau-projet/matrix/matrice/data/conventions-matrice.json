@@ -5,57 +5,67 @@
   },
   "conventions": [
     {
-      "id": "C-001",
+      "id": "CV-001",
       "date": "2026-09-09 09:29:19",
       "convention": "ARCHITECTURE DES OUTILS : point d'entree main.py (DIRIGER, aucune logique metier) -> dossier categorie entry.py (interface) -> fonctions.py (UNE tache par fonction) ; convention zero-valeur-en-dur : la logique CONSOMME les constantes, ne les contient pas ; gardes structurels dans constants.py",
       "tags": [
         "architecture",
         "outils"
       ],
-      "source": "moule outil-bdd"
+      "source": "moule outil-bdd",
+      "ancien_id": "C-001",
+      "renomme_le": "2026-09-13 11:02:41"
     },
     {
-      "id": "C-002",
+      "id": "CV-002",
       "date": "2026-09-09 09:29:20",
       "convention": "PY_COMPILE AVANT LIVRAISON : tout fichier Python de la Matrice passe py_compile (global ou par fichier) avant toute fin de mission ; un fichier qui ne compile pas n'est pas livre",
       "tags": [
         "qualite",
         "tests"
       ],
-      "source": "M-024 createur"
+      "source": "M-024 createur",
+      "ancien_id": "C-002",
+      "renomme_le": "2026-09-13 11:02:41"
     },
     {
-      "id": "C-003",
+      "id": "CV-003",
       "date": "2026-09-09 09:29:20",
       "convention": "INTEGRITE SHA-256 : toute ecriture deterministe (BDD, classeur, etat) force LF et maintient son fichier empreinte .sha256 ; l'espion-integrite surveille les BDD du registre ; journal jsonl append-only",
       "tags": [
         "integrite",
         "bdd"
       ],
-      "source": "M-002 createur"
+      "source": "M-002 createur",
+      "ancien_id": "C-003",
+      "renomme_le": "2026-09-13 11:02:41"
     },
     {
-      "id": "C-004",
+      "id": "CV-004",
       "date": "2026-09-09 09:29:20",
       "convention": "ASCII STRICT hors base acceptee : les fichiers de la Matrice (code + contrats markdown) restent ASCII ; les caracteres accentues du createur sont acceptes par la base (corriger-ascii signale le reste)",
       "tags": [
         "langue",
         "fichiers"
       ],
-      "source": "M-057 createur"
+      "source": "M-057 createur",
+      "ancien_id": "C-004",
+      "renomme_le": "2026-09-13 11:02:41"
     },
     {
-      "id": "C-005",
+      "id": "CV-005",
       "date": "2026-09-09 09:29:20",
       "convention": "NOTES BDD PAR LA PORTE UNIQUE : chaque fichier touche par une mission est note dans modifications-par-fichier via bdd-modifications ; le sac-a-dos note chaque usage d'outil dans usages-outils-combos ; jamais d'ecriture directe de journal",
       "tags": [
         "tracabilite",
         "bdd"
       ],
-      "source": "M-013 createur"
+      "source": "M-013 createur",
+      "ancien_id": "C-005",
+      "renomme_le": "2026-09-13 11:02:41"
     },
     {
-      "id": "C-006",
+      "id": "CV-006",
       "date": "2026-09-09 20:13:29",
       "convention": "COHERENCE LECTURE CAMELEON : tout contenu que le cameleon est cense lire (fiche, routes, personnalites, lecons, themes, checklist, objectif) est VERIFIE avant validation : AUCUNE mention d'entite interne invisible (nom, domicile, trace, zone exclue). Le cameleon ne connait que la Matrice, la MAINTENANCE et l'user.",
       "tags": [
@@ -64,8 +74,92 @@
         "cameleon",
         "audit"
       ],
-      "source": "correction-philosophie (audit-invisibilite)"
+      "source": "correction-philosophie (audit-invisibilite)",
+      "ancien_id": "C-006",
+      "renomme_le": "2026-09-13 11:02:42"
+    },
+    {
+      "id": "CV-007",
+      "date": "2026-09-13 10:00:10",
+      "convention": "FONDAMENTAUX CHEMIN/LIEN/NOM/FLAG (contrat, imperatif 24) : CHEMIN = ancre sur Path(__file__).resolve().parent, JAMAIS Path('.')/cwd, JAMAIS parents[N] nu (remontee AVEC GARDE de nom jusqu'a un marqueur stable), garde structurelle obligatoire sur tout dossier deduit, motif racine IMPORTE depuis data/commun/racine.py (jamais recopie), tout chemin partage declare en constante dans constants.py, ecriture atomique tmp+replace avec LF et .sha256 ; LIEN = passer par la PORTE officielle ou une constante nommee, jamais un chemin coupe au milieu d'une fonction, dossier a tiret = import direct (L-017), aucun contenu croise entre flux sans porte (L-016) ; NOM = minuscules a tirets (jamais underscore/majuscule), suffixe -optimus pour tout homologue Optimus, UN SEUL nom canonique par chose vivant dans UNE constante, renommer = migrer + archiver l'ancien nom ; FLAG = argparse seulement, flags kebab-case minuscules (--mission-id), valeurs fermees par choices, verbes en sous-commandes, flags obligatoires declares required=True, flags APRES le verbe ; ARBRE = l'agent ne relit pas l'arbre, l'indice (indices.md) pointe et le contrat fait foi. Controle : verifier-contrat-fondamental.py (signale, ne repare jamais).",
+      "tags": [
+        "fondamentaux",
+        "chemin",
+        "lien",
+        "nom",
+        "flag",
+        "contrat",
+        "imperatif-24"
+      ],
+      "source": "MO-042 / docs/IMPERATIF.md ligne 24",
+      "ancien_id": "C-007",
+      "renomme_le": "2026-09-13 11:02:42"
+    },
+    {
+      "id": "CV-008",
+      "date": "2026-09-13 10:46:52",
+      "convention": "NOMMAGE NUMEROTE DES COMBOS ET SUPER-COMBOS (contrat, CV-008) : tout super-combo et tout combo porte TOUJOURS un numero visible dans son nom : super-combo = sc-NNN-<slug>/ (id sc-NNN), combo = c-NNN-<slug>/ (id c-NNN), NNN zero-padde sur 3 chiffres et JAMAIS reutilise (le compteur ne redescend pas, meme apres suppression) ; tout est en MINUSCULES : le C- MAJUSCULE est reserve au champ constat fige de historiques-missions.jsonl (regle CV-009, une famille = un prefixe) ; le prefixe dit la NATURE de l objet (sc- = super-combo, c- = combo) et aucun des deux ne vit plus sous un nom libre ; RANGEMENT (MO-067, 2026-09-13) : le prefixe et l EMPLACEMENT disent desormais la MEME chose -- les sc- vivent dans super-combos/ avec leur lanceur et leur registre, les c- dans super-combos/combos/ avec la boite a outils et leur registre (modele du createur : un super-combo peut contenir des combos, qui contiennent des outils) ; avant cette correction les deux familles cohabitaient dans combos/, si bien que la remorque etiquetait sc-001 et sc-002 en type combo -- le rangement niait le prefixe ; source de verite = UN REGISTRE PAR FAMILLE, pose a cote de ses objets : super-combos/registry.json (section super-combos, compteur sc) et super-combos/combos/registry.json (section combos, compteur c), lus par le lanceur de leur famille pour resoudre un numero ; un objet numerote se reference par son ID (sc-001, c-001) dans les textes et les scripts, jamais par un chemin recopie ; les outils (combos/outils/) ne sont PAS des combos et ne portent AUCUN numero ; creation des combos par la porte creer-combo.py (banque / creer / verifier / lister), lancement des super-combos par super-combos/lancer-super-combos.py --numero <sc-NNN>. Controle : creer-combo.py verifier et creer-combo.py lister -- chaque famille est jugee contre SON registre.",
+      "tags": [
+        "nommage",
+        "combos",
+        "super-combos",
+        "numero",
+        "contrat",
+        "cv-008"
+      ],
+      "source": "MO-045 correction du prefixe (CV- au lieu de C-)",
+      "ancien_id": "C-008",
+      "renomme_le": "2026-09-13 11:02:42",
+      "modifie_le": "2026-09-13 17:08:20"
+    },
+    {
+      "id": "CV-009",
+      "date": "2026-09-13 11:05:14",
+      "convention": "PREFIXES ET IDS : UNE FAMILLE = UN PREFIXE (regle, CV-009) : chaque famille d identifiants de la Matrice possede SON prefixe et deux familles ne partagent JAMAIS un prefixe -- missions cameleon M-, missions Optimus MO-, items d entonnoir du cameleon E-, items d entonnoir d Optimus EO-, lecons L-, themes TH-, constats CT-, conventions CV-, protocoles P-, regles R-, historique H-, items de revue createur N-, objets numerotes sur disque c- / sc- (minuscules). La casse est SIGNIFIANTE : un id vivant s ecrit en MAJUSCULES (MO-043, L-029, CT-001, CV-008) et un objet numerote sur disque en minuscules (c-001 combo, sc-001 super-combo, derives de leur nom de dossier). Methode : AVANT de nommer une nouvelle famille, REJOUER l inventaire reel des prefixes (regex des ids sur les donnees) -- jamais un prefixe choisi de memoire, meme si la famille dort. Le prefixe C- nu est MORT : vestige du lot 2026-09-11, migre en CT- le 2026-09-13. Table detaillee : CV-011. Controle : chaque porte attribue le prefixe depuis son constants.py (PREFIXE_ID) ou son listes.py (PREFIXE_ITEM), jamais recopie. Cas juge le 2026-09-13 (MO-058) : les DEUX entonnoirs (cameleon Flux 1, Optimus Flux 2) emettaient E- avec DEUX compteurs separes -- le meme id designait donc deux items et les plages se recouvraient (E-084..E-089). Meme faute que M- pour une mission d Optimus, corrigee en MO- ; ici l entonnoir du cameleon garde E- (ses ids vivent dans des journaux en AJOUT SEUL, un renommage les ferait mentir) et l entonnoir d Optimus prend EO-. Lecon : une COPIE d un meme outil dans un autre flux cree une famille d ids de plus, elle n herite pas du prefixe de l original.",
+      "tags": [
+        "prefixe",
+        "id",
+        "nomenclature",
+        "contrat",
+        "collision",
+        "conventions",
+        "migration"
+      ],
+      "source": "MO-058 (2026-09-13) : separation des prefixes d entonnoir E- / EO-",
+      "modifie_le": "2026-09-13 14:03:08"
+    },
+    {
+      "id": "CV-010",
+      "date": "2026-09-13 11:05:43",
+      "convention": "UN ID OU UN TEXTE NE SE CHANGE QUE PAR LA PORTE (regle, CV-010) : l identifiant d une entree ne se renomme que par le verbe renommer de sa porte (trace ancien_id + renomme_le), et son texte ne se corrige que par le verbe modifier : JAMAIS dans un editeur de texte. Toute ecriture directe casse l empreinte .sha256 et l espion-integrite la signale (BDD modifiee hors outil). Corollaire : toute porte d une BDD-registre doit offrir renommer ET modifier des le premier jour -- bdd-conventions-matrice ne les avait pas (ajoutes le 2026-09-13, MO-045), ce qui obligeait a editer le JSON a la main ; bdd-modifications n accepte pas d action renomme (son vocabulaire est ferme : cree / modifie / corrige / supprime). Le critere de recette d une porte de BDD est donc : ajouter + renommer + modifier + lire + verifier.",
+      "tags": [
+        "porte",
+        "id",
+        "renommer",
+        "modifier",
+        "integrite",
+        "sha256",
+        "bdd",
+        "recette"
+      ],
+      "source": "MO-045 / lecon du renommage C- -> CV-"
+    },
+    {
+      "id": "CV-011",
+      "date": "2026-09-13 11:12:19",
+      "convention": "TABLE DES PREFIXES EN SERVICE (regle, CV-011) : inventaire REEL verifie le 2026-09-13 sur tous les .json/.jsonl/.md/.py de matrix/ (MO-046), puis REVISE le 2026-09-13 (MO-058) -- M- missions cameleon, E- items d entonnoir du CAMELEON (Flux 1, matrice/pilote/entonnoir-files.json, compteur 89), EO- items d entonnoir d OPTIMUS (Flux 2, _operateur/optimus-prime/pilote/entonnoir-files-optimus.json, compteur 101), MO- missions Optimus, L- lecons (31), TH- themes (26), CV- conventions, CT- constats (17), P- protocoles (3), R- regles (3), H- entrees de historique-bdd (4), N- items numerotes de la revue createur (13), V- variables, c- / sc- combos et super-combos sur disque (minuscules). REVISION MO-058 : la famille des items d entonnoir etait declaree UNE SEULE (E-) alors que DEUX entonnoirs l emettaient, chacun avec son compteur -- les deux plages se recouvraient (E-084..E-089 emis des deux cotes) et un meme id designait deux items differents. Corrige comme pour M- (mission d Optimus renommee MO-) : l entonnoir du cameleon garde E-, l entonnoir d Optimus prend EO- (listes.py PREFIXE_ITEM, jamais recopie), et les deux familles sont desormais surveillees par le controle des prefixes du contrat fondamental. MORTS : C- nu, migre en CT- le 2026-09-13 (32 valeurs du champ constat de historiques-missions.jsonl, chacune gardant sa trace dans constat_legacy). FAUX POSITIFS a ne jamais prendre pour des ids : SHA-256, UTF-8. Regle de nomination : rejouer CET inventaire avant de creer une famille ; un prefixe deja pris est INTERDIT, meme si la famille dort ou est morte ; un prefixe libre se choisit court et mnemotechnique (CT- = constat, CV- = convention, EO- = entonnoir Optimus).",
+      "tags": [
+        "prefixe",
+        "id",
+        "nomenclature",
+        "inventaire",
+        "contrat",
+        "collision",
+        "ct-constat"
+      ],
+      "source": "MO-058 (2026-09-13) : separation des prefixes d entonnoir E- / EO-",
+      "modifie_le": "2026-09-13 14:03:14"
     }
   ],
-  "compteur": 6
+  "compteur": 11
 }

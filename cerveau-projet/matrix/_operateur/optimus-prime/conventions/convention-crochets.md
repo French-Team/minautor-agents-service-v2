@@ -8,7 +8,8 @@ identite:
 # CONVENTION -- LES DEMANDES A CROCHETS
 
 > Source : decision createur du 2026-09-07 (mission M-062), amendee M-080
-> (crochets v3 : [alerte] remplace [alerte=defcon:N], [pause] ajoute). Les
+> (crochets v3 : [alerte] remplace [alerte=defcon:N], [pause] ajoute),
+> puis M-131 ([preparation] ajoute). Les
 > demandes de
 > l'operateur qui commencent par un MOT ENTRE CROCHETS declenchent un
 > traitement officiel. La liste des mots est FERMEE : tout autre mot-crochet
@@ -34,6 +35,8 @@ identite:
 | [alerte] | outil `machine-defcon` | met la Matrice en securite : defcon 5 (mise en pause de la session-matrix, cameleon stoppe, optimus reveille) ; variante detaillee possible `[alerte=defcon:N]` |
 | [pause] | outil `pause-session`, verbe `pause` | ouvre la MAINTENANCE avec optimus (pause manuelle user, hors defcon) : session-matrix en pause, cameleon notifie (raison "maintenance"), reprise par `reprendre` |
 | [bilan] | outil `bilan-periode` | bilan de la derniere heure, des dernieres heures (6 h), des dernieres 24 h, des 3 derniers jours, de la semaine ou du mois |
+| [preparation] | theme `PREPARATION` (`preparation/journal-preparation.md` + `theme-preparation.json`) | ouvre l'espace de DISCUSSION & PREPARATION hors code : inventorier les natifs, dessiner leurs versions ameliorees non configurables, prioriser la serie, attendre GO avant tout CREER-OUTIL |
+| [purification] | theme `PURIFICATION` (`theme-purification.json` + analyse prealable `purification/analyse-nemesis.md`) | ordonne la chaine demande -> audit -> nemesis -> decision -> ajouter : controle et purifie fichiers, BDD, journaux et registres SANS jamais supprimer (archivage ou signalement) ; la case [decision] est obligatoire (purger / reparer / declarer dette) |
 
 ## L'echelle defcon (liste fermee, N de 1 a 5, 5 = le plus grave)
 
@@ -70,6 +73,11 @@ identite:
 
 ## Les indices
 
+- `[purification]` (ajoute 2026-09-14, demande createur) : la chaine est
+  ORDONNEE et la case `[decision]` est BLOQUANTE -- c'est le Nemesis qui l'a
+  imposee (analyse `purification/analyse-nemesis.md`) : une purification qui
+  supprime neutralise les controles qui lisent ce qu'elle retire (L-040),
+  donc elle ARCHIVE ou elle SIGNALE, et elle ne touche a rien sans verdict.
 - Les themes des chains `[question]` (ANALYSE, RECHERCHE, CONTRE-ANALYSE,
   RAPPORT) seront ajoutes au vivier a la premiere demande [question]
   (porte : outil theme-vivier) -- le theme DEFCON existe deja (TH-012).

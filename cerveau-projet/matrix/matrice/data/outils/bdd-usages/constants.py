@@ -34,3 +34,30 @@ else:
 from racine import detecter_racine  # noqa: E402
 
 RACINE = detecter_racine(REPERTOIRE_OUTIL)
+
+# --- CAPACITE DU JOURNAL, DECLAREE PAR SON PROPRIETAIRE (MO-101 / P3) --------
+# Ce journal n'etait borne PAR PERSONNE. Sa capacite vivait chez l'OBSERVATEUR
+# (cockpit, `SEUILS_PERFS["usages_lignes"] = 50000`, sans proprietaire sur
+# disque) alors qu'une rotation PONCTUELLE l'avait ramene a 500 lignes le
+# 15/09 (MO-093 : 69519 evenements archives, 0 perdu). Deux politiques sans
+# lien : un seuil qui ignore la rotation qui le precede ne mesure rien.
+#
+# Desormais la valeur appartient ici -- au proprietaire du journal, qui l'ecrit
+# ET le borne -- et la rotation y est LIEE (commun.borner_si_necessaire).
+#
+# MESURES du 2026-09-15 (sequentielle, machine de l'operateur) :
+#   245 559 octets / 1259 lignes = 195 octets par ligne ;
+#   1259 lignes en 24 h -> ~240 Ko par jour.
+#
+# LA BORNE SE DEDUIT DU PLUS LONG LECTEUR, pas d'un gout : `bilan-periode`
+# accepte `--periode mois` = 30 jours, soit ~38 000 lignes (~7,2 Mo). Une borne
+# qui garderait moins que ce que le plus long lecteur demande casserait ce
+# lecteur en silence -- c'est le piege que la revue redoutait.
+#   -> declencheur 16 Mo (~68 jours) et 40 000 evenements gardes (~30 jours) :
+#      chaque rotation libere ~8 Mo (~34 jours) et laisse TOUJOURS au moins les
+#      30 jours que `--periode mois` reclame.
+SEUIL_OCTETS_JOURNAL = 16 * 1024 * 1024
+EVENEMENTS_GARDES_JOURNAL = 40000
+ESSAIS_ROTATION = 3
+NOM_ARCHIVE_PREFIXE = "usages-outils-combos-archive"
+CHEMIN_RELATIF_JOURNAL = Path("matrice") / "data" / NOM_BDD

@@ -1,0 +1,36 @@
+"""Categorie retiqueter : CORRIGE les tags d'une entree EXISTANTE (MO-122).
+
+Pourquoi cette porte existe (friction 40, mesuree le 2026-09-16) : une
+entree notee avec un tag HORS du vocabulaire declare est INVISIBLE du
+lecteur qui ne lit que ce vocabulaire (la porte de reprise ne retient que
+les entrees portant un tag de session) et la BDD n'offrait AUCUNE facon de
+la reparer -- l'ecriture a la main du JSON etant interdite par le marbre
+(porte unique). Mesure d'origine : 34 entrees sur 51 sans tag de session,
+la derniere entree taguee etant vieille de 19 missions.
+
+Le pilote a recu `retiqueter` en MO-112 pour la meme raison : un fait
+historique se CORRIGE par la porte, avec sa trace, jamais par reecriture
+manuelle. Regle CV-010 : un id ne change que par la porte.
+
+La correction CONSERVE la trace : tags_avant, retiquete_le et
+motif_retiquetage restent dans l'entree. Le TEXTE n'est JAMAIS touche :
+corriger un tag ne reecrit pas un fait.
+"""
+from datetime import datetime
+
+
+def trouver(donnees, identifiant):
+    """Retourne l'entree portant cet id, ou None (jamais d'exception)."""
+    for entree in donnees.get("sessions", []):
+        if entree.get("id") == identifiant:
+            return entree
+    return None
+
+
+def retiqueter_entree(entree, tags, motif):
+    """Corrige les tags d'une entree en CONSERVANT la trace de l'ancien etat."""
+    entree["tags_avant"] = list(entree.get("tags", []))
+    entree["tags"] = list(tags)
+    entree["retiquete_le"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    entree["motif_retiquetage"] = motif
+    return entree

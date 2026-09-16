@@ -1,0 +1,126 @@
+{
+  "combos": [
+    {
+      "id": "c-001",
+      "numero": 1,
+      "slug": "lecons",
+      "nom": "c-001-lecons",
+      "fichier": "c-001-lecons/main.py",
+      "bdd": "lecons",
+      "description": "Lecons gravees (L-XXX) : le pilote peut injecter les dernieres lecons qui concernent la mission, triees par tags.",
+      "usage": "python main.py executer [--tag <tag>]",
+      "verbe": "executer",
+      "verbes": [
+        "executer",
+        "lire",
+        "status"
+      ],
+      "cree_le": "2026-09-13 10:43:41"
+    },
+    {
+      "id": "c-002",
+      "numero": 2,
+      "slug": "variables",
+      "nom": "c-002-variables",
+      "fichier": "c-002-variables/main.py",
+      "bdd": "variables",
+      "description": "Classeur des variables : valeurs vivantes de la Matrice (defcon, perimetre-cameleon, etc.), lues par cle ou par tag.",
+      "usage": "python main.py executer [--tag <tag>]",
+      "verbe": "executer",
+      "verbes": [
+        "executer",
+        "lire",
+        "status"
+      ],
+      "cree_le": "2026-09-13 10:43:41"
+    },
+    {
+      "id": "c-003",
+      "numero": 3,
+      "slug": "historique",
+      "nom": "c-003-historique",
+      "fichier": "c-003-historique/main.py",
+      "bdd": "historique",
+      "description": "Historique des missions : trace append-only des missions finies, filtrable par type, tag ou date.",
+      "usage": "python main.py executer [--tag <tag>]",
+      "verbe": "executer",
+      "verbes": [
+        "executer",
+        "lire",
+        "status"
+      ],
+      "cree_le": "2026-09-13 10:43:41"
+    },
+    {
+      "id": "c-004",
+      "numero": 4,
+      "slug": "modifications",
+      "nom": "c-004-modifications",
+      "fichier": "c-004-modifications/main.py",
+      "bdd": "modifications",
+      "description": "Modifications par fichier + tags : savoir en une lecture ce qui a ete fait sur un fichier (hash avant/apres, raison).",
+      "usage": "python main.py executer [--tag <tag>]",
+      "verbe": "executer",
+      "verbes": [
+        "executer",
+        "lire",
+        "status"
+      ],
+      "cree_le": "2026-09-13 10:43:41"
+    },
+    {
+      "id": "c-005",
+      "numero": 5,
+      "slug": "usages",
+      "nom": "c-005-usages",
+      "fichier": "c-005-usages/main.py",
+      "bdd": "usages",
+      "description": "Utilisation des outils et combos : pistage (code, duree, tokens avant/apres) filtrable par outil ou par tag.",
+      "usage": "python main.py executer [--tag <tag>]",
+      "verbe": "executer",
+      "verbes": [
+        "executer",
+        "lire",
+        "status"
+      ],
+      "cree_le": "2026-09-13 10:43:42"
+    },
+    {
+      "id": "c-006",
+      "numero": 6,
+      "slug": "activites",
+      "nom": "c-006-activites",
+      "fichier": "c-006-activites/main.py",
+      "bdd": "activites",
+      "description": "Activites recentes par section (missions, alertes, passes, decisions), filtrables par tag.",
+      "usage": "python main.py executer [--tag <tag>]",
+      "verbe": "executer",
+      "verbes": [
+        "executer",
+        "lire",
+        "status"
+      ],
+      "cree_le": "2026-09-13 10:43:42"
+    },
+    {
+      "id": "c-007",
+      "numero": 7,
+      "slug": "frictions",
+      "nom": "c-007-frictions",
+      "fichier": "c-007-frictions/main.py",
+      "bdd": "frictions",
+      "description": "BDD des frictions : ce qui se repete et coute du temps, qualifie (type, gravite, frequence) pour cibler les corrections.",
+      "usage": "python main.py executer [--tag <tag>]",
+      "verbe": "executer",
+      "verbes": [
+        "executer",
+        "lire",
+        "status"
+      ],
+      "cree_le": "2026-09-13 10:43:42"
+    }
+  ],
+  "compteurs": {
+    "c": 7
+  }
+}

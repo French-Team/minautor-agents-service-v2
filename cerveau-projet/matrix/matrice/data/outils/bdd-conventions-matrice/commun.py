@@ -65,6 +65,16 @@ def lire_empreinte():
     return CHEMIN_EMPREINTE.read_text(encoding=ENCODAGE).strip()
 
 
+def separer_tags(chaine_tags):
+    """Transforme "a, b" en ["a", "b"] (chaine vide -> liste vide).
+
+    Fonction PARTAGEE (ajouter + modifier) : une seule verite sur le format.
+    """
+    if not chaine_tags:
+        return []
+    return [morceau.strip() for morceau in chaine_tags.split(",") if morceau.strip()]
+
+
 def extraire_options(arguments, noms_connus):
     """Extrait les options --nom valeur d'une liste d'arguments (forme seulement)."""
     options = {}

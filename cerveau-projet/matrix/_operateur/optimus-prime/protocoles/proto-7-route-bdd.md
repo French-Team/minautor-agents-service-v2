@@ -21,7 +21,7 @@ identite:
    (structure + empreinte). On ne modifie jamais ce qu'on n'a pas lu.
 3. **Ecrire UNIQUEMENT par l'outil dedie** : verbe ferme (ajouter / definir /
    noter / deposer...), tags OBLIGATOIRES (refus code 2 sinon), source
-   tracee (mission M-XXX). L'outil garantit : ecriture atomique (tmp +
+   tracee (mission MO-XXX). L'outil garantit : ecriture atomique (tmp +
    remplacement), fins de ligne LF, empreinte SHA-256 recalculee a cote.
 4. **Verifier apres** : verbe `verifier` de l'outil (structure + empreinte
    reelle vs etalon), puis l'espion-integrite confirme au prochain tour.

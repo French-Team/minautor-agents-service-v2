@@ -1,0 +1,338 @@
+{
+  "historique": [
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T06:15:02.945764"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T06:15:36.274174"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-13T06:16:39.551521"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "M-TEST",
+        "theme": "TEST",
+        "debut": "2026-09-13T06:15:36.189541",
+        "statut": "terminee",
+        "fin": "2026-09-13T06:16:39.552006",
+        "bilan": "Test termine avec succes"
+      },
+      "timestamp": "2026-09-13T06:16:39.552012"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T06:28:41.973369"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-13T06:29:15.825829"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "M-TEST",
+        "theme": "TEST",
+        "debut": "2026-09-13T06:28:41.892142",
+        "statut": "terminee",
+        "fin": "2026-09-13T06:29:15.826314",
+        "bilan": "Test termine"
+      },
+      "timestamp": "2026-09-13T06:29:15.826322"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T07:40:26.125533"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T07:53:57.426462"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T08:45:46.067621"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T08:55:47.275940"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T09:11:25.462661"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T09:16:13.509978"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T09:18:17.950587"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T09:19:09.928217"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T09:26:49.074654"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T09:30:01.750953"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T09:37:58.859441"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T10:19:35.363596"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T11:53:32.763646"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T11:58:24.551035"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-13T11:58:24.762721"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-051",
+        "theme": "REPARATION",
+        "debut": "2026-09-13T11:58:24.474044",
+        "statut": "terminee",
+        "fin": "2026-09-13T11:58:24.763290",
+        "bilan": "Questionnaire du profil repare et prouve (deplace, chemin par le motif, sans ecrasement) - MO-051"
+      },
+      "timestamp": "2026-09-13T11:58:24.763296"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T14:51:21.567287"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T16:54:11.719645"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T16:57:37.596669"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T17:17:39.915014"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T17:17:40.259373"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T17:33:34.819277"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T17:44:08.688352"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T17:45:05.913007"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T17:47:53.274547"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T18:01:07.196159"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T18:11:22.825134"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T20:04:05.785480"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T20:04:13.288899"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T20:10:58.569631"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T20:22:00.328043"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T20:43:51.646495"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-14T08:28:00.133360"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-14T08:51:18.887643"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-14T10:00:04.072941"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-14T21:33:33.390997"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-14T21:33:37.788089"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-14T21:44:26.743312"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-14T21:45:47.605118"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T08:17:24.576637"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T09:19:15.338364"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T09:35:54.657568"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T19:07:14.734850"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-15T19:10:08.253149"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T19:11:18.949719"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T19:15:34.356514"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T19:21:01.614379"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T19:24:04.147075"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T19:28:31.957716"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T19:35:14.344308"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T21:17:44.491300"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T21:29:39.735025"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T21:29:39.735003",
+      "source": "dernier injection (etat archive)"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-16T06:58:28.943546"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-16T07:09:41.130687"
+    }
+  ],
+  "archive_le": "2026-09-16 07:09:41",
+  "origine": "cycle-state.json archive par MO-110 (EO-119) le 2026-09-15 : l ETAT disparait, l HISTORIQUE est conserve"
+}

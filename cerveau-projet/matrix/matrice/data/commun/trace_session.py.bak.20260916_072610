@@ -1,0 +1,28 @@
+"""Moteur PARTAGE : le vocabulaire de la trace de session (MO-121).
+
+Un contrat ECRIT/LU se declare a UN domicile (L-029) : les composants qui
+ECRIVENT la trace et celui qui la LIT importent CE module, ils ne recopient
+pas son vocabulaire. Mesure du 2026-09-16 (friction 41) : le pilote notait
+`travail` quand la porte de reprise ne lisait que `session-*` -- deux
+moities du meme chantier (MO-092), deux vocabulaires, 19 missions couvertes
+par le silence (la porte repondait une session PERIMEE comme si c'etait la
+verite).
+"""
+
+# Evenements FERMES de la trace de session (tags de la BDD sessions).
+TAG_SESSION_OUVERTE = "session-ouverte"
+TAG_SESSION_FERMEE = "session-fermee"
+TAG_TRAVAIL = "travail"
+
+# Etats rendus par le moteur de lecture data/commun/derniere_session.py.
+ETAT_OUVERTE = "ouverte"
+ETAT_FERMEE = "fermee"
+ETAT_AUCUNE = "aucune"
+
+# Format STABLE de la porte `bdd-sessions etat` : celui qui AFFICHE et celui
+# qui LIT passent par CETTE constante -- deux marqueurs qui divergent, c'est
+# exactement le trou que ce module ferme.
+MARQUEUR_ETAT = "SESSION : "
+
+# Marqueur du garde de retard affiche par `bdd-sessions resume --derniere`.
+MARQUEUR_RETARD = "RETARD DE TRACE : "

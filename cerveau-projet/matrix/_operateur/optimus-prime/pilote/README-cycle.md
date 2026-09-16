@@ -1,0 +1,128 @@
+---
+identite:
+  type: readme
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# Gestionnaires de Cycle de Vie
+
+## Description
+
+Les gestionnaires de cycle orchestrent les injections automatiques au bon moment. Ils gerent le cycle de vie complet des agents (Optimus et Cameleon).
+
+> **Emplacement (2026-09-13)** : le cycle vit DANS la porte qu'il sert,
+> `injection/cycle.py`. Il n'y a plus de `cycle.py` a la racine du pilote, et
+> plus aucune insertion dans `sys.path` : la porte l'importe en nom qualifie
+> (`from injection.cycle import CycleOptimus`). Le chemin NORMAL reste la porte
+> (`python3 main.py injecter`, `main.py mission --action ...`) ; le CLI direct
+> ci-dessous sert aux essais et au diagnostic (a lancer depuis le dossier `pilote/`).
+
+## Optimus Prime
+
+### Emplacement
+`matrix/_operateur/optimus-prime/pilote/injection/cycle.py`
+
+### Utilisation
+
+#### Demarrer le cycle
+```bash
+python3 injection/cycle.py demarrer
+```
+Injecte automatiquement :
+- Fiche d'identite
+- Theme de reprise
+- Protocole de reprise
+
+#### Debut de mission
+```bash
+python3 injection/cycle.py mission --action debut --id "MO-001" --theme "AUTO-EVOLUTION"
+```
+Injecte automatiquement :
+- Regles absolues
+- Theme actif
+- Liste des outils
+- Garde du perimetre
+- Garde du flux 2
+
+#### Pendant la mission
+```bash
+python3 injection/cycle.py mission --action pendant
+```
+Injecte automatiquement :
+- Suivi-optimus
+- BDD des modifications
+
+#### Fin de mission
+```bash
+python3 injection/cycle.py mission --action fin --bilan "Mission terminee"
+```
+Injecte automatiquement :
+- Protocole de fin de mission
+- Metriques
+
+#### Statut
+```bash
+python3 injection/cycle.py statut
+```
+
+## Cameleon
+
+### Emplacement
+`matrix/matrice/pilote/injection/cycle.py`
+
+### Utilisation
+
+Meme principe que pour Optimus :
+```bash
+python3 injection/cycle.py demarrer
+python3 injection/cycle.py mission --action debut --id "M-002" --theme "COMMUNICATION"
+python3 injection/cycle.py mission --action pendant
+python3 injection/cycle.py mission --action fin --bilan "Mission terminee"
+python3 injection/cycle.py statut
+```
+
+## Etat du cycle
+
+Il n'y a PLUS d'etat de cycle : `cycle-state.json` a disparu des DEUX flux.
+
+- **Flux 2 (Optimus)** : supprime le 2026-09-15 par MO-110 (EO-119).
+- **Flux 1 (Cameleon)** : supprime le 2026-09-15 par MO-118 -- son etat annoncait
+  `phase: mission` et une mission `M-CAM` "en cours" depuis le 2026-09-13, alors
+  que la file du cameleon ne portait AUCUNE mission et qu'aucun journal ne
+  connaissait cet id. Une copie de la file, gelee deux jours, que l'operateur lit
+  en premier.
+
+A la place :
+
+- la **PHASE est DEDUITE de la file** de missions (`statut`) : `mission` si la
+  file porte une mission en cours, `pret` sinon. La file est la seule source ;
+- l'**HISTORIQUE vit dans `cycle-historique-archive.json`** (un par flux), EN
+  AJOUT SEUL, sans troncature -- l'ancien etat ne gardait que ses 100 dernieres
+  entrees et les perdait en silence ;
+- une mission que la file ne connait pas ne peut plus naitre : le cameleon REFUSE
+  la declaration d'un debut dont l'id n'est pas la mission en cours de la file
+  (c'est ainsi que l'id fantome `M-CAM` etait ne) ;
+- `demarrer` n'efface plus rien : il DIT ce que la file porte.
+
+Ou vit l'historique :
+
+| Flux | Archive |
+|---|---|
+| Optimus (Flux 2) | `matrix/_operateur/optimus-prime/pilote/cycle-historique-archive.json` |
+| Cameleon (Flux 1) | `matrix/matrice/pilote/cycle-historique-archive.json` |
+
+## Integration avec le pilote
+
+Les gestionnaires peuvent etre appeles par le pilote pour automatiser les injections :
+- Au demarrage de la session
+- Au debut de chaque mission
+- Pendant la mission (sur demande)
+- A la fin de la mission
+
+## Avantages
+
+1. **Automatisation** : Les injections sont appelees au bon moment
+2. **Centralisation** : Un seul endroit pour gerer le cycle
+3. **Historique** : Tracabilite complete des injections
+4. **Flexibilite** : Peut etre utilise manuellement ou automatiquement

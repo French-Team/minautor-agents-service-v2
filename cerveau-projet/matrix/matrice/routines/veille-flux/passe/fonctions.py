@@ -7,6 +7,7 @@ from commun import (
     extraire_fichiers_python_en_erreur,
     lancer_combo,
     lancer_py_compile,
+    relativiser,
     sortie_en_crash,
 )
 from constants import (
@@ -48,21 +49,35 @@ def passer_py_compile():
 
     Un fichier vient peut-etre d'etre sauvegarde a l'instant : si la re-test
     passe, l'echec etait transitoire (pas de fausse alerte).
+    MO-035 : symetrie avec passer_corriger_ascii -- un OSError de lancement
+    devient une DETECTION. C'est l'absence de cette garde qui a laisse la passe
+    mourir en silence (aucun passe-fin) pendant 11 heures.
     """
-    code, sortie = lancer_py_compile()
+    try:
+        code, sortie = lancer_py_compile()
+    except OSError as erreur:
+        return [{"etat": "incident-py-compile", "cible": "py_compile", "detail": str(erreur)}]
     if code == 0:
         return []
     fichiers = extraire_fichiers_python_en_erreur(sortie)
     time.sleep(PAUSE_REPRISE_SECONDES)
-    code, sortie = lancer_py_compile(fichiers or None)
+    try:
+        code, sortie = lancer_py_compile(fichiers or None)
+    except OSError as erreur:
+        return [{"etat": "incident-py-compile", "cible": "py_compile", "detail": str(erreur)}]
     if code == 0:
         return []
     if sortie_en_crash(sortie):
         return [{"etat": "incident-combo", "cible": "py_compile", "detail": "crash du sous-processus (signature de crash)"}]
     if not fichiers:
         return [{"etat": "python-compile", "cible": "py_compile", "detail": sortie[:200]}]
+    # PORTABILITE : on PERSISTE la cible RELATIVE (matrix/...) et non le chemin
+    # absolu cite par py_compile. Ce chemin part dans la signature anti-spam ET
+    # dans le theme de la mission de reparation : en absolu, un projet deplace
+    # rendrait la signature fausse et la mission sans objet.
     return [
-        {"etat": "python-compile", "cible": fichier, "detail": "ne compile pas (confirme apres re-test)"}
+        {"etat": "python-compile", "cible": relativiser(fichier),
+         "detail": "ne compile pas (confirme apres re-test)"}
         for fichier in fichiers
     ]
 

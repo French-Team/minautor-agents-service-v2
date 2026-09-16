@@ -3,19 +3,23 @@
 Une seule tache chacune (convention-architecture-outils).
 """
 try:
-    from listes import MOTS_CLES_TYPES, URGENCE_DEFAUT
+    from listes import MOTS_CLES_TYPES, PREFIXE_ITEM, URGENCE_DEFAUT
     from mots import mot_parcourt, mots_de
     from stockage import horodater
 except ImportError:  # importe comme paquet (depuis le pilote) : chemins complets
-    from entonnoir.listes import MOTS_CLES_TYPES, URGENCE_DEFAUT
+    from entonnoir.listes import MOTS_CLES_TYPES, PREFIXE_ITEM, URGENCE_DEFAUT
     from entonnoir.mots import mot_parcourt, mots_de
     from entonnoir.stockage import horodater
 
 
 def deposer_vrac(etat, theme, objectif, urgence, source):
-    """Depose UNE mission brute au vrac (echelon 0) et retourne son identifiant E-XXX."""
+    """Depose UNE mission brute au vrac (echelon 0) et retourne son identifiant E-XXX.
+
+    Le prefixe vient de listes.py PREFIXE_ITEM (CV-009 : chaque porte attribue
+    le prefixe depuis ses constantes, jamais recopie).
+    """
     etat["compteur"] = etat.get("compteur", 0) + 1
-    identifiant = "E-" + str(etat["compteur"]).zfill(3)
+    identifiant = PREFIXE_ITEM + str(etat["compteur"]).zfill(3)
     etat.setdefault("vrac", []).append(
         {
             "id": identifiant,

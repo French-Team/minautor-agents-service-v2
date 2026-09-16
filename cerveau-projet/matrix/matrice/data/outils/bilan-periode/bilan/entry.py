@@ -3,11 +3,11 @@ from bilan.fonctions import (
     afficher_bilan,
     collecter_activites,
     collecter_defcon,
-    collecter_missions,
+    collecter_missions_par_source,
     collecter_usages,
 )
 from commun import analyser_periode, borne_periode
-from constants import CHEMIN_ACTIVITES, CHEMIN_DEFCON, CHEMIN_HISTORIQUES, CHEMIN_USAGES
+from constants import CHEMINS_HISTORIQUES, CHEMIN_ACTIVITES, CHEMIN_DEFCON, CHEMIN_USAGES
 
 
 def executer(arguments):
@@ -28,7 +28,8 @@ def executer(arguments):
         return 2
 
     borne = borne_periode(heures)
-    missions = collecter_missions(CHEMIN_HISTORIQUES, borne)
+    # TOUS les AVAL de missions (cameleon + optimus) : voir SOURCES_HISTORIQUES.
+    missions = collecter_missions_par_source(CHEMINS_HISTORIQUES, borne)
     usages = collecter_usages(CHEMIN_USAGES, borne)
     activites = collecter_activites(CHEMIN_ACTIVITES, borne)
     transitions = collecter_defcon(CHEMIN_DEFCON, borne)
