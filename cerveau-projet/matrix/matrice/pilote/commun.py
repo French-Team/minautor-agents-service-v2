@@ -16,6 +16,7 @@ from constants import (
     CHEMIN_ETAT_PAUSE,
     CHEMIN_FILE,
     CHEMIN_HISTORIQUE,
+    CHEMIN_PORTE_JOURNAL,
     CHEMIN_THEMES,
     CLE_DEFCON,
     ENCODAGE,
@@ -23,11 +24,19 @@ from constants import (
     NIVEAU_DEFCON_MAX,
     NOM_ENTONNOIR,
     NOM_FILE,
+    NOM_README_ZONE_TMP,
+    NOM_ZONE_TMP,
     PREFIXE_ID,
+    REPERTOIRE_ZONE_TMP,
     STATUT_EN_ATTENTE,
     STATUT_EN_COURS,
     THEME_DEFCON,
 )
+
+# Moteur PARTAGE des zones jetables (M-076 : data/commun est installe dans
+# sys.path par constants.py). Les DEUX pilotes purgent leur zone par ce code :
+# deux copies divergeraient, et l'une des deux zones resterait pleine (MO-136).
+from zone_tmp import vider as vider_zone_tmp  # noqa: E402
 
 
 def horodater():
@@ -252,6 +261,85 @@ def journaliser_mission(entree):
     CHEMIN_HISTORIQUE.parent.mkdir(parents=True, exist_ok=True)
     with open(CHEMIN_HISTORIQUE, "a", encoding=ENCODAGE, newline="\n") as flux:
         flux.write(json.dumps(entree, ensure_ascii=True) + "\n")
+
+
+def rafraichir_vue_journal():
+    """Regenere la VUE du journal du cameleon a l'injection et a la cloture (MO-136).
+
+    Mirroir de `rafraichir_vue_suivi` du pilote Optimus : la vue est une
+    PROJECTION derivee des BDD (l'outil `journal-multi-encarts` la reconstruit),
+    donc la rafraichir ne cree JAMAIS de doublon -- contrairement a une entree de
+    journal, qui reste un acte de l'agent. Sans cet appel, la vue restait figee
+    sur la derniere construction manuelle : mesure du 2026-09-16, aucun appelant
+    de `construire` du cote du flux 1.
+
+    Le NOM de la vue n'est PAS recopie ici : c'est l'outil qui le connait et qui
+    le DIT (sa sortie est reprise telle quelle). Une deuxieme maison pour ce nom
+    serait une copie de plus (zero-valeur-en-dur, L-029).
+
+    NON bloquant : l'echec de la vue ne tue JAMAIS une mission (on alerte).
+    Retourne (code, message) -- le message est imprime par l'appelant.
+    """
+    if not CHEMIN_PORTE_JOURNAL.is_file():
+        return 1, "porte de la vue introuvable : " + str(CHEMIN_PORTE_JOURNAL)
+    try:
+        resultat = subprocess.run(
+            [sys.executable, str(CHEMIN_PORTE_JOURNAL), "construire"],
+            capture_output=True, timeout=30,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+    except (subprocess.TimeoutExpired, OSError) as erreur:
+        return 1, "vue du journal non regeneree (" + str(erreur) + ")"
+    if resultat.returncode != 0:
+        erreur = resultat.stderr.decode(ENCODAGE, errors="replace")
+        return 1, ("vue du journal en echec (code " + str(resultat.returncode) + ") : "
+                   + erreur.strip()[:160])
+    lignes = resultat.stdout.decode(ENCODAGE, errors="replace").strip().splitlines()
+    return 0, (lignes[0] if lignes else "vue du journal regeneree")
+
+
+def purger_zone_temporaire(mission):
+    """Vide la zone jetable du cameleon et TRACE la suppression (MO-136).
+
+    Meme acte que le pilote Optimus, meme MOTEUR partage
+    (`data/commun/zone_tmp.py`) et meme moment : a la cloture, quand la mission
+    est finie et que le travail de la zone n'a plus rien a y faire. La regle
+    immuable `perimetre-tmp`, point 4, l'exigeait deja ("le CONTENU est vide en
+    fin de mission ; sa suppression se TRACE, jamais silencieuse") -- mais elle
+    en faisait une DISCIPLINE D'AGENT, et le garde tmp reconnait lui-meme qu'il ne
+    peut PAS la verifier : une discipline qu'aucun instrument ne mesure depend de
+    la memoire.
+
+    Ici la trace va dans SON journal : une ligne datee nommant la zone et ce qui a
+    disparu -- une preuve citee puis supprimee sans trace laisserait une citation
+    pointant vers du vide. Le README reste : la zone est permanente (point 3).
+
+    NON bloquant : l'echec de la purge ne tue JAMAIS une mission (on alerte).
+    Retourne (code, message) -- le message est imprime par l'appelant.
+    """
+    try:
+        supprimes, echecs = vider_zone_tmp(REPERTOIRE_ZONE_TMP, NOM_README_ZONE_TMP)
+    except ValueError as erreur:
+        print("ALERTE purge : " + str(erreur))
+        return 1, "purge refusee"
+    if echecs:
+        print("ALERTE purge : " + str(len(echecs)) + " element(s) NON supprime(s) dans "
+              + NOM_ZONE_TMP + " : " + ", ".join(echecs[:8]))
+    if not supprimes:
+        return 0, "zone " + NOM_ZONE_TMP + " deja vide (rien a tracer)."
+    journaliser_mission({
+        "type": "purge-zone-tmp",
+        "date": horodater(),
+        "id": mission.get("id", ""),
+        "theme": mission.get("theme", ""),
+        "zone": NOM_ZONE_TMP,
+        "supprimes": len(supprimes),
+        "fichiers": supprimes[:12],
+        "detail": ("zone " + NOM_ZONE_TMP + " videe a la cloture par le pilote : "
+                   + str(len(supprimes)) + " element(s) supprime(s)."),
+    })
+    return 0, ("zone " + NOM_ZONE_TMP + " videe : " + str(len(supprimes))
+               + " element(s) supprime(s), trace au journal.")
 
 
 def charger_entonnoir_pilote():

@@ -1,0 +1,1186 @@
+"""Fonctions communes du pilote : file de missions, intercom, historique, chaine (lot).
+
+Chaque fonction fait UNE chose (convention-architecture-outils).
+"""
+import json
+import os
+import subprocess
+import sys
+from datetime import datetime
+
+from constants import (
+    BOITE_MATRICE_IN,
+    BOITE_PILOTE_OUT,
+    CHAMP_ROLE_ITEM,
+    CHAMP_TITRE_MISSION,
+    CHEMIN_CLASSEUR_VARIABLES,
+    CHEMIN_ENTONNOIR,
+    CHEMIN_ETAT_PAUSE,
+    CHEMIN_FILE,
+    CHEMIN_HISTORIQUE,
+    CHEMIN_MARBRE,
+    CHEMIN_MODIFICATIONS,
+    CHEMIN_PORTE_SESSIONS,
+    CHEMIN_SUPER_COMBO_SUIVI,
+    CHEMIN_THEMES,
+    CLE_DEFCON,
+    DELAI_ENTRETIEN_SUIVI,
+    ENCODAGE,
+    FENETRE_MENTION_DETAIL,
+    INDENTATION_JSON,
+    NIVEAU_DEFCON_MAX,
+    NOM_ENTONNOIR,
+    NOM_FILE,
+    NOM_MARBRE,
+    NOM_MODIFICATIONS,
+    NOM_README_ZONE_TMP,
+    NOM_ZONE_TMP,
+    PREFIXE_ID,
+    REPERTOIRE_DATA,
+    REPERTOIRE_INTERCOM,
+    REPERTOIRE_MATRIX,
+    REPERTOIRE_THEMES_PRIVES,
+    REPERTOIRE_ZONE_TMP,
+    STATUT_EN_ATTENTE,
+    STATUT_EN_COURS,
+    STATUT_TERMINEE,
+    THEME_DEFCON,
+    VERBE_ENTRETIEN_SUIVI,
+)
+
+# Moteurs partages (M-076) : data/commun est installe dans sys.path par
+# constants.py. Le VOCABULAIRE de la trace de session y vit : celui qui
+# ECRIT et celui qui LIT importent le MEME module (friction 41, L-093).
+from trace_session import ETAT_OUVERTE, MARQUEUR_ETAT, TAG_SESSION_OUVERTE  # noqa: E402
+from zone_tmp import vider as vider_zone_tmp  # noqa: E402
+
+
+def horodater():
+    """Retourne la date-heure locale au format des journaux."""
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+def _lister_themes_prives():
+    """Retourne les noms de themes prives Optimus (dossier _operateur/parcours/themes/)."""
+    if not REPERTOIRE_THEMES_PRIVES.is_dir():
+        return []
+    noms = []
+    for p in REPERTOIRE_THEMES_PRIVES.glob("theme-*.json"):
+        try:
+            with open(p, "r", encoding=ENCODAGE) as flux:
+                donnees = json.load(flux)
+            nom = donnees.get("theme", {}).get("nom", "") or donnees.get("identite", {}).get("nom", "")
+            if nom:
+                noms.append(nom)
+        except (json.JSONDecodeError, OSError):
+            continue
+    return noms
+
+
+def charger_themes_autorises():
+    """Retourne les noms de themes autorises : vivier partage + themes prives Optimus (dedupliques).
+
+    Doctrine lecons_utiles : jamais bloquant. La fermeture du champ ne
+    s'applique que si le registre est lisible ET non vide (degradation
+    signalee sinon : le theme passe mais l'ECART est crie).
+    Le pilote Optimus voit les deux : le vivier (Flux 1, partage) pour
+    maintenir la Matrice & le cameleon, et ses themes prives (_operateur).
+    """
+    Themes_vivier = []
+    if CHEMIN_THEMES.exists():
+        try:
+            with open(CHEMIN_THEMES, "r", encoding=ENCODAGE) as flux:
+                donnees = json.load(flux)
+            themes = donnees.get("themes", []) if isinstance(donnees, dict) else []
+            Themes_vivier = [t.get("nom", "") for t in themes if t.get("nom", "")]
+        except (json.JSONDecodeError, OSError):
+            Themes_vivier = []
+    Themes_prives = _lister_themes_prives()
+    # Fusion dedup case-insensitive, ordre : vivier d'abord puis prives non deja presents
+    vus = {n.lower() for n in Themes_vivier}
+    result = list(Themes_vivier)
+    for n in Themes_prives:
+        if n.lower() not in vus:
+            result.append(n)
+            vus.add(n.lower())
+    return result
+
+
+def item_du_vivier(nom):
+    """Retourne l'ITEM du vivier portant ce nom (dict), ou None.
+
+    UNE SEULE lecture du vivier dans tout le flux (M-042) : cette fonction est la
+    porte des items, comme `valider_theme` est celle du champ ferme. La
+    correspondance est casse-ignoree et sur espaces normalises (meme regle que la
+    porte du champ) ; un nom vide ou absent rend None -- jamais un item invente.
+    """
+    nom = " ".join((nom or "").split()).lower()
+    if not nom or not CHEMIN_THEMES.exists():
+        return None
+    try:
+        with open(CHEMIN_THEMES, "r", encoding=ENCODAGE) as flux:
+            donnees = json.load(flux)
+    except (json.JSONDecodeError, OSError):
+        return None
+    themes = donnees.get("themes", []) if isinstance(donnees, dict) else []
+    for item in themes:
+        if isinstance(item, dict) and " ".join(str(item.get("nom", "")).split()).lower() == nom:
+            return item
+    return None
+
+
+def valider_theme(theme):
+    """Porte du champ theme FERME : refuse un theme hors vivier (code 2 + liste).
+
+    Correspondance casse-ignoree sur la forme canonique du vivier ; le theme
+    reconnu est renvoye sous SA forme canonique (canonisation a la porte).
+    Vivier absent/illisible/vide -> degradation : accepte mais ECART affiche
+    (la fermeture ne doit jamais bloquer une reparation du vivier lui-meme).
+    Retourne (code, theme_renvoye).
+    """
+    theme = " ".join(theme.split())
+    themes_autorises = charger_themes_autorises()
+    if not themes_autorises:
+        print("ECART : vivier-themes.json absent, illisible ou vide -- theme accepte SANS verification (a reparer).")
+        return 0, theme
+    for nom in themes_autorises:
+        if nom.lower() == theme.lower():
+            return 0, nom
+    print("REFUS : theme " + repr(theme) + " hors vivier (champ ferme).")
+    print("Themes disponibles : " + ", ".join(themes_autorises))
+    print("(pour l'ajouter au vivier d'abord : outil theme-vivier, verbe ajouter)")
+    return 2, theme
+
+
+def defcon_bloque_theme(theme):
+    """Garde mise en securite : a defcon 5, seul le theme DEFCON reste injectable.
+
+    Lecture seule du classeur-variables (variable tenue par machine-defcon),
+    JAMAIS bloquant si illisible ou absente (une panne de lecture n'est pas
+    une mise en securite ; l'espion attrapera la panne). Retourne (code, message).
+    """
+    if not CHEMIN_CLASSEUR_VARIABLES.exists():
+        return 0, ""
+    try:
+        with open(CHEMIN_CLASSEUR_VARIABLES, "r", encoding=ENCODAGE) as flux:
+            donnees = json.load(flux)
+    except (json.JSONDecodeError, OSError):
+        return 0, ""
+    for variable in donnees.get("variables", ()):
+        if variable.get("cle") != CLE_DEFCON:
+            continue
+        try:
+            niveau = int(variable.get("valeur"))
+        except (TypeError, ValueError):
+            return 0, ""
+        if niveau == NIVEAU_DEFCON_MAX and theme != THEME_DEFCON:
+            return 1, (
+                "REFUS defcon 5 : mise en securite totale -- seules les missions "
+                "themees DEFCON restent injectables (maintenance reveillee)."
+            )
+        return 0, ""
+    return 0, ""
+
+
+def session_en_pause():
+    """Garde protocole de pause (M-080) : True si l'etat serialise existe.
+
+    L'etat est pose par l'outil pause-session (data/session-matrix-etat.json)
+    au moment de la pause, supprime a la reprise. Lecture seule, jamais
+    bloquante : fichier absent = session active.
+    """
+    return CHEMIN_ETAT_PAUSE.exists()
+
+
+def charger_file():
+    """Retourne la file des missions, ou une file vide si elle n'existe pas."""
+    if not CHEMIN_FILE.exists():
+        return {"missions": [], "compteur": 0, "lot": None}
+    with open(CHEMIN_FILE, "r", encoding=ENCODAGE) as flux:
+        return json.load(flux)
+
+
+def enregistrer_file(file_missions):
+    """Ecrit la file de facon atomique (tmp + remplacement, LF forces)."""
+    chemin_tmp = CHEMIN_FILE.with_name(NOM_FILE + ".tmp")
+    with open(chemin_tmp, "w", encoding=ENCODAGE, newline="\n") as flux:
+        json.dump(file_missions, flux, indent=INDENTATION_JSON, ensure_ascii=True)
+        flux.write("\n")
+    os.replace(chemin_tmp, CHEMIN_FILE)
+
+
+PLAFOND_MISSIONS_ACTIVES = 50
+
+
+def archiver_anciennes_missions(file_missions):
+    """Archive les missions terminees au-dela du plafond (50 max en actif).
+
+    Les missions archivees sont DEPLACEES dans file-missions-optimus-archive.json.
+    Garde MO-091 (2026-09-14) : le DEPLACEMENT est complet, sinon la memoire dit
+    une chose et le disque en dit une autre.
+    (1) La file ACTIVE est persistee ICI (tmp + remplacement atomique, LF) --
+    muter la liste en memoire ne suffit pas (preuve : 68 terminees restees sur
+    disque, l'archivage par la porte fin n'ayant pas tourne).
+    (2) DEDUP par id : un id deja present dans l'archive n'y rentre JAMAIS deux
+    fois (premier evenement fait foi, L-040 transpose) et QUITTE l'actif --
+    un id vit soit en actif, soit en archive, jamais les deux (preuve :
+    42 entrees pour 28 ids, 14 jumeaux, MO-023..MO-028 dans les deux fichiers).
+    (3) IDEMPOTENT : rejouer n'ecrit rien (retourne 0).
+    Retourne le nombre de missions archivees.
+    """
+    missions = file_missions.get("missions", [])
+    terminees = [m for m in missions if m.get("statut") == STATUT_TERMINEE]
+    autres = [m for m in missions if m.get("statut") != STATUT_TERMINEE]
+
+    if len(terminees) <= PLAFOND_MISSIONS_ACTIVES:
+        return 0
+
+    a_garder = terminees[-PLAFOND_MISSIONS_ACTIVES:]
+    candidats = terminees[:-PLAFOND_MISSIONS_ACTIVES]
+
+    chemin_archive = CHEMIN_FILE.with_name(NOM_FILE.replace(".json", "") + "-archive.json")
+    if chemin_archive.exists():
+        with open(chemin_archive, "r", encoding=ENCODAGE) as flux:
+            archive_data = json.load(flux)
+    else:
+        archive_data = {"missions": []}
+
+    deja_archivees = {m.get("id") for m in archive_data.get("missions", [])}
+    a_archiver = [m for m in candidats if m.get("id") not in deja_archivees]
+    # Invariant complet : un id deja archive est EVICTE de l'actif ou qu'il y
+    # traine (double presence a reparer), pas seulement s'il est candidat.
+    ids_sortants = {m.get("id") for m in candidats} | deja_archivees
+
+    if a_archiver:
+        archive_data["missions"].extend(a_archiver)
+        archive_data["archive_le"] = horodater()
+
+        chemin_tmp = chemin_archive.with_name(chemin_archive.name + ".tmp")
+        with open(chemin_tmp, "w", encoding=ENCODAGE, newline="\n") as flux:
+            json.dump(archive_data, flux, indent=INDENTATION_JSON, ensure_ascii=True)
+            flux.write("\n")
+        os.replace(chemin_tmp, chemin_archive)
+
+    # Tous les ids sortants QUITTENT l'actif : nouveaux candidats (vers
+    # l'archive) + deja-archivees (double presence a reparer).
+    file_missions["missions"] = [m for m in missions if m.get("id") not in ids_sortants]
+    if a_archiver or len(ids_sortants) > len(candidats):
+        enregistrer_file(file_missions)
+    return len(a_archiver)
+
+
+def ids_en_lot(file_missions):
+    """Retourne la liste des ids du lot actif (liste vide si pas de lot)."""
+    lot = file_missions.get("lot")
+    if not lot:
+        return []
+    return list(lot.get("ids", []))
+
+
+def portee_lot(file_missions):
+    """Retourne (ids_du_lot, position_k, total_n) pour la mission EN COURS.
+
+    Serie stricte : au maximum une mission en cours ; si elle fait partie du
+    lot actif, sa position est k dans le lot (k commence a 1).
+    Retourne (None, 0, 0) si pas de lot ou mission hors lot.
+    """
+    ids = ids_en_lot(file_missions)
+    if not ids:
+        return (None, 0, 0)
+    en_cours = mission_en_cours(file_missions)
+    if en_cours is None or en_cours["id"] not in ids:
+        return (None, 0, 0)
+    return (ids, ids.index(en_cours["id"]) + 1, len(ids))
+
+
+def prochaine_en_attente(file_missions):
+    """Retourne la premiere mission en attente (ordre de chargement), ou None."""
+    for mission in file_missions.get("missions", []):
+        if mission.get("statut") == STATUT_EN_ATTENTE:
+            return mission
+    return None
+
+
+def prochaine_du_lot(file_missions):
+    """Retourne la premiere mission du lot encore en attente, ou None."""
+    ids = ids_en_lot(file_missions)
+    for mission in file_missions.get("missions", []):
+        if mission.get("id") in ids and mission.get("statut") == STATUT_EN_ATTENTE:
+            return mission
+    return None
+
+
+def mission_en_cours(file_missions):
+    """Retourne la mission en cours, ou None (serie stricte : au maximum une)."""
+    for mission in file_missions.get("missions", []):
+        if mission.get("statut") == STATUT_EN_COURS:
+            return mission
+    return None
+
+
+# Nombre minimal de chiffres d'un identifiant (MO-001, pas MO-1).
+LONGUEUR_MIN_NUMERO = 3
+
+
+def numero_id(identifiant):
+    """Numero d'un identifiant MO-NNN, ou None si la forme ne s'y prete pas.
+
+    Domicile UNIQUE (L-029) : cette fonction vivait dans `file/fonctions.py`
+    alors que PREFIXE_ID et prochain_id vivent ici -- deux modules qui parlent du
+    meme identifiant finissent toujours par en parler differemment.
+    """
+    if not identifiant.startswith(PREFIXE_ID):
+        return None
+    reste = identifiant[len(PREFIXE_ID):]
+    if not reste.isdigit() or len(reste) < LONGUEUR_MIN_NUMERO:
+        return None
+    return int(reste)
+
+
+def haut_numero_du_marbre():
+    """Plus haut numero de mission DEJA VU au marbre -- 0 si le marbre est illisible (EO-121).
+
+    Le marbre est la MEMOIRE des identifiants utilises. Une mission menee HORS
+    file (ses bornes ecrites au marbre avant d'etre enregistree -- geste legitime,
+    MO-105 a MO-115) reserve un numero que la file seule ignore : mesure du
+    2026-09-15, le marbre portait MO-108 et `charger` a voulu attribuer MO-108 a
+    une NOUVELLE mission (deux missions pour un identifiant).
+
+    Tolerance : marbre absent ou ligne illisible -> 0, JAMAIS une exception (une
+    charge ne doit pas echouer parce qu'un journal est en cours d'ecriture). Mais
+    on ne se TAIT pas (L-037) : un marbre illisible est SIGNALE.
+
+    Les identifiants d'un AUTRE flux (M- du cameleon) ne sont pas des numeros de
+    mission du pilote : numero_id les rend None, ils sont donc ignores -- c'est
+    voulu, pas un oubli.
+    """
+    plus_haut = 0
+    try:
+        with open(CHEMIN_MARBRE, "r", encoding=ENCODAGE) as flux:
+            for ligne in flux:
+                ligne = ligne.strip()
+                if not ligne:
+                    continue
+                try:
+                    evenement = json.loads(ligne)
+                except ValueError:
+                    continue
+                numero = numero_id(str(evenement.get("mission", "")))
+                if numero is not None and numero > plus_haut:
+                    plus_haut = numero
+    except OSError:
+        print("ALERTE marbre : " + str(CHEMIN_MARBRE) + " illisible -- l'id distribue ne"
+              " consulte PAS les identifiants deja utilises (risque de collision).")
+        return 0
+    return plus_haut
+
+
+def prochain_id(file_missions):
+    """Calcule l'identifiant de la prochaine mission Optimus (MO-001).
+
+    Le compteur de la FILE ne suffit pas (EO-121) : il ignore les identifiants
+    deja utilises par des missions menees HORS file. Le prochain id est donc le
+    plus haut des DEUX (file et marbre), plus un : jamais un numero deja vu.
+    """
+    plus_haut = max(int(file_missions["compteur"]), haut_numero_du_marbre())
+    file_missions["compteur"] = plus_haut + 1
+    return PREFIXE_ID + str(file_missions["compteur"]).zfill(3)
+
+
+def annoncer(type_message, mission, extra=None):
+    """Depose l'annonce DEBUT/FIN d'une mission dans la boite du pilote."""
+    message = {"type": type_message, "date": horodater(), "mission": mission["id"], "theme": mission["theme"]}
+    if extra:
+        message.update(extra)
+    deposer_message(BOITE_PILOTE_OUT, message)
+
+
+def annoncer_debut(file_missions, mission):
+    """Annonce le DEBUT d'une mission, avec sa position dans le lot si place."""
+    ids, k, total = portee_lot(file_missions)
+    extra = {"position": str(k) + "/" + str(total)} if ids else None
+    annoncer("debut-mission", mission, extra)
+    suffixe = " (round " + str(k) + "/" + str(total) + ")" if ids else ""
+    print("DEBUT mission " + mission["id"] + " -- " + mission["theme"] + suffixe)
+
+
+def annoncer_fin(file_missions, mission, portee=None):
+    """Annonce la FIN d'une mission, avec sa position dans le lot si place.
+
+    `portee` : la position (ids, k, total) calculee AVANT que la mission ne soit
+    marquee terminee. Indispensable : la cloture bascule le statut en `terminee`
+    avant d'annoncer, et `portee_lot` exige une mission `en-cours` -- sans cette
+    portee, la FIN ne dit plus son round, alors que la FIN est l'evenement qui
+    fait avancer la chaine (MO-102 : constat sur l'intercom reel, DEBUT 1/3 et
+    2/3 annonces, FIN muette).
+    """
+    ids, k, total = portee if portee else portee_lot(file_missions)
+    extra = {"position": str(k) + "/" + str(total)} if ids else None
+    annoncer("fin-mission", mission, extra)
+    suffixe = " (round " + str(k) + "/" + str(total) + ")" if ids else ""
+    print("FIN mission " + mission["id"] + " -- " + mission["theme"] + suffixe)
+
+
+def armer_lot(file_missions, ids):
+    """Arme le lot : la chaine d'enchainement ne couvrira que ces ids (ordre du lot).
+
+    Le lot ne porte QUE ses ids : la position courante se LIT sur la mission en
+    cours (`portee_lot`), elle n'est pas recopiee ici. L'ancien champ
+    `position`, ecrit a 0 a l'armement et jamais mis a jour, annoncait
+    `position: 0` alors que le lot etait au round 3/3 -- une valeur qui mentait
+    (MO-102).
+    """
+    file_missions["lot"] = {"ids": ids}
+
+
+def lot_termine(file_missions):
+    """Retourne True si le lot est arme et qu'aucune de ses missions n'est en attente."""
+    ids = ids_en_lot(file_missions)
+    return bool(ids) and prochaine_du_lot(file_missions) is None
+
+
+def bilan_consolide(file_missions):
+    """Assemble le bilan consolide du lot depuis l'historique des missions."""
+    ids = ids_en_lot(file_missions)
+    morceaux = []
+    for mission in file_missions.get("missions", []):
+        if mission.get("id") in ids:
+            morceaux.append(mission["id"] + " [" + mission["theme"] + "] " + mission.get("bilan", "(sans bilan)"))
+    return " | ".join(morceaux)
+
+
+def deposer_message(chemin_boite, message):
+    """Depose UN message dans une boite intercom (jsonl en ajout seul)."""
+    chemin_boite.parent.mkdir(parents=True, exist_ok=True)
+    with open(chemin_boite, "a", encoding=ENCODAGE, newline="\n") as flux:
+        flux.write(json.dumps(message, ensure_ascii=True) + "\n")
+
+
+def journaliser_mission(entree):
+    """Ajoute UNE ligne a l'historique des missions (jsonl en ajout seul)."""
+    CHEMIN_HISTORIQUE.parent.mkdir(parents=True, exist_ok=True)
+    with open(CHEMIN_HISTORIQUE, "a", encoding=ENCODAGE, newline="\n") as flux:
+        flux.write(json.dumps(entree, ensure_ascii=True) + "\n")
+
+
+def noter_journal(mission, theme, action, detail, duree_s="0", si_absent=False,
+                  fichiers=None, portes=None):
+    """Note UN evenement au journal suivi-optimus PAR SA PORTE (jamais a la main).
+
+    Marbre L-020 : le pilote ne note RIEN tout seul -- la declaration d'un
+    debut/fin reste un acte de l'AGENT, par la porte `noter`. Cette fonction est
+    l'appel EXPLICITE de cette porte par un verbe qui en a BESOIN (MO-054).
+
+    `si_absent=True` (MO-108) : la porte n'ecrit QUE si l'evenement manque pour
+    cette mission. C'est ce qui permet au pilote de declarer une BORNE sans
+    jamais doubler (le doublon MO-030 venait d'un appel automatique sans garde).
+
+    Cas reel : `enregistrer` inscrit dans la file une mission terminee menee
+    HORS file. La file disait "terminee" mais le journal n'en savait rien, donc
+    le controle de coherence file <-> journal (MO-048) criait un ECART a chaque
+    enregistrement -- et l'agent devait y penser. Un verbe qui ecrit la file
+    doit ecrire les DEUX traces, sinon il fabrique un ecart en silence.
+
+    `fichiers` / `portes` (MO-139) : la porte `noter` accepte ces deux listes
+    depuis sa naissance, mais cet appel ne les transmettait pas. Mesure du
+    2026-09-16 : les colonnes Fichiers et Portes de suivi-optimus.md etaient
+    vides pour tout ce que le pilote notait lui-meme -- la vue lisait bien la
+    trace, c'est la trace qui ne savait rien. Les deux listes sont jointes par
+    des virgules (forme attendue par la porte, `separer_liste`).
+
+    Retourne (code, sortie). L'appelant decide si l'echec est bloquant.
+    """
+    commande = [
+        sys.executable,
+        str(REPERTOIRE_DATA / "outils" / "suivi-optimus" / "main.py"),
+        "noter",
+        "--mission", mission,
+        "--theme", theme,
+        "--action", action,
+        "--detail", detail,
+        "--duree-s", str(duree_s),
+    ]
+    if fichiers:
+        commande += ["--fichiers", ",".join(str(fichier) for fichier in fichiers)]
+    if portes:
+        commande += ["--portes", ",".join(str(porte) for porte in portes)]
+    if si_absent:
+        commande += ["--si-absent", "oui"]
+    try:
+        resultat = subprocess.run(
+            commande, capture_output=True, timeout=15,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+    except (subprocess.TimeoutExpired, OSError) as erreur:
+        return 1, "porte noter injoignable : " + str(erreur)
+    sortie = (resultat.stdout or resultat.stderr).decode(ENCODAGE, errors="replace").strip()
+    return resultat.returncode, sortie
+
+
+def resume_mission(mission, limite=200):
+    """Retourne `THEME : objet de la mission` -- ce qu'une borne doit DIRE.
+
+    Mesure du 2026-09-16 (MO-139) : les debuts notes par le pilote portaient le
+    seul texte "debut declare par le pilote (injection)", sans l'objet de la
+    mission. La vue alignait donc 25 lignes "Debut implicite" identiques, et son
+    lecteur ne pouvait pas savoir de quoi chaque mission parlait -- alors que le
+    titre et l'objectif sont DANS la file du pilote. Un champ absent est
+    simplement omis (jamais un texte invente).
+    """
+    theme = str(mission.get("theme", "") or "")
+    objet = str(mission.get("titre") or mission.get("objectif") or "")
+    resume = (theme + (" : " + objet if objet else "")).strip(" :")
+    return (resume or "(sans objet declare)")[:limite]
+
+
+def charger_domicile_modifications():
+    """Charge le DOMICILE des modifications (la BDD indexee par FICHIER), ou None.
+
+    UN SEUL chargement pour tout le flux (EO-133) : la derivation d'une mission
+    relit le domicile, et le RATTRAPAGE le relit pour CHAQUE mission du journal --
+    sur une BDD de 646 Ko et 128 missions, charger une fois par mission serait paye
+    128 fois pour le meme resultat.
+
+    Illisible -> None, JAMAIS une exception (une charge ne doit pas echouer parce
+    qu'une BDD est en cours d'ecriture), et l'appelant le DIT : c'est lui qui sait
+    QUELLE mission sera muette (L-037 -- un silence n'est pas une reponse).
+    """
+    try:
+        with open(CHEMIN_MODIFICATIONS, "r", encoding=ENCODAGE) as flux:
+            return json.load(flux)
+    except (OSError, ValueError):
+        return None
+
+
+def fichiers_de_la_mission(mission_id, donnees=None):
+    """Retourne les FICHIERS touches par une mission, LUS dans leur domicile.
+
+    Mesure du 2026-09-16 (MO-139) : les colonnes `Fichiers` de suivi-optimus.md
+    etaient VIDES -- non parce que la vue ne les lisait pas, mais parce que
+    personne ne les ecrivait. La porte `noter` accepte `--fichiers` depuis sa
+    naissance ; cet appel ne le transmettait pas.
+
+    Plutot que de demander a l'agent de les declarer (sa memoire est precisement
+    ce que le pilote remplace), le pilote les DERIVE du domicile : la BDD des
+    modifications est indexee par FICHIER, chaque modification portant son detail
+    et ses tags.
+
+    Mesure du meme jour : la discipline de TAGGAGE est inegale -- 0 tag pour
+    MO-136 et MO-132 alors que le texte de leur detail nomme la mission (10 et 4
+    fichiers retrouves). Les deux voies sont donc lues (tag, ou mention en TETE
+    du detail) ; le jour ou le taggage sera tenu, la premiere suffira.
+
+    La mention est lue en TETE, et pas n'importe ou : une mention d'EXEMPLE vit
+    loin dans le texte. Mesure du 2026-09-16 -- `MO-999`, identifiant de cobaye
+    cite dans un detail qui recopie une commande, sortait 1 fichier en recherche
+    libre et 0 avec la fenetre FENETRE_MENTION_DETAIL, laquelle conserve les 10
+    fichiers de MO-136 et les 4 de MO-132. Une derivation qui fabrique un faux
+    fichier MENT dans la trace.
+
+    NON bloquant (une BDD illisible ne tue JAMAIS une mission) mais SIGNALE :
+    quand la liste revient vide, la vue ne peut rien montrer -- le lecteur doit
+    le savoir plutot que de croire qu'aucun fichier n'a ete touche.
+
+    `donnees` (EO-133) : le domicile DEJA CHARGE peut etre transmis. Le rattrapage
+    parcourt toutes les missions du journal : il charge donc UNE fois et interroge
+    la MEME lecture, au lieu de relire 646 Ko par mission. La REGLE de derivation,
+    elle, reste ecrite ICI et nulle part ailleurs (L-029, un seul domicile).
+    """
+    if not mission_id:
+        return []
+    try:
+        with open(CHEMIN_MODIFICATIONS, "r", encoding=ENCODAGE) as flux:
+            donnees = json.load(flux)
+    except (OSError, ValueError):
+        print("ALERTE trace : " + NOM_MODIFICATIONS + " illisible -- les fichiers de "
+              + mission_id + " ne seront pas notes (la trace sera muette sur ses fichiers).")
+        return []
+    fichiers = []
+    for chemin, contenu in (donnees.get("fichiers", {}) or {}).items():
+        for modification in (contenu.get("modifications", []) or []):
+            tags = [str(tag) for tag in (modification.get("tags", []) or [])]
+            detail = str(modification.get("detail", ""))
+            if mission_id in tags or mission_id in detail[:FENETRE_MENTION_DETAIL]:
+                fichiers.append(chemin)
+                break
+    return fichiers
+
+
+def lire_bilan(options, cle="bilan", cle_fichier="bilan-fichier"):
+    """Le bilan de cloture, ecrit OU LU DANS UN FICHIER (EO-132, friction 70/71).
+
+    POURQUOI un chemin par FICHIER : tout argument de ligne de commande traverse
+    le SHELL avant d'atteindre cette porte. Or un accent grave, dans un argument,
+    n'est pas du texte : le shell l'EXECUTE et remplace ce qu'il encadre par du
+    vide -- le recit conserve garde alors des TROUS. Mesure reelle : DEUX
+    occurrences (bilan de MO-142, notes de MO-143), apres qu'une premiere friction
+    (70) avait ete declaree PONCTUELLE ; la 71 la declare RECURRENTE, et c'est
+    elle qui a remonte ce correctif en urgence BLOQUANTE.
+
+    Le DEFAUT reste le texte direct : ce chemin n'est pas une obligation, c'est la
+    sortie de secours des recits longs -- et il evite une classe entiere d'accidents
+    de citation plutot que de demander a l'agent de ne pas se tromper.
+
+    Rend (code, bilan, message) : code 2 quand les DEUX formes sont donnees (une
+    seule est possible) ou quand le fichier est illisible -- l'appelant imprime le
+    message et s'arrete, comme pour tout refus de porte.
+    """
+    texte_direct = (options.get(cle) or "").strip()
+    chemin = (options.get(cle_fichier) or "").strip()
+    if texte_direct and chemin:
+        return 2, "", ("--" + cle + " et --" + cle_fichier
+                       + " sont exclusifs : donne l'un OU l'autre.")
+    if chemin:
+        try:
+            with open(chemin, "r", encoding=ENCODAGE) as flux:
+                return 0, flux.read().strip(), ""
+        except OSError as erreur:
+            return 2, "", "--" + cle_fichier + " illisible : " + str(erreur)
+    return 0, texte_direct, ""
+
+
+def crier_mission_muette(mission, fichiers):
+    """Crie quand une mission close ne dit RIEN de ce qu'elle a touche (EO-130).
+
+    Friction 69, mesure du 2026-09-16 : MO-135 et MO-138, livrees le matin meme,
+    avaient 0 modification tracee quand MO-136 en avait 10. La vue affichait donc
+    une colonne `Fichiers` VIDE -- et une colonne vide se lit "aucun fichier
+    touche", c'est-a-dire N'IMPORTE QUOI. Le defaut n'est pas l'absence de
+    donnees : c'est l'absence de CRI.
+
+    Le constat est ecrit AU MARBRE (action `decouverte`, section qui existe deja) :
+    une alerte qui ne vit que sur la console se perd dans le tuyau -- c'est la
+    lecon de la friction 68, apprise le meme jour.
+
+    NON bloquant : une mission sans fichier est parfois LEGITIME (une mesure, un
+    audit en lecture seule) -- mais elle doit le DIRE, jamais le laisser croire.
+    Retourne (code, message) : code 1 quand la trace est muette (le message est
+    alors NON vide, l'appelant l'imprime) ; (0, "") quand tout va bien.
+    """
+    identifiant = mission.get("id", "")
+    if fichiers or not identifiant:
+        return 0, ""
+    detail = ("TRACE MUETTE (EO-130) : la mission " + identifiant + " est close sans "
+              "AUCUNE modification tracee -- la colonne `Fichiers` de la vue sera VIDE, "
+              "et une colonne vide se lit 'aucun fichier touche'. Deux causes : soit "
+              "rien n'a ete touche (mission de MESURE -- le dire alors dans le bilan), "
+              "soit les modifications n'ont pas ete notees (porte bdd-modifications).")
+    noter_journal(identifiant, mission.get("theme", "") or THEME_DEFCON,
+                  "decouverte", detail)
+    return 1, ("ALERTE trace muette : " + identifiant + " est close SANS modification "
+               "tracee -- le constat est ecrit au marbre (action decouverte).")
+
+
+def declarer_borne_marbre(mission, action, detail, fichiers=None):
+    """Faire DECLARER au pilote les BORNES d'une mission (debut/fin) -- MO-108.
+
+    Mesure du 2026-09-15 : MO-105 et MO-106 ont ete closes SANS fin au marbre --
+    la declaration reposait sur la MEMOIRE de l'agent (L-020 : "le pilote ne note
+    RIEN") donc elle dependait de son oubli. Un appel automatique avait deja ete
+    retire par le passe parce qu'il fabriquait un 2e debut et un 2e fin (MO-030,
+    doublon attrape par `verifier`) : la parade n'est donc PAS d'ecrire AVEC le
+    risque de doubler, c'est d'ecrire IDEMPOTENT. La porte est appelee en mode
+    `--si-absent oui` : elle n'ecrit que si l'evenement manque. Le pilote COMBLE
+    le trou, ne double jamais, et l'agent garde le droit de declarer sa reprise
+    (2 debuts / 2 fins legitimes pour une mission menee en deux sessions).
+
+    NON bloquant : l'echec de la trace ne tue JAMAIS une mission (on alerte).
+    """
+    code, sortie = noter_journal(
+        mission.get("id", ""),
+        mission.get("theme", "") or THEME_DEFCON,
+        action,
+        detail,
+        si_absent=True,
+        fichiers=fichiers,
+    )
+    if code != 0:
+        print("ALERTE marbre : " + action + " " + mission.get("id", "?")
+              + " non note (" + sortie[:120] + ").")
+    return code
+
+
+def noter_session(evenement, detail, mission=""):
+    """Note UN evenement dans la BDD sessions PAR SA PORTE (MO-092).
+
+    La BDD sessions (data/sessions.json, outil bdd-sessions) est la trace
+    PERSISTANTE du travail d'Optimus entre sessions LLM : le createur a
+    demande (2026-09-14) que la session precedente soit RECUPERABLE -- les
+    journaux en ajout seul disent qui a travaille, pas CE QUI a ete fait.
+    Evenements (tags fermes) : session-ouverte, travail, session-fermee.
+
+    Appel par la PORTE (jamais une ecriture directe du JSON). NON bloquant
+    (comme noter_journal) : l'echec de la trace de session ne tue JAMAIS une
+    mission ; l'espion d'integrite surveille la BDD.
+    Retourne (code, sortie).
+    """
+    commande = [
+        sys.executable,
+        str(CHEMIN_PORTE_SESSIONS),
+        "ajouter",
+        "--session", detail,
+        "--tags", evenement,
+        "--source", mission or "pilote",
+    ]
+    try:
+        resultat = subprocess.run(
+            commande, capture_output=True, timeout=15,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+    except (subprocess.TimeoutExpired, OSError) as erreur:
+        return 1, "porte bdd-sessions injoignable : " + str(erreur)
+    sortie = (resultat.stdout or resultat.stderr).decode(ENCODAGE, errors="replace").strip()
+    return resultat.returncode, sortie
+
+
+def lire_etat_session():
+    """L'ETAT de session, LU par sa porte (lecture bornee, MO-121).
+
+    Une seule question, une seule reponse : le pilote doit SAVOIR s'il ouvre
+    une session ou s'il la double. Le vocabulaire du format est PARTAGE
+    (data/commun/trace_session.py) : celui qui AFFICHE et celui qui LIT
+    consomment la meme constante, ils ne la recopient pas (friction 41).
+    Retourne (code, etat) -- non bloquant.
+    """
+    commande = [sys.executable, str(CHEMIN_PORTE_SESSIONS), "etat"]
+    try:
+        resultat = subprocess.run(
+            commande, capture_output=True, timeout=15,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+            env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+        )
+    except (subprocess.TimeoutExpired, OSError) as erreur:
+        return 1, "porte bdd-sessions injoignable : " + str(erreur)
+    sortie = (resultat.stdout or resultat.stderr).decode(ENCODAGE, errors="replace")
+    sortie = sortie.encode("ascii", errors="ignore").decode("ascii").strip()
+    if resultat.returncode != 0 or MARQUEUR_ETAT not in sortie:
+        return 1, "etat de session illisible : " + sortie[:120]
+    return 0, sortie.split(MARQUEUR_ETAT, 1)[1].strip().splitlines()[0].strip()
+
+
+def ouvrir_session():
+    """OUVRE la session courante dans la BDD sessions (porte unique, MO-121).
+
+    ECRIT : la porte `ajouter` accepte le tag `session-ouverte` depuis MO-092,
+    mais AUCUN appelant ne le posait -- la trace automatique du pilote (tag
+    `travail`) restait invisible de la reprise, qui ne lit que les tags de
+    session (friction 41). Le pilote OUVRE donc la session au demarrage du
+    cycle, et JAMAIS deux fois : l'etat est LU par la porte AVANT toute
+    ecriture (une ouverture deja posee n'est pas doublee).
+
+    La FERMETURE reste un acte de l'agent (proto-1 ETAPE 5) : un demarrage ne
+    peut pas prouver qu'une session est finie.
+    Retourne (code, sortie) -- non bloquant (comme noter_session).
+    """
+    code, etat = lire_etat_session()
+    if code != 0:
+        return code, etat
+    if etat == ETAT_OUVERTE:
+        return 0, "session deja ouverte : rien a doubler."
+    return noter_session(
+        TAG_SESSION_OUVERTE,
+        "Session OUVERTE au demarrage du cycle (pilote, MO-121).",
+        mission="",
+    )
+
+
+def rafraichir_vue_suivi():
+    """Regenere la VUE `suivi-optimus.md` au debut et a la fin de mission.
+
+    DISTINCTION CAPITALE (bug du 2026-09-13, corrige ici) :
+      - NOTER une entree dans le journal = un acte de l'AGENT (marbre L-020 :
+        "le pilote ne note RIEN pour toi"). C'est OPTIMUS qui declare son
+        debut/fin via la porte `noter` ; l'appel automatique d'autrefois
+        creait un 2e debut/fin (doublon attrape en MO-030). Un verbe peut en
+        revanche appeler la porte EXPLICITEMENT quand il en a besoin : c'est le
+        role de `noter_journal` (MO-054, verbe `enregistrer`).
+      - RAFRAICHIR la vue = une PROJECTION derivee du journal (Markdown
+        regenere depuis data/suivi-optimus.jsonl). Ce n'est PAS une entree :
+        aucun doublon possible. Sans cet appel, la vue restait figee sur la
+        derniere regeneration manuelle (constat : "derniere mise a jour 9:30"
+        alors qu'Optimus travaillait encore a 9:41).
+    Codes retour : 0=OK, 1=erreur (JAMAIS bloquante pour la mission).
+    """
+    cmd = [
+        sys.executable,
+        str(REPERTOIRE_DATA / "outils" / "suivi-optimus" / "main.py"),
+        "vue",
+    ]
+    try:
+        result = subprocess.run(
+            cmd, capture_output=True, timeout=15,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+        if result.returncode != 0:
+            stderr = result.stderr.decode(ENCODAGE, errors="replace")
+            print("[vue suivi-optimus] code " + str(result.returncode))
+            if stderr:
+                print("  " + stderr[:200])
+            return 1
+        return 0
+    except (subprocess.TimeoutExpired, OSError) as e:
+        print("[vue suivi-optimus] erreur " + str(e))
+        return 1
+
+
+def entretenir_suivi():
+    """Entretient la trace par le super-combo sc-003 (coherence + vue) -- MO-139.
+
+    Demande createur (2026-09-16) : "un super-combos-auto-xxx pour le travail du
+    pilote et les mises a jours du fichier de suivi". Avant, le pilote appelait la
+    SEULE porte `vue` : l'ecart entre la file du pilote et le journal n'etait
+    regarde que si quelqu'un y pensait -- une discipline d'agent, donc une affaire
+    de memoire, et une memoire ca s'oublie.
+
+    Le pilote lance la passe LEGERE (`rapide` = coherence + vue) : la cloture d'une
+    mission n'est pas la passe d'entretien lourde (`verifier` relit la BDD et son
+    empreinte, `executer` reste a la main du createur).
+
+    JAMAIS bloquant, et il le DIT : super-combo injoignable ou qui REFUSE (code 2)
+    -> repli sur la porte `vue` seule, donc la trace reste a jour meme si
+    l'entretien echoue. Un code 1 (un ECART est crie) n'est PAS une panne : il est
+    RELAYE tel quel -- c'est un fait a reparer, pas un incident technique.
+    """
+    commande = [sys.executable, str(CHEMIN_SUPER_COMBO_SUIVI), VERBE_ENTRETIEN_SUIVI]
+    try:
+        resultat = subprocess.run(
+            commande, capture_output=True, timeout=DELAI_ENTRETIEN_SUIVI,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+    except (subprocess.TimeoutExpired, OSError) as erreur:
+        print("[entretien suivi] super-combo injoignable (" + str(erreur)
+              + ") : repli sur la porte vue.")
+        return rafraichir_vue_suivi()
+    if resultat.returncode == 2:
+        print("[entretien suivi] le super-combo REFUSE (code 2) : repli sur la porte vue.")
+        return rafraichir_vue_suivi()
+    sortie = (resultat.stdout or b"").decode(ENCODAGE, errors="replace")
+    for ligne in sortie.strip().splitlines():
+        print("  " + ligne)
+    return resultat.returncode
+
+
+def annoncer_reprise():
+    """Annonce la DERNIERE session a la reprise (demande createur, MO-092).
+
+    Le pilote guide l'agent : au demarrage du cycle, il lit la BDD sessions
+    PAR SA PORTE (lecture bornee --derniere, moteur partage) et imprime le
+    resume de la session precedente -- ce qui a ete fait, ce qui reste, avec
+    l'etat BIEN VISIBLE si la session precedente n'a jamais ete fermee.
+    Lecture seule, NON bloquant : l'absence ou l'echec de la trace ne doit
+    jamais empecher un demarrage (il n'y a rien a reprendre a la premiere
+    session) ; le parcours de reprise relit lui-meme la trace ensuite.
+    Retourne (code, sortie) -- l'appelant imprime la sortie.
+    """
+    commande = [
+        sys.executable,
+        str(CHEMIN_PORTE_SESSIONS),
+        "resume", "--derniere",
+    ]
+    try:
+        resultat = subprocess.run(
+            commande, capture_output=True, timeout=15,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+            env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+        )
+    except (subprocess.TimeoutExpired, OSError) as erreur:
+        return 1, "porte bdd-sessions injoignable : " + str(erreur)
+    # Le contenu est force en ASCII pur A L'ECRITURE (porte ajouter), mais la
+    # lecture console Windows (charmap) peut quand meme mourir sur un caractere
+    # hors de sa table -- l'annonce de reprise ne doit JAMAIS dependre du codec
+    # console. Double ceinture : enfant en UTF-8 force + sortie assainie ici.
+    brut = (resultat.stdout or resultat.stderr).decode(ENCODAGE, errors="replace")
+    sortie = brut.encode("ascii", errors="ignore").decode("ascii").strip()
+    return resultat.returncode, sortie
+
+
+def charger_entonnoir_pilote():
+    """Retourne l'etat de l'entonnoir (echelon 4 : le brin), ou l'etat initial."""
+    if not CHEMIN_ENTONNOIR.exists():
+        return {"vrac": [], "files": {}, "compteur": 0}
+    with open(CHEMIN_ENTONNOIR, "r", encoding=ENCODAGE) as flux:
+        return json.load(flux)
+
+
+def enregistrer_entonnoir_pilote(etat):
+    """Ecrit l'etat de l'entonnoir de facon atomique (tmp + remplacement, LF forces)."""
+    chemin_tmp = CHEMIN_ENTONNOIR.with_name(NOM_ENTONNOIR + ".tmp")
+    with open(chemin_tmp, "w", encoding=ENCODAGE, newline="\n") as flux:
+        json.dump(etat, flux, indent=INDENTATION_JSON, ensure_ascii=True)
+        flux.write("\n")
+    os.replace(chemin_tmp, CHEMIN_ENTONNOIR)
+
+
+def consommer_tete_tresse(file_missions):
+    """Verse la TETE du brin dans la file du pilote (echelon 4 -> serie stricte).
+
+    La mission sort du brin ET de SA file-type (sinon le prochain tisser
+    la re-tisserait). REFUS si le pilote a deja une mission en cours.
+    Retourne (code, message).
+    """
+    if mission_en_cours(file_missions) is not None:
+        return 1, "REFUS : une mission est deja en cours (serie stricte). Termine-la d'abord."
+    etat = charger_entonnoir_pilote()
+    brin = etat.get("brin", [])
+    if not brin:
+        return 0, "Brin vide : rien a verser au pilote (python entonnoir/main.py tresse tisser pour recomposer)."
+    # ROLE (L-061 / MO-076) : la tete du brin porte DEUX champs -- son TITRE
+    # (item "theme", texte libre) et son ROLE (item "role", champ FERME du
+    # vivier). C'est le ROLE qui devient le `theme` de la mission ; le titre est
+    # conserve en `titre`. Consommer le titre comme role fabriquait une mission
+    # que l'injection refusait, jusqu'a un retiquetage a la main (4 blocages
+    # mesures). La tete n'est PAS consommee si le role manque : on la VOIT, on la
+    # repare a SA porte, elle repart.
+    tete = brin[0]
+    role_brut = tete.get(CHAMP_ROLE_ITEM, "")
+    if not role_brut:
+        return 1, (
+            "REFUS : la tete du brin (" + tete.get("id", "E-???") + ") est SANS ROLE "
+            "-- l'injection refuse un theme hors vivier. Repare-la a SA porte :\n"
+            "  python " + str(CHEMIN_ENTONNOIR.parent / "entonnoir" / "main.py")
+            + " retiqueter --id " + tete.get("id", "EO-XXX") + " --role <THEME du vivier>"
+        )
+    code_role, role = valider_theme(role_brut)
+    if code_role != 0:
+        return code_role, (
+            "REFUS : le role de la tete du brin (" + tete.get("id", "E-???") + ") n'est pas "
+            "un theme du vivier. Repare-la a SA porte :\n"
+            "  python " + str(CHEMIN_ENTONNOIR.parent / "entonnoir" / "main.py")
+            + " retiqueter --id " + tete.get("id", "EO-XXX") + " --role <THEME du vivier>"
+        )
+    tete_consommee = brin.pop(0)
+    mission = {
+        "id": prochain_id(file_missions),
+        "theme": role,
+        CHAMP_TITRE_MISSION: tete_consommee.get("theme", ""),
+        "objectif": tete_consommee.get("objectif", ""),
+        "type": tete_consommee.get("type", ""),
+        "statut": STATUT_EN_ATTENTE,
+        "chargee_le": horodater(),
+        "source": "entonnoir:" + tete_consommee.get("id", "E-???") + ":" + tete_consommee.get("type", "?") + "/" + tete_consommee.get("categorie", "?") + ":" + tete_consommee.get("urgence", "?"),
+    }
+    file_missions.setdefault("missions", []).append(mission)
+    for missions_du_type in etat.get("files", {}).values():
+        for rang, m in enumerate(missions_du_type):
+            if m.get("id") == tete.get("id"):
+                del missions_du_type[rang]
+                break
+    enregistrer_file(file_missions)
+    enregistrer_entonnoir_pilote(etat)
+    return 0, (
+        "Tete du brin verse au pilote : " + mission["id"] + " <- " + tete.get("id", "E-???")
+        + " (" + mission["source"] + "). Reste au brin : " + str(len(brin)) + "."
+    )
+
+
+def tisser_tresse():
+    """Recompose le brin via la porte officielle de l'entonnoir (sous-processus).
+
+    Un import croise est interdit (modules homonymes, lecon L-009) : le pilote
+    orchestre, l'entonnoir reste l'unique source de verite du tressage.
+    """
+    resultat = subprocess.run(
+        [sys.executable, str(CHEMIN_ENTONNOIR.parent / "entonnoir" / "main.py"), "tresse", "tisser"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if resultat.returncode != 0:
+        print("ALERTE tresse : le tisser a echoue (code " + str(resultat.returncode) + ")")
+        if resultat.stderr:
+            print(resultat.stderr.strip())
+
+
+def puiser_tresse(file_missions):
+    """    Verse la tete du brin dans la file du pilote (tisser d'abord : brin frais).
+
+    Priorite createur conservee : cette fonction n'est appelee que si ni le lot
+    ni la file n'offrent de mission. Retourne la mission venue de la tresse, ou None.
+    """
+    tisser_tresse()
+    code, message = consommer_tete_tresse(file_missions)
+    print(message)
+    if code != 0:
+        return None
+    return prochaine_en_attente(file_missions)
+
+
+def extraire_options(arguments, noms_connus):
+    """Extrait les options --nom valeur d'une liste d'arguments (forme seulement)."""
+    options = {}
+    index = 0
+    while index < len(arguments):
+        morceau = arguments[index]
+        if morceau.startswith("--") and morceau[2:] in noms_connus:
+            if index + 1 < len(arguments):
+                options[morceau[2:]] = arguments[index + 1]
+            index += 2
+        else:
+            index += 1
+    return options
+
+
+# --- AUTOMATISATIONS PILOTE ---
+
+
+def verification_post_fin(mission, bilan):
+    """Verification automatique apres chaque fin de mission.
+
+    Le pilote lance :
+    1. py_compile sur les .py modifies (si mentionnes dans le bilan)
+    2. benchmark --fichier sur les outils modifies
+    3. verification ASCII
+    Retourne (code, messages).
+    """
+    messages = []
+    code_global = 0
+
+    # Extrait les chemins .py du bilan (pattern: data/outils/XXX/ ou chemin relatif)
+    import re
+    chemins_py = re.findall(r"data/outils/[\w-]+/\w+\.py", bilan)
+    # Aussi les chemins absolus ou relatifs mentionnes
+    chemins_py += re.findall(r"_operateur/[\w/]+\.py", bilan)
+
+    if not chemins_py:
+        return 0, []
+
+    # py_compile rapide sur les .py detectes
+    for chemin in set(chemins_py):
+        # Essai direct (data/outils/...) puis avec matrice/ prefixe
+        plein = REPERTOIRE_MATRIX / chemin
+        if not plein.is_file():
+            plein = REPERTOIRE_MATRIX / "matrice" / chemin
+        if plein.is_file():
+            try:
+                result = subprocess.run(
+                    [sys.executable, "-m", "py_compile", str(plein)],
+                    capture_output=True, timeout=10,
+                    creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+                )
+                if result.returncode != 0:
+                    messages.append("[POST-FIN] py_compile FAIL: " + chemin)
+                    code_global = 1
+                else:
+                    messages.append("[POST-FIN] py_compile OK: " + chemin)
+            except (subprocess.TimeoutExpired, OSError):
+                pass
+
+    return code_global, messages
+
+
+def nettoyer_intercom():
+    """Nettoie les messages traites de l'intercom maintenance.
+
+    Supprime les lignes avec traite_par_optimus=true de la boite maintenance.
+    Append-only respecte : on ecrit un nouveau fichier sans les traites.
+    """
+    boite_in = REPERTOIRE_INTERCOM / "matrice" / "inbox.jsonl"
+    if not boite_in.is_file():
+        return 0
+
+    lignes = boite_in.read_text(encoding=ENCODAGE, errors="replace").splitlines()
+    nettoyes = 0
+    gardes = []
+
+    for ligne in lignes:
+        ligne = ligne.strip()
+        if not ligne:
+            continue
+        try:
+            msg = json.loads(ligne)
+            if msg.get("traite_par_optimus"):
+                nettoyes += 1
+            else:
+                gardes.append(ligne)
+        except json.JSONDecodeError:
+            gardes.append(ligne)
+
+    if nettoyes > 0:
+        boite_tmp = boite_in.with_suffix(".jsonl.tmp")
+        with open(boite_tmp, "w", encoding=ENCODAGE, newline="\n") as f:
+            for g in gardes:
+                f.write(g + "\n")
+        os.replace(boite_tmp, boite_in)
+        print("[NETTOYAGE] " + str(nettoyes) + " messages traites purges de maintenance.")
+
+    return nettoyes
+
+
+def purger_zone_temporaire(mission):
+    """Vide la zone jetable d'Optimus et NOTE la suppression au marbre (MO-136).
+
+    Le point 4 de la regle immuable `perimetre-tmp` ("en fin de mission, le
+    CONTENU de la zone est VIDE ; sa suppression se TRACE, jamais silencieuse")
+    etait une DISCIPLINE D'AGENT -- et le garde tmp le dit lui-meme : le contenu
+    vide n'est PAS verifiable par une garde. Une discipline qu'aucun instrument ne
+    mesure depend de la memoire : mesure du 2026-09-16, la zone portait 141
+    fichiers et il fallait y penser a la main, mission par mission.
+
+    Le pilote, lui, ne peut pas oublier : il purge a CHAQUE cloture, juste apres
+    avoir regenere la vue `suivi-optimus.md` (le meme moment : la mission est
+    close, le travail de la zone est fini). Le moteur est PARTAGE
+    (`data/commun/zone_tmp.py`) -- les deux pilotes purgent leur zone par le meme
+    code ; ici s'ajoute la TRACE, qui appartient a CE flux : une ligne au marbre
+    nommant la zone et ce qui a disparu. Le README reste : la zone est permanente.
+
+    NON bloquant : l'echec de la purge ne tue JAMAIS une mission (on alerte).
+    Retourne (code, message) -- le message est imprime par l'appelant.
+    """
+    try:
+        supprimes, echecs = vider_zone_tmp(REPERTOIRE_ZONE_TMP, NOM_README_ZONE_TMP)
+    except ValueError as erreur:
+        print("ALERTE purge : " + str(erreur))
+        return 1, "purge refusee"
+    if echecs:
+        print("ALERTE purge : " + str(len(echecs)) + " element(s) NON supprime(s) dans "
+              + NOM_ZONE_TMP + " : " + ", ".join(echecs[:8]))
+    if not supprimes:
+        return 0, "zone " + NOM_ZONE_TMP + " deja vide (rien a tracer)."
+    detail = ("zone " + NOM_ZONE_TMP + " videe a la cloture : " + str(len(supprimes))
+              + " element(s) supprime(s) : " + ", ".join(supprimes[:12])
+              + (" ... (+" + str(len(supprimes) - 12) + ")" if len(supprimes) > 12 else ""))
+    code, sortie = noter_journal(
+        mission.get("id", ""),
+        mission.get("theme", "") or THEME_DEFCON,
+        "purge",
+        detail,
+    )
+    if code != 0:
+        print("ALERTE marbre : purge non tracee (" + sortie[:120] + ").")
+        # Le message doit DIRE l'etat REEL de la trace (EO-123) : il annoncait
+        # "trace au marbre" meme quand la trace echouait -- un message MENTEUR,
+        # mesure au reel a chaque cloture depuis MO-136. La suppression, elle, a
+        # bien eu lieu : on ne la cache pas, on dit qu'elle n'est PAS tracee.
+        return code, ("zone " + NOM_ZONE_TMP + " videe : " + str(len(supprimes))
+                      + " element(s) supprime(s), TRACE AU MARBRE EN ECHEC ("
+                      + sortie.strip()[:80] + ").")
+    return 0, ("zone " + NOM_ZONE_TMP + " videe : " + str(len(supprimes))
+               + " element(s) supprime(s), trace au marbre.")
+
+
+def verifier_serie_stricte(file_missions):
+    """Garde-fou : verifie avant injection qu'aucun doublon ni anomalie n'existe.
+
+    Verifications :
+    1. Pas de mission en cours (serie stricte)
+    2. Pas de doublon de theme+objectif dans la file
+    3. Pas de mission terminee re-injectable
+    Retourne (code, message). code 0 = OK.
+    """
+    # 1. Serie stricte
+    encours = mission_en_cours(file_missions)
+    if encours is not None:
+        return 1, "REFUS : mission en cours (" + encours["id"] + "). Serie stricte."
+
+    # 2. Doublons
+    missions = file_missions.get("missions", [])
+    vues = set()
+    for m in missions:
+        if m.get("statut") != STATUT_EN_ATTENTE:
+            continue
+        cle = (m.get("theme", ""), m.get("objectif", ""))
+        if cle in vues:
+            return 1, "REFUS : doublon detecte (" + cle[0] + ")."
+        vues.add(cle)
+
+    return 0, "Serie stricte OK"

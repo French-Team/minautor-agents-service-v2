@@ -18,6 +18,10 @@ Usage :
     python main.py statut
     python main.py injecter
     python main.py fin --bilan "..."   (la mission suivante reste en attente)
+                                       --bilan-fichier <chemin> lit le MEME recit
+                                       dans un fichier (EO-132) : un argument
+                                       traverse le shell, ou un accent grave
+                                       EXECUTE du shell et troue la trace
     python main.py file consommer      (echelon 4 : tete du brin -> file du pilote)
     python main.py enregistrer --id MO-XXX --theme <nom> [--type <t>] --objectif "..."
                                        --bilan "..."   (le TYPE est ACCEPTE EN OPTION --

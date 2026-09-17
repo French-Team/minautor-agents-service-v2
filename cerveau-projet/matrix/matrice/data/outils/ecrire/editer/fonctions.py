@@ -61,7 +61,10 @@ def executer_editer(fichier, ancien, nouveau, ancien_fichier, nouveau_fichier):
         pass
     print(msg_val)
     if code == 1:
-        print("ALERTE : validation echouee -- backup disponible (code 1).")
+        # EO-129 : meme contrat que `ecrire` -- l'echec de validation laisse la
+        # cible INTACTE, il n'y a rien a reverts.
+        print("REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE"
+              + (", .bak de la tentative : " + bak_path.name if bak_path else "") + ".")
         return 1
     print("OK : " + fichier + " edite (1 occurrence)")
     return 0

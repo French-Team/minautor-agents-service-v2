@@ -14,9 +14,11 @@ from constants import (
     ALLOWLIST_PREFIXES,
     ALLOWLIST_RACINE,
     ENCODAGE,
+    FORMAT_HORODATE_BAK,
     RACINE,
     REPERTOIRE_MATRIX,
     REPERTOIRE_MATRICE,
+    SUFFIXE_BAK,
     TAILLE_BLOC_LECTURE,
 )
 
@@ -77,9 +79,14 @@ def normaliser_lf(contenu):
 
 
 def chemin_bak(chemin_absolu):
-    """Retourne le chemin .bak horodate pour proto-2."""
-    horodate = datetime.now().strftime("%Y%m%d_%H%M%S")
-    return chemin_absolu.with_name(chemin_absolu.name + ".bak." + horodate)
+    """Retourne le chemin .bak horodate pour proto-2.
+
+    La forme vient de SES constantes (SUFFIXE_BAK + FORMAT_HORODATE_BAK) : le
+    motif qui la reconnait est declare a cote d'elles, donc jamais redevine par
+    un consommateur (contrat fondamental, espions, remorque).
+    """
+    horodate = datetime.now().strftime(FORMAT_HORODATE_BAK)
+    return chemin_absolu.with_name(chemin_absolu.name + SUFFIXE_BAK + "." + horodate)
 
 
 def creer_bak_si_existe(chemin_absolu):
@@ -98,9 +105,31 @@ def creer_bak_si_existe(chemin_absolu):
     return bak
 
 
-def valider_syntaxe(chemin_absolu):
-    """Valide .py (py_compile) et .json (json.load). Retourne (ok, message)."""
-    suffix = chemin_absolu.suffix.lower()
+def _supprimer_silencieux(chemin):
+    """Retire un fichier de travail sans jamais faire echouer l'appelant.
+
+    Un temporaire qui resiste ne doit pas masquer la vraie raison d'un refus :
+    on essaie, et on continue -- le message rendu a l'agent dit le REFUS, pas
+    l'incident de menage.
+    """
+    try:
+        if chemin.exists():
+            chemin.unlink()
+    except OSError:
+        pass
+
+
+def valider_syntaxe(chemin_absolu, suffixe=None):
+    """Valide .py (py_compile) et .json (json.load). Retourne (ok, message).
+
+    `suffixe` permet de valider un fichier TEMPORAIRE (`x.json.tmp`) COMME S'IL
+    portait le suffixe de sa CIBLE : c'est ce qui rend la validation possible
+    AVANT le remplacement (EO-129). La validation lit le suffixe de la cible,
+    jamais celui du temporaire -- un `.tmp` ne serait reconnu par personne et
+    l'ecriture invalide repasserait pour valide (un controle muet ne controle
+    rien).
+    """
+    suffix = (suffixe if suffixe is not None else chemin_absolu.suffix).lower()
     if suffix == ".py":
         try:
             py_compile.compile(str(chemin_absolu), doraise=True)
@@ -140,7 +169,8 @@ def ecrire_atomique(chemin_relatif, contenu, mode="remplacer"):
     """Ecriture atomique tmp+replace, LF, .bak, SHA, validation.
 
     Retourne (code, sha_avant, sha_apres, bak_path, message_validation).
-    code 0 = OK, 1 = validation echouee mais ecrit, 2 = refus perimetre/mode.
+    code 0 = OK ; 1 = validation ECHOUEE, RIEN n'a ete ecrit (sha_apres None,
+    la cible est INTACTE) ; 2 = refus perimetre/mode.
     """
     if not dans_perimetre_ecriture(chemin_relatif):
         return 2, None, None, None, "REFUS : hors perimetre ecriture (matrix/ seul, allowlist AGENTS.md/demarrer-*.md) : " + chemin_relatif
@@ -179,28 +209,40 @@ def ecrire_atomique(chemin_relatif, contenu, mode="remplacer"):
         except OSError as e:
             return 1, sha_avant, None, bak_path, "Erreur lecture pour ajouter : " + str(e)
 
-    # Ecriture tmp + replace (deterministe LF)
+    # ECRITURE ATOMIQUE : temporaire, VALIDATION, PUIS publication (EO-129).
+    # Avant, la porte PUBLIAIT d'abord et validait ensuite : un fichier invalide
+    # (une virgule manquante dans un JSON, une erreur de syntaxe dans un .py)
+    # RESTAIT en place, et l'alerte se perdait dans le tuyau avec lui. Mesure du
+    # 2026-09-16 : le registre des super-combos est reste invalide sans qu'aucun
+    # controle ne le crie. Une porte d'ecriture qui laisse un fichier casse
+    # derriere elle n'est pas un garde, c'est un conduit.
+    # On REFUSE desormais AVANT : la cible n'est JAMAIS touchee, et le .bak reste
+    # disponible pour l'audit de ce qui a ete tente.
     tmp = chemin_absolu.with_name(chemin_absolu.name + ".tmp")
     try:
         with open(tmp, "w", encoding=ENCODAGE, newline="\n") as flux:
             flux.write(contenu_norm)
             if contenu_norm and not contenu_norm.endswith("\n"):
                 flux.write("\n")
+    except OSError as e:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, "Erreur ecriture atomique : " + str(e)
+
+    # La validation lit le suffixe de la CIBLE : le temporaire, lui, s'appelle
+    # `.tmp` et ne serait reconnu par personne (cf. valider_syntaxe).
+    ok, msg_val = valider_syntaxe(tmp, chemin_absolu.suffix)
+    if not ok:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, (
+            "REFUS : contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine "
+            "est INTACT -- " + msg_val)
+    try:
         os.replace(tmp, chemin_absolu)
     except OSError as e:
-        try:
-            if tmp.exists():
-                tmp.unlink()
-        except OSError:
-            pass
+        _supprimer_silencieux(tmp)
         return 1, sha_avant, None, bak_path, "Erreur ecriture atomique : " + str(e)
 
     sha_apres = calculer_sha256(chemin_absolu)
-    ok, msg_val = valider_syntaxe(chemin_absolu)
-    if not ok:
-        # On garde le fichier mais on signale (backup permet revert)
-        bak_info = (" (backup : " + str(bak_path.name) + ")") if bak_path else ""
-        return 1, sha_avant, sha_apres, bak_path, msg_val + bak_info
     return 0, sha_avant, sha_apres, bak_path, msg_val
 
 
@@ -208,7 +250,8 @@ def editer_atomique(chemin_relatif, ancien, nouveau):
     """Remplace UNE occurrence exacte ancien->nouveau (atomique, .bak, validation).
 
     Retourne (code, sha_avant, sha_apres, bak_path, msg).
-    code 0 OK, 1 validation echouee, 2 refus (perimetre, ancien non trouve ou multiple).
+    code 0 OK ; 1 validation ECHOUEE, RIEN n'a ete ecrit (la cible est INTACTE) ;
+    2 refus (perimetre, ancien non trouve ou multiple).
     """
     if not dans_perimetre_ecriture(chemin_relatif):
         return 2, None, None, None, "REFUS : hors perimetre ecriture : " + chemin_relatif
@@ -238,20 +281,25 @@ def editer_atomique(chemin_relatif, ancien, nouveau):
     try:
         with open(tmp, "w", encoding=ENCODAGE, newline="\n") as flux:
             flux.write(nouveau_texte)
+    except OSError as e:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, "Erreur ecriture atomique editer : " + str(e)
+
+    # Meme regle que `ecrire_atomique` (EO-129) : on VALIDE le temporaire avant
+    # de publier. Une edition qui casse la syntaxe ne doit pas atteindre la cible.
+    ok, msg_val = valider_syntaxe(tmp, chemin_absolu.suffix)
+    if not ok:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, (
+            "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le "
+            "fichier d'origine est INTACT -- " + msg_val)
+    try:
         os.replace(tmp, chemin_absolu)
     except OSError as e:
-        try:
-            if tmp.exists():
-                tmp.unlink()
-        except OSError:
-            pass
+        _supprimer_silencieux(tmp)
         return 1, sha_avant, None, bak_path, "Erreur ecriture atomique editer : " + str(e)
 
     sha_apres = calculer_sha256(chemin_absolu)
-    ok, msg_val = valider_syntaxe(chemin_absolu)
-    if not ok:
-        bak_info = (" (backup : " + str(bak_path.name) + ")") if bak_path else ""
-        return 1, sha_avant, sha_apres, bak_path, msg_val + bak_info
     return 0, sha_avant, sha_apres, bak_path, msg_val
 
 

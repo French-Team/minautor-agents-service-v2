@@ -1,6 +1,6 @@
 """Porte des propositions, classements et decisions de conservation."""
 from commun import charger_bdd, enregistrer_bdd, extraire_options
-from ajouter.fonctions import classer_entree, creer_entree, decider_entree
+from ajouter.fonctions import classer_entree, creer_entree, decider_entree, preciser_entree
 
 NOMS_OPTIONS = (
     "source", "destination", "categorie", "raison", "lecteurs", "ecrivains",
@@ -26,8 +26,12 @@ def executer(arguments):
             donnees, options.get("id", ""), options.get("verdict", ""),
             options.get("destination", ""), options.get("preuve", "")
         )
+    elif verbe == "preciser":
+        entree, message = preciser_entree(
+            donnees, options.get("id", ""), options.get("preuve", ""), options.get("raison", "")
+        )
     else:
-        print("Usage : proposer | classer | decider")
+        print("Usage : proposer | classer | decider | preciser")
         return 2
 
     if entree is None:

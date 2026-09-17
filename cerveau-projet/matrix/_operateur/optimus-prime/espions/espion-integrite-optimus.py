@@ -10,8 +10,10 @@ Usage:
 """
 
 import sys
+import re
 import json
 import hashlib
+import importlib.util
 from datetime import datetime
 from pathlib import Path
 
@@ -23,7 +25,45 @@ REGISTRE = BASE / "registre" / "registre.json"
 
 DOSSIERS = ["parcours", "protocoles", "conventions", "regles-immuables"]
 FICHIERS_RACINE = ["optimus-prime.md"]
-EXCLUS = {".bak", "__pycache__"}
+
+# Exclusion par NOM de dossier : rien a voir avec un point de restauration.
+EXCLUS = {"__pycache__"}
+
+# L espion vit DANS la zone : remonter jusqu a matrix/ pour atteindre le domicile.
+RACINE_MATRIX = next(p for p in [BASE, *BASE.parents] if p.name == "matrix")
+
+
+def charger_motif_point_restauration():
+    """La forme du point de restauration vient de son DOMICILE (porte ecrire).
+
+    L ancien test (`part.endswith(".bak")`) ne reconnaissait AUCUNE forme
+    reellement produite : la porte ecrit `fichier.py.bak.<horodatage>`, dont le
+    dernier morceau n est pas `.bak` -- le filtre RESSEMBLAIT a une protection
+    et ne protegeait rien (MO-133, classe des faux gardes). Le motif est
+    desormais CONSOMME depuis la porte qui produit la forme.
+
+    Retourne None si le domicile est illisible : l espion ne devine jamais, et
+    `fichiers_zone` traite alors un point de restauration comme un fichier a
+    surveiller (crier est acceptable, se taire ne l est pas).
+    """
+    chemin = RACINE_MATRIX / "matrice" / "data" / "outils" / "ecrire" / "constants.py"
+    if not chemin.is_file():
+        return None
+    try:
+        spec = importlib.util.spec_from_file_location("domicile_forme_bak", str(chemin))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return re.compile(module.MOTIF_BAK_HORODATE)
+    except (ImportError, OSError, SyntaxError, AttributeError, re.error):
+        return None
+
+
+MOTIF_POINT_RESTAURATION = charger_motif_point_restauration()
+
+
+def est_point_restauration(nom):
+    """Vrai pour un point de restauration horodate (forme declaree par la porte)."""
+    return bool(MOTIF_POINT_RESTAURATION and MOTIF_POINT_RESTAURATION.search(nom))
 
 
 def fichiers_zone():
@@ -54,7 +94,7 @@ def fichiers_zone():
         if dossier.is_dir():
             resultats += [p for p in dossier.rglob("*.py") if p.is_file()]
     return [p for p in resultats
-            if not any(part in EXCLUS or part.endswith(".bak") for part in p.parts)]
+            if not any(part in EXCLUS or est_point_restauration(part) for part in p.parts)]
 
 
 def empreinte(p: Path) -> str:

@@ -1,6 +1,6 @@
 {
-  "signature": "686fe7889594801784489ad6e6d56a6f120aa5f91dc8bef1c71f4325e3e32598",
-  "alerte_le": "2026-09-16 07:21:58",
+  "signature": "183135ac261579167a10e2c578a0eb31980f2a48971f5fda967f88e02bb11126",
+  "alerte_le": "2026-09-17 07:40:33",
   "alertes": [
     {
       "cle": "recette:benchmark",
@@ -36,6 +36,11 @@
       "cle": "recette:selecteur-flux",
       "niveau": "moyenne",
       "detail": "recette incomplete : DESCRIPTION.md absent (CV-010)"
+    },
+    {
+      "cle": "refus:lire",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 12 refus (code 2) sur 19 appel(s) en 30 jours"
     }
   ]
 }

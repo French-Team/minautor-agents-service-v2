@@ -1,6 +1,6 @@
 {
-  "date": "2026-09-15 09:59:38",
-  "total": 85,
+  "date": "2026-09-16 20:08:22",
+  "total": 90,
   "equipements": [
     {
       "nom": "theme-auto-audit-nemesis",
@@ -338,6 +338,11 @@
       "chemin": "super-combos\\combos\\outils\\verifier-exemptions-visibles.py"
     },
     {
+      "nom": "verifier-fiche.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-fiche.py"
+    },
+    {
       "nom": "verifier-historique-non-redondant.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\verifier-historique-non-redondant.py"
@@ -358,6 +363,16 @@
       "chemin": "super-combos\\combos\\outils\\verifier-passes-non-redondantes.py"
     },
     {
+      "nom": "verifier-rattrapage.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-rattrapage.py"
+    },
+    {
+      "nom": "verifier-recherche.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-recherche.py"
+    },
+    {
       "nom": "verifier-roles.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\verifier-roles.py"
@@ -371,6 +386,11 @@
       "nom": "verifier-sans-attendre.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\verifier-sans-attendre.py"
+    },
+    {
+      "nom": "verifier-vocabulaire-etat.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-vocabulaire-etat.py"
     },
     {
       "nom": "watchdog-flux2-bg.py",
@@ -426,6 +446,11 @@
       "nom": "sc-002-auto-evolution",
       "type": "super-combo",
       "chemin": "super-combos\\sc-002-auto-evolution"
+    },
+    {
+      "nom": "sc-003-auto-suivi",
+      "type": "super-combo",
+      "chemin": "super-combos\\sc-003-auto-suivi"
     }
   ]
 }

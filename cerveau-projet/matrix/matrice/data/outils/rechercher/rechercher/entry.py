@@ -6,7 +6,11 @@ Contrat de la porte (MO-069) :
 - une coupe (troncature) et un ecart (entree sans date) sont DITS dans les deux
   sorties (humaine et --json) : un resultat muet sur ses propres limites ment ;
 - la sortie --json est en ASCII pur (ensure_ascii) : une console cp1252 ne peut
-  plus faire echouer la porte.
+  plus faire echouer la porte ;
+- une option qui ne s'applique pas au mode demande est REFUSEE, jamais ignoree
+  (--prive ne vaut que pour les fichiers) ;
+- le perimetre du scan est DIT quand il sort de l'ordinaire : --prive inclut les
+  zones L-016, et la sortie le declare (EO-126).
 """
 import sys
 import os
@@ -28,8 +32,21 @@ from constants import (
     DEFAUT_DANS,
     LIMITE_DEFAUT,
     LIMITE_LIGNES_JSONL,
+    NOM_OPTION_JSON,
+    NOM_OPTION_PRIVE,
     NOMS_OPTIONS_RECHERCHER,
 )
+
+# La liste des zones invisibles qui est AFFICHEE est la MEME que celle qui est
+# APPLIQUEE : elle vient du domicile data/commun/invisibilite.py (plancher +
+# zones DECLAREES V-003). Sans cela, la porte excluait les zones declarees tout
+# en annoncant les trois historiques -- un message qui ment sur son perimetre
+# (mesure MO-151, reparation MO-152).
+from invisibilite import zones_exclues  # noqa: E402
+
+# La liste est EVALUEE une fois : les trois usages (aide, sortie machine, message
+# d ouverture) doivent dire la MEME chose que le filtre applique.
+ZONES_INVISIBLES = zones_exclues()
 
 # Options qui ne s'appliquent qu'aux BDD : les accepter sur --dans fichiers
 # serait une option qui ne filtre rien (lecon EO-107).
@@ -52,7 +69,9 @@ def rechercher(arguments):
         print("ERREUR : --requete requis. Ex: --requete \"defcon\"")
         print("Usage: rechercher --requete <texte> [--dans fichiers|bdd|tous]")
         print("       [--tag <tag>] [--mot-cle <texte>] [--source <nom>]")
-        print("       [--periode 7j] [--json] [--limite N]")
+        print("       [--periode 7j] [--json] [--limite N] [--prive]")
+        print("       --prive : inclut les zones invisibles L-016 ("
+              + ", ".join(ZONES_INVISIBLES) + ")")
         return 2
 
     dans = options.get("dans", DEFAUT_DANS)
@@ -64,7 +83,9 @@ def rechercher(arguments):
     mot_cle = options.get("mot_cle", "").strip() or None
     source_nom = options.get("source", "").strip() or None
     periode = options.get("periode", "").strip() or None
-    mode_json = "json" in options
+    mode_json = NOM_OPTION_JSON in options
+    # --prive (EO-126) : drapeau, donc on lit sa PRESENCE, jamais une valeur.
+    inclure_prive = NOM_OPTION_PRIVE in options
 
     # --source inconnue : REFUS qui nomme les sources valides (EO-109).
     # Une faute de frappe doit etre une erreur, pas un "0 resultat" muet.
@@ -80,6 +101,13 @@ def rechercher(arguments):
                 print("ERREUR : --" + nom.replace("_", "-")
                       + " ne s'applique qu'aux BDD (--dans bdd ou tous).")
                 return 2
+    # Le pendant : une option de FICHIERS sur un scan de BDD ne filtre rien non
+    # plus -- meme refus, meme raison (une option qui ne filtre pas est un
+    # affichage).
+    if inclure_prive and dans == "bdd":
+        print("ERREUR : --" + NOM_OPTION_PRIVE
+              + " ne s'applique qu'aux FICHIERS (--dans fichiers ou tous).")
+        return 2
 
     # --periode illisible : REFUS (un filtre temporel qui ne filtre pas est un
     # affichage -- EO-110).
@@ -101,7 +129,8 @@ def rechercher(arguments):
 
     # Scan fichiers
     if dans in ("fichiers", "tous"):
-        hits_fichiers, nb_f, limit_f, msg_f = scanner_fichiers(requete)
+        hits_fichiers, nb_f, limit_f, msg_f = scanner_fichiers(
+            requete, inclure_prive=inclure_prive)
         if msg_f:
             erreur_scan = msg_f
         if periode:
@@ -148,6 +177,10 @@ def rechercher(arguments):
             "ecartes_sans_date": ecartes_sans_date,
             "filtres": {"tag": tag, "mot_cle": mot_cle, "source": source_nom,
                         "periode": periode},
+            # L'etat du filtre L-016 est DIT : une sortie machine qui a inclus la
+            # zone privee sans le dire ferait croire a un perimetre ordinaire.
+            "prive": inclure_prive,
+            "zones_invisibles": list(ZONES_INVISIBLES),
             "hits": tous_hits,
         }
         # ensure_ascii : la sortie machine reste de l'ASCII pur, encodable par
@@ -167,6 +200,9 @@ def rechercher(arguments):
                 filtres_actifs.append("periode=" + periode)
             print("Filtres : " + ", ".join(filtres_actifs))
         print(f"Trouves : {nb_total} | Retournes : {len(tous_hits)}")
+        if inclure_prive:
+            print("Zone privee INCLUSE (" + ", ".join(ZONES_INVISIBLES)
+                  + ") -- sans --prive, ces zones restent invisibles.")
         if nb_limite:
             print(f"Limite atteinte ({limite})")
         if sources_tronquees:

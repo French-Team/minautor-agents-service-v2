@@ -14,8 +14,40 @@ import sys
 import argparse
 import sqlite3
 import subprocess
+import importlib.util
 from datetime import datetime
 from pathlib import Path
+
+# Le vocabulaire des statuts de la BDD modifications a UN domicile (bdd-modifs).
+# Ce script le CONSOMME au lieu de recopier 'valide' (friction 49, balayage
+# MO-129) : meme chargement que la porte de l'outil (dossier a tiret = pas un
+# package, importlib + spec). Un domicile illisible est SIGNALE, jamais devine.
+BORNES_REMONTEE = 30
+
+
+def charger_vocabulaire_modifs():
+    """Le module de fonctions de bdd-modifs, charge par son chemin, ou None."""
+    courant = Path(__file__).resolve().parent
+    for _ in range(BORNES_REMONTEE):
+        if (courant / "matrice" / "data" / "commun" / "racine.py").is_file():
+            break
+        courant = courant.parent
+    else:
+        return None
+    chemin = (courant / "_operateur" / "optimus-prime" / "super-combos" / "combos"
+              / "outils" / "bdd-modifs" / "fonctions" / "bdd_modifs.py")
+    if not chemin.is_file():
+        return None
+    try:
+        spec = importlib.util.spec_from_file_location("bdd_modifs_domicile", str(chemin))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+    except (ImportError, OSError, SyntaxError, AttributeError):
+        return None
+    return module
+
+
+VOCABULAIRE_MODIFS = charger_vocabulaire_modifs()
 
 
 def main():
@@ -54,11 +86,16 @@ def main():
             return 2
     outils = base_matrix / "_operateur" / "optimus-prime" / "super-combos" / "combos" / "outils"
 
+    if VOCABULAIRE_MODIFS is None:
+        print("Vocabulaire des statuts introuvable (domicile bdd-modifs) : refus de deviner")
+        print("la valeur d'une modification VALIDEE (friction 49, balayage MO-129).")
+        return 2
+
     with sqlite3.connect(db) as conn:
         conn.row_factory = sqlite3.Row
         rows = conn.execute(
-            "SELECT DISTINCT fichier FROM modifications WHERE date >= ? AND date <= ? AND statut = 'valide'",
-            (args.depuis, args.jusquau),
+            "SELECT DISTINCT fichier FROM modifications WHERE date >= ? AND date <= ? AND statut = ?",
+            (args.depuis, args.jusquau, VOCABULAIRE_MODIFS.STATUT_VALIDE),
         ).fetchall()
     fichiers = [r["fichier"] for r in rows]
 

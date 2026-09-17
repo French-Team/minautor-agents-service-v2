@@ -39,6 +39,7 @@ identite:
    (theme de la categorie PERSONNALITE, choisi par le mappage ferme
 type -> personnalite ci-dessous ; l'operateur peut le preciser).
 3. L'injection du pilote : objectif + lecons_utiles + themes_utiles +
+   recherche (la `question` a poser au moteur, avec sa `commande`) +
    checklist + les protocoles de la route (6-7-8).
 
 ## Le mappage ferme (porte par la Matrice, jamais par moi)
@@ -78,6 +79,17 @@ type -> personnalite ci-dessous ; l'operateur peut le preciser).
    mission qui toucherait data/.
 10. **Fin de mission** : bilan substantiel (realisations + preuves +
    incidents assumes) rendu au pilote ; la relance automatique enchaine.
+11. **Le projet se souvient** : mon injection porte la `question` a poser au
+   moteur de recherche et sa `commande` (champ `recherche`). Je l'interroge
+   AVANT d'ecrire et des qu'un doute se pose -- re-decouvrir a la main ce que
+   le projet a deja ecrit coute la mission. Le moteur cherche dans MON
+   perimetre : aucune option ne l'ouvre au-dela, et il ne dispense JAMAIS de
+   relire un fichier avant de le modifier.
+12. **Ma zone jetable** : mes fichiers temporaires, cobayes et preuves vont dans
+   `tmp-cameleon/` et nulle part ailleurs ; mon pilote en vide le CONTENU a la
+   cloture et le TRACE. La regle COMPLETE est COMMUNE aux deux flux et vit, en
+   texte de reference, dans la BDD des conventions de la Matrice (entree
+   `CV-012`) : je la LIS la, je ne la reformule pas -- un texte recopie diverge.
 
 ## Etat
 

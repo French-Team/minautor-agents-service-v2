@@ -331,8 +331,170 @@
       "action": "injection",
       "categorie": "demarrage",
       "timestamp": "2026-09-16T07:09:41.130687"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-16T09:25:27.697485"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-16T19:47:59.270708"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T06:55:54.833973"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T06:55:58.424596"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T06:59:51.371079"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T07:08:52.685016"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T07:17:33.501908"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-17T07:31:28.447501"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-151",
+        "theme": "AUDITEUR",
+        "bilan": "MO-151 (AUDITEUR) -- QUALIFIER EO-134 : matrice-readme.md est-il lu par le cameleon ?\n\nVERDICT : FUITE CONFIRMEE (L-016/CV-006) -- ce n'est PAS une mention legitime.\n\nTrois preuves, chacune suffisante :\n1. PERIMETRE. La garde de la porte lire est \"matrix/ seul\" : elle lit\n   matrice/matrice-readme.md pour de vrai (essai reel). Elle refuse _operateur/,\n   donc la garde existe -- mais elle ne couvre que le PERIMETRE, pas\n   l'INVISIBILITE (aucune des quatre portes de lecture ne consultait la liste\n   des zones exclues).\n2. MOTEUR. Le moteur de recherche du cameleon (impose par la regle 11 de sa\n   fiche, commande injectee : rechercher --requete \"...\" --dans tous) rendait\n   matrice-readme.md en HIT n1 pour la phrase \"PAS d'encart\" (mesure reelle).\n3. INTENTION. V-003 `perimetre-cameleon` (classeur-variables.json, statut [OK],\n   pose par la porte pause-session) liste matrice-readme.md PARMI LES ZONES\n   EXCLUES du perimetre cameleon. Par conception, la mention n'est donc pas\n   legitime : c'est une exclusion DECLAREE ET JAMAIS APPLIQUEE.\n\nCorrection de mon propre compte : EO-134 disait \"4 mentions\". Mesure par\nl'outil du projet (audit-invisibilite, une mention par ligne) : 22 lignes\nnommant l invisible (optimus l.34-129, _operateur l.27/51/60, optimus-prime\nl.43/48/57). Un compte annonce n'est pas une mesure (famille L-060/L-109).\n\nETENDUE REELLE mesuree (meme cause, plus grave) : 92 fichiers / 39 218 lignes\nnommant l invisible restaient atteignables, dont des zones DEJA declarees\nexclues : data/manuel-outils.md (20, le manuel des outils du cameleon ecrit\n\"OPTIMUS\" en clair l.426), matrice-readme.md (22), routines/routines-readme.md\n(11), journal-multi-encarts.md (5), intercom/*, plus data/suivi-optimus.jsonl\n(205), suivi-optimus.md (101), espion-log-archive-*.jsonl (35 100),\ndata/modifications-par-fichier.json (531), usages-outils-combos.jsonl (812) et\nles .bak.* servis par le moteur.\n\nCAUSE RACINE (unique, en forme d'etoile) : la liste des zones exclues (V-003,\n23 zones declarees) n'etait lue QUE par pause-session (affichage) -- par AUCUN\noutil de lecture. Le seul filtre reellement applique etait une liste EN DUR de\n3 morceaux de chemin, recopiee dans TROIS fichiers (rechercher/commun.py,\nlister/commun.py, benchmark/commun.py) et divergeante entre eux ; la porte lire\nn'en avait aucune. Une protection declaree et jamais posee est une protection\nabsente (L-037).\n\nCONSEQUENCE : reparation confiee a MO-152 (enforcer le perimetre declare +\nreparer la forme), choisie par l'operateur apres delegation explicite du\ncreateur (\"je te laisse prendre cette decision\").\n\nPREUVES : essais reels sur les quatre portes (lire, rechercher, lister,\nbenchmark) ; cobaye de mesure tmp-optimus/mo151-mesure-EO134.py ; lecture de\nV-003 au classeur ; lecture du filtre et de la commande injectee.",
+        "timestamp": "2026-09-17T07:31:28.448721"
+      },
+      "timestamp": "2026-09-17T07:31:28.448728"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-17T07:31:39.174396"
+    },
+    {
+      "action": "mission_debut",
+      "mission": "MO-152",
+      "theme": "REPARATION",
+      "timestamp": "2026-09-17T07:31:39.175644"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-17T07:32:56.082914"
+    },
+    {
+      "action": "mission_debut",
+      "mission": "MO-152",
+      "theme": "REPARATION",
+      "timestamp": "2026-09-17T07:32:56.084225"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T07:33:20.533551"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-17T07:33:21.344645"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-152",
+        "theme": "REPARATION",
+        "bilan": "MO-152 (REPARATION) -- ENFORCER LE PERIMETRE DECLARE (V-003) + REPARER LA FORME\n\nCe qui etait casse (mesure MO-151) : les 23 zones exclues par le createur (V-003)\nn'etaient appliquees par AUCUN outil de lecture, et le seul filtre reel (3\nmorceaux de chemin, recopie dans 3 fichiers) ratait les zones en forme de\nFICHIER (suivi-optimus.md) : 92 fichiers / 39 218 lignes nommant l'invisible\nrestaient atteignables.\n\nLIVRE (par fichier)\n\n- matrice/data/commun/invisibilite.py (CREE) : DOMICILE du contrat. Plancher\n  (3 zones historiques) + zones DECLAREES (V-003 lue au classeur, 23) = 26 zones.\n  Formes couvertes : dossier declare, chemin declare (fichier ou dossier),\n  FICHIER NOMME comme une zone (defaut de FORME qui faisait rater l'exclusion\n  M-084), plus les derives (.bak, -archive, -old) d'un fichier declare.\n  chemin_relatif traite les trois formes d'entree (absolue, relative racine,\n  relative Matrice) ; refus_invisible rend le message imprime par les portes.\n- matrice/data/outils/rechercher/commun.py : copie du filtre SUPPRIMEE.\n- matrice/data/outils/lister/commun.py : idem (cette copie ignorait meme le\n  filtre de sa jumelle : les trois copies divergeaient deja).\n- matrice/data/outils/benchmark/commun.py : idem.\n- matrice/data/outils/rechercher/rechercher/entry.py : la liste AFFICHEE est la\n  liste APPLIQUEE (aide, sortie machine, message d'ouverture : 26 zones reelles).\n- matrice/data/outils/lire/commun.py : --prive reconnu par extraire_options (il\n  etait AVALE EN SILENCE en dernier argument).\n- matrice/data/outils/lire/lire/entry.py + fonctions.py : garde d'invisibilite\n  ajoutee (cette porte etait la SEULE des quatre sans aucune garde) + --prive.\n- matrice/data/outils/lister/lister/entry.py + fonctions.py : inclure_invisible\n  etait FERME EN DUR a False : la trappe --prive l'ouvre desormais.\n\nPREUVES\n\n- py_compile 9/9.\n- Cobaye du domicile : 27/27 sur des cas REELS (trois formes de chemin, derives,\n  plancher, et la NON-sur-exclusion : outils du cameleon, marbre, routines).\n  Une attente de cobaye etait FAUSSE (tmp-optimus juge non interdit) : corrigee\n  et DITE (L-060).\n- Cobaye de mesure CONSOMMANT le domicile : 92 fichiers / 39 218 lignes AVANT ->\n  61 fichiers / 216 lignes APRES (-99,4 %).\n- Outils REELS : rechercher \"PAS d'encart\" = 0 par defaut (13 avant), 15 avec\n  --prive qui DIT les 26 zones ; lire refuse puis ouvre par --prive ; lister la\n  zone espion = 0 par defaut, 9 fichiers + 3 dossiers avec --prive.\n- Non-regression zone + flux : VERDICT OK (26 maillons). /sante : 13 portes\n  vertes. Integrite Optimus : 110 conformes. File <-> journal : 0 ecart.\n\nDEFAUTS DE MA PROPRE REPARATION, TROUVES PAR LA MESURE : (1) fonction alias au\nlieu de sa valeur -> le moteur plantait sur --prive ; (2) marqueur \"/matrice/\"\napplique aux chemins RELATIFS -> intercom/matrice/inbox.jsonl tronque en\ninbox.jsonl, une zone declaree RATEE ; la correction ne coupe plus que sur la\nforme non ambigue \"/matrix/matrice/\".\n\nRESIDUEL DECLARE (216 lignes) : le CODE des portes doit nommer ce qu'il\ninterdit (constants, le domicile meme -- inevitable) ; data/sessions.json (39)\net data/lecons.json (25) ne sont PAS declares exclus par V-003 (a trancher :\nexclure la BDD ou neutraliser les textes) ; logs de routines ; les 128 .bak.*\nrestent servis hors zones declarees (chantier de la suite de purification).",
+        "timestamp": "2026-09-17T07:33:21.345949"
+      },
+      "timestamp": "2026-09-17T07:33:21.345955"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T07:34:53.495910"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-17T07:41:04.744809"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-153",
+        "theme": "REPARATION",
+        "bilan": "MO-153 (REPARATION) -- TRANCHER LE RESIDUEL : data/sessions.json ET data/lecons.json\n\nDEMANDE DU CREATEUR : exclure ces deux BDD du perimetre cameleon, ou neutraliser\nleurs textes ?\n\nDECISION (mesuree, pas d opinion)\n\n- data/sessions.json -> EXCLURE (pure). Mesures : il n a AUCUN chemin de\n  livraison au cameleon (absent de FICHIER_PAR_SOURCE du moteur, aucun champ\n  d injection ne le porte) ; son contenu est l ETAT DE SESSION de l operateur\n  (99 sessions, dont \"Session du 2026-09-15 OUVERTE (Flux 2, Optimus)\").\n  Le neutraliser serait un faux travail : la trame entiere est interne.\n- data/lecons.json -> EXCLURE le chemin BRUT + FILTRER la LIVRAISON.\n  Mesures : la livraison a l injection etait DEJA propre (90 lecons, 0 mot\n  interdit, filtre L-016 pose par les deux pilotes) ; mais le chemin BRUT\n  (lire/lister) ne peut pas filtrer un fichier, et 20 lecons sur 113 nomment\n  l invisible (dont L-021 doctrine double flux, L-022 \"le cameleon ignore qu il\n  est dirige\"). Le cameleon GARDE ses lecons -- par l INJECTION, qui est le\n  canal prevu (la VUE est \"relue a chaque injection\") -- et jamais par la BDD\n  brute. Neutraliser 20 lecons a la main aurait garde la trame double-flux\n  entiere : mesure, ce n est pas un vrai nettoyage.\n\nTROU DECOUVERT EN CHEMIN (plus grave que le residuel demande) : le chemin BDD\ndu moteur n appliquait AUCUNE des deux moities du contrat -- mesure : 101\nentrees de la BDD suivi-optimus etaient servies au cameleon alors que cette\nzone est DECLAREE exclue depuis M-084, et les lecons arrivaient brutes. Une\nregle appliquee a UN point de livraison n est pas une regle : elle doit l etre a\nTOUS ceux qui delivrent le meme contenu.\n\nLIVRE (par fichier)\n\n- matrice/data/commun/vocabulaire_invisible.py (CREE) : DOMICILE du VOCABULAIRE\n  interdit -- l union des trois listes qui existaient (pilote Flux 1, pilote\n  Flux 2, audit) : AUCUNE ne contenait les trois autres. contient_invisible et\n  contient_invisible_item. Regle : on RETIRE l item qui nomme l invisible, on ne\n  le caviarde jamais (une phrase caviardee laisse deviner un secret).\n- matrice/data/outils/rechercher/commun.py : le chemin BDD du moteur consomme le\n  domicile des zones (une BDD declaree exclue n est JAMAIS servie) ET le domicile\n  du vocabulaire (une entree qui nomme l invisible est retiree a la livraison).\n- matrice/pilote/injection/fonctions.py + _operateur/optimus-prime/pilote/\n  injection/fonctions.py : filtrer_pour_cameleon CONSOMME MOTS_INTERDITS.\n- matrice/data/classeur-variables.json : V-003 reduit PAR SA PORTE\n  (pause-session perimetre --zones) : 26 zones declarees (+ les 3 du plancher =\n  28 appliquees).\n\nPREUVES (mesurees)\n\n- Le moteur ne sert plus l invisible : \"optimus\" et \"suivi-optimus\" dans --dans\n  bdd = 0 ; --dans tous = 0 (contre 101 et 354 au depart).\n- Une BDD NON exclue reste servie (le filtre de vocabulaire ne casse pas la\n  fonction) ; une lecon propre reste servie.\n- Les portes brutes refusent les deux BDD (lire : \"zone invisible L-016\n  (data/lecons.json)\" / \"(data/sessions.json)\"), --prive ouvre pour la Matrice.\n- Les deux pilotes importent le domicile et leur livraison reste propre\n  (Flux 1 : 90 lecons livrees, 0 mot interdit).\n- SURFACE ATTEIGNABLE : 92 fichiers / 39 218 lignes (MO-151) -> 62 fichiers /\n  162 lignes (MO-153), soit -99,6 %. Le residuel n est plus que le CODE DU\n  CONTRAT lui-meme (le domicile du vocabulaire, les constants des portes qui\n  nomment ce qu elles interdisent) : inevitable, et ce n est pas du contenu.\n- py_compile 4/4 ; non-regression zone + flux VERDICT OK (26 maillons) ;\n  /sante 13 portes vertes ; integrite Optimus 110 conformes ; file <-> journal\n  0 ecart.\n\nRESIDUEL DECLARE : les .bak.* servis par le moteur quand ils ne derivent pas\nd une zone declaree (chantier de la suite de purification, MO-146) ; le code des\nportes qui nomme le vocabulaire (par nature).",
+        "timestamp": "2026-09-17T07:41:04.746257"
+      },
+      "timestamp": "2026-09-17T07:41:04.746264"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T07:44:03.139268"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-17T07:52:24.500567"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-154",
+        "theme": "PURIFICATION",
+        "bilan": "MO-154 (PURIFICATION) -- OUVRIR LA SUITE DE PURIFICATION SUR UN PERIMETRE REEL (CASES 1 A 4)\n\nCe qui etait le probleme (MO-146) : la suite etait BATIE, jamais COURUE -- une\nBDD de conservation avec UN seul element (un cobaye), un theme jamais ouvert, un\ndossier sans vue. Le createur ne savait pas ou en etait la suite parce qu'il n'y\navait rien a voir.\n\nCASE 1 DEMANDE -- cadrage trace au marbre (evenement `decision`, journal\nsuivi-optimus, MO-154) : perimetre = les points de restauration .bak.* de matrix/\nENTIER + les archives du pilote + l element cobaye ; objectif = BORNER\nl accumulation SANS RIEN PERDRE (un verdict par element, l acte par une PORTE\ndediee, jamais un rm). Cases 1 a 4 en LECTURE SEULE.\n\nCASE 2 CARTOGRAPHIE -- mesure du 2026-09-17 : 148 fichiers .bak.* (2,10 Mo),\n74 sources distinctes (41 x 1 version, 19 x 2, 5 x 3, 5 x 4, 1 x 5, 1 x 7, 1 x 8,\n1 x 14), du 06/09 16:29 au 17/09 07:12, 0 source disparue. Zones :\n_operateur/optimus-prime/ 93 (1,69 Mo), matrice/data/ 43, matrice/pilote/ 8,\ntmp-cameleon/ 2. Famille la plus lourde : pilote/commun.py (14 versions, 666 Ko).\nCroissance par jour : ... 16/09 : 102 fichiers, 17/09 : 8 -- c est la mesure qui\nmontre que rien ne borne la famille.\n\nCASE 3 CLASSIFICATION -- 153 elements classes PAR LA PORTE (bdd-conservation\nproposer), une entree par element, critere mesure et jamais l age seul :\nSTRUCTUREL 73 (le plus recent de chaque famille -- celui que la porte de revert\nsert encore) ; OBSOLETE 73 (une version plus recente du meme fichier existe) ;\nHORS-PERIMETRE 2 (les deux points de restauration de tmp-cameleon, zone du\ncameleon : SIGNALES, aucune ecriture) ; HISTORIQUE 2 (archives de l ancien\nformat, memoire de la migration) ; VIVANT 2 (archives lues par un flux actif) ;\nORPHELIN 1 (aucun lecteur mesure). BDD de conservation : 1 -> 155 elements,\nverifier OK. Deux cobayes requalifies et DITS (K-001 de MO-095, K-002 cree par\nmon propre test de la porte).\n\nCASE 4 AUDIT (lecture seule) -- 9 ecarts mesures avec preuve, dont deux de\ngravite haute : E1 AUCUNE porte de rotation/archivage pour la famille .bak.*\n(la case 7 est BLOQUEE pour ces 146 elements ; la rotation existe pourtant pour\nune autre BDD et le moteur partage data/commun/rotation_journal.py fournit deja\nla surete) ; E2 l exemption du contrat fondamental est bornee par la FORME\n(horodatage complet), pas par le VOLUME ni l age. Autres : E3 aucun verbe de\nretrait dans la porte de conservation (d ou les cobayes immortels) ; E4 REFERME\n(conservation.json est entre au registre d integrite depuis MO-146) ; E5 le theme\ndeclare 9 redirects sans champ PREUVE ; E6 la DESCRIPTION documente un verbe\n`lire` que la porte N A PAS (piege a agents, L-034) ; E7 CONTRADICTION : la BDD\nporte K-001 verdict `conserver` quand le document d etat propose `archiver` ;\nE8 signalement des 2 baks de Flux 1 ; E9 les .bak sont servis par le moteur\nquand ils ne derivent pas d une zone declaree (lien avec MO-153).\n\nLIVRE : _operateur/optimus-prime/purification/rapport-audit-MO-154.md (le\nrapport d audit, qui porte aussi les preuves des cases 1 a 3 -- la purge de\ncloture emporte les cobayes de tmp-optimus) ; data/conservation.json enrichie\nPAR SA PORTE (153 propositions + 1 requalification).\n\nPROUVES : 153/153 elements classes (0 echec de porte) ; bdd-conservation\nverifier OK ; 0 deplacement, 0 suppression (aucun acte : le point de la mission).\nDefauts de MES cobayes, attrapes et dits : `groupe()` supposait 3 niveaux de\nchemin (il a range 2 fichiers de tmp-cameleon comme une \"zone\") et la table des\narchives perdait les tags de deux entrees (100% attrape par le crash avant toute\necriture de porte).\n\nDETTES DECLAREES (pour la suite, PAS faites ici) : construire la porte de\nrotation sur le moteur partage rotation_journal.py, avec la borne declaree par le\nproprietaire de la famille ; corriger la DESCRIPTION de la porte (E6) ; trancher\nla contradiction E7 ; puis cases 5 (NEMESIS), 6 (decision) et 7 (acte).",
+        "timestamp": "2026-09-17T07:52:24.501839"
+      },
+      "timestamp": "2026-09-17T07:52:24.501845"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T07:54:59.088994"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-17T08:00:03.951959"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-155",
+        "theme": "REPARATION",
+        "bilan": "MO-155 (REPARATION) -- LES DEUX REGRESSIONS DE MO-154, ATTRAPEES PAR LES GARDES\n\nCe qui etait casse (mesure, apres la cloture de MO-154) :\n1. GARDE-ASCII : mon rapport d audit portait 10 caracteres NON-ASCII (U+00B7\n   'middot') dans deux lignes de tableau -- /sante rendait 1 PORTE EN ECHEC sur\n   13 (garde-ascii code 1).\n2. CARTES D IDENTITE : sa carte declarait `type: rapport`, hors du vocabulaire\n   FERME des 17 types reconnus -- la non-regression rendait cartes: [KO]\n   TYPES HORS VOCABULAIRE.\n\nCause de fond, mesuree : le document avait ete ecrit par l OUTIL NATIF, pas par\nla PORTE D ECRITURE (friction 74). La porte, elle, a bien VU l ecart ASCII\n('[ASCII] 10 non-ASCII lignes 35,38') mais elle conclut 'pas de validation pour\n.md' et laisse passer : celui qui ECRIT n applique pas ce que l autre REFUSERA.\n\nREPARATION, PAR LA PORTE (toutes les autres voies sont interdites)\n- `type: rapport` -> `type: analyse` (un des 17 types reconnus).\n- les deux lignes de tableau : U+00B7 -> ' ; ' (snippets extraits du fichier,\n  l ancien portant le caractere fautif -- edits par `ecrire editer`).\n3 editions, toutes '1 occurrence', validation de la porte a l appui.\n\nPREUVES DU RETOUR AU VERT (mesure, pas intention)\n- Non-ASCII : AUCUN (controle octet par octet) ; CRLF : non.\n- garde-ascii matrice/ : code=0 -> /sante OK (13 portes vertes).\n- controle des cartes : OK -> non-regression zone + flux : VERDICT OK.\n- Note : le [KO] 'historique' de la meme passe etait un artefact de CADENCE\n  (la routine n avait pas encore absorbe de passe) : il est revenu a OK seul.\n\nDECLARE (frictions 76 et 77, theme outil)\n- 76 (majeure, recurrente) : deux gardes qui ne sont pas d accord sur le meme\n  fichier -- la porte imprime l ecart ASCII d un .md puis le laisse passer, le\n  garde-ascii le refuse ensuite. Celui qui ECRIT devrait refuser ce que l autre\n  REFUSERA ; sinon une mission entiere est payee pour reparer un octet.\n- 77 (mineure, recurrente) : la porte ecrire attend des chemins RELATIFS A LA\n  RACINE du workspace quand tout l ecosysteme parle en chemins relatifs a\n  matrix/ -- et son refus annonce 'hors perimetre ecriture' alors que la cause\n  est la FORME du chemin (3 essais perdus).\n\nLECON L-116 : deux gardes qui ne sont pas d accord sur le meme fichier font une\nfaille, pas une securite.\n\nA DETTE (pour une mission suivante) : faire refuser a la porte d ecriture, pour\nles .md, ce que le garde-ascii refusera ; et harmoniser le langage des chemins.",
+        "timestamp": "2026-09-17T08:00:03.953323"
+      },
+      "timestamp": "2026-09-17T08:00:03.953330"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T08:01:56.268934"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T09:27:00.548330"
     }
   ],
-  "archive_le": "2026-09-16 07:09:41",
+  "archive_le": "2026-09-17 09:27:00",
   "origine": "cycle-state.json archive par MO-110 (EO-119) le 2026-09-15 : l ETAT disparait, l HISTORIQUE est conserve"
 }

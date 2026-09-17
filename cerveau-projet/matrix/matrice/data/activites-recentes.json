@@ -6,6 +6,28 @@
   "sections": {
     "missions": [
       {
+        "date": "2026-09-17 09:51:17",
+        "detail": "MO-162 (theme PURIFICATION, cases 7-8 reprises) : LES POINTS DE RESTAURATION SANS DECISION SONT CLASSES ET L ACTE EST EXECUTE. Mesure d entree : la BDD portait 155 points tous juges (82 decide, 73 archive), mais 29 fichiers .bak etaient sur le DISQUE sans aucune entree -- 20 signales par MO-160, plus 9 nes des ecritures du meme jour. Regle appliquee, APPRISE de la BDD et non inventee : STRUCTUREL -> conserver (73 points deja juges ainsi), OBSOLETE -> archiver (73), et 73 sur 73 des archives gardent un PLUS RECENT en place. Les 29 orphelins (puis 2 de plus nes de la reparation) ont passe les TROIS portes (propose -> classe -> decide) : 31 points classes, 19 conserver et 12 archiver, ZERO echec. L acte par la porte (archiver --lot oui, simule AVANT) : 12 / 12 archives, manifeste a jour. La verification du disque : les 12 sources ont disparu, les 12 destinations existent, sha_avant et sha_apres presents, restaurable vrai. ET LA CASE 8 A ETE TROUVEE FAUSSE : elle rendait 74 ecarts (dont 73 sha differents) alors que les 73 archives etaient intactes -- l inventaire du temoin mesurait la SOURCE d un point deja archive, donc sha=None, donc accusation ; et le continue sortait ces 73 du comptage, faisant tomber le second invariant. Reparee a la cause (le temoin mesure chaque point a son domicile du moment et DIT d ou il a lu ; le controle dit NON MESURABLE au lieu d accuser). Mesure apres : 0 ecart, archive + actif = origine (179 points, 2530800 octets), la ou l origine ne couvrait que 104 points avant.",
+        "tags": [
+          "MO-162",
+          "purification",
+          "cases7-8",
+          "rotation",
+          "archive"
+        ]
+      },
+      {
+        "date": "2026-09-17 09:43:34",
+        "detail": "MO-161 (theme PILOTE) : surveillance suivi-optimus.md -- REPARATION DE LA COLLECTE des colonnes Portes/Fichiers. La chaine etait prete de bout en bout (la porte noter accepte --portes/--fichiers depuis sa naissance, le transport est cable par MO-139, la vue les lit) et TROIS appelants ne les passaient pas : declarer_borne_marbre n acceptait MEME PAS de parametre portes (debut 24/142, fin 35/141), purger_zone_temporaire DETIENT la liste de ses suppressions et n en passait AUCUNE (21 evenements purge, 0 fichier), crier_mission_muette n en passait aucune. Les 3 sont repares. Preuves : cobaye dynamique 10/10 (deux collaborateurs remplaces par des espions, ZERO ecriture au marbre), cobaye statique 10/10 (AST sur les 3 sites d appel -- un correctif juste ecrit dans la mauvaise fonction ne se voit pas autrement), et une preuve BOUT EN BOUT REELLE : purge de la zone tmp-optimus, 19 fichiers, evenement au journal avec portes=[pilote:purge] et les 19 noms, vue regeneree qui les AFFICHE (ligne 185). Controles : py_compile x3 OK, garde-ascii 671 fichiers 0 violation, sc-003 executer code 0, coherence file-journal 0 ecart.",
+        "tags": [
+          "MO-161",
+          "suivi-optimus",
+          "collecte",
+          "pilote",
+          "reparation"
+        ]
+      },
+      {
         "date": "2026-09-06 16:33:45",
         "detail": "M-015 en cours : bdd-activites construite et testee (rotation prouvee)",
         "tags": [
@@ -341,26 +363,12 @@
         "tags": [
           "test-rotation"
         ]
-      },
-      {
-        "date": "2026-09-06 16:32:24",
-        "detail": "activite de rotation 5",
-        "tags": [
-          "test-rotation"
-        ]
-      },
-      {
-        "date": "2026-09-06 16:32:24",
-        "detail": "activite de rotation 4",
-        "tags": [
-          "test-rotation"
-        ]
       }
     ],
     "alertes": [],
     "passes": [
       {
-        "date": "2026-09-16 07:40:25",
+        "date": "2026-09-17 21:41:55",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -369,7 +377,7 @@
         ]
       },
       {
-        "date": "2026-09-16 07:35:24",
+        "date": "2026-09-17 21:36:53",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -378,7 +386,7 @@
         ]
       },
       {
-        "date": "2026-09-16 07:30:22",
+        "date": "2026-09-17 21:31:52",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -387,7 +395,7 @@
         ]
       },
       {
-        "date": "2026-09-16 07:25:21",
+        "date": "2026-09-17 21:26:50",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -396,7 +404,7 @@
         ]
       },
       {
-        "date": "2026-09-16 07:20:19",
+        "date": "2026-09-17 21:21:49",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -405,7 +413,7 @@
         ]
       },
       {
-        "date": "2026-09-16 07:15:18",
+        "date": "2026-09-17 21:16:47",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -414,7 +422,7 @@
         ]
       },
       {
-        "date": "2026-09-16 07:10:16",
+        "date": "2026-09-17 21:11:46",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -423,7 +431,7 @@
         ]
       },
       {
-        "date": "2026-09-16 07:05:15",
+        "date": "2026-09-17 21:06:44",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -432,7 +440,7 @@
         ]
       },
       {
-        "date": "2026-09-16 07:00:13",
+        "date": "2026-09-17 21:01:43",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -441,7 +449,7 @@
         ]
       },
       {
-        "date": "2026-09-16 06:55:12",
+        "date": "2026-09-17 20:56:41",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -450,7 +458,7 @@
         ]
       },
       {
-        "date": "2026-09-16 06:50:10",
+        "date": "2026-09-17 20:51:40",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -459,7 +467,7 @@
         ]
       },
       {
-        "date": "2026-09-16 06:45:09",
+        "date": "2026-09-17 20:46:38",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -468,7 +476,7 @@
         ]
       },
       {
-        "date": "2026-09-16 06:40:08",
+        "date": "2026-09-17 20:41:37",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -477,7 +485,7 @@
         ]
       },
       {
-        "date": "2026-09-16 06:35:06",
+        "date": "2026-09-17 20:36:35",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -486,7 +494,7 @@
         ]
       },
       {
-        "date": "2026-09-16 06:30:05",
+        "date": "2026-09-17 20:31:33",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -495,7 +503,7 @@
         ]
       },
       {
-        "date": "2026-09-16 06:25:03",
+        "date": "2026-09-17 20:26:32",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -504,7 +512,7 @@
         ]
       },
       {
-        "date": "2026-09-16 06:20:02",
+        "date": "2026-09-17 20:21:30",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -513,7 +521,7 @@
         ]
       },
       {
-        "date": "2026-09-16 06:15:01",
+        "date": "2026-09-17 20:16:29",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -522,7 +530,7 @@
         ]
       },
       {
-        "date": "2026-09-16 06:09:59",
+        "date": "2026-09-17 20:11:27",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -531,7 +539,7 @@
         ]
       },
       {
-        "date": "2026-09-16 06:04:58",
+        "date": "2026-09-17 20:06:26",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -540,7 +548,7 @@
         ]
       },
       {
-        "date": "2026-09-16 05:59:56",
+        "date": "2026-09-17 20:01:24",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -549,7 +557,7 @@
         ]
       },
       {
-        "date": "2026-09-16 05:54:55",
+        "date": "2026-09-17 19:56:23",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -558,7 +566,7 @@
         ]
       },
       {
-        "date": "2026-09-16 05:49:53",
+        "date": "2026-09-17 19:51:21",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -567,7 +575,7 @@
         ]
       },
       {
-        "date": "2026-09-16 05:44:52",
+        "date": "2026-09-17 19:46:20",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -576,7 +584,7 @@
         ]
       },
       {
-        "date": "2026-09-16 05:39:51",
+        "date": "2026-09-17 19:41:18",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -585,7 +593,7 @@
         ]
       },
       {
-        "date": "2026-09-16 05:34:49",
+        "date": "2026-09-17 19:36:17",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -594,7 +602,7 @@
         ]
       },
       {
-        "date": "2026-09-16 05:29:48",
+        "date": "2026-09-17 19:31:15",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -603,7 +611,7 @@
         ]
       },
       {
-        "date": "2026-09-16 05:24:47",
+        "date": "2026-09-17 19:26:14",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -612,7 +620,7 @@
         ]
       },
       {
-        "date": "2026-09-16 05:19:45",
+        "date": "2026-09-17 19:21:12",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -621,7 +629,7 @@
         ]
       },
       {
-        "date": "2026-09-16 05:14:44",
+        "date": "2026-09-17 19:16:11",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -630,7 +638,7 @@
         ]
       },
       {
-        "date": "2026-09-16 05:09:42",
+        "date": "2026-09-17 19:11:09",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -639,7 +647,7 @@
         ]
       },
       {
-        "date": "2026-09-16 05:04:41",
+        "date": "2026-09-17 19:06:08",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -648,7 +656,7 @@
         ]
       },
       {
-        "date": "2026-09-16 04:59:40",
+        "date": "2026-09-17 19:01:06",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -657,7 +665,7 @@
         ]
       },
       {
-        "date": "2026-09-16 04:54:38",
+        "date": "2026-09-17 18:56:05",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -666,7 +674,7 @@
         ]
       },
       {
-        "date": "2026-09-16 04:49:37",
+        "date": "2026-09-17 18:51:03",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -675,7 +683,7 @@
         ]
       },
       {
-        "date": "2026-09-16 04:44:35",
+        "date": "2026-09-17 18:46:02",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -684,7 +692,7 @@
         ]
       },
       {
-        "date": "2026-09-16 04:39:34",
+        "date": "2026-09-17 18:41:00",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -693,7 +701,7 @@
         ]
       },
       {
-        "date": "2026-09-16 04:34:33",
+        "date": "2026-09-17 18:35:59",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -702,7 +710,7 @@
         ]
       },
       {
-        "date": "2026-09-16 04:29:31",
+        "date": "2026-09-17 18:30:57",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -711,7 +719,7 @@
         ]
       },
       {
-        "date": "2026-09-16 04:24:30",
+        "date": "2026-09-17 18:25:56",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -720,7 +728,7 @@
         ]
       },
       {
-        "date": "2026-09-16 04:19:28",
+        "date": "2026-09-17 18:20:54",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -729,7 +737,7 @@
         ]
       },
       {
-        "date": "2026-09-16 04:14:27",
+        "date": "2026-09-17 18:15:53",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -738,7 +746,7 @@
         ]
       },
       {
-        "date": "2026-09-16 04:09:26",
+        "date": "2026-09-17 18:10:51",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -747,7 +755,7 @@
         ]
       },
       {
-        "date": "2026-09-16 04:04:24",
+        "date": "2026-09-17 18:05:50",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -756,7 +764,7 @@
         ]
       },
       {
-        "date": "2026-09-16 03:59:23",
+        "date": "2026-09-17 18:00:48",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -765,7 +773,7 @@
         ]
       },
       {
-        "date": "2026-09-16 03:54:21",
+        "date": "2026-09-17 17:55:47",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -774,7 +782,7 @@
         ]
       },
       {
-        "date": "2026-09-16 03:49:20",
+        "date": "2026-09-17 17:50:45",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -783,7 +791,7 @@
         ]
       },
       {
-        "date": "2026-09-16 03:44:19",
+        "date": "2026-09-17 17:45:44",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -792,7 +800,7 @@
         ]
       },
       {
-        "date": "2026-09-16 03:39:17",
+        "date": "2026-09-17 17:40:42",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -801,7 +809,7 @@
         ]
       },
       {
-        "date": "2026-09-16 03:34:16",
+        "date": "2026-09-17 17:35:41",
         "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
         "tags": [
           "veille-flux",
@@ -811,6 +819,26 @@
       }
     ],
     "decisions": [
+      {
+        "date": "2026-09-17 09:51:07",
+        "detail": "MO-162 (cases 7-8) : LA REGLE DE CLASSEMENT A ETE APPRISE DE LA BDD, PAS INVENTEE -- mesure sur les 184 points deja juges : STRUCTUREL -> conserver (73), OBSOLETE -> archiver (73), et 73 sur 73 des archives gardent un PLUS RECENT en place. Applied aux points SANS decision : un point de restauration REMPLACE (un plus recent existe pour le meme fichier) est OBSOLETE ; le PLUS RECENT de son fichier est STRUCTUREL. 31 points classes par les trois portes (propose -> classe -> decide), 19 conserver et 12 archiver. Second point tranche : case 8 etait FAUSSE (74 ecarts fabriques par le temoin) -- reparee a la cause, et l origine couvre desormais l ensemble de la famille au lieu de ce que la mesure avait su lire.",
+        "tags": [
+          "MO-162",
+          "purification",
+          "decision",
+          "case8"
+        ]
+      },
+      {
+        "date": "2026-09-17 09:43:17",
+        "detail": "MO-161 : les colonnes Portes/Fichiers de suivi-optimus.md -- OPTION 1 (reparer la collecte) RETENUE, option 2 (retirer les colonnes) ECARTEE. La mesure qui tranche : chacun des 3 appelants fautifs DETIENT la donnee au moment ou il ecrit (le pilote vient d injecter ou de clore, le purgeur tient la liste de ce qu il vient de supprimer). Retirer une colonne parce que l appelant oublie de la remplir, ce serait supprimer la surveillance au lieu de brancher celui qui devait l alimenter. Second point tranche : le PASSE reste en tiret (aucune source ne relie une mission ancienne a ses portes -- 0 tag-mission sur 5359 usages), et c est un FAIT, pas un trou ; le FUTUR se remplit des la prochaine borne.",
+        "tags": [
+          "MO-161",
+          "suivi-optimus",
+          "decision",
+          "collecte"
+        ]
+      },
       {
         "date": "2026-09-09 09:35:26",
         "detail": "M-082 : marbre Matrice domicile en 3 BDD separees (regles/conventions/protocoles), ecriture optimus seul, lecture Matrice + cameleon",

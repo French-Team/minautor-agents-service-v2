@@ -69,9 +69,9 @@
     },
     {
       "route": "/chercher",
-      "but": "Brancher la PORTE UNIQUE de recherche (EO-112) : chercher une mission, une lecon, un fichier -- avec --requete c'est une recherche reelle, sans elle un temoin prouve que le moteur repond (un moteur aveugle dit 0 resultat, MO-055)",
+      "but": "Brancher la PORTE UNIQUE de recherche (EO-112) : chercher une mission, une lecon, un fichier -- avec --requete c'est une recherche reelle, sans elle un temoin prouve que le moteur repond (un moteur aveugle dit 0 resultat, MO-055). Appelee avec --prive (EO-126) : la porte EXCLUT par defaut les zones invisibles L-016, or cette route annonce zone_perimetre maintenance,_operateur -- sans le drapeau la promesse etait FAUSSE (mesure 2026-09-16 : POSTURE_PAR_TYPE = 0, meme par ici). Le moteur trouve aussi un fichier par son NOM, pas seulement par son contenu.",
       "portes": [
-        "matrice/data/outils/rechercher/main.py rechercher --requete <texte> --dans tous --json"
+        "matrice/data/outils/rechercher/main.py rechercher --requete <texte> --dans tous --prive --json"
       ],
       "ecriture": false
     },

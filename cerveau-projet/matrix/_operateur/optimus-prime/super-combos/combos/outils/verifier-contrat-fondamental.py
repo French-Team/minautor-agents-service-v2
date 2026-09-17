@@ -37,6 +37,7 @@ import re
 import sys
 import json
 import argparse
+import importlib.util
 from pathlib import Path
 
 
@@ -65,7 +66,10 @@ SUFFIXES_NOM_IMPOSE = (".moule",)
 # horodatage, ou d'une autre forme, reste un ECART) et VISIBLE (chaque fichier
 # epargne est RENDU dans le rapport, jamais un silence -- une exemption muette
 # est un angle mort, doctrine de verifier-exemptions-visibles MO-075).
-MOTIF_POINT_RESTAURATION = re.compile(r"\.bak\.\d{8}_\d{6}$")
+# Le MOTIF n'est PAS ecrit ici : la forme est PRODUITE par la porte `ecrire`,
+# c'est donc elle qui la DECLARE (matrice/data/outils/ecrire/constants.py). Le
+# contrat la CONSOMME (voir charger_motif_point_restauration, plus bas) : une
+# forme redevinee par un consommateur derive en silence (L-100/L-102).
 
 
 EXTENSIONS_CODE = (".py",)
@@ -144,6 +148,35 @@ else:
 RACINE_MATRICE = _courant
 
 
+def charger_motif_point_restauration():
+    """Le motif du point de restauration, LU depuis son DOMICILE.
+
+    La forme `.bak.<horodatage>` est produite par la porte `ecrire` (proto-2 :
+    jamais de modification sans point de restauration) : c'est cette porte qui
+    la declare, et le contrat la CONSOMME au lieu de la redeviner -- une forme
+    recopiee par un consommateur derive en silence (lecons L-100/L-102).
+
+    Retourne (motif compile, avis). Un domicile illisible ne rend JAMAIS un
+    motif devine : l'avis est DIT (dette) et rien n'est epargne -- une exemption
+    appliquee sans sa source serait un angle mort.
+    """
+    chemin = RACINE_MATRICE / "matrice" / "data" / "outils" / "ecrire" / "constants.py"
+    if not chemin.is_file():
+        return None, ("DETTE AVOUEE : domicile de la forme .bak introuvable ("
+                      + str(chemin) + ") : aucune exemption n'est appliquee.")
+    try:
+        spec = importlib.util.spec_from_file_location("domicile_forme_bak", str(chemin))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return re.compile(module.MOTIF_BAK_HORODATE), None
+    except (ImportError, OSError, SyntaxError, AttributeError, re.error) as erreur:
+        return None, ("DETTE AVOUEE : motif du point de restauration illisible ("
+                      + str(erreur) + ") : aucune exemption n'est appliquee.")
+
+
+MOTIF_POINT_RESTAURATION, AVIS_DOMICILE_BAK = charger_motif_point_restauration()
+
+
 # --- Fonctions simples -----------------------------------------------------
 
 def doit_ignorer(racine, chemin):
@@ -199,10 +232,14 @@ def nom_objet_canonique(nom):
 def point_de_restauration(nom):
     """Vrai si le nom est un POINT DE RESTAURATION de porte (un .bak horodate).
 
-    Exemption BORNEE : seul le motif declare epargne un fichier, et il exige
-    l horodatage complet. Un .bak d une autre forme reste un ECART -- une
-    exemption large serait l angle mort qu on veut fermer.
+    Exemption BORNEE : seul le motif CONSOMME (celui du domicile de la porte
+    qui produit la forme) epargne un fichier, et il exige l horodatage complet.
+    Un .bak d une autre forme reste un ECART -- une exemption large serait
+    l angle mort qu on veut fermer. Sans domicile lisible, rien n est epargne :
+    la dette le DIT (voir AVIS_DOMICILE_BAK).
     """
+    if MOTIF_POINT_RESTAURATION is None:
+        return False
     return bool(MOTIF_POINT_RESTAURATION.search(nom))
 
 
@@ -233,6 +270,9 @@ def controler_noms(racine):
     """
     ecarts = []
     exemptions = []
+    # Un domicile illisible se DIT (dette), il ne se tait pas : sans lui le
+    # controle classerait des points de restauration en ecarts sans dire pourquoi.
+    dettes = [AVIS_DOMICILE_BAK] if AVIS_DOMICILE_BAK else []
     for chemin in sorted(racine.rglob("*")):
         if doit_ignorer(racine, chemin):
             continue
@@ -248,7 +288,7 @@ def controler_noms(racine):
                 )
             elif not nom_objet_canonique(chemin.name):
                 ecarts.append("fichier non canonique : " + str(chemin))
-    return ecarts, [], exemptions
+    return ecarts, dettes, exemptions
 
 
 def controler_flags(racine):

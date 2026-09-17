@@ -5,6 +5,7 @@ from constants import (
     CARTE_CONVERSION,
     DOSSIERS_CIBLES,
     DOSSIERS_EXCLUS,
+    DOSSIERS_HORS_CHAMP,
     ENCODAGE,
     EXTENSIONS_CIBLES,
     EXTENSIONS_JOURNAUX,
@@ -27,6 +28,10 @@ def classer_fichiers_cibles():
     """
     cibles = []
     exemptes = []
+    # AUCUNE zone hors champ n'entre ici : `exemptes` ne porte que les deux
+    # familles justifiees par le disque (etalon / journal). Les zones hors champ
+    # se lisent par `zones_hors_champ()` -- le rapport les montre, elles ne
+    # polluent pas le contrat des exemptions.
     for dossier in DOSSIERS_CIBLES:
         if not dossier.exists():
             continue
@@ -49,6 +54,23 @@ def classer_fichiers_cibles():
                     continue
                 cibles.append(chemin)
     return sorted(cibles), sorted(exemptes)
+
+
+def zones_hors_champ():
+    """Les ZONES hors champ : jamais scannees, mais TOUJOURS NOMMEES.
+
+    Ne pas confondre avec une EXEMPTION : un exempte est VU puis jamais reecrit
+    (son motif est justifie sur le disque -- etalon `.sha256` ou journal
+    `.jsonl`) ; une zone hors champ n'est pas parcourue du tout (aucun fichier a
+    classer). Les deux vivaient dans la meme liste, ce qui faisait porter a une
+    exclusion de PERIMETRE le contrat d'une exemption de REECRITURE (mesure du
+    2026-09-17 : le garde `verifier-exemptions-visibles` exige DEUX motifs
+    justifies par le disque). Le rapport les MONTRE quand meme : une zone muette
+    est un angle mort qu'aucune suite ne voit.
+    """
+    return sorted(
+        (str(dossier), motif) for dossier, motif in DOSSIERS_HORS_CHAMP if dossier.exists()
+    )
 
 
 def lister_fichiers_cibles():

@@ -41,6 +41,15 @@ INDENTATION_JSON = 2
 SUFFIXE_TMP = ".tmp"
 SUFFIXE_BAK = ".bak"
 
+# FORME du point de restauration (friction 42, arbitrage createur 2026-09-16) :
+# la forme est PRODUITE par cette porte (commun.chemin_bak) et nulle part
+# ailleurs -- elle se declare donc ICI, une seule fois. Tout consommateur qui
+# doit RECONNAITRE un point de restauration (contrat fondamental, espion
+# d'integrite, remorque Optimus) compile CE motif au lieu de le redeviner :
+# une forme redevinee par un consommateur derive en silence (L-100/L-102).
+FORMAT_HORODATE_BAK = "%Y%m%d_%H%M%S"
+MOTIF_BAK_HORODATE = r"\.bak\.\d{8}_\d{6}$"
+
 # Modes
 MODES_PERMIS = ("creer", "remplacer", "ajouter")
 

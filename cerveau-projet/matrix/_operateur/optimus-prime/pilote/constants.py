@@ -94,6 +94,38 @@ NIVEAU_DEFCON_MAX = 5
 THEME_DEFCON = "DEFCON"
 CHEMIN_CLASSEUR_VARIABLES = REPERTOIRE_DATA / "classeur-variables.json"
 
+# BDD des MODIFICATIONS : le domicile de "quel fichier a ete touche par quoi"
+# (indexee par FICHIER, chaque modification portant son detail et ses tags). Le
+# pilote la LIT pour remplir les FICHIERS de la trace de mission (MO-139) : les
+# colonnes vides de suivi-optimus.md ne venaient pas de la vue, elles venaient du
+# fait que le pilote ne transmettait JAMAIS la liste des fichiers a la porte
+# `noter` -- qui l'accepte pourtant depuis sa naissance. Zero-valeur-en-dur : la
+# logique consomme CE chemin, elle ne le reconstruit pas.
+NOM_MODIFICATIONS = "modifications-par-fichier.json"
+CHEMIN_MODIFICATIONS = REPERTOIRE_DATA / NOM_MODIFICATIONS
+# Fenetre de lecture du DETAIL pour attribuer une modification a une mission
+# (MO-139). Convention MESUREE le 2026-09-16 : le detail d'une modification OUVRE
+# sur la mission qui agit ("MO-136 (tracage de rattrapage...) : ..."), alors qu'une
+# mention d'EXEMPLE arrive loin dans le texte (mesure : "MO-999", id de cobaye
+# cite dans un detail qui recopie une commande, se trouvait a la position 319).
+# Au-dela de la fenetre, la mention n'attribue rien : la derivation ne fabrique
+# pas de faux fichier dans la trace.
+FENETRE_MENTION_DETAIL = 60
+
+# SUPER-COMBO D'ENTRETIEN DE LA TRACE (sc-003-auto-suivi) : le PILOTE le lance a
+# chaque cloture de mission (demande createur, 2026-09-16). Il chaine la
+# coherence file<->journal PUIS la regeneration de la vue. Avant, le pilote
+# appelait la SEULE porte `vue` : l'ecart entre la file et le journal n'etait
+# regarde que si quelqu'un y pensait -- une discipline d'agent, donc une affaire
+# de memoire. Chemin ET verbe declares UNE fois (zero-valeur-en-dur).
+CHEMIN_SUPER_COMBO_SUIVI = (
+    REPERTOIRE_OPERATEUR / "super-combos" / "sc-003-auto-suivi" / "main.py"
+)
+VERBE_ENTRETIEN_SUIVI = "rapide"
+# Le super-combo lance deux portes en sous-processus : la borne est large, mais
+# elle EXISTE -- une porte morte ne doit jamais figer une cloture.
+DELAI_ENTRETIEN_SUIVI = 120
+
 # Protocole de pause session-matrix (M-080) : l'etat serialise pose par
 # l'outil pause-session au niveau data/. S'il existe, la session est EN PAUSE.
 NOM_ETAT_PAUSE = "session-matrix-etat.json"
@@ -104,6 +136,68 @@ CHEMIN_ETAT_PAUSE = REPERTOIRE_DATA / NOM_ETAT_PAUSE
 # copies, deux comportements possibles -- L-029) ; le code le CONSOMME
 # desormais, il ne le contient plus (zero-valeur-en-dur).
 CHEMIN_PORTE_SESSIONS = REPERTOIRE_DATA / "outils" / "bdd-sessions" / "main.py"
+
+# Porte de CONSERVATION (EO-147, MO-163) : le BALAYAGE de la famille des points
+# de restauration. La porte `ecrire` cree un point a CHAQUE passage, donc chaque
+# ecriture ajoute un element a classer -- et une classification faite a la main
+# ne se termine jamais (mesure MO-162 : 29 points sans decision en une journee,
+# dont 2 nes de la reparation de la verification elle-meme). Le pilote balaie
+# donc a CHAQUE cloture, comme il purge sa zone jetable : une discipline
+# qu'aucun instrument ne mesure depend de la memoire (lecon MO-136). Chemin,
+# verbe et borne declares UNE fois (zero-valeur-en-dur).
+CHEMIN_PORTE_CONSERVATION = REPERTOIRE_DATA / "outils" / "bdd-conservation" / "main.py"
+VERBE_BALAYAGE_CONSERVATION = "balayer"
+DELAI_BALAYAGE_CONSERVATION = 120
+# L'ACTE de la MEME famille (EO-147) : le balayage n'ecrit que des DECISIONS, et
+# une famille classee mais jamais archivee reste un travail EN ATTENTE -- donc une
+# discipline d'agent, donc oubliee. Mesure de la fermeture d'EO-147 : 88 elements
+# decidas `archiver` attendaient un geste manuel. Le pilote draine donc la famille
+# a CHAQUE cloture, comme il vide sa zone jetable (MO-136). L'option `--lot oui`
+# ne traite que les elements dont le verdict est DEJA trace : la decision vient
+# toujours AVANT le geste (plan-conservation, section 5 : aucun element sans
+# verdict ne bouge).
+VERBE_ARCHIVAGE_CONSERVATION = "archiver"
+OPTION_LOT_ARCHIVAGE_CONSERVATION = "--lot"
+DELAI_ARCHIVAGE_CONSERVATION = 180
+# Le CONTROLE de la MEME famille (EO-152, MO-165) : les deux gestes ci-dessus
+# MAINTIENNENT la borne N=1 (une famille ne garde EN PLACE que son plus recent) ;
+# ce verbe la MESURE. Mesure MO-164 : la case 8 (`controler-archives`) reste verte
+# TOUT LE TEMPS -- elle mesure la PERTE, jamais la BORNE -- et 16 points STRUCTUREL
+# en trop dans 10 familles sur 88 n'etaient vus par AUCUN instrument. Un controle
+# que personne ne lance ne protege rien : le pilote le lance donc a CHAQUE cloture,
+# APRES l'acte qui doit l'etablir.
+VERBE_CONTROLE_BORNE_CONSERVATION = "controler-borne"
+DELAI_CONTROLE_BORNE_CONSERVATION = 60
+# L'ECHEC de ce controle part AU MARBRE (le pilote l'y note) : la vue la relira
+# bien apres que la console s'est refermee, donc la MESURE de la porte -- les
+# familles en exces et leurs identifiants -- doit voyager AVEC l'alerte. Sans
+# borne, un incident qui toucherait toutes les familles transformerait la trace
+# en mur de texte ; le plafond vit donc ici, une seule fois.
+LONGUEUR_MESURE_ALERTE_CONSERVATION = 1200
+
+# ZONE DES FICHIERS JETABLES d'Optimus (regle immuable perimetre-tmp) : c'est le
+# PILOTE qui la VIDE a la cloture (MO-136), sur les DEUX chemins de fin (`fin` et
+# `enregistrer`). Le point 4 de la regle etait une DISCIPLINE D'AGENT -- et le
+# garde tmp dit lui-meme qu'il ne peut pas la verifier : une discipline non
+# verifiee depend de la memoire, donc elle est oubliee. Un domicile, une
+# constante (zero-valeur-en-dur).
+NOM_ZONE_TMP = "tmp-optimus"
+REPERTOIRE_ZONE_TMP = REPERTOIRE_MATRIX / NOM_ZONE_TMP
+NOM_README_ZONE_TMP = "README.md"
+
+# MOTEUR DE RECHERCHE (EO-131) : le projet se souvient mieux que l'agent, mais
+# encore faut-il le lui DEMANDER au bon moment -- le sujet de la mission. Le
+# pilote fournit donc la QUESTION dans l'injection (comme la posture), au lieu de
+# laisser l'agent y penser. Chemin ET options sont declares UNE fois ici : la
+# logique les consomme, elle ne les contient pas (zero-valeur-en-dur).
+# L'option `--prive` ouvre la zone de l'operateur a la recherche : c'est le FLUX 2
+# qui la porte. Le cameleon ne la recoit JAMAIS (L-016, coherence d'invisibilite).
+CHEMIN_MOTEUR_RECHERCHE = REPERTOIRE_DATA / "outils" / "rechercher" / "main.py"
+OPTIONS_MOTEUR_RECHERCHE = "--dans tous --prive"
+GABARIT_COMMANDE_RECHERCHE = (
+    "python3 " + str(CHEMIN_MOTEUR_RECHERCHE)
+    + " rechercher --requete \"{question}\" " + OPTIONS_MOTEUR_RECHERCHE
+)
 
 
 BOITE_PILOTE_OUT = REPERTOIRE_INTERCOM / "pilote" / "outbox.jsonl"

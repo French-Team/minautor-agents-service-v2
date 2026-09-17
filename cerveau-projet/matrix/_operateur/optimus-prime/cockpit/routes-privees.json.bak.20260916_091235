@@ -1,0 +1,102 @@
+{
+  "identite": {
+    "type": "routes-privees",
+    "version": 1,
+    "domicile": "_operateur/optimus-prime/cockpit",
+    "flux": "2-maintenance-optimus-seul",
+    "acces": "lecture-seule-prive-verrouille",
+    "invisible_cameleon": true,
+    "zone_perimetre": "maintenance,_operateur"
+  },
+  "routes": [
+    {
+      "route": "/etat",
+      "but": "Sante du serveur distant + session-matrix (pause/defcon/perimetre)",
+      "portes": [
+        "routines/vie/main.py etat",
+        "routines/vie/main.py server etat",
+        "data/outils/pause-session/main.py etat + journal",
+        "data/outils/machine-defcon/main.py lire",
+        "data/outils/bdd-variables/main.py lire --cle defcon|perimetre-cameleon",
+        "data/classeur-variables.json (lecture via porte)"
+      ],
+      "ecriture": false
+    },
+    {
+      "route": "/sante",
+      "but": "Integrite du marbre + BDD (preuves SHA-256) + coherence file du pilote <-> journal, avec VERDICT global en fin de route (une porte rouge crie)",
+      "portes": [
+        "routines/espion-integrite/main.py verifier (diagnostic SANS ecriture : la route est en lecture seule)",
+        "data/outils/verifier-conventions/main.py verifier",
+        "data/outils/verifier-regles/main.py verifier",
+        "data/outils/verifier-protocoles/main.py verifier",
+        "data/outils/bdd-regles-matrice/main.py verifier",
+        "data/outils/bdd-conventions-matrice/main.py verifier",
+        "data/outils/bdd-protocoles-matrice/main.py verifier",
+        "data/outils/bdd-modifications/main.py verifier",
+        "data/outils/suivi-optimus/main.py verifier",
+        "data/outils/suivi-optimus/main.py coherence (croisement FILE du pilote <-> JOURNAL, MO-048 : c'est lui qui crie quand une mission est menee sans entrer dans le marbre ; branche dans /sante en MO-096)",
+        "super-combos/combos/outils/garde-ascii.py + garde-perimetre-write.py --jours 1"
+      ],
+      "ecriture": false
+    },
+    {
+      "route": "/flux1",
+      "but": "Flux Cameleon : Matrice GUIDE (pilote/file, vrac/tresse, intercom, veille)",
+      "portes": [
+        "matrice/pilote/main.py file",
+        "matrice/pilote/entonnoir/main.py file + tresse brin",
+        "matrice/intercom/pilote/outbox.jsonl (lecture tail)",
+        "matrice/intercom/cameleon/inbox.jsonl (lecture tail)",
+        "matrice/routines/veille-flux (journal dernieres passes)",
+        "_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py (verdict Flux1)"
+      ],
+      "ecriture": false
+    },
+    {
+      "route": "/flux2",
+      "but": "Flux Maintenance : Matrice SURVEILLE Optimus (espions, remorque, suivi-optimus)",
+      "portes": [
+        "_operateur/optimus-prime/espions/espion-integrite-optimus.py",
+        "_operateur/optimus-prime/espions/espion-activite-optimus.py",
+        "_operateur/optimus-prime/remorque/remorque-optimus.py etat",
+        "matrice/data/outils/suivi-optimus/main.py verifier + lire --n 5",
+        "matrice/data/suivi-optimus.md (vue, segments)",
+        "_operateur/optimus-prime/espions/registre/registre.json (71 empreintes)",
+        "_operateur/optimus-prime/remorque/inventaire.json (45 equipements)"
+      ],
+      "ecriture": false
+    },
+    {
+      "route": "/chercher",
+      "but": "Brancher la PORTE UNIQUE de recherche (EO-112) : chercher une mission, une lecon, un fichier -- avec --requete c'est une recherche reelle, sans elle un temoin prouve que le moteur repond (un moteur aveugle dit 0 resultat, MO-055)",
+      "portes": [
+        "matrice/data/outils/rechercher/main.py rechercher --requete <texte> --dans tous --json"
+      ],
+      "ecriture": false
+    },
+    {
+      "route": "/metriques",
+      "but": "Performances + activite (periodes, usages, journal) -- la duree d'un objet se juge contre le BUDGET QUE L'OBJET PUBLIE (routine : etat court ; outil : ligne 'Budget declare de l'outil' dans sa sortie), jamais contre un nombre ecrit chez le cockpit ; la CAPACITE du journal usages est publiee par son proprietaire (bdd-usages lire) et comparee a la TAILLE REELLE du journal (un depassement = la rotation n'a pas tourne)",
+      "portes": [
+        "matrice/data/outils/bilan-periode/main.py bilan --periode heures",
+        "super-combos/combos/outils/bilan-matrice.py --rapide",
+        "matrice/data/outils/journal-multi-encarts/main.py construire (lecture seule, genere vue)",
+        "matrice/data/outils/bdd-usages/main.py lire (derniers)"
+      ],
+      "ecriture": false
+    },
+    {
+      "route": "/complet",
+      "but": "Tout en une passe (/etat + /sante + /flux1 + /flux2 + /chercher + /metriques) en serie stricte",
+      "portes": ["cockpit-matrice.py --route etat,sante,flux1,flux2,chercher,metriques (interne, sans ecriture)"],
+      "ecriture": false
+    }
+  ],
+  "garanties": {
+    "lecture_seule": "aucune route n'ecrit, ne pose de drapeau, ne kill",
+    "invisibilite": "domicile _operateur + zone maintenance => filtre L-016, audit-invisibilite 0 fuite",
+    "perimetre": "Optimus seul, Flux 2, hors pilote, write matrix/ seul (allowlist demarrer* inchangee)",
+    "serie": "routes en serie stricte, une a la fois"
+  }
+}

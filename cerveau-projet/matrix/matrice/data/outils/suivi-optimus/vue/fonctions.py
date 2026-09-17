@@ -4,10 +4,56 @@ Decision createur (2026-09-09) : la vue est organisee en TABLEAUX DEDIES
 par action (jamais a la suite) -- le createur suit TOUTES les actions
 d'optimus-prime a des emplacements precis. optimus reste invisible : pas
 d'encart dans journal-multi-encarts.md, SON fichier est la seule vue.
+
+REVISION CREATEUR (2026-09-16, MO-139) : "suivi-optimus.md ne represente pas du
+tout le travail". Mesure a l'appui -- trois causes vivaient dans CE fichier :
+
+  (1) le DETAIL etait AMPUTE a 200 caracteres. Un bilan de mission en fait 2 000
+      a 3 000 : la vue livrait donc des phrases coupees au milieu, sans le
+      pourquoi ni les preuves. La substance du travail etait jetee a l'affichage.
+  (2) l'affichage s'arretait aux 10 DERNIERS evenements par action. Sur 246
+      evenements et 119 missions, la vue montrait une soixantaine de lignes,
+      presque toutes des "Debut implicite" : aucun RECAP du travail accompli.
+  (3) le compteur "Missions finies" comptait les missions PRESENTES dans la
+      trace, pas celles qui portent une FIN -- une mission ouverte la veille
+      etait comptee comme finie. Un compteur qui ne dit pas ce qu'il annonce.
+
+La vue porte donc DEUX tableaux de LECTURE DU TRAVAIL, en plus des tableaux par
+action (intention du createur conservee telle quelle) :
+
+  - RECAP PAR MISSION : une ligne par mission (debut, fin, duree, portes
+    utilisees, fichiers touches, etat). C'est la reponse a "qu'est-ce qui a ete
+    fait ?", qu'aucune somme d'evenements isoles ne donnait ;
+  - BILAN PAR JOURNEE : une ligne par jour (missions finies, portes, fichiers,
+    themes). C'est la reponse a "le travail depuis ce matin et les jours
+    precedents ?".
+
+Deux regles de fond, tenues par les helpers ci-dessous :
+  - une coupe est toujours DITE (`tronquer` ajoute le nombre de caracteres
+    restants) : une troncature muette a produit le defaut ci-dessus ;
+  - les bornes d'affichage sont DECLAREES en tetes de module, jamais en dur dans
+    la logique qui les consomme.
 """
 
 
 import unicodedata
+
+# --- Bornes d'AFFICHAGE, declarees une seule fois -----------------------------
+# Le detail d'un evenement est la substance de la trace : on le BORNE (au lieu de
+# le jeter) et `tronquer` dit combien de caracteres restent. Mesure du 2026-09-16 :
+# 200 caracteres coupaient les bilans au milieu d'une phrase.
+LIMITE_DETAIL = 600
+# Evenements affiches par action : la memoire courte ne doit plus etre une cecite
+# (10 lignes sur 99 disparaissaient derriere un compteur). Le journal complet
+# reste consultable, la vue en montre assez pour lire une session.
+LIMITE_SECTION = 25
+# Missions et journees affichees dans les tableaux de lecture.
+LIMITE_MISSIONS = 30
+LIMITE_JOURS = 15
+# Longueur maximale d'une cellule de liste (fichiers, portes).
+LIMITE_LISTE = 300
+# Marqueur de coupe : sans lui, une valeur bornee se lit comme une valeur entiere.
+MARQUE_COUPE = " ... (+"
 
 
 def vers_ascii(texte):
@@ -24,17 +70,49 @@ def vers_ascii(texte):
     return decompose.encode("ascii", "ignore").decode("ascii")
 
 
+def tronquer(texte, limite):
+    """Borne un texte en DISANT la coupe.
+
+    Une coupe muette est une cecite (lecon MO-055) : le lecteur de la vue ne peut
+    pas distinguer un detail qui s'arrete la d'un detail qui a ete ampute. Le
+    marqueur porte le nombre de caracteres non affiches.
+    """
+    texte = str(texte)
+    if len(texte) <= limite:
+        return texte
+    return texte[:limite].rstrip() + MARQUE_COUPE + str(len(texte) - limite) + " car.)"
+
+
 def echapper_pipe(texte):
     """Echappe les barres verticales pour garder le tableau markdown intact."""
     return str(texte).replace("|", "\\|")
 
 
+def lister_cellule(valeurs, limite=LIMITE_LISTE):
+    """Joint une liste pour une cellule markdown : bornee, et la coupe est DITE."""
+    valeurs = [str(valeur) for valeur in (valeurs or []) if str(valeur)]
+    if not valeurs:
+        return "-"
+    return tronquer(", ".join(valeurs), limite)
+
+
+def heure_courte(date_complete):
+    """Retourne `JJ/MM HH:MM` d'un horodatage `AAAA-MM-JJ HH:MM:SS`, ou la valeur brute."""
+    if not date_complete or " " not in date_complete:
+        return date_complete or "-"
+    jour, heure = date_complete.split(" ", 1)
+    morceaux = jour.split("-")
+    if len(morceaux) != 3:
+        return date_complete
+    return morceaux[2] + "/" + morceaux[1] + " " + heure[:5]
+
+
 def composer_ligne(evenement):
     """Compose UNE ligne d'un tableau d'action (heure en premier)."""
-    detail = echapper_pipe(evenement.get("detail", ""))[:200]
+    detail = echapper_pipe(tronquer(evenement.get("detail", ""), LIMITE_DETAIL))
     mission = echapper_pipe(evenement.get("mission", "") or "-")
-    portes = ", ".join(evenement.get("portes", ())) if evenement.get("portes") else "-"
-    fichiers = ", ".join(evenement.get("fichiers", ())) if evenement.get("fichiers") else "-"
+    portes = lister_cellule(evenement.get("portes"))
+    fichiers = lister_cellule(evenement.get("fichiers"))
     duree = evenement.get("duree_s") or "-"
     # Separation date et heure pour affichage : heure en premier
     date_complete = evenement.get("date", "")
@@ -55,23 +133,167 @@ def composer_ligne(evenement):
 
 def composer_section(action, evenements):
     """Compose UNE section dediee (un tableau par action).
-    Limite l'affichage aux 10 dernieres evenements.
+
+    L'affichage est borne a LIMITE_SECTION evenements, et le reste est DIT avec
+    son compte : la borne est un choix de lisibilite, jamais un oubli.
     """
     lignes = ["## Action : " + action, ""]
     if not evenements:
         return lignes + ["(aucun evenement)", ""]
-    # Limite aux 10 dernieres evenements (tri chronologique inverse).
-    evenements_triees = sorted(evenements, key=lambda e: e.get("date", ""), reverse=True)
-    evenements_limites = evenements_triees[:10]
+    evenements_tries = sorted(evenements, key=lambda e: e.get("date", ""), reverse=True)
     lignes += [
         "| Heure | Date | Mission | Detail | Portes | Fichiers | Duree |",
         "|---|---|---|---|---|---|---|",
     ]
-    for evenement in evenements_limites:
+    for evenement in evenements_tries[:LIMITE_SECTION]:
         lignes.append(composer_ligne(evenement))
-    if len(evenements) > 10:
+    reste = len(evenements) - LIMITE_SECTION
+    if reste > 0:
         lignes.append("")
-        lignes.append("*" + str(len(evenements) - 10) + " evenement(s) supplementaire(s) non affiches (voir data/suivi-optimus.jsonl).")
+        lignes.append("*" + str(reste) + " evenement(s) de plus dans cette action "
+                      + "(journal complet : data/suivi-optimus.jsonl).")
+    return lignes + [""]
+
+
+def agreger_par_mission(evenements):
+    """Retourne l'agregat PAR MISSION de la trace.
+
+    C'est la DERNIERE brique de lecture qui manquait : le journal porte des
+    evenements isoles, le travail se lit par MISSION. L'agregat rassemble les
+    portes et les fichiers de TOUS les evenements d'une mission (un evenement
+    isole peut ne rien porter : le recap, lui, ne perd rien).
+    """
+    agregats = {}
+    for evenement in evenements:
+        mission = evenement.get("mission", "") or "(sans mission)"
+        agregat = agregats.setdefault(mission, {
+            "mission": mission,
+            "theme": "",
+            "debut": "",
+            "fin": "",
+            "duree_s": "",
+            "evenements": 0,
+            "portes": [],
+            "fichiers": [],
+        })
+        agregat["evenements"] += 1
+        if not agregat["theme"] and evenement.get("theme"):
+            agregat["theme"] = evenement.get("theme")
+        date = evenement.get("date", "")
+        action = evenement.get("action", "")
+        if action == "debut" and date and (not agregat["debut"] or date < agregat["debut"]):
+            agregat["debut"] = date
+        if action == "fin" and date and (not agregat["fin"] or date > agregat["fin"]):
+            agregat["fin"] = date
+        if evenement.get("duree_s"):
+            agregat["duree_s"] = evenement["duree_s"]
+        for porte in evenement.get("portes", ()) or ():
+            if porte not in agregat["portes"]:
+                agregat["portes"].append(porte)
+        for fichier in evenement.get("fichiers", ()) or ():
+            if fichier not in agregat["fichiers"]:
+                agregat["fichiers"].append(fichier)
+    for agregat in agregats.values():
+        if agregat["fin"]:
+            agregat["etat"] = "finie"
+        elif agregat["debut"]:
+            agregat["etat"] = "en cours"
+        else:
+            agregat["etat"] = "trace seule"
+    return agregats
+
+
+def composer_recap_missions(evenements):
+    """Compose le tableau RECAP PAR MISSION (une ligne par mission).
+
+    Ordre : la mission la plus RECEMMENT touchee en premier (derniere date de
+    ses evenements), parce que c'est ce que le createur ouvre la vue pour voir.
+    """
+    agregats = agreger_par_mission(evenements)
+    lignes = ["## Recap par mission", ""]
+    if not agregats:
+        return lignes + ["(aucune mission tracee)", ""]
+    dernieres = {}
+    for evenement in evenements:
+        mission = evenement.get("mission", "") or "(sans mission)"
+        date = evenement.get("date", "")
+        if date > dernieres.get(mission, ""):
+            dernieres[mission] = date
+    ordonnees = sorted(agregats.values(), key=lambda a: dernieres[a["mission"]], reverse=True)
+    lignes += [
+        "| Mission | Theme | Debut | Fin | Duree | Ev. | Etat | Portes | Fichiers |",
+        "|---|---|---|---|---|---|---|---|---|",
+    ]
+    for agregat in ordonnees[:LIMITE_MISSIONS]:
+        lignes.append(vers_ascii("| " + " | ".join([
+            echapper_pipe(agregat["mission"]),
+            echapper_pipe(agregat["theme"] or "-"),
+            echapper_pipe(heure_courte(agregat["debut"])),
+            echapper_pipe(heure_courte(agregat["fin"])),
+            echapper_pipe(agregat["duree_s"] or "-"),
+            str(agregat["evenements"]),
+            agregat["etat"],
+            lister_cellule(agregat["portes"]),
+            lister_cellule(agregat["fichiers"]),
+        ]) + " |"))
+    reste = len(ordonnees) - LIMITE_MISSIONS
+    if reste > 0:
+        lignes.append("")
+        lignes.append("*" + str(reste) + " mission(s) de plus (journal complet : "
+                      "data/suivi-optimus.jsonl).")
+    return lignes + [""]
+
+
+def composer_bilan_journees(evenements):
+    """Compose le tableau BILAN PAR JOURNEE (une ligne par jour de travail).
+
+    Repond a la demande du createur du 2026-09-16 : "ce qui a ete fait depuis ce
+    matin et les jours precedents". Une journee = ses missions FINIES, ses
+    evenements, ses portes, ses fichiers et ses themes -- derive de la trace,
+    jamais d'une saisie parallele.
+    """
+    journees = {}
+    for evenement in evenements:
+        date = evenement.get("date", "")
+        if " " not in date:
+            continue
+        jour = date.split(" ")[0]
+        journee = journees.setdefault(jour, {
+            "missions_finies": set(),
+            "evenements": 0,
+            "portes": [],
+            "fichiers": [],
+            "themes": [],
+        })
+        journee["evenements"] += 1
+        if evenement.get("action") == "fin" and evenement.get("mission"):
+            journee["missions_finies"].add(evenement["mission"])
+        theme = evenement.get("theme", "")
+        if theme and theme not in journee["themes"]:
+            journee["themes"].append(theme)
+        for porte in evenement.get("portes", ()) or ():
+            if porte not in journee["portes"]:
+                journee["portes"].append(porte)
+        for fichier in evenement.get("fichiers", ()) or ():
+            if fichier not in journee["fichiers"]:
+                journee["fichiers"].append(fichier)
+    lignes = ["## Bilan par journee", ""]
+    if not journees:
+        return lignes + ["(aucune journee tracee)", ""]
+    lignes += [
+        "| Jour | Missions finies | Evenements | Portes | Fichiers | Themes |",
+        "|---|---|---|---|---|---|",
+    ]
+    for jour in sorted(journees, reverse=True)[:LIMITE_JOURS]:
+        journee = journees[jour]
+        lignes.append(vers_ascii("| " + " | ".join([
+            jour,
+            str(len(journee["missions_finies"])),
+            str(journee["evenements"]),
+            str(len(journee["portes"])),
+            str(len(journee["fichiers"])),
+            lister_cellule(journee["themes"], 160),
+        ]) + " |"))
     return lignes + [""]
 
 
@@ -111,12 +333,24 @@ def lire_attente_journal(chemin_journal):
     return [i for i in crees if i not in terminees]
 
 
-def composer_vue(evenements, actions, attente_pilote=None):
-    """Retourne les lignes du fichier markdown (entete + tableau recaps + sections par action).
+def compter_missions_finies(evenements):
+    """Compte les missions qui portent une FIN -- pas celles qui sont PRESENTES.
 
-    Ordre ferme des sections : celui des actions (constants.ACTIONS).
+    Correction MO-139 : l'ancien compte rassemblait tout identifiant vu dans la
+    trace, donc une mission ouverte (debut sans fin) etait annoncee "finie". Le
+    fait qui dit une fin est l'evenement `fin`, rien d'autre.
+    """
+    return len({e.get("mission", "") for e in evenements
+                if e.get("action") == "fin" and e.get("mission")})
+
+
+def composer_vue(evenements, actions, attente_pilote=None):
+    """Retourne les lignes du fichier markdown (entete + lectures + sections par action).
+
+    Ordre ferme des sections d'action : celui des actions (constants.ACTIONS).
     Chaque section est un TABLEAU dedie a SON action, present meme vide.
-    Tableau recapitulatif : derniere mise a jour, total evenements, missions en attente, missions finies.
+    Les deux tableaux de LECTURE DU TRAVAIL (journees, missions) viennent en
+    tete : le createur ouvre la vue pour savoir ce qui a ete fait.
     """
     par_action = {action: [] for action in actions}
     for evenement in evenements:
@@ -139,20 +373,18 @@ def composer_vue(evenements, actions, attente_pilote=None):
         if mission_id not in missions_en_attente:
             missions_en_attente.append(mission_id)
 
-    # Missions finies (dans le suivi-optimus).
-    missions_finies = set()
-    for evenement in evenements:
-        mission = evenement.get("mission", "")
-        if mission:
-            missions_finies.add(mission)
+    # Missions TRACEES (presentes) et missions FINIES (evenement `fin`).
+    missions_tracees = {e.get("mission", "") for e in evenements if e.get("mission")}
 
     lignes = [
         "# Suivi d'optimus-prime (v3)",
         "",
         "",
-        "| Derniere mise a jour | Total evenements | Missions en attente | Missions finies |",
-        "|---|---|---|---|",
-        "| " + (derniere_date or "-") + " | " + str(len(evenements)) + " | " + str(len(missions_en_attente)) + " | " + str(len(missions_finies)) + " |",
+        "| Derniere mise a jour | Evenements | Missions tracees | Missions finies | Missions en attente |",
+        "|---|---|---|---|---|",
+        "| " + (derniere_date or "-") + " | " + str(len(evenements)) + " | "
+        + str(len(missions_tracees)) + " | " + str(compter_missions_finies(evenements)) + " | "
+        + str(len(missions_en_attente)) + " |",
         "",
         "> VISUEL GENERE depuis data/suivi-optimus.jsonl -- jamais edite a la main.",
         "> Regenerer : python3 matrice/data/outils/suivi-optimus/main.py vue",
@@ -163,6 +395,8 @@ def composer_vue(evenements, actions, attente_pilote=None):
         "Flux : optimus (via l'outil suivi-optimus) -> data/suivi-optimus.jsonl -> VUE lecture seule",
         "",
     ]
+    lignes.extend(composer_bilan_journees(evenements))
+    lignes.extend(composer_recap_missions(evenements))
     for action in actions:
         lignes.extend(composer_section(action, par_action[action]))
     return lignes

@@ -1327,7 +1327,272 @@
         "observateur"
       ],
       "source": "MO-128"
+    },
+    {
+      "id": "L-104",
+      "date": "2026-09-16 07:41:58",
+      "lecon": "Un balayage ne doit JAMAIS porter le filtre qui cache son perimetre : en MO-126 j'avais exclu 'bdd-frictions/fonctions' du grep pour ne voir que les consommateurs -- et c'est PRECISEMENT dans ce fichier qu'est restee la ligne fautive (archiver_friction construisait ses statuts a la main), donc la mission censee fermer la friction 45 a laisse une copie DANS LE DOMICILE. Methode qui ferme la classe : DERIVER la liste des valeurs des DONNEES elles-memes (colonnes d'etat des BDD, cles d'etat des JSON) puis chercher ces valeurs en LITTERAL dans tout le code, sans exclusion -- le perimetre vient des donnees, pas d'un choix d'agent. Resultat mesure : 10 valeurs derivees, 6 copies reelles chez 6 consommateurs.",
+      "tags": [
+        "auto-valide",
+        "audit",
+        "balayage",
+        "perimetre",
+        "vocabulaire"
+      ],
+      "source": "MO-129"
+    },
+    {
+      "id": "L-105",
+      "date": "2026-09-16 07:47:45",
+      "lecon": "Un test qui peut ECRIRE finira par ecrire : dans mes cobayes MO-124/126/127/130 j'avais remplace le CHEMIN (fixture) -- mais des que j'ai teste en appelant main() en memoire (MO-131, MO-132), mon seul isolant etait un attribut mis a None, que j'ai restaure une ligne trop tot : la commande reelle est passee et a ecrase la date d'archivage de la friction 1. Regle : une porte ECRIVANTE ne s'eprouve que sur une FIXTURE (chemin substitue) ou en DRY-RUN, et tout cobaye qui touche une donnee vivante compare son EMPREINTE avant/apres -- si l'empreinte peut bouger, c'est le test qu'il faut changer, pas la donnee qu'il faut esperer intacte.",
+      "tags": [
+        "auto-valide",
+        "friction:56",
+        "cobaye",
+        "fixture",
+        "incident"
+      ],
+      "source": "MO-132"
+    },
+    {
+      "id": "L-106",
+      "date": "2026-09-16 08:31:07",
+      "lecon": "Une forme produite par une porte se declare a la porte qui la PRODUIT, et tout consommateur la CONSOMME. Un consommateur qui la redevine finit par ne plus reconnaitre la forme reelle (la remorque criait INATTENDU sur l'artefact, l'espion d'integrite ecartait une forme qui n'existe pas) : un garde qui ne reconnait rien est pire qu'un garde absent, car il rassure. Preuve : en changeant le motif au domicile, les trois verdicts changent (MO-133, cobaye 15/15).",
+      "tags": [
+        "forme",
+        "domicile",
+        "consommation",
+        "faux-garde"
+      ],
+      "source": "MO-133"
+    },
+    {
+      "id": "L-107",
+      "date": "2026-09-16 08:37:56",
+      "lecon": "Une CLASSE de defaut se ferme par un OUTIL qui la MESURE, jamais par le cas qu'on vient de reparer : tant que la valeur de reference se lisait dans le code du consommateur, chaque correction ne fermait que le fichier traite et la famille revenait par un autre (douze frictions 45 a 53, 56, 57, 58). L'outil de MO-134 ne contient ni valeur ni domicile : il les DECOUVRE dans le code et dans les donnees, ne compte que les usages en CONTEXTE D'ETAT (un champ homonyme n'est pas une copie) et se piege lui-meme (11/11). Corollaire : une mesure dont on peut deplacer la source (--racine, domaine de reference) doit prouver qu'elle SUIT cette source, sinon elle mesure la memoire de son auteur.",
+      "tags": [
+        "mesure",
+        "classe",
+        "derivation",
+        "domicile"
+      ],
+      "source": "MO-134"
+    },
+    {
+      "id": "L-108",
+      "date": "2026-09-16 08:38:41",
+      "lecon": "Une BDD SCELLEE par une empreinte a UN SEUL ECRIVAIN : la porte qui la possede. Un consommateur qui ecrit par sa propre fabrique (dump non atomique, CRLF Windows, ensure_ascii=False, sans resceller l'empreinte) ne casse pas seulement le fichier -- il fait CRIER la non-regression, car l'empreinte est l'instrument de sa surveillance (mesure MO-135 : 1382 CRLF, 0 LF, 2 accents dans une BDD scellee, deux maillons KO). Le consommateur ORCHESTRE (arguments, id, rapport) et DELEGUE l'ecriture au proprietaire : une fabrique, une empreinte, une verite. Preuve : en fixture, l'ajout rescelle l'empreinte et laisse 0 CRLF ; proprietaire absent = refus DIT, jamais une ecriture par soi-meme.",
+      "tags": [
+        "bdd",
+        "empreinte",
+        "ecrivain-unique",
+        "delegation"
+      ],
+      "source": "MO-135"
+    },
+    {
+      "id": "L-109",
+      "date": "2026-09-16 09:20:09",
+      "lecon": "Un moteur qui ne peut pas lire la maison de son propre operateur n'est pas prudent, il est AVEUGLE -- et un aveugle qui dit 0 resultat est indiscernable d'une absence (MO-055). Le filtre d'invisibilite L-016 doit etre le DEFAUT, jamais la seule possibilite : il se leve sur une option EXPLICITE et BORNEE a un mode (--prive, fichiers seulement), et le moteur DIT qu'il l'a leve (champ prive + zones nommees). Meme exigence pour ce qui est TROUVE : un hit doit dire SUR QUOI il a matche (nom de fichier ou contenu) -- chercher un fichier par son NOM rendait 0 resultat alors qu'il existait (matrice/data/commun/zone_tmp.py).",
+      "tags": [
+        "eo-126",
+        "moteur-recherche",
+        "perimetre",
+        "honnetete"
+      ],
+      "source": "MO-138"
+    },
+    {
+      "id": "L-110",
+      "date": "2026-09-17 07:07:07",
+      "lecon": "Un contrat qui traverse une FRONTIERE (deux bouts qui doivent s'accorder -- un joignant et un coupant, un ecrivain et un lecteur) doit avoir UN SEUL DOMICILE, importe par les DEUX bouts : un commentaire n'est pas un contrat, et une forme recopiee des deux cotes ne se desynchronise pas tout de suite -- elle se desynchronise le jour ou l'un des deux change, et en silence. Deuxieme regle, mesuree le 2026-09-16 : un transport qui REJOINT des donnees LIBRES (des chemins de fichiers) doit REFUSER les valeurs qui contiennent son propre separateur, car il FABRIQUE des faits faux en coupant un nom en deux -- un join silencieux est une ecriture mensongere. Corollaire : la reparation ne s'arrete pas au joignant ; tout consommateur AUTOMATIQUE de la liste (le rattrapage du pilote) doit DIRE ce qu'il n'a pas pu transmettre et ne compter que ce qu'il a REELLEMENT transporte.",
+      "tags": [
+        "MO-149",
+        "friction72",
+        "transport",
+        "domicile",
+        "contrat",
+        "liste"
+      ],
+      "source": "MO-149"
+    },
+    {
+      "id": "L-111",
+      "date": "2026-09-17 07:15:06",
+      "lecon": "Avant de GENERALISER une reparation, MESURER la famille : un contrat a besoin d'un domicile quand la valeur est ECRITE d'un cote ET RELUE de l'autre (un joignant et un coupant), pas quand un seul bout existe dans le code. Un argument de ligne de commande tape par un humain n'a pas de copie a faire diverger -- son second bout est le DOCUMENT qui l'enseigne, et c'est un autre sujet. Mesure du 2026-09-17 : sur 23 decoupes par virgule, 17 appartenaient a des couples ou a des copies REELLES (un couple de chemins dans le perimetre-cameleon, douze copies de la decoupe des tags, le cockpit, le lot) et 6 etaient des arguments a UN SEUL bout, dont trois dans des outils sans acces a data/commun. Reparer les 23 aurait ete un refactor gratuit ; en reparer 17 et DECLARER les 6 est la MEME regle appliquee a la mesure. Corollaire du meme jour : un cobaye peut se tromper LUI-MEME -- deux de mes attentes etaient fausses (le strip des barres d'une zone, une source qui ne consomme pas le domicile), le cobaye a donc accuse le code a tort (famille L-060) : on corrige le COBAYE et on le DIT.",
+      "tags": [
+        "MO-150",
+        "friction73",
+        "transport",
+        "mesure",
+        "cobaye",
+        "generalisation"
+      ],
+      "source": "MO-150"
+    },
+    {
+      "id": "L-112",
+      "date": "2026-09-17 07:15:06",
+      "lecon": "Un outil qui ECRIT doit etre annonce la ou l'agent regarde AU DEMARRAGE : une porte d'ecriture qui valide (py_compile, JSON, LF, ASCII) et depose un point de restauration ne protege que si l'agent SAIT qu'il doit passer par elle. Mesure du 2026-09-17 : MO-149 avait ecrit 4 fichiers avec l'outillage NATIF (non atomique, sans .bak, sans validation par la porte) parce que rien dans le demarrage ne le disait -- la porte existait depuis MO-002 et declarait remplacer les outils natifs. La reponse est dans le protocole, pas dans la discipline de l'agent : ORDRE 4, regle 4 de demarrer-optimus-prime.md.",
+      "tags": [
+        "MO-150",
+        "friction74",
+        "porte",
+        "ecrire",
+        "demarrage",
+        "protocole"
+      ],
+      "source": "MO-150"
+    },
+    {
+      "id": "L-113",
+      "date": "2026-09-17 07:31:28",
+      "lecon": "Une protection DECLAREE et jamais POSEE est une protection ABSENTE. Mesure du 2026-09-17 (EO-134, MO-151/MO-152) : les 23 zones que le createur avait exclues du perimetre cameleon (V-003 du classeur, statut OK) n'etaient lues que par pause-session (affichage) -- par AUCUN outil de lecture ; le seul filtre REELLEMENT applique etait une liste EN DUR de 3 morceaux de chemin, recopiee dans TROIS fichiers et divergeante entre eux, et la porte lire n'en avait AUCUNE. Resultat mesure : 92 fichiers / 39 218 lignes nommant l'invisible restaient atteignables, dont des zones DEJA declarees exclues (matrice-readme.md, data/manuel-outils.md, journal-multi-encarts.md). Une exclusion posee doit avoir un CONSOMMATEUR VERIFIE, sinon on croit proteger et on ne protege rien (famille L-037). Corollaire de FORME : l'exclusion d'un FICHIER (suivi-optimus.md, decision M-084) ratait parce que le filtre ne matchait que des DOSSIERS -- une liste de zones doit DIRE ses formes (dossier, chemin declare, fichier nomme comme une zone, derives .bak/-archive). Methode qui a paye : UN domicile (data/commun/invisibilite.py) consomme par les QUATRE portes de lecture, plancher + zones declarees, ferme par defaut et ouvert par un drapeau explicite (--prive) reserve a la Matrice. Enfin, deux defauts de MA propre reparation ont ete attrapes par la MESURE et pas par relecture (une fonction alias au lieu de sa valeur : plantage ; un marqueur de chemin applique aux chemins relatifs : une zone declaree RATEE en silence) -- et une attente de mon cobaye etait fausse (L-060).",
+      "tags": [
+        "invisibilite",
+        "domicile",
+        "garde-fou",
+        "mesure"
+      ],
+      "source": "MO-151/MO-152"
+    },
+    {
+      "id": "L-114",
+      "date": "2026-09-17 07:41:04",
+      "lecon": "UNE REGLE APPLIQUEE A UN POINT DE LIVRAISON N'EST PAS UNE REGLE. Mesure du 2026-09-17 (MO-153) : le pilote filtrait depuis longtemps les lecons qui nomment l'invisible a l'injection (90 lecons livrees, 0 mot interdit -- verifie), mais le MEME contenu arrivait brut par le moteur de recherche : 101 entrees de la BDD suivi-optimus etaient servies au cameleon alors que cette zone est DECLAREE exclue depuis M-084. Un contenu a plusieurs portes de sortie doit voir la regle posee a TOUTES -- sinon la porte non gardee EST la fuite (famille L-037/L-113). Corollaire de methode : mesurer la LIVRAISON (ce qui sort, et par ou) et pas seulement la lecture (ce qui est range). Deuxieme corollaire : un fichier BRUT ne se filtre pas -- ou l'on retire le fichier du perimetre (porte pause-session), ou l'on retire l'item a la livraison ; choisir selon ce que le contenu EST, jamais par confort. Et la liste elle-meme etait recopiee TROIS fois (deux pilotes + audit), de trois longueurs differentes : d'ou le domicile data/commun/vocabulaire_invisible.py, consomme par les deux pilotes ET le moteur.",
+      "tags": [
+        "invisibilite",
+        "livraison",
+        "domicile",
+        "garde-fou"
+      ],
+      "source": "MO-153"
+    },
+    {
+      "id": "L-115",
+      "date": "2026-09-17 07:52:24",
+      "lecon": "UNE SUITE BATIE N'EST PAS UNE SUITE COURUE, et son etat ne se lit que dans sa BDD. Mesure du 2026-09-17 (MO-146 puis MO-154) : la suite de purification existait depuis longtemps (theme, BDD, plan, analyse contradictoire) mais n'avait JAMAIS tourne -- BDD de conservation a UN element, et cet element etait un COBAYE. Le createur ne savait pas ou en etait la suite parce qu'il n'y avait rien a voir : un dossier sans vue, un theme jamais ouvert, une BDD vide. Ouvrir la suite sur un perimetre REEL (cases 1 a 4 : demande tracee, cartographie mesuree, classification par la porte, audit en lecture seule) a produit 153 elements classes et 9 ecarts mesures en une mission -- la valeur etait dans le DEMARRAGE, pas dans la construction. Deuxieme lecon, sur la BORNE : une exemption bornee par la FORME n'est pas une borne. Le contrat fondamental exempte les .bak horodates (exemption dite BORNEE, MO-133) mais il borne leur NOM, pas leur NOMBRE : 102 fichiers en une seule journee, et rien ne les empeche de s'accumuler indefiniment (l age seul ne classe jamais un element OBSOLETE -- plan-conservation section 2). Une borne de forme protege un contrat de nommage ; elle ne protege pas un volume. Troisieme lecon, sur la ROTATION : le projet avait deja le bon socle ailleurs (data/commun/rotation_journal.py : archiver d'abord, archive dans le deja connu, course refusee, borne declaree chez le PROPRIETAIRE) -- quand une porte manque, chercher d'abord si le moteur existe deja et qui doit declarer la borne. Enfin, mes propres cobayes ont encore failli deux fois (un regroupement de chemins qui supposait 3 niveaux, une table d archives amputee de ses tags) : le crash est arrive AVANT toute ecriture de porte, ce qui est la seule raison pour laquelle ces deux fautes n'ont rien casse.",
+      "tags": [
+        "purification",
+        "borne",
+        "rotation",
+        "suite",
+        "cobaye"
+      ],
+      "source": "MO-154"
+    },
+    {
+      "id": "L-116",
+      "date": "2026-09-17 07:57:40",
+      "lecon": "DEUX GARDES QUI NE SONT PAS D ACCORD SUR LE MEME FICHIER FONT UNE FAILLE, PAS UNE SECURITE. Mesure du 2026-09-17 (MO-154 puis MO-155) : la porte d ecriture a bien VU l ecart ASCII de mon rapport (elle imprime '[ASCII] 10 non-ASCII lignes 35,38') mais elle a conclu 'pas de validation pour .md' et l a laisse passer ; le garde-ascii du cockpit l a refuse ensuite, et /sante est passe au rouge APRES la cloture de la mission. Corollaire : quand un fichier est valide par une porte et refuse par un garde, l ecart n est pas dans le fichier, il est entre les deux -- celui qui ECRIT doit refuser ce que l autre REFUSERA, sinon le prix de la reparation (une mission, une cloture, un bilan) est paye par celui qui a respecte la porte. Deuxieme corollaire de forme, mesure le meme jour : la porte attend des chemins relatifs a la RACINE du workspace quand tout l ecosysteme parle en chemins relatifs a matrix/ -- et son refus annonce 'hors perimetre ecriture' alors que la cause est la FORME du chemin. Un message qui nomme la mauvaise cause coute trois essais et fait douter du bon perimetre.",
+      "tags": [
+        "porte",
+        "garde",
+        "ecriture",
+        "ascii",
+        "chemin"
+      ],
+      "source": "MO-155"
+    },
+    {
+      "id": "L-117",
+      "date": "2026-09-17 08:18:04",
+      "lecon": "UN MOTIF ANCRE AU MAUVAIS BOUT NE CRIE PAS : re.match ancre au DEBUT, re.search cherche partout -- avec un motif domicilie en FIN de nom, mon releve de famille a rendu 0 version pour 73 familles et 146 preuves fausses ont ete ecrites avant que la mesure ne le contredise. Un compte absurde dans une preuve doit etre CONTREDIT par la mesure AVANT d etre ecrit : une preuve fausse est pire qu une preuve absente, elle ferme une decision. Corollaire du jour : le parc a grandi PENDANT la mission (7 points neufs, K-147 perime en 20 minutes) -- un classement est DATE, la BDD donne l intention et le disque donne la verite.",
+      "tags": [
+        "mesure",
+        "preuve",
+        "chemins"
+      ],
+      "source": "MO-156"
+    },
+    {
+      "id": "L-118",
+      "date": "2026-09-17 08:28:59",
+      "lecon": "UNE EXCEPTION ECRITE DANS UN SEUL SCAN SERA RE-INVENTEE PAR LE SUIVANT : la decision du createur (docs/ = sources en lecture seule) etait ecrite dans le code de garde-ascii et PAS dans la regle ni dans corriger-ascii ; le convertisseur ciblait donc docs/, et la veille relayait une alerte caractere non convertible pour un arbitrage DEJA rendu (friction 81, EO-135 -- restee bloquante dans le vrac). La regle ASCII n enoncait aucune exception : c est ce silence qui a produit les deux scans contradiCTOIRES. Repare : l exception est gravec dans la regle, et le consommateur la NOMME dans son rapport au lieu de la taire. Un consommateur qui exclut en silence cree un angle mort ; une regle muette laisse chaque consommateur improviser.",
+      "tags": [
+        "regle",
+        "ascii",
+        "exclusion",
+        "chemins"
+      ],
+      "source": "MO-159"
+    },
+    {
+      "id": "L-119",
+      "date": "2026-09-17 09:18:35",
+      "lecon": "Une EXCLUSION de PERIMETRE et une EXEMPTION de REECRITURE sont DEUX notions : un exempte est VU puis jamais reecrit, et son motif est JUSTIFIE sur le disque (etalon .sha256 ou journal .jsonl) ; une zone hors champ n'est pas PARCOURUE du tout. Les avoir rangees dans la MEME liste (corriger-ascii, MO-159) a fait porter a une exclusion de perimetre le contrat d'une exemption : la non-regression (maillon 12, verifier-exemptions-visibles) a refuse les 3 motifs alors que le contrat en exige DEUX justifies par le disque. Mesure MO-160 : 40 -> 39 exemptes, sept controles verts. Regle generale : deux notions distinctes ne partagent JAMAIS une liste, meme quand elles se ressemblent -- le prochain consommateur lira la liste, pas l'intention.",
+      "tags": [
+        "exemption",
+        "perimetre",
+        "non-regression",
+        "liste"
+      ],
+      "source": "MO-160 (regression MO-159 attrapee par la non-regression)"
+    },
+    {
+      "id": "L-120",
+      "date": "2026-09-17 09:43:16",
+      "lecon": "UN APPELANT QUI DETIENT LA DONNEE ET NE LA PASSE PAS FABRIQUE UNE COLONNE VIDE -- ET UNE COLONNE VIDE SE LIT COMME UN FAIT. Mesure MO-161 : la porte noter acceptait portes et fichiers depuis sa naissance, le transport etait cable par MO-139, la vue les affichait -- et trois appelants detenaient la donnee sans la passer (declarer_borne_marbre pour les portes, purger_zone_temporaire pour ses propres suppressions). Resultat : colonnes vides a 100 pour cent pendant que l information existait en memoire a l instant exact de l ecriture. Un mecanisme pret n est pas un mecanisme BRANCHE : la question n est jamais la porte sait-elle ?, c est QUI l appelle et AVEC QUOI.",
+      "tags": [
+        "trace",
+        "collecte",
+        "portes",
+        "colonnes",
+        "appelant"
+      ],
+      "source": "MO-161"
+    },
+    {
+      "id": "L-121",
+      "date": "2026-09-17 09:51:07",
+      "lecon": "UN TEMOIN QUI N A PAS SU LIRE ACCUSE A LA PLACE DU DISQUE. Mesure MO-162 : l inventaire du temoin mesurait la source de chaque point de restauration ; pour un point deja archive la source n existe plus, donc sha=None, donc la case 8 declarait un sha different de l origine -- 73 faux ecarts sur 73 archives INTACTES (sha egal au sha_avant de la BDD). Et le continue qui suivait sortait ces 73 du COMPTAGE : UN SEUL defaut de lecture fabriquait DEUX invariants faux. Regle : une mesure qui n a pas pu lire son domicile doit le DIRE (non mesurable), jamais rendre un verdict de comparaison ; et quand une verification accuse EN MASSE, le premier suspect est la MESURE, pas la donnee.",
+      "tags": [
+        "verification",
+        "temoin",
+        "mesure",
+        "faux-ecart",
+        "reparation"
+      ],
+      "source": "MO-162"
+    },
+    {
+      "id": "L-122",
+      "date": "2026-09-17 09:58:57",
+      "lecon": "UN TRAVAIL PERPETUEL NE SE TERMINE PAS : CE QUI EST DETERMINISTE DOIT ETRE MECHANISE. Mesure MO-163 (EO-147) : la porte ecrire cree un point de restauration a chaque passage, donc chaque ecriture ajoutait un element a classer par trois marches manuelles -- 29 points sans decision en une journee, dont 2 nes de la reparation de la verification elle-meme. La suite de purification etait donc condamnee a ne jamais se fermer, non par manque d effort mais par CONCEPTION. La regle etant deterministe (mesuree, pas inventee), elle appartient a une PORTE : une seule commande remplace N x 3 actes. Corollaire de methode : on n automatise QUE ce qui est mesure ; ce que la regle ne couvre pas reste DOUTEUX, NOMME et laisse en place -- une automation qui devine est pire qu un travail manuel.",
+      "tags": [
+        "automation",
+        "regle",
+        "porte",
+        "perpetuel",
+        "purification"
+      ],
+      "source": "MO-163"
+    },
+    {
+      "id": "L-123",
+      "date": "2026-09-17 19:59:21",
+      "lecon": "UNE CHAINE NE SE FERME PAS QUAND SES CASES EXISTENT, MAIS QUAND SON TRAVAIL NE SE ROUVRE PLUS : la suite de purification avait ses 9 cases ECRITES depuis MO-087 et etait declaree prete ; elle ne pouvait pourtant pas se fermer, pour TROIS raisons qui n etaient pas dans les cases elles-memes -- une porte d execution absente (case 7), une accumulation non bornee, et un classement PERPETUEL (chaque ecriture creait un element a classer). Fermer une suite demande donc de mesurer ce qui la ROUVRE, pas seulement ce qu elle contient. Corollaire : fermer la CHAINE n est pas fermer la PORTEE -- le theme declare toute la Matrice alors qu un seul perimetre a ete couru ; l un est une mesure, l autre une decision. AMENDEMENT (mesure de la cloture de MO-164, 2026-09-17) : le PREMIER passage de cette meme mission avait conclu que la chaine se ferme -- la cloture de la mission l a FALSIFIE (1 point cree, 0 archive, 16 points STRUCTUREL en trop dans 10 familles). Une verification qu on ne rejoue pas ne prouve que son premier passage ; et l invariant des OCTETS (archive + actif = origine) reste VERT meme quand l actif grandit sans borne -- il mesure la PERTE, jamais la BORNE.",
+      "tags": [
+        "purification",
+        "fermeture",
+        "mesure",
+        "suite"
+      ],
+      "source": "MO-164"
+    },
+    {
+      "id": "L-124",
+      "date": "2026-09-17 20:13:45",
+      "lecon": "UN CONTROLE NE MESURE QU'UNE QUESTION, ET LE TROISIEME CAS EST TOUJOURS CELUI QU'ON OUBLIE : la case 8 de la suite de purification prouve que rien ne se perd (archive + actif = origine) ; elle est restee VERTE pendant que 16 points STRUCTUREL surnageaient dans 10 familles sur 88. Les deux mesures ne sont pas concurrentes, elles sont DIFFERENTES : l'une mesure la PERTE, l'autre la BORNE. Une chaine se verifie en mesurant les DEUX, et un invariant qui reste vert ne dit rien des questions qu'il ne pose pas. Meme motif sur les populations : le balayage traitait le point NEUF et le classement INACHEVE -- le TROISIEME cas, le point DEJA DECIDE qu'un plus recent remplace, n'appartenait a aucune des deux et gardait son verdict POUR TOUJOURS. Regle generale : quand on enumere les cas d'une regle, se demander ce qui reste quand le cas est DEJA traite -- c'est presque toujours la que le travail se rouvre. Corollaire de methode : ecrire la regle dans son domicile ne suffit pas, il faut la TRANSITION qui l'applique (le balayage ne pouvait pas re-juger : la porte n'avait aucun chemin decide -> classe, et sans ce chemin la seule issue etait d'ecrire le JSON a la main).",
+      "tags": [
+        "controle",
+        "borne",
+        "machine",
+        "population",
+        "mesure"
+      ],
+      "source": "MO-165"
     }
   ],
-  "compteur": 103
+  "compteur": 124
 }

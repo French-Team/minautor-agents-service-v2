@@ -10,8 +10,12 @@ from constants import (
     ALLOWLIST_RACINE,
     RACINE,
     REPERTOIRE_MATRIX,
-    ZONES_INVISIBLES,
 )
+
+# Le contrat d invisibilite L-016/CV-006 (plancher + zones DECLAREES V-003 du
+# classeur) vit dans SON domicile : cette porte le CONSOMME, elle ne le recopie
+# pas (M-076 ; mesure MO-151 : 92 fichiers / 39 218 lignes atteignables).
+from invisibilite import est_invisible  # noqa: E402
 
 
 def dans_perimetre(chemin_relatif):
@@ -50,17 +54,13 @@ def resoudre_chemin(chemin_relatif):
 
 
 def est_zone_invisible(path_absolu):
-    """True si path contient une zone L-016 invisible."""
-    parts = path_absolu.parts if hasattr(path_absolu, "parts") else str(path_absolu).replace("\\", "/").split("/")
-    for zone in ZONES_INVISIBLES:
-        if zone in parts:
-            return True
-    # Check string fallback
-    s = str(path_absolu).replace("\\", "/")
-    for zone in ZONES_INVISIBLES:
-        if "/" + zone + "/" in s or s.endswith("/" + zone):
-            return True
-    return False
+    """True si path contient une zone L-016 invisible (domicile data/commun).
+
+    Cette copie-ci IGNORAIT le filtre par morceau de chemin de sa jumelle : les
+    trois copies divergeaient deja (mesure MO-151). Une seule liste, un seul
+    domicile (MO-152).
+    """
+    return est_invisible(path_absolu)
 
 
 def lister_dossier(chemin_relatif, filtre, recursif, inclure_invisible=False):
@@ -134,14 +134,19 @@ def lister_dossier(chemin_relatif, filtre, recursif, inclure_invisible=False):
 
 
 def extraire_options(arguments, noms_connus):
-    """Extrait --nom valeur et flags --recursif/--json sans valeur."""
+    """Extrait --nom valeur et drapeaux --recursif/--json/--prive sans valeur.
+
+    MO-152 : --prive a ete ajoute ici EN MEME TEMPS que dans la liste des
+    options connues -- un drapeau connu de l entree mais pas de ce lecteur
+    aurait ete avale en silence (meme famille que lire, meme jour).
+    """
     options = {}
     index = 0
     while index < len(arguments):
         morceau = arguments[index]
         if morceau.startswith("--") and morceau[2:] in noms_connus:
             nom = morceau[2:]
-            if nom in ("recursif", "json"):
+            if nom in ("recursif", "json", "prive"):
                 options[nom] = "1"
                 index += 1
             elif index + 1 < len(arguments):

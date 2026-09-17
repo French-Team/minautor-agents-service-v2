@@ -5,7 +5,8 @@ bdd-lecons-matrice/fonctions/bdd_lecons_matrice.py -- Porte unique lecons.json (
 """
 
 import json
-from datetime import datetime
+import subprocess
+import sys
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 
@@ -15,9 +16,24 @@ def _load(db_path: Path) -> Dict[str, Any]:
         return json.load(f)
 
 
-def _save(db_path: Path, data: Dict[str, Any]):
-    with open(db_path, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+# Lecons SANS tag : la porte proprietaire exige au moins un tag. Un tag par
+# defaut NOMME vaut mieux qu'un refus : la lecon est rangee, jamais perdue.
+TAGS_DEFAUT = "auto-evolution"
+
+
+def _porte_proprietaire(db_path: Path) -> Path:
+    """Le chemin de la PORTE PROPRIETAIRE de cette BDD (matrice/data/outils/bdd-lecons).
+
+    Pourquoi DELEGUER au lieu d'ecrire : `lecons.json` est une BDD du REGISTRE,
+    surveillee par son empreinte `.sha256`. Deux fabriques d'ecriture = deux
+    verites, et la fabrique locale etait CRLF (Windows), non atomique, en
+    `ensure_ascii=False` (des accents DANS une BDD scellee) et SANS resceller
+    l'empreinte : mesure MO-135 = 1382 CRLF / 0 LF, 2 octets non-ASCII, empreinte
+    fausse, deux maillons de la non-regression KO (chapitres, observations).
+    Un fichier = un ecrivain : l'ecrivain, c'est la porte proprietaire, qui force
+    LF (L-001), l'ASCII, l'atomicite ET l'empreinte.
+    """
+    return db_path.parent / "outils" / "bdd-lecons" / "main.py"
 
 
 def init_db(db_path: Path):
@@ -32,20 +48,26 @@ def ajouter_lecon(
     tags: str = "",
     source: str = "auto-evolution",
 ) -> str:
-    """Ajouter une lecon, retourner son ID (L-0NN via compteur)"""
-    data = _load(db_path)
-    data["compteur"] = data.get("compteur", 0) + 1
-    new_id = f"L-{data['compteur']:03d}"
-    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    data.setdefault("lecons", []).append({
-        "id": new_id,
-        "date": date,
-        "lecon": lecon,
-        "tags": [t.strip() for t in tags.split(",") if t.strip()],
-        "source": source,
-    })
-    _save(db_path, data)
-    return new_id
+    """Ajouter une lecon PAR LA PORTE PROPRIETAIRE, et retourner son ID (L-0NN).
+
+    La fabrique d'ecriture n'est PAS ici : elle appartient a la porte qui POS-
+    SEDE la BDD. Cette porte ORCHESTRE -- elle lit les arguments, appelle le
+    proprietaire, rend l'id -- et ne touche jamais un octet elle-meme.
+    """
+    porte = _porte_proprietaire(db_path)
+    if not porte.is_file():
+        raise FileNotFoundError("Porte proprietaire introuvable : " + str(porte))
+    resultat = subprocess.run(
+        [sys.executable, str(porte), "ajouter",
+         "--lecon", lecon, "--tags", tags or TAGS_DEFAUT, "--source", source],
+        capture_output=True, text=True, encoding="utf-8",
+    )
+    if resultat.returncode != 0:
+        raise RuntimeError(
+            "La porte proprietaire a refuse (code " + str(resultat.returncode) + ") : "
+            + ((resultat.stdout or "") + (resultat.stderr or "")).strip()
+        )
+    return _load(db_path)["lecons"][-1]["id"]
 
 
 def lister_lecons(db_path: Path, limite: int = 10) -> List[Dict[str, Any]]:

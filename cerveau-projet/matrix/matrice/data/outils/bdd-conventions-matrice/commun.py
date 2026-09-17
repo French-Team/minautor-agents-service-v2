@@ -65,14 +65,18 @@ def lire_empreinte():
     return CHEMIN_EMPREINTE.read_text(encoding=ENCODAGE).strip()
 
 
-def separer_tags(chaine_tags):
-    """Transforme "a, b" en ["a", "b"] (chaine vide -> liste vide).
+# CONTRAT DE TRANSPORT des listes (frictions 72 et 73) : la forme vit dans son
+# DOMICILE (data/commun/transport_listes.py) et cette porte la CONSOMME (M-076).
+from transport_listes import decouper_liste  # noqa: E402
 
-    Fonction PARTAGEE (ajouter + modifier) : une seule verite sur le format.
+
+def separer_tags(chaine_tags):
+    """Transforme "a, b" en ["a", "b"].
+
+    Fonction PARTAGEE (ajouter + modifier) : une seule verite sur le format --
+    desormais le domicile du transport, et non une copie locale.
     """
-    if not chaine_tags:
-        return []
-    return [morceau.strip() for morceau in chaine_tags.split(",") if morceau.strip()]
+    return decouper_liste(chaine_tags)
 
 
 def extraire_options(arguments, noms_connus):

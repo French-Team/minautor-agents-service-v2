@@ -9,10 +9,39 @@ Orchestre le cycle complet : detecter -> qualifier -> cibler -> modifier -> vali
 import sys
 import os
 import subprocess
+import importlib.util
 from pathlib import Path
 
 
 OUTILS_DIR = Path(__file__).parent.parent / "combos" / "outils"
+
+# Le vocabulaire du PROCESSUS (types, gravites, frequences, demandes
+# d'archivage) a UN domicile : l'outil bdd-frictions. L'orchestrateur le
+# CONSOMME au lieu de recopier les valeurs admises (friction 50, MO-129).
+BORNES_REMONTEE = 30
+
+
+def charger_vocabulaire(nom_outil, nom_module):
+    """Le vocabulaire d'un outil, charge par son chemin, ou None.
+
+    MEME MOTIF que l'espion d'activite et revert-periode : ce chargement est
+    aujourd'hui RECOPIE trois fois (friction 54, a porter dans un moteur
+    partage). Retourner None vaut refus de deviner.
+    """
+    chemin = OUTILS_DIR / nom_outil / "fonctions" / nom_module
+    if not chemin.is_file():
+        return None
+    try:
+        spec = importlib.util.spec_from_file_location(
+            nom_outil.replace("-", "_") + "_domicile", str(chemin))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+    except (ImportError, OSError, SyntaxError, AttributeError):
+        return None
+    return module
+
+
+VOCABULAIRE_FRICTIONS = charger_vocabulaire("bdd-frictions", "bdd_frictions.py")
 
 
 def run_outil(nom, args):
@@ -42,6 +71,11 @@ def main():
     phase = sys.argv[1]
     args = sys.argv[2:]
 
+    if VOCABULAIRE_FRICTIONS is None:
+        print("Vocabulaire des statuts introuvable (domicile bdd-frictions) : refus de deviner")
+        print("les valeurs admises par la porte (friction 50, balayage MO-129).")
+        return 2
+
     if phase == "detecter":
         return cmd_detecter(args)
     elif phase == "qualifier":
@@ -66,9 +100,9 @@ def cmd_detecter(args):
     import argparse
     parser = argparse.ArgumentParser(description="Noter une friction")
     parser.add_argument("phrase", help="Quand <situation>, <probleme>, car <cause>")
-    parser.add_argument("--type", required=True, choices=["ordre", "outil", "theme", "protocole", "combo", "regle", "convention"])
-    parser.add_argument("--gravite", required=True, choices=["mineure", "majeure", "bloquante"])
-    parser.add_argument("--frequence", required=True, choices=["ponctuelle", "recurrente"])
+    parser.add_argument("--type", required=True, choices=list(VOCABULAIRE_FRICTIONS.TYPES))
+    parser.add_argument("--gravite", required=True, choices=list(VOCABULAIRE_FRICTIONS.GRAVITES))
+    parser.add_argument("--frequence", required=True, choices=list(VOCABULAIRE_FRICTIONS.FREQUENCES))
     parser.add_argument("--mission-id", help="ID mission (optionnel)")
     parsed = parser.parse_args(args)
 
@@ -97,7 +131,8 @@ def cmd_qualifier(args):
     print("  2. Cause racine identifable ? (OUI/NON)")
     print("  3. Solution reversible ? (OUI/NON)")
     print("\n3/3 = VRAIE REGLE GENERALE -> phase cibler")
-    print("<3 = CAS PARTICULIER -> bdd-frictions archiver --id <id> --statut annule --raison cas-particulier")
+    print("<3 = CAS PARTICULIER -> bdd-frictions archiver --id <id> --statut "
+          + "|".join(VOCABULAIRE_FRICTIONS.DEMANDES_ARCHIVAGE) + " --raison cas-particulier")
     return code
 
 
@@ -213,7 +248,8 @@ def cmd_valider(args):
     parser = argparse.ArgumentParser(description="Valider evolution")
     parser.add_argument("--fichier", required=True)
     parser.add_argument("--friction-id", type=int, required=True)
-    parser.add_argument("--statut", required=True, choices=["valide", "annule"])
+    parser.add_argument("--statut", required=True,
+                        choices=list(VOCABULAIRE_FRICTIONS.DEMANDES_ARCHIVAGE))
     parser.add_argument("--raison", default="")
     parser.add_argument("--risque", default="faible", choices=["faible", "moyen", "critique"])
     parsed = parser.parse_args(args)
@@ -222,7 +258,7 @@ def cmd_valider(args):
     print(f"=== VALIDATION {mode}: {parsed.fichier} (risque={parsed.risque}) ===")
     print(f"Statut: {parsed.statut.upper()}")
 
-    if parsed.statut == "valide":
+    if parsed.statut == VOCABULAIRE_FRICTIONS.DEMANDE_VALIDE:
         code, out, err = run_outil("bdd-modifs", ["deverrouiller", "--fichier", parsed.fichier])
         print(out)
         code, out, err = run_outil("bdd-frictions", ["archiver", "--id", str(parsed.friction_id), "--statut", "valide"])

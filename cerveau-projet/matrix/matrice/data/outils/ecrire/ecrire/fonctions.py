@@ -47,7 +47,11 @@ def executer_ecrire(fichier, contenu, contenu_fichier, mode):
         pass
     print(msg_val)
     if code == 1:
-        print("ALERTE : validation echouee -- backup disponible pour revert (code 1, fichier ecrit).")
+        # EO-129 : la cible n'est PLUS ecrite quand la validation echoue. L'annoncer
+        # autrement ferait croire qu'un revert est necessaire -- et un agent qui
+        # revertit une cible INTACTE ecrase du travail sain.
+        print("REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE"
+              + (", .bak de la tentative : " + bak_path.name if bak_path else "") + ".")
         return 1
     print("OK : " + fichier + " [" + mode + "]")
     return 0

@@ -88,6 +88,19 @@ cette partie est une DISCIPLINE, prouvee par la note de fin de mission, et
 non par la garde. Ce que la garde ne voit pas ne doit jamais etre cru
 garde.
 
+## Le texte PARTAGE (la meme regle pour les DEUX flux)
+
+> La regle de la zone jetable lie les DEUX flux, mais CE fichier-ci est PRIVE
+> (`commun: false` : il nomme mon domicile et ma trace), donc le flux voisin ne
+> peut pas le lire -- et il a du REFORMULER la regle a la main. Deux textes
+> copies divergent : mesure du 2026-09-16, les deux formulations avaient derive
+> (frictions 65 et 67). Le texte COMMUN vit desormais la ou les deux le lisent :
+> la BDD des conventions de la Matrice, entree `CV-012` (porte
+> `bdd-conventions-matrice`), ecrite SANS nommer aucun flux -- verifie.
+>
+> C EST le texte de reference. Ce fichier garde ce qui ne m appartient qu a moi :
+> MON domicile, MA trace, et le moment ou MON pilote purge.
+
 ## Ou la regle se LIT (le garde la surveille)
 
 1. Ce fichier.

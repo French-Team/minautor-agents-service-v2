@@ -159,7 +159,19 @@
       ],
       "source": "MO-058 (2026-09-13) : separation des prefixes d entonnoir E- / EO-",
       "modifie_le": "2026-09-13 14:03:14"
+    },
+    {
+      "id": "CV-012",
+      "date": "2026-09-16 19:10:52",
+      "convention": "PERIMETRE DES FICHIERS TEMPORAIRES (regle COMMUNE aux DEUX flux) : tout fichier temporaire, cobaye ou preuve jetable va dans SA zone tmp-<agent>/ a la racine, et JAMAIS ailleurs (ni la racine du projet, ni matrice/, ni AppData/Temp). La zone est PERMANENTE et porte TOUJOURS son README : une zone tmp-* sans son README est un ecart, pas un etat normal. En fin de mission, son CONTENU est vide (fichiers ET dossiers de cobaye) : c'est le PILOTE qui le fait a la cloture, et la suppression se TRACE dans le journal de SON flux, jamais silencieuse -- une preuve citee puis supprimee sans trace laisse une citation vers du vide. La preuve d'un cobaye est son RESULTAT, lu a l'execution : le fichier qui dort n'est plus une preuve. Domicile PARTAGE : cette convention est le texte de reference des DEUX flux ; chaque flux garde sa regle propre pour ce qui n'appartient qu'a lui.",
+      "tags": [
+        "perimetre",
+        "tmp",
+        "commun",
+        "dual-flux"
+      ],
+      "source": "MO-147 / EO-128 (friction 65 et 67)"
     }
   ],
-  "compteur": 11
+  "compteur": 12
 }

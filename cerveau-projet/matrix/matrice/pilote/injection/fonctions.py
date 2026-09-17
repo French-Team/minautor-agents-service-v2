@@ -15,6 +15,7 @@ from commun import (
     prochaine_du_lot,
     prochaine_en_attente,
     puiser_tresse,
+    rafraichir_vue_journal,
     session_en_pause,
     journaliser_mission,
 )
@@ -23,6 +24,7 @@ from constants import (
     BOITE_PILOTE_OUT,
     CHEMIN_THEMES,
     ENCODAGE,
+    GABARIT_COMMANDE_RECHERCHE,
     REPERTOIRE_DATA,
     STATUT_EN_ATTENTE,
     STATUT_EN_COURS,
@@ -33,10 +35,27 @@ try:
 except ImportError:  # jamais bloquant : sans le motif, l'injection part sans poids
     peser_tokens = None
 
+try:
+    from tokens import peser_tokens
+except ImportError:  # jamais bloquant : sans le motif, l'injection part sans poids
+    peser_tokens = None
+
+# MOTEUR DE RECHERCHE (EO-131) : la QUESTION a poser vient du module PARTAGE
+# (data/commun/recherche_mission.py) -- les DEUX flux consomment le meme, ils ne
+# le recopient pas (lecon L-029). Absent, l'injection ne meurt pas : elle le DIT
+# (doctrine du sac-a-dos : jamais bloquant) -- c'est le GARDE qui refuse, jamais
+# le flux de travail.
+try:
+    from recherche_mission import preparer_recherche
+except ImportError:
+    preparer_recherche = None
+
 # Espion de POIDS des injections (E-097, imperatif 56) : le sac-a-dos remis a
 # l'agent est pese -- on voit combien de contexte la Matrice lui demande de lire
-# (objectif + checklist + lecons + themes). Champs fermes : liste unique.
-CHAMPS_PESES = ("objectif", "checklist", "lecons_utiles", "themes_utiles")
+# (objectif + checklist + lecons + themes + recherche). Champs fermes :
+# liste unique.
+CHAMPS_PESES = ("objectif", "checklist", "lecons_utiles", "themes_utiles",
+                "recherche")
 
 
 def poids_injection(injection):
@@ -104,6 +123,7 @@ def preparer_injection(charger_file):
         "checklist": checklist,
         "lecons_utiles": charger_lecons_utiles(),
         "themes_utiles": charger_themes_utiles(),
+        "recherche": preparer_recherche_mission(mission),
     }
     injection["poids_tokens"] = poids_injection(injection)
     deposer_message(BOITE_PILOTE_OUT, injection)
@@ -113,6 +133,11 @@ def preparer_injection(charger_file):
     mission["checklist"] = checklist
     enregistrer_file(file_missions)
     annoncer_debut(file_missions, mission)
+    # Vue du journal (MO-136) : la vue derivee est regeneree par le PILOTE au
+    # DEBUT aussi, comme le pilote Optimus pour `suivi-optimus.md`.
+    _code_vue, message_vue = rafraichir_vue_journal()
+    if _code_vue != 0:
+        print("ALERTE vue : " + message_vue)
     print("Injection deposee pour " + mission["id"] + " -> " + str(BOITE_PILOTE_OUT))
     return 0
 
@@ -151,6 +176,7 @@ def enchainer(charger_file):
         "checklist": checklist,
         "lecons_utiles": charger_lecons_utiles(),
         "themes_utiles": charger_themes_utiles(),
+        "recherche": preparer_recherche_mission(mission),
     }
     injection["poids_tokens"] = poids_injection(injection)
     deposer_message(BOITE_PILOTE_OUT, injection)
@@ -160,19 +186,31 @@ def enchainer(charger_file):
     mission["injectee_le"] = horodater()
     enregistrer_file(file_missions)
     annoncer_debut(file_missions, mission)
+    # Meme regeneration que l'injection simple (MO-136) : la vue suit le DEBUT.
+    _code_vue, message_vue = rafraichir_vue_journal()
+    if _code_vue != 0:
+        print("ALERTE vue : " + message_vue)
     print("Chaine armee : chaque 'fin' enchainra la mission suivante du lot.")
     return 0
+
+
+# Le VOCABULAIRE interdit vit dans son DOMICILE (data/commun/vocabulaire_invisible.py)
+# depuis MO-153 : les DEUX pilotes et le moteur de recherche le CONSOMMENT, ils ne
+# le recopient plus (M-076 ; L-100/L-102 : trois listes recopiees, trois longueurs).
+from vocabulaire_invisible import MOTS_INTERDITS  # noqa: E402
 
 
 def filtrer_pour_cameleon(items):
     """Filtre L-016/invisibilite : retire tout item lisible par le cameleon qui nomme l'invisible.
 
-    L'invisible = Optimus et ses zones (_operateur, suivi-optimus, remorque, espions-optimus,
-    tmp-optimus). Le filtre est case-insensitive et porte sur lecon+tags+source (ou but+description
-    pour les themes). Un item qui contient un mot interdit est invisible pour le cameleon : on le retire
-    de l'injection (la Matrice GUIDE sans reveler ses coulisses). Liste fermee dans audit-invisibilite.py.
+    L'invisible = le flux de maintenance et ses zones (_operateur, suivi-optimus,
+    remorque, espions-optimus, tmp-optimus). Le filtre est case-insensitive et
+    porte sur lecon+tags+source (ou but+description pour les themes). Un item qui
+    contient un mot interdit est invisible pour le cameleon : on le retire de
+    l'injection (la Matrice GUIDE sans reveler ses coulisses). La liste est FERMEE
+    et vit au domicile data/commun/vocabulaire_invisible.py (consommee, jamais recopiee).
     """
-    interdits = ("optimus", "_operateur", "suivi-optimus", "tmp-optimus", "remorque", "espions-optimus", "optimus-prime")
+    interdits = MOTS_INTERDITS
     filtres = []
     for it in items:
         texte = " ".join([
@@ -187,6 +225,29 @@ def filtrer_pour_cameleon(items):
             continue
         filtres.append(it)
     return filtres
+
+
+def preparer_recherche_mission(mission):
+    """La QUESTION a poser au moteur, habillee de la commande de CE flux (EO-131).
+
+    Le module PARTAGE (`data/commun/recherche_mission.py`) derive la question du
+    sujet de la mission ; ICI on l'habille du gabarit du Flux 1, qui ne porte
+    aucune option d'ouverture : la recherche reste dans le perimetre de l'agent.
+    Une seule derivation, deux habillages -- deux copies de la derivation
+    divergeraient (lecon L-029).
+
+    Absent, le module ne fait pas mourir l'injection : le bloc porte un
+    avertissement NOMME, et c'est le garde BLOQUANT qui refuse.
+    """
+    if preparer_recherche is None:
+        return {
+            "quand": "module partage ABSENT",
+            "question": "",
+            "commande": "",
+            "avertissement": ("recherche_mission.py introuvable dans data/commun : "
+                              "la question de recherche n'est PAS injectee"),
+        }
+    return preparer_recherche(mission, GABARIT_COMMANDE_RECHERCHE)
 
 
 def charger_lecons_utiles():

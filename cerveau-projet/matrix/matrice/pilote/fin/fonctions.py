@@ -13,6 +13,8 @@ from commun import (
     journaliser_mission,
     lot_termine,
     mission_en_cours,
+    purger_zone_temporaire,
+    rafraichir_vue_journal,
     session_en_pause,
 )
 from constants import (
@@ -51,6 +53,20 @@ def cloturer_mission(charger_file, bilan):
             "bilan": bilan,
         }
     )
+    # VUE du journal du cameleon (MO-136, miroir de `suivi-optimus.md` cote
+    # Optimus) : la vue derivee est regeneree par le PILOTE a la cloture, juste
+    # apres la ligne de journal que l'on vient d'ecrire -- sans cet appel elle
+    # restait figee sur la derniere construction manuelle (mesure du 2026-09-16 :
+    # aucun appelant de `construire` du cote du flux 1).
+    _code_vue, message_vue = rafraichir_vue_journal()
+    if _code_vue != 0:
+        print("ALERTE vue : " + message_vue)
+    # Zone jetable (MO-136) : la mission est close, le PILOTE vide la zone et le
+    # TRACE dans SON journal -- le point 4 de perimetre-tmp etait une discipline
+    # d'agent, et une discipline qu'aucun instrument ne mesure depend de la
+    # memoire.
+    _code_purge, message_purge = purger_zone_temporaire(mission)
+    print("[PURGE] " + message_purge)
     annoncer_fin(file_missions, mission)
     deposer_message(
         BOITE_MATRICE_IN,

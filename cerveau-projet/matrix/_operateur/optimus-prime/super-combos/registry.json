@@ -51,9 +51,32 @@
         "stats"
       ],
       "cree_le": ""
+    },
+    {
+      "id": "sc-003",
+      "numero": 3,
+      "slug": "auto-suivi",
+      "nom": "sc-003-auto-suivi",
+      "fichier": "sc-003-auto-suivi/main.py",
+      "description": "Entretien de la trace d'Optimus : coherence -> verifier -> vue (+ rapport)",
+      "phases": [
+        "COHERENCE",
+        "VERIFIER",
+        "VUE",
+        "RAPPORT"
+      ],
+      "usage": "python main.py <executer|rapide|status|auto-test>",
+      "verbe": "executer",
+      "verbes": [
+        "executer",
+        "rapide",
+        "status",
+        "auto-test"
+      ],
+      "cree_le": "2026-09-16"
     }
   ],
   "compteurs": {
-    "sc": 2
+    "sc": 3
   }
 }

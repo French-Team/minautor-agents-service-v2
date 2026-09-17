@@ -26,8 +26,12 @@ EXCLUS_DIRS = {".git", "__pycache__"}
 def main():
     parser = argparse.ArgumentParser(description="Audit invisibilite L-016/CV-006")
     parser.add_argument("cible", help="Fichier ou dossier lu par le cameleon")
-    parser.add_argument("--mots", default=",".join(DEFAUT_INTERDITS),
-                        help="Mots interdits separes par virgules")
+    # Le defaut n'a plus besoin de FAIRE puis DEFAIRE une chaine : la liste des mots
+    # interdits existe deja (DEFAUT_INTERDITS). Le detour join puis split ne servait
+    # qu'a recopier le separateur pour rien (frictions 72 et 73) : une valeur absente
+    # vaut le defaut du projet, sans transport.
+    parser.add_argument("--mots", default="",
+                        help="Mots interdits separes par virgules (defaut : la liste du projet)")
     parser.add_argument("--ext", default=".py,.md,.json,.jsonl",
                         help="Extensions (dossier seulement)")
     args = parser.parse_args()
@@ -37,7 +41,7 @@ def main():
         print(f"Cible introuvable: {cible}")
         return 2
 
-    interdits = [m.strip().lower() for m in args.mots.split(",") if m.strip()]
+    interdits = [m.strip().lower() for m in args.mots.split(",") if m.strip()] or list(DEFAUT_INTERDITS)
     exts = {e.strip() for e in args.ext.split(",") if e.strip()}
 
     fichiers = [cible] if cible.is_file() else [

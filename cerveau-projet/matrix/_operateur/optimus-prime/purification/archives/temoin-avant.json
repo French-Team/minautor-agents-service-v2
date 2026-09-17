@@ -1,0 +1,1943 @@
+{
+  "date": "2026-09-17 20:36:16",
+  "elements": [
+    {
+      "id": "K-003",
+      "lignes": 21,
+      "octets": 943,
+      "origine": "source",
+      "sha": "eedcc28198681c74d43fb3f0c47567f60b9818864fc69ac82f154d5799a729c5",
+      "source": "tmp-cameleon/README.md.bak.20260916_191222",
+      "verdict": "signaler"
+    },
+    {
+      "id": "K-004",
+      "lignes": 10,
+      "octets": 363,
+      "origine": "source",
+      "sha": "297f9dcc71b4f1599d9e577ea64b5d44d5053b3c357bbdf0318881d1cd524ede",
+      "source": "tmp-cameleon/README.md.bak.20260916_085620",
+      "verdict": "signaler"
+    },
+    {
+      "id": "K-005",
+      "lignes": 135,
+      "octets": 8583,
+      "origine": "archive",
+      "sha": "54dfe7774bee147cedbe8e116e14b952a285d5a3fa148c93e152cd8848f31f40",
+      "source": "_operateur/optimus-prime/optimus-prime.md.bak.20260916_190749",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-006",
+      "lignes": 240,
+      "octets": 13565,
+      "origine": "archive",
+      "sha": "b660a69ef0d1bc2cc858febafc65de74d7dc66321be2f6ebda9a4cd873413aa3",
+      "source": "_operateur/optimus-prime/optimus-prime.md.bak.20260916_190720",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-007",
+      "lignes": 230,
+      "octets": 12910,
+      "origine": "archive",
+      "sha": "ca2c7beb5c4ccf9e7bcbdd0c2f57251e8310b76ae5fda94020ba85cb6a6480b2",
+      "source": "_operateur/optimus-prime/optimus-prime.md.bak.20260916_185729",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-008",
+      "lignes": 536,
+      "octets": 27375,
+      "origine": "source",
+      "sha": "59f9ade862fb002c9d0135e9737eee6fe740628215f882c2758bdc933ee346ef",
+      "source": "_operateur/optimus-prime/cockpit/cockpit-matrice.py.bak.20260917_071219",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-009",
+      "lignes": 528,
+      "octets": 26784,
+      "origine": "archive",
+      "sha": "c25edaef1da713e4961c16c2a772095adbbe4223c229f1fd932b041a5b656665",
+      "source": "_operateur/optimus-prime/cockpit/cockpit-matrice.py.bak.20260916_091235",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-010",
+      "lignes": 102,
+      "octets": 5140,
+      "origine": "source",
+      "sha": "a2a83254e3d2eab8da8a49019dbb829a01a300d5ce76d5c4d05188785827d89d",
+      "source": "_operateur/optimus-prime/cockpit/routes-privees.json.bak.20260916_091235",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-011",
+      "lignes": 135,
+      "octets": 4569,
+      "origine": "source",
+      "sha": "b819ab0d45da372e06829f4af532c0e92615f61bb31bf219f04aeddc9f405892",
+      "source": "_operateur/optimus-prime/espions/espion-activite-optimus.py.bak.20260916_073741",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-012",
+      "lignes": 83,
+      "octets": 2625,
+      "origine": "archive",
+      "sha": "96e76b49706e618b9ee5648facdf7429af5f268b4a4951fb2653e7859cce9f6a",
+      "source": "_operateur/optimus-prime/espions/espion-activite-optimus.py.bak.20260916_073740",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-013",
+      "lignes": 150,
+      "octets": 5623,
+      "origine": "source",
+      "sha": "888983373f95eff7e9de4ab7305b4f50278810c288f36fad811cf324020f91fe",
+      "source": "_operateur/optimus-prime/espions/espion-integrite-optimus.py.bak.20260916_082911",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-014",
+      "lignes": 110,
+      "octets": 3902,
+      "origine": "archive",
+      "sha": "1f421b08532912bcc500de0d7228a85922f875718f364ad65e85c35876393db7",
+      "source": "_operateur/optimus-prime/espions/espion-integrite-optimus.py.bak.20260916_082910",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-015",
+      "lignes": 1387,
+      "octets": 62196,
+      "origine": "archive",
+      "sha": "1a9909f5d7d11e9c892a11c98d51fdb8fe2666fa952db0ca7962bd9552b4d60d",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260917_071218",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-016",
+      "lignes": 1387,
+      "octets": 62205,
+      "origine": "archive",
+      "sha": "785d74f1b7f65d365707cbcb770d8422ca91845e274808ffb07bcb7d3787966c",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260917_071217",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-017",
+      "lignes": 1323,
+      "octets": 58358,
+      "origine": "archive",
+      "sha": "550381a36ead7dafcb68987c843c71233a21fb77c07c1d1cd91e7df8e8b1079b",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260916_201208",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-018",
+      "lignes": 1185,
+      "octets": 51498,
+      "origine": "archive",
+      "sha": "f15a659b5f58fa789fb27b188500020d42196e20e49b7771e67328bae314e1d0",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260916_195948",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-019",
+      "lignes": 1186,
+      "octets": 51537,
+      "origine": "archive",
+      "sha": "5b7bddc62aa3a34eebe97b497b62a9945d6e6fa87f08a6b49517afde52310554",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260916_195947",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-020",
+      "lignes": 1128,
+      "octets": 48644,
+      "origine": "archive",
+      "sha": "4744ddb799ef1c640452b07cca50a152797c7934fd7efea8ffabcf311e73fa91",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260916_190531",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-021",
+      "lignes": 1096,
+      "octets": 46805,
+      "origine": "archive",
+      "sha": "b33eadad24cff303936cdcd22a8e2eb5e0c91669a9ead75457d83b2d514b34d7",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260916_190325",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-022",
+      "lignes": 1089,
+      "octets": 46282,
+      "origine": "archive",
+      "sha": "ad72d1e39c06f4803c8b107963d9fe995d5ee5142a605dea86c0eec32f2d739d",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260916_185258",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-023",
+      "lignes": 1052,
+      "octets": 44414,
+      "origine": "archive",
+      "sha": "c2058c8c6613df561705393681e6b135d7bfadf378dd1a13beea7ec6d4d1b8f0",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260916_095958",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-024",
+      "lignes": 1048,
+      "octets": 44277,
+      "origine": "archive",
+      "sha": "c2f5812301a1011fdab925fff2f5c5a4bb4edbb4386c9b52f8555b869ce60fd5",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260916_094901",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-025",
+      "lignes": 1041,
+      "octets": 43852,
+      "origine": "archive",
+      "sha": "59f209e0f3fecfec3e6e3ac9cc2333f65f5b9927a2689114bd95dc2b58e36655",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260916_094900",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-026",
+      "lignes": 1039,
+      "octets": 43797,
+      "origine": "archive",
+      "sha": "953ecb5c28b47f4099f2029b9f2d1b894805be46af8ba221436caa8e49bef6e6",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260916_094505",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-027",
+      "lignes": 970,
+      "octets": 40265,
+      "origine": "archive",
+      "sha": "fbc8aea13c814428b18f991866adde5f927f0e5fe4b7cc5af6327f4197c898c0",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260916_094504",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-028",
+      "lignes": 923,
+      "octets": 37892,
+      "origine": "archive",
+      "sha": "d48564d93f4dae953df65f73b0d180ecc6b4bc24be06fcff0e5b43a75538d603",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260916_084730",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-029",
+      "lignes": 177,
+      "octets": 9364,
+      "origine": "archive",
+      "sha": "6b712fe558b068e94851866fc4c7c34d75ccd969166509ceb1beb4ae5ced3aa1",
+      "source": "_operateur/optimus-prime/pilote/constants.py.bak.20260916_185622",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-030",
+      "lignes": 163,
+      "octets": 8589,
+      "origine": "archive",
+      "sha": "6c1b42ee8a247ff5a5d2407f792e6d036f93080f7d0f40fd7306aa225eaa6d58",
+      "source": "_operateur/optimus-prime/pilote/constants.py.bak.20260916_095957",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-031",
+      "lignes": 155,
+      "octets": 8042,
+      "origine": "archive",
+      "sha": "eed05da84124a2ddfef49319e88959d451fa475b9a03e891ef34c9ec27302f92",
+      "source": "_operateur/optimus-prime/pilote/constants.py.bak.20260916_094900",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-032",
+      "lignes": 145,
+      "octets": 7393,
+      "origine": "archive",
+      "sha": "61d839e5b99ca6304ab3744a079692edf7353a5b75c2aedd12805bca9c06171b",
+      "source": "_operateur/optimus-prime/pilote/constants.py.bak.20260916_094504",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-033",
+      "lignes": 135,
+      "octets": 6849,
+      "origine": "archive",
+      "sha": "a41506cc0c699e207d1a153a2c625f52c8d95eec1b3506976d9380d211afea25",
+      "source": "_operateur/optimus-prime/pilote/constants.py.bak.20260916_084729",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-034",
+      "lignes": 908,
+      "octets": 95876,
+      "origine": "source",
+      "sha": "a5b2d96ae0c7c6fbad8d4e18ba494621ad6e88bdeb317f56eebe76cf5946a079",
+      "source": "_operateur/optimus-prime/pilote/file-missions-optimus.json.bak.20260916_190208",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-035",
+      "lignes": 908,
+      "octets": 95833,
+      "origine": "archive",
+      "sha": "6e4f350528f40355e2182657af551cfdbc725d4f58a3efbf6aa8fb7858a2d2c3",
+      "source": "_operateur/optimus-prime/pilote/file-missions-optimus.json.bak.20260916_190207",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-036",
+      "lignes": 69,
+      "octets": 3165,
+      "origine": "source",
+      "sha": "db08fd92e2b217bcf01b1d2975ad8d07307455712e9b410922cd8f5822bb60d4",
+      "source": "_operateur/optimus-prime/pilote/main.py.bak.20260916_190533",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-037",
+      "lignes": 112,
+      "octets": 7162,
+      "origine": "archive",
+      "sha": "b460845e31122cd45fb25d314d9d67e71d9ab0cd03f544b774ff74996482d3c8",
+      "source": "_operateur/optimus-prime/purification/ETAT-SUITE-PURIFICATION.md.bak.20260916_190945",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-038",
+      "lignes": 101,
+      "octets": 4596,
+      "origine": "source",
+      "sha": "a361c40e3e352483f11f79b2eecab91c75e35e70ea7ef045137b04ba20c582e9",
+      "source": "_operateur/optimus-prime/regles-immuables/perimetre-tmp.md.bak.20260916_191213",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-039",
+      "lignes": 148,
+      "octets": 6458,
+      "origine": "source",
+      "sha": "35554f533712c51cf40ccea191af8fe81b01c5bed4ba65afba38b1de8c8384bf",
+      "source": "_operateur/optimus-prime/remorque/remorque-optimus.py.bak.20260916_082912",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-040",
+      "lignes": 141,
+      "octets": 6081,
+      "origine": "archive",
+      "sha": "0664e5dc19d7e46ee7ff25091f45be713a1fc3a5e1d037bf3ed39c995a9c9044",
+      "source": "_operateur/optimus-prime/remorque/remorque-optimus.py.bak.20260916_082911",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-041",
+      "lignes": 82,
+      "octets": 2090,
+      "origine": "source",
+      "sha": "9316c2d622f32da46ef22e0d7c379663b602d095bfb82ebfd31fb1137cdd75a9",
+      "source": "_operateur/optimus-prime/super-combos/registry.json.bak.20260916_095914",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-042",
+      "lignes": 59,
+      "octets": 1501,
+      "origine": "archive",
+      "sha": "e94550b778c9540c4c8621042f1a8851f7805efbc9ae9122c9ce913036e99b1a",
+      "source": "_operateur/optimus-prime/super-combos/registry.json.bak.20260916_095706",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-043",
+      "lignes": 129,
+      "octets": 6778,
+      "origine": "source",
+      "sha": "534433f4aa9cf8f6a44da67afb4c93675f0180b4893e7ca94d37671715672285",
+      "source": "_operateur/optimus-prime/super-combos/super-combos-readme.md.bak.20260916_095706",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-044",
+      "lignes": 295,
+      "octets": 11631,
+      "origine": "source",
+      "sha": "5ec44ba6d3fc548dfe13048158f841f6e6642f187cb200bf8805c269335fad9e",
+      "source": "_operateur/optimus-prime/super-combos/sc-002-auto-evolution/main.py.bak.20260916_074550",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-045",
+      "lignes": 294,
+      "octets": 11581,
+      "origine": "archive",
+      "sha": "1a8bc387f09abb0f59f645da6f2e3a437a95deda12c36ceda4168eacdb2879ba",
+      "source": "_operateur/optimus-prime/super-combos/sc-002-auto-evolution/main.py.bak.20260916_074549",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-046",
+      "lignes": 360,
+      "octets": 14942,
+      "origine": "source",
+      "sha": "e85123f9949370eeca541f46d5bbdca72b1ec66101132163e03edaa76e34cee3",
+      "source": "_operateur/optimus-prime/super-combos/sc-003-auto-suivi/main.py.bak.20260916_100501",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-047",
+      "lignes": 344,
+      "octets": 14227,
+      "origine": "archive",
+      "sha": "612223d2dcc7926fae21e34b6c5298f022b8bb08d688ad2158782774046ebb5a",
+      "source": "_operateur/optimus-prime/super-combos/sc-003-auto-suivi/main.py.bak.20260916_100442",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-048",
+      "lignes": 344,
+      "octets": 14227,
+      "origine": "archive",
+      "sha": "612223d2dcc7926fae21e34b6c5298f022b8bb08d688ad2158782774046ebb5a",
+      "source": "_operateur/optimus-prime/super-combos/sc-003-auto-suivi/main.py.bak.20260916_095429",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-049",
+      "lignes": 80,
+      "octets": 2660,
+      "origine": "source",
+      "sha": "c20a70cfcdf2180a453a3eadb8be177175031d5cd37f23c3693951a9a0b08a87",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/audit-invisibilite.py.bak.20260917_071221",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-050",
+      "lignes": 76,
+      "octets": 2350,
+      "origine": "archive",
+      "sha": "4696644c9ac566f5a1b9c26a1b9bddf20e2835898a469eb29c61a9f47f5870d4",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/audit-invisibilite.py.bak.20260917_071220",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-051",
+      "lignes": 675,
+      "octets": 38747,
+      "origine": "source",
+      "sha": "3c464b20936bb8fd367bd9efb4d4a97d2996503049ae0fce656dd0e4aed7733b",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py.bak.20260916_200500",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-052",
+      "lignes": 671,
+      "octets": 38471,
+      "origine": "archive",
+      "sha": "02e34aa5e158137c08f48db565209f22945313ff1fecbb9919f482903bba2388",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py.bak.20260916_190801",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-053",
+      "lignes": 649,
+      "octets": 37155,
+      "origine": "archive",
+      "sha": "02bb0eed37d91d7c826cf88407044a4da230e9cfe2ab9b85f40997f77adecdb4",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py.bak.20260916_190749",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-054",
+      "lignes": 626,
+      "octets": 35778,
+      "origine": "archive",
+      "sha": "c3739147b52b400235e34290cfb3c5904895db628b3cb1ed3fefb16b9eb3064d",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py.bak.20260916_185833",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-055",
+      "lignes": 111,
+      "octets": 23988,
+      "origine": "source",
+      "sha": "bec53ae114b641b4888fadf1868ced8e9d7efa024f55948f7c57cd2cbdb2a921",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/outils-readme.md.bak.20260916_200636",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-056",
+      "lignes": 110,
+      "octets": 22068,
+      "origine": "archive",
+      "sha": "b04f66285e7b9e7522b4140fb226e2c636cb175628171197893ff69a96275058",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/outils-readme.md.bak.20260916_083436",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-057",
+      "lignes": 139,
+      "octets": 5551,
+      "origine": "source",
+      "sha": "0d7a026bb51d736ad69f34e03997151470a7b19fb12e88a1dc905fac0621e77e",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/revert-periode.py.bak.20260916_074451",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-058",
+      "lignes": 764,
+      "octets": 33717,
+      "origine": "source",
+      "sha": "ecd86078bff00af3b66785b68820b0bca6689aa0968ca04592ee4d9f61ad08c5",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/verifier-contrat-fondamental.py.bak.20260916_082906",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-059",
+      "lignes": 728,
+      "octets": 31795,
+      "origine": "archive",
+      "sha": "5b5c8c7d0c62e7415300c179c46e7835502f9d38ee8b09f29c1aedc2babba768",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/verifier-contrat-fondamental.py.bak.20260916_082905",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-060",
+      "lignes": 156,
+      "octets": 7192,
+      "origine": "source",
+      "sha": "14a15b88b2e51444186eaad16b9bf16508df0b9f8970d7f8738a72a2c4a0687c",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/verifier-fiche.py.bak.20260916_190750",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-061",
+      "lignes": 297,
+      "octets": 14605,
+      "origine": "source",
+      "sha": "3cba55585d212a69a4b00393ab4a62277b575a5327179d7b4084c406bf7c156c",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/verifier-recherche.py.bak.20260916_185815",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-062",
+      "lignes": 160,
+      "octets": 6246,
+      "origine": "source",
+      "sha": "8dff368ca85c8b14c54843e06a759d7ccb497f7e218d328d8313678f34471f60",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/entry.py.bak.20260916_074311",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-063",
+      "lignes": 154,
+      "octets": 6087,
+      "origine": "archive",
+      "sha": "8097ae0b49d7857b4a343375fce83419fcac6c40b25f66b4d4791f60114fdce1",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/entry.py.bak.20260916_074310",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-064",
+      "lignes": 133,
+      "octets": 5038,
+      "origine": "archive",
+      "sha": "5306747e066c3e2719a13c6c5fd7c866c6f1c0c52bca96a7cc67b8c3c0137edb",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/entry.py.bak.20260916_073146",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-065",
+      "lignes": 44,
+      "octets": 1227,
+      "origine": "source",
+      "sha": "d726340b693610dc1e7c922d4ac695f4ad5cbdf35bd12ec16035f829a7623d43",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/main.py.bak.20260916_073146",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-066",
+      "lignes": 131,
+      "octets": 4405,
+      "origine": "source",
+      "sha": "b2c1b6a83893e559ed64523a9fd1127e7f30af96e9489f538d619722b14b70c4",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/bdd-modifs/entry.py.bak.20260916_073538",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-067",
+      "lignes": 47,
+      "octets": 1356,
+      "origine": "source",
+      "sha": "e361b684ded140d914fa65525210eac1b86a7aa9fad524305a5fd67284b8c532",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/bdd-modifs/main.py.bak.20260916_073626",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-068",
+      "lignes": 123,
+      "octets": 4423,
+      "origine": "source",
+      "sha": "4851b76c0d709a13c16862f6065b232cd40501c1cca838ccdfea7f1060a5dde7",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/bdd-modifs/fonctions/bdd_modifs.py.bak.20260916_073538",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-069",
+      "lignes": 123,
+      "octets": 4392,
+      "origine": "archive",
+      "sha": "613ac1d062f1c4b0577973edeee26c4223a26211e39038995a872b759b6942c4",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/bdd-modifs/fonctions/bdd_modifs.py.bak.20260916_073537",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-070",
+      "lignes": 111,
+      "octets": 3753,
+      "origine": "archive",
+      "sha": "c7a05a81fbf04ccfe84ba070c35eb5215379ae5a1a58af1925e685b9c3efc34c",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/bdd-modifs/fonctions/bdd_modifs.py.bak.20260916_073536",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-071",
+      "lignes": 89,
+      "octets": 2963,
+      "origine": "source",
+      "sha": "e387d357f852315623ad9e27986664c0d5a8d7d92573a70038fa948c2441604a",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/bdd-lecons-matrice/fonctions/bdd_lecons_matrice.py.bak.20260916_083745",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-072",
+      "lignes": 219,
+      "octets": 9294,
+      "origine": "source",
+      "sha": "bc5ab7f30cec344796bcb6827a0c05c7a2fd8a1ae393ee77e3d4a763e9eaae59",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/fonctions/bdd_frictions.py.bak.20260916_074548",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-073",
+      "lignes": 209,
+      "octets": 8856,
+      "origine": "archive",
+      "sha": "a8121de1a146026916de31de4e304b17bbcd7e03370a394049f6787688d46c55",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/fonctions/bdd_frictions.py.bak.20260916_074310",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-074",
+      "lignes": 193,
+      "octets": 8045,
+      "origine": "archive",
+      "sha": "ef4b3e52d5e8259464080691b9ea7923cd8a4e262dc2568ee0e6abdbdd939508",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/fonctions/bdd_frictions.py.bak.20260916_073145",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-075",
+      "lignes": 441,
+      "octets": 20717,
+      "origine": "source",
+      "sha": "ac743e1b88f5ba70ff25d05eb39d78ab770ed6c5c052e499ef2a5cdfe546d5e8",
+      "source": "_operateur/optimus-prime/pilote/file/fonctions.py.bak.20260917_071220",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-076",
+      "lignes": 430,
+      "octets": 20148,
+      "origine": "archive",
+      "sha": "7b7eacd81a219d1281f2d71cf517aacee10c1ccbbbfcc09ea985aa183ea92a34",
+      "source": "_operateur/optimus-prime/pilote/file/fonctions.py.bak.20260916_190532",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-077",
+      "lignes": 421,
+      "octets": 19692,
+      "origine": "archive",
+      "sha": "b25eb4a86579077bd77cfa657cfd88da6aaa5fd13828714c1ea8f57794a78fc9",
+      "source": "_operateur/optimus-prime/pilote/file/fonctions.py.bak.20260916_190326",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-078",
+      "lignes": 420,
+      "octets": 19666,
+      "origine": "archive",
+      "sha": "417a46dc07121d6829fd478714eb1cd58992bc9f04a19d0f0c42eb6739d2db81",
+      "source": "_operateur/optimus-prime/pilote/file/fonctions.py.bak.20260916_190325",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-079",
+      "lignes": 419,
+      "octets": 19598,
+      "origine": "archive",
+      "sha": "3b63d752db4a6f5a5a95538c288680491d34891ae07a5bcee8338ad137de948f",
+      "source": "_operateur/optimus-prime/pilote/file/fonctions.py.bak.20260916_094507",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-080",
+      "lignes": 425,
+      "octets": 19706,
+      "origine": "archive",
+      "sha": "7d6403ad1a31fb4fc33dfdad2860185179b9d86bf41d31ec17a9bb60d953bc24",
+      "source": "_operateur/optimus-prime/pilote/file/fonctions.py.bak.20260916_084805",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-081",
+      "lignes": 417,
+      "octets": 19542,
+      "origine": "archive",
+      "sha": "ed40dcb87563a0e584adb172af3bfc0ff53e3e8ade4ba427751a01125534ae88",
+      "source": "_operateur/optimus-prime/pilote/file/fonctions.py.bak.20260916_084741",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-082",
+      "lignes": 412,
+      "octets": 19179,
+      "origine": "archive",
+      "sha": "5528259c7165d31f88639b4050b9732128586bad78338c061c0813e73ab5263f",
+      "source": "_operateur/optimus-prime/pilote/file/fonctions.py.bak.20260916_084731",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-083",
+      "lignes": 17,
+      "octets": 520,
+      "origine": "source",
+      "sha": "8db4d33e3157ffeb0d375daf75469179ec1f93900bd7797e8d5c04ac0c58da75",
+      "source": "_operateur/optimus-prime/pilote/fin/entry.py.bak.20260916_190532",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-084",
+      "lignes": 169,
+      "octets": 7015,
+      "origine": "archive",
+      "sha": "f32a179aaa8648faf68f9fe0b28ff3dff5ecd1155a073121ce0fa28c1a941cfb",
+      "source": "_operateur/optimus-prime/pilote/fin/fonctions.py.bak.20260916_195948",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-085",
+      "lignes": 160,
+      "octets": 6492,
+      "origine": "archive",
+      "sha": "e0dac0b532134465305029a1e17d26304cabb7ffd7f3b477c8ec661b900c8d3f",
+      "source": "_operateur/optimus-prime/pilote/fin/fonctions.py.bak.20260916_190325",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-086",
+      "lignes": 168,
+      "octets": 6885,
+      "origine": "archive",
+      "sha": "9941556fd8f1d700c6f5bdfa109e79dec4fa066b1bbe65d7ead507165069bdb2",
+      "source": "_operateur/optimus-prime/pilote/fin/fonctions.py.bak.20260916_095959",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-087",
+      "lignes": 148,
+      "octets": 5884,
+      "origine": "archive",
+      "sha": "71b544379d9ae1c72558c567a600cc4496c18e02a4c46d66fd6e8584a9a65a13",
+      "source": "_operateur/optimus-prime/pilote/fin/fonctions.py.bak.20260916_094506",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-088",
+      "lignes": 146,
+      "octets": 5836,
+      "origine": "archive",
+      "sha": "f07132b30ad1ab9fa04debfdc3e7a04e7b7abce8e45fad994ffc793beb2a58e4",
+      "source": "_operateur/optimus-prime/pilote/fin/fonctions.py.bak.20260916_094505",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-089",
+      "lignes": 141,
+      "octets": 5494,
+      "origine": "archive",
+      "sha": "d55bf8bf9c25f8da96bce9e4cdab11ac8e6350914672048810452b1cef14135b",
+      "source": "_operateur/optimus-prime/pilote/fin/fonctions.py.bak.20260916_084731",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-090",
+      "lignes": 140,
+      "octets": 5466,
+      "origine": "archive",
+      "sha": "fccc26736f6a36806bedfec97df7f46526ced60a9e2d0b69de3507aaa4ed845d",
+      "source": "_operateur/optimus-prime/pilote/fin/fonctions.py.bak.20260916_084730",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-091",
+      "lignes": 76,
+      "octets": 3160,
+      "origine": "source",
+      "sha": "071605248f424f0059ef711e9b7314524fe53a9aae0e420379fde2000efebdf8",
+      "source": "_operateur/optimus-prime/pilote/injection/entry.py.bak.20260916_190533",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-092",
+      "lignes": 68,
+      "octets": 2693,
+      "origine": "archive",
+      "sha": "11d937a5d89f4663e792ee08a3d3b08114f3ce6d1b919a3457301875664b920c",
+      "source": "_operateur/optimus-prime/pilote/injection/entry.py.bak.20260916_190532",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-093",
+      "lignes": 386,
+      "octets": 16304,
+      "origine": "archive",
+      "sha": "e4849e33d11e4e322dab3cc993a56a8aa57f5eb5d04b215745556f2ba5cb66cb",
+      "source": "_operateur/optimus-prime/pilote/injection/fonctions.py.bak.20260916_185637",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-094",
+      "lignes": 363,
+      "octets": 15253,
+      "origine": "archive",
+      "sha": "f30c3d22a8c42e853321797812f769ba83d8900f91714df124b4de5f287503c9",
+      "source": "_operateur/optimus-prime/pilote/injection/fonctions.py.bak.20260916_185622",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-095",
+      "lignes": 346,
+      "octets": 14667,
+      "origine": "archive",
+      "sha": "d2e3f94cc9d6759da920d3d22e0c756d0d7afc9d0f2d69fe60a9945b9fdc1fcc",
+      "source": "_operateur/optimus-prime/pilote/injection/fonctions.py.bak.20260916_094507",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-096",
+      "lignes": 342,
+      "octets": 14607,
+      "origine": "archive",
+      "sha": "b4cf380ed9253d686427e39063d4a7973404bbd96a3f8a396cb0f998d1a86b72",
+      "source": "_operateur/optimus-prime/pilote/injection/fonctions.py.bak.20260916_094506",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-097",
+      "lignes": 172,
+      "octets": 11049,
+      "origine": "source",
+      "sha": "9c83edacf3a7e111bf25d8c4dd239edc017aa7790ca3fe08d2f64ef68e067012",
+      "source": "_operateur/optimus-prime/parcours/themes/theme-fichier.json.bak.20260916_185729",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-098",
+      "lignes": 492,
+      "octets": 43179,
+      "origine": "source",
+      "sha": "8c4cd9d6909e0f42c7421f5b146e2fb8cbabe554d30f0e1da5885761f0b05063",
+      "source": "matrice/data/manuel-outils.md.bak.20260916_091718",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-099",
+      "lignes": 493,
+      "octets": 43260,
+      "origine": "archive",
+      "sha": "e998a677ec29fbd6395ff1c42241b00128611451fef8f061c08c2e8c175dd66a",
+      "source": "matrice/data/manuel-outils.md.bak.20260916_072801",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-100",
+      "lignes": 491,
+      "octets": 42739,
+      "origine": "archive",
+      "sha": "0e9b168337bf2eb3a06654e51d011eabf1495fef48f7db3fef41abfabe2d7534",
+      "source": "matrice/data/manuel-outils.md.bak.20260916_072748",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-101",
+      "lignes": 491,
+      "octets": 42519,
+      "origine": "archive",
+      "sha": "fb36c095af985530b0eb70afc1ccb4990a512f5eef75382b6d52353c5586ec8e",
+      "source": "matrice/data/manuel-outils.md.bak.20260916_072611",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-102",
+      "lignes": 364,
+      "octets": 13937,
+      "origine": "source",
+      "sha": "38fdfd96d3b06187bb20553561cf2d54ad41213ac604db57cf150004c4ae0665",
+      "source": "matrice/pilote/commun.py.bak.20260916_085611",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-103",
+      "lignes": 84,
+      "octets": 3679,
+      "origine": "source",
+      "sha": "a481a0e8ab982e1cfe59a1da8214ed6b6535677225feeb3140bf37f5efdf5a39",
+      "source": "matrice/pilote/constants.py.bak.20260916_185623",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-104",
+      "lignes": 70,
+      "octets": 2867,
+      "origine": "archive",
+      "sha": "fb4af33c0de640ae73203293c8c75777b33f53477086e3dd2a0783e141f04f72",
+      "source": "matrice/pilote/constants.py.bak.20260916_085611",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-105",
+      "lignes": 100,
+      "octets": 3425,
+      "origine": "source",
+      "sha": "3a0ee4deb2a395fa2d223a31ccf79e201341195c106824bdf59fe774959728ad",
+      "source": "matrice/pilote/fin/fonctions.py.bak.20260916_085619",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-106",
+      "lignes": 279,
+      "octets": 11100,
+      "origine": "source",
+      "sha": "1f93bdd4e35f20deea4b0ca143c592f33426bece362bb33e358e644a88dc9b0c",
+      "source": "matrice/pilote/injection/fonctions.py.bak.20260916_185637",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-107",
+      "lignes": 255,
+      "octets": 10029,
+      "origine": "archive",
+      "sha": "13673b811990e6d229c714208d86dca4221635b7543f4da54af32c82af00f412",
+      "source": "matrice/pilote/injection/fonctions.py.bak.20260916_185623",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-108",
+      "lignes": 233,
+      "octets": 9151,
+      "origine": "archive",
+      "sha": "ca65d275c5dfdf315f30de31d35bd9fdba8be0799fc4900b53cb60732693a8dd",
+      "source": "matrice/pilote/injection/fonctions.py.bak.20260916_085620",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-109",
+      "lignes": 228,
+      "octets": 8883,
+      "origine": "archive",
+      "sha": "ef738a5ffc7a2d7a61d0d15afc3df6bca214375325e0e15911bdae8fdaed4737",
+      "source": "matrice/pilote/injection/fonctions.py.bak.20260916_085619",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-110",
+      "lignes": 100,
+      "octets": 4307,
+      "origine": "source",
+      "sha": "abecb95893df1ca732682b07af343428e7c17f974e3e7dd10a476e3d1e53cab1",
+      "source": "matrice/data/commun/derniere_session.py.bak.20260916_072748",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-111",
+      "lignes": 85,
+      "octets": 3387,
+      "origine": "archive",
+      "sha": "cabc619b4d186681497580d489efe054759d36e319cabdd99c4d9f4199adacf8",
+      "source": "matrice/data/commun/derniere_session.py.bak.20260916_072610",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-112",
+      "lignes": 106,
+      "octets": 4955,
+      "origine": "source",
+      "sha": "5a726a3b036ad4e40c0191ba78a8625b1e91ab8f3174999ae91af862aac38f44",
+      "source": "matrice/data/commun/recherche_mission.py.bak.20260916_185706",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-113",
+      "lignes": 106,
+      "octets": 4955,
+      "origine": "archive",
+      "sha": "5e5539abe42ad2bf90ca7c7ddd61297ebb0d9f70577f97ac2ef0a11d4c17c165",
+      "source": "matrice/data/commun/recherche_mission.py.bak.20260916_185638",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-114",
+      "lignes": 28,
+      "octets": 1188,
+      "origine": "source",
+      "sha": "e035680c99a92b0efb8c93fc95fc2b70aa389196c53f2323bec78bdd2e75fb8c",
+      "source": "matrice/data/commun/trace_session.py.bak.20260916_072610",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-115",
+      "lignes": 95,
+      "octets": 3758,
+      "origine": "source",
+      "sha": "8f90c26bea9f1196b29de1af77eca16fbde41d8710086cee9ef1d2a960466049",
+      "source": "matrice/data/commun/transport_listes.py.bak.20260917_071205",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-116",
+      "lignes": 90,
+      "octets": 2959,
+      "origine": "source",
+      "sha": "4b2db279e5b27a2a03ad556a49631e7099178255e0bd8f19a0063eaf04dea6c7",
+      "source": "matrice/data/outils/bdd-conventions-matrice/commun.py.bak.20260917_071228",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-117",
+      "lignes": 48,
+      "octets": 1502,
+      "origine": "source",
+      "sha": "5227b8d5cd7b78fc5a63f57db639633063991070636d6be00933776b15043dfa",
+      "source": "matrice/data/outils/bdd-sessions/main.py.bak.20260916_072610",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-118",
+      "lignes": 342,
+      "octets": 13783,
+      "origine": "source",
+      "sha": "6d8eb7304614a3c7f031c57bcb8295c8fed0c2ce6e6af0775c242d52f67bd9d6",
+      "source": "matrice/data/outils/ecrire/commun.py.bak.20260916_190036",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-119",
+      "lignes": 328,
+      "octets": 12836,
+      "origine": "archive",
+      "sha": "045ef56b45345522f61ce597297a5615383e8c50b341ff383bdb7e1b23e08392",
+      "source": "matrice/data/outils/ecrire/commun.py.bak.20260916_190035",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-120",
+      "lignes": 301,
+      "octets": 11734,
+      "origine": "archive",
+      "sha": "fa35696985d5d495785b8cb616a8b94c9f5d22afb0e3f5667970a1b7398b6dc5",
+      "source": "matrice/data/outils/ecrire/commun.py.bak.20260916_082905",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-121",
+      "lignes": 299,
+      "octets": 11692,
+      "origine": "archive",
+      "sha": "b9f8e89a5c3656e26ec6dcac5f5bbc79b2f185cd7efcf79155e978e322bf2f92",
+      "source": "matrice/data/outils/ecrire/commun.py.bak.20260916_082904",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-122",
+      "lignes": 49,
+      "octets": 1581,
+      "origine": "source",
+      "sha": "a639cbbd21e1126f089dd5efb5ab19d06f209d68f53f897ccb9850ec8d8e4808",
+      "source": "matrice/data/outils/ecrire/constants.py.bak.20260916_082859",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-123",
+      "lignes": 57,
+      "octets": 2981,
+      "origine": "source",
+      "sha": "b63b0e5dfc691c4e5893eb8fb520be58dc4665aafcb691a625308fb0ab0ff7cb",
+      "source": "matrice/data/outils/ecrire/DESCRIPTION.md.bak.20260916_190111",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-124",
+      "lignes": 57,
+      "octets": 2923,
+      "origine": "archive",
+      "sha": "44825fd89fdea603f19886b0ef10dd1f178ad53e73390fc6c470def1f52499c5",
+      "source": "matrice/data/outils/ecrire/DESCRIPTION.md.bak.20260916_190110",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-125",
+      "lignes": 192,
+      "octets": 6802,
+      "origine": "source",
+      "sha": "90e54e05c16f446b7fe800732f95b36cd8e7e13007982fcc49f9826f22f30ed1",
+      "source": "matrice/data/outils/pause-session/commun.py.bak.20260917_071219",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-126",
+      "lignes": 499,
+      "octets": 17350,
+      "origine": "source",
+      "sha": "8e7dba56dab9925ad198291bcff48b2b63940cff7dd76979e20394845efac128",
+      "source": "matrice/data/outils/rechercher/commun.py.bak.20260916_091153",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-127",
+      "lignes": 470,
+      "octets": 15894,
+      "origine": "archive",
+      "sha": "1df3a1b08c8651f884b203052923f8312e467ce1e2123dcd4561328a5151e8b0",
+      "source": "matrice/data/outils/rechercher/commun.py.bak.20260916_091152",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-128",
+      "lignes": 118,
+      "octets": 3621,
+      "origine": "source",
+      "sha": "5b584aab29a0778eafd37ba05e99dd05953892c7ffeda14d767ad312359d2ac7",
+      "source": "matrice/data/outils/rechercher/constants.py.bak.20260916_091152",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-129",
+      "lignes": 107,
+      "octets": 5195,
+      "origine": "source",
+      "sha": "4b095927475c47a729bc9b15d1f28cb23c6758320cd4c5e49c1548fc22fc8b30",
+      "source": "matrice/data/outils/rechercher/DESCRIPTION.md.bak.20260916_091719",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-130",
+      "lignes": 128,
+      "octets": 6105,
+      "origine": "source",
+      "sha": "c82a51331bc8046cdb7e753fc404a6225fc727002408d57cf8b5e4f5f5fdc84a",
+      "source": "matrice/data/outils/suivi-optimus/constants.py.bak.20260916_185258",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-131",
+      "lignes": 168,
+      "octets": 6978,
+      "origine": "source",
+      "sha": "14a4d24434971f43ab1c5b9e9d521709f06e8baa0099ba81372e3cd7f5f4b16a",
+      "source": "matrice/data/outils/suivi-optimus/vue/fonctions.py.bak.20260916_093742",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-132",
+      "lignes": 207,
+      "octets": 7998,
+      "origine": "source",
+      "sha": "72a9c283b562ae63c5617268938e5dba1b5e6c40ed5de168c2c4f440a0f1cbcb",
+      "source": "matrice/data/outils/rechercher/rechercher/entry.py.bak.20260916_091214",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-133",
+      "lignes": 193,
+      "octets": 7214,
+      "origine": "archive",
+      "sha": "4f8dd3296a6bd2d5ed314f56c8d63eedb352bc5d8c190d1f96d01599aec283b3",
+      "source": "matrice/data/outils/rechercher/rechercher/entry.py.bak.20260916_091213",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-134",
+      "lignes": 83,
+      "octets": 3202,
+      "origine": "source",
+      "sha": "ee171676423ff23a34ec106b51872d8f6d6bb5558ced1741ecdae73480f47667",
+      "source": "matrice/data/outils/pause-session/perimetre/fonctions.py.bak.20260917_071218",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-135",
+      "lignes": 53,
+      "octets": 1741,
+      "origine": "source",
+      "sha": "591934772c43c2c999b6310e937791f60af1719f391ecffce86b9d4f12d04b58",
+      "source": "matrice/data/outils/ecrire/ecrire/fonctions.py.bak.20260916_190036",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-136",
+      "lignes": 67,
+      "octets": 2534,
+      "origine": "source",
+      "sha": "7d0285d87f21a3e0f0559298effdf1569859fe6c5af09dc27bf3cb283f6fa30e",
+      "source": "matrice/data/outils/ecrire/editer/fonctions.py.bak.20260916_190037",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-137",
+      "lignes": 70,
+      "octets": 2617,
+      "origine": "source",
+      "sha": "a9dab376a230324ca9974dad7e766cd5bf296efdf8582111652a1f6ea455da4f",
+      "source": "matrice/data/outils/bdd-variables/definir/fonctions.py.bak.20260917_071227",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-138",
+      "lignes": 35,
+      "octets": 1305,
+      "origine": "source",
+      "sha": "e523d85ae1fb62ac8dcacae4166b901e99343b216de92420ec01165e8d7863fc",
+      "source": "matrice/data/outils/bdd-usages/noter/fonctions.py.bak.20260917_071227",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-139",
+      "lignes": 46,
+      "octets": 1700,
+      "origine": "source",
+      "sha": "88b6313cc97486f4f147b69f37874e552271930ccd7522740c6f9031f80b3f40",
+      "source": "matrice/data/outils/bdd-sessions/ajouter/fonctions.py.bak.20260917_071227",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-140",
+      "lignes": 41,
+      "octets": 1681,
+      "origine": "source",
+      "sha": "ff4b037d42973f0247c9fb420a0835a4645228d0e6e90893d689bbbcb151ae22",
+      "source": "matrice/data/outils/bdd-sessions/retiqueter/entry.py.bak.20260916_072610",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-141",
+      "lignes": 36,
+      "octets": 1573,
+      "origine": "source",
+      "sha": "813f812a0391941b7e0c994e84af442de90da69b7a30ea51cc09b3d011f58a8e",
+      "source": "matrice/data/outils/bdd-sessions/retiqueter/fonctions.py.bak.20260916_072610",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-142",
+      "lignes": 30,
+      "octets": 982,
+      "origine": "source",
+      "sha": "f8c8d53f4df5f06ec3e682a4c67f1d5e6e1d432cc64d353114e333567e18ae79",
+      "source": "matrice/data/outils/bdd-regles-matrice/ajouter/fonctions.py.bak.20260917_071227",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-143",
+      "lignes": 30,
+      "octets": 990,
+      "origine": "source",
+      "sha": "e87a6cae7ed0972a5a8568c1d6b6181179570291b043a6a4fa069648ddba85ad",
+      "source": "matrice/data/outils/bdd-protocoles-matrice/ajouter/fonctions.py.bak.20260917_071226",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-144",
+      "lignes": 38,
+      "octets": 1355,
+      "origine": "source",
+      "sha": "ed75c1863bf4735e776960442052d0ce05d26a00cc95b56bc012c339fa4ed59f",
+      "source": "matrice/data/outils/bdd-modifications/noter/fonctions.py.bak.20260917_071226",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-145",
+      "lignes": 30,
+      "octets": 975,
+      "origine": "source",
+      "sha": "24d132764a853a2203132f12ad0e63f0f41aca70d7b87a4e9a84c181a1de2ca5",
+      "source": "matrice/data/outils/bdd-lecons/ajouter/fonctions.py.bak.20260917_071226",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-146",
+      "lignes": 60,
+      "octets": 2068,
+      "origine": "source",
+      "sha": "014d6f2c0a905ac66211dc108891b52064aa324f061f2b91e04fdd96fe5262f5",
+      "source": "matrice/data/outils/bdd-historique/noter/fonctions.py.bak.20260917_071226",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-147",
+      "lignes": 103,
+      "octets": 4039,
+      "origine": "archive",
+      "sha": "ac148a6b51414d85589176465ce2f791771b9ceecf3c51828acf5df9744a7c79",
+      "source": "matrice/data/outils/bdd-conservation/ajouter/fonctions.py.bak.20260917_071227",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-148",
+      "lignes": 33,
+      "octets": 993,
+      "origine": "source",
+      "sha": "ce306995db0fbe33418ae7ed7d46f498fdc9571044015b9c70154724f27bd32d",
+      "source": "matrice/data/outils/bdd-activites/noter/fonctions.py.bak.20260917_071225",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-149",
+      "lignes": 99,
+      "octets": 4855,
+      "origine": "source",
+      "sha": "30716ca8491949290c02e46acf45a4a53c8547ccd80af4f77cd9977ae461980f",
+      "source": "agents/cameleon/cameleon.md.bak.20260916_191213",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-150",
+      "lignes": 93,
+      "octets": 4433,
+      "origine": "archive",
+      "sha": "d8eeba3791ee2ca5362ef960f53d62e314c77c5f37f1a7cf2c6e86e4cb066dd1",
+      "source": "agents/cameleon/cameleon.md.bak.20260916_185730",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-156",
+      "lignes": 139,
+      "octets": 9185,
+      "origine": "source",
+      "sha": "bf97efd4e3bd9efe1efeba672dd78c9b9b7e1fb5eb7c461c54f21c967eb5ccad",
+      "source": "_operateur/optimus-prime/optimus-prime.md.bak.20260917_082056",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-157",
+      "lignes": 1387,
+      "octets": 62200,
+      "origine": "archive",
+      "sha": "9cf0707535d06c116251c2ea5050180db55b1f62ebb14866cf520aafa683dac0",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260917_093946",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-158",
+      "lignes": 1400,
+      "octets": 62923,
+      "origine": "archive",
+      "sha": "86d6d5c72857b91cf0e427bbac9fc8c3885bbab911ab1dd50451a78763f7b33b",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260917_093947",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-159",
+      "lignes": 180,
+      "octets": 7813,
+      "origine": "archive",
+      "sha": "259b9d84b5a325af5abd124e527a26d3b15f6480377cd8ec17da7fd8bec1ccb4",
+      "source": "_operateur/optimus-prime/pilote/fin/fonctions.py.bak.20260917_093948",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-160",
+      "lignes": 392,
+      "octets": 16377,
+      "origine": "source",
+      "sha": "1d3ffcd9f4720f6311cf8aaadf868956d3e8678583839dbd27d9715af4abc575",
+      "source": "_operateur/optimus-prime/pilote/injection/fonctions.py.bak.20260917_093947",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-161",
+      "lignes": 103,
+      "octets": 6775,
+      "origine": "archive",
+      "sha": "f338b12f7327b108ff45b098c3a20ab1c925bbba33293ad20027e10b8f336e85",
+      "source": "_operateur/optimus-prime/purification/rapport-audit-MO-154.md.bak.20260917_075529",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-162",
+      "lignes": 103,
+      "octets": 6778,
+      "origine": "source",
+      "sha": "cff06419badaf02358feb202b2049a645bc519e0fe8d7477632817d518e3c182",
+      "source": "_operateur/optimus-prime/purification/rapport-audit-MO-154.md.bak.20260917_075530",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-163",
+      "lignes": 12,
+      "octets": 341,
+      "origine": "source",
+      "sha": "b2dd5a6acbf1f047436fe54857b1bcbf44356baea487a54f46d67756730c1437",
+      "source": "_operateur/optimus-prime/regles-immuables/ascii-strict.md.bak.20260917_082840",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-164",
+      "lignes": 31,
+      "octets": 1301,
+      "origine": "source",
+      "sha": "64a6c88178d2be8060036fec2054561fcb776e0b3a4c71364eb06a155b65e670",
+      "source": "_operateur/optimus-prime/regles-immuables/regles-immuables-readme.md.bak.20260917_082056",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-165",
+      "lignes": 374,
+      "octets": 16159,
+      "origine": "archive",
+      "sha": "3323dd465dbf779b8b9d125269a89e9c60d536206bac025020e4f6855114a6c1",
+      "source": "_operateur/optimus-prime/super-combos/sc-001-auto-xxx/main.py.bak.20260917_081721",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-166",
+      "lignes": 394,
+      "octets": 17084,
+      "origine": "source",
+      "sha": "4f94230812dd5336c9e87042956ed71fa0dcdd2c7135cb1de6c71486a8314cc8",
+      "source": "_operateur/optimus-prime/super-combos/sc-001-auto-xxx/main.py.bak.20260917_081722",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-167",
+      "lignes": 60,
+      "octets": 2473,
+      "origine": "source",
+      "sha": "a5f5472be0842c3808b16275ea690e77b2e28a5df73739be52af6fa5326e62ff",
+      "source": "matrice/data/commun/cible.py.bak.20260917_084919",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-168",
+      "lignes": 48,
+      "octets": 1844,
+      "origine": "archive",
+      "sha": "fb5767ed70637971e637825035bacf95cba6dbd42af8be4c6c60c9f05f695ac3",
+      "source": "matrice/data/outils/bdd-conservation/DESCRIPTION.md.bak.20260917_080839",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-169",
+      "lignes": 55,
+      "octets": 2190,
+      "origine": "archive",
+      "sha": "b9e6997ac6a7ce5876739316b87f3e0c3ad4fe00ebfee72507587fa229716c66",
+      "source": "matrice/data/outils/bdd-conservation/DESCRIPTION.md.bak.20260917_090920",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-170",
+      "lignes": 41,
+      "octets": 1543,
+      "origine": "source",
+      "sha": "925dc6b3fb455835fdb13080d6c65fb5afd38c7b747dd6eadf89a1d69de54a80",
+      "source": "matrice/data/outils/bdd-conservation/ajouter/entry.py.bak.20260917_080838",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-171",
+      "lignes": 107,
+      "octets": 4267,
+      "origine": "archive",
+      "sha": "4073ac443916695e9b69496a137792a5230028fd334f3e707bc1891b86370e81",
+      "source": "matrice/data/outils/bdd-conservation/ajouter/fonctions.py.bak.20260917_080838",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-172",
+      "lignes": 603,
+      "octets": 25553,
+      "origine": "archive",
+      "sha": "6a25d5c713e6caf7a65f0555f594f0fe21643ed7ffdb12e95041b2a1de2dad6b",
+      "source": "matrice/data/outils/bdd-conservation/archiver/fonctions.py.bak.20260917_085352",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-173",
+      "lignes": 34,
+      "octets": 1084,
+      "origine": "archive",
+      "sha": "016e153fed49db58d6587ba7f14e601ef5e814304e00cb80c59a511ec76e1b21",
+      "source": "matrice/data/outils/bdd-conservation/constants.py.bak.20260917_080839",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-174",
+      "lignes": 34,
+      "octets": 1096,
+      "origine": "archive",
+      "sha": "07fd49ef0832fb9d276c31908769478a3b08784c0bd98158237b6c34e006db36",
+      "source": "matrice/data/outils/bdd-conservation/constants.py.bak.20260917_085208",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-175",
+      "lignes": 27,
+      "octets": 783,
+      "origine": "archive",
+      "sha": "d08e856393ede0f6f4902d1d0ec43e33281d374d4fc4a743ffafea6bf1506d21",
+      "source": "matrice/data/outils/bdd-conservation/main.py.bak.20260917_080838",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-176",
+      "lignes": 30,
+      "octets": 912,
+      "origine": "archive",
+      "sha": "8260265d6072f8718e634038a4b2abcd8cf337c0b3abacf6d4b1a43fa3b3445b",
+      "source": "matrice/data/outils/bdd-conservation/main.py.bak.20260917_085208",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-177",
+      "lignes": 33,
+      "octets": 1028,
+      "origine": "archive",
+      "sha": "25ff384f3557ef49914cefdb7cc60ff60fc851fe1c52d4edfc1d31cde67a42f3",
+      "source": "matrice/data/outils/bdd-conservation/main.py.bak.20260917_085209",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-178",
+      "lignes": 110,
+      "octets": 3912,
+      "origine": "archive",
+      "sha": "1a71ee6da5632c56389952f8fddb0621daa008963f91dec897434a0d206b7d94",
+      "source": "matrice/data/outils/corriger-ascii/commun.py.bak.20260917_082839",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-179",
+      "lignes": 111,
+      "octets": 3935,
+      "origine": "archive",
+      "sha": "2572f186755cf046797f9ff835099453182e2b19a3634e3fcd87e566028999d8",
+      "source": "matrice/data/outils/corriger-ascii/commun.py.bak.20260917_082840",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-180",
+      "lignes": 115,
+      "octets": 4216,
+      "origine": "source",
+      "sha": "de924c114c9d4f14aed8fe386524a0fbd3eb391068c2b767bd91bdce1912e40b",
+      "source": "matrice/data/outils/corriger-ascii/commun.py.bak.20260917_091626",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-181",
+      "lignes": 77,
+      "octets": 2913,
+      "origine": "archive",
+      "sha": "b7a7b6ccf5b69b8817d53489279a40545fbdc932e3c0f992f8a42014ff7fcb55",
+      "source": "matrice/data/outils/corriger-ascii/constants.py.bak.20260917_082839",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-182",
+      "lignes": 90,
+      "octets": 3605,
+      "origine": "source",
+      "sha": "3f396e343bea9eadd70962404098a012f0151fb0836f242886131339634d9ae7",
+      "source": "matrice/data/outils/corriger-ascii/constants.py.bak.20260917_091625",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-183",
+      "lignes": 55,
+      "octets": 2007,
+      "origine": "archive",
+      "sha": "cc977f1848e61670683ae4e7846ddea96460e9faf6e7183317a233ffc3b74336",
+      "source": "matrice/data/outils/corriger-ascii/corriger/fonctions.py.bak.20260917_091626",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-184",
+      "lignes": 56,
+      "octets": 2029,
+      "origine": "source",
+      "sha": "faa29ca8cbf12f638ecaf06bcec227910809105d27d583372ebbb08f5fff83de",
+      "source": "matrice/data/outils/corriger-ascii/corriger/fonctions.py.bak.20260917_091627",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-185",
+      "lignes": 627,
+      "octets": 27074,
+      "origine": "archive",
+      "sha": "3f4151235609b0c336493e916ce889248b9343295f5727a8e4fb8fc7499dd14b",
+      "source": "matrice/data/outils/bdd-conservation/archiver/fonctions.py.bak.20260917_095026",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-186",
+      "lignes": 632,
+      "octets": 27367,
+      "origine": "source",
+      "sha": "f810402cd3ab93842c445f511f39dda82be0777c574b9625ce72ebc836fc0f5d",
+      "source": "matrice/data/outils/bdd-conservation/archiver/fonctions.py.bak.20260917_095027",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-187",
+      "lignes": 101,
+      "octets": 4250,
+      "origine": "archive",
+      "sha": "9311ac150332cd7e8942f71484e89735417fdcbb97e9bdcddbbe8e5f87e33eef",
+      "source": "matrice/data/outils/bdd-conservation/DESCRIPTION.md.bak.20260917_095518",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-188",
+      "lignes": 102,
+      "octets": 4308,
+      "origine": "archive",
+      "sha": "068f4d4fd9f400af44f34c106144a0e63a5d8de15266211721d5188d627da238",
+      "source": "matrice/data/outils/bdd-conservation/DESCRIPTION.md.bak.20260917_095519",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-189",
+      "lignes": 36,
+      "octets": 1177,
+      "origine": "archive",
+      "sha": "b902d3643e8fbf6727425b07b1175d25f2a7f972e1c22cd4a83db2c1e4e58128",
+      "source": "matrice/data/outils/bdd-conservation/main.py.bak.20260917_095518",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-190",
+      "lignes": 1409,
+      "octets": 63507,
+      "origine": "archive",
+      "sha": "dcf6c991de9ed8a8a01c173887f8c5479d50c5b1e79b3bfbc35bdec9323d1df3",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260917_095811",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-191",
+      "lignes": 1412,
+      "octets": 63604,
+      "origine": "archive",
+      "sha": "ea3e63b713543f378a451bbd5268329fb98287a26f34d94c575456d011344c30",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260917_095812",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-192",
+      "lignes": 191,
+      "octets": 10199,
+      "origine": "archive",
+      "sha": "8b70140d971ce6bb2ea304c75ec3527511c093a0c2b561cc5b5941950ecea6e0",
+      "source": "_operateur/optimus-prime/pilote/constants.py.bak.20260917_095811",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-193",
+      "lignes": 181,
+      "octets": 7844,
+      "origine": "archive",
+      "sha": "d477970ed8af5773404a9fc7c45510173bcda6d69930b8388d692909f8385803",
+      "source": "_operateur/optimus-prime/pilote/fin/fonctions.py.bak.20260917_095812",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-194",
+      "lignes": 182,
+      "octets": 7878,
+      "origine": "archive",
+      "sha": "51ad499fca2455c03782a7e1e4a30d7e2ce5973f7cf0299280053fadff278881",
+      "source": "_operateur/optimus-prime/pilote/fin/fonctions.py.bak.20260917_095813",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-195",
+      "lignes": 1459,
+      "octets": 66144,
+      "origine": "archive",
+      "sha": "0687eba876e4af17b072a58cb3d36baf36f6ead51dae4c8b09a3249b5c940ed2",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260917_100331",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-196",
+      "lignes": 1462,
+      "octets": 66251,
+      "origine": "archive",
+      "sha": "e3fb599ba2ff4332bb050de5225f2c68992d197e9c098284cf80391141798074",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260917_100332",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-197",
+      "lignes": 203,
+      "octets": 10968,
+      "origine": "archive",
+      "sha": "5e03bbba44c231700afa4c72b03089983b3a66fac756467749d494ac4a52c484",
+      "source": "_operateur/optimus-prime/pilote/constants.py.bak.20260917_100356",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-198",
+      "lignes": 190,
+      "octets": 8357,
+      "origine": "archive",
+      "sha": "8c5b5cd4237c873f8ea0eb2909dc4f518bb27eea5361340b1ede928d277d46f0",
+      "source": "_operateur/optimus-prime/pilote/fin/fonctions.py.bak.20260917_100332",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-199",
+      "lignes": 198,
+      "octets": 9236,
+      "origine": "archive",
+      "sha": "a40251675c62719a56dd1de7bb28af458044907cc9344957ecac3f58d0a2b01b",
+      "source": "matrice/data/outils/bdd-conservation/balayer/entry.py.bak.20260917_100224",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-200",
+      "lignes": 130,
+      "octets": 5713,
+      "origine": "archive",
+      "sha": "a67f61f36813d3fe5050428562655789ceb0a6916750af7bfd489b7eb834779d",
+      "source": "matrice/data/outils/bdd-conservation/DESCRIPTION.md.bak.20260917_100617",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-201",
+      "lignes": 120,
+      "octets": 7746,
+      "origine": "archive",
+      "sha": "f59adae24a609e68c79b6940dd9caaf98889ee25b151716971ddde800e4cd612",
+      "source": "_operateur/optimus-prime/purification/ETAT-SUITE-PURIFICATION.md.bak.20260917_195606",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-202",
+      "lignes": 122,
+      "octets": 8123,
+      "origine": "source",
+      "sha": "9d684e7b2b2e0a0285debbeede337e0fd878cc0d683ffcc744121689951ce70d",
+      "source": "_operateur/optimus-prime/purification/ETAT-SUITE-PURIFICATION.md.bak.20260917_195943",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-203",
+      "lignes": 163,
+      "octets": 9535,
+      "origine": "archive",
+      "sha": "75d57cd845966348de43e98d7564bc030f69bd043cf89c302cbf10b0badad415",
+      "source": "_operateur/optimus-prime/purification/rapport-fermeture-MO-164.md.bak.20260917_195903",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-204",
+      "lignes": 192,
+      "octets": 11135,
+      "origine": "source",
+      "sha": "62208275021e4ee9c75badc4bceaae8380576785bcd280d2207cc0b7c34a3f18",
+      "source": "_operateur/optimus-prime/purification/rapport-fermeture-MO-164.md.bak.20260917_200126",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-205",
+      "lignes": 135,
+      "octets": 5532,
+      "origine": "source",
+      "sha": "e9a81ca982476a39d34f8db5e87afb432854e7a41fad07c7e20fc78df7eef8ac",
+      "source": "matrice/data/outils/bdd-conservation/ajouter/fonctions.py.bak.20260917_200502",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-206",
+      "lignes": 282,
+      "octets": 13795,
+      "origine": "archive",
+      "sha": "d9162821a39e146e289038ac0c60cb3a4add14a3cda9b1b9bbd36575aff19adf",
+      "source": "matrice/data/outils/bdd-conservation/balayer/entry.py.bak.20260917_200540",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-207",
+      "lignes": 305,
+      "octets": 15370,
+      "origine": "archive",
+      "sha": "f522bd91250b85a8e53544d06da289ac45acdbd9aa68d05d9b2eb4f8f46465b3",
+      "source": "matrice/data/outils/bdd-conservation/balayer/entry.py.bak.20260917_200630",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-208",
+      "lignes": 323,
+      "octets": 16402,
+      "origine": "source",
+      "sha": "c9f75b3bf102796cdf62d13b02f21b70bb9985c2dddf27e239b725c2ac5598e5",
+      "source": "matrice/data/outils/bdd-conservation/balayer/entry.py.bak.20260917_200631",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-209",
+      "lignes": 96,
+      "octets": 4239,
+      "origine": "archive",
+      "sha": "2569f4695b7dbd6ce8bcf36a7f7da742d828b27b01738fb132a1dc0766a518ce",
+      "source": "matrice/data/outils/bdd-conservation/balayer/fonctions.py.bak.20260917_200644",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-210",
+      "lignes": 137,
+      "octets": 6344,
+      "origine": "source",
+      "sha": "29775403f84808f02a1685c04c02cdf877a8ea3843a6a87bbbc88aae447af368",
+      "source": "matrice/data/outils/bdd-conservation/balayer/fonctions.py.bak.20260917_200652",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-211",
+      "lignes": 53,
+      "octets": 2310,
+      "origine": "source",
+      "sha": "20b97ae2986aead02b588715d9f10f86a5261ea52912de963f22b4706fea527d",
+      "source": "matrice/data/outils/bdd-conservation/constants.py.bak.20260917_200502",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-212",
+      "lignes": 37,
+      "octets": 1238,
+      "origine": "archive",
+      "sha": "835a61e25618d1c435b529cba57faab0ec6dbbe7496cdaeeb0cf5b2b95cd3237",
+      "source": "matrice/data/outils/bdd-conservation/main.py.bak.20260917_200755",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-213",
+      "lignes": 38,
+      "octets": 1277,
+      "origine": "source",
+      "sha": "93253eecc7d2d9399ae385ee241cf604c7688160e2902045017ca258ae9ceba9",
+      "source": "matrice/data/outils/bdd-conservation/main.py.bak.20260917_200756",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-214",
+      "lignes": 1507,
+      "octets": 68707,
+      "origine": "archive",
+      "sha": "14f87c997da645afab8ab027b7f6e50d9717be9d6928047912e2ea1916ca3bd5",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260917_201139",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-215",
+      "lignes": 1555,
+      "octets": 71284,
+      "origine": "source",
+      "sha": "4a91c84ae67a96051036de34f20703772d8fa853fe368ae3f97e793e09763eaf",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260917_201218",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-216",
+      "lignes": 214,
+      "octets": 11677,
+      "origine": "source",
+      "sha": "70fd23479ba7dae2f082a95470597024cdc850f200c26935575f85efe5080d8b",
+      "source": "_operateur/optimus-prime/pilote/constants.py.bak.20260917_201139",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-217",
+      "lignes": 201,
+      "octets": 9079,
+      "origine": "source",
+      "sha": "20c64b516e66f0e3f199c140bf0be5c6140d10977c94ee40e779960469ae0cd3",
+      "source": "_operateur/optimus-prime/pilote/fin/fonctions.py.bak.20260917_201139",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-218",
+      "lignes": 164,
+      "octets": 7553,
+      "origine": "source",
+      "sha": "eeb91d1a151a1e8235f6a046e378102e372c62b5230141be39f6569d8fc1a152",
+      "source": "matrice/data/outils/bdd-conservation/DESCRIPTION.md.bak.20260917_200936",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-219",
+      "lignes": 1556,
+      "octets": 71323,
+      "origine": "source",
+      "sha": "93717b01a66281af4ab8932d71daaab9d0ae12e2a66eae521d9046b00378ca8c",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260917_203320",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-220",
+      "lignes": 1563,
+      "octets": 71837,
+      "origine": "source",
+      "sha": "89e3e977861cba7e8ef51f4e964361d86320a9df1c03f847acfd6a1ce71e9c0c",
+      "source": "_operateur/optimus-prime/pilote/commun.py.bak.20260917_203321",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-221",
+      "lignes": 223,
+      "octets": 12298,
+      "origine": "source",
+      "sha": "9bf9d82bf45f8b48167dab448add2ce2f2db58a7bcde8be35229b17785009d92",
+      "source": "_operateur/optimus-prime/pilote/constants.py.bak.20260917_203320",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-222",
+      "lignes": 213,
+      "octets": 9806,
+      "origine": "source",
+      "sha": "2c306c0e82abdbec96a5c78ed5bb6b2a3a7f7f0c0fd5d3007af238da0f91312b",
+      "source": "_operateur/optimus-prime/pilote/fin/fonctions.py.bak.20260917_203321",
+      "verdict": "conserver"
+    }
+  ],
+  "nb": 215,
+  "octets": 3296846,
+  "type": "temoin-avant"
+}

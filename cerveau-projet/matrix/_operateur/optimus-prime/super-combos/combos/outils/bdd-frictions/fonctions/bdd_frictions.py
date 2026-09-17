@@ -35,6 +35,24 @@ FILTRES_STATUT = {
 FILTRES_STATUT[STATUT_ARCHIVEE_VALIDEE] = (STATUT_ARCHIVEE_VALIDEE,)
 FILTRES_STATUT[STATUT_ARCHIVEE_ANNULEE] = (STATUT_ARCHIVEE_ANNULEE,)
 
+# Vocabulaire des AUTRES colonnes d'etat de la BDD (type, gravite, frequence) :
+# MEME domicile, meme raison que les statuts -- un consommateur ne doit pas les
+# recopier (friction 48, mesuree par le balayage MO-129).
+TYPES = ("ordre", "outil", "theme", "protocole", "combo", "regle", "convention")
+GRAVITES = ("mineure", "majeure", "bloquante")
+FREQUENCES = ("ponctuelle", "recurrente")
+
+# La DEMANDE d'archivage (ce que la porte accepte) devient le statut REEL stocke.
+# Les deux vocabulaires sont exprimes ICI, ensemble : archiver_friction ne les
+# construit plus a la main (l'ancienne formule etait un ternaire qui acceptait
+# n'importe quoi et retombait sur 'annule').
+DEMANDE_VALIDE = "valide"
+DEMANDE_ANNULE = "annule"
+DEMANDES_ARCHIVAGE = {
+    DEMANDE_VALIDE: STATUT_ARCHIVEE_VALIDEE,
+    DEMANDE_ANNULE: STATUT_ARCHIVEE_ANNULEE,
+}
+
 
 def filtres_disponibles() -> List[str]:
     """Les filtres offerts par la porte (ordre stable : celui de la table)."""
@@ -125,9 +143,19 @@ def lister_frictions(
 
 
 def archiver_friction(db_path: Path, friction_id: int, statut: str, raison: str = ""):
-    """Archiver une friction (valide ou annule)"""
+    """Archiver une friction : la DEMANDE ('valide' ou 'annule') devient le statut REEL.
+
+    MO-130 : la traduction vit dans DEMANDES_ARCHIVAGE (le domicile), elle n'est
+    plus construite ici. Une demande inconnue LEVE au lieu de retomber
+    silencieusement sur 'annule' (l'ancien ternaire acceptait n'importe quoi).
+    """
+    statut_reel = DEMANDES_ARCHIVAGE.get(statut)
+    if statut_reel is None:
+        raise ValueError(
+            "Demande d'archivage inconnue : " + str(statut) + " (demandes admises : "
+            + ", ".join(DEMANDES_ARCHIVAGE) + ")"
+        )
     date = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-    nouveau_statut = "archivee_validee" if statut == "valide" else "archivee_annulee"
     with sqlite3.connect(db_path) as conn:
         conn.execute(
             """
@@ -135,7 +163,7 @@ def archiver_friction(db_path: Path, friction_id: int, statut: str, raison: str 
             SET statut = ?, raison_archivage = ?, date_archivage = ?
             WHERE id = ?
             """,
-            (nouveau_statut, raison, date, friction_id),
+            (statut_reel, raison, date, friction_id),
         )
         conn.commit()
 

@@ -32,9 +32,32 @@ EXTENSIONS_JOURNAUX = (".jsonl",)
 DOSSIERS_CIBLES = (
     REPERTOIRE_MATRIX / "matrice",
     REPERTOIRE_MATRIX / "_operateur",
-    REPERTOIRE_MATRIX / "docs",
 )
 DOSSIERS_EXCLUS = ("__pycache__",)
+
+# Zone de SOURCES du createur : LECTURE SEULE. C'est la MEME decision que
+# `garde-ascii` (EXCLUS_DIRS) -- mais elle etait ecrite la-bas et PAS ici, donc
+# deux scans du projet se contredisaient : l'un exemptait `docs/`, l'autre le
+# ciblait et levait une alerte "caractere non convertible (decision du createur
+# requise)" pour un arbitrage DEJA rendu (friction 81, EO-135).
+# Mesure du 2026-09-17 : AUCUN caractere de `docs/` n'est convertible (emojis et
+# degre hors carte) -- ce scan n'y corrigeait rien, il n'y faisait que crier.
+# Le motif est NOMME et RAPPORTE, jamais tu : une exclusion muette est un angle
+# mort qu'aucune suite ne voit (doctrine de cet outil).
+# HORS CHAMP -- et ce n'est PAS une exemption. Deux notions distinctes :
+#   - un EXEMPTE est VU puis JAMAIS reecrit, et son motif est JUSTIFIE sur le
+#     disque (un etalon `.sha256`, ou un journal `.jsonl`) ;
+#   - une zone HORS CHAMP n'est pas PARCOURUE du tout (aucun fichier a classer).
+# Les deux vivaient dans la MEME liste : une exclusion de PERIMETRE portait donc
+# le contrat d'une exemption de REECRITURE. Mesure du 2026-09-17 : le garde
+# `verifier-exemptions-visibles` exige DEUX motifs d'exemption justifies par le
+# disque -- y verser un dossier entier faisait echouer la non-regression (maillon
+# 12). Une exclusion de perimetre se DECLARE ici ; une exemption de reecriture se
+# JUSTIFIE sur le disque. Deux maisons, jamais la meme.
+DOSSIERS_HORS_CHAMP = (
+    (REPERTOIRE_MATRIX / "docs",
+     "zone de SOURCES du createur (lecture seule, decision createur)"),
+)
 SUFFIXES_EXCLUS = (".sha256", ".tmp")
 
 # Un fichier possedant un etalon .sha256 n'est JAMAIS reecrit (BDD empreintee).

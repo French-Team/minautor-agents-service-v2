@@ -1,0 +1,88 @@
+---
+identite:
+  type: readme
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# sc-003-auto-suivi
+
+> Super-combo de l'ENTRETIEN de la trace d'Optimus. Il n'ecrit rien lui-meme : il
+> fait travailler les **portes officielles** de l'outil `suivi-optimus`, dans
+> l'ordre, et rend le verdict.
+
+## Pourquoi il existe (decision createur, 2026-09-16)
+
+> *"il faut lancer un super-combos-auto-xxx pour le travail du pilote et les mises
+> a jours du fichier de suivi"*
+
+La mesure qui a motive la decision :
+
+| Constat mesure | Cause |
+|---|---|
+| la vue `suivi-optimus.md` ne representait pas le travail | le DETAIL etait **ampute a 200 caracteres** (un bilan en fait 2 000 a 3 000) et seuls **10 evenements par action** etaient affiches, sur 246 |
+| le compteur annoncait 119 "missions finies" | il comptait les missions **PRESENTES**, pas celles qui portent une **FIN** |
+| les colonnes Fichiers et Portes etaient vides | le pilote ne les transmettait **jamais** a la porte `noter`, qui les accepte depuis sa naissance |
+| l'entretien se faisait quand on y pensait | un `vue` par-ci, un `coherence` par-la : **une discipline d'agent**, donc une affaire de memoire |
+
+## Phases
+
+| Phase | Porte consommee | Ce qu'elle dit |
+|---|---|---|
+| `coherence` | `suivi-optimus coherence` | la file du pilote et le journal se croisent : un ECART est une divergence **a reparer** |
+| `verifier` | `suivi-optimus verifier` | empreinte SHA-256 de la BDD + coherence debut/fin (le marbre juge) |
+| `vue` | `suivi-optimus vue` | regenere le markdown (recap par mission + bilan par journee) |
+| `rapport` | *aucune* (lecture de la vue) | MONTRE le travail tel que la vue vient de l'ecrire |
+
+`rapport` ne recalcule rien : il lit les sections de la vue produite par la porte.
+Un second calcul ici serait une **seconde verite**, qui divergerait de la premiere
+au premier changement d'affichage (L-029).
+
+## Verbes
+
+```
+python main.py executer    # chaine complete : coherence -> verifier -> vue -> rapport
+python main.py rapide      # passe de fin de mission : coherence -> vue
+python main.py status      # LECTURE SEULE : coherence + verifier + etat des sections
+python main.py auto-test   # prouve que la chaine sait ACCUSER
+python lancer-super-combos.py --numero sc-003 [--verbe <verbe>]
+```
+
+Codes retour : `0` = toutes les phases ont rendu 0 ; `1` = au moins une phase a
+**accuse** (le verdict est rendu, le texte le dit) ; `2` = **refus** (porte
+injoignable, verbe hors contrat). Un refus n'est jamais un succes muet.
+
+Une phase qui accuse **n'arrete pas** les suivantes : la trace doit etre
+rafraichie meme quand la coherence crie un ecart -- sans quoi l'ecart resterait
+invisible dans la vue, ce qui est exactement le defaut d'origine.
+
+## Ce que l'auto-test prouve (6 controles)
+
+Un controle qui ne peut pas echouer ne dit rien (doctrine `sc-001`) :
+
+1. un verbe hors contrat est **refuse en le nommant** ;
+2. le **registre** et le **code** declarent la MEME liste de verbes (une liste qui
+   oublie le code fabrique un objet inlancable ; une liste qui oublie le registre
+   passe sous le radar du lanceur) ;
+3. **temoin negatif** : une racine jetable ou la file dit MO-500 `terminee` et ou
+   le journal n'a pas la fin -> la porte `coherence` **accuse** l'ecart en nommant
+   MO-500 (`--racine`, lecon L-032) ;
+4. **temoin positif** : la meme racine AVEC la fin -> le controle **se tait** ;
+5. une section absente de la vue est **DITE** ("SECTION ABSENTE"), jamais un
+   silence qui se lirait "rien a signaler" ;
+6. porte absente -> **refus nomme avec son chemin**, jamais un traceback.
+
+## Cablage
+
+Le PILOTE lance `rapide` a la cloture de chaque mission (apres la declaration de
+fin) : c'est ce qui remplace la memoire. La chaine complete (`executer`) reste a
+la main du createur et de la passe d'entretien.
+
+## Limites assumees
+
+- Le super-combo **n'ecrit aucune entree** dans la trace : `noter` reste un acte
+  de l'agent ou du pilote (marbre L-020). Il ne fait que faire travailler les
+  portes de controle, de projection et de lecture.
+- Les missions dont la livraison n'a pas ete tracee dans la BDD des modifications
+  apparaissent **sans fichiers** dans le recap : la vue ne peut pas montrer ce que
+  personne n'a ecrit. Le fait est visible (colonne vide) plutot que devine.

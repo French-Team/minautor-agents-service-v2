@@ -32,6 +32,9 @@ REPERTOIRE_OP = REPERTOIRE_MATRIX / "_operateur" / "optimus-prime"
 # data/commun = motif unique racine (M-076) : detecter_racine
 sys.path.insert(0, str(REPERTOIRE_DATA / "commun"))
 from racine import detecter_racine  # noqa: E402
+# CONTRAT DE TRANSPORT des listes (frictions 72 et 73) : --route est une LISTE
+# ("sante,flux2") ; son caractere appartient a son domicile, jamais au cockpit.
+from transport_listes import decouper_liste  # noqa: E402
 
 ENCODAGE = "utf-8"
 ROUTES = ("etat", "sante", "flux1", "flux2", "chercher", "metriques", "complet")
@@ -388,6 +391,10 @@ def route_chercher(racine):
     au meme endroit ou Optimus cherchait a la main (une mission, une lecon, un
     fichier). Avec --requete la recherche est reelle, sans elle un temoin prouve
     que la porte repond et n'est pas aveugle.
+
+    EO-126 : la porte est appelee avec --prive, parce que cette route annonce un
+    perimetre (maintenance,_operateur) que le moteur exclut par defaut -- la
+    promesse de routes-privees.json n'etait vraie que sur le papier.
     """
     out = []
     out.append(_section("chercher")
@@ -395,9 +402,14 @@ def route_chercher(racine):
     moteur = REPERTOIRE_DATA / "outils" / "rechercher" / "main.py"
     requete = REQUETE_ROUTE or REQUETE_TEMOIN
     mode = "requete reelle" if REQUETE_ROUTE else "temoin (porte vivante ?)"
+    # `--prive` (EO-126) : la route annonce `zone_perimetre = maintenance,_operateur`
+    # dans routes-privees.json, mais le moteur EXCLUT ces zones par defaut -- la
+    # promesse etait donc FAUSSE (mesure : POSTURE_PAR_TYPE = 0, meme par ici). Le
+    # cockpit est la fenetre privee d'Optimus : il demande explicitement ce que le
+    # perimetre annonce deja.
     code, texte = _run([
         sys.executable, str(moteur), "rechercher",
-        "--requete", requete, "--dans", "tous",
+        "--requete", requete, "--dans", "tous", "--prive",
         "--json", "--limite", str(LIMITE_AFFICHAGE_CHERCHER),
     ])
     out.append("[" + mode + "] requete=" + repr(requete) + " code=" + str(code))
@@ -492,7 +504,7 @@ def main():
         if args.racine != ".":
             racine = Path(args.racine).resolve()
 
-    routes_demandees = [r.strip().lower() for r in args.route.split(",") if r.strip()]
+    routes_demandees = [r.lower() for r in decouper_liste(args.route)]
     if not routes_demandees:
         routes_demandees = ["complet"]
     # complet = tout

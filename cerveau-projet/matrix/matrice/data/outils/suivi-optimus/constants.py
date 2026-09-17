@@ -26,6 +26,11 @@ ACTIONS = (
     "depot",        # mission deposee au vrac de l'entonnoir (E-XXX)
     "decision",     # GO / arbitrage du createur
     "decouverte",   # constat d'audit interne (ex : angle mort detecte)
+    "purge",        # zone jetable VIDEe par le pilote a la cloture (MO-136/EO-123) :
+                    # l'acte est celui du PILOTE, pas de l'agent -- il doit donc etre
+                    # une action DECLAREE, comme les autres. Sans cette declaration la
+                    # porte noter REFUSAIT l'evenement et la suppression d'une preuve
+                    # partait sans trace (mesure MO-136 : "Action inconnue : 'purge'").
     "bilan",        # bilan-periode demande et rendu
 )
 

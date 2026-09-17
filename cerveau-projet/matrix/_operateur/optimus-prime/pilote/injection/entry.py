@@ -3,7 +3,7 @@
 Interface entre main.py et les fonctions simples (injection/fonctions.py).
 Integre le gestionnaire de cycle pour les injections automatiques.
 """
-from commun import charger_file
+from commun import charger_file, lire_bilan
 from injection.fonctions import afficher_statut, enchainer, preparer_injection
 
 # Le gestionnaire de cycle vit DANS la porte qu'il sert : import qualifie, et
@@ -27,7 +27,8 @@ def executer(arguments):
     if arguments and arguments[0] == "mission":
         # Gestion des phases de mission via le cycle
         if len(arguments) < 2:
-            print('Usage : python main.py mission --action <debut|pendant|fin> [--id ID] [--theme THEME] [--bilan BILAN]')
+            print('Usage : python main.py mission --action <debut|pendant|fin> [--id ID] [--theme THEME] '
+                  '[--bilan BILAN | --bilan-fichier <chemin>]')
             return 2
         cycle = CycleOptimus()
         # Parser les arguments
@@ -44,6 +45,14 @@ def executer(arguments):
                 theme = arguments[i + 1]
             elif arg == "--bilan" and i + 1 < len(arguments):
                 bilan = arguments[i + 1]
+            elif arg == "--bilan-fichier" and i + 1 < len(arguments):
+                # Meme lecture que `fin` et `enregistrer` (EO-132) : le recit long
+                # peut venir d'un FICHIER, donc hors du shell.
+                code_bilan, bilan, message_bilan = lire_bilan(
+                    {"bilan-fichier": arguments[i + 1]})
+                if code_bilan != 0:
+                    print("REFUS : " + message_bilan)
+                    return 2
         
         if not action:
             print("ERREUR : --action requis (debut, pendant, fin)")

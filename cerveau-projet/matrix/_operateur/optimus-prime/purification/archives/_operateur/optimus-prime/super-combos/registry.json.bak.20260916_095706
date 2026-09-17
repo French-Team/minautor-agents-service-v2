@@ -1,0 +1,59 @@
+{
+  "super-combos": [
+    {
+      "id": "sc-001",
+      "numero": 1,
+      "slug": "auto-xxx",
+      "nom": "sc-001-auto-xxx",
+      "fichier": "sc-001-auto-xxx/main.py",
+      "description": "Enchainement intelligent des themes AUTO-XXX",
+      "phases": [
+        "PREPARATION",
+        "AUTO-CORRECTION",
+        "AUTO-TESTING",
+        "AUTO-OPTIMISATION",
+        "AUTO-PERFORMANCE",
+        "AUTO-AUDIT-NEMESIS"
+      ],
+      "usage": "python main.py <executer|executer-complet|status|auto-test> [--fichier <fichier>] [--mission <id>]",
+      "verbe": "executer",
+      "verbes": [
+        "executer",
+        "executer-complet",
+        "status",
+        "auto-test"
+      ],
+      "cree_le": ""
+    },
+    {
+      "id": "sc-002",
+      "numero": 2,
+      "slug": "auto-evolution",
+      "nom": "sc-002-auto-evolution",
+      "fichier": "sc-002-auto-evolution/main.py",
+      "description": "Orchestration du cycle complet d'auto-evolution : detecter -> qualifier -> cibler -> modifier -> valider",
+      "phases": [
+        "DETECTER",
+        "QUALIFIER",
+        "CIBLER",
+        "MODIFIER",
+        "VALIDER"
+      ],
+      "usage": "python main.py <detecter|qualifier|cibler|modifier-avant|modifier-apres|valider|stats> [args]",
+      "verbe": "",
+      "verbes": [
+        "detecter",
+        "qualifier",
+        "cibler",
+        "modifier-avant",
+        "modifier-apres",
+        "valider",
+        "stats"
+      ],
+      "cree_le": ""
+    }
+  ],
+  "compteurs": {
+    "sc": 2
+  }
+}

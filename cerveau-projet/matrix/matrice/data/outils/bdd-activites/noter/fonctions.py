@@ -4,11 +4,16 @@ from datetime import datetime
 from constants import SECTIONS, TAILLE_SECTION
 
 
+# CONTRAT DE TRANSPORT des listes (frictions 72 et 73) : les tags voyagent joints
+# par un caractere qui vit dans son DOMICILE (data/commun/transport_listes.py) --
+# cette fonction le CONSOMME au lieu de le recopier, comme les dix autres portes de
+# BDD (M-076 ; L-100/L-102 : une forme recopiee derive en silence).
+from transport_listes import decouper_liste  # noqa: E402
+
+
 def separer_tags(chaine_tags):
-    """Transforme "a, b" en ["a", "b"] (chaine vide -> liste vide)."""
-    if not chaine_tags:
-        return []
-    return [morceau.strip() for morceau in chaine_tags.split(",") if morceau.strip()]
+    """Transforme "a, b" en ["a", "b"] -- le separateur vient de son domicile."""
+    return decouper_liste(chaine_tags)
 
 
 def section_connue(nom):

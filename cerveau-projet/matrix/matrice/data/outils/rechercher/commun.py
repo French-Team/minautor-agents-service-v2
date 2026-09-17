@@ -28,11 +28,20 @@ from constants import (
     LIMITE_FICHIERS,
     LIMITE_LIGNES_JSONL,
     LIMITE_PAR_FICHIER,
+    NOMS_OPTIONS_DRAPEAU,
     RACINE,
     REPERTOIRE_DATA,
     REPERTOIRE_MATRIX,
-    ZONES_INVISIBLES,
+    SUR_CONTENU,
+    SUR_NOM,
 )
+
+# Le contrat d invisibilite L-016/CV-006 (plancher + zones DECLAREES V-003 du
+# classeur) vit dans SON domicile : cette porte le CONSOMME, elle ne le recopie
+# pas (M-076 ; L-100/L-102 : trois copies divergeaient en silence, et la V-003
+# n etait lue par AUCUN outil de lecture -- mesure MO-151).
+from invisibilite import est_invisible  # noqa: E402
+from vocabulaire_invisible import contient_invisible  # noqa: E402
 
 
 # --- Perimetre ---
@@ -70,16 +79,13 @@ def dans_perimetre(chemin_relatif):
 
 
 def est_zone_invisible(path_absolu):
-    """True si path contient une zone L-016 invisible."""
-    s = str(path_absolu).replace("\\", "/")
-    for zone in ZONES_INVISIBLES:
-        if "/" + zone + "/" in s or s.endswith("/" + zone):
-            return True
-    parts = path_absolu.parts if hasattr(path_absolu, "parts") else s.split("/")
-    for zone in ZONES_INVISIBLES:
-        if zone in parts:
-            return True
-    return False
+    """True si path contient une zone L-016 invisible (domicile data/commun).
+
+    La liste ne vit plus ici : le plancher et les zones DECLAREES par la
+    Matrice (V-003 du classeur) sont dans `data/commun/invisibilite.py`, que les
+    quatre outils de lecture consomment (MO-152).
+    """
+    return est_invisible(path_absolu)
 
 
 def resoudre_chemin(chemin_relatif):
@@ -102,11 +108,17 @@ def est_fichier_ignore(nom_fichier):
 # --- Scan fichiers (Python seul) ---
 
 
-def scanner_fichiers(requete, dans="fichiers", repertoire=None):
+def scanner_fichiers(requete, dans="fichiers", repertoire=None, inclure_prive=False):
     """Scan fichiers en Python (ripgrep retire : absent du PATH, branche morte).
 
     Retourne (hits, nb_trouves, nb_limites, msg).
-    hit = {"fichier": str, "ligne": int, "texte": str}.
+    hit = {"fichier": str, "ligne": int, "sur": str, "texte": str}.
+
+    `inclure_prive` (EO-126) leve le filtre des zones L-016 pour CE scan. Il est
+    FAUX par defaut : le moteur reste etanche au cameleon tant que personne ne le
+    demande explicitement. Un moteur qui ne peut pas lire la maison de son propre
+    operateur n'est pas prudent, il est AVEUGLE -- et un aveugle qui dit "0
+    resultat" est indiscernable d'une absence (lecon MO-055).
     """
     if repertoire is None:
         repertoire = REPERTOIRE_MATRIX
@@ -118,14 +130,15 @@ def scanner_fichiers(requete, dans="fichiers", repertoire=None):
     except re.error as erreur:
         return [], 0, False, "expression reguliere invalide : " + str(erreur)
 
-    # Filtre perimetre + zones invisibles
+    # Filtre perimetre + zones invisibles (le filtre L-016 se leve SEULEMENT sur
+    # demande explicite : --prive).
     filtres = []
     for h in hits:
         fp = Path(h["fichier"])
         relatif = fp.relative_to(RACINE) if fp.is_relative_to(RACINE) else fp
         if not dans_perimetre(str(relatif)):
             continue
-        if est_zone_invisible(fp):
+        if not inclure_prive and est_zone_invisible(fp):
             continue
         filtres.append(h)
 
@@ -134,7 +147,16 @@ def scanner_fichiers(requete, dans="fichiers", repertoire=None):
 
 
 def _scan_python(requete, repertoire):
-    """Scan ligne par ligne, retourne (hits, nb_limites)."""
+    """Scan du CONTENU et du NOM, retourne (hits, nb_limites).
+
+    Deux facons de trouver un fichier, donc deux sortes de hits (EO-126) :
+    - par son NOM (`sur` = SUR_NOM, `ligne` = 0) : chercher un fichier par son
+      nom rendait 0 resultat alors qu'il existait -- mesure du 2026-09-16 :
+      "zone_tmp" ne trouvait pas matrice/data/commun/zone_tmp.py ;
+    - par son CONTENU (`sur` = SUR_CONTENU).
+    Le champ `sur` est ce qui permet au lecteur (humain ou machine) de ne pas
+    confondre les deux -- un nom n'est pas une ligne.
+    """
     hits = []
     pattern = re.compile(requete, re.IGNORECASE)
     try:
@@ -148,6 +170,15 @@ def _scan_python(requete, repertoire):
                 if est_fichier_ignore(nom_f):
                     continue
                 fp = Path(racine_d) / nom_f
+                if pattern.search(nom_f):
+                    hits.append({
+                        "fichier": str(fp),
+                        "ligne": 0,
+                        "sur": SUR_NOM,
+                        "texte": nom_f,
+                    })
+                    if len(hits) >= LIMITE_FICHIERS:
+                        return hits, True
                 try:
                     with open(fp, "r", encoding=ENCODAGE, errors="replace") as f:
                         for i, ligne in enumerate(f, 1):
@@ -155,6 +186,7 @@ def _scan_python(requete, repertoire):
                                 hits.append({
                                     "fichier": str(fp),
                                     "ligne": i,
+                                    "sur": SUR_CONTENU,
                                     "texte": ligne.strip(),
                                 })
                                 if len(hits) >= LIMITE_FICHIERS:
@@ -196,6 +228,12 @@ def scanner_bdd(requete, sources=None, tag=None, mot_cle=None, source_nom=None):
         chemin = REPERTOIRE_DATA / fichier
         if not chemin.is_file():
             continue
+        # Zone invisible L-016 (domicile) : une BDD declaree exclue ne se sert
+        # JAMAIS, meme par le chemin BDD. La garde de chemin ne couvrait que les
+        # FICHIERS : mesure MO-153, le moteur servait 101 entrees de suivi-optimus
+        # alors que cette zone est declaree exclue depuis M-084.
+        if est_invisible(chemin):
+            continue
 
         try:
             entrees, tronque = _lire_source(chemin, prefiltre)
@@ -206,6 +244,12 @@ def scanner_bdd(requete, sources=None, tag=None, mot_cle=None, source_nom=None):
 
         for cle, valeur in entrees:
             texte_recherche = texte_de(valeur)
+
+            # L-016 a la LIVRAISON (domicile data/commun/vocabulaire_invisible.py) :
+            # une entree qui nomme l invisible ne se livre jamais -- MEME regle que
+            # l injection, qui la tenait deja (MO-153 : le moteur servait la BDD brute).
+            if contient_invisible(texte_recherche):
+                continue
 
             # 1) La RECHERCHE : la requete doit correspondre
             if pattern and not pattern.search(texte_recherche):
@@ -364,9 +408,18 @@ def calculer_score_requete(requete, texte):
 
 
 def formatter_hit(hit, index):
-    """Formate un hit pour sortie human."""
+    """Formate un hit pour sortie human.
+
+    Un hit de NOM n'a pas de ligne : l'afficher comme `<fichier>:0` ferait croire
+    a une ligne zero qui n'existe pas (EO-126).
+    """
     src = hit.get("source", "fichier")
     if src == "fichier":
+        if hit.get("sur") == SUR_NOM:
+            return (
+                f"  {index + 1}. {hit['fichier']}\n"
+                f"     (nom de fichier)"
+            )
         return (
             f"  {index + 1}. {hit['fichier']}:{hit['ligne']}\n"
             f"     {hit['texte'][:120]}"
@@ -456,7 +509,7 @@ def extraire_options(arguments, noms_connus):
         morceau = arguments[index]
         if morceau.startswith("--") and morceau[2:] in noms_connus:
             nom = morceau[2:]
-            if nom in ("json", "indexer", "forcer"):
+            if nom in NOMS_OPTIONS_DRAPEAU:
                 options[nom] = "1"
                 index += 1
             elif index + 1 < len(arguments):

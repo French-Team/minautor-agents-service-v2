@@ -481,11 +481,12 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 | `rechercher` | `python main.py rechercher --requete <texte> [--dans fichiers\|bdd\|tous]` |
 |  | `[--tag <tag>] [--mot-cle <texte>] [--source <nom>] [--periode 7j\|30j\|3m\|1a]` |
 |  | `[--json] [--limite N]` |
+|  | `[--prive]` (EO-126 : inclut les zones invisibles L-016 -- FICHIERS seulement) |
 | `indexer` | palier 2 (FTS5) -- non implemente |
 | `schema` | affiche les options |
 
-**Protections** : perimetre `matrix/` seul ; zones L-016 filtrees ; fichiers BINAIRES exclus par extension (`.db`, `.pyc`...) ; une option illisible est REFUSEE (code 2) : `--source` inconnue nomme les sources valides, `--periode` hors forme `<nombre><j\|m\|a>`, `--limite` non entiere ; `--tag`/`--mot-cle`/`--source` refuses avec `--dans fichiers` (ils ne filtreraient rien) ; sortie `--json` en ASCII pur.
-**Contrat (MO-069)** : un FILTRE filtre (`--tag`, `--mot-cle`, `--source`, `--periode` RETIRENT des resultats) ; **un hit = une ENTREE** (jamais une section : `lecons/L-054`) ; une coupe ou un ecart est DIT (`tronque`, `ecartes_sans_date`).
+**Protections** : perimetre `matrix/` seul ; zones L-016 filtrees ; fichiers BINAIRES exclus par extension (`.db`, `.pyc`...) ; une option illisible est REFUSEE (code 2) : `--source` inconnue nomme les sources valides, `--periode` hors forme `<nombre><j\|m\|a>`, `--limite` non entiere ; `--tag`/`--mot-cle`/`--source` refuses avec `--dans fichiers` (ils ne filtreraient rien), et `--prive` refuse avec `--dans bdd` (meme raison : une option qui ne filtre pas est un affichage) ; sortie `--json` en ASCII pur.
+**Contrat (MO-069, etendu MO-126/EO-126)** : un FILTRE filtre (`--tag`, `--mot-cle`, `--source`, `--periode` RETIRENT des resultats) ; **un hit = une ENTREE** (jamais une section : `lecons/L-054`) ; **un hit dit SUR QUOI il a matche** (`sur` = `nom` ou `contenu` -- un fichier se trouve par son NOM, pas seulement par son contenu) ; une coupe ou un ecart est DIT (`tronque`, `ecartes_sans_date`).
 **Benchmark** : scan BDD complet ~0,3 s sur les 8 sources (usages 67k lignes lues SANS troncature muette) ; limite 50 resultats par defaut.
-**Branchement** : vigie-portes (sonde de cecite a chaque tour) + cockpit prive route `/chercher` (`cockpit-matrice.py --route chercher --requete "<texte>"`).
+**Branchement** : vigie-portes (sonde de cecite a chaque tour) + cockpit prive route `/chercher` (`cockpit-matrice.py --route chercher --requete "<texte>"`), qui l'appelle avec `--prive` -- cette route annonce `zone_perimetre = maintenance,_operateur` : sans le drapeau la promesse etait FAUSSE (EO-126).
 **Quand** : des qu'il faut retrouver une mission, une lecon, un fichier ou un usage -- ne jamais chercher a la main ni par le natif (pas de BDD, pas de tags).

@@ -1,0 +1,394 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+auto-xxx -- Super-combo AUTO-XXX (sc-001)
+
+Enchaine les six themes AUTO-XXX dans l'ordre :
+PREPARATION -> AUTO-CORRECTION -> AUTO-TESTING -> AUTO-OPTIMISATION ->
+AUTO-PERFORMANCE -> AUTO-AUDIT-NEMESIS.
+
+CE QU'EST UNE PHASE ICI (reecrit le 2026-09-14) : une phase TESTE son theme par
+la PORTE OFFICIELLE du theme, `combos/outils/tester-theme.py` -- la meme porte
+que sc-002 emploie deja dans sa phase `modifier-apres`. Une phase n'est declaree
+reussie que sur TEMOIN positif.
+
+POURQUOI CETTE REECRITURE -- le vert qui ne pouvait pas rougir :
+  l'ancienne version lancait le theme par `python theme-X.json`. Or un theme
+  n'est PAS un programme : c'est l'ARBRE DE DECISION (JSON) que l'AGENT lit.
+  Execute par Python, un JSON de theme est un LITTERAL DE DICTIONNAIRE : une
+  expression valide, sans effet, qui sort en code 0. Mesure du 2026-09-14 :
+  `--fichier /chemin/qui/n/existe/pas.py --mission MO-999` rendait
+  "6/6 themes, 0 echec, TOUS LES THEMES ONT REUSSI" -- le vert ne dependait ni
+  du fichier, ni de la mission, ni de l'etat des themes. Un controle qui ne
+  peut pas echouer ne dit rien (meme jour, friction 28).
+
+TROIS REFUS, tous NOMMES (une impossibilite de conclure ne se declare jamais
+"reussie") :
+  - une cible `--fichier` absente : aucune validation sur un fichier absent ;
+  - un theme introuvable ou un testeur absent : NON TESTABLE (code 2) ;
+  - un testeur qui sort en code 0 SANS dire son verdict : "teste" et "aveugle"
+    se ressemblent, donc on accuse (le faux vert d'origine, transpose).
+
+Usage:
+    python main.py executer [--fichier <fichier>] [--mission <id>]
+    python main.py executer-complet [--fichier <fichier>] [--mission <id>]
+    python main.py auto-test
+    python main.py status
+"""
+
+import argparse
+import shutil
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+
+# --- ANCRAGE (jamais de parents[N] : convention-chemins-liens-noms-flags) ----
+REPERTOIRE_SC = Path(__file__).resolve().parent
+REPERTOIRE_SUPER_COMBOS = REPERTOIRE_SC.parent
+if REPERTOIRE_SUPER_COMBOS.name != "super-combos":
+    raise RuntimeError(
+        "Structure inattendue : " + str(REPERTOIRE_SUPER_COMBOS) + " n'est pas le dossier super-combos/"
+    )
+REPERTOIRE_OPTIMUS = REPERTOIRE_SUPER_COMBOS.parent
+if REPERTOIRE_OPTIMUS.name != "optimus-prime":
+    raise RuntimeError(
+        "Structure inattendue : " + str(REPERTOIRE_OPTIMUS) + " n'est pas le dossier optimus-prime/"
+    )
+
+# --- ANCRAGE (convention-chemins-liens-noms-flags, 1.1, 1.3 et 1.4) ---------
+# Mesure du 2026-09-17 (friction 80) : la cible `--fichier` etait resolue contre
+# le CWD, donc acceptee depuis la racine et refusee depuis le dossier de l outil.
+# La remontee est GARDEE par un marqueur stable (jamais un parents[N]), et le
+# motif racine est CONSOMME depuis son domicile (data/commun/), jamais recopie.
+BORNES_REMONTEE = 30
+REPERTOIRE_MATRICE = REPERTOIRE_SC
+for _ in range(BORNES_REMONTEE):
+    if (REPERTOIRE_MATRICE / "matrice" / "data" / "commun" / "racine.py").is_file():
+        break
+    REPERTOIRE_MATRICE = REPERTOIRE_MATRICE.parent
+else:
+    raise RuntimeError(
+        "Racine matrix/ introuvable en remontant (marqueur matrice/data/commun/racine.py)."
+    )
+
+REPERTOIRE_COMMUN = REPERTOIRE_MATRICE / "matrice" / "data" / "commun"
+sys.path.insert(0, str(REPERTOIRE_COMMUN))
+from cible import resoudre  # noqa: E402
+
+NOM_DOSSIER_PARC = "parcours"
+NOM_DOSSIER_THEMES = "themes"
+REPERTOIRE_THEMES = REPERTOIRE_OPTIMUS / NOM_DOSSIER_PARC / NOM_DOSSIER_THEMES
+REPERTOIRE_OUTILS = REPERTOIRE_SUPER_COMBOS / "combos" / "outils"
+
+# PORTE OFFICIELLE du test d'un theme : on ne recopie pas le test, on l'appelle.
+NOM_OUTIL_TEST_THEME = "tester-theme.py"
+CHEMIN_OUTIL_TEST_THEME = REPERTOIRE_OUTILS / NOM_OUTIL_TEST_THEME
+
+# TEMOIN positif du testeur : sa phrase de succes. Un testeur qui sort en 0 sans
+# la dire ne distingue pas "le theme est bon" de "je n'ai rien regarde" (lecon
+# du temoin : une porte muette et une porte aveugle se ressemblent). Le temoin
+# est declare ICI, en un seul endroit, et le controle qui le cherche est
+# `juger_phase` : si le testeur change de phrase, la chaine ECHOUE BRUYAMMENT au
+# lieu de passer en silence.
+TEMOIN_THEME_TESTE = "Aucune erreur structurelle"
+
+# PHASES : (nom du theme, description). Le NOM DU FICHIER se compose
+# (prefixe + nom minuscule + suffixe) : il n'est jamais ecrit deux fois.
+PHASES = (
+    ("PREPARATION", "Analyse et comprehension du probleme"),
+    ("AUTO-CORRECTION", "Correction des erreurs detectees"),
+    ("AUTO-TESTING", "Tests de validation"),
+    ("AUTO-OPTIMISATION", "Optimisation des performances"),
+    ("AUTO-PERFORMANCE", "Mesure de performance"),
+    ("AUTO-AUDIT-NEMESIS", "Audit 3 axes avant validation"),
+)
+PREFIXE_FICHIER_THEME = "theme-"
+SUFFIXE_FICHIER_THEME = ".json"
+
+# Codes NOMMES : un code magique dans la logique est une decision cachee.
+CODE_NON_TESTABLE = 2
+LONGUEUR_MOTIF = 160
+
+
+# --- CHEMINS DES THEMES ----------------------------------------------------
+
+def chemin_theme(nom, racine=REPERTOIRE_THEMES):
+    """Chemin du fichier d'un theme (racine surchargeable : cobaye du auto-test)."""
+    return Path(racine) / (PREFIXE_FICHIER_THEME + nom.lower() + SUFFIXE_FICHIER_THEME)
+
+
+# --- TEST D'UNE PHASE ------------------------------------------------------
+
+def tester_theme(nom, racine=REPERTOIRE_THEMES):
+    """(code, stdout, stderr) du test du theme, par la PORTE OFFICIELLE.
+
+    code 2 = on N'A PAS PU tester (theme ou testeur absent). Ce n'est pas un
+    echec du theme, c'est une impossibilite de conclure -- et une impossibilite
+    de conclure ne se declare JAMAIS "reussie".
+    """
+    theme = chemin_theme(nom, racine)
+    if not theme.is_file():
+        return CODE_NON_TESTABLE, "", "theme introuvable : " + str(theme)
+    if not CHEMIN_OUTIL_TEST_THEME.is_file():
+        return CODE_NON_TESTABLE, "", "testeur introuvable : " + str(CHEMIN_OUTIL_TEST_THEME)
+    resultat = subprocess.run(
+        [sys.executable, str(CHEMIN_OUTIL_TEST_THEME), str(theme)],
+        capture_output=True, text=True,
+    )
+    return resultat.returncode, resultat.stdout, resultat.stderr
+
+
+def premiere_ligne(texte, longueur=LONGUEUR_MOTIF):
+    """Premiere ligne NON VIDE d'un texte, bornee : un motif se lit, ne se noie pas."""
+    for ligne in (texte or "").splitlines():
+        if ligne.strip():
+            return ligne.strip()[:longueur]
+    return "(aucun message)"
+
+
+def juger_phase(code, sortie, erreur):
+    """(ok, motif) : DECISION PURE -- une phase n'est reussie que sur PREUVE.
+
+    Pure (aucun disque, aucune horloge, aucun sous-processus) : le cobaye la
+    rejoue donc sur des cas pieges, dont LE cas d'origine -- le code 0 muet.
+    """
+    if code == CODE_NON_TESTABLE:
+        return False, "non testable : " + premiere_ligne(erreur or "cause non dite")
+    if code != 0:
+        return False, "code " + str(code) + " : " + premiere_ligne(erreur or sortie or "sans message")
+    if TEMOIN_THEME_TESTE not in (sortie or ""):
+        return False, "code 0 mais AUCUN TEMOIN : 'teste' et 'aveugle' se ressemblent"
+    return True, "temoin present (" + TEMOIN_THEME_TESTE + ")"
+
+
+def verifier_cible(fichier):
+    """(ok, motif) : refuser un vert sur une cible ABSENTE.
+
+    La cible est ANCREE par le domicile partage `cible.resoudre` : le cwd n est
+    jamais une base, et un refus NOMME les bases essayees (friction 80 / 77).
+    """
+    if not fichier:
+        return True, "aucune cible declaree : la chaine teste les six themes"
+    chemin, motif = resoudre(fichier, REPERTOIRE_SC)
+    return chemin is not None, motif
+
+
+def executer_phases(fichier, mission, racine=REPERTOIRE_THEMES, verbeux=True):
+    """Teste les six phases, dans l'ordre. Rend (code, resultats).
+
+    `verbeux=False` est pour le cobaye : il veut le VERDICT, pas la sortie.
+    """
+    resultats = []
+    for index, (nom, description) in enumerate(PHASES, 1):
+        if verbeux:
+            print("=" * 60)
+            print("PHASE " + str(index) + "/" + str(len(PHASES)) + " : " + nom)
+            print("Description : " + description)
+            print("=" * 60)
+        code, sortie, erreur = tester_theme(nom, racine)
+        ok, motif = juger_phase(code, sortie, erreur)
+        if verbeux:
+            if sortie and sortie.strip():
+                print(sortie.rstrip())
+            if erreur and erreur.strip():
+                print("ERREUR : " + erreur.strip(), file=sys.stderr)
+            print(("  [OK] " if ok else "  [KO] ") + motif)
+        resultats.append({"theme": nom, "ok": ok, "code": code, "motif": motif})
+    echecs = [resultat for resultat in resultats if not resultat["ok"]]
+    return (1 if echecs else 0), resultats
+
+
+def resumer(resultats, verbeux=True):
+    """Resume + VERDICT : les phases ACCUSEES sont NOMMEES, jamais comptees seulement."""
+    echecs = [resultat["theme"] for resultat in resultats if not resultat["ok"]]
+    if verbeux:
+        print("=" * 60)
+        print("RESUME DE L'EXECUTION")
+        print("=" * 60)
+        print("Themes testes : " + str(len(resultats)))
+        print("Reussis : " + str(len(resultats) - len(echecs)))
+        print("Echecs : " + str(len(echecs)))
+    if echecs:
+        if verbeux:
+            print("PHASES ACCUSEES : " + ", ".join(echecs))
+            print("VERDICT KO : ces phases n'ont pas pu etre prouvees.")
+        return 1
+    if verbeux:
+        print("VERDICT OK : les six themes sont bien formes (temoin present a chaque phase).")
+    return 0
+
+
+# --- LES VERBES ------------------------------------------------------------
+
+def cmd_executer(args, complet=False):
+    """Verb `executer` (et `executer-complet`) : enchainer les six phases."""
+    analyseur = argparse.ArgumentParser(description="Executer le super-combo AUTO-XXX")
+    analyseur.add_argument("--fichier", help="Fichier a traiter (optionnel)")
+    analyseur.add_argument("--mission", help="ID mission (optionnel)")
+    parsed = analyseur.parse_args(args)
+
+    print("=" * 60)
+    print("SUPER-COMBOS AUTO-XXX - " + ("Execution complete" if complet else "Enchainement intelligent"))
+    print("=" * 60)
+    print("Fichier : " + (parsed.fichier or "(aucun)"))
+    # La mission n'entre PAS dans le test des themes : le DIRE, ne pas le laisser croire.
+    print("Mission : " + (parsed.mission or "(aucune)") + " (contexte, non utilisee par le test des themes)")
+    print("Porte de test : " + NOM_OUTIL_TEST_THEME)
+
+    cible_ok, motif_cible = verifier_cible(parsed.fichier)
+    print(("  [OK] " if cible_ok else "  [KO] ") + motif_cible)
+    if not cible_ok:
+        print("")
+        print("VERDICT KO : cible invalide, aucune phase lancee.")
+        return 1
+
+    code, resultats = executer_phases(parsed.fichier, parsed.mission)
+    if complet:
+        print("=" * 60)
+        print("VALIDATION FINALE")
+        print("=" * 60)
+        print("Phase terminale : le verdict des six phases fait foi (temoin ou rien).")
+    return resumer(resultats)
+
+
+def cmd_status(args):
+    """Verb `status` : le statut d'un theme, c'est son TEST, pas sa presence."""
+    print("=" * 60)
+    print("STATUT DES THEMES AUTO-XXX (teste, pas suppose)")
+    print("=" * 60)
+    resultats = []
+    for nom, description in PHASES:
+        code, sortie, erreur = tester_theme(nom)
+        ok, motif = juger_phase(code, sortie, erreur)
+        print(("  [OK] " if ok else "  [KO] ") + nom.ljust(20) + " : " + description)
+        print("         " + motif)
+        resultats.append({"theme": nom, "ok": ok, "code": code, "motif": motif})
+    echecs = [resultat["theme"] for resultat in resultats if not resultat["ok"]]
+    if echecs:
+        print("")
+        print("VERDICT KO : " + ", ".join(echecs))
+        return 1
+    print("")
+    print("VERDICT OK : les six themes repondent avec leur temoin.")
+    return 0
+
+
+# --- AUTO-TEST (cobaye) ----------------------------------------------------
+
+def _peupler_cobaye(racine, corrompre=None, retirer=None):
+    """Copie les six VRAIS themes dans un dossier jetable, en abimant ce qu'on veut."""
+    Path(racine).mkdir(parents=True, exist_ok=True)
+    for nom, _ in PHASES:
+        cible = chemin_theme(nom, racine)
+        if nom == retirer:
+            continue
+        if nom == corrompre:
+            cible.write_text("{ ceci n'est pas du JSON", encoding="utf-8")
+            continue
+        shutil.copyfile(chemin_theme(nom), cible)
+
+
+def controler(nom, condition, detail, resultats):
+    """Un controle lisible, et son resultat garde pour le verdict."""
+    resultats.append((nom, bool(condition)))
+    print(("  [OK] " if condition else "  [KO] ") + nom + " : " + detail)
+    return bool(condition)
+
+
+def cmd_auto_test(args):
+    """Verb `auto-test` : PROUVER que la chaine sait ACCUSER (lecon L-032).
+
+    Un controle qui ne peut pas echouer ne vaut rien : on rejoue donc les cas
+    qui DOIVENT etre accuses, et le cas d'origine -- le mecanisme d'avant, qui
+    rendait un code 0 muet et se declarait reussi.
+    """
+    print("=" * 60)
+    print("AUTO-TEST sc-001 : la chaine sait-elle ACCUSER ?")
+    print("=" * 60)
+    resultats = []
+
+    print("-- 1. la decision (pure) sur des cas pieges --")
+    cas = (
+        ("temoin present", juger_phase(0, TEMOIN_THEME_TESTE + ".", ""), True),
+        ("code 0 SANS temoin (le faux vert d'origine)", juger_phase(0, "", ""), False),
+        ("code 0 avec sortie muette", juger_phase(0, "\n  \n", ""), False),
+        ("theme en erreur (code 1)", juger_phase(1, "ERREURS (2):", ""), False),
+        ("non testable (code 2)", juger_phase(CODE_NON_TESTABLE, "", "theme introuvable"), False),
+    )
+    for nom, (ok, _), attendu in cas:
+        controler(nom, ok == attendu,
+                  "attendu " + ("OK" if attendu else "ACCUSE") + " -- obtenu " + ("OK" if ok else "ACCUSE"),
+                  resultats)
+
+    print("-- 2. l'ANCIEN mecanisme, rejoue : code 0 et AUCUN temoin --")
+    ancien = subprocess.run([sys.executable, str(chemin_theme("PREPARATION"))],
+                            capture_output=True, text=True)
+    ancien_reussi = (ancien.returncode == 0)
+    nouveau_ok, motif = juger_phase(ancien.returncode, ancien.stdout, ancien.stderr)
+    controler("l'ancien mecanisme rend bien un code 0 muet", ancien_reussi and not nouveau_ok,
+              "ancienne regle (code de sortie) = REUSSI ; regle actuelle = ACCUSE (" + motif + ")",
+              resultats)
+
+    print("-- 3. la chaine REELLE, sur un cobaye en dossier jetable --")
+    with tempfile.TemporaryDirectory(prefix="cobaye-sc001-") as jetable:
+        propre = Path(jetable) / "propre"
+        _peupler_cobaye(propre)
+        code_propre, _ = executer_phases(None, None, racine=propre, verbeux=False)
+        controler("six themes sains : la chaine REUSSIT", code_propre == 0,
+                  "code " + str(code_propre), resultats)
+
+        casse = Path(jetable) / "casse"
+        _peupler_cobaye(casse, corrompre="AUTO-TESTING")
+        code_casse, resultats_casses = executer_phases(None, None, racine=casse, verbeux=False)
+        accuses = [r["theme"] for r in resultats_casses if not r["ok"]]
+        controler("theme corrompu : la chaine ACCUSE et le NOMME",
+                  code_casse == 1 and accuses == ["AUTO-TESTING"],
+                  "code " + str(code_casse) + ", accuses : " + (", ".join(accuses) or "(aucun)"),
+                  resultats)
+
+        manquant = Path(jetable) / "manquant"
+        _peupler_cobaye(manquant, retirer="AUTO-PERFORMANCE")
+        code_manquant, resultats_manquants = executer_phases(None, None, racine=manquant, verbeux=False)
+        accuses = [r["theme"] for r in resultats_manquants if not r["ok"]]
+        controler("theme absent : la chaine ACCUSE et le NOMME",
+                  code_manquant == 1 and accuses == ["AUTO-PERFORMANCE"],
+                  "code " + str(code_manquant) + ", accuses : " + (", ".join(accuses) or "(aucun)"),
+                  resultats)
+
+    print("-- 4. une cible ABSENTE est refusee --")
+    cible_ok, motif_cible = verifier_cible("/chemin/qui/n/existe/pas.py")
+    controler("cible absente refusee", not cible_ok, motif_cible, resultats)
+    cible_ok, motif_cible = verifier_cible(str(REPERTOIRE_SC / "main.py"))
+    controler("cible presente acceptee", cible_ok, motif_cible, resultats)
+
+    echecs = [nom for nom, ok in resultats if not ok]
+    print("")
+    if echecs:
+        print("VERDICT KO : " + str(len(echecs)) + " controle(s) en echec -- " + ", ".join(echecs))
+        return 1
+    print("VERDICT OK : " + str(len(resultats)) + " controles -- la chaine accuse ce qu'elle doit accuser.")
+    return 0
+
+
+COMMANDES = {
+    "executer": cmd_executer,
+    "executer-complet": lambda args: cmd_executer(args, complet=True),
+    "status": cmd_status,
+    "auto-test": cmd_auto_test,
+}
+
+
+def main():
+    if len(sys.argv) < 2 or sys.argv[1] not in COMMANDES:
+        print(__doc__)
+        print("\nVerbes :")
+        for nom in ("executer", "executer-complet", "status", "auto-test"):
+            print("  " + nom)
+        return 1
+    return COMMANDES[sys.argv[1]](sys.argv[2:])
+
+
+if __name__ == "__main__":
+    sys.exit(main())

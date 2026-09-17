@@ -2,7 +2,7 @@
 identite:
   type: outil-rechercher
   appartient_a: matrice-data-outils
-  version: 1.1.0
+  version: 1.2.0
   palier: 1 (scan Python + JSON par ENTREE)
 ---
 
@@ -37,6 +37,7 @@ Il combine **fichiers** (scan Python, aucune dependance externe) et **BDD**
 | `--source` | (toutes) | **FILTRE** de source BDD : `lecons`, `modifications`, `historiques`, `historiques-optimus`, `vivier`, `activites`, `usages`, `classeur`, `conservation` |
 | `--periode` | (aucune) | **FILTRE** temporel : `7j`, `30j`, `3m`, `1a` |
 | `--json` | (non) | Sortie machine JSON (ASCII pur) |
+| `--prive` | (non) | **FICHIERS seulement** : inclut les zones invisibles L-016 (`_operateur`, `tmp-optimus`, `suivi-optimus`). Sans lui, le moteur reste etanche au cameleon |
 | `--limite` | 50 | Nombre max de resultats |
 
 ## Contrat de la porte (corrige par MO-069, audit MO-057)
@@ -56,6 +57,17 @@ Il combine **fichiers** (scan Python, aucune dependance externe) et **BDD**
    qui pourrissent les extraits et font crasher une sortie machine (EO-105).
 6. **Sortie machine en ASCII pur** (`ensure_ascii`) : aucune console ne peut faire
    echouer la porte.
+7. **Un fichier se trouve par son NOM** (EO-126) : chercher `zone_tmp` ne rendait
+   RIEN alors que `matrice/data/commun/zone_tmp.py` existait -- le scan ne lisait
+   que le contenu. Chaque hit porte desormais `sur` = `nom` ou `contenu` : un nom
+   n'est pas une ligne, et un hit de nom porte `ligne` = 0 -- jamais une ligne
+   inventee.
+8. **Le perimetre du scan est DIT, et il ne s'ouvre que sur demande** (EO-126) :
+   `--prive` est le SEUL moyen d'atteindre les zones L-016. Un moteur qui ne peut
+   pas lire la maison de son propre operateur n'est pas prudent, il est AVEUGLE --
+   et un aveugle qui dit "0 resultat" est indiscernable d'une absence (MO-055). Le
+   defaut ne bouge pas d'un pouce ; quand `--prive` est actif, la sortie le
+   DECLARE (`prive`) et NOMME les zones ouvertes (`zones_invisibles`).
 
 ## Granularite
 
@@ -66,6 +78,9 @@ Il combine **fichiers** (scan Python, aucune dependance externe) et **BDD**
   sont ecartees avant `json.loads` (pre-filtre documente : motif ASCII sans
   anti-slash) -- c'est ce qui permet de lire les 67k lignes d'`usages` sans
   troncature muette.
+- Fichiers : **un hit par NOM de fichier** (`sur` = `nom`, `ligne` = 0) et/ou
+  **un hit par LIGNE** de contenu (`sur` = `contenu`) -- un meme fichier peut
+  matcher des deux facons, et c'est le champ `sur` qui le dit (EO-126).
 
 ## Architecture
 
@@ -88,7 +103,8 @@ rechercher/
 ## Garanties
 
 - Perimetre `matrix/` seul (hors = 0 hit)
-- Zones invisibles L-016 filtrees
+- Zones invisibles L-016 filtrees PAR DEFAUT ; `--prive` les inclut, et la sortie
+  le DIT (EO-126) -- le defaut ne s'ouvre jamais tout seul
 - Sortie deterministe (tri score desc, puis ordre d'insertion)
 - BDD en lecture seule (jamais d'ecriture)
 - Compatible win/linux (pathlib, aucune dependance externe)

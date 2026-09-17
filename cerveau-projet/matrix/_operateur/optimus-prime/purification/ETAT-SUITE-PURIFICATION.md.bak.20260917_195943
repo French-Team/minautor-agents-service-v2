@@ -1,0 +1,122 @@
+---
+identite:
+  type: analyse
+  appartient_a: optimus-prime
+  commun: false
+  mission: MO-146
+  statut: valide
+---
+
+# ETAT DE LA SUITE DE PURIFICATION -- bilan, contenu, besoins
+
+> Demande createur 2026-09-16 : "de la suite de purification, je ne sais meme pas
+> ce qui a ete fait ? [question] que doit contenir la suite de purification ?
+> [preparation] lister les besoins ... conserver l'essentiel et se debarrasser de
+> tout ce qui concerne les correctifs anciens qui n'ont plus de sens : nettoyer
+> nos fichiers, nos BDD, nos journaux SANS RIEN PERDRE."
+> Ce document repond aux TROIS volets. Il ne purge RIEN : il dit ce qui existe,
+> ce que la suite doit faire, et ce qu'il lui manque.
+
+## CE QUE CONTIENT CE DOSSIER
+
+| Fichier | Role |
+|---|---|
+| `analyse-nemesis.md` | L'analyse contradictoire OBLIGATOIRE avant tout ajout (MO-087, theme CONTRE-ANALYSE). |
+| `plan-conservation.md` | Le plan de preparation-conservation (MO-094) : categories, statuts, schema de BDD, portes a creer, 9 cases cibles. |
+| `ETAT-SUITE-PURIFICATION.md` | CE document : ou en est la suite, ce qu'elle doit contenir, ce qui lui manque. |
+
+## VOLET 1 -- BILAN : ce qui est DEJA fait
+
+| Maillon | Mission | Livrable | Etat |
+|---|---|---|---|
+| Analyse NEMESIS obligatoire | MO-087 | `analyse-nemesis.md` | **FAIT** |
+| Plan de conservation (10 sections) | MO-094 | `plan-conservation.md` | **FAIT** (valide createur 2026-09-15) |
+| BDD de conservation | MO-095 | outil `bdd-conservation` + `data/conservation.json` | **FAIT, mais VIDE** (1 seul element : le cobaye de MO-095) |
+| Theme PURIFICATION (9 cases) | MO-087 | `parcours/themes/theme-purification.json` | **FAIT** |
+| Routage du theme | MO-087 | `index-parcours.json` (case 13) + `index-themes.json` | **FAIT** |
+| Crochet `[purification]` | MO-087 | `conventions/convention-crochets.md` (liste fermee) | **FAIT** |
+| Theme courant | MO-093 | `index-parcours.json` -> `PURIFICATION` | **FAIT** |
+| Purge des zones jetables | MO-136 + EO-123 | moteur partage `data/commun/zone_tmp.py` + action `purge` au marbre | **FAIT** (voisin, pas la suite) |
+| Suite COURUE sur un perimetre reel (9/9 cases) | MO-154, MO-156, MO-160, MO-163, MO-164 | `rapport-fermeture-MO-164.md` + famille `.bak` : 193 points, 0 sans verdict | **FAIT** (2026-09-17) |
+| Classification NON PERPETUELLE (porte `balayer` + acte enchaine a la cloture) | MO-163 (EO-147) | `bdd-conservation/balayer/` + cablage du pilote (`commun.py`, `fin/`) | **FAIT** |
+
+### CE QUI N'A JAMAIS ETE FAIT -- et pourquoi le createur ne voyait rien
+
+**La suite n'a JAMAIS TOURNE.** Aucune mission n'a parcouru ses 9 cases sur un
+perimetre reel : tout est BATI, rien n'est COURU. La BDD de conservation ne porte
+qu'un element, et c'est un COBAYE (`K-001`, `source: MO-095 test prepare`).
+Le createur ne savait pas ou en etait la suite parce qu'il n'y avait rien a voir :
+un dossier sans vue, un theme jamais ouvert, une BDD vide.
+
+> **MISE A JOUR 2026-09-17 (MO-164) : la suite A TOURNE.** Le constat ci-dessus
+> est celui du 2026-09-16. Depuis, un PERIMETRE REEL a ete couru de bout en bout
+> -- la famille des points de restauration `.bak` : cases 1 a 4 (MO-154), 5 et 6
+> (MO-156), 7 et 8 (MO-160), le classement rendu non perpetuel (MO-163), et la
+> case 9 (MO-164). Preuve par case : `rapport-fermeture-MO-164.md`. La BDD de
+> conservation porte desormais `200` points, `0` sans verdict, `0` en attente.
+> La fermeture du THEME reste une decision de PORTEE (le theme declare toute la
+> Matrice ; un seul perimetre est couru).
+## VOLET 2 -- CONTENU : ce que la suite DOIT contenir
+
+Les 9 cases, dans l'ORDRE impose (celui du theme), avec ce que chacune PRODUIT et
+la PREUVE qu'elle doit laisser :
+
+| # | Case | Produit | Preuve exigee |
+|---|---|---|---|
+| 1 | **demande** | le perimetre demande et ses bornes | une phrase de cadrage au marbre (`decision`) |
+| 2 | **cartographie** | l'inventaire du perimetre AVANT tout classement | le compte par categorie (fichiers, BDD, journaux, archives) |
+| 3 | **classification** | chaque element CLASSE avant d'etre juge | une entree par element dans la BDD de conservation |
+| 4 | **audit** | la liste des ecarts, AUCUNE ecriture | le rapport d'audit, en lecture seule |
+| 5 | **nemesis** | l'avis contradictoire (theme CONTRE-ANALYSE) | l'analyse, sur les 3 axes (cas limites, optimisation, securite) |
+| 6 | **decision** | un VERDICT par element (conserver / archiver / corriger) | une decision TRACEE, jamais implicite |
+| 7 | **execution-par-porte** | l'acte, et RIEN que ce qui a ete decide | la porte utilisee + le manifeste d'archive |
+| 8 | **verification** | la preuve de conservation et la non-regression | archive + actif = origine (aucun octet perdu) |
+| 9 | **bilan** | un bilan RECUPERABLE | le bilan au marbre + la vue a jour |
+
+**Doctrine de la suite, non negociable** : ARCHIVER, jamais supprimer sec ; un
+element sans verdict ne bouge pas ; toute execution passe par une PORTE (jamais une
+reecriture a la main) ; la verification est un maillon de la suite, pas une bonne
+intention.
+
+## VOLET 3 -- BESOINS et ARBITRAGE
+
+### Ce dont la suite a besoin (et son etat REEL)
+
+| Besoin | Existe ? | Domicile | Manque |
+|---|---|---|---|
+| Theme PURIFICATION | oui (9 cases) | `parcours/themes/theme-purification.json` | les cases 1 a 9 n'ont aucune PREUVE DECLAREE dans le JSON -- le contrat des preuves vit dans ce document, pas dans le theme |
+| BDD de conservation | oui, VIDE | `matrice/data/conservation.json` + outil `bdd-conservation` | elle n'est PAS au registre d'integrite (ecart mesure le 2026-09-16) |
+| Parcours / routage | oui | `index-parcours.json`, `index-themes.json` | RAS |
+| Fichiers | oui | ce dossier (3 documents) | un README de dossier (facultatif : ce document en tient lieu) |
+| Outils | oui | `bdd-conservation` (ajouter / lire / verifier) | aucune porte de ROTATION d'archive pour les fichiers de travail (voir ci-dessous) |
+| Espions | partiel | registre d'integrite (109 empreintes) | `conservation.json` hors registre |
+
+### ARBITRAGE : les correctifs anciens qui n'ont plus de sens (a archiver, jamais a supprimer sec)
+
+Mesures du 2026-09-16, dans la zone `cerveau-projet/matrix/` :
+
+| Residu | Volume mesure | Pourquoi il n'a plus de sens | Verdict propose |
+|---|---|---|---|
+| Points de restauration `.bak.*` | **118 fichiers** | ils servent au REVERT d'une modification en cours ; une fois la modification validee et tracee en BDD modifications, le `.bak` n'est plus qu'un doublon. Le contrat fondamental les exempte (exemption BORNEE, MO-133) mais ils s'accumulent sans borne. | **ARCHIVER** par une porte dediee (jamais un `rm`), en gardant les N plus recents par fichier |
+| Archives `legacy` du pilote | 3 fichiers (dont `file-missions-legacy-archive.json` : 109 Ko) | elles portent des missions d'un ANCIEN format, deja remplacees ; elles sont la MEMOIRE de la migration | **CONSERVER** (ce sont des archives, pas des residus : elles ne sont plus lues, elles ne genent personne) |
+| Entree `K-001` de `conservation.json` | 1 element | c'est un COBAYE de MO-095, pas un element reel | **ARCHIVER** (statut `archivee`), pour que la BDD ne mente pas sur son contenu |
+
+**Ce que cet arbitrage NE dit PAS** : aucun de ces actes n'est fait ici. Ils sont
+PROPOSES, mesures et justifies -- l'execution appartient a la case 7 de la suite,
+par une porte, sur decision tracee.
+
+### Sujets freres DECLARES (mesures, non traites)
+
+1. `conservation.json` n'est pas au registre d'integrite : la BDD de la suite n'est
+   pas surveillee par l'espion qui surveille le reste.
+2. Le theme ne declare pas ses PREUVES par case : le contrat des preuves vit dans
+   ce document. Un theme qui ne dit pas ce qu'il prouve laisse la suite se croire
+   finie.
+
+## ETAT DE FIN MO-146
+
+- Trois volets rendus : bilan, contenu, besoins + arbitrage.
+- Une MESURE qui explique le silence : la suite est BATIE, jamais COURUE.
+- Aucune donnee deplacee, aucune suppression, aucune ecriture hors ce document.
+- Prochaine etape naturelle : une mission qui OUVRE la suite sur un perimetre
+  reel (residus `.bak` et element cobaye `K-001` sont les deux premiers candidats).

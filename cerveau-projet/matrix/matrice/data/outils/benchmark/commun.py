@@ -19,8 +19,12 @@ from constants import (
     RACINE,
     REPERTOIRE_DATA,
     REPERTOIRE_MATRIX,
-    ZONES_INVISIBLES,
 )
+
+# Le contrat d invisibilite L-016/CV-006 (plancher + zones DECLAREES V-003 du
+# classeur) vit dans SON domicile : cette porte le CONSOMME, elle ne le recopie
+# pas (M-076 ; mesure MO-151).
+from invisibilite import est_invisible  # noqa: E402
 
 
 # --- Helpers perimetre (copie desde lire/commun.py) ---
@@ -57,12 +61,8 @@ def dans_perimetre(chemin_relatif):
 
 
 def est_zone_invisible(path_absolu):
-    """True si path contient zone L-016."""
-    s = str(path_absolu).replace("\\", "/")
-    for zone in ZONES_INVISIBLES:
-        if "/" + zone + "/" in s or s.endswith("/" + zone):
-            return True
-    return False
+    """True si path contient une zone L-016 (domicile data/commun, MO-152)."""
+    return est_invisible(path_absolu)
 
 
 def calculer_sha256(chemin):

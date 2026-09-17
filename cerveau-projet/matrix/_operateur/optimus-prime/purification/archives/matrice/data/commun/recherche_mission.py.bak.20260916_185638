@@ -1,0 +1,106 @@
+"""LA QUESTION a poser au moteur de recherche, derivee du SUJET de la mission (EO-131).
+
+MO-138 a rendu le moteur CAPABLE : la zone de l'operateur s'ouvre par une option
+explicite et bornee, un fichier se trouve par son NOM, la promesse de la route
+/chercher du cockpit est tenue par le code. Il restait a le rendre REFLEXE.
+
+C'est le role du PILOTE, pas de la memoire de l'agent : le createur l'a dit --
+les systemes agentiques versent tout au debut et l'agent ne sait plus, a la fin,
+ce qu'il devait faire ; ici le pilote fournit ce dont l'agent a besoin AU MOMENT
+ou il en a besoin. Or le moment ou l'on interroge le projet, c'est le SUJET de la
+mission : avant d'ecrire, on demande au projet ce qu'il sait deja.
+
+Ce module est le moteur PARTAGE (data/commun, comme zone_tmp.py et
+rotation_journal.py) : les DEUX pilotes -- Optimus (Flux 2) et le cameleon
+(Flux 1) -- l'utilisent, ils ne le recopient pas. Deux copies de cette derivation
+divergeraient : l'une poserait une question utile, l'autre du bruit (lecon L-029).
+
+Ce que ce module NE fait PAS : la COMMANDE. Le chemin du moteur et ses options
+appartiennent a chaque flux -- le Flux 2 ouvre sa zone privee par une option que
+le Flux 1 ne doit JAMAIS recevoir (L-016). Ici, la QUESTION seulement ; chaque
+pilote l'habille de SON gabarit.
+
+La derivation est DETERMINISTE et sans disque : memes donnees -> meme question.
+C'est ce qui la rend testable, donc PIEGEABLE par un cobaye (lecon L-032).
+"""
+
+import re
+
+# Un mot trop court ("de", "la", "un") ou une formule administrative ne designe
+# rien dans un index : la question serait du bruit, et une question bruyante
+# apprend a l'agent a ne plus interroger le moteur. Vocabulaire DECLARE ici, lu
+# par la logique -- jamais devine a chaque appel (convention-zero-valeurs-en-dur).
+MOTS_VIDES = (
+    "aucun", "aucune", "ainsi", "alors", "apres", "aussi", "avant", "avec",
+    "avoir", "cela", "ceci", "celle", "celui", "cette", "chaque", "chez",
+    "comme", "createur", "dans", "date", "demande", "deja", "doit", "donc",
+    "elle", "encore", "entre", "etait", "etre", "faire", "fait", "faite",
+    "jamais", "jour", "leur", "leurs", "mais", "meme", "mission", "moins",
+    "modifie", "modifier", "nous", "objectif", "peut", "plus", "pour", "puis",
+    "quel", "quelle", "revision", "sans", "sera", "sont", "sur", "toujours",
+    "tous", "tout", "toute", "toutes", "une", "verifie", "verifier", "vers",
+    "vous",
+)
+
+# Bornes de la derivation : un mot plus court que 4 caracteres ne designe rien,
+# et au-dela de 5 mots la question perd son sujet au profit du bavardage.
+LONGUEUR_MINIMALE_MOT = 4
+NOMBRE_MOTS_QUESTION = 5
+
+# Le QUAND, dit a l'agent dans l'injection -- pas une etape facultative.
+QUAND = ("AVANT d'ecrire, et A CHAQUE QUESTION posee pendant la mission "
+         "(un fichier, un nom, une regle, un usage)")
+
+DOCTRINE = ("Le projet se souvient mieux que l'agent : interroge le moteur "
+            "AVANT d'ecrire et des qu'un doute se pose. La reponse tient en "
+            "une commande -- la re-decouvrir a la main coute une mission.")
+
+AVERTISSEMENT_VIDE = ("question vide : aucun mot utile trouve dans le sujet -- "
+                      "pose-la a la main, le sujet est ta source")
+
+
+def deriver_question(mission, nombre=NOMBRE_MOTS_QUESTION):
+    """Les mots UTILES du sujet, dans l'ordre, sans doublon.
+
+    Source : le THEME (champ ferme, le chantier, qui SCOPE la question) puis
+    l'OBJECTIF (le sujet, qui la precise). Deterministe : memes donnees, meme
+    question. Rend une chaine VIDE si rien d'utile -- l'appelant le DIT, il
+    n'invente pas une question a la place de l'agent.
+    """
+    texte = (str(mission.get("theme", "")) + " "
+             + str(mission.get("objectif", ""))).lower()
+    mots = []
+    for brut in re.split(r"[^a-z0-9]+", texte):
+        if len(brut) < LONGUEUR_MINIMALE_MOT or brut in MOTS_VIDES or brut.isdigit():
+            continue
+        if brut in mots:
+            continue
+        mots.append(brut)
+        if len(mots) >= nombre:
+            break
+    return " ".join(mots)
+
+
+def preparer_recherche(mission, gabarit_commande=""):
+    """Le bloc injecte : quand, la question, la commande, la doctrine.
+
+    `gabarit_commande` vient du PILOTE (son chemin, ses options) et porte le
+    marqueur `{question}` -- jamais la question elle-meme : chaque flux habille
+    la question de SA commande, le module partage n'en connait aucune.
+
+    Sans question utile, AUCUNE commande n'est fabriquee (une requete vide
+    rendrait zero resultat et apprendrait le faux) : le bloc porte alors un
+    AVERTISSEMENT nomme.
+    """
+    question = deriver_question(mission)
+    bloc = {
+        "quand": QUAND,
+        "question": question,
+        "doctrine": DOCTRINE,
+        "commande": "",
+    }
+    if question and gabarit_commande:
+        bloc["commande"] = gabarit_commande.replace("{question}", question)
+    else:
+        bloc["avertissement"] = AVERTISSEMENT_VIDE
+    return bloc

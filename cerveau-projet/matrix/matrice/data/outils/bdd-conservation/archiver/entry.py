@@ -1,0 +1,147 @@
+"""Porte de ROTATION de la famille des points de restauration (cases 7 et 8).
+
+Trois verbes, un seul contrat : ce qui sort de sa place y laisse une PREUVE.
+
+    python main.py archiver --id K-XXX [--simuler oui]
+    python main.py archiver --lot oui [--simuler oui]
+    python main.py restaurer --id K-XXX [--simuler oui]
+    python main.py controler-archives
+
+L'acte ne se decide pas ici : la porte ne traite que les entrees deja DECIDEES
+(statut `decide`, verdict `archiver`). Un element sans decision est SIGNALE,
+jamais deplace.
+"""
+from pathlib import Path
+
+from archiver.fonctions import (
+    archiver_un, chemin_archive, ecrire_temoin, inventaire,
+    points_sans_decision, restaurer_un, trouver, verifier_archives,
+)
+from commun import charger_bdd, enregistrer_bdd, extraire_options
+
+NOMS_OPTIONS = ("id", "lot", "simuler")
+DEPART = Path(__file__).resolve().parent
+
+
+def _vrai(valeur):
+    return str(valeur).strip().lower() in ("oui", "true", "1", "vrai")
+
+
+def _archiver_un_element(donnees, identifiant, chemin_manifeste, simuler):
+    entree = trouver(donnees, identifiant)
+    if entree is None:
+        print("Refus : element inconnu : " + identifiant)
+        return 2
+    code, message = archiver_un(entree, donnees, DEPART, chemin_manifeste, simuler)
+    print("[" + identifiant + "] " + message)
+    if code:
+        return 1
+    if not simuler:
+        enregistrer_bdd(donnees)
+    return 0
+
+
+def _archiver_lot(donnees, chemin_manifeste, chemin_temoin, simuler):
+    """Archive TOUS les elements decides `archiver`, apres avoir pose l'ORIGINE."""
+    temoin = inventaire(donnees, DEPART)
+    if simuler:
+        print("SIMULATION -- origine mesuree : " + str(temoin["nb"]) + " point(s), "
+              + str(temoin["octets"]) + " octet(s)")
+    else:
+        ecrire_temoin(chemin_temoin, temoin)
+        print("Origine posee (temoin) : " + str(temoin["nb"]) + " point(s), "
+              + str(temoin["octets"]) + " octet(s)")
+
+    cibles = [entree for entree in donnees.get("elements", [])
+              if entree.get("statut") == "decide" and entree.get("verdict") == "archiver"]
+    archives = 0
+    refuses = []
+    for entree in cibles:
+        code, message = archiver_un(entree, donnees, DEPART, chemin_manifeste, simuler)
+        if code == 0:
+            archives += 1
+            if not simuler:
+                enregistrer_bdd(donnees)
+        else:
+            refuses.append((entree.get("id", ""), message))
+            print("  [" + entree.get("id", "") + "] " + message)
+
+    sans_decision = points_sans_decision(donnees, DEPART)
+    print()
+    print("ARRIVEE : " + str(archives) + " / " + str(len(cibles)) + " archive(s)"
+          + (" (SIMULATION)" if simuler else ""))
+    if refuses:
+        print("REFUSES : " + str(len(refuses)))
+        for identifiant, message in refuses:
+            print("  " + identifiant + " : " + message)
+    if sans_decision:
+        print("SIGNALES (presents sur le disque, AUCUNE decision -- l'acte n'y touche pas) : "
+              + str(len(sans_decision)))
+        for chemin in sans_decision:
+            print("  " + chemin)
+    return 0 if not refuses else 1
+
+
+def _restaurer(donnees, identifiant, simuler):
+    entree = trouver(donnees, identifiant)
+    if entree is None:
+        print("Refus : element inconnu : " + identifiant)
+        return 2
+    code, message = restaurer_un(entree, DEPART, simuler)
+    print("[" + identifiant + "] " + message)
+    if code:
+        return 1
+    if not simuler:
+        enregistrer_bdd(donnees)
+    return 0
+
+
+def _controler_archives(donnees, chemin_temoin):
+    ecarts, mesure = verifier_archives(donnees, DEPART, chemin_temoin)
+    if mesure:
+        print("origine : " + str(mesure["origine_nb"]) + " point(s), "
+              + str(mesure["origine_octets"]) + " octet(s)")
+        print("archive : " + str(mesure["archive_nb"]) + " point(s), "
+              + str(mesure["archive_octets"]) + " octet(s)")
+        print("actif   : " + str(mesure["actif_nb"]) + " point(s), "
+              + str(mesure["actif_octets"]) + " octet(s)")
+        total = mesure["archive_octets"] + mesure["actif_octets"]
+        print("archive + actif = " + str(total) + " | origine = "
+              + str(mesure["origine_octets"]))
+    if ecarts:
+        print("ECARTS : " + str(len(ecarts)))
+        for ecart in ecarts:
+            print("  " + ecart)
+        return 1
+    print("VERDICT : archive + actif = origine (aucun octet perdu)")
+    return 0
+
+
+def executer(arguments):
+    verbe = arguments[0] if arguments else ""
+    options = extraire_options(arguments[1:], NOMS_OPTIONS)
+    donnees = charger_bdd()
+    _, chemin_manifeste, chemin_temoin = chemin_archive(DEPART)
+    simuler = _vrai(options.get("simuler", ""))
+
+    if verbe == "archiver":
+        if options.get("lot") and _vrai(options["lot"]):
+            return _archiver_lot(donnees, chemin_manifeste, chemin_temoin, simuler)
+        identifiant = options.get("id", "")
+        if not identifiant:
+            print("Usage : archiver --id K-XXX [--simuler oui] | archiver --lot oui")
+            return 2
+        return _archiver_un_element(donnees, identifiant, chemin_manifeste, simuler)
+
+    if verbe == "restaurer":
+        identifiant = options.get("id", "")
+        if not identifiant:
+            print("Usage : restaurer --id K-XXX [--simuler oui]")
+            return 2
+        return _restaurer(donnees, identifiant, simuler)
+
+    if verbe == "controler-archives":
+        return _controler_archives(donnees, chemin_temoin)
+
+    print("Usage : archiver | restaurer | controler-archives")
+    return 2

@@ -5,9 +5,14 @@ from pathlib import Path
 from commun import RACINE, lister_dossier
 
 
-def executer_lister(dossier, filtre, recursif, as_json):
-    """Execute le listage. Retourne code 0/1/2."""
-    fichiers, dossiers, code, msg = lister_dossier(dossier, filtre, recursif, inclure_invisible=False)
+def executer_lister(dossier, filtre, recursif, as_json, inclure_prive=False):
+    """Execute le listage. Retourne code 0/1/2.
+
+    inclure_prive vient de --prive : le listage est FERME par defaut (zones
+    invisibles L-016 du domicile data/commun/invisibilite.py).
+    """
+    fichiers, dossiers, code, msg = lister_dossier(dossier, filtre, recursif,
+                                                   inclure_invisible=inclure_prive)
     if code != 0:
         print(msg)
         return code

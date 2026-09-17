@@ -1,0 +1,198 @@
+"""Porte du BALAYAGE : appliquer la REGLE de la famille des points de restauration.
+
+    python main.py balayer [--simuler oui] [--mission MO-XXX]
+
+Le probleme qu'elle ferme (EO-147, 2026-09-17) : chaque ecriture cree un point de
+restauration, donc chaque ecriture ajoute un element a classer, et le classement
+exige trois marches. Faites a la main une par une, ces marches ne se terminent
+jamais -- et une suite de purification qui ne se ferme pas n'est pas une suite.
+
+Trois garanties, dans cet ORDRE :
+
+  1. les TROIS marches du plan sont franchies (`propose -> classe -> decide`) par
+     les FONCTIONS de la porte qui les possede deja (`ajouter.fonctions`) : le
+     balayage ORCHESTRE, il ne redecide NI les transitions NI les listes fermees ;
+  2. ce que la regle ne couvre pas est DOUTEUX : NOMME, laisse en place, compte
+     dans le rapport. Les quatre refus du contrat de rotation qui concernent le
+     classement sont donc verifies AVANT de juger -- point plus recent que sa
+     source, source absente, zone hors perimetre, point introuvable ;
+  3. `--simuler oui` n'ecrit RIEN : ni BDD, ni disque. C'est le mode par lequel on
+     verifie ce qu'on s'apprete a faire, et il doit rester le premier reflexe.
+
+CE QUE LA PORTE NE FAIT PAS : elle ne deplace aucun fichier. L'acte appartient a
+la porte de rotation (`archiver --lot oui`), qui exige une decision deja tracee.
+Un balayage se juge donc sur ses DECISIONS, et l'archive sur son manifeste.
+"""
+from pathlib import Path
+
+from archiver.fonctions import (
+    hors_perimetre, motif_forme, origine_complete, points_sans_decision,
+)
+from balayer.fonctions import ordonner_familles, verdicts_de_famille
+from cible import resoudre
+from commun import charger_bdd, enregistrer_bdd, extraire_options
+from constants import CHEMIN_DOMICILE_FORME_BAK, REPERTOIRE_ARCHIVES
+from ajouter.fonctions import classer_entree, creer_entree, decider_entree
+
+NOMS_OPTIONS = ("simuler", "mission")
+TAGS = "balayer,purification,bak,rotation,regle"
+DEPART = Path(__file__).resolve().parent
+
+
+def _vrai(valeur):
+    return str(valeur).strip().lower() in ("oui", "true", "1", "vrai")
+
+
+def _points_sur_disque(donnees, motif):
+    """Les points de restauration PRESENTS sur le disque : les CIBLES et les JUMEAUX.
+
+    Le balayage a besoin de la FAMILLE ENTIERE pour savoir qui est remplace :
+    `points_sans_decision` rend les cibles (absentes de la BDD), et la BDD rend
+    les jumeaux DEJA juges dont la source existe encore. Sans ces jumeaux, un
+    point seul de sa famille serait declare `STRUCTUREL` alors qu'un plus recent
+    existe -- mesure MO-162 : le plus recent est celui du DISQUE, et un plus
+    recent deja archiver ne compte plus, sa source ayant quitte sa place.
+    """
+    points = set(points_sans_decision(donnees, DEPART))
+    for entree in donnees.get("elements", []):
+        source = str(entree.get("source", "")).replace("\\", "/")
+        if not source or not motif.search(source.split("/")[-1]):
+            continue
+        chemin, _ = resoudre(source, DEPART)
+        if chemin is not None and chemin.is_file():
+            points.add(source)
+    return sorted(points)
+
+
+def _doute(relatif):
+    """La raison de NE PAS juger ce point, ou "" s'il est jugeable.
+
+    L'ordre suit le contrat de rotation : le POINT, le PERIMETRE, la SOURCE, la
+    FRAICHEUR. Chaque raison est un FAIT mesure, jamais une supposition -- un
+    doute muet serait un angle mort, et un doute devine serait un mensonge.
+    """
+    chemin, _ = resoudre(relatif, DEPART)
+    if chemin is None or not chemin.is_file():
+        return "point introuvable sur le disque"
+    if hors_perimetre(chemin, DEPART):
+        return "zone hors perimetre (hors Matrice, ou zone du voisin Flux 1)"
+    origine, _ = resoudre(origine_complete(relatif), DEPART)
+    if origine is None or not origine.is_file():
+        return "source absente : le point serait le dernier chemin de restauration"
+    if chemin.stat().st_mtime_ns > origine.stat().st_mtime_ns:
+        return "point plus recent que sa source (seul temoin d'une ecriture en cours)"
+    return ""
+
+
+def _juger(donnees, relatif, categorie, verdict, plus_recent, mission):
+    """Franchit les TROIS marches pour un point. Rend (identifiant, refus).
+
+    Les fonctions appelees sont celles de la porte qui possede les transitions :
+    `creer_entree` pose `propose`, `classer_entree` pose `classe`,
+    `decider_entree` rend le verdict. Aucune de ces marches n'est reecrite ici.
+    """
+    origine = origine_complete(relatif).split("/")[-1]
+    if verdict == "conserver":
+        raison = ("Point de restauration LE PLUS RECENT de " + origine + " : aucun plus "
+                  "recent n'existe pour ce fichier, il sert au revert d'une modification "
+                  "en cours (regle du plan MO-094 : garder les N plus recents par fichier).")
+        preuve = ("regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier "
+                  "-- dernier temoin de " + origine + " avant sa version courante.")
+        destination = ""
+    else:
+        plus_recent_nom = plus_recent.replace("\\", "/").split("/")[-1]
+        raison = ("Point de restauration REMPLACE de " + origine + " : une version plus "
+                  "recente existe pour ce fichier. Regle du plan MO-094 : garder les N plus "
+                  "recents par fichier, archiver les versions depassees (jamais de "
+                  "suppression seche).")
+        preuve = ("regle de la famille (mesure MO-162) : REMPLACE par " + plus_recent_nom
+                  + ", qui reste EN PLACE -- ce point n'est plus le temoin d'une ecriture "
+                  "en cours.")
+        destination = REPERTOIRE_ARCHIVES + "/" + relatif.replace("\\", "/")
+
+    entree, message = creer_entree(donnees, {
+        "source": relatif, "categorie": categorie, "raison": raison,
+        "tags": TAGS, "mission": mission,
+    })
+    if entree is None:
+        return "", "proposer refuse : " + message
+    identifiant = entree["id"]
+    entree, message = classer_entree(donnees, identifiant, categorie, raison)
+    if entree is None:
+        return identifiant, "classer refuse : " + message
+    entree, message = decider_entree(donnees, identifiant, verdict, destination, preuve)
+    if entree is None:
+        return identifiant, "decider refuse : " + message
+    return identifiant, ""
+
+
+def executer(arguments):
+    options = extraire_options(arguments[1:], NOMS_OPTIONS)
+    simuler = _vrai(options.get("simuler", ""))
+    mission = options.get("mission", "")
+    donnees = charger_bdd()
+
+    motif = motif_forme()
+    if motif is None:
+        print("Refus : la forme du point de restauration est introuvable chez son "
+              "proprietaire (" + str(CHEMIN_DOMICILE_FORME_BAK) + "). Le balayage ne "
+              "DEVINE aucune forme : une forme redevinee derive en silence (L-100).")
+        return 2
+
+    cibles = points_sans_decision(donnees, DEPART)
+    if not cibles:
+        print("BALAYAGE : aucun point de restauration sans decision -- rien a classer.")
+        return 0
+
+    sur_disque = _points_sur_disque(donnees, motif)
+    verdicts = verdicts_de_famille(ordonner_familles(sur_disque))
+
+    juges = []
+    doutes = []
+    for relatif in cibles:
+        raison = _doute(relatif)
+        if raison:
+            doutes.append((relatif, raison))
+            continue
+        categorie, verdict, plus_recent = verdicts.get(relatif, ("", "", ""))
+        if not categorie:
+            doutes.append((relatif, "famille non ordonnable par la regle"))
+            continue
+        identifiant, refus = ("", "")
+        if not simuler:
+            identifiant, refus = _juger(donnees, relatif, categorie, verdict,
+                                        plus_recent, mission)
+        if refus:
+            doutes.append((relatif, refus))
+            continue
+        juges.append((relatif, categorie, verdict, identifiant))
+
+    print("BALAYAGE de la famille de rotation" + (" (SIMULATION)" if simuler else ""))
+    print("  points sans decision : " + str(len(cibles)))
+    print("  juges par la regle   : " + str(len(juges)))
+    print("  laisses en place     : " + str(len(doutes)) + " (douteux)")
+    print("")
+    for relatif, categorie, verdict, identifiant in juges:
+        marque = (identifiant + " ") if identifiant else ""
+        print("  " + marque + categorie + " -> " + verdict + "  " + relatif)
+    if doutes:
+        print("")
+        print("DOUTEUX (la regle ne les couvre pas : laisses EN PLACE, aucun verdict) :")
+        for relatif, raison in doutes:
+            print("  " + relatif)
+            print("      -> " + raison)
+
+    if simuler:
+        print("")
+        print("SIMULATION : aucune ecriture (ni BDD, ni disque).")
+        return 0
+    if juges:
+        empreinte = enregistrer_bdd(donnees)
+        print("")
+        print("BDD de conservation enregistree : " + str(len(juges)) + " element(s) "
+              "-- empreinte : " + empreinte[:16] + "...")
+        a_archiver = sum(1 for _, _, verdict, _ in juges if verdict == "archiver")
+        if a_archiver:
+            print("L'acte reste a la porte de rotation : " + str(a_archiver)
+                  + " element(s) a archiver (python main.py archiver --lot oui).")
+    return 0

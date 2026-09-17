@@ -57,6 +57,26 @@ if REPERTOIRE_OPTIMUS.name != "optimus-prime":
         "Structure inattendue : " + str(REPERTOIRE_OPTIMUS) + " n'est pas le dossier optimus-prime/"
     )
 
+# --- ANCRAGE (convention-chemins-liens-noms-flags, 1.1, 1.3 et 1.4) ---------
+# Mesure du 2026-09-17 (friction 80) : la cible `--fichier` etait resolue contre
+# le CWD, donc acceptee depuis la racine et refusee depuis le dossier de l outil.
+# La remontee est GARDEE par un marqueur stable (jamais un parents[N]), et le
+# motif racine est CONSOMME depuis son domicile (data/commun/), jamais recopie.
+BORNES_REMONTEE = 30
+REPERTOIRE_MATRICE = REPERTOIRE_SC
+for _ in range(BORNES_REMONTEE):
+    if (REPERTOIRE_MATRICE / "matrice" / "data" / "commun" / "racine.py").is_file():
+        break
+    REPERTOIRE_MATRICE = REPERTOIRE_MATRICE.parent
+else:
+    raise RuntimeError(
+        "Racine matrix/ introuvable en remontant (marqueur matrice/data/commun/racine.py)."
+    )
+
+REPERTOIRE_COMMUN = REPERTOIRE_MATRICE / "matrice" / "data" / "commun"
+sys.path.insert(0, str(REPERTOIRE_COMMUN))
+from cible import resoudre  # noqa: E402
+
 NOM_DOSSIER_PARC = "parcours"
 NOM_DOSSIER_THEMES = "themes"
 REPERTOIRE_THEMES = REPERTOIRE_OPTIMUS / NOM_DOSSIER_PARC / NOM_DOSSIER_THEMES
@@ -144,15 +164,15 @@ def juger_phase(code, sortie, erreur):
 
 
 def verifier_cible(fichier):
-    """(ok, motif) : refuser un vert sur une cible ABSENTE (decision pure sur le disque)."""
+    """(ok, motif) : refuser un vert sur une cible ABSENTE.
+
+    La cible est ANCREE par le domicile partage `cible.resoudre` : le cwd n est
+    jamais une base, et un refus NOMME les bases essayees (friction 80 / 77).
+    """
     if not fichier:
         return True, "aucune cible declaree : la chaine teste les six themes"
-    if Path(fichier).exists():
-        return True, "cible presente : " + str(fichier)
-    return False, (
-        "cible INTROUVABLE : " + str(fichier)
-        + " (aucune validation possible sur un fichier absent)"
-    )
+    chemin, motif = resoudre(fichier, REPERTOIRE_SC)
+    return chemin is not None, motif
 
 
 def executer_phases(fichier, mission, racine=REPERTOIRE_THEMES, verbeux=True):
@@ -337,11 +357,35 @@ def cmd_auto_test(args):
                   "code " + str(code_manquant) + ", accuses : " + (", ".join(accuses) or "(aucun)"),
                   resultats)
 
-    print("-- 4. une cible ABSENTE est refusee --")
+    print("-- 4. la CIBLE : ancree sur la racine, jamais sur le cwd --")
     cible_ok, motif_cible = verifier_cible("/chemin/qui/n/existe/pas.py")
     controler("cible absente refusee", not cible_ok, motif_cible, resultats)
     cible_ok, motif_cible = verifier_cible(str(REPERTOIRE_SC / "main.py"))
-    controler("cible presente acceptee", cible_ok, motif_cible, resultats)
+    controler("cible presente acceptee (chemin absolu)", cible_ok, motif_cible, resultats)
+
+    # Les DEUX formes RELATIVES reelles : racine du workspace, puis matrix/.
+    RELATIF_RACINE = "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-001-auto-xxx/main.py"
+    RELATIF_MATRICE = "_operateur/optimus-prime/super-combos/sc-001-auto-xxx/main.py"
+    for etiquette, relatif in (("relative a la racine", RELATIF_RACINE),
+                               ("relative a matrix/", RELATIF_MATRICE)):
+        cible_ok, motif_cible = verifier_cible(relatif)
+        controler("cible " + etiquette + " resolue", cible_ok, motif_cible, resultats)
+
+    # LA preuve qui manquait : la MEME cible relative, depuis un cwd ETRANGER.
+    # L ancien cobaye ne testait que des chemins ABSOLUS : le defaut de cwd ne
+    # pouvait donc PAS rougir dans son propre test (L-032 transpose).
+    with tempfile.TemporaryDirectory(prefix="cobaye-cwd-") as ailleurs:
+        programme = (
+            "import sys; sys.path.insert(0, " + repr(str(REPERTOIRE_SC)) + "); "
+            "import main; ok, motif = main.verifier_cible(" + repr(RELATIF_MATRICE) + "); "
+            "print(('OK ' if ok else 'KO ') + motif)"
+        )
+        essai = subprocess.run([sys.executable, "-c", programme],
+                               capture_output=True, text=True, cwd=ailleurs)
+        sortie = (essai.stdout or essai.stderr).strip()
+        controler("MEME cible relative depuis un AUTRE cwd",
+                  essai.returncode == 0 and sortie.startswith("OK "),
+                  sortie[:140] or "(aucune sortie)", resultats)
 
     echecs = [nom for nom, ok in resultats if not ok]
     print("")

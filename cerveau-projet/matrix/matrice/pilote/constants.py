@@ -59,6 +59,33 @@ CHEMIN_CLASSEUR_VARIABLES = REPERTOIRE_DATA / "classeur-variables.json"
 NOM_ETAT_PAUSE = "session-matrix-etat.json"
 CHEMIN_ETAT_PAUSE = REPERTOIRE_DATA / NOM_ETAT_PAUSE
 
+# ZONE DES FICHIERS JETABLES du cameleon (regle immuable perimetre-tmp) : le
+# PILOTE la VIDE a la cloture (MO-136), comme le pilote Optimus, et par le MEME
+# moteur (data/commun/zone_tmp.py) -- point 1 de la regle : chaque zone a SON
+# domicile, donc seule la zone change d'un flux a l'autre.
+NOM_ZONE_TMP = "tmp-cameleon"
+REPERTOIRE_ZONE_TMP = REPERTOIRE_MATRICE.parent / NOM_ZONE_TMP
+NOM_README_ZONE_TMP = "README.md"
+
+# Porte de la VUE du journal (M-079) : le pilote la regenere a la cloture, comme
+# le pilote Optimus regenere `suivi-optimus.md` (MO-136). La vue est une
+# PROJECTION derivee des BDD : la rafraichir ne cree jamais de doublon. Le
+# chemin est declare UNE fois ici (zero-valeur-en-dur), jamais recopie.
+CHEMIN_PORTE_JOURNAL = REPERTOIRE_DATA / "outils" / "journal-multi-encarts" / "main.py"
+
+# MOTEUR DE RECHERCHE (EO-131) : meme doctrine que le pilote Optimus -- le pilote
+# fournit la QUESTION au moment ou elle sert (le sujet de la mission) au lieu de
+# laisser l'agent y penser. Un seul module PARTAGE derive la question
+# (data/commun/recherche_mission.py) ; ici, le gabarit du FLUX 1 : il ne porte
+# AUCUNE option qui ouvrirait une zone interne (L-016) -- la recherche du
+# cameleon reste dans son perimetre, comme sa fiche le lui interdit.
+CHEMIN_MOTEUR_RECHERCHE = REPERTOIRE_DATA / "outils" / "rechercher" / "main.py"
+OPTIONS_MOTEUR_RECHERCHE = "--dans tous"
+GABARIT_COMMANDE_RECHERCHE = (
+    "python3 " + str(CHEMIN_MOTEUR_RECHERCHE)
+    + " rechercher --requete \"{question}\" " + OPTIONS_MOTEUR_RECHERCHE
+)
+
 BOITE_PILOTE_OUT = REPERTOIRE_INTERCOM / "pilote" / "outbox.jsonl"
 BOITE_MATRICE_IN = REPERTOIRE_INTERCOM / "matrice" / "inbox.jsonl"
 

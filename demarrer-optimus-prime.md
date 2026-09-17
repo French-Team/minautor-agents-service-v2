@@ -86,7 +86,13 @@ Tu recevras :
 2. Bank de themes : `_operateur/optimus-prime/parcours/themes/`.
 3. Bank d outils & combos : `_operateur/optimus-prime/super-combos/`.
 4. BDD des modifications : y noter chaque changement (jamais de
-   commentaires de modification dans les fichiers eux-memes).
+   commentaires de modification dans les fichiers eux-memes). TOUTE ECRITURE
+   passe par la PORTE `matrice/data/outils/ecrire` -- JAMAIS les outils natifs
+   (write_file, str_replace) : la porte depose un point de restauration `.bak`,
+   force LF, valide py_compile / JSON AVANT publication (un contenu invalide est
+   REFUSE et la cible reste intacte) et annonce l'ASCII ; ses options
+   `--contenu-fichier`, `--ancien-fichier` et `--nouveau-fichier` evitent le
+   shell (friction 74, MO-150 : 4 fichiers ecrits hors porte la veille).
 5. RITUEL DE MISSION (obligatoire, Flux 2) : a chaque mission que tu
    prends en charge :
    ```

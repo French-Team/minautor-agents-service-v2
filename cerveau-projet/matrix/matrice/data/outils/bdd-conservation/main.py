@@ -2,6 +2,9 @@
 import sys
 
 from ajouter.entry import executer as ajouter_executer
+from archiver.entry import executer as archiver_executer
+from balayer.entry import executer as balayer_executer
+from borne.entry import executer as borne_executer
 from lire.entry import executer as lire_executer
 from verifier.entry import executer as verifier_executer
 
@@ -9,7 +12,14 @@ COMMANDES = {
     "proposer": ajouter_executer,
     "classer": ajouter_executer,
     "decider": ajouter_executer,
+    "preciser": ajouter_executer,
+    "balayer": balayer_executer,
+    "archiver": archiver_executer,
+    "restaurer": archiver_executer,
+    "controler-archives": archiver_executer,
+    "controler-borne": borne_executer,
     "manifeste": lire_executer,
+    "lire": lire_executer,
     "verifier": verifier_executer,
 }
 
@@ -17,7 +27,8 @@ COMMANDES = {
 def principal(arguments):
     if not arguments or arguments[0] not in COMMANDES:
         print(__doc__)
-        print("Usage : proposer | classer | decider | lire | manifeste | verifier")
+        print("Usage : proposer | classer | decider | preciser | balayer | archiver | restaurer"
+              " | controler-archives | controler-borne | lire | manifeste | verifier")
         return 2
     return COMMANDES[arguments[0]](arguments)
 

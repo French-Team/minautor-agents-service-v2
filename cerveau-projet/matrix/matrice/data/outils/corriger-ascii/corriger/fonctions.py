@@ -5,6 +5,7 @@ from commun import (
     ecrire_texte_atomique,
     lire_texte,
     scanner_texte,
+    zones_hors_champ,
 )
 
 
@@ -32,6 +33,11 @@ def resumer_exemptions():
         "Fichiers examines : " + str(len(cibles)) + " reecrivables, "
         + str(len(exemptes)) + " exemptes de reecriture (jamais touches)."
     ]
+    hors_champ = zones_hors_champ()
+    if hors_champ:
+        lignes.append("Zones HORS CHAMP (jamais scannees, jamais reecrites) :")
+        for chemin, motif in hors_champ:
+            lignes.append("  HORS CHAMP [" + motif + "] " + chemin)
     if not exemptes:
         lignes.append("Aucun fichier exempte : le scan couvre tout le perimetre.")
         return lignes

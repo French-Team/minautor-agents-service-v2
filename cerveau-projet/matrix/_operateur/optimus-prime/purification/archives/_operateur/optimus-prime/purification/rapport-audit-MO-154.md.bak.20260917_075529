@@ -1,0 +1,103 @@
+---
+identite:
+  type: analyse
+  appartient_a: optimus-prime
+  commun: false
+  mission: MO-154
+  statut: valide
+---
+
+# RAPPORT D'AUDIT -- SUITE DE PURIFICATION, CASES 1 A 4 (MO-154)
+
+> Ce rapport porte les PREUVES des quatre premieres cases. Il est en LECTURE
+> SEULE : rien n'a ete deplace, rien n'a ete supprime, aucun element n'a bouge.
+> L'acte appartient a la case 7, par une porte, sur decision tracee.
+
+## CASE 1 -- DEMANDE (cadrage trace)
+
+Perimetre demande : les points de restauration `.bak.*` de `matrix/` ENTIER
+(`matrice/` = la Matrice, `_operateur/` = la zone privee de l'operateur), plus
+les archives du pilote, plus l'element cobaye de la BDD de conservation.
+Objectif chiffre : BORNER l'accumulation SANS RIEN PERDRE -- un verdict par
+element, l'acte par une porte dediee (jamais un `rm`), en gardant les N plus
+recents par source.
+
+Trace : evenement `decision` au journal suivi-optimus, mission MO-154,
+theme PURIFICATION (2026-09-17).
+
+## CASE 2 -- CARTOGRAPHIE (mesuree)
+
+| Mesure | Valeur (2026-09-17) |
+|---|---|
+| Points de restauration `.bak.*` | **148 fichiers**, **2,10 Mo** |
+| Sources distinctes | **74** (41 x 1 version, 19 x 2, 5 x 3, 5 x 4, 1 x 5, 1 x 7, 1 x 8, 1 x 14) |
+| Plage de dates | du 2026-09-06 16:29 au 2026-09-17 07:12 |
+| Par zone | `_operateur/optimus-prime/` 93 (1,69 Mo) · `matrice/data/` 43 · `matrice/pilote/` 8 · `tmp-cameleon/` 2 |
+| Famille la plus lourde | `_operateur/optimus-prime/pilote/commun.py` : **14 versions, 666 Ko** |
+| Sources disparues (orphelins) | **0** -- chaque `.bak` a encore sa source a restaurer |
+| Croissance par jour | 06/09 : 1 · 11/09 : 4 · 12/09 : 7 · 13/09 : 14 · 14/09 : 4 · 15/09 : 8 · **16/09 : 102** · 17/09 : 8 |
+
+Archives du pilote mesurees : `file-missions-legacy-archive.json` (107,2 Ko),
+`entonnoir-files-legacy-archive.json` (10,7 Ko), `cycle-historique-archive.json`
+(21,2 Ko), `file-missions-optimus-archive.json` (205,2 Ko),
+`file-missions-optimus-archive-doublons.json` (0 Ko), plus la copie Flux 1
+`matrice/pilote/cycle-historique-archive.json` (1,4 Ko).
+
+BDD de conservation AVANT cette mission : **1 element** (`K-001`, un cobaye de
+MO-095). La suite etait batie, jamais courue.
+
+## CASE 3 -- CLASSIFICATION (par la porte)
+
+Une entree par ELEMENT, posee par la porte `bdd-conservation proposer` (jamais
+une ecriture directe). **153 elements classes** :
+
+| Categorie | Nombre | Critere MESURE (jamais l'age seul : plan-conservation section 2) |
+|---|---|---|
+| STRUCTUREL | 73 | le point de restauration le PLUS RECENT de sa famille : c'est celui que la porte de revert sert encore |
+| OBSOLETE | 73 | une version plus recente du MEME fichier existe (preuve de remplacement), la source est presente |
+| HORS-PERIMETRE | 2 | les deux points de restauration de `tmp-cameleon/` (zone du cameleon, Flux 1) : SIGNALES, aucune ecriture |
+| HISTORIQUE | 2 | archives de l'ANCIEN format, memoire de la migration, plus lues par un flux actif |
+| VIVANT | 2 | archives LUES/ECRITES par un flux actif (`cycle-historique-archive.json` par le cycle des deux pilotes, `file-missions-optimus-archive.json` par le pilote et la porte suivi-optimus) |
+| ORPHELIN | 1 | `file-missions-optimus-archive-doublons.json` : aucun lecteur mesure, ne pas toucher avant contre-analyse |
+
+Cobayes de la BDD, requalifies et DITS : `K-001` (MO-095, categorie COBAYE) et
+`K-002` (cree par le test de forme de la porte pendant cette mission, categorie
+COBAYE) -- aucun des deux n'est un element reel.
+
+Etat de la BDD : **155 elements**, `verifier` OK.
+
+## CASE 4 -- AUDIT (lecture seule) : les ecarts
+
+| # | Ecart | Preuve mesuree | Gravite |
+|---|---|---|---|
+| **E1** | **Aucune porte de ROTATION/archivage pour la famille `.bak.*`** : la case 7 est BLOQUEE pour ces 146 elements (doctrine : toute execution passe par une porte). La rotation EXISTE pour une autre BDD (`bdd-usages/rotation/`) | article + le moteur partage `data/commun/rotation_journal.py` (archiver d'abord, archive dans le "deja connu", course refusee) | **haute** |
+| **E2** | L'exemption du contrat fondamental est bornee par la FORME (horodatage complet), pas par le VOLUME ni l'age : rien ne borne l'accumulation | `verifier-contrat-fondamental.py` l.60-65 + la croissance mesuree (102 fichiers en une journee) | **haute** |
+| **E3** | La porte `bdd-conservation` n'a AUCUN verbe de retrait/archivage d'une entree : les cobayes restent dans la BDD sans chemin de sortie | `COMMANDES` = proposer, classer, decider, manifeste, verifier | moyenne |
+| **E4** | (REFERME) `conservation.json` n'etait pas au registre d'integrite : il l'est depuis MO-146 | `routines/espion-integrite/constants.py` l.43 | -- |
+| **E5** | Le theme declare 9 redirects (`besoin`, `action`, `etapes`, `regle`) mais AUCUN champ PREUVE par case : le contrat des preuves vit dans `ETAT-SUITE-PURIFICATION.md`, pas dans le theme | lecture du theme (9 redirects, 4 champs) | mineure |
+| **E6** | La `DESCRIPTION.md` de la porte documente `main.py lire [--id K-XXX]`, verbe que la porte **n'a pas** : une fiche qui enseigne un verbe inexistant est un piege a agents (L-034) | DESCRIPTION l.13 vs `COMMANDES` (essai reel : la porte a rendu son usage) | moyenne |
+| **E7** | CONTRADICTION : la BDD porte `K-001` avec `verdict: conserver`, alors que `ETAT-SUITE-PURIFICATION.md` propose de l'ARCHIVER | `conservation.json` (K-001) vs ETAT (section arbitrage) | moyenne |
+| **E8** | 2 points de restauration vivent dans `tmp-cameleon/` (zone du cameleon, Flux 1) | cartographie (zone `tmp-cameleon/`) | signalement |
+| **E9** | Les `.bak` sont servis par le moteur de recherche quand ils ne derivent pas d'une zone declaree (chantier invisibilite, mesure MO-153) | residuel MO-153 | information |
+
+## CE QUI EST BLOQUE, ET PAR QUOI
+
+La suite ne peut pas avancer au-dela de la case 4 sur ce perimetre : la case 7
+(execution par porte) exige une porte de rotation qui n'existe pas (E1), et la
+case 6 (decision) exige un verdict par element, donc la case 5 (analyse
+contradictoire NEMESIS) avant tout acte.
+
+Chemin propose (pour la suite, PAS fait ici) : construire la porte de rotation
+de la famille sur le MOTEUR PARTAGE `data/commun/rotation_journal.py`, avec la
+borne declaree par le PROPRIETAIRE de la famille (celui qui ecrit les `.bak`),
+et refuser tout element qui n'a pas de verdict -- exactement la doctrine de la
+rotation des usages (MO-101).
+
+## ETAT DE FIN MO-154
+
+- Cases 1 a 4 faites, EN LECTURE SEULE : aucun deplacement, aucune suppression.
+- 153 elements classes par la porte ; BDD de conservation passee de 1 a 155
+  elements, `verifier` OK ; 2 cobayes requalifies et DITS.
+- 9 ecarts mesures avec preuve, dont 2 de gravite haute (E1, E2).
+- La suite de purification est desormais COURUE sur un perimetre reel -- elle
+  n'est plus seulement BATIE.

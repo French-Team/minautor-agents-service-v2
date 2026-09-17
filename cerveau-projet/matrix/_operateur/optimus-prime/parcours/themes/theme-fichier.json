@@ -10,6 +10,18 @@
     "but": "Traiter tout fichier de la Matrice sans jamais improviser : detecter le type, choisir l'action, appliquer la procedure dediee, produire les preuves, consigner en BDD",
     "redirects": [
       {
+        "besoin": "CHERCHER ce que le projet sait DEJA (moteur de recherche, EO-131)",
+        "action": "procedure",
+        "etapes": [
+          "AVANT d'ecrire : le pilote a injecte le champ `recherche` (sa `question` et sa `commande`) -- pose la commande telle quelle, elle est prete",
+          "python3 matrice/data/outils/rechercher/main.py rechercher --requete \"<question>\" --dans tous --prive   (le Flux 2 ouvre SA zone ; le Flux 1 s'en passe, L-016)",
+          "Trouver un fichier par son NOM : c'est `--prive` qui ouvre la zone de l'operateur -- sans lui, elle reste invisible (filtre L-016), et le moteur le DIT",
+          "La question injectee est derivee du SUJET : si elle rend du bruit, AFFINE-la avec les mots exacts du sujet -- la commande est un point de depart, pas un oracle",
+          "Un hit dit SUR QUOI il a matche : `sur: nom` (ligne 0 : c'est le NOM du fichier, pas une ligne) ou `sur: contenu`"
+        ],
+        "regle": "Le projet se souvient mieux que l'agent : re-decouvrir a la main ce qui est DEJA ecrit coute une mission. Le moteur est un REFLEXE, pas une option -- et il ne remplace jamais la lecture du fichier avant de le modifier."
+      },
+      {
         "besoin": "Toucher un fichier de la Matrice (entree du parcours)",
         "action": "procedure",
         "etapes": [

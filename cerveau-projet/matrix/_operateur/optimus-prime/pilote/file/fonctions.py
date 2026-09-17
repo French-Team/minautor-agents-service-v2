@@ -1,18 +1,27 @@
 """Fonctions simples de la categorie file : une seule tache chacune."""
 from commun import (
     armer_lot,
+    crier_mission_muette,
     defcon_bloque_theme,
     enregistrer_file,
+    fichiers_de_la_mission,
     horodater,
+    lire_bilan,
     noter_journal,
     noter_session,
     numero_id,
     prochain_id,
+    purger_zone_temporaire,
     rafraichir_vue_suivi,
     extraire_options,
     valider_theme,
 )
 from constants import PREFIXE_ID, STATUT_EN_ATTENTE, STATUT_TERMINEE
+
+# CONTRAT DE TRANSPORT des listes (frictions 72 et 73) : les listes du LOT (--theme
+# "t1,t2" et --type "dev,reparation") sont coupees par le MEME domicile que la
+# liste de fichiers du pilote, au lieu de recopier la virgule (M-076).
+from transport_listes import decouper_liste  # noqa: E402
 
 # Les TYPES de mission sont une liste FERMEE de l'entonnoir (EO-118) : le lot les
 # EXIGE au lieu de faire naitre des missions sans type, donc sans posture. Une
@@ -228,15 +237,21 @@ def enregistrer_mission(arguments, charger_file):
     Refus (aucune ecriture) : identifiant mal forme, identifiant deja present,
     champ obligatoire manquant, type HORS vocabulaire (s'il est donne).
     """
-    options = extraire_options(arguments, ("id", "theme", "objectif", "bilan", "type"))
+    options = extraire_options(
+        arguments, ("id", "theme", "objectif", "bilan", "bilan-fichier", "type"))
     identifiant = (options.get("id") or "").strip().upper()
     theme = options.get("theme", "")
     objectif = options.get("objectif", "")
-    bilan = options.get("bilan", "")
+    # Meme lecture que `fin` (EO-132) : le recit long peut venir d'un FICHIER,
+    # pour qu'aucun accent grave traverse par le shell ne le troue.
+    code_bilan, bilan, message_bilan = lire_bilan(options)
+    if code_bilan != 0:
+        print("REFUS : " + message_bilan)
+        return 2
     type_cible = (options.get("type") or "").strip().lower()
     if not identifiant or not theme or not objectif or not bilan:
         print('Usage : python main.py enregistrer --id MO-00X --theme <nom> '
-              '[--type <t>] --objectif "..." --bilan "..."')
+              '[--type <t>] --objectif "..." --bilan "..." | --bilan-fichier <chemin>')
         return 2
     numero = numero_id(identifiant)
     if numero is None:
@@ -296,9 +311,18 @@ def enregistrer_mission(arguments, charger_file):
     # `--si-absent oui` : elle n'ecrit la fin QUE si elle manque. Le drapeau
     # protege aussi le debut implicite (le garde anti-fin-orpheline ne se
     # declenche que s'il manque vraiment). Zero doublon, dans les DEUX sens.
+    fichiers_mission = fichiers_de_la_mission(identifiant)
     notes = [
-        noter_journal(identifiant, theme, "fin", bilan, si_absent=True),
+        noter_journal(identifiant, theme, "fin", bilan, si_absent=True,
+                      fichiers=fichiers_mission),
     ]
+    # Trace MUETTE (EO-130) : les DEUX clotures crient -- `fin` ET `enregistrer`.
+    # Une seule des deux laisserait la moitie des missions muettes en silence,
+    # exactement le trou qu'on ferme (friction 69, mesure MO-135/MO-138).
+    _code_muet, message_muet = crier_mission_muette(
+        {"id": identifiant, "theme": theme}, fichiers_mission)
+    if message_muet:
+        print(message_muet)
     # BDD sessions (MO-092) : la trace persistante entre sessions LLM.
     # Un fait = mission finie + theme : la reprise de la PROCHAINE session
     # relit cette entree au lieu de deviner ce qui a ete fait. Non bloquant.
@@ -311,6 +335,11 @@ def enregistrer_mission(arguments, charger_file):
         print("ALERTE BDD sessions : fait non trace (" + sortie_session[:120] + ").")
 
     rafraichir_vue_suivi()
+    # Zone jetable (MO-136) : le pilote VIDE la zone et le NOTE au marbre, sur ce
+    # chemin comme sur `fin` -- les DEUX clotures purgent (une seule suffirait a
+    # laisser une zone pleine quand la mission est menee hors file).
+    _code_purge, message_purge = purger_zone_temporaire({"id": identifiant, "theme": theme})
+    print("[PURGE] " + message_purge)
     print("Mission " + identifiant + " enregistree (terminee, hors file) -- compteur : "
           + str(file_missions["compteur"]) + ".")
     if not type_cible:
@@ -353,8 +382,8 @@ def charger_lot(arguments, charger_file):
     """
     options = extraire_options(arguments, ("theme", "objectif", "lot", "type"))
     nom_lot = options.get("lot", "")
-    themes = [t.strip() for t in options.get("theme", "").split(",") if t.strip()]
-    types = [t.strip().lower() for t in options.get("type", "").split(",") if t.strip()]
+    themes = decouper_liste(options.get("theme", ""))
+    types = [t.lower() for t in decouper_liste(options.get("type", ""))]
     objectifs = [o.strip() for o in options.get("objectif", "").split("|") if o.strip()]
     if not nom_lot or not themes or not objectifs or len(themes) != len(objectifs):
         print('Usage : python main.py charger --lot "nom" --theme "t1,t2" '

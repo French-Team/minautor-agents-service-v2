@@ -14,6 +14,12 @@ from commun import (
 )
 from constants import RACINE
 
+# Le contrat d invisibilite L-016/CV-006 (plancher + zones DECLAREES V-003 du
+# classeur) vit dans SON domicile : cette porte le CONSOMME (MO-152). Elle etait
+# la SEULE des quatre portes de lecture sans AUCUNE garde d invisibilite : la
+# zone suivi-optimus etait lisible alors que la decision M-084 l exclut.
+from invisibilite import refus_invisible  # noqa: E402
+
 
 def _afficher_resultat(chemin_relatif, lignes, total, lu, avec_hash, chemin_absolu, bom, fins, tranche):
     """Affiche UN fichier lu (en-tete + contenu tranche)."""
@@ -44,10 +50,16 @@ def _afficher_resultat(chemin_relatif, lignes, total, lu, avec_hash, chemin_abso
     return 0
 
 
-def lire_fichier(chemin_relatif, tranche, avec_hash):
+def lire_fichier(chemin_relatif, tranche, avec_hash, inclure_prive=False):
     """Lit UN fichier. Retourne code 0/1/2."""
     if not dans_perimetre(chemin_relatif):
         print("REFUS : hors perimetre lecture (matrix/ seul, allowlist AGENTS.md/demarrer-*.md) : " + chemin_relatif)
+        return 2
+    # Zone invisible L-016 (domicile) : fermee par defaut. Seule la Matrice ouvre
+    # par --prive ; le cameleon, lui, n ouvre jamais (regle 9 de sa fiche).
+    refus = refus_invisible(chemin_relatif)
+    if refus and not inclure_prive:
+        print(refus)
         return 2
     chemin_absolu = resoudre_chemin(chemin_relatif)
     if not chemin_absolu.exists():
@@ -80,17 +92,17 @@ def lire_fichier(chemin_relatif, tranche, avec_hash):
     return _afficher_resultat(chemin_relatif, lignes, total, lu, avec_hash, chemin_absolu, bom, fins, tranche)
 
 
-def lire_fichiers(chemins_relatifs, tranche, avec_hash):
+def lire_fichiers(chemins_relatifs, tranche, avec_hash, inclure_prive=False):
     """Lit N fichiers dans l'ordre fourni. Code = max des codes."""
     code_max = 0
     for chemin in chemins_relatifs:
-        code = lire_fichier(chemin, tranche, avec_hash)
+        code = lire_fichier(chemin, tranche, avec_hash, inclure_prive)
         if code > code_max:
             code_max = code
     return code_max
 
 
-def lire_dossier(chemin_relatif, tranche, avec_hash, filtre, recursif):
+def lire_dossier(chemin_relatif, tranche, avec_hash, filtre, recursif, inclure_prive=False):
     """Liste puis lit chaque fichier du dossier (perimetre verifie)."""
     if not dans_perimetre(chemin_relatif):
         print("REFUS : hors perimetre lecture : " + chemin_relatif)
@@ -116,7 +128,7 @@ def lire_dossier(chemin_relatif, tranche, avec_hash, filtre, recursif):
         except ValueError:
             rel = str(p)
         # Perimetre fichier par fichier (un fichier du dossier peut etre hors allowlist si lien).
-        code = lire_fichier(rel, tranche, avec_hash)
+        code = lire_fichier(rel, tranche, avec_hash, inclure_prive)
         if code > code_max:
             code_max = code
     return code_max

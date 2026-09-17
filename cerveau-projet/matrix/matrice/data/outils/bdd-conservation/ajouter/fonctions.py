@@ -15,10 +15,14 @@ def prochain_id(donnees):
     return PREFIXE_ID + str(maximum + 1).zfill(3)
 
 
+# CONTRAT DE TRANSPORT des listes (frictions 72 et 73) : la forme vit dans son
+# DOMICILE (data/commun/transport_listes.py) et cette porte la CONSOMME (M-076).
+from transport_listes import decouper_liste  # noqa: E402
+
+
 def separer_liste(texte):
-    if not texte:
-        return []
-    return [part.strip() for part in texte.split(",") if part.strip()]
+    """Transforme "a, b" en ["a", "b"] -- le separateur vient de son domicile."""
+    return decouper_liste(texte)
 
 
 def trouver(donnees, identifiant):
@@ -99,5 +103,81 @@ def decider_entree(donnees, identifiant, verdict, destination, preuve):
     entree["preuve"] = preuve
     entree["statut"] = "decide"
     entree["operation"] = "decider"
+    entree["date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return entree, ""
+
+
+def rejuger_entree(donnees, identifiant, raison):
+    """RE-OUVRE un element DECIDE, pour un re-jugement par la regle du jour.
+
+    EO-152 (mission MO-165). Mesure MO-164 : 16 points `STRUCTUREL` en trop dans
+    10 familles sur 88 -- et le compte GRANDIT a chaque ecriture, parce que
+    chaque point neuf devenait `STRUCTUREL` sans que l'ancien soit re-juge.
+    Le controle qui devait le voir rendait "EN ORDRE".
+    La cause n'etait pas la REGLE mais la MACHINE : le balayage ne traitait que
+    le point NEUF et le classement INACHEVE, jamais le point DEJA DECIDE
+    `STRUCTUREL` qu'un point plus recent vient de REMPLACER. Or la regle du
+    domicile couvre ce cas ("tout point REMPLACE est OBSOLETE") : un STRUCTUREL
+    DEPASSE est remplace. Il manquait la TRANSITION.
+
+    Cette transition est DECLAREE ici, chez le proprietaire des transitions
+    (meme fichier que `classer_entree` et `decider_entree`) : le balayage
+    l'ORCHESTRE, il ne la redecide pas.
+
+    Trois choix, tous mesures :
+
+      - elle refuse tout ce qui n'est pas `decide` -- on ne "re-juge" pas un
+        element qui n'a jamais ete juge (celui-la prend le chemin `propose`) ;
+      - elle VIDE le verdict et la destination : un element ne porte jamais deux
+        verites, et une destination sans verdict ferait archiver un point que
+        personne n'a decide d'archiver ;
+      - elle ramene a `classe`, c'est-a-dire dans un statut que `classer_entree`
+        et `decider_entree` acceptent. Si le re-jugement est INTERROMPU, l'element
+        retombe donc dans la population INACHEVE du balayage : le travail ne peut
+        pas se perdre en chemin (c'est le trou ferme par EO-147).
+
+    Elle ne decide RIEN : le verdict vient apres, par `decider_entree`. Une
+    transition qui decide serait une porte qui fait deux metiers.
+    """
+    entree = trouver(donnees, identifiant)
+    if entree is None:
+        return None, "Element inconnu : " + identifiant
+    if entree.get("statut") != "decide":
+        return None, "Re-jugement refuse : statut attendu decide"
+    if not raison:
+        return None, "Raison obligatoire"
+    entree["statut"] = "classe"
+    entree["verdict"] = ""
+    entree["destination"] = ""
+    entree["raison"] = raison
+    entree["operation"] = "rejuger"
+    entree["date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return entree, ""
+
+
+def preciser_entree(donnees, identifiant, preuve, raison):
+    """CORRIGE la preuve (et la raison) d une decision deja rendue.
+
+    Ajout MO-156 : une porte qui ferme une decision sans permettre de corriger
+    sa preuve oblige a porter une PREUVE FAUSSE ou a ecrire le JSON a la main
+    (contournement interdit par le plan). La correction est donc un verbe de la
+    porte. Elle ne touche NI la categorie, NI le statut, NI le verdict : elle
+    REMPLACE la preuve, trace l operation et la date. Refus si la preuve est
+    vide, si l element n est pas decide, ou si rien ne change (pas d ecriture
+    inutile).
+    """
+    entree = trouver(donnees, identifiant)
+    if entree is None:
+        return None, "Element inconnu : " + identifiant
+    if entree.get("statut") != "decide":
+        return None, "Precision refusee : statut attendu decide"
+    if not preuve:
+        return None, "Preuve obligatoire"
+    if preuve == entree.get("preuve") and (not raison or raison == entree.get("raison")):
+        return None, "Precision refusee : aucun changement"
+    entree["preuve"] = preuve
+    if raison:
+        entree["raison"] = raison
+    entree["operation"] = "preciser"
     entree["date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return entree, ""

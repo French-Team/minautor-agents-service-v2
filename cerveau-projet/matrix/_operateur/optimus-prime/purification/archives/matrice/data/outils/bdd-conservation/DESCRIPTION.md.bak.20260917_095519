@@ -1,0 +1,102 @@
+# OUTIL -- bdd-conservation
+
+> Registre de conservation de toute la Matrice v3. Genere depuis le moule
+> outil-bdd puis renforce par MO-095 avec des portes de classement et de
+> decision. Cette BDD prepare l archivage reversible ; elle ne supprime rien.
+
+## Portes
+
+```
+python main.py proposer --source <chemin> --categorie <categorie> --raison <raison> --tags <a,b> [--mission MO-XXX]
+python main.py classer --id K-XXX --categorie <categorie> --raison <raison>
+python main.py decider --id K-XXX --verdict <conserver|archiver|reparer|dette|signaler> --preuve <preuve> [--destination <chemin>]
+python main.py preciser --id K-XXX --preuve <nouvelle preuve> [--raison <nouvelle raison>]
+python main.py balayer [--simuler oui] [--mission MO-XXX]
+python main.py archiver --id K-XXX [--simuler oui]
+python main.py archiver --lot oui [--simuler oui]
+python main.py restaurer --id K-XXX [--simuler oui]
+python main.py controler-archives
+python main.py lire [--id K-XXX] [--categorie X] [--statut X] [--verdict X] [--tag X]
+python main.py manifeste
+python main.py verifier
+```
+```
+
+## Categories fermees
+
+`VIVANT`, `STRUCTUREL`, `GENERE`, `HISTORIQUE`, `OBSOLETE`, `COBAYE`,
+`ORPHELIN`, `HORS-PERIMETRE`.
+
+## Statuts fermes
+
+`propose`, `classe`, `decide`, `archive`, `conserve`, `repare`, `dette`,
+`signale`, `restaure`.
+
+## Schema d une entree
+
+Chaque entree porte :
+
+`id`, `date`, `mission`, `source`, `destination`, `categorie`, `statut`,
+`verdict`, `raison`, `lecteurs`, `ecrivains`, `index`, `sha_avant`,
+`sha_apres`, `octets_avant`, `octets_apres`, `lignes_avant`, `lignes_apres`,
+`restaurable`, `operation`, `archive`, `preuve`, `tags`.
+
+## Protections
+
+- Prefixe d identifiant `K-` et numerotation max+1.
+- Categories, statuts et verdicts en listes fermees.
+- Transition obligatoire `propose -> classe -> decide`.
+- `archiver` exige une destination et une preuve.
+- La preuve d une decision reste CORRIGEABLE par `preciser` : la correction ne
+  touche NI la categorie, NI le statut, NI le verdict (aucune re-decision).
+- Source, raison et tags obligatoires.
+- Ecriture atomique LF et empreinte SHA-256.
+- Verification structurelle et cryptographique.
+- Aucune porte de suppression.
+- L execution d une archive passe par la PORTE DE ROTATION (case 7) : un
+  element sans decision ne bouge JAMAIS.
+
+## Porte de ROTATION (MO-160, cases 7 et 8)
+
+```text
+demande -> cartographie -> classification -> audit -> contre-analyse
+        -> decision -> EXECUTION PAR PORTE -> VERIFICATION
+```
+
+`archiver` EXECUTE une decision deja tracee (statut `decide`, verdict
+`archiver`). Sa surete vient du moteur PARTAGE `data/commun/rotation_journal.py`
+(MO-101) : ARCHIVER D ABORD (copier, verifier la copie, puis retirer la source),
+l archive dans le DEJA CONNU (idempotence), une COURSE SE REFUSE (jamais ecraser).
+
+### Les 5 refus du contrat de rotation
+
+1. jamais un point PLUS RECENT que sa source ;
+2. jamais le DERNIER point d une source ABSENTE ;
+3. jamais une FORME NON CONFORME (SIGNALER, ne pas absorber) ;
+4. jamais une ZONE HORS PERIMETRE (hors Matrice, ou zone du voisin Flux 1) ;
+5. jamais DEUX FOIS le meme element (idempotence).
+
+Protections du plan (section 5) : aucun element sans decision, aucune
+destination occupee par un contenu DIFFERENT, aucun point introuvable.
+
+### Manifeste, origine et verification
+
+- `archiver --lot oui` mesure d abord l ORIGINE (temoin : `temoin-avant.json`,
+  les points de restauration de la BDD avec leur sha et leurs octets), PUIS
+  deplace. Chaque element archive ajoute UNE ligne au manifeste append-only
+  `manifeste-archives.jsonl` (source, destination, sha avant/apres, octets,
+  lignes, restaurable, preuve).
+- Les points presents sur le disque SANS decision sont SIGNALES, jamais
+  deplaces.
+- `controler-archives` verifie `archive + actif = origine` (aucun octet perdu,
+  aucune duplication) et que chaque archive vit dans une ZONE INVISIBLE
+  declaree.
+- `restaurer` PROUVE la reversibilite : la source est recopiee depuis l archive
+  (l archive reste en place, comme preuve).
+
+### Domicile de l archive
+
+`_operateur/optimus-prime/purification/archives/<chemin source en miroir>` --
+dans la Matrice, sous `_operateur` (PLANCHER du domicile d invisibilite), donc
+une zone que le cameleon ne lit JAMAIS : l archive contient du CONTENU INTERNE
+(contre-analyse MO-156).

@@ -18,11 +18,21 @@ from constants import (
     TAGS_PERIMETRE,
 )
 
+# CONTRAT DE TRANSPORT des listes (frictions 72 et 73) : le perimetre-cameleon est
+# une LISTE DE CHEMINS stockee JOINTE dans le classeur -- le joignant (ci-dessous)
+# et ses DEUX coupants consomment le MEME domicile (M-076) au lieu de recopier la
+# virgule : un chemin qui en contient une serait relu en DEUX zones.
+from transport_listes import (  # noqa: E402
+    SEPARATEUR_LISTE,
+    decouper_liste,
+    joindre_liste,
+)
+
 
 def normaliser_zones(brut):
     """Retourne la liste des zones exclues (separees par des virgules), nettoyee."""
     zones = []
-    for morceau in str(brut).split(","):
+    for morceau in decouper_liste(brut):
         zone = morceau.strip().strip("/")
         if zone and zone not in zones:
             zones.append(zone)
@@ -62,5 +72,12 @@ def ecrire_perimetre(zones):
     a la porte est la chaine vide, que la porte accepte pour la mise a
     jour d'une cle existante (decision MO-093).
     """
-    valeur = ",".join(zones)
+    valeur, refus = joindre_liste(zones)
+    if refus:
+        # Le perimetre est une LISTE DE CHEMINS : un nom qui contient le
+        # separateur serait relu en DEUX zones. On ne devine pas, on REFUSE et
+        # on NOMME -- ecrire un perimetre faux serait pire que ne rien ecrire.
+        return ("REFUS transport : " + str(len(refus)) + " zone(s) contiennent le separateur de "
+                "liste '" + SEPARATEUR_LISTE + "' et ne peuvent pas etre portees par le classeur "
+                "(elles seraient relues en DEUX zones) : " + " | ".join(refus))
     return deleguer_definir(CLE_PERIMETRE, valeur, RAISON_PERIMETRE, TAGS_PERIMETRE)

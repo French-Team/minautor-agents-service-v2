@@ -26,7 +26,7 @@ python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fic
 | LF non forces (L-001) | **LF forces** (`newline="\n"`, normalise CRLF/CR) |
 | Pas de .bak (pas de revert proto-2) | **.bak horodate** si fichier existait (revert possible) |
 | Pas de SHA | **SHA-256 avant/apres** annonce (preuve disque) |
-| Pas de validation syntaxe | **py_compile** (.py) et **json** (.json) auto, alerte code 1 mais fichier garde + bak |
+| Pas de validation syntaxe | **py_compile** (.py) et **json** (.json) VALIDES AVANT publication : un contenu invalide est REFUSE (code 1) et la cible reste INTACTE (EO-129) |
 | Hors perimetre possible | **Refuse hors `matrix/`** (sauf allowlist `AGENTS.md`/`demarrer-*.md`), code 2 |
 | str_replace fragile whitespace | **Occurrence unique imposee** (0 ou >1 = REFUS code 2, message explicite) |
 | Pas d'ASCII | **ASCII signale** (nb non-ASCII + lignes) |
@@ -48,8 +48,8 @@ python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fic
 - Mode ferme (`creer|remplacer|ajouter`) -- inconnu = code 2.
 - `creer` refuse si existe (code 2).
 - `editer` : 0 occurrence = code 2, >1 = code 2 (unique).
-- Validation : `.py` via `py_compile`, `.json` via `json.load` (code 1 si echoue, mais ecrit + bak).
-- Ecriture atomique : `tmp` puis `os.replace`, LF forces.
+- Validation : `.py` via `py_compile`, `.json` via `json.load`, faite sur le TEMPORAIRE **AVANT** le remplacement. Echec = code 1, RIEN n'est ecrit, la cible est INTACTE (EO-129 : avant, la porte publiait d'abord et un fichier invalide restait en place).
+- Ecriture atomique : `tmp`, VALIDATION, puis `os.replace`, LF forces (le temporaire est retire si le contenu est refuse).
 
 ## Benchmark (critere GO MO-002)
 

@@ -29,7 +29,13 @@ Rejoue : PRE-VOL (integrite + activite/frictions + remorque)
 + CHEMINS (aucun `parents[N]` nu, la racine se DETECTE par marqueur, MO-088)
 + CARTES D'IDENTITE (tout document dit QUOI il est, MO-089)
 + ROLES (chaque type a une POSTURE reelle du vivier, et le pilote l'INJECTE,
- MAILLON 2/5 de la revision).
+ MAILLON 2/5 de la revision)
++ RECHERCHE (le pilote INJECTE la question au moteur, une seule derivation
+ partagee, deux chemins par flux, le Flux 1 jamais ouvert, EO-131)
++ FICHE (courte sous un PLAFOND declare, roles et parcours NOMMES, et AUCUNE
+ regle immuable perdue dans l'allegement, EO-124)
++ RATTRAPAGE (le pilote COMBLE a chaque cloture les fichiers notes au DOMICILE et
+ muets au journal, AVANT la vue qui ne lit que le journal, EO-133).
 Verdict OK/KO. code 0 = OK, code 1 = KO.
 
 Bloquants : le controle des PREFIXES du contrat fondamental (CV-009/CV-011) et,
@@ -610,6 +616,75 @@ def main():
                           if l.strip().startswith("ECART")]
                 ko.append(verbe + ": " + ("; ".join(ecarts) if ecarts
                                           else "voir verifier-contrat-fondamental.py"))
+
+    # 24. RECHERCHE (EO-131) : le pilote INJECTE la question a poser au moteur,
+    #     au moment ou elle sert -- le sujet de la mission. Sans ce maillon, le
+    #     moteur redevient ce qu'il etait avant MO-138 : une CAPACITE que personne
+    #     n'utilise, donc une fonctionnalite morte (un moteur qu'il faut penser a
+    #     lancer est un moteur eteint). Le garde exige UNE derivation partagee
+    #     (deux copies divergeraient, L-029), les DEUX chemins d'injection par flux
+    #     (simple ET lot), et que le Flux 1 ne recoive JAMAIS l'option qui ouvre
+    #     une zone interne (L-016).
+    print("== 24. recherche (le pilote injecte la question) ==")
+    garde_recherche = outils / "verifier-recherche.py"
+    if not garde_recherche.is_file():
+        print("  recherche: ABSENT")
+        ko.append("manquant: verifier-recherche.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_recherche), "--racine", str(zone.parent.parent)],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        print(f"  recherche: {etat}")
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines()
+                      if l.strip().startswith(("[KO", "ECART"))]
+            ko.append("recherche: " + ("; ".join(ecarts) if ecarts else "voir verifier-recherche.py"))
+
+    # 25. FICHE (EO-124) : ma fiche doit rester COURTE -- c'est le createur qui l'a
+    #     demande, et la raison est de fond : une fiche qui verse tout au demarrage
+    #     rend l'agent instable et lui fait perdre, a la fin, ce qu'il devait faire.
+    #     Mais une fiche qu'on allege sans garde perd des regles en silence : ce
+    #     maillon tient les DEUX bouts -- un PLAFOND declare, et la COUVERTURE de
+    #     toutes les regles immuables (aucune perdue). Sans lui, la fiche regrossit
+    #     ligne par ligne, ou maigrit en oubliant une regle : personne ne le voit.
+    print("== 25. fiche (courte, et aucune regle perdue) ==")
+    garde_fiche = outils / "verifier-fiche.py"
+    if not garde_fiche.is_file():
+        print("  fiche: ABSENT")
+        ko.append("manquant: verifier-fiche.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_fiche), "--racine", str(zone.parent.parent)],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        print(f"  fiche: {etat}")
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines()
+                      if l.strip().startswith(("[KO", "ECART"))]
+            ko.append("fiche: " + ("; ".join(ecarts) if ecarts else "voir verifier-fiche.py"))
+
+    # 26. RATTRAPAGE (EO-133) : la vue ne lit QUE le journal -- une modification
+    #     notee au DOMICILE apres la cloture d'une mission n'y apparait donc JAMAIS
+    #     (mesure : 576 fichiers sur 80 missions invisibles, il a fallu les recrire
+    #     a la main). Le createur a tranche : c'est le PILOTE qui comble le trou a
+    #     chaque cloture, la vue restant un rendereur. Ce maillon exige que le
+    #     rattrapage DETECTE les trous, ne DOUBLE jamais, se TAISE proprement quand
+    #     il ne peut pas lire, et tourne AVANT l'entretien de la vue -- un
+    #     rattrapage place apres elle ne serait visible qu'au tour suivant.
+    print("== 26. rattrapage (le pilote comble les fichiers non traces) ==")
+    garde_rattrapage = outils / "verifier-rattrapage.py"
+    if not garde_rattrapage.is_file():
+        print("  rattrapage: ABSENT")
+        ko.append("manquant: verifier-rattrapage.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_rattrapage),
+                            "--racine", str(zone.parent.parent)],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        print(f"  rattrapage: {etat}")
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines()
+                      if l.strip().startswith(("[KO", "ECART"))]
+            ko.append("rattrapage: " + ("; ".join(ecarts) if ecarts else "voir verifier-rattrapage.py"))
 
     if ko:
         print(f"\nVERDICT KO : {len(ko)} echec(s) :")

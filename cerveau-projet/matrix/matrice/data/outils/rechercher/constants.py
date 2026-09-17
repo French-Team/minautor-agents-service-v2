@@ -114,5 +114,26 @@ FICHIER_PAR_SOURCE = {
 INDEX_SQLITE = "index-recherche.sqlite"
 INDEX_EMPREINTE = "index-recherche.sqlite.sha256"
 
-NOMS_OPTIONS_RECHERCHER = ("requete", "dans", "tag", "mot-cle", "source", "periode", "json", "limite")
+# Options DRAPEAU : presentes ou absentes, jamais suivies d'une valeur. Leurs
+# NOMS sont declares ici et CONSOMMES par extraire_options -- la liste vivait
+# recopiee dans la logique, donc chaque option ajoutee pouvait l'oublier.
+NOM_OPTION_JSON = "json"
+# `--prive` (EO-126) : INCLUT les zones invisibles L-016 dans le scan des
+# FICHIERS, sinon le moteur est AVEUGLE dans la maison de son propre operateur
+# (mesure du 2026-09-16 : POSTURE_PAR_TYPE = 0 resultat, alors que la valeur
+# n'existe QUE dans _operateur/.../personnalites.py). Le drapeau est EXPLICITE et
+# BORNE : sans lui le defaut ne bouge pas d'un pouce, donc le cameleon ne voit
+# rien de plus. Il est reserve a la fenetre privee d'Optimus (cockpit, route
+# /chercher), jamais a un appel qui pourrait fuir vers le flux 1.
+NOM_OPTION_PRIVE = "prive"
+NOMS_OPTIONS_DRAPEAU = (NOM_OPTION_JSON, NOM_OPTION_PRIVE, "indexer", "forcer")
+
+# Un hit dit SUR QUOI il a matche : un NOM de fichier n'est pas une LIGNE de
+# contenu (EO-126). Sans ce champ, une sortie machine ne peut pas distinguer les
+# deux et son lecteur croit a une ligne -- numereo 0 comprise.
+SUR_NOM = "nom"
+SUR_CONTENU = "contenu"
+
+NOMS_OPTIONS_RECHERCHER = ("requete", "dans", "tag", "mot-cle", "source", "periode",
+                           NOM_OPTION_JSON, NOM_OPTION_PRIVE, "limite")
 NOMS_OPTIONS_INDEXER = ("forcer",)

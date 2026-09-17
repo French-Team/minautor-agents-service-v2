@@ -27,6 +27,12 @@ stats_frictions = _fonc.stats_frictions
 filtres_disponibles = _fonc.filtres_disponibles
 statuts_pour = _fonc.statuts_pour
 STATUT_ACTIVE = _fonc.STATUT_ACTIVE
+# Les AUTRES colonnes et la demande d'archivage viennent du meme domicile
+# (friction 48 : la porte les enumerait en dur). MO-130.
+TYPES = _fonc.TYPES
+GRAVITES = _fonc.GRAVITES
+FREQUENCES = _fonc.FREQUENCES
+DEMANDES_ARCHIVAGE = _fonc.DEMANDES_ARCHIVAGE
 
 
 # Racine matrix/ DETECTEE par le marqueur partage (M-076 : matrice/data/commun/racine.py),
@@ -62,9 +68,9 @@ def run(commande, args):
 def cmd_ajouter(args):
     parser = argparse.ArgumentParser(description="Ajouter une friction")
     parser.add_argument("phrase", help="Phrase complete: Quand <situation>, <probleme>, car <cause>")
-    parser.add_argument("--type", required=True, choices=["ordre", "outil", "theme", "protocole", "combo", "regle", "convention"])
-    parser.add_argument("--gravite", required=True, choices=["mineure", "majeure", "bloquante"])
-    parser.add_argument("--frequence", required=True, choices=["ponctuelle", "recurrente"])
+    parser.add_argument("--type", required=True, choices=list(TYPES))
+    parser.add_argument("--gravite", required=True, choices=list(GRAVITES))
+    parser.add_argument("--frequence", required=True, choices=list(FREQUENCES))
     parser.add_argument("--mission-id", help="ID de la mission (optionnel)")
     parsed = parser.parse_args(args)
 
@@ -122,7 +128,9 @@ def cmd_lister(args):
 def cmd_archiver(args):
     parser = argparse.ArgumentParser(description="Archiver une friction")
     parser.add_argument("--id", type=int, required=True)
-    parser.add_argument("--statut", required=True, choices=["valide", "annule"])
+    parser.add_argument("--statut", required=True, choices=list(DEMANDES_ARCHIVAGE),
+                        help="Demande d'archivage (statuts REELS stockes : "
+                             + ", ".join(DEMANDES_ARCHIVAGE.values()) + ")")
     parser.add_argument("--raison", default="")
     parsed = parser.parse_args(args)
 

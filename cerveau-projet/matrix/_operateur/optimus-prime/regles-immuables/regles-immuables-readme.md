@@ -26,6 +26,7 @@ identite:
 | Action minimale (anti code fantome) | action-minimale.md |
 | L attente ne prouve rien (une preuve se LIT) | attente-ne-prouve-rien.md |
 | Suivi d optimus-prime toujours a jour (debut/fin declares, vue regeneree) | suivi-optimus-marbre.md |
+| Les demandes du createur entrent dans l entonnoir (depot, source, classement, sortie des items resolus) | entonnoir-des-demandes.md |
 
 Sources : fiche optimus-prime.md (REGLES ABSOLUES) + matrix/docs/IMPERATIF.md
 + lecon du createur du 2026-09-06 (langue).

@@ -33,6 +33,7 @@ cote sous des noms libres, sans moyen de les distinguer).
 |---|---|---|---|
 | `sc-001` | `super-combos/sc-001-auto-xxx/` | Enchainement intelligent des themes AUTO-XXX (6 phases) | AUTO-XXX |
 | `sc-002` | `super-combos/sc-002-auto-evolution/` | Orchestration complete du cycle auto-evolution (detecter -> qualifier -> cibler -> modifier -> valider) | AUTO-EVOLUTION |
+| `sc-003` | `super-combos/sc-003-auto-suivi/` | Entretien de la trace d'Optimus (coherence -> verifier -> vue + rapport) -- lance par le pilote a chaque cloture | SUIVI |
 
 Lancement par numero : `python lancer-super-combos.py --numero sc-001` (le lanceur
 vit ICI, avec ses objets : il lit le `registry.json` pose a cote de lui)
@@ -58,6 +59,16 @@ vers `sc-001` -- la forme canonique est en minuscules, regle CV-009)
 > pas le meme metier. `sc-001` a UNE entree (`executer`) ; `sc-002` est un cycle a
 > phases dont "executer" ne veut rien dire -- imposer ce verbe aurait fabrique un
 > verbe FAUX (le contrat doit dire la verite de l'objet).
+>
+> `sc-003-auto-suivi` (2026-09-16) : troisieme cas. Il a UNE entree naturelle
+> (`executer`, la chaine d'entretien de la trace) ET une entree COURTE (`rapide`,
+> coherence + vue) que le PILOTE lance a chaque cloture de mission. Le registre
+> porte donc `verbe: "executer"` -- le lanceur lance la chaine complete par
+> defaut -- et les DEUX verbes dans `verbes`, pour que le pilote demande la passe
+> legere. Son `auto-test` compare d'ailleurs les verbes du REGISTRE et ceux de son
+> propre code : deux listes vivent separement, l'auto-test refuse qu'elles
+> divergent (une liste qui oublie le code fabrique un objet inlancable, une liste
+> qui oublie le registre passe sous le radar du lanceur).
 
 Lancement :
 
@@ -65,6 +76,8 @@ Lancement :
 python lancer-super-combos.py --numero sc-001 [--verbe status] [--fichier <f>] [--mission <id>]
 python lancer-super-combos.py --numero sc-001 --verbe auto-test
 python lancer-super-combos.py --numero sc-002 --verbe detecter "Quand X, Y, car Z" --type outil --gravite mineure --frequence ponctuelle
+python lancer-super-combos.py --numero sc-003                 (chaine d'entretien de la trace : coherence -> verifier -> vue)
+python lancer-super-combos.py --numero sc-003 --verbe rapide  (passe de fin de mission, lancee par le pilote)
 ```
 
 ### sc-001 : ce qu'une phase TESTE vraiment (reparation 2026-09-14)

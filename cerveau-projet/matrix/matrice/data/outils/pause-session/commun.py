@@ -26,6 +26,11 @@ from constants import (
     ZONE_MAINTENANCE,
 )
 
+# CONTRAT DE TRANSPORT des listes (frictions 72 et 73) : le perimetre lu ici est la
+# MEME liste que celle ecrite par la categorie perimetre -- les deux bouts
+# consomment le domicile au lieu de recopier la virgule (M-076).
+from transport_listes import decouper_liste  # noqa: E402
+
 
 def horodater():
     """Retourne la date-heure locale au format des journaux Matrice."""
@@ -178,7 +183,7 @@ def lire_perimetre():
             for variable in donnees.get("variables", ()):
                 if variable.get("cle") == CLE_PERIMETRE:
                     brut = variable.get("valeur", "")
-                    zones = [z.strip() for z in str(brut).split(",") if z.strip()]
+                    zones = decouper_liste(brut)
         except (json.JSONDecodeError, OSError):
             zones = []
     if ZONE_MAINTENANCE in zones:

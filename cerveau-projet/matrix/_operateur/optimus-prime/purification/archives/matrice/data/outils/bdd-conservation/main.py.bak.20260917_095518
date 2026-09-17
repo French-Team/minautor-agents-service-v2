@@ -1,0 +1,36 @@
+"""Point d entree global de l outil bdd-conservation."""
+import sys
+
+from ajouter.entry import executer as ajouter_executer
+from archiver.entry import executer as archiver_executer
+from balayer.entry import executer as balayer_executer
+from lire.entry import executer as lire_executer
+from verifier.entry import executer as verifier_executer
+
+COMMANDES = {
+    "proposer": ajouter_executer,
+    "classer": ajouter_executer,
+    "decider": ajouter_executer,
+    "preciser": ajouter_executer,
+    "balayer": balayer_executer,
+    "archiver": archiver_executer,
+    "restaurer": archiver_executer,
+    "controler-archives": archiver_executer,
+    "manifeste": lire_executer,
+    "lire": lire_executer,
+    "verifier": verifier_executer,
+}
+
+
+def principal(arguments):
+    if not arguments or arguments[0] not in COMMANDES:
+        print(__doc__)
+        print("Usage : proposer | classer | decider | preciser | archiver | restaurer"
+              " | controler-archives | lire | manifeste | verifier")
+        return 2
+    return COMMANDES[arguments[0]](arguments)
+
+
+if __name__ == "__main__":
+    from sac_a_dos import envelopper
+    sys.exit(envelopper(principal, sys.argv[1:]))
