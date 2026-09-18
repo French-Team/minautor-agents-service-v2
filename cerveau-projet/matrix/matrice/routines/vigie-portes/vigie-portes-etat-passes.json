@@ -1,19 +1,19 @@
 {
-  "portes": 33,
-  "notables": 8,
-  "signature": "183135ac261579167a10e2c578a0eb31980f2a48971f5fda967f88e02bb11126",
-  "date": "2026-09-18 08:28:27",
-  "alertes": 22,
+  "portes": 34,
+  "notables": 9,
+  "signature": "2fcc39db9e5b5dcd6f11198bb37157945e58b1893a2097ff5610c592a338b9b7",
+  "date": "2026-09-18 19:50:15",
+  "alertes": 23,
   "motif": "deja-signale",
   "mode": "absorbee",
-  "signature_passe": "{\"notables\": 8, \"portes\": 33, \"signature\": \"183135ac261579167a10e2c578a0eb31980f2a48971f5fda967f88e02bb11126\"}",
-  "passes_absorbes": 97,
-  "derniere_ecriture": "2026-09-17 07:55:44",
+  "signature_passe": "{\"notables\": 9, \"portes\": 34, \"signature\": \"2fcc39db9e5b5dcd6f11198bb37157945e58b1893a2097ff5610c592a338b9b7\"}",
+  "passes_absorbes": 42,
+  "derniere_ecriture": "2026-09-18 09:13:54",
   "dernieres_passes": [
-    "2026-09-18 07:27:48",
-    "2026-09-18 07:42:58",
-    "2026-09-18 07:58:08",
-    "2026-09-18 08:13:18",
-    "2026-09-18 08:28:27"
+    "2026-09-18 18:49:38",
+    "2026-09-18 19:04:47",
+    "2026-09-18 19:19:56",
+    "2026-09-18 19:35:05",
+    "2026-09-18 19:50:15"
   ]
 }

@@ -2076,8 +2076,56 @@
       "bilan": "MO-121 (AUTO-EVOLUTION) terminee : contrat ECRIT/LU aligne -- domicile unique du vocabulaire (data/commun/trace_session.py), categorie etat (lecture bornee), ouvrir_session au demarrage (jamais double), garde de retard qui DIT le retard sur session fermee, fin du faux 'BDD vide'. Cobaye 18/18 (5 pieges), preuve vivante 'session deja ouverte : rien a doubler' (56 -> 56 entrees), 0 ecart au contrat fondamental, ASCII sain, remorque 85. Friction 41 validee ; friction 42 notee (les .bak de ecrire hors zone).",
       "hors_file": true,
       "type": "dev"
+    },
+    {
+      "id": "MO-122",
+      "theme": "AUTO-EVOLUTION",
+      "objectif": "Poser la PORTE MANQUANTE (friction 40) : une categorie retiqueter pour corriger les tags d'une entree de la BDD sessions, trace conservee.",
+      "statut": "terminee",
+      "chargee_le": "2026-09-16 07:13:11",
+      "injectee_le": "2026-09-16 07:13:11",
+      "terminee_le": "2026-09-16 07:13:11",
+      "bilan": "MO-122 (AUTO-EVOLUTION) terminee : categorie retiqueter livree (tags_avant + retiquete_le + motif, texte jamais touche), cobaye 11/11 dont 4 pieges prouvant l'effet sur le lecteur, refus sans ecriture, friction 40 validee, lecon L-095, 0 ecart au contrat fondamental, ASCII sain, remorque 85.",
+      "hors_file": true,
+      "type": "dev"
+    },
+    {
+      "id": "MO-123",
+      "theme": "AUTO-EVOLUTION",
+      "objectif": "Livrer l'arbitrage createur sur la friction 42 : le point de restauration .bak reste a cote de sa cible, le contrat fondamental l'accepte par une exemption BORNEE et VISIBLE, et la regle immuable perimetre-tmp est amendee.",
+      "statut": "terminee",
+      "chargee_le": "2026-09-16 07:17:57",
+      "injectee_le": "2026-09-16 07:17:57",
+      "terminee_le": "2026-09-16 07:17:57",
+      "bilan": "MO-123 (AUTO-EVOLUTION) terminee : exemption du point de restauration de porte -- motif borne .bak.<horodatage> + exemption VISIBLE (nommee et comptee) dans le contrat fondamental, regle immuable perimetre-tmp amendee (4 points de relecture intacts), cobaye 6/6 dont 3 pieges, friction 42 validee, lecon L-096, 0 ecart, marbre regles conforme, ASCII sain.",
+      "hors_file": true,
+      "type": "dev"
+    },
+    {
+      "id": "MO-124",
+      "theme": "AUTO-EVOLUTION",
+      "objectif": "Fermer le sujet ouvert a la cloture S-060 : rendre une entree de la BDD sessions RE-DATABLE par la porte, sans creer de collision a la seconde.",
+      "statut": "terminee",
+      "chargee_le": "2026-09-16 07:26:53",
+      "injectee_le": "2026-09-16 07:26:53",
+      "terminee_le": "2026-09-16 07:26:53",
+      "bilan": "La porte retiqueter accepte --horodatage (re-datage trace : horodatage_avant + re_date_le) et REFUSE une seconde deja occupee en NOMMANT l'occupant, sans rien ecrire ; le format d'horodatage a UN domicile (data/commun/trace_session.py) consomme par le lecteur. Preuves : cobaye 37/37 (0 echec) + porte reelle intacte + ASCII/py_compile ; friction 43 validee, lecon L-097.",
+      "hors_file": true,
+      "type": "dev"
+    },
+    {
+      "id": "MO-125",
+      "theme": "AUTO-EVOLUTION",
+      "objectif": "Fermer le sujet ouvert a la cloture S-060 : departager deux entrees de la BDD sessions a la MEME SECONDE par l'ordre d'ecriture, jamais par l'ordre de lecture.",
+      "statut": "terminee",
+      "chargee_le": "2026-09-16 07:28:16",
+      "injectee_le": "2026-09-16 07:28:16",
+      "terminee_le": "2026-09-16 07:28:16",
+      "bilan": "Le moteur partage data/commun/derniere_session.py mesure la recence sur (horodatage, rang d'append) pour derniere_session ET entrees_apres : l'accident S-052/S-053 rend desormais OUVERTE (la verite) au lieu de FERMEE. Preuves : cobaye 20/20 (0 echec, 3 pieges) + etalon sur la BDD reelle en lecture seule + ASCII 0 violation (apres refus du garde et correction) ; friction 44 validee, lecon L-098.",
+      "hors_file": true,
+      "type": "dev"
     }
   ],
-  "archive_le": "2026-09-18 08:32:18",
+  "archive_le": "2026-09-18 09:46:31",
   "dedup_le": "2026-09-14 (MO-091) : 14 jumeaux de re-archivages anterieurs au fix sortent du vivant vers la trousse a poussiere"
 }

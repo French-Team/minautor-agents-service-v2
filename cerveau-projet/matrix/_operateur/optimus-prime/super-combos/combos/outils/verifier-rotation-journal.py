@@ -33,7 +33,6 @@ Usage: python verifier-rotation-journal.py [--racine <path>]
 import argparse
 import collections
 import json
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -43,6 +42,10 @@ from pathlib import Path
 # --- REFERENCES (aucune valeur en dur dans la logique) ----------------------
 # Le moteur PARTAGE : une seule source pour les cinq journaux.
 MODULE_PARTAGE = Path("matrice") / "data" / "commun" / "rotation_journal.py"
+# La FABRIQUE DE FIXTURES JETABLES (meme dossier partage) : ce garde ne
+# recopie plus `mkdtemp`/`rmtree`, il DEMANDE ses fixtures au domicile commun.
+MODULE_FABRIQUE = Path("matrice") / "data" / "commun" / "cobayes_jetables.py"
+PREFIXE_COBAYE = "garde-rotation-"
 NOM_MAIN = "main.py"
 # Fenetre d'EPREUVE (MO-099) : ce nombre n'est PAS la fenetre reelle de lecture des
 # journaux (chaque domaine la deduit de SA borne declaree, voir le moteur partage
@@ -172,6 +175,26 @@ def charger_moteur(matrix):
     import importlib.util
 
     specification = importlib.util.spec_from_file_location("moteur_rotation_epreuve", str(chemin))
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    return module
+
+
+def charger_fabrique(matrix):
+    """Charge la FABRIQUE DE FIXTURES JETABLES par son chemin (moteur partage).
+
+    Meme domicile que le moteur de rotation, et meme chargement que lui : les
+    outils portent des tirets, un import par nom serait devine. Ce garde ne
+    recopie donc plus `mkdtemp`/`rmtree` : le retrait des fixtures et la
+    mutation d une copie vivent a UN seul domicile (L-029/L-102).
+    """
+    chemin = matrix / MODULE_FABRIQUE
+    if not chemin.is_file():
+        return None
+    import importlib.util
+
+    specification = importlib.util.spec_from_file_location("cobayes_jetables_epreuve",
+                                                          str(chemin))
     module = importlib.util.module_from_spec(specification)
     specification.loader.exec_module(module)
     return module
@@ -485,12 +508,15 @@ def main():
     if moteur is None:
         print("Moteur de rotation introuvable : " + str(matrix / MODULE_PARTAGE))
         return 2
+    fabrique = charger_fabrique(matrix)
+    if fabrique is None:
+        print("Fabrique de fixtures introuvable : " + str(matrix / MODULE_FABRIQUE))
+        return 2
 
     print("VERIFIER ROTATION JOURNAL -- moteur PARTAGE, cinq portes, rien ne se perd")
 
-    dossier = Path(tempfile.mkdtemp(prefix="garde-rotation-"))
     erreurs = []
-    try:
+    with fabrique.fixtures(PREFIXE_COBAYE) as dossier:
         controler(
             "moteur-partage",
             callable(getattr(moteur, "decision_rotation", None)) and callable(getattr(moteur, "tourner", None)),
@@ -503,8 +529,6 @@ def main():
         controler_decision(moteur, erreurs)
         controler_portes(matrix, erreurs)
         controler_journaux_reels(matrix, erreurs)
-    finally:
-        shutil.rmtree(dossier, ignore_errors=True)
 
     echecs = [nom for nom, ok, _ in RESULTATS if not ok]
     if erreurs or echecs:

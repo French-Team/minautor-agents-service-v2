@@ -5,18 +5,79 @@ Il detecte les demandes a crochets, les route vers la bonne porte,
 et gere les taches routinieres que l'agent n'a pas besoin de faire.
 """
 import re
+import subprocess
 import sys
 import os
+from pathlib import Path
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# La racine de CE repertoire se DETECTE par le marqueur partage (L-013 / MO-088) :
+# aucune chaine de niveaux comptee a la main -- le garde `chemins` l accuse, a raison.
+# `commun.py` est le marqueur du pilote : `filtrer/` n en a pas (mesure 2026-09-18).
+BORNES_REMONTEE = 30
+MARQUEUR_PILOTE = Path("commun.py")
+
+
+def trouver_repertoire_marqueur(depart, marqueur):
+    """Remonte jusqu au dossier qui PORTE le marqueur ; l echec se DIT."""
+    courant = Path(depart).resolve()
+    for _ in range(BORNES_REMONTEE):
+        if (courant / marqueur).is_file():
+            return courant
+        if courant.parent == courant:
+            break
+        courant = courant.parent
+    raise RuntimeError("Marqueur " + str(marqueur) + " introuvable en remontant depuis "
+                       + str(depart) + " : le pilote n a pas ete trouve.")
+
+
+REPERTOIRE_PILOTE = trouver_repertoire_marqueur(Path(__file__).resolve().parent, MARQUEUR_PILOTE)
+sys.path.insert(0, str(REPERTOIRE_PILOTE))
 
 from commun import extraire_options, horodater
+# La liste FERMEE des types vit dans l ENTONNOIR (un seul domicile) : ce filtre
+# la CONSOMME pour valider ce qu il transmet, il ne la recopie pas (L-029).
+from entonnoir.listes import TYPES
 
-NOMS_OPTIONS = ("message",)
+NOMS_OPTIONS = ("message", "theme", "source")
+
+# --- DEPOT AUTOMATIQUE (MO-175, decision createur 2026-09-18) ----------------
+# Avant, `filtrer` IMPRIMAIT la route et rendait 0 : le depot restait un geste
+# MANUEL (mesure MO-174). Le pilote JOUE desormais la porte qu il vient de router.
+PORTE_DEPOT = ("entonnoir", "deposer")
+CHEMIN_DEPOT = REPERTOIRE_PILOTE / "entonnoir" / "main.py"
+REFUS_THEME = ("REFUS : depot NON joue -- --theme requis (un depot automatique"
+               " ne devine pas le theme).")
+SOURCE_DEFAUT = "createur"
+
+
+def jouer_depot(theme, objectif, source, type_declare=""):
+    """JOUE la porte de depot et rend (code, sortie).
+
+    Un theme ABSENT n est PAS devine : le refus se DIT (jamais un repli muet).
+    Le TYPE DECLARE du crochet (`[outil]` -> `reparation`) est TRANSMIS a la
+    porte : sans cela il etait annonce puis PERDU (`proposer_type` retombait
+    sur `dev` faute de mot-cle) et le crochet ne routait rien (mesure MO-174).
+    """
+    if not theme:
+        return 2, REFUS_THEME
+    commande = [sys.executable, CHEMIN_DEPOT, "deposer", "--theme", theme,
+                "--objectif", objectif, "--source", source]
+    if type_declare:
+        # Un type declare HORS de la liste fermee ne se transmet JAMAIS :
+        # la porte le refuserait et le depot echouerait pour un mot mal
+        # orthographie dans un crochet -- l echec se DIT ici, avant la porte.
+        if type_declare not in TYPES:
+            return 2, ("REFUS : le crochet declare un type INCONNU ("
+                       + type_declare + ") -- types fermes : " + ", ".join(TYPES))
+        commande += ["--type", type_declare]
+    processus = subprocess.run(commande, capture_output=True, text=True)
+    sortie = ((processus.stdout or "") + (processus.stderr or "")).strip()
+    return processus.returncode, sortie
 
 # Liste fermee des mots-crochet reconnus (miroir convention-crochets.md)
 CROCHETS = {
-    "mission": {"porte": "entonnoir", "action": "deposer", "type": "mission"},
+    "mission": {"porte": "entonnoir", "action": "deposer", "type": ""},
+  # aucun type declare : le CLASSEMENT decide (voir A3, R5)
     "audit": {"porte": "entonnoir", "action": "deposer", "type": "audit"},
     "revision": {"porte": "entonnoir", "action": "deposer", "type": "revision"},
     "question": {"porte": "pilote", "action": "lot", "type": "question"},
@@ -24,6 +85,15 @@ CROCHETS = {
     "pause": {"porte": "pause-session", "action": "pause", "type": "pause"},
     "bilan": {"porte": "bilan-periode", "action": "bilan", "type": "bilan"},
     "preparation": {"porte": "preparation", "action": "ouvrir", "type": "preparation"},
+    # [outil] (R5, audit MO-174) : un OUTIL fautif trouve EN TRAVAILLANT.
+    # Le type DECLARE est `reparation` : la demande part en reparation, jamais
+    # en simple constat. Route complete : protocoles/proto-10-route-outil-defaillant.md.
+    "outil": {"porte": "entonnoir", "action": "deposer", "type": "reparation"},
+    # [purification] REPARE (R5) : la convention le declarait, le code l ignorait
+    # -- la liste fermee et sa convention avaient diverge SANS que rien ne le dise.
+    # Le maillon 28 surveille desormais ce miroir.
+    "purification": {"porte": "purification", "action": "ouvrir",
+                     "type": "purification"},
 }
 
 # Detection : [mot] au debut de la ligne
@@ -101,6 +171,13 @@ def executer(arguments):
         "date": horodater(),
     }
 
+    # MO-175 : la DETECTION ne suffit pas -- le pilote JOUE la porte routee.
+    code_depot, sortie_depot = None, ""
+    if (config["porte"], config["action"]) == PORTE_DEPOT:
+        code_depot, sortie_depot = jouer_depot(
+            options.get("theme", ""), reste, options.get("source", SOURCE_DEFAUT),
+            config.get("type", ""))
+
     if mode_json:
         import json
         print(json.dumps(resultat, ensure_ascii=False, indent=2))
@@ -111,4 +188,9 @@ def executer(arguments):
         print("  Porte : " + config["porte"])
         print("  Action : " + config["action"])
 
-    return 0
+    if code_depot is not None:
+        if sortie_depot:
+            print(sortie_depot)
+        print("  DEPOT JOUE (porte " + config["porte"] + "/" + config["action"]
+              + ") : code " + str(code_depot))
+    return code_depot if code_depot is not None else 0

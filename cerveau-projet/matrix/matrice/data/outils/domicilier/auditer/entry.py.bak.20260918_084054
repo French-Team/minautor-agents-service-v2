@@ -1,0 +1,31 @@
+"""Entree du verbe auditer : lire les options, valider le plan, rendre le rapport.
+
+Role : ORCHESTRER (options -> plan -> premisses -> audit). Aucune regle de classe ici.
+"""
+from auditer.fonctions import executer
+from constants import NOM_PLAN_DEFAUT, REPERTOIRE_PLANS
+from commun import CLE_SANS_VALEUR, charger_plan, extraire_options, verifier_premisses
+
+NOMS_CONNUS = ("plan", "json", "perimetre")
+DRAPEAUX = ("json",)
+
+
+def executer_verbe(arguments):
+    options = extraire_options(arguments, NOMS_CONNUS, drapeaux=DRAPEAUX)
+    sans_valeur = options.get(CLE_SANS_VALEUR)
+    if sans_valeur:
+        print("REFUS : option privee de valeur : " + ", ".join("--" + nom for nom in sans_valeur))
+        return 2
+    chemin = options.get("plan") or str(REPERTOIRE_PLANS / NOM_PLAN_DEFAUT)
+    try:
+        plan = charger_plan(chemin)
+    except ValueError as erreur:
+        print("REFUS : " + str(erreur))
+        return 2
+    ecarts = verifier_premisses(plan)
+    if ecarts:
+        print("REFUS : le plan n'est pas sur ses premisses (rien n'a ete lu ni ecrit) :")
+        for ecart in ecarts:
+            print("  - " + ecart)
+        return 2
+    return executer(plan, brut=bool(options.get("json")))

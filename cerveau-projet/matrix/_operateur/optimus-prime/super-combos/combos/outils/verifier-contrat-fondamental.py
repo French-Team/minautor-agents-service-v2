@@ -4,7 +4,8 @@
 verifier-contrat-fondamental.py -- Signale les ecarts au contrat CV-007
 
 Controle les problemes FONDAMENTAUX (imperatif 24) :
-    chemins     -- ancrage, garde, jamais parents[N] nu, jamais cwd
+    chemins     -- ancrage, garde, jamais parents[N] nu, jamais une CHAINE de
+                   niveaux comptes a la main (dirname/`.parent`), jamais cwd
     noms        -- objets de la Matrice en minuscules a tirets (les POINTS DE
                    RESTAURATION de porte, .bak horodates, sont EPARGNES et NOMMES :
                    exemption BORNEE par le motif, arbitrage createur 2026-09-16)
@@ -15,7 +16,12 @@ Controle les problemes FONDAMENTAUX (imperatif 24) :
     insertions  -- B-2 : la fabrique de sys.path.insert/append est surveillee
     prefixes    -- une famille d'ids = UN prefixe, jamais partage (revue CV-009/CV-011)
                    ET aucun prefixe ATTRIBUE en dur dans le code (fabrique de l'id)
-    tout        -- les huit + verdict
+    crochets    -- la liste FERMEE des crochets et sa convention
+                   disent la MEME chose (deux sens), et un crochet qui
+                   part a l'entonnoir declare un type de la liste TYPES
+    appels      -- aucun nom APPELE n'est orphelin (import manquant =
+                   NameError a l execution : py_compile ne le voit pas)
+    tout        -- les dix + verdict
 
 Les controles `resolution` et `insertions` sont le PAS 1 du chantier natif
 (fiche I-00, controle B -- garde de resolution). Ils lisent le CODE (AST),
@@ -27,12 +33,13 @@ Il SIGNALE, il ne repare jamais (doctrine de l'espion).
 code 0 = conforme, code 1 = ecart(s) detecte(s).
 
 Usage:
-    python verifier-contrat-fondamental.py <chemins|noms|flags|collisions|imports|resolution|insertions|prefixes|tout> [options]
+    python verifier-contrat-fondamental.py <chemins|noms|flags|collisions|imports|resolution|insertions|prefixes|crochets|jumeaux|tout> [options]
     python verifier-contrat-fondamental.py tout --strict   (parents[N] bloquant)
     python verifier-contrat-fondamental.py resolution --perimetre matrice/data/commun
 """
 
 import ast
+import builtins
 import re
 import sys
 import json
@@ -103,6 +110,12 @@ FAMILLES_IDS = (
 PREFIXES_MORTS = ("C",)
 SEPARATEUR_PREFIXE = "-"
 MOTIF_PARENTS = re.compile(r"parents\[(\d+)\]")
+# L-013 : le peche n est pas la BIBLIOTHEQUE, c est de COMPTER les niveaux a la main.
+# Une CHAINE de DEUX niveaux (ou plus) est le meme peche que `parents[2]` : elle casse
+# a la premiere profondeur qui change. Un SEUL niveau (`dirname(abspath(__file__))`,
+# l amorce d un outil) n est PAS une chaine -- hors perimetre, et ce garde le DIT.
+MOTIF_CHAINE_DIRNAME = re.compile(r"dirname\s*\([^()]{0,80}dirname\s*\(")
+MOTIF_CHAINE_PARENT = re.compile(r"\.parent\b[^\n]{0,60}?\.parent\b")
 MOTIF_CWD = re.compile(r"(Path\(\s*[\"']\.[\"']\s*\)|getcwd\(\))")
 MOTIF_FLAG = re.compile(r"add_argument\(\s*[\"'](--[^\"']+)[\"']")
 MOTIF_FLAG_CANONIQUE = re.compile(r"^--[a-z0-9]+(-[a-z0-9]+)*$")
@@ -245,16 +258,58 @@ def point_de_restauration(nom):
 
 # --- Controles -------------------------------------------------------------
 
+def zone_operateur():
+    """La zone de CE garde (le dossier `optimus-prime` qui le porte), ou None.
+
+    Elle sert a BORNER la nouvelle regle : elle est BLOQUANTE dans la zone (c est
+    notre code, on le repare) et CHIFFREE ailleurs (les outils de `matrice/data/`
+    demandent chacun leur ancrage -- dette DITE, jamais muette).
+    """
+    for parent in Path(__file__).resolve().parents:
+        if parent.name == "optimus-prime":
+            return parent
+    return None
+
+
 def controler_chemins(racine, strict):
-    """Ecarts de chemins : cwd interdit, parents[N] nu (dette)."""
+    """Ecarts de chemins : cwd interdit, niveaux COMPTES a la main (dette).
+
+    Deux formes du meme peche (L-013) sont vues : `parents[N]` nu et une CHAINE
+    de deux niveaux `dirname` -- toutes deux bloquees en mode `--strict`. La
+    chaine `.parent` est de la meme famille mais sa classe est large : elle est
+    CHIFFREE et DITE, non bloquante, tant que chaque site n a pas son ancrage.
+    """
     ecarts = []
     dettes = []
+    # Classe MESUREE (2026-09-18) : 32 sites de chaine `.parent`, tous ancrables un
+    # par un -- mais chacun demande son marqueur. Elle est donc CHIFFREE et DITE ici,
+    # sans rendre la suite rouge : une dette que personne ne voit est un angle mort.
+    avis_parent = []
+    avis_dirname = []
+    zone = zone_operateur()
     for chemin in iterer_fichiers(racine, ".py"):
         for numero, ligne in lignes_code(chemin):
             if MOTIF_CWD.search(ligne):
                 ecarts.append("cwd interdit : " + str(chemin) + ":" + str(numero))
             if MOTIF_PARENTS.search(ligne):
                 dettes.append("parents[N] a ancrer : " + str(chemin) + ":" + str(numero))
+            if MOTIF_CHAINE_DIRNAME.search(ligne):
+                message = ("chaine dirname a ancrer : " + str(chemin) + ":" + str(numero)
+                           + " -- deux niveaux comptes a la main (L-013)")
+                if zone is not None and zone in chemin.parents:
+                    dettes.append(message)
+                else:
+                    avis_dirname.append(message)
+            if MOTIF_CHAINE_PARENT.search(ligne):
+                avis_parent.append(str(chemin) + ":" + str(numero))
+    if avis_dirname:
+        print("[--] chaine dirname HORS ZONE : " + str(len(avis_dirname)) + " site(s)"
+              + " (dette chiffree, non bloquante -- elle demande un ancrage par outil)"
+              + " -- premier : " + avis_dirname[0])
+    if avis_parent:
+        print("[--] chaine .parent NON ancree : " + str(len(avis_parent)) + " site(s)"
+              + " (dette chiffree, non bloquante) -- " + ", ".join(avis_parent[:4])
+              + (" ..." if len(avis_parent) > 4 else ""))
     if strict:
         ecarts += dettes
         dettes = []
@@ -673,6 +728,524 @@ def controler_insertions(racine, perimetre=None):
     return ecarts, dettes
 
 
+# --- JUMEAUX DE LITTERAUX (MO-175) -----------------------------------------
+#
+# Deux domiciles declarent le MEME nom pour la MEME chose : le pilote (contrat)
+# et l entonnoir (sa table de travail, qui doit tourner seul). Une divergence
+# est INVISIBLE : les deux fichiers compilent, le SENS change -- c est la meme
+# famille que le chemin DOUBLE qui a fait tomber l avis d auto-validation a NON.
+#
+# DEUX DETECTIONS, parce qu une seule laisserait un trou :
+#  - AUTOMATIQUE : tout nom declare en litteral des DEUX cotes doit porter la
+#    MEME valeur (perimetre minimal : personne n a rien a declarer) ;
+#  - DECLAREE : les couples de NOMS DIFFERENTS qui portent la meme chose (ex.
+#    VALEUR_AUTO_VALIDATION face a VERDICT_AUTO) -- aucun automatisme ne peut
+#    les voir : cette liste est un PERIMETRE A MAINTENIR (un jumeau non declare
+#    reste invisible, comme une copie non listee dans un plan).
+PAIRE_JUMELLE = ("pilote/constants.py", "pilote/entonnoir/listes.py")
+NOMS_JUMEAUX_DECLARES = (
+    ("CHAMP_AUTO_VALIDATION", "champ ecrit par le pilote, relu par l entonnoir"),
+    ("CLE_AUTO_VALIDEES", "index auto-valide : ecrit par l entonnoir, lu par le pilote"),
+    ("NOM_ENTONNOIR", "le nom du fichier d etat, lu par les deux"),
+)
+COUPLES_DECLARES = (
+    ("VALEUR_AUTO_VALIDATION", "VERDICT_AUTO",
+     "la valeur du verdict auto : ecrite par le pilote, relue par l entonnoir"),
+)
+
+
+def charger_fabrique():
+    """La FABRIQUE DE FIXTURES JETABLES, LU depuis son domicile PARTAGE.
+
+    Les outils de la matrice portent des TIRETS : ils ne sont JAMAIS importables
+    par nom. Le module partage se charge donc par son CHEMIN (meme mecanisme que
+    le domicile de la forme `.bak`, juste au-dessus). Un domicile illisible ne
+    rend JAMAIS une fabrique devinee : le cobaye le DIT et n eprouve rien en
+    faisant semblant.
+
+    Les fixtures et leur retrait, la copie d un domicile reel et la mutation d une
+    declaration vivaient ICI, en double de ce que font les autres gardes : une
+    fabrique recopiee par consommateur est exactement le defaut que le controle
+    `jumeaux` surveille. Ils vivent desormais a UN seul domicile.
+    """
+    chemin = RACINE_MATRICE.joinpath(*FABRIQUE_RELATIVE)
+    if not chemin.is_file():
+        return None
+    specification = importlib.util.spec_from_file_location("cobayes_jetables", str(chemin))
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    return module
+def comparer_jumeaux(gauche, droite, noms_gauche, noms_droite):
+    """DECISION PURE (testable sans disque) : les litteraux jumeaux divergent-ils ?
+
+    Rend la liste des ECARTS, chacun NOMME avec sa valeur ET sa ligne : un verdict
+    muet ne dit rien a reparer.
+    """
+    ecarts = []
+    for nom, pourquoi in NOMS_JUMEAUX_DECLARES:
+        manquants = [cote for cote, table in ((noms_gauche, gauche), (noms_droite, droite))
+                     if nom not in table]
+        if manquants:
+            ecarts.append(nom + " : declare jumeau (" + pourquoi + ") mais ABSENT de "
+                          + " et ".join(manquants))
+    for nom in sorted(set(gauche) & set(droite)):
+        valeur_g, ligne_g = gauche[nom]
+        valeur_d, ligne_d = droite[nom]
+        if valeur_g != valeur_d:
+            ecarts.append(nom + " DIVERGE : " + noms_gauche + ":" + str(ligne_g)
+                          + " = " + repr(valeur_g) + " MAIS " + noms_droite + ":"
+                          + str(ligne_d) + " = " + repr(valeur_d))
+    for nom_g, nom_d, pourquoi in COUPLES_DECLARES:
+        if nom_g not in gauche or nom_d not in droite:
+            ecarts.append(nom_g + " / " + nom_d + " : couple declare (" + pourquoi
+                          + ") mais ABSENT d un des deux domiciles")
+            continue
+        if gauche[nom_g][0] != droite[nom_d][0]:
+            ecarts.append(nom_g + " DIVERGE de " + nom_d + " : " + repr(gauche[nom_g][0])
+                          + " MAIS " + repr(droite[nom_d][0]) + " (" + pourquoi + ")")
+    return ecarts
+
+
+# --- COBAYE REJOUABLE : fixtures JETABLES (MO-175) --------------------------
+#
+# Le controle ci-dessus compare les DEUX DOMICILES REELS : il dit l etat du jour.
+# Ce cobaye, lui, prouve que la DETECTION SAIT ACCUSER -- sur des COPIES posees
+# dans un dossier TEMPORAIRE, jamais sur les originaux (lecon L-032 : un
+# detecteur jamais eprouve ne prouve rien). Le piege est donc rejoue a CHAQUE
+# execution, et non plus prouve une seule fois dans un compte-rendu :
+#   - UNE epreuve NOMINALE doit PASSER (aucune fausse alerte) ;
+#   - TROIS PIEGES doivent ACCUSER : divergence par NOM, divergence d un COUPLE
+#     declare, et jumeau declare ABSENT de l un des deux domiciles.
+# Une epreuve n est OK que si l ecart NOMME la chose visee : un ecart quelconque
+# ne prouve pas que la bonne regle a parle.
+#
+# Rien n est fabrique ici : ce garde DEMANDE ses fixtures a la fabrique PARTAGEE
+# (`matrice/data/commun/cobayes_jetables.py`). Copier la fabrique chez chaque
+# consommateur rejouerait le defaut que ce controle surveille (deux domiciles,
+# un seul sens) -- la lecon L-029/L-102, appliquee a l outillage lui-meme.
+PREFIXE_COBAYE_JUMEAUX = "garde-jumeaux-"
+FABRIQUE_RELATIVE = ("matrice", "data", "commun", "cobayes_jetables.py")
+
+
+def jouer_epreuve_jumeaux(fabrique, zone, dossier, nom_cible, genre, fragment_attendu, accuse):
+    """Joue UNE epreuve sur fixtures NEUVES : rend (ok, message).
+
+    `accuse` = True si la detection DOIT accuser, False si elle doit PASSER. Le
+    verdict exige que l ecart NOMME la chose visee (`fragment_attendu`) : un ecart
+    quelconque ne prouve pas que la bonne regle a parle.
+    """
+    gauche, droite = fabrique.copier(zone, dossier, PAIRE_JUMELLE)
+    if nom_cible is not None and not fabrique.muter_litteral(droite, nom_cible, genre):
+        return False, ("fixture INUTILISABLE : " + str(nom_cible) + " absent de "
+                       + droite.name)
+    ecarts = comparer_jumeaux(fabrique.litteraux(gauche), fabrique.litteraux(droite),
+                              PAIRE_JUMELLE[0], PAIRE_JUMELLE[1])
+    if accuse:
+        ok = any(fragment_attendu in ecart for ecart in ecarts)
+        return ok, ("ACCUSE (" + fragment_attendu + ")" if ok
+                    else "N A PAS ACCUSE -- attendu un ecart nommant " + fragment_attendu)
+    return not ecarts, ("PASSE (0 ecart)" if not ecarts
+                        else "A ACCUSE A TORT : " + " | ".join(ecarts))
+
+
+def eprouver_jumeaux(fabrique, zone):
+    """Joue les QUATRE epreuves du cobaye : 1 doit PASSER, 3 doivent ACCUSER.
+
+    Rend la liste des ECARTS du cobaye (vide = le cobaye a joue son role). La
+    fabrique retire TOUJOURS ses fixtures, et ce qui aurait resiste est DIT : une
+    fixture qui survit ferait dire "sain" a un garde au-dessus d un residu.
+    """
+    if not NOMS_JUMEAUX_DECLARES or not COUPLES_DECLARES:
+        return ["cobaye jumeaux : PLUS RIEN a eprouver (une declaration a disparu) : "
+                "le controle jumeaux ne prouve plus rien"]
+    nom_eprouve = NOMS_JUMEAUX_DECLARES[0][0]
+    nom_gauche, nom_droite, _ = COUPLES_DECLARES[0]
+    epreuves = (
+        ("fixtures-telles-quelles-pas-accusees", None, None, "", False),
+        ("jumeau-par-nom-divergent-accuse", nom_eprouve, fabrique.GENRE_VALEUR,
+         nom_eprouve + " DIVERGE", True),
+        ("couple-declare-divergent-accuse", nom_droite, fabrique.GENRE_VALEUR,
+         nom_gauche + " DIVERGE de " + nom_droite, True),
+        ("jumeau-declare-absent-accuse", nom_eprouve, fabrique.GENRE_ABSENT,
+         nom_eprouve + " : declare jumeau", True),
+    )
+    ecarts = []
+    residus = []
+    with fabrique.fixtures(PREFIXE_COBAYE_JUMEAUX, residus) as dossier:
+        for nom_epreuve, cible, genre, fragment, accuse in epreuves:
+            ok, message = jouer_epreuve_jumeaux(fabrique, zone, dossier, cible, genre,
+                                                fragment, accuse)
+            print("  cobaye " + nom_epreuve + " : "
+                  + ("OK -- " + message if ok else "ECHEC -- " + message))
+            if not ok:
+                ecarts.append("cobaye jumeaux (" + nom_epreuve + ") : " + message)
+    for residu in residus:
+        ecarts.append("cobaye jumeaux : fixture NON retiree (residu) : " + residu)
+    return ecarts
+
+
+# --- APPELS NON LIES : un nom APPELE que rien ne lie (R5, audit MO-174) -------
+#
+# Mesure du 2026-09-18 : `pilote/fin/entry.py` appelait `lire_defauts` sans
+# l'avoir importe. Trois instruments etaient VERTS et ne pouvaient pas le voir :
+# `py_compile` (le compilateur ne resout pas les noms), la porte `editer` (elle
+# verifie que les imports ECRITS existent -- jamais qu'un nom UTILISE est
+# importe), et mes propres preuves (elles appelaient la fonction DIRECTEMENT :
+# c'est la PORTE qui manquait a l'epreuve). Le defaut ne se voyait qu'en
+# EXECUTANT la commande -- un NameError au coeur de la chaine de cloture.
+#
+# Ce controle le voit SANS executer : il lit l'ARBRE (AST). Son perimetre est
+# BORNEE et DITE : il ne traque que les APPELS (la ou le NameError coute le plus
+# cher), et il s'appuie sur un ensemble de base LARGE (toutes les builtins) pour
+# ne jamais crier a tort -- un controle qui crie a tort est desactive par ses
+# lecteurs, donc inutile. Un nom CHARGE sans etre appele (`x = inconnu`) n'est pas
+# signale ici : c'est un autre controle, pas celui-ci.
+LIES_DE_BASE = frozenset(dir(builtins)) | frozenset((
+    "__file__", "__name__", "__doc__", "__spec__", "__package__", "__loader__",
+    "__builtins__", "__annotations__", "self", "cls", "match", "case",
+))
+DOSSIERS_IGNORES = ("__pycache__",)
+
+
+def noms_lies(arbre):
+    """Tout nom que le module LIE : import (et `as`), def, class, parametres,
+    affectations et cibles (boucle, `with as`, comprehension, walrus, `del`),
+    `except as`, `global`/`nonlocal`. Volontairement LARGE : mieux vaut taire un
+    cas douteux que crier sur une liaison correcte.
+    """
+    trouves = set()
+    for noeud in ast.walk(arbre):
+        if isinstance(noeud, (ast.Import, ast.ImportFrom)):
+            for alias in noeud.names:
+                trouves.add((alias.asname or alias.name).split(".")[0])
+        elif isinstance(noeud, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            trouves.add(noeud.name)
+        elif isinstance(noeud, (ast.Global, ast.Nonlocal)):
+            trouves.update(noeud.names)
+        elif isinstance(noeud, ast.arg):
+            trouves.add(noeud.arg)
+        elif isinstance(noeud, ast.ExceptHandler) and noeud.name:
+            trouves.add(noeud.name)
+        elif isinstance(noeud, ast.Name) and isinstance(noeud.ctx, (ast.Store, ast.Del)):
+            trouves.add(noeud.id)
+    return trouves
+
+
+def appels_non_lies(arbre):
+    """DECISION PURE : les APPELS dont le nom n'est lie nulle part dans le module.
+
+    Rend des ecarts NOMMES et SITUES (numero de ligne) : un verdict muet ne dit
+    pas quoi reparer.
+    """
+    connus = noms_lies(arbre) | LIES_DE_BASE
+    ecarts = []
+    for noeud in ast.walk(arbre):
+        if isinstance(noeud, ast.Call) and isinstance(noeud.func, ast.Name):
+            if noeud.func.id not in connus:
+                ecarts.append("ligne " + str(noeud.lineno) + " : `" + noeud.func.id
+                              + "` est APPELE mais rien ne le lie (import manquant ?)")
+    return sorted(ecarts, key=lambda ecart: int(ecart.split()[1].rstrip(":")))
+
+
+def eprouver_appels_non_lies():
+    """COBAYE du controle : trois LIAISONS correctes tues, un ORPHELIN accuse.
+
+    Un controle qui crierait sur les liaisons correctes serait desactive au
+    premier usage ; un controle qui ne verrait pas l'orphelin serait un decor. Les
+    quatre cas tiennent les deux bords, plus l'appel ANTICIPE a une fonction
+    definie plus bas (legal en Python, et c'est le cas d'un module normal).
+    """
+    cas = (
+        ("import present", "import os\n\n\ndef f():\n    return os.path.join('a', 'b')\n", 0),
+        ("parametre local", "def f(valeur):\n    return round(valeur)\n", 0),
+        ("affectation locale", "def f():\n    total = 0\n    return int(total)\n", 0),
+        ("appel ANTICIPE (def plus bas)", "def f():\n    return g()\n\n\ndef g():\n    return 1\n", 0),
+        ("APPEL ORPHELIN", "def f():\n    return lire_defauts('x')\n", 1),
+    )
+    details = []
+    for nom, source, attendu in cas:
+        ecarts = appels_non_lies(ast.parse(source))
+        if len(ecarts) != attendu:
+            details.append(nom + " : " + str(len(ecarts)) + " ecart(s) au lieu de " + str(attendu))
+    print("  cobaye appels non lies : "
+          + ("OK -- " + str(len(cas)) + " cas (4 liaisons tues, 1 orphelin accuse)"
+             if not details else "ECHEC -- " + " | ".join(details)))
+    return details
+
+
+def controler_appels(racine):
+    """Aucun APPEL dont le nom n'est lie nulle part, dans la zone de l'operateur."""
+    zone = zone_operateur()
+    if zone is None:
+        return ["appels : zone optimus-prime INTROUVABLE (le controle se DIT)"], []
+    ecarts = []
+    for detail in eprouver_appels_non_lies():
+        ecarts.append("cobaye appels non lies (" + detail + ")")
+    fichiers = [chemin for chemin in sorted(zone.rglob("*.py"))
+                if not any(partie in DOSSIERS_IGNORES for partie in chemin.parts)
+                and ".bak" not in chemin.name]
+    if not fichiers:
+        return ecarts + ["appels : aucun fichier .py dans la zone (le controle se DIT)"], []
+    total = 0
+    for chemin in fichiers:
+        try:
+            arbre = ast.parse(chemin.read_text(encoding="utf-8"))
+        except (SyntaxError, UnicodeDecodeError) as erreur:
+            ecarts.append(str(chemin) + " : INLISIBLE (" + str(erreur) + ")")
+            continue
+        total += sum(1 for noeud in ast.walk(arbre) if isinstance(noeud, ast.Call))
+        for ecart in appels_non_lies(arbre):
+            ecarts.append(str(chemin) + " : " + ecart)
+    if not ecarts:
+        print("  " + str(total) + " appel(s) dans " + str(len(fichiers))
+              + " fichier(s) : tous LIES")
+    return ecarts, []
+
+
+def controler_jumeaux(racine):
+    """Les LITTERAUX JUMEAUX de deux domiciles ne divergent JAMAIS.
+
+    BLOQUANT : un litteral jumeau ne se rembourse pas, il se repare. Un OK est
+    INFORMATIF (il dit combien de noms communs ont ete compares), jamais muet --
+    et le cobaye a fixtures jetables REJOUE le piege a chaque execution, pour que
+    la detection ne soit pas seulement prouvee une fois.
+    """
+    zone = zone_operateur()
+    if zone is None:
+        return ["jumeaux : zone optimus-prime INTROUVABLE (le controle se DIT)"], []
+    fabrique = charger_fabrique()
+    if fabrique is None:
+        return ["jumeaux : fabrique de fixtures INTROUVABLE ("
+                + "/".join(FABRIQUE_RELATIVE) + ") : le controle se DIT"], []
+    gauche, droite = zone / PAIRE_JUMELLE[0], zone / PAIRE_JUMELLE[1]
+    absents = [str(chemin) for chemin in (gauche, droite) if not chemin.is_file()]
+    if absents:
+        return ["jumeaux : domicile ABSENT " + " et ".join(absents)], []
+    table_gauche = fabrique.litteraux(gauche)
+    table_droite = fabrique.litteraux(droite)
+    ecarts = comparer_jumeaux(table_gauche, table_droite,
+                              PAIRE_JUMELLE[0], PAIRE_JUMELLE[1])
+    if not ecarts:
+        communs = sorted(set(table_gauche) & set(table_droite))
+        print("  " + str(len(communs)) + " nom(s) commun(s) au deux domiciles, tous EGAUX : "
+              + ", ".join(communs))
+    ecarts.extend(eprouver_jumeaux(fabrique, zone))
+    return ecarts, []
+
+
+# --- CROCHETS : LE MIROIR CODE <-> CONVENTION (R5, audit MO-174) ------------
+#
+# `CROCHETS` (dans `pilote/filtrer/entry.py`) est une liste FERMEE, et
+# `conventions/convention-crochets.md` en est le MIROIR declare. Mesure du
+# 2026-09-18 : la convention declarait DIX crochets, le code en portait HUIT --
+# `[purification]` vivait dans la convention et NULLE PART dans le code, et aucun
+# instrument ne voyait l ecart. Une liste fermee qui diverge de sa convention ne
+# protege plus rien : elle refuse ce qu elle declare, ou accepte ce qu on a
+# retire. Le miroir se VERIFIE donc, dans les DEUX sens.
+#
+# Contrat : BLOQUANT (une divergence ne se rembourse pas, elle se repare) ; un
+# ecart NOMME le cote qui porte le crochet ET celui qui l ignore ; un OK est
+# INFORMATIF (il dit combien de crochets ont ete compares), jamais muet.
+CROCHETS_RELATIF = ("pilote", "filtrer", "entry.py")
+CONVENTION_CROCHETS_RELATIVE = ("conventions", "convention-crochets.md")
+LISTES_ENTONNOIR_RELATIF = ("pilote", "entonnoir", "listes.py")
+NOM_TABLE_CROCHETS = "CROCHETS"
+NOM_LISTE_TYPES = "TYPES"
+PORTE_DEPOT = ("entonnoir", "deposer")
+# Les lignes de la liste fermee s ecrivent `| [mot] | ... |` : le motif exige le
+# crochet carre en TETE de ligne de tableau (les autres tables du document -- defcon,
+# par exemple -- ne commencent pas par un crochet, elles ne sont donc pas lues).
+MOTIF_CROCHET_CONVENTION = re.compile(r"^\|\s*\[([a-z0-9_-]+)\]")
+
+
+def valeur_de_champ(noeud, champ):
+    """Le litteral de chaine `champ` d une entree de table, ou "" (AST, jamais devine)."""
+    if not isinstance(noeud, ast.Dict):
+        return ""
+    for cle, valeur in zip(noeud.keys, noeud.values):
+        if (isinstance(cle, ast.Constant) and cle.value == champ
+                and isinstance(valeur, ast.Constant) and isinstance(valeur.value, str)):
+            return valeur.value
+    return ""
+
+
+def table_litterale(chemin, nom):
+    """La table `nom = {...}` d un module : cle -> noeud de valeur (AST, sans import)."""
+    arbre = ast.parse(Path(chemin).read_text(encoding="utf-8"))
+    for noeud in arbre.body:
+        if isinstance(noeud, ast.Assign) and isinstance(noeud.value, ast.Dict):
+            for cible in noeud.targets:
+                if isinstance(cible, ast.Name) and cible.id == nom:
+                    return {cle.value: valeur
+                            for cle, valeur in zip(noeud.value.keys, noeud.value.values)
+                            if isinstance(cle, ast.Constant) and isinstance(cle.value, str)}
+    return {}
+
+
+def tuple_litteral(chemin, nom):
+    """Le tuple `nom = (...)` d un module : ses valeurs de chaine (AST, sans import)."""
+    arbre = ast.parse(Path(chemin).read_text(encoding="utf-8"))
+    for noeud in arbre.body:
+        if isinstance(noeud, ast.Assign) and isinstance(noeud.value, ast.Tuple):
+            for cible in noeud.targets:
+                if isinstance(cible, ast.Name) and cible.id == nom:
+                    return tuple(element.value for element in noeud.value.elts
+                                 if isinstance(element, ast.Constant))
+    return ()
+
+
+def crochets_de_la_convention(chemin):
+    """Les crochets DECLARES par la convention : les lignes `| [mot] | ... |`."""
+    lus = []
+    for ligne in Path(chemin).read_text(encoding="utf-8").split("\n"):
+        correspondance = MOTIF_CROCHET_CONVENTION.match(ligne)
+        if correspondance:
+            lus.append(correspondance.group(1))
+    return lus
+
+
+def comparer_crochets(du_code, de_la_convention):
+    """DECISION PURE : le code et la convention declarent-ils les MEMES crochets ?
+
+    Rend (ecarts, communs). Un ecart NOMME le cote qui PORTE le crochet et celui
+    qui l IGNORE : un verdict muet ne dit pas quoi reparer.
+    """
+    ecarts = []
+    for mot in sorted(set(du_code) - set(de_la_convention)):
+        ecarts.append("[" + mot + "] present dans le CODE mais ABSENT de la convention"
+                      " -- le pilote accepte un crochet que personne n a declare")
+    for mot in sorted(set(de_la_convention) - set(du_code)):
+        ecarts.append("[" + mot + "] present dans la CONVENTION mais ABSENT du code"
+                      " -- la convention declare un crochet que le pilote REFUSERA")
+    return ecarts, sorted(set(du_code) & set(de_la_convention))
+
+
+def eprouver_crochets():
+    """COBAYE du miroir : la decision PURE doit ACCUSER dans les DEUX sens.
+
+    Un detecteur qui ne saurait accuser que d un cote laisserait passer la moitie
+    des divergences -- precisement celle qui a produit `[purification]` (declaree
+    par la convention et inconnue du code). Un cas QUI PASSE ne rend RIEN : c est
+    l appelant qui en fait un ecart s il y a quelque chose a dire.
+    """
+    epreuves = (
+        ("meme liste", ["outil", "audit"], ["audit", "outil"], 0),
+        ("crochet en trop dans le code", ["outil", "audit", "fantome"], ["outil", "audit"], 1),
+        ("crochet en trop dans la convention", ["outil"], ["outil", "purification"], 1),
+        ("divergence des DEUX cotes", ["a"], ["b"], 2),
+    )
+    details = []
+    for nom, du_code, de_la_convention, attendu in epreuves:
+        ecarts, _ = comparer_crochets(du_code, de_la_convention)
+        if len(ecarts) != attendu:
+            details.append(nom + " : " + str(len(ecarts)) + " ecart(s) rendu(s) au lieu de "
+                           + str(attendu))
+    print("  cobaye crochets : " + ("OK -- " + str(len(epreuves))
+                                    + " cas rejoues (les DEUX sens accusent)"
+                                    if not details else "ECHEC -- " + " | ".join(details)))
+    return details
+
+
+
+CONSTANTS_PILOTE_RELATIF = ("pilote", "constants.py")
+NOM_TYPE_ROUTE = "TYPE_ROUTE_OUTIL"
+
+
+def litteral_de(chemin, nom):
+    """La valeur de la declaration de chaine `nom = "..."`, ou "" (AST, sans import)."""
+    arbre = ast.parse(Path(chemin).read_text(encoding="utf-8"))
+    for noeud in arbre.body:
+        if isinstance(noeud, ast.Assign) and isinstance(noeud.value, ast.Constant):
+            for cible in noeud.targets:
+                if (isinstance(cible, ast.Name) and cible.id == nom
+                        and isinstance(noeud.value.value, str)):
+                    return noeud.value.value
+    return ""
+
+
+def eprouver_appartenance():
+    """COBAYE de l'appartenance a une liste fermee : un type HORS liste ACCUSE.
+
+    C'est ce controle qui empeche un type renomme de rendre un rappel MUET (R5) :
+    un controle d'appartenance qui ne saurait pas refuser serait un decor.
+    """
+    cas = (("membre", "dev", True), ("hors-liste", "type_FANTOME", False))
+    details = []
+    for nom, valeur, attendu in cas:
+        if (valeur in ("dev", "audit")) is not attendu:
+            details.append(nom)
+    print("  cobaye appartenance : "
+          + ("OK -- " + str(len(cas)) + " cas (un membre, un intrus)" if not details
+             else "ECHEC -- " + " | ".join(details)))
+    return details
+
+
+def controler_crochets(racine):
+    """La liste FERMEE des crochets et sa convention disent la MEME chose.
+
+    Et chaque crochet qui part a l entonnoir declare un type de la liste FERMEE
+    `TYPES` (ou aucun type) : depuis R5 le type est TRANSMIS, un type hors liste
+    ferait REFUSER le depot.
+    """
+    zone = zone_operateur()
+    if zone is None:
+        return ["crochets : zone optimus-prime INTROUVABLE (le controle se DIT)"], []
+    code_path = zone.joinpath(*CROCHETS_RELATIF)
+    convention_path = zone.joinpath(*CONVENTION_CROCHETS_RELATIVE)
+    listes_path = zone.joinpath(*LISTES_ENTONNOIR_RELATIF)
+    absents = [str(chemin) for chemin in (code_path, convention_path, listes_path)
+               if not chemin.is_file()]
+    if absents:
+        return ["crochets : domicile ABSENT " + " et ".join(absents)], []
+    table = table_litterale(code_path, NOM_TABLE_CROCHETS)
+    if not table:
+        return ["crochets : table " + NOM_TABLE_CROCHETS + " INTROUVABLE dans "
+                + str(code_path) + " (le controle se DIT)"], []
+    convention = crochets_de_la_convention(convention_path)
+    if not convention:
+        return ["crochets : aucune ligne `| [mot] |` lue dans " + str(convention_path)
+                + " (le controle se DIT)"], []
+    ecarts, communs = comparer_crochets(sorted(table), convention)
+    types = tuple_litteral(listes_path, NOM_LISTE_TYPES)
+    if not types:
+        ecarts.append("crochets : liste " + NOM_LISTE_TYPES + " INTROUVABLE dans "
+                      + str(listes_path) + " : le controle des types se DIT")
+    for mot in sorted(table):
+        entree = table[mot]
+        if (valeur_de_champ(entree, "porte"), valeur_de_champ(entree, "action")) != PORTE_DEPOT:
+            continue
+        declare = valeur_de_champ(entree, "type")
+        if declare and types and declare not in types:
+            ecarts.append("[" + mot + "] declare le type " + repr(declare)
+                          + " qui n appartient PAS a la liste fermee " + NOM_LISTE_TYPES
+                          + " : ce crochet ferait REFUSER son propre depot")
+    # Tout type DECLARE ailleurs dans le pilote appartient a la MEME liste
+    # fermee : `TYPE_ROUTE_OUTIL` (constants.py) declenche le RAPPEL DE ROUTE
+    # (R5, audit MO-174). Un renommage dans TYPES rendrait ce rappel MUET sans
+    # que rien ne le dise -- meme classe de divergence que le miroir ci-dessus,
+    # fermee par le meme verbe.
+    constants_path = zone.joinpath(*CONSTANTS_PILOTE_RELATIF)
+    if not constants_path.is_file():
+        ecarts.append("crochets : domicile ABSENT " + str(constants_path))
+    else:
+        type_route = litteral_de(constants_path, NOM_TYPE_ROUTE)
+        if not type_route:
+            ecarts.append("crochets : " + NOM_TYPE_ROUTE + " INTROUVABLE dans "
+                          + str(constants_path) + " (le controle se DIT)")
+        elif types and type_route not in types:
+            ecarts.append(NOM_TYPE_ROUTE + " = " + repr(type_route)
+                          + " n appartient PAS a la liste fermee " + NOM_LISTE_TYPES
+                          + " : le rappel de route (R5) ne se declencherait JAMAIS")
+    for detail in eprouver_appartenance():
+        ecarts.append("cobaye appartenance (" + detail + ")")
+    for detail in eprouver_crochets():
+        ecarts.append("cobaye crochets (" + detail + ")")
+    if not ecarts:
+        print("  " + str(len(communs)) + " crochet(s) au miroir code<->convention, tous EGAUX : "
+              + ", ".join(communs))
+    return ecarts, []
+
+
 CONTROLES = {
     "chemins": controler_chemins,
     "noms": controler_noms,
@@ -683,6 +1256,9 @@ CONTROLES = {
     "insertions": controler_insertions,
     "prefixes": controler_prefixes,
     "prefixes-en-dur": prefixes_en_dur,
+    "jumeaux": controler_jumeaux,
+    "crochets": controler_crochets,
+    "appels-non-lies": controler_appels,
 }
 
 
@@ -715,7 +1291,7 @@ def principal(arguments):
     parser = argparse.ArgumentParser(description="Verifier le contrat fondamental CV-007")
     parser.add_argument("verbe", choices=("chemins", "noms", "flags", "collisions", "imports",
                                           "resolution", "insertions", "prefixes",
-                                          "prefixes-en-dur", "tout"))
+                                          "prefixes-en-dur", "jumeaux", "crochets", "appels-non-lies", "tout"))
     parser.add_argument("--racine", default=None, help="Racine a controler (defaut : matrix/)")
     parser.add_argument("--strict", action="store_true",
                         help="Rendre les dettes (parents[N]) bloquantes")

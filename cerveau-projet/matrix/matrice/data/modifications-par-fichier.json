@@ -509,6 +509,18 @@
             "champ",
             "fiche"
           ]
+        },
+        {
+          "date": "2026-09-18 19:17:50",
+          "action": "modifie",
+          "detail": "R3 (audit MO-174) : la fiche NOMME la nouvelle regle immuable (ligne REGLES ABSOLUES -> regles-immuables/defaut-outil-repare-sur-place.md, exige par le garde 'aucune-regle-perdue') + une LIMITE ('Un contournement manuel d un defaut d outil est une FAUTE de process : je repare DANS l outil, jamais a cote'). 143 lignes / plafond declare 150.",
+          "tags": [
+            "fiche",
+            "r3",
+            "audit",
+            "mo174",
+            "outil"
+          ]
         }
       ],
       "tags": [
@@ -538,7 +550,11 @@
         "auto-validation",
         "EO-143",
         "regle-immuable",
-        "champ"
+        "champ",
+        "r3",
+        "audit",
+        "mo174",
+        "outil"
       ]
     },
     "_operateur/optimus-prime/parcours/index-parcours.json": {
@@ -826,6 +842,17 @@
             "cartes-identite",
             "audit"
           ]
+        },
+        {
+          "date": "2026-09-18 19:17:51",
+          "action": "modifie",
+          "detail": "R3 : l index des protocoles declare le protocole 10 (route outil defaillant) et son domaine (outil fautif trouve EN SEANCE).",
+          "tags": [
+            "index",
+            "r3",
+            "mo174",
+            "protocole"
+          ]
         }
       ],
       "tags": [
@@ -834,7 +861,11 @@
         "CONTRATS",
         "MO-089",
         "cartes-identite",
-        "audit"
+        "audit",
+        "index",
+        "r3",
+        "mo174",
+        "protocole"
       ]
     },
     "_operateur/optimus-prime/protocoles/protocoles-readme.md + proto-1 + proto-2 + proto-5": {
@@ -934,6 +965,17 @@
             "champ",
             "index"
           ]
+        },
+        {
+          "date": "2026-09-18 19:17:50",
+          "action": "modifie",
+          "detail": "R3 : l index des regles immuables declare la nouvelle regle (defaut-outil-repare-sur-place.md).",
+          "tags": [
+            "index",
+            "r3",
+            "mo174",
+            "regle-immuable"
+          ]
         }
       ],
       "tags": [
@@ -951,7 +993,9 @@
         "MO-167",
         "auto-validation",
         "EO-143",
-        "champ"
+        "champ",
+        "r3",
+        "mo174"
       ]
     },
     "_operateur/optimus-prime/regles-immuables/suivi-optimus-marbre.md": {
@@ -1862,6 +1906,18 @@
             "maillon-26",
             "non-regression"
           ]
+        },
+        {
+          "date": "2026-09-18 18:49:46",
+          "action": "modifie",
+          "detail": "MO-175 j4 : maillon 27 dit combien d epreuves le cobaye jumeaux a rejouees (le piege est rejoue a chaque execution)",
+          "tags": [
+            "jumeaux",
+            "cobaye",
+            "non-regression",
+            "maillon27",
+            "mo175"
+          ]
         }
       ],
       "tags": [
@@ -1920,7 +1976,11 @@
         "MO-148",
         "EO-133",
         "lanceur",
-        "maillon-26"
+        "maillon-26",
+        "jumeaux",
+        "cobaye",
+        "maillon27",
+        "mo175"
       ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/revert-periode.py": {
@@ -3439,6 +3499,30 @@
             "manuel",
             "moteur-recherche"
           ]
+        },
+        {
+          "date": "2026-09-18 08:44:53",
+          "action": "modifie",
+          "detail": "MO-172 : section 32 domicilier (usage, protections, contrat du plan, verdicts, epreuve 18/18 et plan reel 41 alignees / 1 exclue / 0 trou) -- un outil qui n est pas au manuel n existe pas pour l operateur.",
+          "tags": [
+            "manuel",
+            "outil",
+            "domicilier",
+            "declaration",
+            "mo-172"
+          ]
+        },
+        {
+          "date": "2026-09-18 08:54:52",
+          "action": "modifie",
+          "detail": "MO-173 : section 29 (porte ecrire) -- verbe --contenu-base64, protections (trois sources exclusives, source vide refusee, blob strict), correction d une AFFIRMATION PERIMEE (un contenu invalide n est plus ecrit : echec = code 1 et RIEN n est ecrit, cible INTACTE) et la regle de l extrait a deux formes.",
+          "tags": [
+            "manuel",
+            "ecrire",
+            "base64",
+            "verite",
+            "mo-173"
+          ]
         }
       ],
       "tags": [
@@ -3495,7 +3579,14 @@
         "auto-evolution",
         "mo-125",
         "eo-126",
-        "moteur-recherche"
+        "moteur-recherche",
+        "domicilier",
+        "declaration",
+        "mo-172",
+        "ecrire",
+        "base64",
+        "verite",
+        "mo-173"
       ]
     },
     "matrice/data/modifications-par-fichier.json": {
@@ -8387,12 +8478,32 @@
             "theme",
             "perimetre"
           ]
+        },
+        {
+          "date": "2026-09-18 19:17:50",
+          "action": "modifie",
+          "detail": "R3 (audit MO-174) : case OUTIL ajoutee au theme AUTO-CORRECTION (un defaut d OUTIL n est PAS une erreur de DONNEE) : 7 etapes (reproduire, pause, reparer dans l outil, prouver, tracer, reprendre, inter-round) + regle pointant proto-10. description et but mis a jour (8 cases). Defaut trouve en seance : mon driver de pose n etait PAS idempotent -- relance apres un echec du 3e edit, la case est entree DEUX fois (JSON valide, rien ne l interdit) ; retire par un driver qui VERIFIE l etat avant d ecrire. Ecart de forme declare : le fichier etait en CRLF, la porte a normalise en LF (L-001), comme les 8 autres themes.",
+          "tags": [
+            "theme",
+            "r3",
+            "audit",
+            "mo174",
+            "outil",
+            "auto-correction",
+            "idempotence"
+          ]
         }
       ],
       "tags": [
         "mo032",
         "theme",
-        "perimetre"
+        "perimetre",
+        "r3",
+        "audit",
+        "mo174",
+        "outil",
+        "auto-correction",
+        "idempotence"
       ]
     },
     "_operateur/optimus-prime/pilote/entonnoir/listes.py": {
@@ -8413,13 +8524,38 @@
           "action": "modifie",
           "detail": "MO-058 : PREFIXE_ITEM = EO- (le prefixe des items de l'entonnoir d'Optimus), pris ici et nulle part ailleurs (CV-009) -- E- etait partage avec l'entonnoir du cameleon.",
           "tags": []
+        },
+        {
+          "date": "2026-09-18 09:16:47",
+          "action": "modifie",
+          "detail": "MO-175 : domicile des 6 valeurs de l auto-validation (champ, champ des axes, verdicts auto/non, nom de la file auto-validee, nom de l avis) -- zero valeur en dur dans la logique.",
+          "tags": [
+            "optimus",
+            "MO-175",
+            "auto-validation"
+          ]
+        },
+        {
+          "date": "2026-09-18 09:19:55",
+          "action": "corrige",
+          "detail": "MO-175 (reparation du blocage retirer) : CLE_AUTO_VALIDEES remplace FILE_AUTO_VALIDEE -- l auto-validation est un INDEX d ids, jamais une copie de mission. CLE_LEGACY_AUTO_VALIDEE garde le nom de la file legacy pour l auto-soin.",
+          "tags": [
+            "optimus",
+            "MO-175",
+            "auto-validation",
+            "reparation"
+          ]
         }
       ],
       "tags": [
         "mo033",
         "entonnoir",
         "chemin",
-        "legacy"
+        "legacy",
+        "optimus",
+        "MO-175",
+        "auto-validation",
+        "reparation"
       ]
     },
     "_operateur/optimus-prime/pilote/entonnoir-files-optimus.json": {
@@ -8797,12 +8933,48 @@
             "non-regression",
             "flux"
           ]
+        },
+        {
+          "date": "2026-09-18 09:53:34",
+          "action": "modifie",
+          "detail": "Maillon 27 : jumeaux -- la divergence de litteraux entre constants.py et entonnoir/listes.py devient BLOQUANTE dans la non-regression (la classe d ecart qui a fait tomber l avis d auto-validation a NON)",
+          "tags": [
+            "MO-175",
+            "non-regression",
+            "garde",
+            "jumeaux"
+          ]
+        },
+        {
+          "date": "2026-09-18 19:27:59",
+          "action": "modifie",
+          "detail": "R5-B : maillon 28 crochets (bloquant) + docstring : la ligne JUMEAUX, manquante depuis MO-175, est ajoutee.",
+          "tags": [
+            "MO-174",
+            "R5",
+            "non-regression"
+          ]
+        },
+        {
+          "date": "2026-09-18 19:47:53",
+          "action": "modifie",
+          "detail": "R5-E : maillon 29 appels-non-lies (bloquant) + docstring.",
+          "tags": [
+            "MO-174",
+            "R5",
+            "non-regression"
+          ]
         }
       ],
       "tags": [
         "e-095",
         "non-regression",
-        "flux"
+        "flux",
+        "MO-175",
+        "garde",
+        "jumeaux",
+        "MO-174",
+        "R5"
       ]
     },
     "cerveau-projet/matrix/matrice/pilote/detecteur/entry.py": {
@@ -8995,12 +9167,40 @@
             "pilote-optimus",
             "tokens"
           ]
+        },
+        {
+          "date": "2026-09-18 09:38:55",
+          "action": "modifie",
+          "detail": "MO-175 jambe 3 : enchainer=True au fin, priorite lot > auto-validee > file > tresse, arret de la chaine si la tete n est pas auto-validee",
+          "tags": [
+            "MO-175",
+            "pilote",
+            "enchainement",
+            "auto-validation"
+          ]
+        },
+        {
+          "date": "2026-09-18 19:39:51",
+          "action": "modifie",
+          "detail": "R5-C/D : defauts structures (OPTION_DEFAUTS, CHAMPS_DEFAUTS, STATUTS_DEFAUT) et rappel de route (TYPE_ROUTE_OUTIL, CHAMP_RAPPEL, RAPPEL_ROUTE_OUTIL).",
+          "tags": [
+            "MO-174",
+            "R5",
+            "contrat"
+          ]
         }
       ],
       "tags": [
         "e-097",
         "pilote-optimus",
-        "tokens"
+        "tokens",
+        "MO-175",
+        "pilote",
+        "enchainement",
+        "auto-validation",
+        "MO-174",
+        "R5",
+        "contrat"
       ]
     },
     "cerveau-projet/matrix/_operateur/optimus-prime/pilote/injection/fonctions.py": {
@@ -9015,13 +9215,51 @@
             "poids",
             "pilote-optimus"
           ]
+        },
+        {
+          "date": "2026-09-18 09:38:56",
+          "action": "modifie",
+          "detail": "MO-175 jambe 3 : enchainer=True au fin, priorite lot > auto-validee > file > tresse, arret de la chaine si la tete n est pas auto-validee",
+          "tags": [
+            "MO-175",
+            "pilote",
+            "enchainement",
+            "auto-validation"
+          ]
+        },
+        {
+          "date": "2026-09-18 09:50:39",
+          "action": "modifie",
+          "detail": "Decision createur 2026-09-18 : un STOP ne consomme RIEN -- UN candidat (coup d oeil sur la tete du brin), juge AVANT d etre tire ; l auto-validee en tete passe avant la file chargee ; l injection explicite (enchainer=False) tire toujours",
+          "tags": [
+            "MO-175",
+            "enchainement",
+            "stop",
+            "auto-validation"
+          ]
+        },
+        {
+          "date": "2026-09-18 19:39:52",
+          "action": "modifie",
+          "detail": "R5-D : charger_rappel_route + 7e champ pese 'rappel' sur les DEUX sites du sac (simple et lot).",
+          "tags": [
+            "MO-174",
+            "R5"
+          ]
         }
       ],
       "tags": [
         "e-097",
         "injection",
         "poids",
-        "pilote-optimus"
+        "pilote-optimus",
+        "MO-175",
+        "pilote",
+        "enchainement",
+        "auto-validation",
+        "stop",
+        "MO-174",
+        "R5"
       ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/creer-combo.py": {
@@ -9993,6 +10231,43 @@
             "friction-42",
             "exemption"
           ]
+        },
+        {
+          "date": "2026-09-18 09:31:55",
+          "action": "modifie",
+          "detail": "GARDE CHEMINS etendu (angle mort mesure en MO-175) : il declarait MOTIFS_CHEMIN_CALCULE (dirname, abspath, parent) mais ne le CONSOMMAIT pas dans le controle des chemins. Il voit desormais la CHAINE de 2 niveaux comptes a la main (memme peche que parents[N], L-013) : BLOQUANTE dans la zone operateur, CHIFFREE et DITE hors zone (8 sites dans matrice/data/outils) ; la chaine .parent est chiffree et dite (90 sites). Mesure : 0 ecart, 0 dette, deux dettes chiffrees.",
+          "tags": [
+            "optimus",
+            "garde",
+            "chemins",
+            "L-013",
+            "dette"
+          ]
+        },
+        {
+          "date": "2026-09-18 18:49:46",
+          "action": "modifie",
+          "detail": "MO-175 j4 : controle jumeaux -> cobaye rejouable (fixtures jetables, 4 epreuves : 1 nominale + 3 pieges ; preuve meta aveugle 3/3 et crieur 1/1)",
+          "tags": [
+            "jumeaux",
+            "cobaye",
+            "non-regression",
+            "cv-007",
+            "mo175"
+          ]
+        },
+        {
+          "date": "2026-09-18 18:59:11",
+          "action": "modifie",
+          "detail": "MO-175 j5 : le cobaye jumeaux passe par la FABRIQUE PARTAGEE (data/commun/cobayes_jetables.py). charger_fabrique() charge par CHEMIN (importlib, meme mecanisme que le domicile de la forme .bak) : AUCUNE dette ajoutee (resolution 579 et insertions 89 inchangees). litteraux_de/mkdtemp/rmtree/copie/mutation locales SUPPRIMEES : un seul domicile. Fabrique absente = le controle SE DIT (jamais un faux vert).",
+          "tags": [
+            "jumeaux",
+            "cobaye",
+            "fabrique",
+            "non-regression",
+            "cv-007",
+            "mo175"
+          ]
         }
       ],
       "tags": [
@@ -10019,7 +10294,18 @@
         "chantier-natif",
         "mo-123",
         "friction-42",
-        "exemption"
+        "exemption",
+        "optimus",
+        "garde",
+        "chemins",
+        "L-013",
+        "dette",
+        "jumeaux",
+        "cobaye",
+        "non-regression",
+        "cv-007",
+        "mo175",
+        "fabrique"
       ]
     },
     "_operateur/optimus-prime/indices.md": {
@@ -13830,9 +14116,25 @@
           "action": "modifie",
           "detail": "MO-058 : verifier_famille() -- un id hors famille (E- cote Optimus) est REFUSE (code 2, aucune ecriture) au lieu de passer pour un oubli de saisie.",
           "tags": []
+        },
+        {
+          "date": "2026-09-18 09:19:56",
+          "action": "corrige",
+          "detail": "MO-175 : normaliser_chargement = AUTO-SOIN a la lecture -- une file legacy auto-validee est convertie en index et retiree des files. C est ce qui a DEBLOQUE retirer sans chirurgie a la main sur l etat.",
+          "tags": [
+            "optimus",
+            "MO-175",
+            "reparation",
+            "auto-soin"
+          ]
         }
       ],
-      "tags": []
+      "tags": [
+        "optimus",
+        "MO-175",
+        "reparation",
+        "auto-soin"
+      ]
     },
     "_operateur/optimus-prime/pilote/entonnoir/vrac/fonctions.py": {
       "modifications": [
@@ -13851,12 +14153,25 @@
             "L-061",
             "role"
           ]
+        },
+        {
+          "date": "2026-09-18 09:16:47",
+          "action": "modifie",
+          "detail": "MO-175 : deposer_vrac ecrit le verdict d auto-validation DANS L ENREGISTREMENT DE LA MISSION a la creation (decision createur) ; un verdict non rendu est ecrit NON -- jamais de repli muet.",
+          "tags": [
+            "optimus",
+            "MO-175",
+            "auto-validation"
+          ]
         }
       ],
       "tags": [
         "MO-076",
         "L-061",
-        "role"
+        "role",
+        "optimus",
+        "MO-175",
+        "auto-validation"
       ]
     },
     "_operateur/optimus-prime/pilote/entonnoir/classer/fonctions.py": {
@@ -13876,12 +14191,38 @@
             "L-061",
             "role"
           ]
+        },
+        {
+          "date": "2026-09-18 09:16:48",
+          "action": "modifie",
+          "detail": "MO-175 : le classement range l item dans sa file-type ET, si le verdict est auto, dans la FILE AUTO-VALIDEE (transverse aux types). Mesure : EO-165 (auto) dans reparation ET auto-validee ; EO-166 (non) dans doc seulement.",
+          "tags": [
+            "optimus",
+            "MO-175",
+            "auto-validation",
+            "file"
+          ]
+        },
+        {
+          "date": "2026-09-18 09:19:55",
+          "action": "corrige",
+          "detail": "MO-175 : le classement range l ID de la mission dans l index auto-validees (plus de copie dans files). Mesure : item EO-167 en file reparation + id dans l index, aucune cle auto-validee dans files.",
+          "tags": [
+            "optimus",
+            "MO-175",
+            "reparation"
+          ]
         }
       ],
       "tags": [
         "MO-076",
         "L-061",
-        "role"
+        "role",
+        "optimus",
+        "MO-175",
+        "auto-validation",
+        "file",
+        "reparation"
       ]
     },
     "_operateur/optimus-prime/pilote/entonnoir/retirer/fonctions.py": {
@@ -13891,9 +14232,23 @@
           "action": "modifie",
           "detail": "MO-058 : retirer (vrac ET files) verifie la famille de l'id.",
           "tags": []
+        },
+        {
+          "date": "2026-09-18 09:19:56",
+          "action": "corrige",
+          "detail": "MO-175 : retirer_de_l_index nettoie l id retire -- un id sans mission serait un FANTOME en tete auto-validee. Mesure : apres retrait, index vide et brin recompose (1 mission).",
+          "tags": [
+            "optimus",
+            "MO-175",
+            "reparation"
+          ]
         }
       ],
-      "tags": []
+      "tags": [
+        "optimus",
+        "MO-175",
+        "reparation"
+      ]
     },
     "_operateur/optimus-prime/pilote/entonnoir/retirer/entry.py": {
       "modifications": [
@@ -14465,6 +14820,17 @@
             "l-013",
             "routine"
           ]
+        },
+        {
+          "date": "2026-09-18 09:24:45",
+          "action": "corrige",
+          "detail": "EO-163 : le fait du routeur porte l identite des messages ROUTES (index d inbox, type, outil, niveau, expediteur) ; si le fait vient d un CHANGEMENT du tableau, il porte la transition (avant -> apres). Mesure : deux messages distincts ne produisent plus deux lignes identiques.",
+          "tags": [
+            "matrice",
+            "EO-163",
+            "routeur",
+            "identite"
+          ]
         }
       ],
       "tags": [
@@ -14488,7 +14854,10 @@
         "chemins",
         "ancrage",
         "l-013",
-        "routine"
+        "routine",
+        "matrice",
+        "EO-163",
+        "identite"
       ]
     },
     "matrice/data/commun/attente.py": {
@@ -16746,12 +17115,38 @@
             "L-061",
             "role"
           ]
+        },
+        {
+          "date": "2026-09-18 09:16:48",
+          "action": "modifie",
+          "detail": "MO-175 : l avis multi-axes est rendu AVANT l ecriture (subprocess, chemin resolu depuis le fichier) ; moteur injoignable = verdict NON + axe moteur qui porte la raison.",
+          "tags": [
+            "optimus",
+            "MO-175",
+            "auto-validation"
+          ]
+        },
+        {
+          "date": "2026-09-18 09:21:44",
+          "action": "corrige",
+          "detail": "MO-175 : le chemin de l avis etait resolu par parents[3] compte a la main -- interdit par L-013/MO-088, et le garde chemins l a accuse. Remplace par la DETECTION PAR MARQUEUR PARTAGE (matrice/data/commun/racine.py) dont l echec se DIT. Suite : 25/26 OK, le seul KO restant est le fait duplique du routeur (EO-163).",
+          "tags": [
+            "optimus",
+            "MO-175",
+            "reparation",
+            "chemins"
+          ]
         }
       ],
       "tags": [
         "MO-076",
         "L-061",
-        "role"
+        "role",
+        "optimus",
+        "MO-175",
+        "auto-validation",
+        "reparation",
+        "chemins"
       ]
     },
     "matrice/routines/espion-integrite/commun.py": {
@@ -16940,6 +17335,19 @@
             "observateur",
             "valeur-en-dur"
           ]
+        },
+        {
+          "date": "2026-09-18 18:59:11",
+          "action": "modifie",
+          "detail": "MO-175 j5 : 2e CONSOMMATEUR REEL de la fabrique partagee (la reutilisation est prouvee, pas seulement promise). charger_fabrique() calque sur charger_moteur (chargement par chemin, doctrine declaree du fichier : jamais un import devine) ; le temporaire devient une fixture JETABLE (with fabrique.fixtures(PREFIXE_COBAYE)) et le try/finally rmtree disparait ; import shutil retire. VERDICT OK, 27 controles.",
+          "tags": [
+            "fabrique",
+            "fixtures",
+            "cobaye",
+            "rotation",
+            "non-regression",
+            "mo175"
+          ]
         }
       ],
       "tags": [
@@ -16955,7 +17363,12 @@
         "performance",
         "p5",
         "observateur",
-        "valeur-en-dur"
+        "valeur-en-dur",
+        "fabrique",
+        "fixtures",
+        "cobaye",
+        "non-regression",
+        "mo175"
       ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression-flux.py": {
@@ -17253,12 +17666,39 @@
             "garde",
             "non-regression"
           ]
+        },
+        {
+          "date": "2026-09-18 09:24:45",
+          "action": "corrige",
+          "detail": "EO-163 : le garde COMPARE les faits identifies et DECLARE les autres (compte + message) au lieu de les accuser. La regle garde toute sa force : deux faits de meme identite = le meme message route deux fois, et c est un VRAI defaut. Verdict OK, 15 faits d avant l identite declares.",
+          "tags": [
+            "optimus",
+            "EO-163",
+            "garde",
+            "identite"
+          ]
+        },
+        {
+          "date": "2026-09-18 09:27:22",
+          "action": "modifie",
+          "detail": "EO-163 (suite) : la classification des lignes d histoire devient une FONCTION PURE (classer_faits) -- donc piegeable -- et le compte des faits sans identite est fait PAR ECRIVAIN DECLARE (ECRIVAINS : tour / journaliser type / journaliser demarrage), au lieu de melanger les passes de routage et les traces de rotation. Cobaye controler_faits : 4 cas, dont DEUX doivent accuser (meme identite = le meme message route deux fois) et DEUX doivent passer (identites differentes ; legacy).",
+          "tags": [
+            "optimus",
+            "EO-163",
+            "garde",
+            "cobaye",
+            "identite"
+          ]
         }
       ],
       "tags": [
         "MO-080",
         "garde",
-        "non-regression"
+        "non-regression",
+        "optimus",
+        "EO-163",
+        "identite",
+        "cobaye"
       ]
     },
     "matrice/routines/espion-integrite/espion-etat-bdds.json": {
@@ -17359,12 +17799,27 @@
             "etat-histoire",
             "moteur-partage"
           ]
+        },
+        {
+          "date": "2026-09-18 09:24:44",
+          "action": "modifie",
+          "detail": "EO-163 (tranche par le createur) : CHAMP_IDENTITE = 'identite' -- LE FAIT PORTE L IDENTITE DE L EVENEMENT. Un fait sans identite est indistinguable d une recopie d etat : le garde l accusait a juste titre, et l histoire ne repondait plus a 'que s est-il passe ?'. Une seule definition du nom (moteur partage MO-082).",
+          "tags": [
+            "matrice",
+            "EO-163",
+            "routeur",
+            "identite"
+          ]
         }
       ],
       "tags": [
         "MO-082",
         "etat-histoire",
-        "moteur-partage"
+        "moteur-partage",
+        "matrice",
+        "EO-163",
+        "routeur",
+        "identite"
       ]
     },
     "matrice/routines/vigie-profil/vigie-profil-etat-passes.json": {
@@ -19980,13 +20435,33 @@
             "ecrire",
             "friction68"
           ]
+        },
+        {
+          "date": "2026-09-18 08:54:51",
+          "action": "modifie",
+          "detail": "MO-173 : (1) decoder_contenu_base64 -- transport SANS echappement : alphabet sans guillemet ni antislash ni saut de ligne, lecture STRICTE (validate=True), refus NOMME si base64 invalide ou non-UTF8. (2) DEFECT REPARE en seance : `ecrire` force un LF final (L-001), donc un extrait de MILIEU de ligne ecrit par la porte ne pouvait JAMAIS correspondre dans `editer` (deux refus en serie sur le manuel) -- variantes_extrait essaie la forme EXACTE puis SANS le LF final, DIT la forme retenue, et retire le LF du NOUVEAU par symetrie (sinon l edition injecte un saut de ligne DANS la ligne). (3) DEFECT REPARE : le compte-rendu est construit AVANT os.replace (un NameError apres l ecriture annoncait en erreur un fichier DEJA modifie) -- apres publication il ne reste que le SHA et le retour.",
+          "tags": [
+            "outil",
+            "ecrire",
+            "base64",
+            "extrait",
+            "lf",
+            "ordre-publication",
+            "mo-173"
+          ]
         }
       ],
       "tags": [
         "MO-142",
         "EO-129",
         "ecrire",
-        "friction68"
+        "friction68",
+        "outil",
+        "base64",
+        "extrait",
+        "lf",
+        "ordre-publication",
+        "mo-173"
       ]
     },
     "matrice/data/outils/ecrire/ecrire/fonctions.py": {
@@ -20043,13 +20518,29 @@
             "ecrire",
             "friction68"
           ]
+        },
+        {
+          "date": "2026-09-18 08:54:52",
+          "action": "modifie",
+          "detail": "MO-173 : contrat de la porte -- verbe --contenu-base64, option (blob strict, refus nomme), ligne de garanties (contenu hostile au transport : CORROMPU en brut, BIT-EXACT en base64) et les deux regles de l extrait (deux formes, rien apres la publication).",
+          "tags": [
+            "outil",
+            "ecrire",
+            "description",
+            "contrat",
+            "mo-173"
+          ]
         }
       ],
       "tags": [
         "MO-142",
         "EO-129",
         "ecrire",
-        "friction68"
+        "friction68",
+        "outil",
+        "description",
+        "contrat",
+        "mo-173"
       ]
     },
     "_operateur/optimus-prime/pilote/fin/entry.py": {
@@ -21597,13 +22088,24 @@
             "parseur-options",
             "domicile"
           ]
+        },
+        {
+          "date": "2026-09-18 19:39:51",
+          "action": "modifie",
+          "detail": "R5-C : lire_defauts -- JSONL a champs FERMES, refus nommant la ligne (champ inconnu, requis vide, statut hors liste).",
+          "tags": [
+            "MO-174",
+            "R5"
+          ]
         }
       ],
       "tags": [
         "EO-158",
         "MO-171",
         "parseur-options",
-        "domicile"
+        "domicile",
+        "MO-174",
+        "R5"
       ]
     },
     "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/classer/entry.py": {
@@ -21681,13 +22183,28 @@
             "parseur-options",
             "domicile"
           ]
+        },
+        {
+          "date": "2026-09-18 09:47:13",
+          "action": "corrige",
+          "detail": "MO-175 jambe 3 : CHEMIN_EVALUATEUR_REL ne recommence plus par matrix/ (le marqueur partage rend deja .../matrix) et le motif d echec NOMME la cause (chemin + code + stderr)",
+          "tags": [
+            "MO-175",
+            "EO-168",
+            "auto-validation",
+            "chemin"
+          ]
         }
       ],
       "tags": [
         "EO-158",
         "MO-171",
         "parseur-options",
-        "domicile"
+        "domicile",
+        "MO-175",
+        "EO-168",
+        "auto-validation",
+        "chemin"
       ]
     },
     "cerveau-projet/matrix/matrice/data/commun/options.py": {
@@ -21711,6 +22228,603 @@
         "domicile",
         "parseur-options",
         "motif-partage"
+      ]
+    },
+    "matrice/data/outils/domicilier/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:44:52",
+          "action": "cree",
+          "detail": "MO-172 (EO-160) : point d entree de la remorque durablEE -- 2 verbes (auditer, aligner), DIRIGE seulement. Nom : domicilier, car la \"remorque\" est deja l inventaire de l operateur (collision nommee, pas de doublon de sens).",
+          "tags": [
+            "outil",
+            "domicilier",
+            "classe",
+            "mo-172"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "domicilier",
+        "classe",
+        "mo-172"
+      ]
+    },
+    "matrice/data/outils/domicilier/constants.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:44:52",
+          "action": "cree",
+          "detail": "MO-172 : constantes zero-valeur-en-dur -- porte ecrire, zone de fragments, repertoire des plans, filtres techniques (bac/archives), champs FERMES du plan, codes retour.",
+          "tags": [
+            "outil",
+            "domicilier",
+            "constants",
+            "mo-172"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "domicilier",
+        "constants",
+        "mo-172"
+      ]
+    },
+    "matrice/data/outils/domicilier/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:44:52",
+          "action": "cree",
+          "detail": "MO-172 : le coeur -- lire la classe (bloc de fonction LU, jamais redevine), charger/verifier le PLAN (champs fermes + premisses : domicile portant la fonction, marqueur coherent, exclusions qui excluent VRAIMENT), auditer (alignees / a aligner / exclues / TROU hors perimetre declare / PERIME), publier par la PORTE uniquement. Corrige en seance : le hors_plan etait du CODE MORT (jamais declenchable) -- remplace par un PERIMETRE DECLARE (attendu).",
+          "tags": [
+            "outil",
+            "domicilier",
+            "coeur",
+            "classe",
+            "perimetre-declare",
+            "mo-172"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "domicilier",
+        "coeur",
+        "classe",
+        "perimetre-declare",
+        "mo-172"
+      ]
+    },
+    "matrice/data/outils/domicilier/auditer/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:44:52",
+          "action": "cree",
+          "detail": "MO-172 : rapport lisible + verdict en code ET en clair. Corrige en seance : --json ne porte QUE le rapport (aucune prose) -- un consommateur machine n a pas a decouper du texte (mesure d epreuve).",
+          "tags": [
+            "outil",
+            "domicilier",
+            "auditer",
+            "json",
+            "mo-172"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "domicilier",
+        "auditer",
+        "json",
+        "mo-172"
+      ]
+    },
+    "matrice/data/outils/domicilier/auditer/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:44:52",
+          "action": "cree",
+          "detail": "MO-172 : orchestration du verbe auditer -- options du DOMICILE partage (data/commun/options.py, jamais recopie), plan par defaut livre, refus nomme sur option privee de valeur.",
+          "tags": [
+            "outil",
+            "domicilier",
+            "auditer",
+            "domicile-partage",
+            "mo-172"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "domicilier",
+        "auditer",
+        "domicile-partage",
+        "mo-172"
+      ]
+    },
+    "matrice/data/outils/domicilier/aligner/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:44:52",
+          "action": "cree",
+          "detail": "MO-172 : la passe -- un plan a TROU est REFUSE (aligner a l aveugle est interdit), le suffixe d appel est DECLARE par le plan sinon DEDUIT du texte ancien (drapeaux, sans_tirets), publication par la porte seulement.",
+          "tags": [
+            "outil",
+            "domicilier",
+            "aligner",
+            "derive",
+            "mo-172"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "domicilier",
+        "aligner",
+        "derive",
+        "mo-172"
+      ]
+    },
+    "matrice/data/outils/domicilier/aligner/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:44:53",
+          "action": "cree",
+          "detail": "MO-172 : orchestration du verbe aligner -- --simuler est le DEFAUT, --publier et --simuler sont REFUSES ensemble (la remorque ne devine pas ce qu on veut d elle).",
+          "tags": [
+            "outil",
+            "domicilier",
+            "aligner",
+            "dry-run",
+            "mo-172"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "domicilier",
+        "aligner",
+        "dry-run",
+        "mo-172"
+      ]
+    },
+    "matrice/data/outils/domicilier/plans/parseur-options.json": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:44:53",
+          "action": "cree",
+          "detail": "MO-172 : le PLAN de la classe du parseur d options -- rejoue MO-171 (domicile data/commun/options.py), 10 drapeaux declares + 2 sans_tirets, 1 exclusion DECLAREE (detecter-decalages-catalogue, homonyme qui n est pas de la classe) et le PERIMETRE DECLARE de 41 copies (manifeste genere par le rapport de la remorque elle-meme).",
+          "tags": [
+            "outil",
+            "domicilier",
+            "plan",
+            "classe",
+            "options",
+            "mo-172"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "domicilier",
+        "plan",
+        "classe",
+        "options",
+        "mo-172"
+      ]
+    },
+    "matrice/data/outils/domicilier/DESCRIPTION.md": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:44:53",
+          "action": "cree",
+          "detail": "MO-172 : contrat de la remorque -- les 7 champs fermes du plan, les 4 optionnels (exclus, attendu, extras, derive), les 3 verdicts, la securite (ecriture DANS la porte, cible INTACTE si refus) et ce que l outil n est PAS.",
+          "tags": [
+            "outil",
+            "domicilier",
+            "description",
+            "contrat",
+            "mo-172"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "domicilier",
+        "description",
+        "contrat",
+        "mo-172"
+      ]
+    },
+    "matrice/data/outils/ecrire/constants.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:54:51",
+          "action": "modifie",
+          "detail": "MO-173 (EO-161) : --contenu-base64 declare dans NOMS_OPTIONS_ECRIRE. Les trois sources de contenu (contenu, contenu-fichier, contenu-base64) sont EXCLUSIVES et c est leur PRESENCE qui fait foi, jamais leur verite.",
+          "tags": [
+            "outil",
+            "ecrire",
+            "base64",
+            "transport",
+            "mo-173"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "ecrire",
+        "base64",
+        "transport",
+        "mo-173"
+      ]
+    },
+    "matrice/data/outils/ecrire/ecrire/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:54:51",
+          "action": "modifie",
+          "detail": "MO-173 : entree du verbe ecrire -- sources de contenu EXCLUSIVES (refus nomme si combinees), decodage base64 avant publication, refus NOMME si le contenu resolu est VIDE (ecrire un fichier vide est une intention, jamais un oubli, EO-156), USAGE unique qui nomme les trois sources.",
+          "tags": [
+            "outil",
+            "ecrire",
+            "options",
+            "base64",
+            "dry",
+            "mo-173"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "ecrire",
+        "options",
+        "base64",
+        "dry",
+        "mo-173"
+      ]
+    },
+    "_operateur/optimus-prime/audits/audit-pilote-erreurs-travail.md": {
+      "modifications": [
+        {
+          "date": "2026-09-18 09:01:03",
+          "action": "cree",
+          "detail": "AUDIT MO-174 (EO-162) : les 8 devoirs du pilote sur les erreurs et problemes trouves en travaillant, ce qu'il porte deja (mesure fichier:ligne), l'ECART mesure et les 7 reparations proposees (R1..R4 CRITIQUES, R5..R7 autonomes). Premier document du domicile audits/",
+          "tags": [
+            "optimus",
+            "audit",
+            "pilote",
+            "process",
+            "erreurs",
+            "MO-174",
+            "EO-162"
+          ]
+        },
+        {
+          "date": "2026-09-18 19:18:27",
+          "action": "modifie",
+          "detail": "Cloture de l audit : section 7 'Suite donnee' -- R1..R4 POSES (domiciles nommes), R5..R6 a faire, R7 FAIT, non-regression 27/27. Sans cette mise a jour le document aurait continue d affirmer 'R1..R4 CRITIQUE : accord du createur' alors que l accord est donne et les reparations livrees.",
+          "tags": [
+            "audit",
+            "mo174",
+            "r1",
+            "r2",
+            "r3",
+            "r4",
+            "cloture"
+          ]
+        }
+      ],
+      "tags": [
+        "optimus",
+        "audit",
+        "pilote",
+        "process",
+        "erreurs",
+        "MO-174",
+        "EO-162",
+        "mo174",
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "cloture"
+      ]
+    },
+    "_operateur/optimus-prime/super-combos/combos/outils/evaluer-auto-validation.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 09:16:47",
+          "action": "cree",
+          "detail": "AVIS MULTI-AXES d auto-validation (MO-175) : 5 axes (perimetre, reversible, preuve, deja-vu, serie), chacun vote et se justifie ; verdict AUTO seulement si un vote pour et AUCUN vote contre. Un seul contre suffit : le CRITIQUE reste au createur et l item rend la main.",
+          "tags": [
+            "optimus",
+            "MO-175",
+            "auto-validation",
+            "super-combo"
+          ]
+        }
+      ],
+      "tags": [
+        "optimus",
+        "MO-175",
+        "auto-validation",
+        "super-combo"
+      ]
+    },
+    "_operateur/optimus-prime/pilote/filtrer/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 09:16:48",
+          "action": "modifie",
+          "detail": "MO-175 : filtrer JOUE desormais la porte qu il route (avant : il imprimait la route et rendait 0, le depot restait manuel -- mesure MO-174). Theme absent = REFUS NOMME code 2, jamais un theme devine. Mesure : EO-165 et EO-166 deposees automatiquement, le 3e appel refuse.",
+          "tags": [
+            "optimus",
+            "MO-175",
+            "depot-automatique"
+          ]
+        },
+        {
+          "date": "2026-09-18 09:31:56",
+          "action": "corrige",
+          "detail": "MO-175 : les DEUX chaines dirname du fichier (sys.path.insert et CHEMIN_DEPOT) sont ancrees sur le MARQUEUR PARTAGE (commun.py du pilote, L-013/MO-088) au lieu de compter deux niveaux. Mesure : filtrer repond (crochet, refus nomme) et la zone n a plus AUCUNE chaine dirname.",
+          "tags": [
+            "optimus",
+            "MO-175",
+            "chemins",
+            "ancrage"
+          ]
+        }
+      ],
+      "tags": [
+        "optimus",
+        "MO-175",
+        "depot-automatique",
+        "chemins",
+        "ancrage"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/pilote/fin/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 09:38:56",
+          "action": "modifie",
+          "detail": "MO-175 jambe 3 : enchainer=True au fin, priorite lot > auto-validee > file > tresse, arret de la chaine si la tete n est pas auto-validee",
+          "tags": [
+            "MO-175",
+            "pilote",
+            "enchainement",
+            "auto-validation"
+          ]
+        },
+        {
+          "date": "2026-09-18 19:39:52",
+          "action": "modifie",
+          "detail": "R5-C : cloturer_mission(..., defauts) -- les defauts voyagent (mission, journal, retour Matrice) et les NON REPARES sont CRIES.",
+          "tags": [
+            "MO-174",
+            "R5"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-175",
+        "pilote",
+        "enchainement",
+        "auto-validation",
+        "MO-174",
+        "R5"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-contrat-fondamental.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 09:53:34",
+          "action": "cree",
+          "detail": "Controle JUMEAUX (MO-175) : deux domiciles declarant le meme nom ne divergent jamais -- detection automatique par nom + couples DECLARES (VALEUR_AUTO_VALIDATION / VERDICT_AUTO), decision pure comparer_jumeaux, lecture par AST, ecart nomme avec valeur ET ligne",
+          "tags": [
+            "MO-175",
+            "non-regression",
+            "garde",
+            "jumeaux"
+          ]
+        },
+        {
+          "date": "2026-09-18 09:53:54",
+          "action": "corrige",
+          "detail": "Rectification de la note precedente : l action est MODIFIE (le fichier existait deja, seule la fonction controler_jumeaux est NEUVE), et le controle a ete MESURE -- nominal sur les 3 jumeaux reels, piege sur copie",
+          "tags": [
+            "MO-175",
+            "non-regression",
+            "trace"
+          ]
+        },
+        {
+          "date": "2026-09-18 19:27:59",
+          "action": "modifie",
+          "detail": "R5-B : verbe 'crochets' -- le miroir code<->convention (deux sens) + validation que le type transmis appartient a la liste fermee TYPES. Bloquant, cobaye 4 cas rejoues.",
+          "tags": [
+            "MO-174",
+            "R5",
+            "garde",
+            "CV-007"
+          ]
+        },
+        {
+          "date": "2026-09-18 19:39:52",
+          "action": "modifie",
+          "detail": "R5-B/D : le verbe crochets verifie aussi que TYPE_ROUTE_OUTIL appartient a la liste fermee TYPES (cobaye appartenance).",
+          "tags": [
+            "MO-174",
+            "R5",
+            "garde"
+          ]
+        },
+        {
+          "date": "2026-09-18 19:47:52",
+          "action": "modifie",
+          "detail": "R5-E : verbe appels-non-lies -- aucun nom APPELE n'est orphelin (AST, sans execution), cobaye 5 cas, import builtins.",
+          "tags": [
+            "MO-174",
+            "R5",
+            "garde"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-175",
+        "non-regression",
+        "garde",
+        "jumeaux",
+        "trace",
+        "MO-174",
+        "R5",
+        "CV-007"
+      ]
+    },
+    "matrice/data/commun/cobayes_jetables.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 18:59:11",
+          "action": "cree",
+          "detail": "MO-175 j5 : FABRIQUE DE FIXTURES JETABLES partagee (moteur partage data/commun, moteur unique L-029/L-102). API : fixtures(prefixe, journal) = dossier temporaire retire TOUJOURS (meme sur exception) et residu DIT ; retirer(dossier) = (retires, echecs) jamais avale ; copier(zone, dossier, relatifs) = copies de fichiers reels, originaux intacts ; litteraux(chemin) = declarations de chaine de module par AST (aucun import) ; muter_litteral(chemin, nom, genre) = valeur fausse ou declaration retiree, dans une COPIE. Charge par CHEMIN (les outils portent des tirets : jamais importables par nom). Preuve : 14/14 epreuves.",
+          "tags": [
+            "fabrique",
+            "fixtures",
+            "cobaye",
+            "data-commun",
+            "moteur-partage",
+            "mo175"
+          ]
+        }
+      ],
+      "tags": [
+        "fabrique",
+        "fixtures",
+        "cobaye",
+        "data-commun",
+        "moteur-partage",
+        "mo175"
+      ]
+    },
+    "_operateur/optimus-prime/regles-immuables/defaut-outil-repare-sur-place.md": {
+      "modifications": [
+        {
+          "date": "2026-09-18 19:17:50",
+          "action": "cree",
+          "detail": "R1 (audit MO-174, GO createur) : REGLE IMMUABLE 'UN DEFAUT D OUTIL SE REPARE DANS L OUTIL'. 6 temps (reproduire, reparer DANS l outil, prouver, tracer, reprendre, hors perimetre -> inter-round), le tableau des 5 contournements INTERDITS, et les 2 choses que la regle N EXIGE PAS (reparation immediate si hors perimetre ; outil CRITIQUE sans le createur). L ecart D7 de l audit etait GRAVE : la garantie n existait NULLE PART avant ce fichier.",
+          "tags": [
+            "regle-immuable",
+            "r1",
+            "audit",
+            "mo174",
+            "outil",
+            "reparation"
+          ]
+        }
+      ],
+      "tags": [
+        "regle-immuable",
+        "r1",
+        "audit",
+        "mo174",
+        "outil",
+        "reparation"
+      ]
+    },
+    "_operateur/optimus-prime/protocoles/proto-10-route-outil-defaillant.md": {
+      "modifications": [
+        {
+          "date": "2026-09-18 19:17:50",
+          "action": "cree",
+          "detail": "R2 (audit MO-174) : PROTOCOLE 10 -- route OUTIL DEFAILLANT en 8 temps (D1 detecter, D2 reproduire, D3 qualifier, D4 mettre la mission en pause, D5 reparer dans l outil, D6 prouver, D7 tracer, D8 reprendre/alerter) + quand l utiliser (faux refus, garde trop large, faux echec, silence, deux textes qui se contredisent) + interdits + rappel du pilote. Distinct de proto-8 (celui de la VEILLE) : ici le defaut est trouve EN SEANCE.",
+          "tags": [
+            "protocole",
+            "r2",
+            "audit",
+            "mo174",
+            "outil",
+            "reparation"
+          ]
+        }
+      ],
+      "tags": [
+        "protocole",
+        "r2",
+        "audit",
+        "mo174",
+        "outil",
+        "reparation"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/pilote/fin/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 19:39:52",
+          "action": "modifie",
+          "detail": "R5-C : option --defauts-fichier (lu dans un FICHIER, jamais un argument : EO-132) + usage.",
+          "tags": [
+            "MO-174",
+            "R5"
+          ]
+        },
+        {
+          "date": "2026-09-18 19:47:52",
+          "action": "modifie",
+          "detail": "R5-C : REPARATION d'un defaut REEL --  etait APPELE sans etre importe (NameError au coeur de la cloture) ; vu par la fumee de la porte, pas par py_compile ni par mes preuves.",
+          "tags": [
+            "MO-174",
+            "R5",
+            "reparation"
+          ]
+        },
+        {
+          "date": "2026-09-18 19:48:45",
+          "action": "modifie",
+          "detail": "RECTIFICATION de la note du 2026-09-18 19:47:52 (elle est arrivee AMPUTEE : le nom de la fonction avait disparu). Cause MESUREE : mes accents graves dans --detail ont ete EXECUTES par le shell (bash : 'lire_defauts: command not found'), exactement le defaut que R6 de l'audit MO-174 decrit et qui n'est PAS encore repare. Le fait : lire_defauts etait APPELE sans etre importe dans fin/entry.py -- NameError au coeur de la cloture. Vu par la FUMEE de la porte (main.py fin), pas par py_compile, pas par la porte editer, pas par mes preuves unitaires (elles appelaient la fonction directement). Repare par la porte, puis couvert par le maillon 29 appels-non-lies.",
+          "tags": [
+            "MO-174",
+            "R5",
+            "reparation",
+            "R6"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-174",
+        "R5",
+        "reparation",
+        "R6"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/audits/audit-pilote-erreurs-travail.md": {
+      "modifications": [
+        {
+          "date": "2026-09-18 19:43:09",
+          "action": "modifie",
+          "detail": "R5 : la ligne R5 passe de 'a faire' a POSE, et le controle passe a 28/28.",
+          "tags": [
+            "MO-174",
+            "R5",
+            "audit"
+          ]
+        },
+        {
+          "date": "2026-09-18 19:49:44",
+          "action": "modifie",
+          "detail": "R5 : controle a 29/29 + la decouverte de seance (nom non importe, maillon 29) gravee dans l audit.",
+          "tags": [
+            "MO-174",
+            "R5",
+            "audit"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-174",
+        "R5",
+        "audit"
       ]
     }
   },

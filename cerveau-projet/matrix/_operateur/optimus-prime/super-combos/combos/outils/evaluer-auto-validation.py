@@ -1,0 +1,167 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""evaluer-auto-validation -- AVIS MULTI-AXES sur l auto-validation d un item du vrac.
+
+Demande du createur (MO-175, 2026-09-18) : la decision AUTO-VALIDATION ne doit PAS
+etre un simple drapeau. Elle est RENDUE par une evaluation a plusieurs axes, et son
+verdict est ecrit dans l ENREGISTREMENT DE LA MISSION au moment de la CREATION
+(l entonnoir l ecrit ; l entonnoir le lit ; une file AUTO-VALIDEE ne recoit que les
+items dont le verdict est AUTO).
+
+5 AXES -- chacun VOTE (jamais muet) :
+  A1 PERIMETRE  l item touche-t-il une zone CRITIQUE (regle immuable, fiche,
+                protocole, theme, parcours) ?            -> vote CONTRE
+  A2 REVERSIBLE le livrable est-il du code / un outil ? -> vote POUR
+  A3 PREUVE     l item exige-t-il une preuve (cobaye) ? -> vote POUR
+  A4 DEJA-VU    la source est-elle le createur ?        -> vote POUR
+  A5 SERIE      l item est-il une REPARATION / correction (le cas a automatiser) ?
+                                                        -> vote POUR
+
+VERDICT : AUTO si au moins un vote POUR et AUCUN vote CONTRE ; sinon NON.
+Un SEUL vote CONTRE suffit : la regle du createur est que l enchainement S ARRETE
+des qu un item NON auto-valide est en tete (le CRITIQUE reste au createur).
+
+Usage :
+    python evaluer-auto-validation.py --theme PILOTE --objectif "..." [--source createur]
+                                 [--type dev] [--json]
+"""
+
+import argparse
+import json
+import sys
+import unicodedata
+
+# --- REFERENCES (aucune valeur en dur dans la logique) -----------------------
+VERDICT_AUTO = "auto"
+VERDICT_NON = "non"
+AXE_PERIMETRE = "perimetre"
+AXE_REVERSIBLE = "reversible"
+AXE_PREUVE = "preuve"
+AXE_DEJA_VU = "deja-vu"
+AXE_SERIE = "serie"
+VOTE_POUR = "pour"
+VOTE_CONTRE = "contre"
+SOURCE_CREATEUR = "createur"
+
+# Les zones CRITIQUES : les nommer suffit a declencher le vote CONTRE (A1).
+MOTS_ZONES_CRITIQUES = (
+    "regle immuable", "regles immuables", "regle-immuable", "fiche", "protocole",
+    "constitution", "parcours", "theme", "index", "agenda",
+)
+# Ce qui est du CODE (reparable, avec un point de restauration) -> A2.
+MOTS_CODE = (
+    "outil", "porte", "pilote", "garde", "combo", "script", "code", "bug",
+    "service", "routine", "fonction", "py", "json", "bdd",
+)
+# Ce qui EXIGE une preuve executable -> A3.
+MOTS_PREUVE = ("cobaye", "preuve", "prouver", "mesure", "mesurer", "verifier", "test", "eprouver")
+# Ce qui est une REPARATION / correction (le cas a automatiser) -> A5.
+MOTS_REPARATION = (
+    "reparer", "reparation", "corriger", "correction", "bug", "erreur", "friction",
+    "ecart", "ko", "auto-correction", "auto correction", "defaut",
+)
+
+
+def normaliser(texte):
+    """Minuscule SANS accent : la comparaison de mots entiers doit etre stable."""
+    decompose = unicodedata.normalize("NFD", texte or "")
+    sans_accent = "".join(c for c in decompose if unicodedata.category(c) != "Mn")
+    return sans_accent.lower()
+
+
+def mot_present(texte_normalise, mot):
+    """Vrai si le mot est present EN ENTIER (jamais dans un autre mot)."""
+    mot_normalise = normaliser(mot)
+    debut = 0
+    while True:
+        position = texte_normalise.find(mot_normalise, debut)
+        if position < 0:
+            return False
+        avant = texte_normalise[position - 1] if position > 0 else " "
+        apres_position = position + len(mot_normalise)
+        apres = texte_normalise[apres_position] if apres_position < len(texte_normalise) else " "
+        if not avant.isalnum() and not apres.isalnum():
+            return True
+        debut = position + 1
+
+
+def mot_cle(texte_normalise, mots):
+    """Retourne le PREMIER mot-cle trouve (ou ""), pour que l avis soit LISIBLE."""
+    for mot in mots:
+        if mot_present(texte_normalise, mot):
+            return mot
+    return ""
+
+
+def evaluer(theme, objectif, type_propose="", source=""):
+    """Retourne (verdict, axes) -- chaque axe porte son vote ET sa JUSTIFICATION."""
+    texte = normaliser(" ".join([theme or "", objectif or "", type_propose or ""]))
+    axes = []
+
+    mot_critique = mot_cle(texte, MOTS_ZONES_CRITIQUES)
+    axes.append({
+        "axe": AXE_PERIMETRE,
+        "vote": VOTE_CONTRE if mot_critique else VOTE_POUR,
+        "motif": ("zone CRITIQUE nommee : " + mot_critique) if mot_critique
+                 else "aucune zone critique nommee",
+    })
+    mot_code = mot_cle(texte, MOTS_CODE)
+    axes.append({
+        "axe": AXE_REVERSIBLE,
+        "vote": VOTE_POUR if mot_code else VOTE_CONTRE,
+        "motif": ("livrable de code : " + mot_code) if mot_code else "livrable non identifie comme du code",
+    })
+    mot_preuve = mot_cle(texte, MOTS_PREUVE)
+    axes.append({
+        "axe": AXE_PREUVE,
+        "vote": VOTE_POUR if mot_preuve else VOTE_CONTRE,
+        "motif": ("preuve exigee : " + mot_preuve) if mot_preuve else "aucune preuve exigee dans l enonce",
+    })
+    est_createur = normaliser(source) == SOURCE_CREATEUR
+    axes.append({
+        "axe": AXE_DEJA_VU,
+        "vote": VOTE_POUR if est_createur else VOTE_CONTRE,
+        "motif": ("source createur : deja vue avec lui") if est_createur else "source : " + (source or "inconnue"),
+    })
+    mot_serie = mot_cle(texte, MOTS_REPARATION)
+    axes.append({
+        "axe": AXE_SERIE,
+        "vote": VOTE_POUR if mot_serie else VOTE_CONTRE,
+        "motif": ("reparation / correction : " + mot_serie) if mot_serie else "pas une reparation",
+    })
+
+    contre = [a for a in axes if a["vote"] == VOTE_CONTRE]
+    pour = [a for a in axes if a["vote"] == VOTE_POUR]
+    verdict = VERDICT_AUTO if (pour and not contre) else VERDICT_NON
+    return verdict, axes
+
+
+def main():
+    analyseur = argparse.ArgumentParser(description="Avis multi-axes sur l auto-validation")
+    analyseur.add_argument("--theme", default="")
+    analyseur.add_argument("--objectif", default="")
+    analyseur.add_argument("--type", dest="type_propose", default="")
+    analyseur.add_argument("--source", default="")
+    analyseur.add_argument("--json", action="store_true")
+    arguments = analyseur.parse_args()
+    if not arguments.objectif:
+        print("Usage : python evaluer-auto-validation.py --theme <theme> --objectif \"...\" [--source createur] [--json]")
+        return 2
+    verdict, axes = evaluer(arguments.theme, arguments.objectif, arguments.type_propose, arguments.source)
+    if arguments.json:
+        print(json.dumps({"verdict": verdict, "axes": axes}, ensure_ascii=False, indent=2))
+        return 0
+    print("AVIS AUTO-VALIDATION -- " + str(len(axes)) + " axes")
+    for a in axes:
+        print("  " + a["axe"] + " : " + a["vote"].upper() + " -- " + a["motif"])
+    print("VERDICT : " + verdict.upper())
+    if verdict == VERDICT_AUTO:
+        print("  -> la mission part en FILE AUTO-VALIDEE : elle s enchaine sans redemander.")
+    else:
+        refus = ", ".join(a["axe"] for a in axes if a["vote"] == VOTE_CONTRE)
+        print("  -> la mission reste NON auto-validee (axes contre : " + refus + ") : elle rend la main.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

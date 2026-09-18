@@ -42,6 +42,14 @@ categorie importable d'un pilote ou d'une routine (`commun.py`, `constants.py`,
 """
 import json
 
+# L IDENTITE D UN FAIT : ce qui DIT ce qui s est passe (le fait lui-meme), par
+# opposition aux champs d ETAT (la date de la passe, le tableau courant, le compteur
+# absorbe). Un fait SANS identite est INDISTINGUABLE de la recopie du meme etat :
+# le garde de non-redondance l accuse alors a juste titre, et l histoire ne peut plus
+# repondre "que s est-il passe ?" (EO-163, decision du createur 2026-09-18 : le fait
+# PORTE l identite de l evenement -- le garde, lui, ne s affaiblit pas).
+CHAMP_IDENTITE = "identite"
+
 # Motifs de la DECISION (journalises, jamais recopies dans la logique).
 MOTIF_CHANGEMENT = "changement"
 MOTIF_ABSORBEE = "absorbee"

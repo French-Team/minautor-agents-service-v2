@@ -1,0 +1,48 @@
+"""Fonctions de l'audit d'une classe (une fonction = une chose)."""
+import json
+
+from commun import auditer
+
+
+def lignes_rapport(rapport):
+    """Rapport lisible : ce qui est aligne, ce qui reste, ce que le plan EXCLUT."""
+    lignes = [
+        "Classe : " + rapport["classe"],
+        "Domicile : " + rapport["domicile"],
+        "Copies alignees : " + str(len(rapport["alignees"])),
+        "Copies a aligner : " + str(len(rapport["a_aligner"])),
+    ]
+    for rel in rapport["a_aligner"]:
+        lignes.append("  A ALIGNER : " + rel)
+    lignes.append("Exclusions DECLAREES : " + str(len(rapport["exclues"])))
+    for rel in rapport["exclues"]:
+        lignes.append("  EXCLUE : " + rel)
+    lignes.append("Perimetre DECLARE : " + ("oui" if rapport["perimetre_declare"] else "NON (plan en perimetre ouvert)"))
+    lignes.append("HORS PLAN (copies que le plan ne liste pas) : " + str(len(rapport["hors_plan"])))
+    for rel in rapport["hors_plan"]:
+        lignes.append("  TROU : " + rel)
+    lignes.append("Copies ATTENDUES disparues (plan perime) : " + str(len(rapport["disparues"])))
+    for rel in rapport["disparues"]:
+        lignes.append("  PERIMEE : " + rel)
+    return lignes
+
+
+def executer(plan, brut=False, perimetre=None):
+    """Imprime le rapport et rend le CODE d'etat : 0 aligne, 1 ecart, 2 refuse."""
+    rapport = auditer(plan, perimetre)
+    if brut:
+        print(json.dumps(rapport, ensure_ascii=True, indent=2, sort_keys=True))
+    else:
+        for ligne in lignes_rapport(rapport):
+            print(ligne)
+    if rapport["hors_plan"]:
+        print("REFUS : le plan laisse " + str(len(rapport["hors_plan"])) + " copie(s) hors plan -- il ne couvre pas la classe.")
+        return 2
+    if rapport["disparues"]:
+        print("ECART : " + str(len(rapport["disparues"])) + " copie(s) attendue(s) ne porte(nt) plus la fonction -- plan PERIME.")
+        return 1
+    if rapport["a_aligner"]:
+        print("ECART : " + str(len(rapport["a_aligner"])) + " copie(s) ne consomment pas le domicile.")
+        return 1
+    print("OK : la classe est entierement alignee sur son domicile.")
+    return 0

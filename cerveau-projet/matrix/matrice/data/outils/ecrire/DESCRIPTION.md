@@ -7,6 +7,7 @@
 ```
 python main.py ecrire --fichier <chemin> --contenu "<texte|@fichier>" [--mode creer|remplacer|ajouter]
 python main.py ecrire --fichier <chemin> --contenu-fichier <chemin-source> [--mode creer|remplacer|ajouter]
+python main.py ecrire --fichier <chemin> --contenu-base64 <blob> [--mode creer|remplacer|ajouter]
 python main.py editer --fichier <chemin> --ancien "<old|@fichier>" --nouveau "<new|@fichier>"
 python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fichier <chemin>
 ```
@@ -14,8 +15,12 @@ python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fic
 - `--fichier` : cible (relatif a la racine, detectee par `data/commun/racine.py`).
 - `--contenu` : texte direct, ou `@chemin` (anti-heredoc, lecture du fichier source).
 - `--contenu-fichier` : alias lecture fichier source (meme effet que `--contenu @...`).
+- `--contenu-base64` : **transport SANS echappement (MO-173)** -- le blob ne porte ni guillemet, ni antislash, ni saut de ligne : aucune couche traversee (heredoc, shell, litteral) ne peut le deformer. Lecture STRICTE (`validate=True`), refus NOMME si le blob est invalide ou n est pas de l UTF-8. **Les trois sources de contenu sont EXCLUSIVES** et seule leur PRESENCE compte : une source videe est REFUSEE (ecrire un fichier vide est une intention, pas un oubli).
 - `--mode` : `creer` (refuse si existe), `remplacer` (defaut), `ajouter` (concatene).
 - `--ancien` / `--nouveau` : chaines exactes (1 occurrence unique imposee, comme `str_replace` mais validee).
+
+- **Extrait a DEUX formes (MO-173)** : `ecrire` force un LF final (L-001), donc un extrait de MILIEU de ligne ecrit par la porte ne pouvait JAMAIS correspondre. `editer` essaie la forme EXACTE, puis la forme SANS son LF final, et DIT laquelle a servi ; si la forme retenue a perdu le LF, le NOUVEAU le perd aussi (symetrie -- sinon l edition injecterait un saut de ligne DANS la ligne).
+- **Rien apres la publication (MO-173)** : le compte-rendu est construit AVANT `os.replace` ; apres la publication il ne reste que le SHA et le retour. Une porte qui ecrit PUIS crie annonce un faux echec (mesure : un NameError declenche apres l ecriture).
 - `--ancien-fichier` / `--nouveau-fichier` : variantes fichier pour gros blocs.
 - **Valeur a tirets (EO-156)** : une valeur peut commencer par `--` -- un document a carte d'identite COMMENCE par `---` : la carte s'ecrit donc en UNE passe. Le morceau suivant n'est pris pour une option que s'il est un NOM connu (`--contenu`). Seule limite : une valeur qui serait exactement un nom d'option connu (ex. `--mode`) passe par `@fichier`.
 
@@ -32,6 +37,7 @@ python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fic
 | str_replace fragile whitespace | **Occurrence unique imposee** (0 ou >1 = REFUS code 2, message explicite) |
 | Pas d'ASCII | **ASCII signale** (nb non-ASCII + lignes) |
 | Heredoc casse | **@file** (anti-heredoc) |
+| Contenu hostile au transport (antislash, triples guillemets imbriques) | **`--contenu-base64`** (MO-173) : le blob traverse la chaine sans qu aucune couche puisse le deformer. Epreuve : le MEME contenu, en brut, arrive CORROMPU (l antislash consomme) ; en base64 il est **BIT-EXACT** |
 | ImportError invisible a la compilation | **Garde d ORDRE** (EO-159) : un import LOCAL dont le nom n est pas lie par le module fournisseur est REFUSE avant publication -- `py_compile` ne dit rien d un ImportError (mesure MO-169 : la porte est morte de son propre contenu) |
 
 ## Architecture

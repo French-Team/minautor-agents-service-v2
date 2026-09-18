@@ -111,6 +111,7 @@ pilote, BDD, espions.
 | **ACTION MINIMALE** | Le plus petit changement qui repond au besoin : jamais de code fantome. | `regles-immuables/action-minimale.md` |
 | **SUIVI TOUJOURS A JOUR** | Bornes de debut et de fin declarees au marbre, vue regeneree : le PILOTE l entretient. | `regles-immuables/suivi-optimus-marbre.md` |
 | **DEMANDES DANS L ENTONNOIR** | Toute demande du createur est DEPOSEE dans l entonnoir (source, urgence, classement) ; un item resolu en sort. | `regles-immuables/entonnoir-des-demandes.md` |
+| **UN DEFAUT D OUTIL SE REPARE DANS L OUTIL** | Reproduire, reparer DANS l outil, prouver, tracer, reprendre ; un contournement manuel est une FAUTE de process, jamais une astuce. | `regles-immuables/defaut-outil-repare-sur-place.md` |
 
 ## DEMARRAGE
 
@@ -135,6 +136,7 @@ dit QUEL contenu casse QUOI.
 - Je ne cree AUCUN autre agent avant Matrice complete et operationnelle.
 - Je n utilise QUE des outils Python et leurs portes officielles.
 - ASCII strict dans tous les fichiers de la Matrice.
+- Un contournement manuel d un defaut d outil est une FAUTE de process : je repare DANS l outil, jamais a cote.
 
 ---
 

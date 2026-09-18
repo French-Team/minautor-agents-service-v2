@@ -2,7 +2,12 @@
 
 Interface entre main.py et les fonctions simples (vrac/fonctions.py).
 """
-from listes import URGENCES
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+from listes import NOM_EVALUATEUR, TYPES, URGENCES, VERDICT_NON
 from roles import CHAMP_ROLE, valider_role
 from stockage import charger_entonnoir, enregistrer_entonnoir
 from vrac.fonctions import deposer_vrac, proposer_type, proposer_urgence
@@ -14,7 +19,61 @@ def extraire_options(arguments, noms_connus):
     return repartir(arguments, noms_connus)
 
 
-NOMS_OPTIONS = ("theme", "objectif", "urgence", "source", "role")
+NOMS_OPTIONS = ("theme", "objectif", "urgence", "source", "role", "type")
+
+# L avis multi-axes est un SUPER-COMBO de l operateur (hors pilote). Le chemin se
+# resout par le MARQUEUR PARTAGE (L-013 / MO-088) : AUCUN parents[N] compte a la
+# main, et un marqueur introuvable le DIT (jamais un chemin faux et silencieux).
+BORNES_REMONTEE = 30
+MARQUEUR_MATRICE = Path("matrice") / "data" / "commun" / "racine.py"
+# ATTENTION (EO-168 / MO-175 jambe 3) : le marqueur PARTAGE designe le dossier
+# QUI PORTE `matrice/` (soit .../cerveau-projet/matrix) -- le chemin relatif
+# part DONC de `_operateur/...`. L ancienne valeur commencait par `matrix/`, ce
+# qui DOUBLAIT le segment (`.../matrix/matrix/_operateur/...`) : l evaluateur
+# etait INTROUVABLE, et l avis tombait a NON avec un motif qui parlait de JSON.
+CHEMIN_EVALUATEUR_REL = (Path("_operateur") / "optimus-prime" / "super-combos"
+                         / "combos" / "outils" / NOM_EVALUATEUR)
+
+
+def trouver_racine_matrice(depart):
+    """Remonte jusqu au dossier qui PORTE le marqueur partage ; l echec se DIT."""
+    courant = Path(depart).resolve()
+    for _ in range(BORNES_REMONTEE):
+        if (courant / MARQUEUR_MATRICE).is_file():
+            return courant
+        if courant.parent == courant:
+            break
+        courant = courant.parent
+    raise RuntimeError("Racine matrix introuvable (marqueur " + str(MARQUEUR_MATRICE)
+                       + " absent en remontant).")
+
+
+CHEMIN_EVALUATEUR = trouver_racine_matrice(Path(__file__).resolve().parent) / CHEMIN_EVALUATEUR_REL
+
+
+def avis_auto_validation(theme, objectif, type_propose, source):
+    """Rend (verdict, axes) par l AVIS MULTI-AXES sur l auto-validation.
+
+    Un moteur INJOIGNABLE se DIT : il rend NON (l item rend la main) et l axe
+    `moteur` porte la raison -- jamais un repli muet (l absence d un champ doit
+    se dire, lecon MO-167).
+    """
+    if not CHEMIN_EVALUATEUR.is_file():
+        return VERDICT_NON, [{"axe": "moteur", "vote": "contre",
+                              "motif": "evaluateur INTROUVABLE : " + str(CHEMIN_EVALUATEUR)}]
+    sortie = subprocess.run(
+        [sys.executable, str(CHEMIN_EVALUATEUR), "--theme", theme,
+         "--objectif", objectif, "--type", type_propose, "--source", source,
+         "--json"], capture_output=True, text=True)
+    try:
+        avis = json.loads(sortie.stdout)
+    except Exception as erreur:
+        # Le motif NOMME la cause reelle : code de sortie + ce que le moteur a DIT
+        # (l ancien motif parlait de JSON et cachait un chemin introuvable).
+        motif = ("evaluateur injoignable (code " + str(sortie.returncode) + ") : "
+                 + str(erreur)[:60] + " -- " + (sortie.stderr or "").strip()[:140])
+        return VERDICT_NON, [{"axe": "moteur", "vote": "contre", "motif": motif}]
+    return avis.get("verdict", VERDICT_NON), avis.get("axes", [])
 
 
 def executer(arguments):
@@ -25,7 +84,7 @@ def executer(arguments):
     source = options.get("source", "createur")
 
     if not theme or not objectif:
-        print('Usage : python main.py deposer --theme "..." --objectif "..." [--urgence bloquante|haute|normale|basse] [--source veille|createur] [--role THEME]')
+        print('Usage : python main.py deposer --theme "..." --objectif "..." [--urgence bloquante|haute|normale|basse] [--source veille|createur] [--role THEME] [--type dev|reparation|doc|audit|revision]')
         return 2
     if urgence not in URGENCES:
         print("Urgence inconnue : " + urgence + " (urgences fermees : " + ", ".join(URGENCES) + ")")
@@ -43,9 +102,20 @@ def executer(arguments):
             print(ecart)
         role = canonical
 
+    # Le TYPE declare (crochet `[outil]`, `[audit]`...) est valide contre la
+    # liste FERMEE avant toute ecriture : un type inconnu se REFUSE, il ne
+    # se replie pas en silence sur une proposition.
+    type_declare = (options.get("type") or "").strip()
+    if type_declare and type_declare not in TYPES:
+        print("Type inconnu : " + type_declare + " (types fermes : "
+              + ", ".join(TYPES) + ")")
+        return 2
     etat = charger_entonnoir()
-    identifiant = deposer_vrac(etat, theme, objectif, urgence, source, role)
-    type_propose, mot_cle = proposer_type(theme, objectif)
+    type_propose, mot_cle = proposer_type(theme, objectif, type_declare)
+    # L AVIS est rendu AVANT l ecriture : le verdict part avec l item (MO-175).
+    verdict, axes = avis_auto_validation(theme, objectif, type_propose, source)
+    identifiant = deposer_vrac(etat, theme, objectif, urgence, source, role,
+                               verdict, axes, type_propose)
     enregistrer_entonnoir(etat)
     print(
         "Mission " + identifiant + " deposee au vrac (urgence " + urgence

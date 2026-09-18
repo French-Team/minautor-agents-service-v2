@@ -156,6 +156,51 @@ def _passer(routeur, boite, maintenance, historique, etat):
 
 
 # --------------------------------------------------------------------------- 1
+# --- LES ECRIVAINS du journal (DECLARES, jamais devines) ---------------------
+# Un journal d histoire peut avoir PLUSIEURS ecrivains : les compter ensemble
+# melange deux choses (les passes de routage et les traces de rotation/demarrage).
+# Chaque ecrivain se reconnait a un CHAMP MARQUEUR declare ici.
+ECRIVAINS = (
+    ("tour (passe de routage)", "routes"),
+    ("journaliser (evenement type)", "type"),
+    ("journaliser (demarrage)", "demarrage"),
+)
+NOM_ECRIVAIN_INCONNU = "autre (aucune signature declaree)"
+
+
+def classer_faits(lignes, champ_identite):
+    """CLASSE les lignes d un journal d histoire (fonction PURE : donc piegeable).
+
+    Rend : `legacy` (le bloc d AVANT la reparation : une recopie d etat),
+    `identifies` (les faits qui PORTENT leur identite, comparables entre eux) et
+    `sans_identite` (les faits d AVANT le champ, comptes PAR ECRIVAIN).
+    Un fait sans identite n est jamais accuse : il est DECLARE -- il ne porte pas
+    de quoi se distinguer d une recopie d etat (EO-163).
+    """
+    resultat = {"legacy": 0, "identifies": [], "sans_identite": {}}
+    for ligne in lignes:
+        try:
+            evenement = json.loads(ligne)
+        except ValueError:
+            continue
+        if "routes" in evenement and "passes_absorbes" not in evenement:
+            resultat["legacy"] += 1
+            continue
+        if champ_identite in evenement and "passes_absorbes" in evenement:
+            resultat["identifies"].append(json.dumps(
+                {cle: valeur for cle, valeur in evenement.items() if cle != "date"},
+                sort_keys=True, ensure_ascii=True))
+            continue
+        ecrivain = NOM_ECRIVAIN_INCONNU
+        for nom, marqueur in ECRIVAINS:
+            if marqueur in evenement:
+                ecrivain = nom
+                break
+        resultat["sans_identite"][ecrivain] = (
+            resultat["sans_identite"].get(ecrivain, 0) + 1)
+    return resultat
+
+
 def controler_decision_pure(routeur, erreurs):
     """La decision rend la meme reponse pour les memes nombres, sans disque."""
     if not callable(getattr(routeur, "fait_notable", None)):
@@ -314,6 +359,58 @@ def controler_cobaye(routeur, dossier, erreurs):
 
 
 # --------------------------------------------------------------------------- 3
+def controler_faits(matrix, erreurs):
+    """Cobaye de la REGLE DU FAIT : l ancienne ET la nouvelle (lecon L-032).
+
+    La classification est une FONCTION PURE : elle se piege sans disque ni service.
+    Quatre cas, dont DEUX doivent ACCUSER et DEUX doivent PASSER :
+      1. deux faits identifies d identites DIFFERENTES -> PAS accuses (deux
+         evenements distincts ne sont pas une repetition : c est la FAUSSE ALERTE
+         que portait l ancien garde, mesuree en EO-163) ;
+      2. deux faits identifies de MEME identite -> ACCUSES (le meme message route
+         deux fois : le VRAI defaut -- la regle garde toute sa force) ;
+      3. deux faits SANS identite -> DECLARES et comptes PAR ECRIVAIN ;
+      4. le bloc LEGACY (recopie d etat) -> compte, jamais accuse.
+    """
+    sys.path.insert(0, str(matrix / "matrice" / "data" / "commun"))
+    from etat_histoire import CHAMP_IDENTITE
+    def ligne(payload):
+        return json.dumps(payload, ensure_ascii=True)
+
+    fait = {"routes": 1, "ignores": 107, "anormaux": 11, "passes_absorbes": 29}
+    identite_a = [{"index": 12, "type": "signaler", "outil": "veille-flux"}]
+    identite_b = [{"index": 13, "type": "signaler", "outil": "veille-flux"}]
+    distingues = classer_faits([ligne(dict(fait, date="J1", identite=identite_a)),
+                                ligne(dict(fait, date="J2", identite=identite_b))],
+                               CHAMP_IDENTITE)
+    memes = classer_faits([ligne(dict(fait, date="J1", identite=identite_a)),
+                           ligne(dict(fait, date="J2", identite=identite_a))],
+                          CHAMP_IDENTITE)
+    sans = classer_faits([ligne(dict(fait, date="J1")),
+                          ligne({"type": "rotation", "archive": "a.jsonl"}),
+                          ligne({"demarrage": 30})], CHAMP_IDENTITE)
+    legacy = classer_faits([ligne({"routes": 0, "anormaux": 11}),
+                            ligne({"routes": 0, "anormaux": 11})], CHAMP_IDENTITE)
+    epreuves = [
+        ("faits-distincts-pas-accuses",
+         len(distingues["identifies"]) == 2 and len(set(distingues["identifies"])) == 2),
+        ("meme-identite-accusee",
+         len(memes["identifies"]) == 2 and len(set(memes["identifies"])) == 1),
+        ("sans-identite-declares-par-ecrivain",
+         sum(sans["sans_identite"].values()) == 3 and len(sans["sans_identite"]) >= 2),
+        ("legacy-compte-jamais-accuse",
+         legacy["legacy"] == 2 and not legacy["identifies"]),
+    ]
+    reussies = sum(1 for _, ok in epreuves if ok)
+    controler("autotest-regle-du-fait", reussies == len(epreuves),
+              "piege (" + str(reussies) + "/" + str(len(epreuves)) + ")"
+              if reussies == len(epreuves)
+              else "rate : " + ", ".join(nom for nom, ok in epreuves if not ok))
+    if reussies != len(epreuves):
+        erreurs.append("le cobaye de la regle du fait n a pas accuse ce qu il devait")
+    return reussies == len(epreuves)
+
+
 def controler_autotest():
     """Le garde doit ACCUSER l'ancienne regle (lecon L-032).
 
@@ -369,23 +466,14 @@ def controler_fabrique(matrix, erreurs):
     etat = matrix / "matrice" / "routines" / ROUTINE / NOM_ETAT
     historique = matrix / "matrice" / "routines" / ROUTINE / NOM_HISTORIQUE
     lignes = lignes_histoire(historique)
-    legacy = 0
-    faits = []
-    for ligne in lignes:
-        try:
-            evenement = json.loads(ligne)
-        except ValueError:
-            continue
-        if "routes" in evenement and "passes_absorbes" not in evenement:
-            legacy += 1
-        elif "passes_absorbes" in evenement:
-            faits.append(
-                json.dumps(
-                    {cle: valeur for cle, valeur in evenement.items() if cle != "date"},
-                    sort_keys=True,
-                    ensure_ascii=True,
-                )
-            )
+    # Le NOM du champ d identite vient du moteur PARTAGE (jamais recopie) : une
+    # seule definition (matrice/data/commun/etat_histoire.py, MO-082 / EO-163).
+    sys.path.insert(0, str(matrix / "matrice" / "data" / "commun"))
+    from etat_histoire import CHAMP_IDENTITE
+    classement = classer_faits(lignes, CHAMP_IDENTITE)
+    legacy = classement["legacy"]
+    faits = classement["identifies"]
+    sans_identite = classement["sans_identite"]
 
     # 1. L'ETAT est ecrit a CHAQUE passe : il porte la vie de la routine ET le
     #    compte des passes absorbees (la redondance supprimee, TRACEE).
@@ -433,6 +521,15 @@ def controler_fabrique(matrix, erreurs):
             "[--] faits-toujours-distincts : aucun fait ecrit depuis la reparation"
             " (rien a verifier sur le service -- voir le cobaye)"
         )
+    if sans_identite:
+        detail = ", ".join(nom + " : " + str(nombre)
+                           for nom, nombre in sorted(sans_identite.items()))
+        print(
+            "[--] faits-sans-identite : " + str(sum(sans_identite.values()))
+            + " fait(s) ecrit(s) AVANT le champ d identite (" + CHAMP_IDENTITE + ") :"
+            " NON compares -- ils ne portent pas de quoi se distinguer d une recopie"
+            " d etat (EO-163). PAR ECRIVAIN : " + detail
+        )
     _ = time.time()
 
 
@@ -459,6 +556,7 @@ def main():
     try:
         controler_decision_pure(routeur, erreurs)
         controler_cobaye(routeur, dossier, erreurs)
+        controler_faits(matrix, erreurs)
         controler_autotest()
         controler_fabrique(matrix, erreurs)
     finally:

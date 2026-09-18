@@ -36,6 +36,12 @@ Rejoue : PRE-VOL (integrite + activite/frictions + remorque)
  regle immuable perdue dans l'allegement, EO-124)
 + RATTRAPAGE (le pilote COMBLE a chaque cloture les fichiers notes au DOMICILE et
  muets au journal, AVANT la vue qui ne lit que le journal, EO-133).
++ JUMEAUX (deux domiciles declarent le meme nom : une divergence compile
+ et change le SENS, MO-175)
++ CROCHETS (la liste fermee et sa convention disent la MEME chose, dans les
++ APPELS NON LIES (un appel orphelin est un NameError en puissance,
+ R5)
+ deux sens, et le type transmis appartient a la liste fermee, R5)
 Verdict OK/KO. code 0 = OK, code 1 = KO.
 
 Bloquants : le controle des PREFIXES du contrat fondamental (CV-009/CV-011) et,
@@ -685,6 +691,88 @@ def main():
             ecarts = [l.strip() for l in r.stdout.splitlines()
                       if l.strip().startswith(("[KO", "ECART"))]
             ko.append("rattrapage: " + ("; ".join(ecarts) if ecarts else "voir verifier-rattrapage.py"))
+
+    # 27. JUMEAUX DE LITTERAUX (MO-175) : deux domiciles declarent le MEME nom
+    #     (pilote/constants.py et pilote/entonnoir/listes.py). Une divergence
+    #     compile, passe py_compile et change le SENS : elle ne se voit qu a
+    #     l usage -- c est exactement ce qui a fait tomber l avis d auto-
+    #     validation a NON (chemin double). Ce maillon la rend BLOQUANTE.
+    print("== 27. jumeaux (deux domiciles, un seul sens) ==")
+    garde_jumeaux = outils / "verifier-contrat-fondamental.py"
+    if not garde_jumeaux.is_file():
+        print("  jumeaux: ABSENT")
+        ko.append("manquant: verifier-contrat-fondamental.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_jumeaux), "jumeaux"],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        # Le cobaye a fixtures jetables REJOUE le piege a chaque execution : on le
+        # DIT (sinon le lecteur ne sait pas que la detection a ete eprouvee, la et
+        # pas seulement une fois dans un compte-rendu).
+        cobaye = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith("cobaye ")]
+        print(f"  jumeaux: {etat}"
+              + (f" (cobaye : {len(cobaye)} epreuve(s) rejouee(s))" if cobaye else ""))
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines()
+                      if l.strip().startswith(("ECART", "DETTE"))]
+            ko.append("jumeaux: " + ("; ".join(ecarts) if ecarts
+                                     else "voir verifier-contrat-fondamental.py"))
+
+    # 28. MIROIR DES CROCHETS (R5, audit MO-174) : la liste FERMEE des crochets vit
+    #     dans le code (pilote/filtrer/entry.py) ET dans sa convention. Le
+    #     2026-09-18 les deux avaient diverge en SILENCE : `[purification]` etait
+    #     declare par la convention et INCONNU du pilote, et aucun instrument ne
+    #     voyait l ecart. Ce maillon rend la divergence BLOQUANTE dans les deux
+    #     sens, et exige qu un crochet qui part a l entonnoir declare un type de
+    #     la liste fermee TYPES -- depuis R5 le type est TRANSMIS, un type hors
+    #     liste ferait REFUSER le depot.
+    print("== 28. crochets (le code et sa convention disent la MEME chose) ==")
+    garde_crochets = outils / "verifier-contrat-fondamental.py"
+    if not garde_crochets.is_file():
+        print("  crochets: ABSENT")
+        ko.append("manquant: verifier-contrat-fondamental.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_crochets), "crochets"],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        # Le cobaye rejoue le miroir dans les DEUX sens a chaque execution : on le
+        # DIT, sinon la lecture croirait que seul le cas nominal a ete mesure.
+        cobaye = [l.strip() for l in r.stdout.splitlines() if "cas rejoues" in l]
+        print(f"  crochets: {etat}"
+              + (" (cobaye : les deux sens accuses)" if cobaye and r.returncode == 0 else ""))
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines()
+                      if l.strip().startswith(("ECART", "DETTE"))]
+            ko.append("crochets: " + ("; ".join(ecarts) if ecarts
+                                      else "voir verifier-contrat-fondamental.py"))
+
+
+    # 29. APPELS NON LIES (R5, audit MO-174) : un nom APPELE que rien ne lie est
+    #     un NameError en puissance -- au coeur de la chaine de cloture le
+    #     2026-09-18 (`fin/entry.py` appelait `lire_defauts` sans l'importer).
+    #     py_compile etait VERT (le compilateur ne resout pas les noms), la porte
+    #     `editer` aussi (elle verifie que les imports ECRITS existent, jamais
+    #     qu'un nom UTILISE est importe). Ce maillon le voit SANS executer.
+    print("== 29. appels non lies (un appel que rien ne lie) ==")
+    garde_appels = outils / "verifier-contrat-fondamental.py"
+    if not garde_appels.is_file():
+        print("  appels-non-lies: ABSENT")
+        ko.append("manquant: verifier-contrat-fondamental.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_appels), "appels-non-lies"],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        # Le cobaye tient les DEUX bords (4 liaisons tues, 1 orphelin accuse) : on
+        # le DIT, sinon la lecture croirait qu'un seul cote a ete mesure.
+        cobaye = [l.strip() for l in r.stdout.splitlines() if "cas (4 liaisons" in l]
+        print(f"  appels-non-lies: {etat}"
+              + (" (cobaye : 4 liaisons tues, 1 orphelin accuse)" if cobaye else ""))
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines()
+                      if l.strip().startswith(("ECART", "DETTE"))]
+            ko.append("appels-non-lies: " + ("; ".join(ecarts[:6]) if ecarts
+                                             else "voir verifier-contrat-fondamental.py"))
+
 
     if ko:
         print(f"\nVERDICT KO : {len(ko)} echec(s) :")

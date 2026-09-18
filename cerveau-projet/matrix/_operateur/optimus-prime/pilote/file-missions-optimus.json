@@ -1,54 +1,6 @@
 {
   "missions": [
     {
-      "id": "MO-122",
-      "theme": "AUTO-EVOLUTION",
-      "objectif": "Poser la PORTE MANQUANTE (friction 40) : une categorie retiqueter pour corriger les tags d'une entree de la BDD sessions, trace conservee.",
-      "statut": "terminee",
-      "chargee_le": "2026-09-16 07:13:11",
-      "injectee_le": "2026-09-16 07:13:11",
-      "terminee_le": "2026-09-16 07:13:11",
-      "bilan": "MO-122 (AUTO-EVOLUTION) terminee : categorie retiqueter livree (tags_avant + retiquete_le + motif, texte jamais touche), cobaye 11/11 dont 4 pieges prouvant l'effet sur le lecteur, refus sans ecriture, friction 40 validee, lecon L-095, 0 ecart au contrat fondamental, ASCII sain, remorque 85.",
-      "hors_file": true,
-      "type": "dev"
-    },
-    {
-      "id": "MO-123",
-      "theme": "AUTO-EVOLUTION",
-      "objectif": "Livrer l'arbitrage createur sur la friction 42 : le point de restauration .bak reste a cote de sa cible, le contrat fondamental l'accepte par une exemption BORNEE et VISIBLE, et la regle immuable perimetre-tmp est amendee.",
-      "statut": "terminee",
-      "chargee_le": "2026-09-16 07:17:57",
-      "injectee_le": "2026-09-16 07:17:57",
-      "terminee_le": "2026-09-16 07:17:57",
-      "bilan": "MO-123 (AUTO-EVOLUTION) terminee : exemption du point de restauration de porte -- motif borne .bak.<horodatage> + exemption VISIBLE (nommee et comptee) dans le contrat fondamental, regle immuable perimetre-tmp amendee (4 points de relecture intacts), cobaye 6/6 dont 3 pieges, friction 42 validee, lecon L-096, 0 ecart, marbre regles conforme, ASCII sain.",
-      "hors_file": true,
-      "type": "dev"
-    },
-    {
-      "id": "MO-124",
-      "theme": "AUTO-EVOLUTION",
-      "objectif": "Fermer le sujet ouvert a la cloture S-060 : rendre une entree de la BDD sessions RE-DATABLE par la porte, sans creer de collision a la seconde.",
-      "statut": "terminee",
-      "chargee_le": "2026-09-16 07:26:53",
-      "injectee_le": "2026-09-16 07:26:53",
-      "terminee_le": "2026-09-16 07:26:53",
-      "bilan": "La porte retiqueter accepte --horodatage (re-datage trace : horodatage_avant + re_date_le) et REFUSE une seconde deja occupee en NOMMANT l'occupant, sans rien ecrire ; le format d'horodatage a UN domicile (data/commun/trace_session.py) consomme par le lecteur. Preuves : cobaye 37/37 (0 echec) + porte reelle intacte + ASCII/py_compile ; friction 43 validee, lecon L-097.",
-      "hors_file": true,
-      "type": "dev"
-    },
-    {
-      "id": "MO-125",
-      "theme": "AUTO-EVOLUTION",
-      "objectif": "Fermer le sujet ouvert a la cloture S-060 : departager deux entrees de la BDD sessions a la MEME SECONDE par l'ordre d'ecriture, jamais par l'ordre de lecture.",
-      "statut": "terminee",
-      "chargee_le": "2026-09-16 07:28:16",
-      "injectee_le": "2026-09-16 07:28:16",
-      "terminee_le": "2026-09-16 07:28:16",
-      "bilan": "Le moteur partage data/commun/derniere_session.py mesure la recence sur (horodatage, rang d'append) pour derniere_session ET entrees_apres : l'accident S-052/S-053 rend desormais OUVERTE (la verite) au lieu de FERMEE. Preuves : cobaye 20/20 (0 echec, 3 pieges) + etalon sur la BDD reelle en lecture seule + ASCII 0 violation (apres refus du garde et correction) ; friction 44 validee, lecon L-098.",
-      "hors_file": true,
-      "type": "dev"
-    },
-    {
       "id": "MO-126",
       "theme": "AUTO-EVOLUTION",
       "objectif": "Corriger l'outil bdd-frictions : lister et filtrer les frictions archivees (statuts reels archivee_validee / archivee_annulee).",
@@ -1011,7 +963,7 @@
       "theme": "OUTIL",
       "type": "dev",
       "objectif": "Remorque de classe (demande createur, suite MO-171/EO-158) : faire de la passe d alignement jetable un OUTIL DURABLE. Le geste : une classe de copies (une fonction recopiee, mesure MO-171 : 40 copies du parseur d options en 22 textes) s aligne en CONSOMMANT son DOMICILE, sur un PLAN qui declare la fonction-cible, le domicile, la ligne d import, la forme de l appel et les EXCLUSIONS. Attendu : (1) DRY-RUN par defaut (--simuler) disant : a aligner, deja alignees, exclues DECLAREES, et ce que le plan ne couvre pas ; (2) toutes les ecritures par la PORTE ecrire (jamais d ecriture brute, fragments compris) ; (3) un audit de classe (qui diverge aujourd hui) ; (4) cobaye nominal + negatif + une classe REELLE alignee en preuve ; (5) contrat ecrit (DESCRIPTION.md + manuel-outils) et outil ne EQUIPE par dupliquer-template (sac a dos + verifications).",
-      "statut": "en-cours",
+      "statut": "terminee",
       "chargee_le": "2026-09-18 08:35:49",
       "auto_validation": "auto",
       "injectee_le": "2026-09-18 08:35:50",
@@ -1028,9 +980,96 @@
         "V: zero valeur en dur (constantes seulement)",
         "V: ASCII strict hors base acceptee",
         "V: ecriture atomique (tmp + remplacement, LF forces)"
-      ]
+      ],
+      "terminee_le": "2026-09-18 08:46:36",
+      "bilan": "MO-172 (EO-160) : OUTIL DURABLE domicilier -- aligner une CLASSE de copies sur son DOMICILE. Nom : la remorque est deja l inventaire de l operateur, l outil s appelle donc domicilier (collision nommee). 2 verbes : auditer (alignees / a aligner / exclues / TROU hors PERIMETRE DECLARE / PERIME) et aligner (--simuler par DEFAUT, --publier). Le PLAN est un contrat FERME (7 champs obligatoires) + 4 optionnels : exclus (une exclusion qui n exclut rien est REFUSEE), attendu (copie non listee = TROU, alignement REFUSE ; copie listee sans la fonction = plan PERIME), extras, derive (drapeaux + sans_tirets du texte ANCIEN). Ecriture UNIQUEMENT par la porte, fragments compris ; refus de validation = cible INTACTE. Deux mesures en seance : hors_plan etait du CODE MORT (corrige par le perimetre declare) ; --json ne portait pas une sortie machine pure (corrige). PREUVES : cobaye bac a sable 18/18 OK rejouable (aucune ecriture hors bac), plan REEL 41 alignees / 1 exclue / 0 trou, py_compile global OK, non-regression VERTE zone+flux 26 maillons, 10 notes BDD, espion re-arme 112 empreintes. Demande d audit deposee par le createur : BUG colonnes duree du suivi .md (0 ou -)."
+    },
+    {
+      "id": "MO-173",
+      "theme": "OUTIL",
+      "type": "dev",
+      "objectif": "OUTIL ecrire : option --contenu-base64 (transport sans echappement). Ajouter l option, refuser nommement les combinaisons et les blobs invalides, garder la validation de la porte, mettre DESCRIPTION + manuel a jour, PUIS PROUVER par un cobaye que le MEME contenu traverse le MEME transport : en brut CORROMPU (ancienne regle rejouee et accusee), en base64 BIT-EXACT (SHA).",
+      "statut": "terminee",
+      "chargee_le": "2026-09-18 08:49:53",
+      "auto_validation": "auto",
+      "injectee_le": "2026-09-18 08:49:53",
+      "checklist": [
+        "E: lire SA fiche + ses corrections avant de commencer",
+        "E: template existant duplique avant toute nouvelle piece",
+        "E: fiche dans manuel-outils mise a jour",
+        "E: tests reels du livrable (nominal + negatif)",
+        "E: py_compile global avant livraison",
+        "E: notes BDD par la porte unique (bdd-modifications)",
+        "E: fin de mission via le pilote",
+        "V: outil auto-note dans usages-outils-combos si applicable",
+        "V: registre espion-integrite a jour si nouvelle BDD",
+        "V: zero valeur en dur (constantes seulement)",
+        "V: ASCII strict hors base acceptee",
+        "V: ecriture atomique (tmp + remplacement, LF forces)"
+      ],
+      "terminee_le": "2026-09-18 08:55:20",
+      "bilan": "MO-173 (EO-161) : porte ecrire -- option --contenu-base64 (transport sans echappement) + DEUX defects de process repares en seance selon la consigne du createur : l extrait a DEUX formes (exacte, puis sans LF final -- ecrire force un LF, L-001, donc un extrait de milieu de ligne ne pouvait jamais correspondre), la forme retenue est DITE, et le compte-rendu est construit AVANT os.replace (une porte qui ecrit puis crie annone un faux echec). Preuve : cobaye 19/19 OK (le meme contenu est CORROMPU en brut et BIT-EXACT en base64), non-regression VERTE zone+flux, py_compile global OK."
+    },
+    {
+      "id": "MO-174",
+      "theme": "REPARATION",
+      "type": "doc",
+      "objectif": "PROCESS : erreurs trouvees en travaillant (auto-reparation temps reel) + revue du pilote. Mesurer ce que la doctrine dit DEJA (fiche optimus-prime, regles immuables, protocoles, themes REPARATION, parcours, conventions) sur les erreurs d outillage rencontrees en travaillant : reparer DANS l outil (jamais contourner par un geste manuel), interrompre/qualifier/tracer, et le role du PILOTE (detecter, qualifier, router, journaliser) ; mesurer aussi les outils a texte libre en argv (backticks executes par le shell : texte ampute). Rendre la liste des regles existantes, la liste des TROUS, et des propositions de correction par la porte. REGLE IMMUABLE / PROTOCOLE / FICHE = CRITIQUE : accord du createur avant.",
+      "statut": "terminee",
+      "chargee_le": "2026-09-18 08:55:37",
+      "auto_validation": "auto",
+      "injectee_le": "2026-09-18 08:55:37",
+      "checklist": [
+        "E: index du dossier mis a jour (aucune ligne morte)",
+        "E: liens internes verifies (chemins existants)",
+        "E: tests reels du livrable (nominal + negatif)",
+        "E: py_compile global avant livraison",
+        "E: notes BDD par la porte unique (bdd-modifications)",
+        "E: fin de mission via le pilote",
+        "V: zero valeur en dur (constantes seulement)",
+        "V: ASCII strict hors base acceptee",
+        "V: ecriture atomique (tmp + remplacement, LF forces)"
+      ],
+      "terminee_le": "2026-09-18 09:05:01",
+      "bilan": "MO-174 (EO-162) -- AUDIT DU PILOTE SUR LES ERREURS TROUVEES EN TRAVAILLANT.\nLIVRABLE : _operateur/optimus-prime/audits/audit-pilote-erreurs-travail.md -- premier document du\ndomicile audits/ (le dossier n existait pas). Contenu MESURE (chaque ligne porte son fichier:ligne) :\nles 8 DEVOIRS du pilote (D1 detecter/reproduire, D2 qualifier/router, D3 mettre la mission en pause,\nD4 tracer, D5 prouver, D6 reprendre, D7 ne jamais contourner, D8 alerter hors perimetre) ; ce qu il\nporte deja (alerte persistante de ses propres portes, garde defcon par theme, 8 crochets routes dont\nAUCUN outil, 6 champs peses, lecons seulement CONSOMMEES, cloture sans collecte, bilan en texte libre) ;\nL ECART : D7 = GRAVE (aucun texte ne l interdit : ni les 20 regles immuables, ni la fiche, ni un\nprotocole), D1-D4 MOYENNE ; 7 reparations proposees (R1..R4 CRITIQUES : accord du createur ; R5..R7\nautonomes).\nECART DE CARTE (trouve en verifiant) : le vocabulaire des cartes d identite est FERME (17 types) et ne\ncontient pas audit -- corrige en type analyse ; ajouter un type n est PAS decide ici.\nECART DE SERVICE (trouve par un garde pendant la verification) : le garde\nverifier-historique-non-redondant est KO sur le SERVICE REEL -- deux faits IDENTIQUES au journal du\nrouteur (16/09 07:22:14 et 18/09 08:58:51, routes=1 anormaux=11 passes_absorbes=29) : contradiction\nentre deux de nos textes (le routeur : chaque message route est un fait ; le garde : un fait ne se\nrepete jamais). Depose en EO-163 (haute, classe audit/flux) -- non repare : c est une DECISION (le\nfait porte l identite de ce qui est route, OU le garde compare les champs du FAIT).\nNON-REGRESSION : 24/26 maillons OK ; le KO restant est ce fait duplique du routeur (hors perimetre,\ndepose) -- et il est la PREUVE de R5 : aucune porte ne recoit un defaut d OUTIL."
+    },
+    {
+      "id": "MO-175",
+      "theme": "REPARATION",
+      "type": "dev",
+      "objectif": "AUTOMATISER LA CHAINE DE BOUT EN BOUT : (1) quand optimus ecrit une mission / un audit, la DETECTION et le DEPOT dans l entonnoir sont AUTOMATIQUES (aujourd hui filtrer ROUTE mais ne joue PAS la porte : mesure) ; (2) tout est CLASSE et place dans les files d attente ; (3) INJECTION directe et ENCHAINEMENT de plusieurs missions de bout en bout SANS S ARRETER jusqu au retour ; (4) la decision AUTO-VALIDATION vit dans la CARTE D IDENTITE de la mission / de l audit, lue par l entonnoir ; (5) une file d attente AUTO-VALIDEE ne contient QUE les items declares auto-valides par optimus AU MOMENT DE LA CREATION.",
+      "statut": "terminee",
+      "chargee_le": "2026-09-18 09:05:01",
+      "auto_validation": "auto",
+      "injectee_le": "2026-09-18 09:05:03",
+      "checklist": [
+        "E: lire SA fiche + ses corrections avant de commencer",
+        "E: template existant duplique avant toute nouvelle piece",
+        "E: fiche dans manuel-outils mise a jour",
+        "E: tests reels du livrable (nominal + negatif)",
+        "E: py_compile global avant livraison",
+        "E: notes BDD par la porte unique (bdd-modifications)",
+        "E: fin de mission via le pilote",
+        "V: outil auto-note dans usages-outils-combos si applicable",
+        "V: registre espion-integrite a jour si nouvelle BDD",
+        "V: zero valeur en dur (constantes seulement)",
+        "V: ASCII strict hors base acceptee",
+        "V: ecriture atomique (tmp + remplacement, LF forces)"
+      ],
+      "terminee_le": "2026-09-18 09:46:31",
+      "bilan": "MO-175 jambe 3 -- l enchainement est plante au fin (enchainer=True), priorite lot > auto-validee > file > tresse, et la chaine S ARRETE des que la mission a injecter n est pas auto-validee (decision pure, 7 cas eprouves). Defaut reel trouve en seance et REPARE dans l outil : CHEMIN_EVALUATEUR_REL recommencait par matrix/ alors que le marqueur partage rend deja .../matrix -- segment double, evaluateur introuvable, avis d auto-validation tombe a NON sur un motif qui parlait de JSON. Motif desormais nomme (chemin + code + stderr). Non-regression verte 26/26, py_compile OK, espion sain 113 empreintes."
+    },
+    {
+      "id": "MO-176",
+      "theme": "PILOTE",
+      "titre": "PILOTE",
+      "objectif": "PILOTE auto-validation : ajouter un controle qui compare CLE_AUTO_VALIDEES de constants.py et de entonnoir/listes.py et qui echoue si les deux divergent (fragilite introduite en MO-175 jambe 3)",
+      "type": "dev",
+      "statut": "en-attente",
+      "chargee_le": "2026-09-18 09:46:34",
+      "source": "entonnoir:EO-168:dev/outil:normale"
     }
   ],
-  "compteur": 172,
+  "compteur": 176,
   "lot": null
 }

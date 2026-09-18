@@ -34,16 +34,22 @@ from commun import (
 )
 from constants import (
     BOITE_MATRICE_IN,
+    CHAMP_DEFAUTS_MISSION,
+    STATUT_DEFAUT_REPARE,
     STATUT_TERMINEE,
 )
 
 
-def cloturer_mission(charger_file, bilan):
+def cloturer_mission(charger_file, bilan, defauts=None):
     """CLOTURE la mission en cours, puis, si un lot est arme :
     - annonce la FIN (k/n),
     - enchaine AUTOMATIQUEMENT la mission suivante du lot (DEBUT k+1/n),
     - au terme du lot : RETOUR consolide a la Matrice (bilan du lot entier).
+    Les DEFAUTS d'outil rencontres en travaillant (R5, audit MO-174) VOYAGENT
+    avec la mission -- fichier, journal, retour Matrice. Un defaut NON REPARE est
+    un POINT OUVERT : il est CRIE, jamais une note de bas de page.
     """
+    defauts = defauts or []
     file_missions = charger_file()
     mission = mission_en_cours(file_missions)
     if mission is None:
@@ -56,6 +62,22 @@ def cloturer_mission(charger_file, bilan):
     mission["statut"] = STATUT_TERMINEE
     mission["terminee_le"] = horodater()
     mission["bilan"] = bilan
+    # DEFAUTS STRUCTURES (R5) : attaches a la MISSION, pas seulement au recit du
+    # bilan. Le fichier les porte (ils survivent a la session), le journal les
+    # historise, le retour Matrice les remonte. Un defaut lisible par un
+    # instrument est un defaut qu'on peut SUIVRE ; un defaut qui ne vit que dans
+    # une phrase se perd au premier changement de session.
+    if defauts:
+        mission[CHAMP_DEFAUTS_MISSION] = defauts
+        non_repares = [d for d in defauts if d.get("statut") != STATUT_DEFAUT_REPARE]
+        print("DEFAUTS DECLARES : " + str(len(defauts)) + " (dont "
+              + str(len(non_repares)) + " non repare(s)).")
+        for defaut in non_repares:
+            # Le cri porte l'OUTIL et son ETAT : la Matrice voit ce qui reste
+            # ouvert sans relire le recit (lecon de la friction 68 -- une alerte
+            # qui ne vit que dans un tuyau se perd).
+            print("  [A SUIVRE] [" + (defaut.get("statut") or "sans statut") + "] "
+                  + defaut["outil"] + " : " + defaut["defaut"])
     enregistrer_file(file_missions)
 
     # Archivage automatique si plafond depasse (50 missions terminees max en actif)
@@ -74,6 +96,7 @@ def cloturer_mission(charger_file, bilan):
             "injectee_le": mission.get("injectee_le", ""),
             "terminee_le": mission["terminee_le"],
             "bilan": bilan,
+            CHAMP_DEFAUTS_MISSION: defauts,
         }
     )
     # Suivi-optimus : marbre L-020 (2026-09-11) -- "Le pilote ne note RIEN" :
@@ -178,6 +201,7 @@ def cloturer_mission(charger_file, bilan):
             "date": horodater(),
             "mission": mission["id"],
             "bilan": bilan,
+            CHAMP_DEFAUTS_MISSION: defauts,
         },
     )
 
@@ -192,7 +216,9 @@ def cloturer_mission(charger_file, bilan):
         if not session_en_pause():
             from injection.fonctions import preparer_injection
 
-            preparer_injection(charger_file)
+            # MO-175 (3e jambe) : c est ICI que la CHAINE s enchaine -- et qu elle
+            # S ARRETE si la mission suivante n est pas auto-validee.
+            preparer_injection(charger_file, enchainer=True)
         else:
             print("SESSION EN PAUSE (M-080) : aucune relance automatique pendant la maintenance.")
         return 0
@@ -213,5 +239,5 @@ def cloturer_mission(charger_file, bilan):
         from injection.fonctions import preparer_injection
 
         print("Enchainement automatique de la mission suivante du lot...")
-        preparer_injection(charger_file)
+        preparer_injection(charger_file, enchainer=True)
     return 0

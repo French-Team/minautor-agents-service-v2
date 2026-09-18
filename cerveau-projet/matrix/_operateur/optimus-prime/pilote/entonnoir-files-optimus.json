@@ -79,24 +79,104 @@
       "source": "re-depot : MO-168 ecartee sur priorite createur (EO-156 d abord)",
       "deposee_le": "2026-09-18 07:30:54",
       "role": "OUTIL"
-    },
-    {
-      "id": "EO-160",
-      "theme": "Remorque de classe : aligner une classe de copies sur son domicile (outil durable)",
-      "objectif": "Demande du createur apres MO-171 : la passe d alignement jetable (tmp-optimus/mo171-passe.py, purgee a la cloture) a repare 41 copies du parseur d options en une fois -- ce geste doit devenir un OUTIL DURABLE de la Matrice. Attendu : (1) une remorque qui prend un PLAN (fonction-cible, domicile, ligne d import, appel, exclusions DECLAREES) et aligne les copies en CONSOMMANT le domicile ; (2) un DRY-RUN par defaut (--simuler) qui dit ces copies seront alignees, celles deja alignees, celles EXCLUES, et ce que le plan ne couvre PAS ; (3) toutes les ecritures par la PORTE ecrire (jamais d ecriture brute), frag-ments compris ; (4) un audit de classe (qui diverge du domicile aujourd hui) ; (5) cobaye nominal + negatif + preuve reelle (une classe reelle alignee), et le contrat ecrit (DESCRIPTION + manuel-outils).",
-      "urgence": "normale",
-      "source": "demande createur (suite MO-171 / EO-158)",
-      "deposee_le": "2026-09-18 08:35:49",
-      "role": "OUTIL"
     }
   ],
   "files": {
     "dev": [],
-    "reparation": [],
+    "reparation": [
+      {
+        "id": "EO-169",
+        "theme": "PILOTE",
+        "objectif": "PILOTE reparation : reparer les 8 chaines dirname hors zone signalees par le garde chemins, une reparation a la fois, avec preuve avant/apres rendue par le garde lui-meme (cobaye rejouable)",
+        "urgence": "normale",
+        "source": "createur",
+        "deposee_le": "2026-09-18 09:46:31",
+        "auto_validation": "auto",
+        "auto_validation_axes": [
+          {
+            "axe": "perimetre",
+            "vote": "pour",
+            "motif": "aucune zone critique nommee"
+          },
+          {
+            "axe": "reversible",
+            "vote": "pour",
+            "motif": "livrable de code : pilote"
+          },
+          {
+            "axe": "preuve",
+            "vote": "pour",
+            "motif": "preuve exigee : cobaye"
+          },
+          {
+            "axe": "deja-vu",
+            "vote": "pour",
+            "motif": "source createur : deja vue avec lui"
+          },
+          {
+            "axe": "serie",
+            "vote": "pour",
+            "motif": "reparation / correction : reparer"
+          }
+        ],
+        "type": "reparation",
+        "categorie": "outil",
+        "role": "PILOTE",
+        "role_source": "declaration",
+        "classee_le": "2026-09-18 09:46:31"
+      }
+    ],
     "doc": [],
     "audit": [],
     "revision": []
   },
-  "compteur": 160,
-  "brin": []
+  "compteur": 172,
+  "brin": [
+    {
+      "id": "EO-169",
+      "theme": "PILOTE",
+      "objectif": "PILOTE reparation : reparer les 8 chaines dirname hors zone signalees par le garde chemins, une reparation a la fois, avec preuve avant/apres rendue par le garde lui-meme (cobaye rejouable)",
+      "urgence": "normale",
+      "source": "createur",
+      "deposee_le": "2026-09-18 09:46:31",
+      "auto_validation": "auto",
+      "auto_validation_axes": [
+        {
+          "axe": "perimetre",
+          "vote": "pour",
+          "motif": "aucune zone critique nommee"
+        },
+        {
+          "axe": "reversible",
+          "vote": "pour",
+          "motif": "livrable de code : pilote"
+        },
+        {
+          "axe": "preuve",
+          "vote": "pour",
+          "motif": "preuve exigee : cobaye"
+        },
+        {
+          "axe": "deja-vu",
+          "vote": "pour",
+          "motif": "source createur : deja vue avec lui"
+        },
+        {
+          "axe": "serie",
+          "vote": "pour",
+          "motif": "reparation / correction : reparer"
+        }
+      ],
+      "type": "reparation",
+      "categorie": "outil",
+      "role": "PILOTE",
+      "role_source": "declaration",
+      "classee_le": "2026-09-18 09:46:31",
+      "position_brin": 2,
+      "tresse_le": "2026-09-18 09:46:34"
+    }
+  ],
+  "auto_validees": [
+    "EO-169"
+  ]
 }

@@ -1,0 +1,25 @@
+{
+  "classe": "parseur d options (contrat partage de data/commun/options.py)",
+  "fonction": "extraire_options",
+  "domicile": "cerveau-projet/matrix/matrice/data/commun/options.py",
+  "marqueur": "from options import extraire_options as repartir",
+  "docstring": "    \"\"\"Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici.\"\"\"",
+  "import": "    from options import extraire_options as repartir  # domicile partage (EO-158)",
+  "appel": "    return repartir(arguments, noms_connus{extras})",
+  "derive": true,
+  "exclus": [
+    "cerveau-projet/agents/tools/detecter/detecter-decalages-catalogue/detecter-decalages-catalogue.py"
+  ],
+  "extras": {
+    "cerveau-projet/matrix/matrice/data/outils/benchmark/commun.py": ", drapeaux=(\"json\", \"recursif\", \"integration\")",
+    "cerveau-projet/matrix/matrice/data/outils/dialoguer/commun.py": ", drapeaux=(\"json\",)",
+    "cerveau-projet/matrix/matrice/data/outils/executer/commun.py": ", drapeaux=(\"json\", \"verbose\")",
+    "cerveau-projet/matrix/matrice/data/outils/lire/commun.py": ", drapeaux=(\"recursif\", \"hash\", \"prive\")",
+    "cerveau-projet/matrix/matrice/data/outils/lister/commun.py": ", drapeaux=(\"recursif\", \"json\", \"prive\")",
+    "cerveau-projet/matrix/matrice/data/outils/maintenir/commun.py": ", drapeaux=(\"json\", \"etat\")",
+    "cerveau-projet/matrix/matrice/data/outils/rechercher/commun.py": ", drapeaux=NOMS_OPTIONS_DRAPEAU",
+    "cerveau-projet/matrix/matrice/data/outils/signaler/commun.py": ", drapeaux=(\"json\",)",
+    "cerveau-projet/matrix/matrice/data/outils/editer-agents-md/commun.py": ", sans_tirets=True",
+    "cerveau-projet/matrix/matrice/data/outils/machine-defcon/commun.py": ", sans_tirets=True"
+  }
+}

@@ -1,7 +1,12 @@
 {
-  "signature": "183135ac261579167a10e2c578a0eb31980f2a48971f5fda967f88e02bb11126",
-  "alerte_le": "2026-09-17 07:40:33",
+  "signature": "2fcc39db9e5b5dcd6f11198bb37157945e58b1893a2097ff5610c592a338b9b7",
+  "alerte_le": "2026-09-18 08:58:45",
   "alertes": [
+    {
+      "cle": "verbe:domicilier:plans",
+      "niveau": "haute",
+      "detail": "verbe fantome : plans/ sans entry.py"
+    },
     {
       "cle": "recette:benchmark",
       "niveau": "moyenne",
@@ -40,7 +45,7 @@
     {
       "cle": "refus:lire",
       "niveau": "moyenne",
-      "detail": "mal utilisee : 12 refus (code 2) sur 19 appel(s) en 30 jours"
+      "detail": "mal utilisee : 12 refus (code 2) sur 23 appel(s) en 30 jours"
     }
   ]
 }

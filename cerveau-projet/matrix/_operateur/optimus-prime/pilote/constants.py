@@ -236,5 +236,48 @@ CATEGORIE_POSTURE = "PERSONNALITE"
 CHAMP_AUTO_VALIDATION = "auto_validation"
 VALEUR_AUTO_VALIDATION = "auto"
 
+# INDEX DES MISSIONS AUTO-VALIDEES (3e jambe MO-175) : une LISTE D IDS vivant
+# dans l ETAT DE L ENTONNOIR -- jamais une copie (une seule verite, lecon
+# d EO-154 : c est la copie qui bloquait `retirer`). Le pilote LIT cet index
+# pour decider de l ENCHAINEMENT ; il ne l ecrit JAMAIS (la queue appartient a
+# l entonnoir). Meme litteral que entonnoir/listes.py -- les deux doivent
+# rester EGAUX (une divergence rendrait l auto-validee invisible au pilote).
+CLE_AUTO_VALIDEES = "auto_validees"
+
+# DEFAUTS STRUCTURES D'UNE MISSION (R5, audit MO-174) : un OUTIL fautif rencontre
+# EN TRAVAILLANT se declare a la cloture, et sa declaration VOYAGE avec la mission
+# (fichier + journal + retour Matrice). Avant, le defaut n'existait que dans le
+# RECIT du bilan : illisible pour tout instrument, et perdu au premier changement
+# de session. Le format est JSONL -- un OBJET par defaut, champs FERMES : un champ
+# inconnu, un champ requis vide ou un statut hors liste sont des REFUS, jamais des
+# silences (un format qui accepte n'importe quoi ne structure rien : il donne
+# l'illusion d'une trace).
+OPTION_DEFAUTS = "defauts-fichier"
+CHAMP_DEFAUTS_MISSION = "defauts"
+CHAMPS_DEFAUTS = ("outil", "defaut", "reproduit", "reparation", "preuve", "statut")
+CHAMPS_DEFAUTS_REQUIS = ("outil", "defaut")
+# Le statut REPARE est declare ICI et consomme PAR le tuple : un second litteral
+# ecrit ailleurs serait un jumeau muet (lecon de MO-175).
+STATUT_DEFAUT_REPARE = "repare"
+STATUTS_DEFAUT = (STATUT_DEFAUT_REPARE, "signale", "hors-perimetre", "bloque")
+
+# RAPPEL DE ROUTE (R5, audit MO-174) : la route de l'outil fautif VOYAGE avec la
+# mission. L'agent qui repare n'a pas a se souvenir de la doctrine -- elle est
+# dans son sac-a-dos, comme la checklist et les lecons. Le DECLENCHEUR est le
+# TYPE de la mission : `reparation` est le type DECLARE par le crochet `[outil]`
+# (pilote/filtrer/entry.py) et il appartient a la liste FERMEE TYPES
+# (checklist/listes.py). Ecrit ICI et lu d'ici (proprietaire du contrat, L-035) ;
+# le garde CV-007 (verbe `crochets`) verifie qu'il appartient bien a TYPES -- une
+# liste ou ce type serait renomme rendrait le rappel MUET sans rien dire.
+TYPE_ROUTE_OUTIL = "reparation"
+CHAMP_RAPPEL = "rappel"
+RAPPEL_ROUTE_OUTIL = (
+    "ROUTE OUTIL (protocole 10, regle immuable defaut-outil-repare-sur-place) : "
+    "un defaut d'OUTIL se REPRODUIT, se REPARE DANS L'OUTIL (jamais a la main), "
+    "se PROUVE, se TRACE, puis le travail REPREND. Un contournement manuel est "
+    "une FAUTE de process, jamais une astuce -- et un outil CRITIQUE reste au "
+    "CREATEUR. La route complete : protocoles/proto-10-route-outil-defaillant.md."
+)
+
 ENCODAGE = "utf-8"
 INDENTATION_JSON = 2

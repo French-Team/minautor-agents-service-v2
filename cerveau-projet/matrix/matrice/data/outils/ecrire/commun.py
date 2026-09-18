@@ -3,6 +3,8 @@
 Chaque fonction fait UNE chose (convention-architecture-outils).
 """
 import ast
+import base64
+import binascii
 import hashlib
 import json
 import os
@@ -347,6 +349,20 @@ def ecrire_atomique(chemin_relatif, contenu, mode="remplacer"):
     return 0, sha_avant, sha_apres, bak_path, msg_val
 
 
+def variantes_extrait(texte):
+    """Les formes d un EXTRAIT a essayer, dans l ordre (MO-173).
+
+    Mesure : `ecrire` FORCE un LF final (L-001) -- un extrait de MILIEU de ligne
+    ecrit par la porte arrive donc avec un LF que la cible ne contient pas, et il
+    ne pouvait JAMAIS correspondre (deux refus en serie sur le manuel). La porte
+    essaie la forme EXACTE d abord, puis la forme SANS son LF final, et elle DIT
+    laquelle a servi. Aucune forme n est devinee : chacune doit exister UNE fois.
+    """
+    if texte.endswith("\n"):
+        return (("exacte", texte), ("sans LF final", texte[:-1]))
+    return (("exacte", texte),)
+
+
 def editer_atomique(chemin_relatif, ancien, nouveau):
     """Remplace UNE occurrence exacte ancien->nouveau (atomique, .bak, validation).
 
@@ -366,16 +382,38 @@ def editer_atomique(chemin_relatif, ancien, nouveau):
     except UnicodeDecodeError as e:
         return 1, None, None, None, "REFUS : non-UTF8 : " + str(e)
 
-    occurrences = texte.count(ancien)
-    if occurrences == 0:
-        return 2, None, None, None, "REFUS : --ancien introuvable (0 occurrence) : verifiez whitespace exact"
+    # L extrait a DEUX formes possibles (MO-173) : la forme EXACTE, puis la forme
+    # SANS son LF final -- `ecrire` en ajoute un (L-001), donc un extrait de
+    # milieu de ligne ne pouvait jamais correspondre. On DIT laquelle a servi.
+    forme, occurrences, ancien_utilise = None, 0, ancien
+    for etiquette, candidat in variantes_extrait(ancien):
+        if not candidat:
+            continue
+        nombre = texte.count(candidat)
+        if nombre:
+            forme, occurrences, ancien_utilise = etiquette, nombre, candidat
+            break
+    if forme is None:
+        return 2, None, None, None, ("REFUS : --ancien introuvable (0 occurrence) : verifiez whitespace exact"
+                                     " (formes essayees : exacte, puis sans LF final)")
     if occurrences > 1:
-        return 2, None, None, None, "REFUS : --ancien trouve " + str(occurrences) + " fois (attendu 1 unique) : precisez plus de contexte"
+        return 2, None, None, None, ("REFUS : --ancien trouve " + str(occurrences) + " fois (attendu 1 unique)"
+                                     " : precisez plus de contexte (forme : " + forme + ")")
+
+    # Le COMPTE-RENDU est construit AVANT la publication : apres `os.replace`, plus
+    # rien ne doit pouvoir echouer -- une porte qui a ecrit PUIS crie laisse
+    # l appelant croire que rien n a change (mesure MO-173 : un NameError declenche
+    # APRES l ecriture, donc un fichier modifie annonce en erreur).
+    note_extrait = "" if forme == "exacte" else (
+        " ; extrait retenu : " + forme + " (LF final ajoute par ecrire, L-001)")
 
     sha_avant = calculer_sha256(chemin_absolu)
     bak_path = creer_bak_si_existe(chemin_absolu)
 
-    nouveau_texte = texte.replace(ancien, nouveau, 1)
+    # SYMETRIE : la forme retenue ayant perdu son LF final, le NOUVEAU perd le
+    # sien -- sinon l edition injecterait un saut de ligne DANS la ligne.
+    nouveau_utilise = nouveau[:-1] if (forme != "exacte" and nouveau.endswith("\n")) else nouveau
+    nouveau_texte = texte.replace(ancien_utilise, nouveau_utilise, 1)
     nouveau_texte = normaliser_lf(nouveau_texte)
 
     tmp = chemin_absolu.with_name(chemin_absolu.name + ".tmp")
@@ -394,6 +432,7 @@ def editer_atomique(chemin_relatif, ancien, nouveau):
         return 1, sha_avant, None, bak_path, (
             "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le "
             "fichier d'origine est INTACT -- " + msg_val)
+    msg_val = msg_val + note_extrait
     try:
         os.replace(tmp, chemin_absolu)
     except OSError as e:
@@ -425,6 +464,34 @@ def refuser_options_sans_valeur(options):
         " Ecrire la valeur (un texte commencant par des tirets est accepte)."
     )
     return 2
+
+
+def decoder_contenu_base64(blob):
+    """Decode un contenu transmis en BASE64 -- le transport SANS echappement.
+
+    Mesure MO-173 : dans la chaine heredoc -> bash -> litteral Python -> argv ->
+    porte, chaque couche peut de-echapper UNE fois (un antislash-n litteral
+    devenu un VRAI saut de ligne, des triples guillemets imbriques qui
+    referment un litteral, une apostrophe qui casse un shell). L alphabet base64
+    ne contient NI guillemet, NI antislash, NI saut de ligne : un blob traverse
+    la chaine SANS qu aucune couche ne puisse le deformer. La porte decode,
+    VALIDE et publie exactement les octets demandes.
+
+    La lecture est STRICTE (`validate=True`) et le refus est NOMME : tolerer un
+    espace ou un caractere etranger, ce serait rouvrir la porte au silence qu on
+    vient de fermer (une donnee deformee passerait pour valide).
+
+    Retourne (code, contenu_ou_message) : 0 = contenu decode, 2 = REFUS nomme.
+    """
+    try:
+        octets = base64.b64decode(blob, validate=True)
+    except (binascii.Error, ValueError) as erreur:
+        return 2, ("REFUS : --contenu-base64 INVALIDE (base64 STRICT attendu :"
+                   " A-Z a-z 0-9 + / =, aucun espace ni saut de ligne) -- " + str(erreur))
+    try:
+        return 0, octets.decode(ENCODAGE)
+    except UnicodeDecodeError as erreur:
+        return 2, "REFUS : --contenu-base64 n est pas de l UTF-8 VALIDE -- " + str(erreur)
 
 
 def lire_contenu_source(valeur_directe, chemin_fichier):

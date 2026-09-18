@@ -3,11 +3,11 @@
     "type": "theme",
     "appartient_a": "optimus-prime",
     "nom": "AUTO-CORRECTION",
-    "description": "La Matrice corrige automatiquement les erreurs detectees : ASCII, syntaxe, imports, conventions. Probleme grave = alerte, jamais de suppression silencieuse."
+    "description": "La Matrice corrige automatiquement les erreurs detectees : ASCII, syntaxe, imports, conventions -- ET les defauts d'OUTIL (l'outil est en cause, pas la donnee). Probleme grave = alerte, jamais de suppression silencieuse."
   },
   "theme": {
     "nom": "AUTO-CORRECTION",
-    "but": "Detecter et corriger les erreurs automatiquement en 5 temps : diagnostiquer, classifier, corriger, verifier, consigner",
+    "but": "Detecter et corriger les erreurs automatiquement en 5 temps : diagnostiquer, classifier, corriger, verifier, consigner -- dont le cas OUTIL : reparer DANS l outil, jamais contourner (proto-10)",
     "redirects": [
       {
         "besoin": "Diagnostiquer l'erreur",
@@ -18,6 +18,20 @@
           "Verifier que la cible n'est PAS sous etalon .sha256 ou BDD empreintee"
         ],
         "regle": "Jamais de correction aveugle : diagnostiquer AVANT d'agir. BDD empreintees = lecture seule."
+      },
+      {
+        "besoin": "OUTIL : l'outil est en cause (ce n'est PAS une erreur de donnee)",
+        "action": "procedure",
+        "etapes": [
+          "REPRODUIRE le defaut : meme appel, meme entree, meme sortie fausse",
+          "METTRE LA MISSION EN PAUSE : on ne continue pas sur un outil douteux (serie stricte)",
+          "REPARER DANS L'OUTIL (regles-immuables/defaut-outil-repare-sur-place.md) : la CAUSE, pas le symptome, par la porte officielle",
+          "PROUVER : un cobaye rejoue l'ANCIENNE regle et l'ACCUSE, et le cas nominal passe",
+          "TRACER : BDD modifications (fichier repare) + marbre (outil, cause, preuve)",
+          "REPRENDRE la mission ou elle s'est arretee (proto-1-reprise-mission.md, ETAPE 0)",
+          "HORS PERIMETRE -> INTER-ROUND : signaler au pilote, ne JAMAIS improviser"
+        ],
+        "regle": "Un defaut d'OUTIL n'est pas une erreur de DONNEE : la cible est l'outil. Route complete : protocoles/proto-10-route-outil-defaillant.md. Un contournement manuel est une FAUTE de process, jamais une astuce."
       },
       {
         "besoin": "Classifier la severite",

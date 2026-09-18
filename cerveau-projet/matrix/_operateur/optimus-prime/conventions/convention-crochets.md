@@ -32,6 +32,7 @@ identite:
 | [question] | pilote, verbe `lot` | suit le theme en 4 parts de LOT : analyse -> recherche approfondie (+ web si besoin) -> contre-analyse (Nemesis incarne en THEME, pas un agent) -> rapport pour/contre ; le pilote charge optimus-prime pour CHAQUE part, avec SON theme du vivier |
 | [audit] | entonnoir `deposer` (type audit) | lance un audit sur le sujet donne |
 | [revision] | entonnoir `deposer` (type revision) | lance une revision sur le sujet donne |
+| [outil] | entonnoir, verbe `deposer` (type DECLARE `reparation`) | signale un OUTIL fautif trouve EN TRAVAILLANT : la demande part en REPARATION (jamais en simple constat) ; route complete `protocoles/proto-10-route-outil-defaillant.md` (reproduire -> reparer DANS l outil -> prouver -> tracer -> reprendre) |
 | [alerte] | outil `machine-defcon` | met la Matrice en securite : defcon 5 (mise en pause de la session-matrix, cameleon stoppe, optimus reveille) ; variante detaillee possible `[alerte=defcon:N]` |
 | [pause] | outil `pause-session`, verbe `pause` | ouvre la MAINTENANCE avec optimus (pause manuelle user, hors defcon) : session-matrix en pause, cameleon notifie (raison "maintenance"), reprise par `reprendre` |
 | [bilan] | outil `bilan-periode` | bilan de la derniere heure, des dernieres heures (6 h), des dernieres 24 h, des 3 derniers jours, de la semaine ou du mois |

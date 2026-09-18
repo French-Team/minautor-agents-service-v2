@@ -1592,7 +1592,31 @@
         "mesure"
       ],
       "source": "MO-165"
+    },
+    {
+      "id": "L-125",
+      "date": "2026-09-18 19:41:52",
+      "lecon": "Un garde d'idempotence par SEUIL de longueur ne garde rien : mon seuil de 20 caracteres laissait passer les lignes courtes (imports), et deux d'entre elles ont ete posees DEUX fois. Le seuil doit etre STRUCTUREL (la ligne neuve doit etre ABSENTE de l'ancre ET du fichier), jamais un nombre choisi a l'oeil.",
+      "tags": [
+        "MO-174",
+        "idempotence",
+        "pose",
+        "seuil"
+      ],
+      "source": "MO-174 R5 (2026-09-18)"
+    },
+    {
+      "id": "L-126",
+      "date": "2026-09-18 19:49:44",
+      "lecon": "Une preuve qui n'exerce pas la PORTE ne prouve pas le chemin : j'avais prouve lire_defauts et cloturer_mission en les appelant directement, pendant que fin/entry.py appelait un nom qu'il n'importait pas. py_compile, la porte editer et mes preuves etaient TOUS verts ; seule la fumee de la commande reelle a parle. Tout livrable de porte se prouve par SA porte.",
+      "tags": [
+        "MO-174",
+        "preuve",
+        "porte",
+        "fumee"
+      ],
+      "source": "MO-174 R5 (2026-09-18)"
     }
   ],
-  "compteur": 124
+  "compteur": 126
 }

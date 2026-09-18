@@ -45,6 +45,38 @@ def verifier_famille(identifiant):
     )
 
 
+def normaliser_chargement(etat):
+    """AUTO-SOIN a la lecture : l auto-validation est un INDEX d ids, pas une COPIE.
+
+    Une mission presente dans deux listes = DEUX verites, et le brin se BLOQUE
+    dessus (mesure MO-175 : tresser ne rend jamais la main quand un id vit dans
+    deux files). Une file legacy est donc CONVERTIE en index et RETIREE des files :
+    la mission ne vit plus qu a UN domicile.
+    """
+    try:
+        from listes import (CHAMP_AUTO_VALIDATION, CLE_AUTO_VALIDEES,
+                            CLE_LEGACY_AUTO_VALIDEE, VERDICT_AUTO)
+    except ImportError:
+        from entonnoir.listes import (CHAMP_AUTO_VALIDATION, CLE_AUTO_VALIDEES,
+                                      CLE_LEGACY_AUTO_VALIDEE, VERDICT_AUTO)
+    files = etat.get("files")
+    index = list(etat.get(CLE_AUTO_VALIDEES) or [])
+    if isinstance(files, dict):
+        legacy = files.pop(CLE_LEGACY_AUTO_VALIDEE, None) or []
+        for missions in list(files.values()) + [legacy]:
+            for mission in missions or []:
+                if not isinstance(mission, dict):
+                    continue
+                if mission.get(CHAMP_AUTO_VALIDATION) != VERDICT_AUTO:
+                    continue
+                if mission.get("id") and mission["id"] not in index:
+                    index.append(mission["id"])
+    etat.setdefault("files", {})
+    if index:
+        etat[CLE_AUTO_VALIDEES] = index
+    return etat
+
+
 def charger_entonnoir():
     """Retourne l'etat de l'entonnoir, ou l'etat initial si le fichier n'existe pas.
 
@@ -53,7 +85,7 @@ def charger_entonnoir():
     if not CHEMIN_ENTONNOIR.exists():
         return {"vrac": [], "files": {}, "compteur": 0}
     with open(CHEMIN_ENTONNOIR, "r", encoding=ENCODAGE) as flux:
-        return json.load(flux)
+        return normaliser_chargement(json.load(flux))
 
 
 def enregistrer_entonnoir(etat):

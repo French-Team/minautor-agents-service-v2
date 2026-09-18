@@ -29,6 +29,30 @@ CATEGORIES_DEFAUT = {
 }
 
 # Echelon 3 : les niveaux d'urgence (du plus urgent au moins urgent).
+# --- AUTO-VALIDATION (MO-175, decision createur 2026-09-18) -------------------
+# Le verdict vit dans l ENREGISTREMENT DE LA MISSION (jamais dans un document),
+# il est RENDU par un AVIS MULTI-AXES a la CREATION, et il ouvre la FILE
+# AUTO-VALIDEE -- transverse aux types : elle ne contient QUE les items declares
+# auto-valides au moment de la creation (decision du createur).
+CHAMP_AUTO_VALIDATION = "auto_validation"
+CHAMP_AUTO_AXES = "auto_validation_axes"
+VERDICT_AUTO = "auto"
+VERDICT_NON = "non"
+# L auto-validation est un INDEX d ids (JAMAIS une copie de mission) : une mission
+# presente dans deux listes = deux verites, et le brin se BLOQUE dessus (mesure
+# MO-175 : tresser ne rend jamais la main quand un id vit dans deux files).
+CLE_AUTO_VALIDEES = "auto_validees"
+# Nom de la file LEGACY (avant la conversion en index) : garde pour l auto-soin.
+CLE_LEGACY_AUTO_VALIDEE = "auto-validee"
+# Le TYPE PROPOSE au depot (R5, audit MO-174) : le crochet du createur peut le
+# DECLARER (`deposer --type`), sinon il est propose par mots entiers. Il est
+# desormais PORTE par l item -- plus seulement IMPRIME : un type affiche puis
+# perdu ne route rien, et le crochet redeviendrait decoratif.
+CHAMP_TYPE_PROPOSE = "type_propose"
+MOT_CLE_DECLARE = "type declare"
+# Le nom NU de l avis (super-combo hors pilote) : le chemin se resout chez qui appelle.
+NOM_EVALUATEUR = "evaluer-auto-validation.py"
+
 URGENCES = ("bloquante", "haute", "normale", "basse")
 
 # Urgence par defaut quand le createur ne precise pas.

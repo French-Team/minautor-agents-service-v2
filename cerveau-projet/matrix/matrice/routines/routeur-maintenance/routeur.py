@@ -112,6 +112,7 @@ from attente import attendre  # noqa: E402
 from battement import ajouter_passe  # noqa: E402
 from etat_histoire import decision_fait as _decision_fait  # noqa: E402
 from etat_histoire import signature_fait as _signature_fait_partage  # noqa: E402
+from etat_histoire import CHAMP_IDENTITE as _CHAMP_IDENTITE  # noqa: E402
 from rotation_journal import cli  # noqa: E402
 from rotation_journal import tourner_et_journaliser as _tourner_et_journaliser  # noqa: E402
 
@@ -326,6 +327,9 @@ def tour():
     routes = 0
     ignores_par_type = {}
     anormaux = 0
+    # EO-163 : l IDENTITE des messages routes par CETTE passe (le fait dit CE QUI
+    # s est passe, pas seulement COMBIEN).
+    identites = []
 
     for i, msg in enumerate(messages):
         # Deja traite ?
@@ -347,6 +351,13 @@ def tour():
             ecrire_message(BOITE_MAINTENANCE_IN, msg)
             marquer_traiter(BOITE_MATRICE_IN, i)
             routes += 1
+            identites.append({
+                "index": i,
+                "type": msg.get("type", "?"),
+                "outil": msg.get("outil") or msg.get("cible", "?"),
+                "niveau": msg.get("niveau", "?"),
+                "expediteur": msg.get("source", "?"),
+            })
             print(f"  ROUTE : {msg.get('niveau', '?').upper()} {msg.get('outil', '?')} -> maintenance")
         else:
             type_msg = msg.get("type", "?")
@@ -378,6 +389,11 @@ def tour():
             "ignores_par_type": ignores_par_type,
             "anormaux": anormaux,
             "passes_absorbes": absorbes,
+            # LE FAIT PORTE SON IDENTITE (EO-163) : les messages routes, ou -- si
+            # le fait vient d un CHANGEMENT du tableau -- la transition elle-meme.
+            _CHAMP_IDENTITE: identites or [{"transition": {
+                "avant": signature_ecrite,
+                "apres": signature_fait(ignores_par_type)}}],
         })
         signature_ecrite = signature_fait(ignores_par_type)
         absorbes = 0

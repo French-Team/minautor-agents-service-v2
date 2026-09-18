@@ -6,6 +6,7 @@ from commun import (
     annoncer_debut,
     armer_lot,
     bilan_consolide,
+    charger_entonnoir_pilote,
     declarer_auto_validation,
     defcon_bloque_theme,
     deposer_message,
@@ -30,12 +31,17 @@ from checklist.stockage import fabrique_checklist
 from constants import (
     BOITE_PILOTE_OUT,
     CHAMP_AUTO_VALIDATION,
+    CHAMP_RAPPEL,
     CHEMIN_THEMES,
+    CLE_AUTO_VALIDEES,
     ENCODAGE,
     GABARIT_COMMANDE_RECHERCHE,
+    RAPPEL_ROUTE_OUTIL,
     REPERTOIRE_DATA,
     STATUT_EN_ATTENTE,
     STATUT_EN_COURS,
+    TYPE_ROUTE_OUTIL,
+    VALEUR_AUTO_VALIDATION,
 )
 
 try:
@@ -55,10 +61,11 @@ except ImportError:
 
 # Espion de POIDS des injections (E-097, imperatif 56) : le sac-a-dos remis a
 # l'agent est pese -- on voit combien de contexte la Matrice lui demande de lire
-# (objectif + checklist + lecons + themes + role + recherche). Champs fermes :
-# liste unique.
+# (objectif + checklist + lecons + themes + role + recherche + rappel). Champs
+# fermes : liste unique. Le RAPPEL (R5) est du contexte OFFERT : il se compte
+# comme le reste -- un rappel qu'on ne pese pas serait du contexte en franchise.
 CHAMPS_PESES = ("objectif", "checklist", "lecons_utiles", "themes_utiles", "role",
-                "recherche")
+                "recherche", CHAMP_RAPPEL)
 
 
 def poids_injection(injection):
@@ -146,13 +153,91 @@ def garder_theme_et_checklist(mission):
     return 0, checklist
 
 
-def preparer_injection(charger_file):
+
+
+def index_auto_valide():
+    """L INDEX des missions auto-validees : une liste d IDS (3e jambe MO-175).
+
+    L index vit dans l ETAT DE L ENTONNOIR : le pilote le LIT (pour decider de
+    l enchainement), il ne l ecrit jamais -- la queue appartient a l entonnoir.
+    Un etat illisible se DIT et rend une liste vide : la priorite continue, sans
+    repli muet (une auto-validee ne disparait jamais en silence).
+    """
+    try:
+        etat = charger_entonnoir_pilote()
+    except Exception as erreur:
+        print("[--] index auto-valide illisible (" + type(erreur).__name__
+              + ") : aucun item auto-valide lu.")
+        return []
+    if not isinstance(etat, dict):
+        return []
+    return list(etat.get(CLE_AUTO_VALIDEES) or [])
+
+
+def est_auto_validee(mission, index_auto):
+    """Vrai si la mission est AUTO-VALIDEE : par son CHAMP, ou par l INDEX.
+
+    Le champ est porte par l ENREGISTREMENT de la mission
+    (constants.CHAMP_AUTO_VALIDATION, GO createur) ; l index est la file. Les
+    deux disent la meme chose -- on accepte l un OU l autre, jamais un repli muet.
+    """
+    if not isinstance(mission, dict):
+        return False
+    if mission.get(CHAMP_AUTO_VALIDATION) == VALEUR_AUTO_VALIDATION:
+        return True
+    return mission.get("id") in index_auto
+
+
+def tete_brin():
+    """La TETE du brin en LECTURE SEULE -- meme source que le puisage (commun).
+
+    Coup d oeil : on ne consomme rien tant que la decision n est pas prise (un
+    puisage pour rien ferait disparaitre la tete du brin, donc l item).
+    """
+    try:
+        etat = charger_entonnoir_pilote()
+    except Exception:
+        return None
+    if not isinstance(etat, dict):
+        return None
+    brin = etat.get("brin") or []
+    return brin[0] if brin else None
+
+
+def decision_enchainement(mission, depuis_lot, enchainer, index_auto):
+    """DECISION PURE (testable sans disque) : faut-il ARRETER l enchainement ?
+
+    - un LOT arme est une decision EXPLICITE du createur : la chaine continue ;
+    - une injection EXPLICITE (enchainer faux) n est pas un enchainement : elle
+      passe (le verbe `injecter` reste un ordre, pas une decision automatique) ;
+    - sinon -- c est la CHAINE -- une mission NON auto-validee ARRETE tout : le
+      pilote rend la main (decision createur MO-175).
+    Rend (arret, motif) : le motif est toujours DIT quand la chaine s arrete.
+    """
+    if mission is None or depuis_lot or not enchainer:
+        return False, ""
+    if est_auto_validee(mission, index_auto):
+        return False, ""
+    return True, (str(mission.get("id", "?")) + " n est PAS auto-validee --"
+                  " la chaine s arrete ici (le createur reprend la main).")
+
+
+def preparer_injection(charger_file, enchainer=False):
     """Prepare et depose l'injection ordonnee de la mission suivante.
 
     Serie stricte : REFUS si une mission est deja en cours.
     Protocole de pause (M-080) : REFUS si la session-matrix est EN PAUSE.
-    Priorite au createur : 1) le lot arme, 2) la file des missions chargees,
-    3) la TRESSE (puisage automatique : tisser si besoin, puis tete du brin).
+    Priorite au createur : 1) le lot arme, 2) l ITEM AUTO-VALIDE en tete du brin
+    (decision MO-175 : l auto-validee passe AVANT la file chargee, juste apres
+    le lot arme), 3) la file des missions chargees, 4) la TRESSE (puisage
+    automatique : tisser si besoin, puis tete du brin).
+    ENCHAINEMENT (3e jambe MO-175) : quand `enchainer` est vrai (appel depuis
+    `fin`), la chaine s ARRETE des que la mission a injecter n est PAS
+    auto-validee -- le createur reprend la main. Une injection EXPLICITE
+    (`enchainer` faux, verbe `injecter`) n est pas un enchainement : elle passe.
+    Un STOP NE CONSOMME RIEN (decision createur 2026-09-18) : le candidat est
+    juge AVANT d etre tire -- la tete du brin reste en tete, la file garde sa
+    mission. Un arret ne se paie donc d aucun effet de bord.
     """
     if session_en_pause():
         print("REFUS : session-matrix EN PAUSE (protocole M-080) -- aucune injection pendant la maintenance.")
@@ -162,9 +247,31 @@ def preparer_injection(charger_file):
     if mission_en_cours(file_missions) is not None:
         print("REFUS : une mission est deja en cours (serie stricte). Termine-la d'abord : python main.py fin --bilan ...")
         return 1
-    mission = prochaine_du_lot(file_missions) or prochaine_en_attente(file_missions)
+    index_auto = index_auto_valide()
+    mission = prochaine_du_lot(file_missions)
     if mission is None:
-        mission = puiser_tresse(file_missions)
+        # UN SEUL CANDIDAT, JUGE AVANT D ETRE TIRE (decision createur 2026-09-18) :
+        # l auto-validee en TETE du brin passe avant la file chargee, et RIEN n est
+        # consomme tant que la chaine a le droit d enchainer. Un STOP laisse donc
+        # l etat EXACTEMENT comme il etait (la tete reste en tete).
+        tete = tete_brin()
+        auto_en_tete = tete is not None and est_auto_validee(tete, index_auto)
+        en_file = None if auto_en_tete else prochaine_en_attente(file_missions)
+        if auto_en_tete or en_file is None:
+            candidat, origine = tete, "brin"
+        else:
+            candidat, origine = en_file, "file"
+        # Aucun lot ici (la branche lot est sortie plus haut) : depuis_lot=False.
+        arret, motif = decision_enchainement(candidat, False, enchainer, index_auto)
+        if arret:
+            print("STOP ENCHAINEMENT : " + motif)
+            print("(RIEN n a ete consomme -- "
+                  + ("la tete du brin reste EN PLACE" if origine == "brin"
+                     else "la mission reste dans sa file") + " ;")
+            print(" injection explicite : python main.py injecter)")
+            return 0
+        if candidat is not None:
+            mission = puiser_tresse(file_missions) if origine == "brin" else candidat
     if mission is None:
         print("Aucune mission en attente (lot, file et tresse vides).")
         return 0
@@ -200,6 +307,7 @@ def preparer_injection(charger_file):
         "lecons_utiles": charger_lecons_utiles(),
         "themes_utiles": charger_themes_utiles(),
         "recherche": preparer_recherche_mission(mission),
+        CHAMP_RAPPEL: charger_rappel_route(mission),
     }
     injection["poids_tokens"] = poids_injection(injection)
     deposer_message(BOITE_PILOTE_OUT, injection)
@@ -283,6 +391,7 @@ def enchainer(charger_file):
         "lecons_utiles": charger_lecons_utiles(),
         "themes_utiles": charger_themes_utiles(),
         "recherche": preparer_recherche_mission(mission),
+        CHAMP_RAPPEL: charger_rappel_route(mission),
     }
     injection["poids_tokens"] = poids_injection(injection)
     deposer_message(BOITE_PILOTE_OUT, injection)
@@ -375,6 +484,24 @@ def preparer_recherche_mission(mission):
                               "la question de recherche n'est PAS injectee"),
         }
     return preparer_recherche(mission, GABARIT_COMMANDE_RECHERCHE)
+
+
+def charger_rappel_route(mission):
+    """La ROUTE du defaut d'OUTIL, portee par le sac-a-dos de la mission (R5).
+
+    Mesure de l'audit MO-174 : la regle que le createur venait d'enoncer (reparer
+    DANS l'outil, jamais contourner a la main) n'etait ecrite NULLE PART ou
+    l'agent la cherche -- c'est-a-dire AU MOMENT ou il en a besoin. Elle voyage
+    donc AVEC la mission dont le TYPE est `reparation` : le type que declarent le
+    crochet `[outil]` (filtrer/entry.py) et la liste fermee TYPES.
+
+    Tout autre type rend une chaine VIDE, et c'est voulu : un rappel toujours
+    present ne se lit plus. Le champ est PESE avec les autres (CHAMPS_PESES) --
+    c'est du contexte offert a l'agent, il se compte comme le reste.
+    """
+    if str(mission.get("type", "") or "").strip() != TYPE_ROUTE_OUTIL:
+        return ""
+    return RAPPEL_ROUTE_OUTIL
 
 
 def charger_lecons_utiles():

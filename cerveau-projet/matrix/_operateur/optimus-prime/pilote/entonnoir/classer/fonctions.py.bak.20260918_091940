@@ -1,0 +1,111 @@
+"""Fonctions simples des echelons 1-2 : classer, proposer la categorie.
+
+Une seule tache chacune (convention-architecture-outils).
+"""
+from listes import (CATEGORIES, CATEGORIES_DEFAUT, CHAMP_AUTO_VALIDATION,
+                    MOTS_CLES_CATEGORIES, TYPES, VERDICT_AUTO, VERDICT_NON)
+from mots import mot_parcourt, mots_de
+from roles import CHAMP_ROLE, proposer_role, valider_role
+from stockage import horodater, verifier_famille
+
+
+def proposer_categorie(theme, objectif):
+    """PROPOSE une categorie par MOTS ENTIERS (deterministe, reclassable a la main).
+
+    Retourne (categorie_proposee, mot_cle_trouve) ; "" si aucun mot-cle ne parle.
+    """
+    mots = mots_de(theme + " " + objectif)
+    for mot_cle, categorie_associee in MOTS_CLES_CATEGORIES:
+        if mot_parcourt(mots, mot_cle):
+            return categorie_associee, mot_cle
+    return "", ""
+
+
+def mission_du_vrac(etat, identifiant):
+    """Retourne la mission EO-XXX du vrac, ou None (une seule tache : chercher)."""
+    for mission in etat.get("vrac", []):
+        if mission.get("id") == identifiant:
+            return mission
+    return None
+
+
+def classer_mission(etat, identifiant, type_cible, categorie_explicite, role_explicite=""):
+    """Classe la mission EO-XXX du vrac vers SA file-type (echelons 1-2).
+
+    Type FERME (code 2) ; categorie : explicite (souveraine, verifiee contre
+    la liste fermee) ou PROPOSEE par mots entiers (M-027) quand le createur
+    ne la precise pas -- la proposition n'est gardee que si elle appartient
+    aux categories du type, sinon categorie par defaut du type.
+    ROLE (L-061/MO-076) : le classement pose le ROLE de la mission, champ
+    FERME (le vivier). Explicite (`--role`) ou PROPOSE par la table complete
+    (roles.py) sur le couple (type, categorie) -- jamais devine, toujours
+    imprime pour etre confirme ou corrige. Un role hors vivier est REFUSE
+    (code 2) : un item sans role ferait echouer l'injection plus tard.
+    Mission inconnue : code 1 (les listes sont toujours validees AVANT la
+    recherche, lecon M-018). Retourne (code, message).
+    """
+    if type_cible not in TYPES:
+        return 2, "Type inconnu : " + repr(type_cible) + " (types fermes : " + ", ".join(TYPES) + ")"
+    code, message = verifier_famille(identifiant)
+    if code != 0:
+        return code, message
+    categories_du_type = CATEGORIES.get(type_cible, ())
+    if categorie_explicite:
+        categorie_cible = categorie_explicite
+    else:
+        mission_trouvee = mission_du_vrac(etat, identifiant)
+        if mission_trouvee is None:
+            categorie_cible = categorie_par_defaut(type_cible)
+        else:
+            proposee, _ = proposer_categorie(mission_trouvee.get("theme", ""), mission_trouvee.get("objectif", ""))
+            categorie_cible = proposee if proposee in categories_du_type else categorie_par_defaut(type_cible)
+    if categorie_cible not in categories_du_type:
+        return 2, (
+            "Categorie inconnue pour " + type_cible + " : " + repr(categorie_cible)
+            + " (categories fermees : " + ", ".join(categories_du_type) + ")"
+        )
+    # ROLE : propose par la table complete, ou impose par la declaration.
+    source_role = "declaration" if role_explicite else "table"
+    role_brut = role_explicite or proposer_role(type_cible, categorie_cible)
+    code_role, role_canonique, ecart_role = valider_role(role_brut)
+    if ecart_role:
+        print(ecart_role)
+    if code_role != 0:
+        return code_role, (
+            "Mission " + identifiant + " NON classee : le role rendu (" + repr(role_brut)
+            + ") n'est pas un theme du vivier."
+        )
+
+    vrac = etat.get("vrac", [])
+    for position, mission in enumerate(vrac):
+        if mission.get("id") == identifiant:
+            mission_classee = dict(mission)
+            mission_classee["type"] = type_cible
+            mission_classee["categorie"] = categorie_cible
+            mission_classee[CHAMP_ROLE] = role_canonique
+            mission_classee["role_source"] = source_role
+            mission_classee["classee_le"] = horodater()
+            mission_classee[CHAMP_AUTO_VALIDATION] = (
+                mission_classee.get(CHAMP_AUTO_VALIDATION) or VERDICT_NON)
+            if mission_classee[CHAMP_AUTO_VALIDATION] == VERDICT_AUTO:
+                # INDEX AUTO-VALIDEE : des IDS, jamais des copies -- la mission vit
+                # dans SA file-type (une seule verite, EO-154) ; il ne recoit QUE les
+                # items declares auto-valides A LA CREATION.
+                index_auto = etat.setdefault(CLE_AUTO_VALIDEES, [])
+                if identifiant not in index_auto:
+                    index_auto.append(identifiant)
+            etat.setdefault("files", {}).setdefault(type_cible, []).append(mission_classee)
+            del vrac[position]
+            return 0, (
+                "Mission " + identifiant + " classee : type " + type_cible
+                + ", categorie " + categorie_cible + ", role " + role_canonique
+                + " (" + ("declare" if source_role == "declaration" else "propose par la table")
+                + ") ; auto-validation " + mission_classee[CHAMP_AUTO_VALIDATION]
+                + ")."
+            )
+    return 1, "Mission inconnue au vrac : " + identifiant
+
+
+def categorie_par_defaut(type_cible):
+    """Retourne la categorie par defaut de ce type (toujours dans la liste fermee)."""
+    return CATEGORIES_DEFAUT.get(type_cible, "autre")

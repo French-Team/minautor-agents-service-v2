@@ -9,17 +9,17 @@
     "Commentaires",
     "Suggestions"
   ],
-  "date": "2026-09-18 08:28:06",
+  "date": "2026-09-18 19:43:19",
   "motif": "profil-complet",
   "mode": "absorbee",
   "signature": "{\"attendus_vides\": [], \"optionnels_vides\": [\"Email\", \"Discord\", \"Autre\", \"Commentaires\", \"Suggestions\"], \"pourcentage\": 100, \"present\": true}",
-  "passes_absorbes": 393,
+  "passes_absorbes": 438,
   "derniere_ecriture": "2026-09-14 06:55:28",
   "dernieres_passes": [
-    "2026-09-18 07:28:05",
-    "2026-09-18 07:43:05",
-    "2026-09-18 07:58:06",
-    "2026-09-18 08:13:06",
-    "2026-09-18 08:28:06"
+    "2026-09-18 18:43:18",
+    "2026-09-18 18:58:18",
+    "2026-09-18 19:13:19",
+    "2026-09-18 19:28:19",
+    "2026-09-18 19:43:19"
   ]
 }

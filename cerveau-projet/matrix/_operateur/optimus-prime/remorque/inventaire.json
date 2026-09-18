@@ -1,6 +1,6 @@
 {
-  "date": "2026-09-16 20:08:22",
-  "total": 90,
+  "date": "2026-09-18 19:17:49",
+  "total": 92,
   "equipements": [
     {
       "nom": "theme-auto-audit-nemesis",
@@ -71,6 +71,11 @@
       "nom": "proto-1-reprise-mission",
       "type": "protocole",
       "chemin": "protocoles\\proto-1-reprise-mission.md"
+    },
+    {
+      "nom": "proto-10-route-outil-defaillant",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-10-route-outil-defaillant.md"
     },
     {
       "nom": "proto-2-auto-evolution",
@@ -241,6 +246,11 @@
       "nom": "dry-run.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\dry-run.py"
+    },
+    {
+      "nom": "evaluer-auto-validation.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\evaluer-auto-validation.py"
     },
     {
       "nom": "garde-ascii.py",

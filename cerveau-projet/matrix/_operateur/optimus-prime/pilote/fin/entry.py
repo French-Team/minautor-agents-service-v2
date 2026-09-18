@@ -2,14 +2,19 @@
 
 Interface entre main.py et les fonctions simples (fin/fonctions.py).
 """
-from commun import charger_file, extraire_options, lire_bilan
+from commun import charger_file, extraire_options, lire_bilan, lire_defauts
+from constants import OPTION_DEFAUTS
 from fin.fonctions import cloturer_mission
 
 # --bilan : le texte direct (defaut). --bilan-fichier : le MEME recit, lu dans un
 # fichier (EO-132) -- un argument traverse le shell, ou un accent grave EXECUTE du
 # shell et disparait de la trace : mesure reelle, deux bilans troues (MO-142,
 # MO-143), la friction declaree ponctuelle s'etant revelee RECURRENTE (friction 71).
-NOMS_OPTIONS = ("bilan", "bilan-fichier")
+# --defauts-fichier (R5, audit MO-174) : les DEFAUTS d'outil rencontres EN
+# TRAVAILLANT, en JSONL STRUCTURE -- un objet par defaut, champs FERMES. Lus
+# dans un FICHIER, pour la meme raison que le bilan (EO-132) : un argument
+# traverse le shell, ou un accent grave EXECUTE du shell et disparait.
+NOMS_OPTIONS = ("bilan", "bilan-fichier", OPTION_DEFAUTS)
 
 
 def executer(arguments):
@@ -20,5 +25,10 @@ def executer(arguments):
         return 2
     if not bilan:
         print('Usage : python main.py fin --bilan "..." | --bilan-fichier <chemin>')
+        print("        [--defauts-fichier <chemin.jsonl>]  (defauts d'OUTIL, R5)")
         return 2
-    return cloturer_mission(charger_file, bilan)
+    code, defauts, message = lire_defauts((options.get(OPTION_DEFAUTS) or "").strip())
+    if code != 0:
+        print("REFUS : " + message)
+        return 2
+    return cloturer_mission(charger_file, bilan, defauts)

@@ -2,7 +2,9 @@
 
 Une seule tache chacune (convention-architecture-outils).
 """
-from listes import CATEGORIES, CATEGORIES_DEFAUT, MOTS_CLES_CATEGORIES, TYPES
+from listes import (CATEGORIES, CATEGORIES_DEFAUT, CHAMP_AUTO_VALIDATION,
+                    CLE_AUTO_VALIDEES, MOTS_CLES_CATEGORIES, TYPES, VERDICT_AUTO,
+                    VERDICT_NON)
 from mots import mot_parcourt, mots_de
 from roles import CHAMP_ROLE, proposer_role, valider_role
 from stockage import horodater, verifier_famille
@@ -84,12 +86,22 @@ def classer_mission(etat, identifiant, type_cible, categorie_explicite, role_exp
             mission_classee[CHAMP_ROLE] = role_canonique
             mission_classee["role_source"] = source_role
             mission_classee["classee_le"] = horodater()
+            mission_classee[CHAMP_AUTO_VALIDATION] = (
+                mission_classee.get(CHAMP_AUTO_VALIDATION) or VERDICT_NON)
+            if mission_classee[CHAMP_AUTO_VALIDATION] == VERDICT_AUTO:
+                # INDEX AUTO-VALIDEE : des IDS, jamais des copies -- la mission vit
+                # dans SA file-type (une seule verite, EO-154) ; il ne recoit QUE les
+                # items declares auto-valides A LA CREATION.
+                index_auto = etat.setdefault(CLE_AUTO_VALIDEES, [])
+                if identifiant not in index_auto:
+                    index_auto.append(identifiant)
             etat.setdefault("files", {}).setdefault(type_cible, []).append(mission_classee)
             del vrac[position]
             return 0, (
                 "Mission " + identifiant + " classee : type " + type_cible
                 + ", categorie " + categorie_cible + ", role " + role_canonique
                 + " (" + ("declare" if source_role == "declaration" else "propose par la table")
+                + ") ; auto-validation " + mission_classee[CHAMP_AUTO_VALIDATION]
                 + ")."
             )
     return 1, "Mission inconnue au vrac : " + identifiant

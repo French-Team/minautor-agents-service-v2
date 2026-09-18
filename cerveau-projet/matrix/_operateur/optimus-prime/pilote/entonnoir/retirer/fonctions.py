@@ -9,6 +9,23 @@ except ImportError:  # importe comme paquet (depuis le pilote) : chemin complet
     from entonnoir.stockage import horodater, verifier_famille
 
 
+def retirer_de_l_index(etat, identifiant):
+    """Retire l id de l INDEX auto-valide : un id sans mission est un FANTOME.
+
+    La mission vit dans SA file-type (une seule verite) ; l index ne fait que
+    pointer. Retirer la mission sans nettoyer l index laisserait une tete
+    auto-validee SANS mission -- ce que le brin ne doit jamais voir.
+    """
+    try:
+        from listes import CLE_AUTO_VALIDEES
+    except ImportError:
+        from entonnoir.listes import CLE_AUTO_VALIDEES
+    index = etat.get(CLE_AUTO_VALIDEES) or []
+    if identifiant in index:
+        index.remove(identifiant)
+    return index
+
+
 def retirer_des_files(etat, identifiant):
     """Retire UNE mission CLASSEE (echelons 1-2) par son id exact.
 
@@ -26,6 +43,7 @@ def retirer_des_files(etat, identifiant):
         for mission in missions:
             if mission.get("id") == identifiant:
                 missions.remove(mission)
+                retirer_de_l_index(etat, identifiant)
                 return 0, (
                     "Mission " + identifiant + " retiree de la file " + type_file
                     + " (categorie : " + mission.get("categorie", "?")

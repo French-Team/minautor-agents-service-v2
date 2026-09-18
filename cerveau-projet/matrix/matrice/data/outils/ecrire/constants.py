@@ -54,7 +54,7 @@ MOTIF_BAK_HORODATE = r"\.bak\.\d{8}_\d{6}$"
 MODES_PERMIS = ("creer", "remplacer", "ajouter")
 
 # Options CLI
-NOMS_OPTIONS_ECRIRE = ("fichier", "contenu", "contenu-fichier", "mode")
+NOMS_OPTIONS_ECRIRE = ("fichier", "contenu", "contenu-fichier", "contenu-base64", "mode")
 NOMS_OPTIONS_EDITER = ("fichier", "ancien", "nouveau", "ancien-fichier", "nouveau-fichier")
 
 # Option SANS valeur : la sentinelle est CONSOMMEE du DOMICILE partage
