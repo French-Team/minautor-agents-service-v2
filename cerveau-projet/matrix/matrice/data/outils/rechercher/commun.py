@@ -502,22 +502,6 @@ def filtrer_par_periode(hits, periode_str):
 
 
 def extraire_options(arguments, noms_connus):
-    """Extrait --nom valeur et flags sans valeur."""
-    options = {}
-    index = 0
-    while index < len(arguments):
-        morceau = arguments[index]
-        if morceau.startswith("--") and morceau[2:] in noms_connus:
-            nom = morceau[2:]
-            if nom in NOMS_OPTIONS_DRAPEAU:
-                options[nom] = "1"
-                index += 1
-            elif index + 1 < len(arguments):
-                options[nom] = arguments[index + 1]
-                index += 2
-            else:
-                options[nom] = ""
-                index += 1
-        else:
-            index += 1
-    return options
+    """Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici."""
+    from options import extraire_options as repartir  # domicile partage (EO-158)
+    return repartir(arguments, noms_connus, drapeaux=NOMS_OPTIONS_DRAPEAU)

@@ -2004,8 +2004,80 @@
       "bilan": "DECISION : le type est ACCEPTE EN OPTION, JAMAIS exige. 1) une porte de REPARATION ne doit jamais pouvoir refuser de reparer : un champ exige rendrait inenregistrable une mission dont la nature est perdue, donc creerait l'ecart qu'elle existe pour fermer ; 2) c'est le raisonnement deja tenu pour le THEME (un fait historique ne se juge pas) ; 3) mais un fait se nomme dans le VOCABULAIRE FERME quand il est donne, et la porte le DIT quand il manque (elle nomme retiqueter --type). Cobaye 6/6 : refus si type hors vocabulaire (0 ecriture), accepte sans type SANS cle 'type' (une cle absente dit 'nature inconnue', une cle vide dirait 'nature vide'), message SANS TYPE, fiche typee quand donne, meme videur que charger.",
       "hors_file": true,
       "type": "reparation"
+    },
+    {
+      "id": "MO-116",
+      "theme": "REPARATEUR",
+      "objectif": "EO-121 : prochain_id(file) ignore le MARBRE -> collision d'id (MO-108 attribue deux fois le 2026-09-15).",
+      "statut": "terminee",
+      "chargee_le": "2026-09-15 21:48:42",
+      "injectee_le": "2026-09-15 21:48:42",
+      "terminee_le": "2026-09-15 21:48:42",
+      "bilan": "prochain_id prend desormais le plus haut des DEUX (compteur de file ET plus haut numero vu au marbre) plus un : jamais un numero deja pris. numero_id deplace dans commun.py (un seul domicile, il y avait une copie dans file/fonctions.py). Marbre illisible -> 0 sans exception, mais SIGNALE (L-037). Les ids d'un autre flux (M- du cameleon) sont ignores volontairement. Cobaye 6/6 : compteur en retard 107 -> MO-116 (jamais MO-108, la collision d'origine), compteur en avance inchange, 3 charges de suite sans id deja vu, marbre illisible tolere et dit, numero_id un seul domicile, rien ecrit.",
+      "hors_file": true,
+      "type": "reparation"
+    },
+    {
+      "id": "MO-117",
+      "theme": "REPARATEUR",
+      "objectif": "Appliquer le tableau des 41 types, valide par le createur, par la porte retiqueter.",
+      "statut": "terminee",
+      "chargee_le": "2026-09-15 21:50:33",
+      "injectee_le": "2026-09-15 21:50:33",
+      "terminee_le": "2026-09-15 21:50:33",
+      "bilan": "41 missions sans type -> 41 missions typees, PAR LA PORTE (jamais une ecriture directe du JSON) : chaque mission porte desormais son type + sa trace (type_avant=None + motif issu du tableau). Preuves : couverture 41/41 avant (refus du script sinon), application 41/41, relecture 0 sans type / 0 type faux / 41 traces completes. Repartition : 29 reparation, 8 dev, 2 doc, 1 revision, 1 audit. Document renomme inventaire-types.md (il ne dit plus 'a valider').",
+      "hors_file": true,
+      "type": "reparation"
+    },
+    {
+      "id": "MO-118",
+      "theme": "REPARATEUR",
+      "objectif": "Trancher le sort du miroir Flux 1 : supprimer son etat menteur (M-CAM fantome) en alignant la doctrine, sans violer L-016",
+      "statut": "terminee",
+      "chargee_le": "2026-09-15 22:17:00",
+      "injectee_le": "2026-09-15 22:17:00",
+      "terminee_le": "2026-09-15 22:17:00",
+      "bilan": "MO-118 : LE MIROIR FLUX 1 EST ALIGNE -- et mon erreur de MO-110 est corrigee. (1) LA DECISION : j'avais ecrit en MO-110 que le miroir etait 'hors perimetre'. Faux par la regle immuable (perimetre-write.md : je n'ECRIS que dans cerveau-projet/matrix/, et matrice/pilote y est) ; ce qui etait vrai est que la MISSION EO-119 visait le Flux 2. La seule contrainte reelle est L-016 (aucun contenu d'Optimus lisible par le cameleon) : la reparation vit donc DANS le domicile du cameleon, avec SES outils (commun.mission_en_cours), zero import de _operateur. (2) LE MENSONGE MESURE : cycle-state.json du cameleon annoncait phase=mission et une mission M-CAM 'en cours' depuis le 2026-09-13T06:30:20, alors que sa file portait 0 mission (compteur 89) et que M-CAM n'existe dans AUCUN journal (147 lignes relues) ; il etait de plus tronque EN SILENCE a ses 100 dernieres entrees, et son demarrer EFFACAIT la mission courante. (3) LIVRE : cycle.py reecrit SANS ETAT -- la PHASE est DEDUITE de la file, l'historique vit dans matrice/pilote/cycle-historique-archive.json EN AJOUT SEUL (ecriture atomique, temoignage du fantome conserve avec la verite mesuree), et la declaration d'un debut dont l'id n'est pas la mission en cours de la file est REFUSEE (garde anti M-CAM : c'est ainsi que le fantome est ne). La fin se rattache a la file (mission en cours, sinon derniere terminee) et le rattachement est DIT. Etat supprime APRES archivage et relecture ; API preservee pour injection/entry.py. (4) PREUVES : cobaye 13/13, 7 pieges (refus du fantome sans injection ni ecriture ; phase deduite dans les deux sens ; ajout seul 120 -> 121 sans troncature ; aucun .tmp residuel ; L-016 prouve par AST -- seuls imports commun et constants ; API preservee ; catalogue toujours lance, espionne et non execute ; L-015 archive reelle 3 -> 3). EPREUVE VIVANTE : la declaration reelle du debut de M-CAM est REFUSEE (code 1, archive 3 -> 3), la phase reelle se lit 'pret (deduite de la file)', et la porte main.py statut est verte de bout en bout. (5) DOC QUI MENTAIT, CORRIGE : _operateur/optimus-prime/pilote/README-cycle.md annoncait encore 'les gestionnaires sauvegardent leur etat dans cycle-state.json' -- reste de MO-110 que je n'avais pas vu ; il dit desormais la verite des DEUX flux. (6) ETAT : non-regression ZONE+FLUX verte ; coherence 2 ecarts AVANT enregistrement (MO-118 declaree au journal sans fiche, compteur 117 < 118) et 0 apres ; 4 notes BDD. Aveu utile : mon cobaye a d'abord echoue sur T9/T10 parce qu'il lisait la PROSE du docstring -- corrige le cobaye, jamais le code.",
+      "hors_file": true,
+      "type": "reparation"
+    },
+    {
+      "id": "MO-119",
+      "theme": "REPARATEUR",
+      "objectif": "Rendre la porte de reprise VERIDIQUE : l'ecart mesure a l'ETAPE 0 (resume --derniere annoncait S-026 / MO-099 au lieu de MO-118), la reparation par la porte bdd-sessions, et la cause racine declaree (aucune categorie de re-tiquetage dans la BDD sessions).",
+      "statut": "terminee",
+      "chargee_le": "2026-09-16 07:02:02",
+      "injectee_le": "2026-09-16 07:02:02",
+      "terminee_le": "2026-09-16 07:02:02",
+      "bilan": "MO-119 (REPARATION) terminee : la porte de reprise dit la verite (S-052 = vraie fermeture du 2026-09-15 avec le vrai reste-a-faire ; 34 entrees sur 51 sans tag de session ; friction 40 ; lecon L-092 ; limite de granularite a la seconde mesuree et dite).",
+      "hors_file": true,
+      "type": "reparation"
+    },
+    {
+      "id": "MO-120",
+      "theme": "AUDITEUR",
+      "objectif": "Qualifier la CAUSE RACINE exacte de l'ecart de reprise : le pilote note la session au tag 'travail' alors que la porte de reprise ne lit que session-ouverte / session-fermee -- contrat ECRIT/LU non aligne (constat seul, aucune modification).",
+      "statut": "terminee",
+      "chargee_le": "2026-09-16 07:02:46",
+      "injectee_le": "2026-09-16 07:02:46",
+      "terminee_le": "2026-09-16 07:02:46",
+      "bilan": "MO-120 (AUDITEUR) terminee : la trace AUTOMATIQUE du pilote (tag 'travail') est invisible de la porte de reprise (qui ne lit que session-ouverte / session-fermee) -- les deux moities du chantier MO-092 ne partagent pas de vocabulaire ; la reparation de MO-119 est un pansement tant que le contrat ECRIT/LU n'est pas aligne ; friction 41, lecon L-093.",
+      "hors_file": true,
+      "type": "audit"
+    },
+    {
+      "id": "MO-121",
+      "theme": "AUTO-EVOLUTION",
+      "objectif": "Aligner le contrat ECRIT/LU de la trace de session (friction 41) : le pilote OUVRE la session (tag que la reprise LIT) et la porte de reprise DIT son retard.",
+      "statut": "terminee",
+      "chargee_le": "2026-09-16 07:11:27",
+      "injectee_le": "2026-09-16 07:11:27",
+      "terminee_le": "2026-09-16 07:11:27",
+      "bilan": "MO-121 (AUTO-EVOLUTION) terminee : contrat ECRIT/LU aligne -- domicile unique du vocabulaire (data/commun/trace_session.py), categorie etat (lecture bornee), ouvrir_session au demarrage (jamais double), garde de retard qui DIT le retard sur session fermee, fin du faux 'BDD vide'. Cobaye 18/18 (5 pieges), preuve vivante 'session deja ouverte : rien a doubler' (56 -> 56 entrees), 0 ecart au contrat fondamental, ASCII sain, remorque 85. Friction 41 validee ; friction 42 notee (les .bak de ecrire hors zone).",
+      "hors_file": true,
+      "type": "dev"
     }
   ],
-  "archive_le": "2026-09-17 20:14:48",
+  "archive_le": "2026-09-18 08:32:18",
   "dedup_le": "2026-09-14 (MO-091) : 14 jumeaux de re-archivages anterieurs au fix sortent du vivant vers la trousse a poussiere"
 }

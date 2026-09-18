@@ -16,6 +16,7 @@ identite:
 | Perimetre des fichiers temporaires (zones `tmp-*`, README, contenu vide) | perimetre-tmp.md |
 | Hors flux formel v1/v2 | hors-flux-formel.md |
 | Serie stricte (single-LLM) | serie-stricte.md |
+| Auto-validation des missions (deja vues avec le createur : enchainables sans redemander ; le CRITIQUE reste au createur) | auto-validation-missions.md |
 | Python seul | python-seul.md |
 | Anti-surcharge (modifications en BDD) | anti-surcharge.md |
 | Faciliter la vie du LLM | faciliter-vie-llm.md |

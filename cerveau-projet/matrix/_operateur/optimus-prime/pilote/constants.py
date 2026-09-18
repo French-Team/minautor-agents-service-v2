@@ -225,5 +225,16 @@ CHAMP_TITRE_MISSION = "titre"
 CHAMP_POSTURE_MISSION = "posture"
 CATEGORIE_POSTURE = "PERSONNALITE"
 
+# AUTO-VALIDATION D'UNE MISSION (EO-143 / MO-167, GO createur du 2026-09-18) :
+# la garantie "une mission deja vue avec le createur s enchaine sans redemander"
+# ne reposait que sur une ABSENCE (aucune porte d approbation dans la chaine :
+# injection / fin / file / checklist verifies) et une LECON (L-019). Une garantie
+# qui ne vit que dans une absence se re-cree au premier garde qui l ignore : le
+# CHAMP la rend LISIBLE. Nom du champ et valeur declares ICI (proprietaire du
+# contrat, L-035) ; la doctrine est portee par la regle immuable
+# regles-immuables/auto-validation-missions.md.
+CHAMP_AUTO_VALIDATION = "auto_validation"
+VALEUR_AUTO_VALIDATION = "auto"
+
 ENCODAGE = "utf-8"
 INDENTATION_JSON = 2

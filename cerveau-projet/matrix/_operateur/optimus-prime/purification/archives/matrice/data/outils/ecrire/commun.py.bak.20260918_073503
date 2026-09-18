@@ -1,0 +1,347 @@
+"""Fonctions communes de l'outil ecrire : perimetre, SHA, atomique, validation.
+
+Chaque fonction fait UNE chose (convention-architecture-outils).
+"""
+import hashlib
+import json
+import os
+import py_compile
+import shutil
+from datetime import datetime
+from pathlib import Path
+
+from constants import (
+    ALLOWLIST_PREFIXES,
+    ALLOWLIST_RACINE,
+    ENCODAGE,
+    FORMAT_HORODATE_BAK,
+    RACINE,
+    REPERTOIRE_MATRIX,
+    REPERTOIRE_MATRICE,
+    SUFFIXE_BAK,
+    TAILLE_BLOC_LECTURE,
+)
+
+
+def dans_perimetre_ecriture(chemin_relatif):
+    """True si le chemin est ecrivible (dans matrix/ ou allowlist racine)."""
+    brut = str(chemin_relatif).replace("\\", "/").strip()
+    if not brut:
+        return False
+    while brut.startswith("./"):
+        brut = brut[2:]
+    while brut.startswith("/"):
+        brut = brut[1:]
+    nom = brut.split("/")[-1]
+    if "/" not in brut and (nom in ALLOWLIST_RACINE or any(nom.startswith(p) for p in ALLOWLIST_PREFIXES)):
+        return True
+    if brut.startswith("matrix/") or brut.startswith("cerveau-projet/matrix/"):
+        return True
+    try:
+        p = (RACINE / brut).resolve()
+        # Accepte tout sous RACINE/matrix ou RACINE/cerveau-projet/matrix
+        for base in (RACINE / "matrix", RACINE / "cerveau-projet" / "matrix"):
+            if base.is_dir():
+                try:
+                    if str(p).startswith(str(base.resolve())):
+                        return True
+                except OSError:
+                    continue
+        # Fallback : sous REPERTOIRE_MATRIX
+        return str(p).startswith(str(REPERTOIRE_MATRIX.resolve()))
+    except (OSError, RuntimeError):
+        return False
+
+
+def resoudre_chemin(chemin_relatif):
+    """Retourne le Path absolu (depuis RACINE)."""
+    brut = str(chemin_relatif).strip()
+    p = (RACINE / brut).resolve()
+    return p
+
+
+def calculer_sha256(chemin_absolu):
+    """SHA-256 hex du fichier (lecture binaire, blocs). None si absent."""
+    if not chemin_absolu.exists() or not chemin_absolu.is_file():
+        return None
+    h = hashlib.sha256()
+    with open(chemin_absolu, "rb") as flux:
+        for bloc in iter(lambda: flux.read(TAILLE_BLOC_LECTURE), b""):
+            h.update(bloc)
+    return h.hexdigest()
+
+
+def normaliser_lf(contenu):
+    """Force LF (L-001) : CRLF et CR -> LF, assure LF final si non vide."""
+    # Normalise d'abord CRLF -> LF puis CR -> LF
+    contenu = contenu.replace("\r\n", "\n").replace("\r", "\n")
+    return contenu
+
+
+def chemin_bak(chemin_absolu):
+    """Retourne le chemin .bak horodate pour proto-2.
+
+    La forme vient de SES constantes (SUFFIXE_BAK + FORMAT_HORODATE_BAK) : le
+    motif qui la reconnait est declare a cote d'elles, donc jamais redevine par
+    un consommateur (contrat fondamental, espions, remorque).
+    """
+    horodate = datetime.now().strftime(FORMAT_HORODATE_BAK)
+    return chemin_absolu.with_name(chemin_absolu.name + SUFFIXE_BAK + "." + horodate)
+
+
+def creer_bak_si_existe(chemin_absolu):
+    """Cree un .bak si le fichier existe. Retourne le Path bak ou None."""
+    if not chemin_absolu.exists() or not chemin_absolu.is_file():
+        return None
+    bak = chemin_bak(chemin_absolu)
+    try:
+        shutil.copy2(str(chemin_absolu), str(bak))
+    except OSError:
+        # Fallback copie bytes
+        try:
+            bak.write_bytes(chemin_absolu.read_bytes())
+        except OSError:
+            return None
+    return bak
+
+
+def _supprimer_silencieux(chemin):
+    """Retire un fichier de travail sans jamais faire echouer l'appelant.
+
+    Un temporaire qui resiste ne doit pas masquer la vraie raison d'un refus :
+    on essaie, et on continue -- le message rendu a l'agent dit le REFUS, pas
+    l'incident de menage.
+    """
+    try:
+        if chemin.exists():
+            chemin.unlink()
+    except OSError:
+        pass
+
+
+def valider_syntaxe(chemin_absolu, suffixe=None):
+    """Valide .py (py_compile) et .json (json.load). Retourne (ok, message).
+
+    `suffixe` permet de valider un fichier TEMPORAIRE (`x.json.tmp`) COMME S'IL
+    portait le suffixe de sa CIBLE : c'est ce qui rend la validation possible
+    AVANT le remplacement (EO-129). La validation lit le suffixe de la cible,
+    jamais celui du temporaire -- un `.tmp` ne serait reconnu par personne et
+    l'ecriture invalide repasserait pour valide (un controle muet ne controle
+    rien).
+    """
+    suffix = (suffixe if suffixe is not None else chemin_absolu.suffix).lower()
+    if suffix == ".py":
+        try:
+            py_compile.compile(str(chemin_absolu), doraise=True)
+            return True, "py_compile OK"
+        except py_compile.PyCompileError as e:
+            return False, "py_compile ECHEC : " + str(e)
+        except OSError as e:
+            return False, "py_compile illisible : " + str(e)
+    if suffix == ".json":
+        try:
+            with open(chemin_absolu, "r", encoding=ENCODAGE) as flux:
+                json.load(flux)
+            return True, "json OK"
+        except (OSError, json.JSONDecodeError) as e:
+            return False, "json ECHEC : " + str(e)
+    return True, "pas de validation pour " + suffix
+
+
+def verifier_ascii(chemin_absolu):
+    """Retourne (nb_non_ascii, lignes_concernees) pour garde-ascii."""
+    try:
+        texte = chemin_absolu.read_text(encoding=ENCODAGE)
+    except (OSError, UnicodeDecodeError):
+        return 0, []
+    lignes = texte.splitlines()
+    cibles = []
+    total = 0
+    for idx, ligne in enumerate(lignes, start=1):
+        non_ascii = [c for c in ligne if ord(c) > 127]
+        if non_ascii:
+            total += len(non_ascii)
+            cibles.append(idx)
+    return total, cibles
+
+
+def ecrire_atomique(chemin_relatif, contenu, mode="remplacer"):
+    """Ecriture atomique tmp+replace, LF, .bak, SHA, validation.
+
+    Retourne (code, sha_avant, sha_apres, bak_path, message_validation).
+    code 0 = OK ; 1 = validation ECHOUEE, RIEN n'a ete ecrit (sha_apres None,
+    la cible est INTACTE) ; 2 = refus perimetre/mode.
+    """
+    if not dans_perimetre_ecriture(chemin_relatif):
+        return 2, None, None, None, "REFUS : hors perimetre ecriture (matrix/ seul, allowlist AGENTS.md/demarrer-*.md) : " + chemin_relatif
+    if mode not in ("creer", "remplacer", "ajouter"):
+        return 2, None, None, None, "REFUS : --mode doit etre creer|remplacer|ajouter (recu : " + mode + ")"
+    chemin_absolu = resoudre_chemin(chemin_relatif)
+    existe = chemin_absolu.exists()
+    if mode == "creer" and existe:
+        return 2, None, None, None, "REFUS : --mode creer mais le fichier existe deja : " + chemin_relatif
+    if mode == "ajouter" and not existe:
+        # ajouter sur inexistant = creer
+        pass
+    # Perimetre parent : assure dossier parent dans matrix/
+    try:
+        parent = chemin_absolu.parent
+        # Verifie que parent reste dans perimetre (empeche traversal)
+        # On cree les dossiers si besoin
+        parent.mkdir(parents=True, exist_ok=True)
+    except OSError as e:
+        return 1, None, None, None, "Erreur creation dossier parent : " + str(e)
+
+    sha_avant = calculer_sha256(chemin_absolu) if existe else None
+    bak_path = creer_bak_si_existe(chemin_absolu) if existe and mode != "ajouter" else (creer_bak_si_existe(chemin_absolu) if mode == "ajouter" and existe else None)
+
+    # Prepare contenu normalise
+    contenu_norm = normaliser_lf(contenu)
+    # Mode ajouter : concatene
+    if mode == "ajouter" and existe:
+        try:
+            ancien = chemin_absolu.read_text(encoding=ENCODAGE)
+            ancien_norm = normaliser_lf(ancien)
+            # Assure saut entre ancien et nouveau si besoin
+            if ancien_norm and not ancien_norm.endswith("\n"):
+                ancien_norm += "\n"
+            contenu_norm = ancien_norm + contenu_norm
+        except OSError as e:
+            return 1, sha_avant, None, bak_path, "Erreur lecture pour ajouter : " + str(e)
+
+    # ECRITURE ATOMIQUE : temporaire, VALIDATION, PUIS publication (EO-129).
+    # Avant, la porte PUBLIAIT d'abord et validait ensuite : un fichier invalide
+    # (une virgule manquante dans un JSON, une erreur de syntaxe dans un .py)
+    # RESTAIT en place, et l'alerte se perdait dans le tuyau avec lui. Mesure du
+    # 2026-09-16 : le registre des super-combos est reste invalide sans qu'aucun
+    # controle ne le crie. Une porte d'ecriture qui laisse un fichier casse
+    # derriere elle n'est pas un garde, c'est un conduit.
+    # On REFUSE desormais AVANT : la cible n'est JAMAIS touchee, et le .bak reste
+    # disponible pour l'audit de ce qui a ete tente.
+    tmp = chemin_absolu.with_name(chemin_absolu.name + ".tmp")
+    try:
+        with open(tmp, "w", encoding=ENCODAGE, newline="\n") as flux:
+            flux.write(contenu_norm)
+            if contenu_norm and not contenu_norm.endswith("\n"):
+                flux.write("\n")
+    except OSError as e:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, "Erreur ecriture atomique : " + str(e)
+
+    # La validation lit le suffixe de la CIBLE : le temporaire, lui, s'appelle
+    # `.tmp` et ne serait reconnu par personne (cf. valider_syntaxe).
+    ok, msg_val = valider_syntaxe(tmp, chemin_absolu.suffix)
+    if not ok:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, (
+            "REFUS : contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine "
+            "est INTACT -- " + msg_val)
+    try:
+        os.replace(tmp, chemin_absolu)
+    except OSError as e:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, "Erreur ecriture atomique : " + str(e)
+
+    sha_apres = calculer_sha256(chemin_absolu)
+    return 0, sha_avant, sha_apres, bak_path, msg_val
+
+
+def editer_atomique(chemin_relatif, ancien, nouveau):
+    """Remplace UNE occurrence exacte ancien->nouveau (atomique, .bak, validation).
+
+    Retourne (code, sha_avant, sha_apres, bak_path, msg).
+    code 0 OK ; 1 validation ECHOUEE, RIEN n'a ete ecrit (la cible est INTACTE) ;
+    2 refus (perimetre, ancien non trouve ou multiple).
+    """
+    if not dans_perimetre_ecriture(chemin_relatif):
+        return 2, None, None, None, "REFUS : hors perimetre ecriture : " + chemin_relatif
+    chemin_absolu = resoudre_chemin(chemin_relatif)
+    if not chemin_absolu.exists() or not chemin_absolu.is_file():
+        return 1, None, None, None, "Fichier introuvable : " + chemin_relatif
+    try:
+        texte = chemin_absolu.read_text(encoding=ENCODAGE)
+    except OSError as e:
+        return 1, None, None, None, "Erreur lecture : " + str(e)
+    except UnicodeDecodeError as e:
+        return 1, None, None, None, "REFUS : non-UTF8 : " + str(e)
+
+    occurrences = texte.count(ancien)
+    if occurrences == 0:
+        return 2, None, None, None, "REFUS : --ancien introuvable (0 occurrence) : verifiez whitespace exact"
+    if occurrences > 1:
+        return 2, None, None, None, "REFUS : --ancien trouve " + str(occurrences) + " fois (attendu 1 unique) : precisez plus de contexte"
+
+    sha_avant = calculer_sha256(chemin_absolu)
+    bak_path = creer_bak_si_existe(chemin_absolu)
+
+    nouveau_texte = texte.replace(ancien, nouveau, 1)
+    nouveau_texte = normaliser_lf(nouveau_texte)
+
+    tmp = chemin_absolu.with_name(chemin_absolu.name + ".tmp")
+    try:
+        with open(tmp, "w", encoding=ENCODAGE, newline="\n") as flux:
+            flux.write(nouveau_texte)
+    except OSError as e:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, "Erreur ecriture atomique editer : " + str(e)
+
+    # Meme regle que `ecrire_atomique` (EO-129) : on VALIDE le temporaire avant
+    # de publier. Une edition qui casse la syntaxe ne doit pas atteindre la cible.
+    ok, msg_val = valider_syntaxe(tmp, chemin_absolu.suffix)
+    if not ok:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, (
+            "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le "
+            "fichier d'origine est INTACT -- " + msg_val)
+    try:
+        os.replace(tmp, chemin_absolu)
+    except OSError as e:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, "Erreur ecriture atomique editer : " + str(e)
+
+    sha_apres = calculer_sha256(chemin_absolu)
+    return 0, sha_avant, sha_apres, bak_path, msg_val
+
+
+def extraire_options(arguments, noms_connus):
+    """Extrait --nom valeur (flag sans valeur non gere ici ; gere en entry)."""
+    options = {}
+    index = 0
+    while index < len(arguments):
+        morceau = arguments[index]
+        if morceau.startswith("--") and morceau[2:] in noms_connus:
+            nom = morceau[2:]
+            # Flags sans valeur : aucun dans ecrire/editer (tous a valeur)
+            if index + 1 < len(arguments) and not arguments[index + 1].startswith("--"):
+                options[nom] = arguments[index + 1]
+                index += 2
+            else:
+                options[nom] = ""
+                index += 1
+        else:
+            index += 1
+    return options
+
+
+def lire_contenu_source(valeur_directe, chemin_fichier):
+    """Retourne le contenu depuis --contenu ou --contenu-fichier (@file)."""
+    if chemin_fichier:
+        # chemin_fichier est relatif a RACINE (comme --fichier)
+        p = resoudre_chemin(chemin_fichier)
+        if not p.exists() or not p.is_file():
+            raise FileNotFoundError("Fichier source introuvable : " + chemin_fichier)
+        return p.read_text(encoding=ENCODAGE)
+    if valeur_directe and valeur_directe.startswith("@"):
+        # @file anti-heredoc : seulement si @ est suivi d'un chemin contenant / ou .
+        # Sinon c'est un contenu litteral commencant par @
+        ref = valeur_directe[1:].strip()
+        if not ref:
+            raise ValueError("--contenu @ vide")
+        # Si ref ne ressemble pas a un chemin (pas de / ni .), traiter comme litteral
+        if "/" not in ref and "\\" not in ref and "." not in ref:
+            return valeur_directe
+        p = resoudre_chemin(ref)
+        if not p.exists() or not p.is_file():
+            raise FileNotFoundError("Fichier @ introuvable : " + ref)
+        return p.read_text(encoding=ENCODAGE)
+    return valeur_directe

@@ -123,25 +123,6 @@ def lister_fichiers(dossier_absolu, filtre, recursif):
 
 
 def extraire_options(arguments, noms_connus):
-    """Extrait les options --nom valeur (forme seulement). Drapeaux sans valeur :
-
-    --recursif, --hash et --prive (MO-152 : un drapeau absent de cette liste
-    etait IGNORE en silence -- --prive en dernier argument ne s appliquait pas).
-    """
-    options = {}
-    index = 0
-    while index < len(arguments):
-        morceau = arguments[index]
-        if morceau.startswith("--") and morceau[2:] in noms_connus:
-            nom = morceau[2:]
-            if nom in ("recursif", "hash", "prive"):
-                options[nom] = "1"
-                index += 1
-            elif index + 1 < len(arguments):
-                options[nom] = arguments[index + 1]
-                index += 2
-            else:
-                index += 1
-        else:
-            index += 1
-    return options
+    """Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici."""
+    from options import extraire_options as repartir  # domicile partage (EO-158)
+    return repartir(arguments, noms_connus, drapeaux=("recursif", "hash", "prive"))

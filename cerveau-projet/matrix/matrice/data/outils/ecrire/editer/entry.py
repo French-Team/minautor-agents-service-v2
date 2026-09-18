@@ -2,14 +2,18 @@
 
 Interface entre main.py et les fonctions simples (editer/fonctions.py).
 """
-from commun import extraire_options
+from commun import extraire_options, refuser_options_sans_valeur
+from constants import NOMS_OPTIONS_EDITER
 from editer.fonctions import executer_editer
 
-NOMS_OPTIONS = ("fichier", "ancien", "nouveau", "ancien-fichier", "nouveau-fichier")
+NOMS_OPTIONS = NOMS_OPTIONS_EDITER
 
 
 def executer(arguments):
     options = extraire_options(arguments, NOMS_OPTIONS)
+    code = refuser_options_sans_valeur(options)
+    if code:
+        return code
     fichier = options.get("fichier", "")
     ancien = options.get("ancien", "")
     nouveau = options.get("nouveau", "")

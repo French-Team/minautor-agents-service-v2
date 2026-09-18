@@ -6222,3 +6222,909 @@
 {"date": "2026-09-17 21:41:54", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 284, "tokens_avant": 5, "tokens_apres": 1062}
 {"date": "2026-09-17 21:41:55", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1328, "detail": "0 detection(s)"}
 {"date": "2026-09-17 21:41:55", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 21:46:56", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 293, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 21:46:57", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1251, "detail": "0 detection(s)"}
+{"date": "2026-09-17 21:46:57", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 21:51:57", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 21:51:58", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1230, "detail": "0 detection(s)"}
+{"date": "2026-09-17 21:51:58", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 21:56:59", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 21:57:00", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1230, "detail": "0 detection(s)"}
+{"date": "2026-09-17 21:57:00", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 22:02:00", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 22:02:01", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1241, "detail": "0 detection(s)"}
+{"date": "2026-09-17 22:02:01", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 22:07:02", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 286, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 22:07:03", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1230, "detail": "0 detection(s)"}
+{"date": "2026-09-17 22:07:03", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 22:12:03", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 22:12:04", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1236, "detail": "0 detection(s)"}
+{"date": "2026-09-17 22:12:04", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 22:17:05", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 22:17:06", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1226, "detail": "0 detection(s)"}
+{"date": "2026-09-17 22:17:06", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 22:22:06", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 22:22:07", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1227, "detail": "0 detection(s)"}
+{"date": "2026-09-17 22:22:07", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 22:27:08", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 288, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 22:27:09", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1239, "detail": "0 detection(s)"}
+{"date": "2026-09-17 22:27:09", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 22:32:09", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 22:32:10", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1237, "detail": "0 detection(s)"}
+{"date": "2026-09-17 22:32:10", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 22:37:11", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 22:37:12", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1236, "detail": "0 detection(s)"}
+{"date": "2026-09-17 22:37:12", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 22:42:12", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 292, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 22:42:13", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1238, "detail": "0 detection(s)"}
+{"date": "2026-09-17 22:42:13", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 22:47:14", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 22:47:15", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1246, "detail": "0 detection(s)"}
+{"date": "2026-09-17 22:47:15", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 22:52:15", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 287, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 22:52:16", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1229, "detail": "0 detection(s)"}
+{"date": "2026-09-17 22:52:16", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 22:57:17", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 293, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 22:57:18", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1240, "detail": "0 detection(s)"}
+{"date": "2026-09-17 22:57:18", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 23:02:18", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 23:02:19", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1246, "detail": "0 detection(s)"}
+{"date": "2026-09-17 23:02:19", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 23:07:20", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 285, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 23:07:21", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1234, "detail": "0 detection(s)"}
+{"date": "2026-09-17 23:07:21", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 23:12:21", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 286, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 23:12:22", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1238, "detail": "0 detection(s)"}
+{"date": "2026-09-17 23:12:22", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 23:17:23", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 23:17:24", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1235, "detail": "0 detection(s)"}
+{"date": "2026-09-17 23:17:24", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 23:22:24", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 23:22:25", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1234, "detail": "0 detection(s)"}
+{"date": "2026-09-17 23:22:25", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 23:27:26", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 23:27:27", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1238, "detail": "0 detection(s)"}
+{"date": "2026-09-17 23:27:27", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 23:32:27", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 288, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 23:32:28", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1228, "detail": "0 detection(s)"}
+{"date": "2026-09-17 23:32:28", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 23:37:29", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 23:37:30", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1233, "detail": "0 detection(s)"}
+{"date": "2026-09-17 23:37:30", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 23:42:30", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 23:42:31", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1236, "detail": "0 detection(s)"}
+{"date": "2026-09-17 23:42:31", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 23:47:32", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 293, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 23:47:33", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1251, "detail": "0 detection(s)"}
+{"date": "2026-09-17 23:47:33", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 23:52:33", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 23:52:34", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1241, "detail": "0 detection(s)"}
+{"date": "2026-09-17 23:52:34", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-17 23:57:35", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-17 23:57:36", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1246, "detail": "0 detection(s)"}
+{"date": "2026-09-17 23:57:36", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 00:02:36", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 00:02:37", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1237, "detail": "0 detection(s)"}
+{"date": "2026-09-18 00:02:37", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 00:07:38", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 284, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 00:07:39", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1228, "detail": "0 detection(s)"}
+{"date": "2026-09-18 00:07:39", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 00:12:39", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 00:12:40", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1241, "detail": "0 detection(s)"}
+{"date": "2026-09-18 00:12:41", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 00:17:41", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 00:17:42", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1253, "detail": "0 detection(s)"}
+{"date": "2026-09-18 00:17:42", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 00:22:43", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 286, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 00:22:43", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1223, "detail": "0 detection(s)"}
+{"date": "2026-09-18 00:22:44", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 00:27:44", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 00:27:45", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1236, "detail": "0 detection(s)"}
+{"date": "2026-09-18 00:27:45", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 00:32:46", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 00:32:47", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1231, "detail": "0 detection(s)"}
+{"date": "2026-09-18 00:32:47", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 00:37:47", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 00:37:48", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1248, "detail": "0 detection(s)"}
+{"date": "2026-09-18 00:37:48", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 00:42:49", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 291, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 00:42:50", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1242, "detail": "0 detection(s)"}
+{"date": "2026-09-18 00:42:50", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 00:47:50", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 292, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 00:47:51", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1240, "detail": "0 detection(s)"}
+{"date": "2026-09-18 00:47:51", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 00:52:52", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 288, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 00:52:53", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1229, "detail": "0 detection(s)"}
+{"date": "2026-09-18 00:52:53", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 00:57:53", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 00:57:54", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1230, "detail": "0 detection(s)"}
+{"date": "2026-09-18 00:57:54", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 01:02:55", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 292, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 01:02:56", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1233, "detail": "0 detection(s)"}
+{"date": "2026-09-18 01:02:56", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 01:07:56", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 01:07:57", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1241, "detail": "0 detection(s)"}
+{"date": "2026-09-18 01:07:57", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 01:12:58", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 01:12:59", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1233, "detail": "0 detection(s)"}
+{"date": "2026-09-18 01:12:59", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 01:17:59", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 01:18:00", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1365, "detail": "0 detection(s)"}
+{"date": "2026-09-18 01:18:00", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 01:23:01", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 286, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 01:23:02", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1240, "detail": "0 detection(s)"}
+{"date": "2026-09-18 01:23:02", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 01:28:02", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 01:28:03", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1237, "detail": "0 detection(s)"}
+{"date": "2026-09-18 01:28:03", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 01:33:04", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 286, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 01:33:05", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1232, "detail": "0 detection(s)"}
+{"date": "2026-09-18 01:33:05", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 01:38:05", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 285, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 01:38:06", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1227, "detail": "0 detection(s)"}
+{"date": "2026-09-18 01:38:06", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 01:43:07", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 01:43:08", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1226, "detail": "0 detection(s)"}
+{"date": "2026-09-18 01:43:08", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 01:48:08", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 293, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 01:48:09", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1241, "detail": "0 detection(s)"}
+{"date": "2026-09-18 01:48:09", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 01:53:10", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 285, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 01:53:11", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1230, "detail": "0 detection(s)"}
+{"date": "2026-09-18 01:53:11", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 01:58:11", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 285, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 01:58:12", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1236, "detail": "0 detection(s)"}
+{"date": "2026-09-18 01:58:12", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 02:03:13", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 02:03:14", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1228, "detail": "0 detection(s)"}
+{"date": "2026-09-18 02:03:14", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 02:08:14", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 02:08:15", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1230, "detail": "0 detection(s)"}
+{"date": "2026-09-18 02:08:15", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 02:13:16", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 284, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 02:13:17", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1231, "detail": "0 detection(s)"}
+{"date": "2026-09-18 02:13:17", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 02:18:17", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 02:18:18", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1231, "detail": "0 detection(s)"}
+{"date": "2026-09-18 02:18:18", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 02:23:19", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 301, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 02:23:20", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1250, "detail": "0 detection(s)"}
+{"date": "2026-09-18 02:23:20", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 02:28:20", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 02:28:21", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1241, "detail": "0 detection(s)"}
+{"date": "2026-09-18 02:28:21", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 02:33:22", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 288, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 02:33:23", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1230, "detail": "0 detection(s)"}
+{"date": "2026-09-18 02:33:23", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 02:38:23", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 02:38:24", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1228, "detail": "0 detection(s)"}
+{"date": "2026-09-18 02:38:24", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 02:43:25", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 02:43:26", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1235, "detail": "0 detection(s)"}
+{"date": "2026-09-18 02:43:26", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 02:48:26", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 292, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 02:48:27", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1234, "detail": "0 detection(s)"}
+{"date": "2026-09-18 02:48:27", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 02:53:28", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 286, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 02:53:29", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1230, "detail": "0 detection(s)"}
+{"date": "2026-09-18 02:53:29", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 02:58:29", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 02:58:30", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1228, "detail": "0 detection(s)"}
+{"date": "2026-09-18 02:58:30", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 03:03:31", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 03:03:32", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1229, "detail": "0 detection(s)"}
+{"date": "2026-09-18 03:03:32", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 03:08:32", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 03:08:33", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1231, "detail": "0 detection(s)"}
+{"date": "2026-09-18 03:08:33", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 03:13:34", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 03:13:35", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1232, "detail": "0 detection(s)"}
+{"date": "2026-09-18 03:13:35", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 03:18:35", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 03:18:36", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1236, "detail": "0 detection(s)"}
+{"date": "2026-09-18 03:18:36", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 03:23:37", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 03:23:38", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1236, "detail": "0 detection(s)"}
+{"date": "2026-09-18 03:23:38", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 03:28:38", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 286, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 03:28:39", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1231, "detail": "0 detection(s)"}
+{"date": "2026-09-18 03:28:39", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 03:33:40", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 03:33:41", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1234, "detail": "0 detection(s)"}
+{"date": "2026-09-18 03:33:41", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 03:38:41", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 03:38:42", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1232, "detail": "0 detection(s)"}
+{"date": "2026-09-18 03:38:42", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 03:43:43", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 285, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 03:43:44", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1227, "detail": "0 detection(s)"}
+{"date": "2026-09-18 03:43:44", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 03:48:44", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 292, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 03:48:45", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1237, "detail": "0 detection(s)"}
+{"date": "2026-09-18 03:48:45", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 03:53:46", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 291, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 03:53:47", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1237, "detail": "0 detection(s)"}
+{"date": "2026-09-18 03:53:47", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 03:58:47", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 285, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 03:58:48", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1230, "detail": "0 detection(s)"}
+{"date": "2026-09-18 03:58:48", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 04:03:49", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 04:03:50", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1241, "detail": "0 detection(s)"}
+{"date": "2026-09-18 04:03:50", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 04:08:50", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 04:08:51", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1238, "detail": "0 detection(s)"}
+{"date": "2026-09-18 04:08:51", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 04:13:52", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 285, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 04:13:53", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1229, "detail": "0 detection(s)"}
+{"date": "2026-09-18 04:13:53", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 04:18:53", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 04:18:54", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1235, "detail": "0 detection(s)"}
+{"date": "2026-09-18 04:18:54", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 04:23:55", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 04:23:56", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1228, "detail": "0 detection(s)"}
+{"date": "2026-09-18 04:23:56", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 04:28:56", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 04:28:57", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1238, "detail": "0 detection(s)"}
+{"date": "2026-09-18 04:28:57", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 04:33:58", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 287, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 04:33:59", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1225, "detail": "0 detection(s)"}
+{"date": "2026-09-18 04:33:59", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 04:38:59", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 288, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 04:39:00", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1246, "detail": "0 detection(s)"}
+{"date": "2026-09-18 04:39:00", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 04:44:01", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 04:44:02", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1238, "detail": "0 detection(s)"}
+{"date": "2026-09-18 04:44:02", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 04:49:02", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 292, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 04:49:03", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1237, "detail": "0 detection(s)"}
+{"date": "2026-09-18 04:49:03", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 04:54:04", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 04:54:05", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1229, "detail": "0 detection(s)"}
+{"date": "2026-09-18 04:54:05", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 04:59:05", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 04:59:06", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1234, "detail": "0 detection(s)"}
+{"date": "2026-09-18 04:59:06", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 05:04:07", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 286, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 05:04:08", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1241, "detail": "0 detection(s)"}
+{"date": "2026-09-18 05:04:08", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 05:09:08", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 05:09:09", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1231, "detail": "0 detection(s)"}
+{"date": "2026-09-18 05:09:09", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 05:14:10", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 05:14:11", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1237, "detail": "0 detection(s)"}
+{"date": "2026-09-18 05:14:11", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 05:19:11", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 287, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 05:19:12", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1231, "detail": "0 detection(s)"}
+{"date": "2026-09-18 05:19:12", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 05:24:13", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 05:24:14", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1241, "detail": "0 detection(s)"}
+{"date": "2026-09-18 05:24:14", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 05:29:14", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 288, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 05:29:15", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1240, "detail": "0 detection(s)"}
+{"date": "2026-09-18 05:29:15", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 05:34:16", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 285, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 05:34:17", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1225, "detail": "0 detection(s)"}
+{"date": "2026-09-18 05:34:17", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 05:39:17", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 05:39:18", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1240, "detail": "0 detection(s)"}
+{"date": "2026-09-18 05:39:18", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 05:44:19", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 287, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 05:44:20", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1227, "detail": "0 detection(s)"}
+{"date": "2026-09-18 05:44:20", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 05:49:20", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 293, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 05:49:21", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1247, "detail": "0 detection(s)"}
+{"date": "2026-09-18 05:49:21", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 05:54:22", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 285, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 05:54:23", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1239, "detail": "0 detection(s)"}
+{"date": "2026-09-18 05:54:23", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 05:59:23", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 294, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 05:59:24", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1241, "detail": "0 detection(s)"}
+{"date": "2026-09-18 05:59:24", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 06:04:25", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 06:04:26", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1238, "detail": "0 detection(s)"}
+{"date": "2026-09-18 06:04:26", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 06:09:26", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 291, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 06:09:27", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1240, "detail": "0 detection(s)"}
+{"date": "2026-09-18 06:09:27", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 06:14:28", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 06:14:29", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1241, "detail": "0 detection(s)"}
+{"date": "2026-09-18 06:14:29", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 06:19:29", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 292, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 06:19:30", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1236, "detail": "0 detection(s)"}
+{"date": "2026-09-18 06:19:30", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 06:24:31", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 291, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 06:24:32", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1236, "detail": "0 detection(s)"}
+{"date": "2026-09-18 06:24:32", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 06:29:32", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 288, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 06:29:33", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1233, "detail": "0 detection(s)"}
+{"date": "2026-09-18 06:29:33", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 06:34:34", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 287, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 06:34:35", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1237, "detail": "0 detection(s)"}
+{"date": "2026-09-18 06:34:35", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 06:39:35", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 06:39:36", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1233, "detail": "0 detection(s)"}
+{"date": "2026-09-18 06:39:36", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 06:44:37", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 287, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 06:44:38", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1239, "detail": "0 detection(s)"}
+{"date": "2026-09-18 06:44:38", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 06:49:38", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 296, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 06:49:39", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1235, "detail": "0 detection(s)"}
+{"date": "2026-09-18 06:49:39", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 06:54:40", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 285, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 06:54:41", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1221, "detail": "0 detection(s)"}
+{"date": "2026-09-18 06:54:41", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 06:59:41", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 286, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 06:59:42", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1230, "detail": "0 detection(s)"}
+{"date": "2026-09-18 06:59:42", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 07:04:43", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 07:04:44", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1233, "detail": "0 detection(s)"}
+{"date": "2026-09-18 07:04:44", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 07:09:44", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 292, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 07:09:45", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1331, "detail": "0 detection(s)"}
+{"date": "2026-09-18 07:09:46", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 07:11:36", "outil": "bdd-sessions", "commande": "resume", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 5, "tokens_apres": 36}
+{"date": "2026-09-18 07:11:36", "outil": "bdd-sessions", "commande": "etat", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 1, "tokens_apres": 5}
+{"date": "2026-09-18 07:11:41", "outil": "bdd-sessions", "commande": "resume", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 5, "tokens_apres": 36}
+{"date": "2026-09-18 07:11:57", "outil": "suivi-optimus", "commande": "verifier", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 2, "tokens_apres": 43}
+{"date": "2026-09-18 07:12:18", "outil": "bdd-lecons", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 1, "tokens_apres": 23842}
+{"date": "2026-09-18 07:12:31", "outil": "theme-vivier", "commande": "lister", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 4, "tokens_apres": 163, "detail": "python main.py verifier"}
+{"date": "2026-09-18 07:13:29", "outil": "ecrire", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 143, "detail": "python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fichier <chemin>"}
+{"date": "2026-09-18 07:13:50", "outil": "bdd-modifications", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 91, "detail": "python main.py verifier"}
+{"date": "2026-09-18 07:13:50", "outil": "suivi-optimus", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 205, "detail": "python main.py vue   (genere la vue markdown dediee matrice/suivi-optimus.md)"}
+{"date": "2026-09-18 07:14:46", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 292, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 07:14:47", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1256, "detail": "0 detection(s)"}
+{"date": "2026-09-18 07:14:47", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 07:15:45", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 550, "tokens_apres": 45}
+{"date": "2026-09-18 07:15:50", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 553, "tokens_apres": 58}
+{"date": "2026-09-18 07:15:55", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 425, "tokens_apres": 58}
+{"date": "2026-09-18 07:16:01", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 622, "tokens_apres": 58}
+{"date": "2026-09-18 07:16:08", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 873, "tokens_apres": 58}
+{"date": "2026-09-18 07:16:13", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 610, "tokens_apres": 58}
+{"date": "2026-09-18 07:16:18", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 384, "tokens_apres": 58}
+{"date": "2026-09-18 07:16:26", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 1273, "tokens_apres": 58}
+{"date": "2026-09-18 07:16:34", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 9, "tokens_avant": 49, "tokens_apres": 61}
+{"date": "2026-09-18 07:16:52", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 60, "tokens_apres": 63}
+{"date": "2026-09-18 07:16:57", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 9, "tokens_avant": 330, "tokens_apres": 63}
+{"date": "2026-09-18 07:17:08", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 187, "tokens_apres": 59}
+{"date": "2026-09-18 07:17:15", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 88, "tokens_apres": 67}
+{"date": "2026-09-18 07:17:20", "outil": "ecrire", "commande": "editer", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 115, "tokens_apres": 18, "detail": "REFUS : --ancien introuvable (0 occurrence) : verifiez whitespace exact"}
+{"date": "2026-09-18 07:17:20", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 147, "tokens_apres": 67}
+{"date": "2026-09-18 07:17:45", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 20, "tokens_avant": 305, "tokens_apres": 31}
+{"date": "2026-09-18 07:17:46", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 20, "tokens_avant": 82, "tokens_apres": 27}
+{"date": "2026-09-18 07:17:50", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 20, "tokens_avant": 95, "tokens_apres": 32}
+{"date": "2026-09-18 07:17:51", "outil": "bdd-modifications", "commande": "verifier", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 2, "tokens_apres": 13}
+{"date": "2026-09-18 07:17:57", "outil": "suivi-optimus", "commande": "coherence", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 26, "tokens_avant": 3, "tokens_apres": 57}
+{"date": "2026-09-18 07:18:00", "outil": "suivi-optimus", "commande": "verifier", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 2, "tokens_apres": 43}
+{"date": "2026-09-18 07:18:00", "outil": "suivi-optimus", "commande": "coherence", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 26, "tokens_avant": 16, "tokens_apres": 57}
+{"date": "2026-09-18 07:18:01", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 293, "tokens_avant": 2, "tokens_apres": 1062}
+{"date": "2026-09-18 07:18:19", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 3, "tokens_apres": 744}
+{"date": "2026-09-18 07:18:30", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 549, "tokens_apres": 21}
+{"date": "2026-09-18 07:18:34", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 07:18:34", "outil": "suivi-optimus", "commande": "verifier", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 2, "tokens_apres": 29}
+{"date": "2026-09-18 07:18:47", "outil": "bdd-sessions", "commande": "ajouter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 183, "tokens_apres": 20}
+{"date": "2026-09-18 07:18:48", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 104, "tokens_apres": 26}
+{"date": "2026-09-18 07:18:48", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 274, "tokens_apres": 23}
+{"date": "2026-09-18 07:18:48", "outil": "suivi-optimus", "commande": "coherence", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 33, "tokens_avant": 3, "tokens_apres": 57}
+{"date": "2026-09-18 07:18:48", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 07:18:49", "outil": "bdd-conservation", "commande": "balayer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 382, "tokens_avant": 6, "tokens_apres": 406}
+{"date": "2026-09-18 07:18:49", "outil": "bdd-conservation", "commande": "archiver", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 361, "tokens_avant": 5, "tokens_apres": 21}
+{"date": "2026-09-18 07:18:49", "outil": "bdd-conservation", "commande": "controler-borne", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 4, "tokens_apres": 101}
+{"date": "2026-09-18 07:18:50", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 318, "tokens_apres": 22}
+{"date": "2026-09-18 07:18:50", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 60, "tokens_apres": 22}
+{"date": "2026-09-18 07:18:50", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 07:19:01", "outil": "suivi-optimus", "commande": "verifier", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 2, "tokens_apres": 43}
+{"date": "2026-09-18 07:19:48", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 292, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 07:19:48", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1250, "detail": "0 detection(s)"}
+{"date": "2026-09-18 07:19:49", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 07:20:00", "outil": "bdd-lecons", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 1, "tokens_apres": 23842}
+{"date": "2026-09-18 07:22:47", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 227, "tokens_apres": 59}
+{"date": "2026-09-18 07:22:54", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 14, "tokens_avant": 64, "tokens_apres": 57}
+{"date": "2026-09-18 07:22:54", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 14, "tokens_avant": 58, "tokens_apres": 57}
+{"date": "2026-09-18 07:22:54", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 14, "tokens_avant": 171, "tokens_apres": 57}
+{"date": "2026-09-18 07:23:14", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 59, "tokens_apres": 61}
+{"date": "2026-09-18 07:23:14", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 58, "tokens_apres": 61}
+{"date": "2026-09-18 07:23:21", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 229, "tokens_apres": 61}
+{"date": "2026-09-18 07:23:21", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 222, "tokens_apres": 61}
+{"date": "2026-09-18 07:23:26", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 265, "tokens_apres": 61}
+{"date": "2026-09-18 07:23:34", "outil": "ecrire", "commande": "ecrire", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 595, "tokens_apres": 24, "detail": "Usage : python main.py ecrire --fichier <chemin> --contenu \"...\" ou --contenu-fichier <chemin>"}
+{"date": "2026-09-18 07:24:10", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 55, "tokens_apres": 54}
+{"date": "2026-09-18 07:24:10", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 630, "tokens_apres": 72}
+{"date": "2026-09-18 07:24:11", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 53, "tokens_apres": 72}
+{"date": "2026-09-18 07:24:21", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 96, "tokens_apres": 71}
+{"date": "2026-09-18 07:24:22", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 179, "tokens_apres": 62}
+{"date": "2026-09-18 07:24:45", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 1233, "tokens_apres": 44}
+{"date": "2026-09-18 07:24:49", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 310, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 07:24:50", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1326, "detail": "0 detection(s)"}
+{"date": "2026-09-18 07:24:50", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 07:25:44", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 169, "tokens_apres": 32}
+{"date": "2026-09-18 07:25:44", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 65, "tokens_apres": 32}
+{"date": "2026-09-18 07:25:45", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 20, "tokens_avant": 106, "tokens_apres": 25}
+{"date": "2026-09-18 07:25:51", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 20, "tokens_avant": 107, "tokens_apres": 26}
+{"date": "2026-09-18 07:25:51", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 20, "tokens_avant": 74, "tokens_apres": 25}
+{"date": "2026-09-18 07:25:51", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 20, "tokens_avant": 108, "tokens_apres": 28}
+{"date": "2026-09-18 07:26:24", "outil": "suivi-optimus", "commande": "coherence", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 27, "tokens_avant": 3, "tokens_apres": 57}
+{"date": "2026-09-18 07:26:26", "outil": "suivi-optimus", "commande": "verifier", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 2, "tokens_apres": 43}
+{"date": "2026-09-18 07:26:26", "outil": "suivi-optimus", "commande": "coherence", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 27, "tokens_avant": 16, "tokens_apres": 57}
+{"date": "2026-09-18 07:26:28", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 292, "tokens_avant": 2, "tokens_apres": 1062}
+{"date": "2026-09-18 07:26:44", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 547, "tokens_apres": 21}
+{"date": "2026-09-18 07:26:51", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 07:26:51", "outil": "suivi-optimus", "commande": "verifier", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 2, "tokens_apres": 29}
+{"date": "2026-09-18 07:26:58", "outil": "bdd-sessions", "commande": "ajouter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 228, "tokens_apres": 20}
+{"date": "2026-09-18 07:26:58", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 141, "tokens_apres": 26}
+{"date": "2026-09-18 07:26:59", "outil": "suivi-optimus", "commande": "coherence", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 29, "tokens_avant": 3, "tokens_apres": 57}
+{"date": "2026-09-18 07:26:59", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 07:26:59", "outil": "bdd-conservation", "commande": "balayer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 418, "tokens_avant": 6, "tokens_apres": 475}
+{"date": "2026-09-18 07:27:00", "outil": "bdd-conservation", "commande": "archiver", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 391, "tokens_avant": 5, "tokens_apres": 21}
+{"date": "2026-09-18 07:27:00", "outil": "bdd-conservation", "commande": "controler-borne", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 4, "tokens_apres": 101}
+{"date": "2026-09-18 07:27:00", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 65, "tokens_apres": 22}
+{"date": "2026-09-18 07:27:01", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 58, "tokens_apres": 22}
+{"date": "2026-09-18 07:27:01", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 07:27:10", "outil": "suivi-optimus", "commande": "verifier", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 2, "tokens_apres": 43}
+{"date": "2026-09-18 07:29:51", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 294, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 07:29:52", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1258, "detail": "0 detection(s)"}
+{"date": "2026-09-18 07:29:52", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 07:29:56", "outil": "suivi-optimus", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 205, "detail": "python main.py vue   (genere la vue markdown dediee matrice/suivi-optimus.md)"}
+{"date": "2026-09-18 07:29:56", "outil": "bdd-modifications", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 91, "detail": "python main.py verifier"}
+{"date": "2026-09-18 07:31:05", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 83, "tokens_apres": 21}
+{"date": "2026-09-18 07:31:05", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 54, "tokens_apres": 22}
+{"date": "2026-09-18 07:31:05", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 85, "tokens_apres": 22}
+{"date": "2026-09-18 07:31:05", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 34, "tokens_apres": 22}
+{"date": "2026-09-18 07:31:15", "outil": "bdd-sessions", "commande": "ajouter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 53, "tokens_apres": 20}
+{"date": "2026-09-18 07:31:15", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 55, "tokens_apres": 26}
+{"date": "2026-09-18 07:31:15", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 105, "tokens_apres": 23}
+{"date": "2026-09-18 07:31:16", "outil": "suivi-optimus", "commande": "coherence", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 26, "tokens_avant": 3, "tokens_apres": 57}
+{"date": "2026-09-18 07:31:16", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 07:31:16", "outil": "bdd-conservation", "commande": "balayer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 369, "tokens_avant": 6, "tokens_apres": 33}
+{"date": "2026-09-18 07:31:17", "outil": "bdd-conservation", "commande": "archiver", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 295, "tokens_avant": 5, "tokens_apres": 21}
+{"date": "2026-09-18 07:31:17", "outil": "bdd-conservation", "commande": "controler-borne", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 4, "tokens_apres": 101}
+{"date": "2026-09-18 07:31:17", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 89, "tokens_apres": 22}
+{"date": "2026-09-18 07:31:17", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 07:34:37", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 198, "tokens_apres": 44}
+{"date": "2026-09-18 07:34:50", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 405, "tokens_apres": 44}
+{"date": "2026-09-18 07:34:52", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 293, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 07:34:53", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1260, "detail": "0 detection(s)"}
+{"date": "2026-09-18 07:34:53", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 07:35:04", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 54, "tokens_apres": 56}
+{"date": "2026-09-18 07:35:04", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 71, "tokens_apres": 56}
+{"date": "2026-09-18 07:35:41", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 137, "tokens_apres": 57}
+{"date": "2026-09-18 07:36:01", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 205, "tokens_apres": 56}
+{"date": "2026-09-18 07:36:15", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 191, "tokens_apres": 57}
+{"date": "2026-09-18 07:36:15", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 196, "tokens_apres": 57}
+{"date": "2026-09-18 07:36:30", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 39, "tokens_apres": 43}
+{"date": "2026-09-18 07:36:30", "outil": "ecrire", "commande": "ecrire", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 22, "tokens_apres": 49, "detail": "REFUS : option --contenu sans valeur -- une option videe en silence se lit \"pas de contenu\", ce qui accuse a tort l appelant. Ecrire la valeur (un texte commencant par des tirets est accepte)."}
+{"date": "2026-09-18 07:36:31", "outil": "ecrire", "commande": "ecrire", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 19, "tokens_apres": 49, "detail": "REFUS : option --contenu sans valeur -- une option videe en silence se lit \"pas de contenu\", ce qui accuse a tort l appelant. Ecrire la valeur (un texte commencant par des tirets est accepte)."}
+{"date": "2026-09-18 07:36:31", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 31, "tokens_apres": 44}
+{"date": "2026-09-18 07:37:31", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 884, "tokens_apres": 40}
+{"date": "2026-09-18 07:37:52", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 626, "tokens_apres": 52}
+{"date": "2026-09-18 07:38:07", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 44}
+{"date": "2026-09-18 07:38:07", "outil": "ecrire", "commande": "ecrire", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 23, "tokens_apres": 49, "detail": "REFUS : option --contenu sans valeur -- une option videe en silence se lit \"pas de contenu\", ce qui accuse a tort l appelant. Ecrire la valeur (un texte commencant par des tirets est accepte)."}
+{"date": "2026-09-18 07:38:07", "outil": "ecrire", "commande": "ecrire", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 19, "tokens_apres": 49, "detail": "REFUS : option --contenu sans valeur -- une option videe en silence se lit \"pas de contenu\", ce qui accuse a tort l appelant. Ecrire la valeur (un texte commencant par des tirets est accepte)."}
+{"date": "2026-09-18 07:38:40", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 180, "tokens_apres": 55}
+{"date": "2026-09-18 07:38:40", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 29, "tokens_apres": 56}
+{"date": "2026-09-18 07:38:40", "outil": "ecrire", "commande": "ecrire", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 23, "tokens_apres": 49, "detail": "REFUS : option --contenu sans valeur -- une option videe en silence se lit \"pas de contenu\", ce qui accuse a tort l appelant. Ecrire la valeur (un texte commencant par des tirets est accepte)."}
+{"date": "2026-09-18 07:38:40", "outil": "ecrire", "commande": "ecrire", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 19, "tokens_apres": 49, "detail": "REFUS : option --contenu sans valeur -- une option videe en silence se lit \"pas de contenu\", ce qui accuse a tort l appelant. Ecrire la valeur (un texte commencant par des tirets est accepte)."}
+{"date": "2026-09-18 07:39:17", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 153, "tokens_apres": 62}
+{"date": "2026-09-18 07:39:17", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 99, "tokens_apres": 62}
+{"date": "2026-09-18 07:39:54", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 292, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 07:39:55", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1275, "detail": "0 detection(s)"}
+{"date": "2026-09-18 07:39:55", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 07:40:03", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 115, "tokens_apres": 59}
+{"date": "2026-09-18 07:42:25", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 20, "tokens_avant": 140, "tokens_apres": 29}
+{"date": "2026-09-18 07:42:25", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 20, "tokens_avant": 101, "tokens_apres": 30}
+{"date": "2026-09-18 07:42:25", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 20, "tokens_avant": 85, "tokens_apres": 31}
+{"date": "2026-09-18 07:42:25", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 23, "tokens_avant": 76, "tokens_apres": 31}
+{"date": "2026-09-18 07:42:26", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 103, "tokens_apres": 30}
+{"date": "2026-09-18 07:42:26", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 74, "tokens_apres": 27}
+{"date": "2026-09-18 07:42:51", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 167, "tokens_apres": 21}
+{"date": "2026-09-18 07:42:51", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 84, "tokens_apres": 23}
+{"date": "2026-09-18 07:42:51", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 78, "tokens_apres": 22}
+{"date": "2026-09-18 07:42:51", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 64, "tokens_apres": 22}
+{"date": "2026-09-18 07:42:51", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 07:43:12", "outil": "suivi-optimus", "commande": "coherence", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 26, "tokens_avant": 3, "tokens_apres": 74, "detail": "RESULTAT : 1 ecart(s), 0 dette(s)"}
+{"date": "2026-09-18 07:43:12", "outil": "bdd-sessions", "commande": "ajouter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 134, "tokens_apres": 20}
+{"date": "2026-09-18 07:43:13", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 181, "tokens_apres": 26}
+{"date": "2026-09-18 07:43:13", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 347, "tokens_apres": 23}
+{"date": "2026-09-18 07:43:13", "outil": "suivi-optimus", "commande": "coherence", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 26, "tokens_avant": 3, "tokens_apres": 57}
+{"date": "2026-09-18 07:43:13", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 07:43:14", "outil": "bdd-conservation", "commande": "balayer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 400, "tokens_avant": 6, "tokens_apres": 374}
+{"date": "2026-09-18 07:43:14", "outil": "bdd-conservation", "commande": "archiver", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 372, "tokens_avant": 5, "tokens_apres": 21}
+{"date": "2026-09-18 07:43:14", "outil": "bdd-conservation", "commande": "controler-borne", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 4, "tokens_apres": 101}
+{"date": "2026-09-18 07:43:15", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 154, "tokens_apres": 22}
+{"date": "2026-09-18 07:43:35", "outil": "suivi-optimus", "commande": "coherence", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 27, "tokens_avant": 3, "tokens_apres": 57}
+{"date": "2026-09-18 07:44:20", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 147, "tokens_apres": 23}
+{"date": "2026-09-18 07:44:20", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 07:44:55", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 289, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 07:44:56", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1253, "detail": "0 detection(s)"}
+{"date": "2026-09-18 07:44:56", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 07:45:36", "outil": "bdd-sessions", "commande": "resume", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 5, "tokens_apres": 36}
+{"date": "2026-09-18 07:45:36", "outil": "bdd-sessions", "commande": "etat", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 1, "tokens_apres": 5}
+{"date": "2026-09-18 07:45:37", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 89, "tokens_apres": 22}
+{"date": "2026-09-18 07:45:37", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 07:49:57", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 299, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 07:49:58", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1258, "detail": "0 detection(s)"}
+{"date": "2026-09-18 07:49:58", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 07:53:02", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 40, "tokens_apres": 56}
+{"date": "2026-09-18 07:53:03", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 1070, "tokens_apres": 56}
+{"date": "2026-09-18 07:53:50", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 52, "tokens_apres": 56}
+{"date": "2026-09-18 07:53:50", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 58, "tokens_apres": 56}
+{"date": "2026-09-18 07:53:51", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 200, "tokens_apres": 59}
+{"date": "2026-09-18 07:53:51", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 14, "tokens_avant": 93, "tokens_apres": 62}
+{"date": "2026-09-18 07:53:51", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 12, "tokens_avant": 100, "tokens_apres": 62}
+{"date": "2026-09-18 07:54:32", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 958, "tokens_apres": 46}
+{"date": "2026-09-18 07:54:59", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 298, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 07:54:59", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1287, "detail": "0 detection(s)"}
+{"date": "2026-09-18 07:55:00", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 07:55:06", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 677, "tokens_apres": 59}
+{"date": "2026-09-18 07:55:06", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 28, "tokens_apres": 49}
+{"date": "2026-09-18 07:55:06", "outil": "ecrire", "commande": "ecrire", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 40, "tokens_apres": 100, "detail": "REFUS : contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\tmp-optimus\\mo170-consommateur.py.tmp\", line 1 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE."}
+{"date": "2026-09-18 07:55:07", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 44, "tokens_apres": 40, "detail": "REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE."}
+{"date": "2026-09-18 07:55:38", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 28, "tokens_apres": 62}
+{"date": "2026-09-18 07:55:38", "outil": "ecrire", "commande": "ecrire", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 40, "tokens_apres": 100, "detail": "REFUS : contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\tmp-optimus\\mo170-consommateur.py.tmp\", line 1 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE."}
+{"date": "2026-09-18 07:56:16", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 1596, "tokens_apres": 59}
+{"date": "2026-09-18 07:56:17", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 28, "tokens_apres": 49}
+{"date": "2026-09-18 07:56:17", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 40, "tokens_apres": 49}
+{"date": "2026-09-18 07:56:17", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 44, "tokens_apres": 113, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- imports locaux NON RESOLUS : ABSENTE <- mo170_fournisseur.py -- POSER LE FOURNISSEUR AVANT LE CONSOMMATEUR (friction 29) | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de la tent"}
+{"date": "2026-09-18 07:56:17", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 31, "tokens_apres": 64}
+{"date": "2026-09-18 07:56:17", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 44, "tokens_apres": 64}
+{"date": "2026-09-18 07:56:17", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 42, "tokens_apres": 62}
+{"date": "2026-09-18 07:56:18", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 39, "tokens_apres": 62}
+{"date": "2026-09-18 07:56:19", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 26, "tokens_apres": 45}
+{"date": "2026-09-18 07:56:19", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 26, "tokens_apres": 57}
+{"date": "2026-09-18 07:56:56", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 507, "tokens_apres": 70}
+{"date": "2026-09-18 07:57:32", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 116, "tokens_apres": 62}
+{"date": "2026-09-18 07:57:32", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 283, "tokens_apres": 62}
+{"date": "2026-09-18 07:57:32", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 149, "tokens_apres": 59}
+{"date": "2026-09-18 07:59:55", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 175, "tokens_apres": 29}
+{"date": "2026-09-18 07:59:55", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 20, "tokens_avant": 101, "tokens_apres": 30}
+{"date": "2026-09-18 07:59:55", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 72, "tokens_apres": 27}
+{"date": "2026-09-18 07:59:56", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 20, "tokens_avant": 129, "tokens_apres": 37}
+{"date": "2026-09-18 08:00:00", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 303, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 08:00:01", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1280, "detail": "0 detection(s)"}
+{"date": "2026-09-18 08:00:01", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 08:00:34", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 183, "tokens_apres": 21}
+{"date": "2026-09-18 08:00:34", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 157, "tokens_apres": 23}
+{"date": "2026-09-18 08:00:34", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 64, "tokens_apres": 22}
+{"date": "2026-09-18 08:00:35", "outil": "suivi-optimus", "commande": "coherence", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 27, "tokens_avant": 3, "tokens_apres": 74, "detail": "RESULTAT : 1 ecart(s), 0 dette(s)"}
+{"date": "2026-09-18 08:00:35", "outil": "bdd-sessions", "commande": "ajouter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 132, "tokens_apres": 20}
+{"date": "2026-09-18 08:00:35", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 156, "tokens_apres": 26}
+{"date": "2026-09-18 08:00:35", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 322, "tokens_apres": 23}
+{"date": "2026-09-18 08:00:36", "outil": "suivi-optimus", "commande": "coherence", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 26, "tokens_avant": 3, "tokens_apres": 57}
+{"date": "2026-09-18 08:00:36", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 08:00:36", "outil": "bdd-conservation", "commande": "balayer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 404, "tokens_avant": 6, "tokens_apres": 309}
+{"date": "2026-09-18 08:00:37", "outil": "bdd-conservation", "commande": "archiver", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 362, "tokens_avant": 5, "tokens_apres": 21}
+{"date": "2026-09-18 08:00:37", "outil": "bdd-conservation", "commande": "controler-borne", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 4, "tokens_apres": 101}
+{"date": "2026-09-18 08:00:37", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 230, "tokens_apres": 22}
+{"date": "2026-09-18 08:01:12", "outil": "suivi-optimus", "commande": "coherence", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 26, "tokens_avant": 3, "tokens_apres": 57}
+{"date": "2026-09-18 08:01:12", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 08:05:02", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 295, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 08:05:03", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1260, "detail": "0 detection(s)"}
+{"date": "2026-09-18 08:05:03", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 08:06:10", "outil": "bdd-sessions", "commande": "resume", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 5, "tokens_apres": 36}
+{"date": "2026-09-18 08:06:11", "outil": "bdd-sessions", "commande": "etat", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 1, "tokens_apres": 5}
+{"date": "2026-09-18 08:06:11", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 89, "tokens_apres": 22}
+{"date": "2026-09-18 08:06:11", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 08:09:44", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 856, "tokens_apres": 47}
+{"date": "2026-09-18 08:10:03", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 290, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 08:10:04", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1245, "detail": "0 detection(s)"}
+{"date": "2026-09-18 08:10:04", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 08:10:39", "outil": "ecrire", "commande": "ecrire", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 1109, "tokens_apres": 111, "detail": "REFUS : contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\tmp-optimus\\mo171-passe.py.tmp\", line 17 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE."}
+{"date": "2026-09-18 08:11:26", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 1126, "tokens_apres": 46}
+{"date": "2026-09-18 08:12:22", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 208, "tokens_apres": 61}
+{"date": "2026-09-18 08:12:22", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 145, "tokens_apres": 61}
+{"date": "2026-09-18 08:12:22", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 76, "tokens_apres": 61}
+{"date": "2026-09-18 08:13:08", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 57, "tokens_apres": 140, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\_operateur\\optimus-prime\\pilote\\checklist\\entry.py.tmp\", line 48 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE,"}
+{"date": "2026-09-18 08:13:08", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 55, "tokens_apres": 139, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\_operateur\\optimus-prime\\pilote\\commun.py.tmp\", line 1425 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak d"}
+{"date": "2026-09-18 08:13:08", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 59, "tokens_apres": 142, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\_operateur\\optimus-prime\\pilote\\entonnoir\\classer\\entry.py.tmp\", line 10 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est "}
+{"date": "2026-09-18 08:13:09", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 60, "tokens_apres": 143, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\_operateur\\optimus-prime\\pilote\\entonnoir\\retiqueter\\entry.py.tmp\", line 11 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible e"}
+{"date": "2026-09-18 08:13:09", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 59, "tokens_apres": 142, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\_operateur\\optimus-prime\\pilote\\entonnoir\\retirer\\entry.py.tmp\", line 13 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est "}
+{"date": "2026-09-18 08:13:09", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 59, "tokens_apres": 142, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\_operateur\\optimus-prime\\pilote\\entonnoir\\urgencer\\entry.py.tmp\", line 10 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est"}
+{"date": "2026-09-18 08:13:09", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 58, "tokens_apres": 141, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\_operateur\\optimus-prime\\pilote\\entonnoir\\vrac\\entry.py.tmp\", line 12 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INT"}
+{"date": "2026-09-18 08:13:09", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 55, "tokens_apres": 139, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\bdd-activites\\commun.py.tmp\", line 77 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak d"}
+{"date": "2026-09-18 08:13:09", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 56, "tokens_apres": 139, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\bdd-conservation\\commun.py.tmp\", line 64 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .ba"}
+{"date": "2026-09-18 08:13:10", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 58, "tokens_apres": 141, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\bdd-conventions-matrice\\commun.py.tmp\", line 83 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTAC"}
+{"date": "2026-09-18 08:13:10", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 56, "tokens_apres": 139, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\bdd-historique\\commun.py.tmp\", line 30 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak "}
+{"date": "2026-09-18 08:13:10", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 55, "tokens_apres": 138, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\bdd-lecons\\commun.py.tmp\", line 69 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de l"}
+{"date": "2026-09-18 08:13:10", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 56, "tokens_apres": 140, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\bdd-modifications\\commun.py.tmp\", line 72 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .b"}
+{"date": "2026-09-18 08:13:10", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 58, "tokens_apres": 141, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\bdd-protocoles-matrice\\commun.py.tmp\", line 69 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACT"}
+{"date": "2026-09-18 08:13:10", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 57, "tokens_apres": 140, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\bdd-regles-matrice\\commun.py.tmp\", line 69 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, ."}
+{"date": "2026-09-18 08:13:11", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 55, "tokens_apres": 138, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\bdd-sessions\\commun.py.tmp\", line 69 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de"}
+{"date": "2026-09-18 08:13:11", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 55, "tokens_apres": 138, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\bdd-usages\\commun.py.tmp\", line 101 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de "}
+{"date": "2026-09-18 08:13:11", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 55, "tokens_apres": 139, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\bdd-variables\\commun.py.tmp\", line 69 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak d"}
+{"date": "2026-09-18 08:13:11", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 10, "tokens_avant": 54, "tokens_apres": 138, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\benchmark\\commun.py.tmp\", line 331 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de l"}
+{"date": "2026-09-18 08:13:11", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 54, "tokens_apres": 138, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\dialoguer\\commun.py.tmp\", line 122 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de l"}
+{"date": "2026-09-18 08:13:11", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 57, "tokens_apres": 140, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\dupliquer-template\\commun.py.tmp\", line 5 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .b"}
+{"date": "2026-09-18 08:13:11", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 56, "tokens_apres": 140, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\editer-agents-md\\commun.py.tmp\", line 107 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .b"}
+{"date": "2026-09-18 08:13:12", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 11, "tokens_avant": 54, "tokens_apres": 138, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\executer\\commun.py.tmp\", line 232 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de la"}
+{"date": "2026-09-18 08:13:12", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 53, "tokens_apres": 137, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\lire\\commun.py.tmp\", line 126 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de la ten"}
+{"date": "2026-09-18 08:13:12", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 54, "tokens_apres": 137, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\lister\\commun.py.tmp\", line 137 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de la t"}
+{"date": "2026-09-18 08:13:12", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 56, "tokens_apres": 139, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\machine-defcon\\commun.py.tmp\", line 79 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak "}
+{"date": "2026-09-18 08:13:12", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 9, "tokens_avant": 54, "tokens_apres": 138, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\maintenir\\commun.py.tmp\", line 95 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de la"}
+{"date": "2026-09-18 08:13:12", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 55, "tokens_apres": 139, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\pause-session\\commun.py.tmp\", line 152 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak "}
+{"date": "2026-09-18 08:13:13", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 10, "tokens_avant": 55, "tokens_apres": 138, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\rechercher\\commun.py.tmp\", line 505 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de "}
+{"date": "2026-09-18 08:13:13", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 9, "tokens_avant": 54, "tokens_apres": 138, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\signaler\\commun.py.tmp\", line 101 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de la"}
+{"date": "2026-09-18 08:13:13", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 55, "tokens_apres": 139, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\suivi-optimus\\commun.py.tmp\", line 107 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak "}
+{"date": "2026-09-18 08:13:13", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 55, "tokens_apres": 138, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\theme-vivier\\commun.py.tmp\", line 69 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de"}
+{"date": "2026-09-18 08:13:13", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 53, "tokens_apres": 136, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\pilote\\checklist\\entry.py.tmp\", line 37 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de la tenta"}
+{"date": "2026-09-18 08:13:13", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 11, "tokens_avant": 51, "tokens_apres": 134, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\pilote\\commun.py.tmp\", line 432 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de la tentative : c"}
+{"date": "2026-09-18 08:13:14", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 55, "tokens_apres": 138, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\pilote\\entonnoir\\classer\\entry.py.tmp\", line 10 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de "}
+{"date": "2026-09-18 08:13:14", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 55, "tokens_apres": 138, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\pilote\\entonnoir\\retirer\\entry.py.tmp\", line 13 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de "}
+{"date": "2026-09-18 08:13:14", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 55, "tokens_apres": 138, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\pilote\\entonnoir\\urgencer\\entry.py.tmp\", line 10 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de"}
+{"date": "2026-09-18 08:13:14", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 54, "tokens_apres": 137, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\pilote\\entonnoir\\vrac\\entry.py.tmp\", line 11 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de la "}
+{"date": "2026-09-18 08:13:14", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 55, "tokens_apres": 63}
+{"date": "2026-09-18 08:13:14", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 55, "tokens_apres": 63}
+{"date": "2026-09-18 08:13:14", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 10, "tokens_avant": 54, "tokens_apres": 137, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\ecrire\\commun.py.tmp\", line 408 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de la t"}
+{"date": "2026-09-18 08:14:13", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 496, "tokens_apres": 47}
+{"date": "2026-09-18 08:15:01", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 601, "tokens_apres": 58}
+{"date": "2026-09-18 08:15:01", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 146, "tokens_apres": 46}
+{"date": "2026-09-18 08:15:01", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 87, "tokens_apres": 46}
+{"date": "2026-09-18 08:15:01", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 58, "tokens_apres": 139, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC :   File \"Z:\\analyste-in-console\\cerveau-projet\\matrix\\matrice\\data\\outils\\bdd-activites\\commun.py.tmp\", line 77 | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak d"}
+{"date": "2026-09-18 08:15:05", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 301, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 08:15:06", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1269, "detail": "0 detection(s)"}
+{"date": "2026-09-18 08:15:06", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 08:15:54", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 67, "tokens_apres": 61}
+{"date": "2026-09-18 08:15:54", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 186, "tokens_apres": 61}
+{"date": "2026-09-18 08:15:55", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 138, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:55", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:55", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 14, "tokens_avant": 57, "tokens_apres": 65}
+{"date": "2026-09-18 08:15:55", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 144, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:55", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:55", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 29, "tokens_avant": 55, "tokens_apres": 63}
+{"date": "2026-09-18 08:15:56", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 145, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:56", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:56", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 59, "tokens_apres": 67}
+{"date": "2026-09-18 08:15:56", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 145, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:56", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:56", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 60, "tokens_apres": 68}
+{"date": "2026-09-18 08:15:56", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 145, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:57", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:57", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 59, "tokens_apres": 67}
+{"date": "2026-09-18 08:15:57", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 145, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:57", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:57", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 59, "tokens_apres": 68}
+{"date": "2026-09-18 08:15:57", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 145, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:58", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:58", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 9, "tokens_avant": 58, "tokens_apres": 67}
+{"date": "2026-09-18 08:15:58", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 144, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:58", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:58", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 55, "tokens_apres": 64}
+{"date": "2026-09-18 08:15:58", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 123, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:58", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:59", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 56, "tokens_apres": 65}
+{"date": "2026-09-18 08:15:59", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 144, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:59", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:59", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 58, "tokens_apres": 66}
+{"date": "2026-09-18 08:15:59", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 144, "tokens_apres": 57}
+{"date": "2026-09-18 08:15:59", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:00", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 56, "tokens_apres": 64}
+{"date": "2026-09-18 08:16:00", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 144, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:00", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:00", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 55, "tokens_apres": 63}
+{"date": "2026-09-18 08:16:00", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 158, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:01", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:01", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 56, "tokens_apres": 65}
+{"date": "2026-09-18 08:16:01", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 144, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:01", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:01", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 58, "tokens_apres": 66}
+{"date": "2026-09-18 08:16:01", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 144, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:02", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:02", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 57, "tokens_apres": 65}
+{"date": "2026-09-18 08:16:02", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 144, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:02", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:02", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 55, "tokens_apres": 64}
+{"date": "2026-09-18 08:16:02", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 144, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:02", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:03", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 10, "tokens_avant": 55, "tokens_apres": 63}
+{"date": "2026-09-18 08:16:03", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 144, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:03", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:03", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 55, "tokens_apres": 64}
+{"date": "2026-09-18 08:16:03", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 193, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:03", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 99, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:04", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 10, "tokens_avant": 54, "tokens_apres": 63}
+{"date": "2026-09-18 08:16:04", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 187, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:04", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 92, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:04", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 54, "tokens_apres": 63}
+{"date": "2026-09-18 08:16:04", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 144, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:04", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:04", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 57, "tokens_apres": 65}
+{"date": "2026-09-18 08:16:05", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 130, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:05", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 92, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:05", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 56, "tokens_apres": 65}
+{"date": "2026-09-18 08:16:05", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 189, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:05", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 95, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:05", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 54, "tokens_apres": 63}
+{"date": "2026-09-18 08:16:06", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 232, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:06", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 97, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:06", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 53, "tokens_apres": 62}
+{"date": "2026-09-18 08:16:06", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 255, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:06", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 97, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:06", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 9, "tokens_avant": 54, "tokens_apres": 62}
+{"date": "2026-09-18 08:16:06", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 128, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:07", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 92, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:07", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 56, "tokens_apres": 64}
+{"date": "2026-09-18 08:16:07", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 187, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:07", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 94, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:07", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 54, "tokens_apres": 63}
+{"date": "2026-09-18 08:16:07", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 140, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:08", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:08", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 9, "tokens_avant": 55, "tokens_apres": 64}
+{"date": "2026-09-18 08:16:08", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 189, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:08", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 95, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:08", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 14, "tokens_avant": 55, "tokens_apres": 63}
+{"date": "2026-09-18 08:16:08", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 187, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:09", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 92, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:09", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 54, "tokens_apres": 63}
+{"date": "2026-09-18 08:16:09", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 144, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:09", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:09", "outil": "ecrire", "commande": "editer", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 55, "tokens_apres": 18, "detail": "REFUS : --ancien introuvable (0 occurrence) : verifiez whitespace exact"}
+{"date": "2026-09-18 08:16:09", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 144, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:09", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:10", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 55, "tokens_apres": 64}
+{"date": "2026-09-18 08:16:10", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 138, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:10", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:10", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 10, "tokens_avant": 53, "tokens_apres": 61}
+{"date": "2026-09-18 08:16:10", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 144, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:10", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:11", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 13, "tokens_avant": 51, "tokens_apres": 59}
+{"date": "2026-09-18 08:16:11", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 145, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:11", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:11", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 55, "tokens_apres": 63}
+{"date": "2026-09-18 08:16:11", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 145, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:11", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:11", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 55, "tokens_apres": 63}
+{"date": "2026-09-18 08:16:12", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 145, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:12", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:12", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 55, "tokens_apres": 63}
+{"date": "2026-09-18 08:16:12", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 145, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:12", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:12", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 54, "tokens_apres": 62}
+{"date": "2026-09-18 08:16:13", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 86, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:13", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 92, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:13", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 55, "tokens_apres": 63}
+{"date": "2026-09-18 08:16:13", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 86, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:13", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 92, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:13", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 55, "tokens_apres": 63}
+{"date": "2026-09-18 08:16:13", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 406, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:14", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 87, "tokens_apres": 57}
+{"date": "2026-09-18 08:16:14", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 13, "tokens_avant": 54, "tokens_apres": 62}
+{"date": "2026-09-18 08:18:48", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 146, "tokens_apres": 59}
+{"date": "2026-09-18 08:18:48", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 87, "tokens_apres": 60}
+{"date": "2026-09-18 08:18:49", "outil": "ecrire", "commande": "editer", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 58, "tokens_apres": 18, "detail": "REFUS : --ancien introuvable (0 occurrence) : verifiez whitespace exact"}
+{"date": "2026-09-18 08:20:06", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 294, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 08:20:07", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1272, "detail": "0 detection(s)"}
+{"date": "2026-09-18 08:20:07", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 08:20:42", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 140, "tokens_apres": 57}
+{"date": "2026-09-18 08:20:42", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 134, "tokens_apres": 57}
+{"date": "2026-09-18 08:20:42", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 93, "tokens_apres": 57}
+{"date": "2026-09-18 08:20:42", "outil": "ecrire", "commande": "editer", "code": 1, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 55, "tokens_apres": 99, "detail": "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine est INTACT -- py_compile ECHEC : Sorry: IndentationError: unexpected indent (commun.py.tmp, line 110) | REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE, .bak de la tentative : commun.py.bak.20260918_08"}
+{"date": "2026-09-18 08:21:37", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 140, "tokens_apres": 57}
+{"date": "2026-09-18 08:21:37", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 92, "tokens_apres": 57}
+{"date": "2026-09-18 08:21:38", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 55, "tokens_apres": 64}
+{"date": "2026-09-18 08:22:42", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 904, "tokens_apres": 62}
+{"date": "2026-09-18 08:23:47", "outil": "lister", "commande": "lister", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 17, "tokens_apres": 172}
+{"date": "2026-09-18 08:23:47", "outil": "lire", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 17, "tokens_apres": 853}
+{"date": "2026-09-18 08:23:47", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 3, "tokens_apres": 316}
+{"date": "2026-09-18 08:24:57", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 182, "tokens_apres": 64}
+{"date": "2026-09-18 08:25:08", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 295, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 08:25:09", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1266, "detail": "0 detection(s)"}
+{"date": "2026-09-18 08:25:09", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 08:26:07", "outil": "ecrire", "commande": "ecrire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 1754, "tokens_apres": 47}
+{"date": "2026-09-18 08:26:07", "outil": "lister", "commande": "lister", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 17, "tokens_apres": 172}
+{"date": "2026-09-18 08:26:08", "outil": "lire", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 17, "tokens_apres": 853}
+{"date": "2026-09-18 08:26:08", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 3, "tokens_apres": 84}
+{"date": "2026-09-18 08:26:08", "outil": "bdd-modifications", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 5, "tokens_apres": 8}
+{"date": "2026-09-18 08:26:08", "outil": "machine-defcon", "commande": "--etat", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 2, "tokens_apres": 150, "detail": "1 est reserve (jamais atteint : la descente s'arrete a 2)."}
+{"date": "2026-09-18 08:26:08", "outil": "editer-agents-md", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 152, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:26:08", "outil": "pause-session", "commande": "--etat", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 2, "tokens_apres": 187, "detail": "python main.py journal                       (derniers evenements pause/reprise)"}
+{"date": "2026-09-18 08:27:20", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 9, "tokens_avant": 313, "tokens_apres": 61}
+{"date": "2026-09-18 08:27:21", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 174, "tokens_apres": 61}
+{"date": "2026-09-18 08:27:21", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 183, "tokens_apres": 61}
+{"date": "2026-09-18 08:27:24", "outil": "lister", "commande": "lister", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 17, "tokens_apres": 172}
+{"date": "2026-09-18 08:27:24", "outil": "lire", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 17, "tokens_apres": 853}
+{"date": "2026-09-18 08:27:24", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 3, "tokens_apres": 84}
+{"date": "2026-09-18 08:27:24", "outil": "bdd-modifications", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 5, "tokens_apres": 8}
+{"date": "2026-09-18 08:27:24", "outil": "machine-defcon", "commande": "--etat", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 2, "tokens_apres": 150, "detail": "1 est reserve (jamais atteint : la descente s'arrete a 2)."}
+{"date": "2026-09-18 08:27:25", "outil": "editer-agents-md", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 152, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:27:25", "outil": "pause-session", "commande": "--etat", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 2, "tokens_apres": 187, "detail": "python main.py journal                       (derniers evenements pause/reprise)"}
+{"date": "2026-09-18 08:27:25", "outil": "bdd-activites", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 92, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:27:25", "outil": "bdd-conservation", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 51, "detail": "Usage : proposer | classer | decider | preciser | balayer | archiver | restaurer | controler-archives | controler-borne | lire | manifeste | verifier"}
+{"date": "2026-09-18 08:27:25", "outil": "bdd-conventions-matrice", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 124, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:27:25", "outil": "bdd-historique", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 106, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:27:26", "outil": "bdd-lecons", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 97, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:27:26", "outil": "bdd-protocoles-matrice", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 83, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:27:26", "outil": "bdd-regles-matrice", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 99, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:27:26", "outil": "bdd-sessions", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 240, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:27:26", "outil": "bdd-variables", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 88, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:27:26", "outil": "dupliquer-template", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 173, "detail": "jeton residuel) et l'executable clone AVANT d'ecrire sur disque."}
+{"date": "2026-09-18 08:27:27", "outil": "theme-vivier", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 163, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:27:27", "outil": "ecrire", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 143, "detail": "python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fichier <chemin>"}
+{"date": "2026-09-18 08:28:33", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 177, "tokens_apres": 61}
+{"date": "2026-09-18 08:28:34", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 83, "tokens_apres": 61}
+{"date": "2026-09-18 08:28:34", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 7, "tokens_avant": 133, "tokens_apres": 61}
+{"date": "2026-09-18 08:28:37", "outil": "lister", "commande": "lister", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 17, "tokens_apres": 172}
+{"date": "2026-09-18 08:28:37", "outil": "lire", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 17, "tokens_apres": 853}
+{"date": "2026-09-18 08:28:37", "outil": "suivi-optimus", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 3, "tokens_apres": 84}
+{"date": "2026-09-18 08:28:37", "outil": "bdd-modifications", "commande": "lire", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 5, "tokens_apres": 8}
+{"date": "2026-09-18 08:28:37", "outil": "machine-defcon", "commande": "--etat", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 2, "tokens_apres": 150, "detail": "1 est reserve (jamais atteint : la descente s'arrete a 2)."}
+{"date": "2026-09-18 08:28:37", "outil": "editer-agents-md", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 152, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:28:38", "outil": "pause-session", "commande": "--etat", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 2, "tokens_apres": 187, "detail": "python main.py journal                       (derniers evenements pause/reprise)"}
+{"date": "2026-09-18 08:28:38", "outil": "bdd-activites", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 92, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:28:38", "outil": "bdd-conservation", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 51, "detail": "Usage : proposer | classer | decider | preciser | balayer | archiver | restaurer | controler-archives | controler-borne | lire | manifeste | verifier"}
+{"date": "2026-09-18 08:28:38", "outil": "bdd-conventions-matrice", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 124, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:28:38", "outil": "bdd-historique", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 106, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:28:39", "outil": "bdd-lecons", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 97, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:28:39", "outil": "bdd-protocoles-matrice", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 83, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:28:39", "outil": "bdd-regles-matrice", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 99, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:28:39", "outil": "bdd-sessions", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 240, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:28:39", "outil": "bdd-variables", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 88, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:28:39", "outil": "dupliquer-template", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 173, "detail": "jeton residuel) et l'executable clone AVANT d'ecrire sur disque."}
+{"date": "2026-09-18 08:28:40", "outil": "theme-vivier", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 163, "detail": "python main.py verifier"}
+{"date": "2026-09-18 08:28:40", "outil": "ecrire", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 143, "detail": "python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fichier <chemin>"}
+{"date": "2026-09-18 08:30:10", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 299, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 08:30:10", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1268, "detail": "0 detection(s)"}
+{"date": "2026-09-18 08:30:11", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 08:30:58", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 155, "tokens_apres": 31}
+{"date": "2026-09-18 08:30:58", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 156, "tokens_apres": 32}
+{"date": "2026-09-18 08:30:58", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 158, "tokens_apres": 33}
+{"date": "2026-09-18 08:30:58", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 156, "tokens_apres": 31}
+{"date": "2026-09-18 08:30:59", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 155, "tokens_apres": 30}
+{"date": "2026-09-18 08:30:59", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 156, "tokens_apres": 32}
+{"date": "2026-09-18 08:30:59", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 158, "tokens_apres": 33}
+{"date": "2026-09-18 08:30:59", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 157, "tokens_apres": 32}
+{"date": "2026-09-18 08:30:59", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 155, "tokens_apres": 31}
+{"date": "2026-09-18 08:31:00", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 155, "tokens_apres": 30}
+{"date": "2026-09-18 08:31:00", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 155, "tokens_apres": 31}
+{"date": "2026-09-18 08:31:00", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 154, "tokens_apres": 30}
+{"date": "2026-09-18 08:31:01", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 154, "tokens_apres": 30}
+{"date": "2026-09-18 08:31:01", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 157, "tokens_apres": 32}
+{"date": "2026-09-18 08:31:01", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 154, "tokens_apres": 29}
+{"date": "2026-09-18 08:31:01", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 156, "tokens_apres": 32}
+{"date": "2026-09-18 08:31:01", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 23, "tokens_avant": 154, "tokens_apres": 30}
+{"date": "2026-09-18 08:31:02", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 153, "tokens_apres": 29}
+{"date": "2026-09-18 08:31:02", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 154, "tokens_apres": 29}
+{"date": "2026-09-18 08:31:02", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 156, "tokens_apres": 31}
+{"date": "2026-09-18 08:31:02", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 154, "tokens_apres": 30}
+{"date": "2026-09-18 08:31:02", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 155, "tokens_apres": 31}
+{"date": "2026-09-18 08:31:03", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 155, "tokens_apres": 30}
+{"date": "2026-09-18 08:31:03", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 154, "tokens_apres": 30}
+{"date": "2026-09-18 08:31:03", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 155, "tokens_apres": 31}
+{"date": "2026-09-18 08:31:03", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 155, "tokens_apres": 31}
+{"date": "2026-09-18 08:31:03", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 153, "tokens_apres": 28}
+{"date": "2026-09-18 08:31:04", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 23, "tokens_avant": 151, "tokens_apres": 26}
+{"date": "2026-09-18 08:31:04", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 23, "tokens_avant": 155, "tokens_apres": 30}
+{"date": "2026-09-18 08:31:04", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 23, "tokens_avant": 155, "tokens_apres": 30}
+{"date": "2026-09-18 08:31:04", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 155, "tokens_apres": 31}
+{"date": "2026-09-18 08:31:04", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 154, "tokens_apres": 30}
+{"date": "2026-09-18 08:31:05", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 155, "tokens_apres": 31}
+{"date": "2026-09-18 08:31:05", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 155, "tokens_apres": 31}
+{"date": "2026-09-18 08:31:05", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 157, "tokens_apres": 33}
+{"date": "2026-09-18 08:31:05", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 32, "tokens_avant": 155, "tokens_apres": 30}
+{"date": "2026-09-18 08:31:05", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 159, "tokens_apres": 35}
+{"date": "2026-09-18 08:31:06", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 160, "tokens_apres": 35}
+{"date": "2026-09-18 08:31:06", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 159, "tokens_apres": 35}
+{"date": "2026-09-18 08:31:06", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 22, "tokens_avant": 159, "tokens_apres": 35}
+{"date": "2026-09-18 08:31:06", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 158, "tokens_apres": 34}
+{"date": "2026-09-18 08:31:07", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 21, "tokens_avant": 160, "tokens_apres": 28}
+{"date": "2026-09-18 08:31:07", "outil": "bdd-modifications", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 23, "tokens_avant": 96, "tokens_apres": 30}
+{"date": "2026-09-18 08:31:07", "outil": "ecrire", "commande": "editer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 142, "tokens_apres": 59}
+{"date": "2026-09-18 08:32:17", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 226, "tokens_apres": 21}
+{"date": "2026-09-18 08:32:17", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 206, "tokens_apres": 23}
+{"date": "2026-09-18 08:32:17", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 116, "tokens_apres": 23}
+{"date": "2026-09-18 08:32:18", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 67, "tokens_apres": 22}
+{"date": "2026-09-18 08:32:18", "outil": "bdd-sessions", "commande": "ajouter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 3, "tokens_avant": 119, "tokens_apres": 20}
+{"date": "2026-09-18 08:32:18", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 802, "tokens_apres": 26}
+{"date": "2026-09-18 08:32:18", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1, "tokens_avant": 968, "tokens_apres": 23}
+{"date": "2026-09-18 08:32:19", "outil": "suivi-optimus", "commande": "coherence", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 31, "tokens_avant": 3, "tokens_apres": 57}
+{"date": "2026-09-18 08:32:19", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 08:32:20", "outil": "bdd-conservation", "commande": "balayer", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 635, "tokens_avant": 6, "tokens_apres": 2376}
+{"date": "2026-09-18 08:32:21", "outil": "bdd-conservation", "commande": "archiver", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 1079, "tokens_avant": 5, "tokens_apres": 22}
+{"date": "2026-09-18 08:32:21", "outil": "bdd-conservation", "commande": "controler-borne", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 4, "tokens_apres": 102}
+{"date": "2026-09-18 08:32:21", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 678, "tokens_apres": 22}
+{"date": "2026-09-18 08:33:26", "outil": "suivi-optimus", "commande": "coherence", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 27, "tokens_avant": 3, "tokens_apres": 57}
+{"date": "2026-09-18 08:33:27", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 8, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 08:35:11", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 300, "tokens_avant": 5, "tokens_apres": 1062}
+{"date": "2026-09-18 08:35:12", "outil": "veille-flux", "commande": "passe-relax", "code": 0, "tags": ["veille-flux", "passe", "auto"], "duree_ms": 1264, "detail": "0 detection(s)"}
+{"date": "2026-09-18 08:35:12", "outil": "bdd-activites", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 2, "tokens_avant": 29, "tokens_apres": 22}
+{"date": "2026-09-18 08:35:50", "outil": "bdd-sessions", "commande": "resume", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 6, "tokens_avant": 5, "tokens_apres": 36}
+{"date": "2026-09-18 08:35:50", "outil": "bdd-sessions", "commande": "etat", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 1, "tokens_apres": 5}
+{"date": "2026-09-18 08:35:50", "outil": "suivi-optimus", "commande": "noter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 5, "tokens_avant": 89, "tokens_apres": 22}
+{"date": "2026-09-18 08:35:50", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 9, "tokens_avant": 1, "tokens_apres": 34}
+{"date": "2026-09-18 08:35:57", "outil": "dupliquer-template", "commande": "-", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 0, "tokens_apres": 173, "detail": "jeton residuel) et l'executable clone AVANT d'ecrire sur disque."}

@@ -104,17 +104,9 @@ def garde_structurelle(texte_avant, texte_apres):
 
 
 def extraire_options(arguments, noms_connus):
-    """Extrait les options --nom valeur (noms_connus sans les tirets de tete)."""
-    options = {}
-    index = 0
-    while index < len(arguments):
-        nom = arguments[index].lstrip("-")
-        if nom in noms_connus and index + 1 < len(arguments):
-            options[nom] = arguments[index + 1]
-            index += 2
-        else:
-            index += 1
-    return options
+    """Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici."""
+    from options import extraire_options as repartir  # domicile partage (EO-158)
+    return repartir(arguments, noms_connus, sans_tirets=True)
 
 
 def lire_empreinte_enregistree():

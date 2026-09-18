@@ -493,8 +493,28 @@
       "action": "injection",
       "categorie": "demarrage",
       "timestamp": "2026-09-17T09:27:00.548330"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T07:11:36.492320"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T07:45:36.707399"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T08:06:10.807599"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T08:35:50.192779"
     }
   ],
-  "archive_le": "2026-09-17 09:27:00",
+  "archive_le": "2026-09-18 08:35:50",
   "origine": "cycle-state.json archive par MO-110 (EO-119) le 2026-09-15 : l ETAT disparait, l HISTORIQUE est conserve"
 }

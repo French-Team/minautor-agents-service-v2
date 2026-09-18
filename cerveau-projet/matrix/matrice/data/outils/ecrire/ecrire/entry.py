@@ -2,14 +2,18 @@
 
 Interface entre main.py et les fonctions simples (ecrire/fonctions.py).
 """
-from commun import extraire_options
+from commun import extraire_options, refuser_options_sans_valeur
+from constants import NOMS_OPTIONS_ECRIRE
 from ecrire.fonctions import executer_ecrire
 
-NOMS_OPTIONS = ("fichier", "contenu", "contenu-fichier", "mode")
+NOMS_OPTIONS = NOMS_OPTIONS_ECRIRE
 
 
 def executer(arguments):
     options = extraire_options(arguments, NOMS_OPTIONS)
+    code = refuser_options_sans_valeur(options)
+    if code:
+        return code
     fichier = options.get("fichier", "")
     contenu = options.get("contenu", "")
     contenu_fichier = options.get("contenu-fichier", "")

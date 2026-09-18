@@ -1104,7 +1104,61 @@
         "travail"
       ],
       "source": "MO-165"
+    },
+    {
+      "id": "S-113",
+      "date": "2026-09-18 07:18:47",
+      "session": "Mission MO-166 terminee (theme REPARATION) : MO-166 (friction 80) : sc-002 ANCRE comme sc-001 -- le cwd n est plus une base. Les 2 sites (modifier-avant, modifier-apres) consomment le domicile partage data/commun/cible.py ; chemin ANCRE pour les lectures, refus NOMME qui dit les bases essayees ; cobaye auto-test 12/12 (dont LA preuve qui manquait : la MEME cible relative depuis un cwd ETRANGER, ancienne regle rejouee et ACCUSEE). Contrat a jour (registry verbes + README). Non-regression VERTE (zone + flux, 26 maillons), 3 notes BDD, py_compile OK par la porte. Aveu : mon cobaye a d abord accuse le code a tort en comptant ses propres litteraux -- corrige le COBAYE (L-060).",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-166"
+    },
+    {
+      "id": "S-114",
+      "date": "2026-09-18 07:26:58",
+      "session": "Mission MO-167 terminee (theme PILOTE) : MO-167 (EO-143, GO createur) : l auto-validation des missions est GRAVEE et ECRITE, sur ses DEUX porteurs. REGLE IMMUABLE regles-immuables/auto-validation-missions.md (une mission deja vue avec le createur s enchaine sans redemander ; le CRITIQUE reste au createur ; un echec arrete le round) + CHAMP auto_validation declare par le pilote a l injection sur les DEUX chemins, porte par l injection et AFFICHE par statut (son absence se DIT). Index des regles et fiche alignes (16 regles toutes nommees). Preuves : cobaye 10/10, verifier-fiche OK, cartes OK, non-regression VERTE (zone + flux, 26 maillons), 6 notes BDD, espion repreinte (112). Ecart d outillage signale : la porte ecrire vide en SILENCE une valeur d option qui commence par '--' (une carte d identite commence par '---') -- demande EO-156 deposee au vrac.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-167"
+    },
+    {
+      "id": "S-115",
+      "date": "2026-09-18 07:31:15",
+      "session": "Mission MO-168 terminee (theme OUTIL) : MO-168 ECARTEE sur priorite du createur (EO-156 d abord) ; aucun travail mene ; demande EO-139 re-deposee au vrac (EO-157).",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-168"
+    },
+    {
+      "id": "S-116",
+      "date": "2026-09-18 07:43:12",
+      "session": "Mission MO-169 terminee (theme OUTIL) : EO-156 reparee : la porte ecrire DIT ce qu elle refuse. extraire_options accepte une valeur commencant par des tirets (carte d identite en UNE passe) et n ecrit plus une option privee de valeur en silence (sentinelle CLE_SANS_VALEUR du domicile constants.py, refus nomme code 2). Cobaye 13/13. Classe balayee : 40 copies vivantes, 2 variantes -- fautive reparee, majoritaire deposee (EO-158), auto-reparation de la porte deposee (EO-159, vecue).",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-169"
+    },
+    {
+      "id": "S-117",
+      "date": "2026-09-18 08:00:35",
+      "session": "Mission MO-170 terminee (theme OUTIL) : EO-159 reparee : la porte ecrire ne peut plus mourir de son propre contenu. Garde d ORDRE avant publication (import local dont le nom n est pas lie par le fournisseur = REFUS, cible intacte ; le nom IMPORTE est cherche, jamais l alias). Secours officiel et declare : point de restauration .bak + revert-fichier hors porte, expres, limites dites. Cobaye 10/10 dont 456 fichiers re-verifies par la fonction de production avec 0 faux refus.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-170"
+    },
+    {
+      "id": "S-118",
+      "date": "2026-09-18 08:32:18",
+      "session": "Mission MO-171 terminee (theme OUTIL) : EO-158 reparee : la classe est DOMICILIEE. data/commun/options.py porte le contrat du parseur (valeur a tirets, seul un nom d option connu l arrete, option privee de valeur DITE, drapeaux declares) et 41 copies le CONSOMMENT -- 0 avaleur restant, les 2 moules alignes. Cobaye 13/13 dont 41 appels reels et 30 experiences vivantes ; benchmark VERT sur les fichiers touches ; 43 notes BDD.",
+      "tags": [
+        "travail"
+      ],
+      "source": "MO-171"
     }
   ],
-  "compteur": 112
+  "compteur": 118
 }

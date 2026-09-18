@@ -31,6 +31,9 @@ python auto-evolution/main.py modifier-apres --fichier cerveau-projet/matrix/_op
 python auto-evolution/main.py valider --fichier cerveau-projet/matrix/_operateur/optimus-prime/parcours/themes/theme-reprise-mission.json --friction-id 1 --statut valide --risque faible
 # Risque critique : --risque critique (attente createur)
 
+# Preuve de l ancrage de la cible (friction 80 : le cwd n est jamais une base)
+python auto-evolution/main.py auto-test
+
 # Statistiques
 python auto-evolution/main.py stats
 ```
@@ -51,6 +54,7 @@ python auto-evolution/main.py stats
 - **Serie stricte** : une seule evolution a la fois (verrou BDD-modifs)
 - **Tracabilite totale** : chaque phase laisse une trace en BDD
 - **Preuves obligatoires** : hash avant/apres + tests passes pour valider
+- **Cible ANCRES (friction 80)** : `--fichier` se resout par le domicile partage `matrice/data/commun/cible.py` (chemin absolu, racine du workspace, puis `matrix/`) ; le cwd n est JAMAIS une base, et un refus NOMME les bases essayees. Le cobaye `auto-test` rejoue la MEME cible relative depuis un cwd ETRANGER.
 - **Reversible** : revert automatique via .bak si annule
 - **Autonomie par defaut** : auto-valide si risque faible/moyen ; createur seulement si critique
 - **Zero changement NON TRACE** : la BDD est la transparence (pas l attente createur)

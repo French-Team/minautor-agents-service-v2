@@ -17,6 +17,7 @@ python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fic
 - `--mode` : `creer` (refuse si existe), `remplacer` (defaut), `ajouter` (concatene).
 - `--ancien` / `--nouveau` : chaines exactes (1 occurrence unique imposee, comme `str_replace` mais validee).
 - `--ancien-fichier` / `--nouveau-fichier` : variantes fichier pour gros blocs.
+- **Valeur a tirets (EO-156)** : une valeur peut commencer par `--` -- un document a carte d'identite COMMENCE par `---` : la carte s'ecrit donc en UNE passe. Le morceau suivant n'est pris pour une option que s'il est un NOM connu (`--contenu`). Seule limite : une valeur qui serait exactement un nom d'option connu (ex. `--mode`) passe par `@fichier`.
 
 ## Garanties (pourquoi meilleur que le natif)
 
@@ -31,6 +32,7 @@ python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fic
 | str_replace fragile whitespace | **Occurrence unique imposee** (0 ou >1 = REFUS code 2, message explicite) |
 | Pas d'ASCII | **ASCII signale** (nb non-ASCII + lignes) |
 | Heredoc casse | **@file** (anti-heredoc) |
+| ImportError invisible a la compilation | **Garde d ORDRE** (EO-159) : un import LOCAL dont le nom n est pas lie par le module fournisseur est REFUSE avant publication -- `py_compile` ne dit rien d un ImportError (mesure MO-169 : la porte est morte de son propre contenu) |
 
 ## Architecture
 
@@ -47,9 +49,27 @@ python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fic
 - Perimetre `matrix/` seul (allowlist racine) -- hors perimetre = code 2.
 - Mode ferme (`creer|remplacer|ajouter`) -- inconnu = code 2.
 - `creer` refuse si existe (code 2).
+- Option PRIVEE de valeur = **REFUS nomme** (code 2, `REFUS : option --X sans valeur`) : le parseur n'ecrit plus `""` en silence -- une option videe en silence se lit "pas de contenu" et accuse a tort l'appelant (EO-156).
 - `editer` : 0 occurrence = code 2, >1 = code 2 (unique).
 - Validation : `.py` via `py_compile`, `.json` via `json.load`, faite sur le TEMPORAIRE **AVANT** le remplacement. Echec = code 1, RIEN n'est ecrit, la cible est INTACTE (EO-129 : avant, la porte publiait d'abord et un fichier invalide restait en place).
 - Ecriture atomique : `tmp`, VALIDATION, puis `os.replace`, LF forces (le temporaire est retire si le contenu est refuse).
+
+## Secours (EO-159)
+
+Un garde ne suffit pas : si la porte est cassee MALGRE le garde, plus AUCUNE
+ecriture n est possible -- toute ecriture du perimetre passe par elle (mesure
+MO-169 : un import pose avant sa constante a rendu la porte injouable).
+
+- **Prevention** : le garde d ORDRE refuse d ecrire un `.py` qui consomme un nom
+  absent de son fournisseur local. La porte ne peut plus mourir de son propre
+  contenu, et le geste fautif est DIT (jamais silencieux).
+- **Cure** : le POINT DE RESTAURATION `.bak` horodate, laisse par la porte a
+  chaque ecriture, EST la porte de secours. `revert-fichier.py`
+  (`_operateur/optimus-prime/super-combos/combos/outils/`) rend un fichier a sa
+  version d avant DEPUIS ce `.bak` -- et il ecrit SANS la porte, expres : il sert
+  quand la porte est la chose cassee. Limites DITES : aucune validation, aucun
+  SHA, la version courante n est pas sauvee. Mesure MO-170 : les 10 controles du
+  cobaye passent, secours compris.
 
 ## Benchmark (critere GO MO-002)
 

@@ -4,21 +4,57 @@
 auto-evolution -- Super-combo auto-evolution (Optimus Prime)
 
 Orchestre le cycle complet : detecter -> qualifier -> cibler -> modifier -> valider
+
+LA CIBLE EST ANCRES, JAMAIS LE CWD (friction 80). Les deux phases
+`modifier-avant` et `modifier-apres` verifiaient leur cible par
+`Path(fichier).exists()`, donc CONTRE LE CWD de l appelant : la MEME cible
+relative etait acceptee depuis la racine du workspace et refusee depuis le
+dossier de l outil -- deux verdicts pour un seul fichier, et un rouge qui
+accusait la cible au lieu d accuser l ancrage.
+
+La resolution passe desormais par le DOMICILE PARTAGE
+`matrice/data/commun/cible.py` (le meme que sc-001), CONSOMME et jamais
+recopie : trois formes couvertes (chemin absolu, relatif a la racine du
+workspace, relatif a matrix/), le cwd n est JAMAIS une base, et un refus
+NOMME les bases essayees.
+
+Le cobaye `auto-test` porte LA preuve qui manquait : la MEME cible relative,
+depuis un cwd ETRANGER. Le controle precedent ne testait que des chemins
+ABSOLUS -- le defaut de cwd ne pouvait donc pas rougir dans son propre test.
 """
 
 import sys
 import os
 import subprocess
 import importlib.util
+import tempfile
 from pathlib import Path
 
 
 OUTILS_DIR = Path(__file__).parent.parent / "combos" / "outils"
 
+# --- ANCRAGE (convention-chemins-liens-noms-flags, 1.1 et 1.3) --------------
+# La remontee est GARDEE par un marqueur stable (jamais un parents[N]) et le
+# motif racine est CONSOMME depuis son domicile (data/commun/), jamais recopie.
+BORNES_REMONTEE = 30
+REPERTOIRE_SC = Path(__file__).resolve().parent
+REPERTOIRE_MATRICE = REPERTOIRE_SC
+for _ in range(BORNES_REMONTEE):
+    if (REPERTOIRE_MATRICE / "matrice" / "data" / "commun" / "racine.py").is_file():
+        break
+    REPERTOIRE_MATRICE = REPERTOIRE_MATRICE.parent
+else:
+    raise RuntimeError(
+        "Racine matrix/ introuvable en remontant (marqueur matrice/data/commun/racine.py)."
+    )
+
+REPERTOIRE_COMMUN = REPERTOIRE_MATRICE / "matrice" / "data" / "commun"
+sys.path.insert(0, str(REPERTOIRE_COMMUN))
+from cible import resoudre  # noqa: E402
+
 # Le vocabulaire du PROCESSUS (types, gravites, frequences, demandes
 # d'archivage) a UN domicile : l'outil bdd-frictions. L'orchestrateur le
 # CONSOMME au lieu de recopier les valeurs admises (friction 50, MO-129).
-BORNES_REMONTEE = 30
 
 
 def charger_vocabulaire(nom_outil, nom_module):
@@ -55,6 +91,23 @@ def run_outil(nom, args):
     return result.returncode, result.stdout, result.stderr
 
 
+def resoudre_cible(fichier):
+    """(chemin, motif) : ancrer la cible par le DOMICILE PARTAGE cible.resoudre.
+
+    Le cwd n est JAMAIS une base (convention 1.1) et un refus NOMME les bases
+    essayees (friction 80 / 77). `chemin` vaut None quand la cible est
+    introuvable : l appelant refuse alors de partir sur une cible absente.
+    """
+    return resoudre(fichier, REPERTOIRE_SC)
+
+
+def exiger_cible(fichier):
+    """(chemin, motif) : la cible ancree, et le VERDICT affiche (refus nomme)."""
+    chemin, motif = resoudre_cible(fichier)
+    print(("  [OK] " if chemin is not None else "  [KO] ") + motif)
+    return chemin, motif
+
+
 def main():
     if len(sys.argv) < 2:
         print(__doc__)
@@ -66,6 +119,7 @@ def main():
         print("  modifier-apres -- Hash apres + tests + BDD (etape 4b, non-bloquant)")
         print("  valider     -- Auto-valider (faible/moyen) ou createur (critique) (etape 5)")
         print("  stats       -- Statistiques auto-evolution")
+        print("  auto-test   -- Prouver l ancrage de la cible (friction 80)")
         return 1
 
     phase = sys.argv[1]
@@ -90,6 +144,8 @@ def main():
         return cmd_valider(args)
     elif phase == "stats":
         return cmd_stats(args)
+    elif phase == "auto-test":
+        return cmd_auto_test(args)
     else:
         print(f"Phase inconnue: {phase}")
         return 1
@@ -157,21 +213,20 @@ def cmd_modifier_avant(args):
     parser.add_argument("--fichier", required=True)
     parsed = parser.parse_args(args)
 
-    fichier_path = Path(parsed.fichier)
-    if not fichier_path.exists():
-        print(f"Fichier introuvable: {fichier_path}")
+    chemin, motif = exiger_cible(parsed.fichier)
+    if chemin is None:
         return 1
 
-    print(f"=== MODIFICATION-AVANT: {fichier_path} ===")
+    print(f"=== MODIFICATION-AVANT: {chemin} ===")
 
     print("\n1. Lecture complete...")
-    code, out, err = run_outil("lire-fichier-complet.py", [str(fichier_path)])
+    code, out, err = run_outil("lire-fichier-complet.py", [str(chemin)])
     print(out)
     if code != 0:
         return code
 
     print("\n2. Hash AVANT...")
-    code, out, err = run_outil("calculer-hash.py", [str(fichier_path)])
+    code, out, err = run_outil("calculer-hash.py", [str(chemin)])
     hash_avant = out.strip().split()[0] if out.strip() else ""
     print(out)
     if code != 0:
@@ -179,7 +234,7 @@ def cmd_modifier_avant(args):
 
     print(f"\nHASH_AVANT={hash_avant}")
     print("Modifiez le fichier (edit ou ajouter-case/redirect-theme.py), puis appelez :")
-    print(f"  modifier-apres --fichier {fichier_path} --hash-avant {hash_avant} --friction-id <id> --raison \"<txt>\" --type <type>")
+    print(f"  modifier-apres --fichier {str(chemin)} --hash-avant {hash_avant} --friction-id <id> --raison \"<txt>\" --type <type>")
     return 0
 
 
@@ -194,15 +249,14 @@ def cmd_modifier_apres(args):
     parser.add_argument("--type", choices=["theme", "protocole", "fiche", "combo", "outil", "convention", "regle"], default="theme")
     parsed = parser.parse_args(args)
 
-    fichier_path = Path(parsed.fichier)
-    if not fichier_path.exists():
-        print(f"Fichier introuvable: {fichier_path}")
+    chemin, motif = exiger_cible(parsed.fichier)
+    if chemin is None:
         return 1
 
-    print(f"=== MODIFICATION-APRES: {fichier_path} ===")
+    print(f"=== MODIFICATION-APRES: {chemin} ===")
 
     print("\n1. Hash APRES...")
-    code, out, err = run_outil("calculer-hash.py", [str(fichier_path)])
+    code, out, err = run_outil("calculer-hash.py", [str(chemin)])
     hash_apres = out.strip().split()[0] if out.strip() else ""
     print(out)
     if code != 0:
@@ -214,7 +268,7 @@ def cmd_modifier_apres(args):
 
     print("\n2. Tests validation...")
     if parsed.type == "theme":
-        code, out, err = run_outil("tester-theme.py", [str(fichier_path)])
+        code, out, err = run_outil("tester-theme.py", [str(chemin)])
         print(out)
         if err:
             print(err, file=sys.stderr)
@@ -222,10 +276,10 @@ def cmd_modifier_apres(args):
             print("ATTENTION: Theme invalide !")
             return code
     else:
-        if str(fichier_path).endswith(".json"):
+        if str(chemin).endswith(".json"):
             try:
                 import json
-                with open(fichier_path, "r", encoding="utf-8") as f:
+                with open(chemin, "r", encoding="utf-8") as f:
                     json.load(f)
                 print("  JSON valide: OK")
             except Exception as e:
@@ -233,8 +287,8 @@ def cmd_modifier_apres(args):
                 return 1
 
     print("\n3. Enregistrement BDD modifications...")
-    diff = f"Hash avant: {parsed.hash_avant}\nHash apres: {hash_apres}\nFichier: {fichier_path}\nType: {parsed.type}\nRaison: {parsed.raison}"
-    code, out, err = run_outil("bdd-modifs", ["ajouter", "--fichier", str(fichier_path), "--hash-avant", parsed.hash_avant, "--hash-apres", hash_apres, "--diff", diff, "--raison", parsed.raison, "--friction-id", str(parsed.friction_id)])
+    diff = f"Hash avant: {parsed.hash_avant}\nHash apres: {hash_apres}\nFichier: {chemin}\nType: {parsed.type}\nRaison: {parsed.raison}"
+    code, out, err = run_outil("bdd-modifs", ["ajouter", "--fichier", parsed.fichier, "--hash-avant", parsed.hash_avant, "--hash-apres", hash_apres, "--diff", diff, "--raison", parsed.raison, "--friction-id", str(parsed.friction_id)])
     print(out)
     if err:
         print(err, file=sys.stderr)
@@ -288,6 +342,138 @@ def cmd_stats(args):
     code, out, err = run_outil("bdd-modifs", ["lister", "--n", "10"])
     print(out)
 
+    return 0
+
+
+# --- COBAYE (les preuves du livrable) --------------------------------------
+# Les chemins du cobaye sont DECLARES ici, en un seul endroit : un cobaye qui
+# invente ses constantes au fil du code ne se relit pas.
+MARQUEUR_COBAYE = "# --- COBAYE"
+PREFIXE_COBAYE_CWD = "cobaye-cwd-sc002-"
+CHEMIN_ABSENT = "/chemin/qui/n/existe/pas.py"
+RELATIF_RACINE = "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-002-auto-evolution/main.py"
+RELATIF_MATRICE = "_operateur/optimus-prime/super-combos/sc-002-auto-evolution/main.py"
+NOM_PHASE_AVANT = "modifier-avant"
+NOM_PHASE_APRES = "modifier-apres"
+HASH_FACTICE = "0" * 64
+LONGUEUR_DETAIL = 140
+
+
+def controler(nom, condition, detail, resultats):
+    """Un controle lisible, et son resultat garde pour le verdict."""
+    resultats.append((nom, bool(condition)))
+    print(("  [OK] " if condition else "  [KO] ") + nom + " : " + detail)
+    return bool(condition)
+
+
+def premiere_ligne(texte, longueur=LONGUEUR_DETAIL):
+    """Premiere ligne NON VIDE d'une sortie, bornee : un motif se lit."""
+    for ligne in (texte or "").splitlines():
+        if ligne.strip():
+            return ligne.strip()[:longueur]
+    return "(aucune sortie)"
+
+
+def derniere_ligne(texte, longueur=LONGUEUR_DETAIL):
+    """Derniere ligne NON VIDE d'une sortie, bornee."""
+    lignes = [ligne.strip() for ligne in (texte or "").splitlines() if ligne.strip()]
+    if not lignes:
+        return "(aucune sortie)"
+    return lignes[-1][:longueur]
+
+
+def cmd_auto_test(args):
+    """Verb `auto-test` : PROUVER que la cible est ANCREE (friction 80).
+
+    Quatre exigences, dans l ordre : la resolution NOMINALE (les trois formes
+    reelles), le REFUS d une cible absente qui NOMME les bases essayees, la
+    preuve de la friction 80 (la MEME cible relative depuis un cwd ETRANGER,
+    l ancienne regle rejouee et ACCUSEE), et la STRUCTURE (les deux sites
+    passent par le domicile). Aucune ecriture : le livrable est seulement LU.
+    """
+    print("=" * 60)
+    print("AUTO-TEST sc-002 : la cible est-elle ancree sur la racine ?")
+    print("=" * 60)
+    resultats = []
+
+    print("-- 1. la resolution NOMINALE : absolue, racine du workspace, matrix/ --")
+    chemin, motif = resoudre_cible(str(REPERTOIRE_SC / "main.py"))
+    controler("cible ABSOLUE presente acceptee", chemin is not None, motif, resultats)
+    for etiquette, relatif in (("relative a la racine", RELATIF_RACINE),
+                               ("relative a matrix/", RELATIF_MATRICE)):
+        chemin, motif = resoudre_cible(relatif)
+        controler("cible " + etiquette + " resolue", chemin is not None, motif, resultats)
+
+    print("-- 2. le REFUS : une cible absente est refusee, le motif NOMME les bases --")
+    chemin, motif = resoudre_cible(CHEMIN_ABSENT)
+    controler("cible absente refusee", chemin is None, motif, resultats)
+    controler("le refus NOMME les bases essayees et l interdiction du cwd",
+              "essaye sous" in motif and "cwd" in motif, motif, resultats)
+
+    print("-- 3. la preuve de la friction 80 : la MEME cible, cwd ETRANGER --")
+    with tempfile.TemporaryDirectory(prefix=PREFIXE_COBAYE_CWD) as ailleurs:
+        ancienne = subprocess.run(
+            [sys.executable, "-c",
+             "import sys; from pathlib import Path; "
+             "sys.exit(0 if Path(sys.argv[1]).exists() else 1)",
+             RELATIF_MATRICE],
+            capture_output=True, text=True, cwd=ailleurs)
+        controler("l ANCIENNE regle (Path contre le cwd) accusait la cible",
+                  ancienne.returncode == 1,
+                  "code " + str(ancienne.returncode), resultats)
+
+        programme = (
+            "import sys; sys.path.insert(0, " + repr(str(REPERTOIRE_SC)) + "); "
+            "import main; chemin, motif = main.resoudre_cible(" + repr(RELATIF_MATRICE) + "); "
+            "print(('OK ' if chemin is not None else 'KO ') + motif)"
+        )
+        essai = subprocess.run([sys.executable, "-c", programme],
+                               capture_output=True, text=True, cwd=ailleurs)
+        sortie = (essai.stdout or essai.stderr).strip()
+        controler("MEME cible relative depuis un AUTRE cwd",
+                  essai.returncode == 0 and sortie.startswith("OK "),
+                  sortie[:LONGUEUR_DETAIL] or "(aucune sortie)", resultats)
+
+        avant = subprocess.run(
+            [sys.executable, str(REPERTOIRE_SC / "main.py"),
+             NOM_PHASE_AVANT, "--fichier", RELATIF_MATRICE],
+            capture_output=True, text=True, cwd=ailleurs)
+        controler(NOM_PHASE_AVANT + " ACCEPTE la cible depuis un cwd etranger",
+                  avant.returncode == 0 and "HASH_AVANT=" in avant.stdout,
+                  "code " + str(avant.returncode) + " -- " + derniere_ligne(avant.stdout), resultats)
+
+        for nom_phase, extra in ((NOM_PHASE_AVANT, []),
+                                 (NOM_PHASE_APRES, ["--hash-avant", HASH_FACTICE,
+                                                    "--friction-id", "1",
+                                                    "--raison", "cobaye", "--type", "theme"])):
+            refus = subprocess.run(
+                [sys.executable, str(REPERTOIRE_SC / "main.py"), nom_phase,
+                 "--fichier", CHEMIN_ABSENT] + extra,
+                capture_output=True, text=True, cwd=ailleurs)
+            controler(nom_phase + " REFUSE une cible absente",
+                      refus.returncode == 1 and "INTROUVABLE" in refus.stdout,
+                      "code " + str(refus.returncode) + " -- " + premiere_ligne(refus.stdout), resultats)
+
+    print("-- 4. la STRUCTURE : les deux sites consomment le domicile --")
+    # Le controle lit le LIVRABLE, jamais son propre texte : la section COBAYE
+    # cite les motifs qu elle cherche, et se compter elle-meme accuserait le
+    # code a tort -- on corrige alors le COBAYE, jamais le code (lecon L-060).
+    source = (REPERTOIRE_SC / "main.py").read_text(encoding="utf-8")
+    livrable = source.split(MARQUEUR_COBAYE)[0]
+    controler("aucune cible resolue par Path(...).exists()",
+              "Path(parsed.fichier)" not in livrable,
+              "occurrences : " + str(livrable.count("Path(parsed.fichier)")), resultats)
+    controler("les deux phases passent par exiger_cible",
+              livrable.count("exiger_cible(") >= 3,
+              "appels : " + str(livrable.count("exiger_cible(")), resultats)
+
+    echecs = [nom for nom, ok in resultats if not ok]
+    print("")
+    if echecs:
+        print("VERDICT KO : " + str(len(echecs)) + " controle(s) en echec -- " + ", ".join(echecs))
+        return 1
+    print("VERDICT OK : " + str(len(resultats))
+          + " controles -- la cible est ancree, le cwd n est pas une base.")
     return 0
 
 

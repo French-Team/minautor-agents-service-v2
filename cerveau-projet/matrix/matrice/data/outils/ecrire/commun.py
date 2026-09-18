@@ -2,6 +2,7 @@
 
 Chaque fonction fait UNE chose (convention-architecture-outils).
 """
+import ast
 import hashlib
 import json
 import os
@@ -13,6 +14,7 @@ from pathlib import Path
 from constants import (
     ALLOWLIST_PREFIXES,
     ALLOWLIST_RACINE,
+    CLE_SANS_VALEUR,
     ENCODAGE,
     FORMAT_HORODATE_BAK,
     RACINE,
@@ -119,7 +121,100 @@ def _supprimer_silencieux(chemin):
         pass
 
 
-def valider_syntaxe(chemin_absolu, suffixe=None):
+def noms_de_cible(cible):
+    """Noms lies par une cible d assignation (nom simple, tuple, liste)."""
+    if isinstance(cible, ast.Name):
+        return {cible.id}
+    if isinstance(cible, (ast.Tuple, ast.List)):
+        noms = set()
+        for element in cible.elts:
+            noms |= noms_de_cible(element)
+        return noms
+    return set()
+
+
+def noms_lies_module(chemin_py):
+    """Noms lies au niveau MODULE par un fichier .py, SANS l executer.
+
+    Le nom cherche chez le fournisseur est le nom IMPORTE, jamais le nom local
+    de l appelant : `from constants import X as Y` exige X chez constants.py --
+    un alias renomme la liaison locale, pas la source. Mesure MO-170 : lire
+    l alias condamnait 776 imports locaux LEGITIMES (faux refus en serie).
+    """
+    noms = set()
+    for noeud in ast.parse(chemin_py.read_text(encoding=ENCODAGE)).body:
+        if isinstance(noeud, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            noms.add(noeud.name)
+        elif isinstance(noeud, ast.Assign):
+            for cible in noeud.targets:
+                noms |= noms_de_cible(cible)
+        elif isinstance(noeud, (ast.AnnAssign, ast.AugAssign)):
+            noms |= noms_de_cible(noeud.target)
+        elif isinstance(noeud, ast.Import):
+            for alias in noeud.names:
+                noms.add(alias.asname or alias.name.split(".")[0])
+        elif isinstance(noeud, ast.ImportFrom):
+            for alias in noeud.names:
+                if alias.name != "*":
+                    noms.add(alias.asname or alias.name)
+    return noms
+
+
+def chemin_fournisseur_local(nom_module, cible):
+    """Chemin du module LOCAL nomme par un import, ou None s il est externe.
+
+    Trois bases, MESUREES (MO-170) : a cote du fichier ecrit, un cran au-dessus
+    (une categorie importe le commun de son outil), et le domicile partage
+    data/commun/. Un module introuvable n est JAMAIS accuse : le garde ne devine
+    pas, il ne parle que du fournisseur qu il a TROUVE.
+    """
+    relatif = nom_module.replace(".", "/") + ".py"
+    for base in (cible.parent, cible.parent.parent, REPERTOIRE_MATRICE / "data" / "commun"):
+        candidat = base / relatif
+        if candidat.is_file():
+            return candidat
+    return None
+
+
+def verifier_imports_locaux(chemin_ecrit, cible):
+    """Garde d ORDRE (EO-159) : le fournisseur AVANT le consommateur.
+
+    Mesure MO-169 : l import de CLE_SANS_VALEUR pose dans commun.py AVANT la
+    constante dans constants.py a rendu la porte INJOUABLE (ImportError) -- et
+    py_compile ne dit RIEN d un ImportError, qui n est pas une SyntaxError : le
+    controle passait pendant que la porte mourait, sans aucun moyen d ecrire
+    ensuite (toute ecriture passe par elle). Le garde lit les imports locaux du
+    CONTENU ECRIT et verifie que chaque nom importe est bien lie par le module
+    fournisseur. Zero faux refus mesure : 776 imports locaux du perimetre
+    verifies, 0 nom manquant (mesure MO-170).
+    """
+    try:
+        arbre = ast.parse(chemin_ecrit.read_text(encoding=ENCODAGE))
+    except (OSError, SyntaxError, UnicodeDecodeError):
+        return True, "imports locaux non verifies (contenu illisible)"
+    manquants = []
+    for noeud in ast.walk(arbre):
+        if not isinstance(noeud, ast.ImportFrom):
+            continue
+        if noeud.level or not noeud.module or any(a.name == "*" for a in noeud.names):
+            continue
+        fournisseur = chemin_fournisseur_local(noeud.module, cible)
+        if fournisseur is None or fournisseur == cible:
+            continue
+        try:
+            lies = noms_lies_module(fournisseur)
+        except (OSError, SyntaxError, UnicodeDecodeError):
+            continue
+        for alias in noeud.names:
+            if alias.name not in lies:
+                manquants.append(alias.name + " <- " + fournisseur.name)
+    if manquants:
+        return False, ("imports locaux NON RESOLUS : " + ", ".join(sorted(set(manquants)))
+                       + " -- POSER LE FOURNISSEUR AVANT LE CONSOMMATEUR (friction 29)")
+    return True, "imports locaux resolus"
+
+
+def valider_syntaxe(chemin_absolu, suffixe=None, cible=None):
     """Valide .py (py_compile) et .json (json.load). Retourne (ok, message).
 
     `suffixe` permet de valider un fichier TEMPORAIRE (`x.json.tmp`) COMME S'IL
@@ -133,11 +228,17 @@ def valider_syntaxe(chemin_absolu, suffixe=None):
     if suffix == ".py":
         try:
             py_compile.compile(str(chemin_absolu), doraise=True)
-            return True, "py_compile OK"
         except py_compile.PyCompileError as e:
             return False, "py_compile ECHEC : " + str(e)
         except OSError as e:
             return False, "py_compile illisible : " + str(e)
+        # Garde d ORDRE (EO-159) : la syntaxe ne suffit pas -- un ImportError
+        # n est pas une SyntaxError, et la porte peut mourir de son propre
+        # contenu (mesure MO-169). La CIBLE sert a trouver le fournisseur local.
+        ok_imports, msg_imports = verifier_imports_locaux(chemin_absolu, cible if cible is not None else chemin_absolu)
+        if not ok_imports:
+            return False, msg_imports
+        return True, "py_compile OK ; " + msg_imports
     if suffix == ".json":
         try:
             with open(chemin_absolu, "r", encoding=ENCODAGE) as flux:
@@ -230,7 +331,7 @@ def ecrire_atomique(chemin_relatif, contenu, mode="remplacer"):
 
     # La validation lit le suffixe de la CIBLE : le temporaire, lui, s'appelle
     # `.tmp` et ne serait reconnu par personne (cf. valider_syntaxe).
-    ok, msg_val = valider_syntaxe(tmp, chemin_absolu.suffix)
+    ok, msg_val = valider_syntaxe(tmp, chemin_absolu.suffix, chemin_absolu)
     if not ok:
         _supprimer_silencieux(tmp)
         return 1, sha_avant, None, bak_path, (
@@ -287,7 +388,7 @@ def editer_atomique(chemin_relatif, ancien, nouveau):
 
     # Meme regle que `ecrire_atomique` (EO-129) : on VALIDE le temporaire avant
     # de publier. Une edition qui casse la syntaxe ne doit pas atteindre la cible.
-    ok, msg_val = valider_syntaxe(tmp, chemin_absolu.suffix)
+    ok, msg_val = valider_syntaxe(tmp, chemin_absolu.suffix, chemin_absolu)
     if not ok:
         _supprimer_silencieux(tmp)
         return 1, sha_avant, None, bak_path, (
@@ -304,23 +405,26 @@ def editer_atomique(chemin_relatif, ancien, nouveau):
 
 
 def extraire_options(arguments, noms_connus):
-    """Extrait --nom valeur (flag sans valeur non gere ici ; gere en entry)."""
-    options = {}
-    index = 0
-    while index < len(arguments):
-        morceau = arguments[index]
-        if morceau.startswith("--") and morceau[2:] in noms_connus:
-            nom = morceau[2:]
-            # Flags sans valeur : aucun dans ecrire/editer (tous a valeur)
-            if index + 1 < len(arguments) and not arguments[index + 1].startswith("--"):
-                options[nom] = arguments[index + 1]
-                index += 2
-            else:
-                options[nom] = ""
-                index += 1
-        else:
-            index += 1
-    return options
+    """Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici."""
+    from options import extraire_options as repartir  # domicile partage (EO-158)
+    return repartir(arguments, noms_connus)
+
+
+def refuser_options_sans_valeur(options):
+    """Refus NOMME quand une option a ete privee de valeur (EO-156).
+
+    Le parseur ne pose plus "" en silence : il inscrit le nom sous
+    CLE_SANS_VALEUR, et l appelant l apprend ICI (code 2 + message nomme).
+    """
+    noms = options.get(CLE_SANS_VALEUR, [])
+    if not noms:
+        return 0
+    print(
+        "REFUS : option --" + str(noms[0]) + " sans valeur -- une option videe"
+        " en silence se lit \"pas de contenu\", ce qui accuse a tort l appelant."
+        " Ecrire la valeur (un texte commencant par des tirets est accepte)."
+    )
+    return 2
 
 
 def lire_contenu_source(valeur_directe, chemin_fichier):

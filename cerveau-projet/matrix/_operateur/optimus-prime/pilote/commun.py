@@ -11,6 +11,7 @@ from datetime import datetime
 from constants import (
     BOITE_MATRICE_IN,
     BOITE_PILOTE_OUT,
+    CHAMP_AUTO_VALIDATION,
     CHAMP_ROLE_ITEM,
     CHAMP_TITRE_MISSION,
     CHEMIN_CLASSEUR_VARIABLES,
@@ -51,6 +52,7 @@ from constants import (
     STATUT_EN_COURS,
     STATUT_TERMINEE,
     THEME_DEFCON,
+    VALEUR_AUTO_VALIDATION,
     VERBE_ARCHIVAGE_CONSERVATION,
     VERBE_BALAYAGE_CONSERVATION,
     VERBE_CONTROLE_BORNE_CONSERVATION,
@@ -322,6 +324,18 @@ def prochaine_du_lot(file_missions):
         if mission.get("id") in ids and mission.get("statut") == STATUT_EN_ATTENTE:
             return mission
     return None
+
+
+def declarer_auto_validation(mission):
+    """Declare le CHAMP d AUTO-VALIDATION sur la mission (UN seul domicile).
+
+    Appelee par les DEUX chemins d injection (mission simple et LOT) : deux
+    copies de cette declaration divergeraient comme deux copies d un garde
+    (L-029). Le champ est pose AVANT la construction de l injection, sinon
+    l agent ne le lit jamais et la garantie redevient une absence (EO-143).
+    """
+    mission[CHAMP_AUTO_VALIDATION] = VALEUR_AUTO_VALIDATION
+    return mission
 
 
 def mission_en_cours(file_missions):
@@ -1408,18 +1422,9 @@ def puiser_tresse(file_missions):
 
 
 def extraire_options(arguments, noms_connus):
-    """Extrait les options --nom valeur d'une liste d'arguments (forme seulement)."""
-    options = {}
-    index = 0
-    while index < len(arguments):
-        morceau = arguments[index]
-        if morceau.startswith("--") and morceau[2:] in noms_connus:
-            if index + 1 < len(arguments):
-                options[morceau[2:]] = arguments[index + 1]
-            index += 2
-        else:
-            index += 1
-    return options
+    """Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici."""
+    from options import extraire_options as repartir  # domicile partage (EO-158)
+    return repartir(arguments, noms_connus)
 
 
 # --- AUTOMATISATIONS PILOTE ---

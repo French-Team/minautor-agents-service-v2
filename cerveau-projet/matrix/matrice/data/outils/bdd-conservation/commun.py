@@ -61,14 +61,6 @@ def lire_empreinte():
 
 
 def extraire_options(arguments, noms_connus):
-    options = {}
-    index = 0
-    while index < len(arguments):
-        morceau = arguments[index]
-        if morceau.startswith("--") and morceau[2:] in noms_connus:
-            if index + 1 < len(arguments):
-                options[morceau[2:]] = arguments[index + 1]
-            index += 2
-        else:
-            index += 1
-    return options
+    """Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici."""
+    from options import extraire_options as repartir  # domicile partage (EO-158)
+    return repartir(arguments, noms_connus)

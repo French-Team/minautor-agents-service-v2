@@ -39,7 +39,7 @@
         "MODIFIER",
         "VALIDER"
       ],
-      "usage": "python main.py <detecter|qualifier|cibler|modifier-avant|modifier-apres|valider|stats> [args]",
+      "usage": "python main.py <detecter|qualifier|cibler|modifier-avant|modifier-apres|valider|stats|auto-test> [args]",
       "verbe": "",
       "verbes": [
         "detecter",
@@ -48,7 +48,8 @@
         "modifier-avant",
         "modifier-apres",
         "valider",
-        "stats"
+        "stats",
+        "auto-test"
       ],
       "cree_le": ""
     },

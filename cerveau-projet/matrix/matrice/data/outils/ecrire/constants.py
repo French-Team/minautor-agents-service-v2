@@ -56,3 +56,9 @@ MODES_PERMIS = ("creer", "remplacer", "ajouter")
 # Options CLI
 NOMS_OPTIONS_ECRIRE = ("fichier", "contenu", "contenu-fichier", "mode")
 NOMS_OPTIONS_EDITER = ("fichier", "ancien", "nouveau", "ancien-fichier", "nouveau-fichier")
+
+# Option SANS valeur : la sentinelle est CONSOMMEE du DOMICILE partage
+# data/commun/options.py (EO-158) -- UN SEUL domicile par verite (lecon EO-154 :
+# deux domiciles qui divergent font une trace muette). Le chemin data/commun est
+# deja pose plus haut par le motif M-076, d ou l import APRES, jamais avant.
+from options import CLE_SANS_VALEUR  # noqa: E402,F401

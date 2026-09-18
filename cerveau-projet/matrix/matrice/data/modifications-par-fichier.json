@@ -496,6 +496,19 @@
             "regles",
             "MO-158"
           ]
+        },
+        {
+          "date": "2026-09-18 07:25:44",
+          "action": "modifie",
+          "detail": "MO-167 : la fiche NOMME la nouvelle regle immuable (exigence du garde verifier-fiche : chaque regle du dossier doit etre nommee). Une LIGNE de tableau ajoutee -- aucune valeur ni comportement de la fiche retires. Risque MOYEN (valeur fiche) : auto-valide, createur notifie.",
+          "tags": [
+            "MO-167",
+            "auto-validation",
+            "EO-143",
+            "regle-immuable",
+            "champ",
+            "fiche"
+          ]
         }
       ],
       "tags": [
@@ -520,7 +533,12 @@
         "MO-145",
         "EO-124",
         "regles",
-        "MO-158"
+        "MO-158",
+        "MO-167",
+        "auto-validation",
+        "EO-143",
+        "regle-immuable",
+        "champ"
       ]
     },
     "_operateur/optimus-prime/parcours/index-parcours.json": {
@@ -903,6 +921,19 @@
             "regles-immuables",
             "index"
           ]
+        },
+        {
+          "date": "2026-09-18 07:25:44",
+          "action": "modifie",
+          "detail": "MO-167 : l index des regles immuables liste auto-validation-missions.md (16 regles).",
+          "tags": [
+            "MO-167",
+            "auto-validation",
+            "EO-143",
+            "regle-immuable",
+            "champ",
+            "index"
+          ]
         }
       ],
       "tags": [
@@ -916,7 +947,11 @@
         "regle-immuable",
         "perimetre",
         "mo-104",
-        "MO-158"
+        "MO-158",
+        "MO-167",
+        "auto-validation",
+        "EO-143",
+        "champ"
       ]
     },
     "_operateur/optimus-prime/regles-immuables/suivi-optimus-marbre.md": {
@@ -7049,12 +7084,45 @@
             "ecrire",
             "MO-002"
           ]
+        },
+        {
+          "date": "2026-09-18 07:42:26",
+          "action": "modifie",
+          "detail": "EO-156 (MO-169) : le contrat de la porte declare les deux regles nouvelles (valeur a tirets acceptee, carte en UNE passe ; option privee de valeur = REFUS nomme code 2) et sa limite (une valeur qui serait exactement un nom d option connu passe par @fichier).",
+          "tags": [
+            "ecrire",
+            "porte",
+            "EO-156",
+            "MO-169",
+            "contrat",
+            "doc"
+          ]
+        },
+        {
+          "date": "2026-09-18 07:59:55",
+          "action": "modifie",
+          "detail": "EO-159 (MO-170) : contrat a jour -- ligne Garanties sur le garde d ORDRE (ImportError invisible a py_compile) et section Secours : prevention par le garde, cure par le point de restauration .bak + revert-fichier (combos/outils), avec ses limites DITES.",
+          "tags": [
+            "ecrire",
+            "porte",
+            "EO-159",
+            "MO-170",
+            "contrat",
+            "doc"
+          ]
         }
       ],
       "tags": [
         "outil",
         "ecrire",
-        "MO-002"
+        "MO-002",
+        "porte",
+        "EO-156",
+        "MO-169",
+        "contrat",
+        "doc",
+        "EO-159",
+        "MO-170"
       ]
     },
     "cerveau-projet/matrix/matrice/data/outils/ecrire/constants.py": {
@@ -7068,12 +7136,46 @@
             "ecrire",
             "MO-002"
           ]
+        },
+        {
+          "date": "2026-09-18 07:42:25",
+          "action": "modifie",
+          "detail": "EO-156 (MO-169) : nouvelle constante CLE_SANS_VALEUR = __sans_valeur__ (domicile unique de la sentinelle) ; les noms d options NOMS_OPTIONS_ECRIRE / NOMS_OPTIONS_EDITER sont desormais CONSOMMES par les entrees au lieu d etre recopies.",
+          "tags": [
+            "ecrire",
+            "porte",
+            "EO-156",
+            "MO-169",
+            "constantes",
+            "zero-valeur-en-dur"
+          ]
+        },
+        {
+          "date": "2026-09-18 08:31:07",
+          "action": "modifie",
+          "detail": "EO-158 (MO-171) : la sentinelle CLE_SANS_VALEUR est CONSOMMEE du domicile data/commun/options.py -- UN SEUL domicile par verite (lecon EO-154 : deux domiciles qui divergent font une trace muette). La definition locale est retiree.",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "ecrire",
+            "domicile",
+            "sentinelle"
+          ]
         }
       ],
       "tags": [
         "outil",
         "ecrire",
-        "MO-002"
+        "MO-002",
+        "porte",
+        "EO-156",
+        "MO-169",
+        "constantes",
+        "zero-valeur-en-dur",
+        "EO-158",
+        "MO-171",
+        "domicile",
+        "sentinelle"
       ]
     },
     "cerveau-projet/matrix/matrice/data/outils/ecrire/commun.py": {
@@ -7087,12 +7189,64 @@
             "ecrire",
             "MO-002"
           ]
+        },
+        {
+          "date": "2026-09-18 07:42:25",
+          "action": "corrige",
+          "detail": "EO-156 (MO-169) : extraire_options accepte une VALEUR commencant par des tirets (un document a carte d identite COMMENCE par --- : la carte s ecrit en UNE passe) et n ecrit plus une option en silence -- l option privee de valeur est inscrite sous CLE_SANS_VALEUR (domicile constants.py). Ajout de refuser_options_sans_valeur : REFUS nomme portant le nom de l option. Usage : lire_contenu_source inchange.",
+          "tags": [
+            "ecrire",
+            "porte",
+            "EO-156",
+            "MO-169",
+            "parseur",
+            "refus-nomme"
+          ]
+        },
+        {
+          "date": "2026-09-18 07:59:55",
+          "action": "corrige",
+          "detail": "EO-159 (MO-170) : garde d ORDRE avant publication. noms_de_cible + noms_lies_module (lecture ast, SANS executer le module) + chemin_fournisseur_local (3 bases mesurees : voisin, un cran au-dessus, domicile partage data/commun) + verifier_imports_locaux, branche sur valider_syntaxe (nouveau parametre cible = la CIBLE, pas le .tmp). py_compile ne dit RIEN d un ImportError : c est ce qui a tue la porte en MO-169. Le nom cherche est le nom IMPORTE, jamais l alias local (mesure : lire l alias condamnait 776 imports legitimes).",
+          "tags": [
+            "ecrire",
+            "porte",
+            "EO-159",
+            "MO-170",
+            "garde-ordre",
+            "imports-locaux",
+            "validation"
+          ]
+        },
+        {
+          "date": "2026-09-18 08:31:01",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
         }
       ],
       "tags": [
         "outil",
         "ecrire",
-        "MO-002"
+        "MO-002",
+        "porte",
+        "EO-156",
+        "MO-169",
+        "parseur",
+        "refus-nomme",
+        "EO-159",
+        "MO-170",
+        "garde-ordre",
+        "imports-locaux",
+        "validation",
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
       ]
     },
     "cerveau-projet/matrix/matrice/data/outils/ecrire/main.py": {
@@ -7125,12 +7279,30 @@
             "ecrire",
             "MO-002"
           ]
+        },
+        {
+          "date": "2026-09-18 07:42:25",
+          "action": "corrige",
+          "detail": "EO-156 (MO-169) : l entree DECLARE le refus (code 2, message nomme) des qu une option a ete privee de valeur ; NOMS_OPTIONS vient du domicile constants.py (plus de tuple recopie).",
+          "tags": [
+            "ecrire",
+            "porte",
+            "EO-156",
+            "MO-169",
+            "entree",
+            "refus-nomme"
+          ]
         }
       ],
       "tags": [
         "outil",
         "ecrire",
-        "MO-002"
+        "MO-002",
+        "porte",
+        "EO-156",
+        "MO-169",
+        "entree",
+        "refus-nomme"
       ]
     },
     "cerveau-projet/matrix/matrice/data/outils/ecrire/ecrire/fonctions.py": {
@@ -7163,12 +7335,30 @@
             "ecrire",
             "MO-002"
           ]
+        },
+        {
+          "date": "2026-09-18 07:42:25",
+          "action": "corrige",
+          "detail": "EO-156 (MO-169) : meme declaration du refus nomme que la categorie ecrire ; NOMS_OPTIONS consomme NOMS_OPTIONS_EDITER (domicile constants.py).",
+          "tags": [
+            "ecrire",
+            "porte",
+            "EO-156",
+            "MO-169",
+            "entree",
+            "refus-nomme"
+          ]
         }
       ],
       "tags": [
         "outil",
         "ecrire",
-        "MO-002"
+        "MO-002",
+        "porte",
+        "EO-156",
+        "MO-169",
+        "entree",
+        "refus-nomme"
       ]
     },
     "cerveau-projet/matrix/matrice/data/outils/ecrire/editer/fonctions.py": {
@@ -7211,6 +7401,30 @@
             "lister",
             "MO-003"
           ]
+        },
+        {
+          "date": "2026-09-18 07:42:26",
+          "action": "modifie",
+          "detail": "EO-156 (MO-169) : fiche de l outil ecrire mise a jour (protections) -- valeur a tirets acceptee, option privee de valeur = refus nomme, jamais videe en silence.",
+          "tags": [
+            "manuel",
+            "ecrire",
+            "EO-156",
+            "MO-169",
+            "fiche"
+          ]
+        },
+        {
+          "date": "2026-09-18 07:59:55",
+          "action": "modifie",
+          "detail": "EO-159 (MO-170) : fiche de l outil ecrire -- garde d ORDRE (import local non lie = refus avant publication) et secours DECLARE (.bak + revert-fichier).",
+          "tags": [
+            "manuel",
+            "ecrire",
+            "EO-159",
+            "MO-170",
+            "fiche"
+          ]
         }
       ],
       "tags": [
@@ -7218,7 +7432,13 @@
         "ecrire",
         "MO-002",
         "lister",
-        "MO-003"
+        "MO-003",
+        "manuel",
+        "EO-156",
+        "MO-169",
+        "fiche",
+        "EO-159",
+        "MO-170"
       ]
     },
     "cerveau-projet/matrix/matrice/data/outils/lister/DESCRIPTION.md": {
@@ -7270,12 +7490,27 @@
             "lister",
             "MO-003"
           ]
+        },
+        {
+          "date": "2026-09-18 08:31:02",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
         }
       ],
       "tags": [
         "outil",
         "lister",
-        "MO-003"
+        "MO-003",
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
       ]
     },
     "cerveau-projet/matrix/matrice/data/outils/lister/main.py": {
@@ -7879,6 +8114,18 @@
             "suivi-optimus",
             "portes"
           ]
+        },
+        {
+          "date": "2026-09-18 07:25:51",
+          "action": "modifie",
+          "detail": "MO-167 : le champ est DECLARE sur les DEUX chemins d injection (mission simple ET lot) AVANT la construction de l injection, et l injection le PORTE ; le verbe statut l AFFICHE, et son ABSENCE se DIT (pas de repli muet -- un champ que personne ne lit serait reste une absence, L-120).",
+          "tags": [
+            "MO-167",
+            "auto-validation",
+            "EO-143",
+            "pilote",
+            "champ"
+          ]
         }
       ],
       "tags": [
@@ -7910,7 +8157,11 @@
         "MO-161",
         "collecte",
         "suivi-optimus",
-        "portes"
+        "portes",
+        "MO-167",
+        "auto-validation",
+        "EO-143",
+        "champ"
       ]
     },
     "_operateur/optimus-prime/protocoles/proto-1-reprise-mission.md": {
@@ -8435,11 +8686,26 @@
             "entonnoir",
             "mo-035"
           ]
+        },
+        {
+          "date": "2026-09-18 08:31:06",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
         }
       ],
       "tags": [
         "entonnoir",
-        "mo-035"
+        "mo-035",
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
       ]
     },
     "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/main.py": {
@@ -11164,6 +11430,18 @@
             "trace",
             "friction89"
           ]
+        },
+        {
+          "date": "2026-09-18 07:25:51",
+          "action": "modifie",
+          "detail": "MO-167 (EO-143) : le DOMICILE du champ -- CHAMP_AUTO_VALIDATION = 'auto_validation' et VALEUR_AUTO_VALIDATION = 'auto' declares ICI (proprietaire du contrat, L-035), jamais recopies dans la logique. Le commentaire nomme la regle immuable qui porte la doctrine et l ecart mesure par MO-160.",
+          "tags": [
+            "MO-167",
+            "auto-validation",
+            "EO-143",
+            "pilote",
+            "champ"
+          ]
         }
       ],
       "tags": [
@@ -11206,7 +11484,11 @@
         "alerte",
         "MO-165",
         "republie",
-        "friction89"
+        "friction89",
+        "MO-167",
+        "auto-validation",
+        "EO-143",
+        "champ"
       ]
     },
     "_operateur/optimus-prime/pilote/profil/fonctions.py": {
@@ -13076,6 +13358,18 @@
             "trace",
             "friction89"
           ]
+        },
+        {
+          "date": "2026-09-18 07:25:51",
+          "action": "modifie",
+          "detail": "MO-167 : declarer_auto_validation(mission) -- UN SEUL domicile pour poser le champ, appele par les DEUX chemins d injection (deux copies divergeraient, L-029).",
+          "tags": [
+            "MO-167",
+            "auto-validation",
+            "EO-143",
+            "pilote",
+            "champ"
+          ]
         }
       ],
       "tags": [
@@ -13140,7 +13434,11 @@
         "alerte",
         "MO-164",
         "republie",
-        "friction89"
+        "friction89",
+        "MO-167",
+        "auto-validation",
+        "EO-143",
+        "champ"
       ]
     },
     "matrice/data/outils/rechercher/constants.py": {
@@ -15308,6 +15606,20 @@
             "orchestrateur",
             "auto-evolution"
           ]
+        },
+        {
+          "date": "2026-09-18 07:17:45",
+          "action": "corrige",
+          "detail": "MO-166 (friction 80, reste a faire de MO-157) : les DEUX sites de sc-002 (phases modifier-avant et modifier-apres) resolvaient leur cible par Path(fichier).exists(), donc CONTRE LE CWD -- la MEME cible relative etait acceptee depuis la racine et refusee depuis le dossier de l outil. Ils CONSOMMENT desormais le DOMICILE PARTAGE matrice/data/commun/cible.py (comme sc-001) : trois formes (absolue, racine du workspace, matrix/), remontee gardee par un marqueur stable (jamais un parents[N]), le cwd n est JAMAIS une base et un refus NOMME les bases essayees. Les fichiers LUS (lire-fichier-complet, calculer-hash, JSON) recoivent le chemin ANCRE ; la BDD des modifications garde le chemin DECLARE (inchange). Nouveau verbe auto-test (12 controles) : resolution nominale des 3 formes, refus nomme d une cible absente, LA preuve qui manquait (la MEME cible relative depuis un cwd ETRANGER, l ancienne regle rejouee et ACCUSEE), et un controle STRUCTUREL (le livrable, hors section COBAYE, ne contient plus Path(parsed.fichier) et passe par exiger_cible).",
+          "tags": [
+            "MO-166",
+            "friction80",
+            "sc-002",
+            "cible",
+            "ancrage",
+            "cobaye",
+            "cwd"
+          ]
         }
       ],
       "tags": [
@@ -15320,7 +15632,14 @@
         "mo-132",
         "friction-50",
         "orchestrateur",
-        "auto-evolution"
+        "auto-evolution",
+        "MO-166",
+        "friction80",
+        "sc-002",
+        "cible",
+        "ancrage",
+        "cobaye",
+        "cwd"
       ]
     },
     "_operateur/optimus-prime/super-combos/combos/sc-002-auto-evolution/main.py": {
@@ -15395,6 +15714,18 @@
             "sc-003",
             "trace"
           ]
+        },
+        {
+          "date": "2026-09-18 07:17:46",
+          "action": "modifie",
+          "detail": "MO-166 : le contrat de LANCEMENT de sc-002 declare le nouveau verbe auto-test (champ verbes + usage) -- un verbe non declare serait refuse par le lanceur (contrat de lancement, MO-071).",
+          "tags": [
+            "MO-166",
+            "friction80",
+            "sc-002",
+            "registre",
+            "contrat"
+          ]
         }
       ],
       "tags": [
@@ -15409,7 +15740,10 @@
         "suivi",
         "pilote",
         "sc-003",
-        "trace"
+        "trace",
+        "MO-166",
+        "friction80",
+        "sc-002"
       ]
     },
     "matrice/data/outils/rechercher/commun.py": {
@@ -17468,12 +17802,29 @@
             "cartes-identite",
             "audit"
           ]
+        },
+        {
+          "date": "2026-09-18 07:17:50",
+          "action": "modifie",
+          "detail": "MO-166 : le contrat du combo dit l ancrage de la cible (le cwd n est jamais une base, un refus NOMME les bases essayees) et documente le verbe auto-test (le cobaye rejoue la MEME cible relative depuis un cwd etranger).",
+          "tags": [
+            "MO-166",
+            "friction80",
+            "sc-002",
+            "readme",
+            "contrat"
+          ]
         }
       ],
       "tags": [
         "MO-089",
         "cartes-identite",
-        "audit"
+        "audit",
+        "MO-166",
+        "friction80",
+        "sc-002",
+        "readme",
+        "contrat"
       ]
     },
     "_operateur/optimus-prime/preparation/README.md": {
@@ -20493,6 +20844,873 @@
         "republie",
         "trace",
         "friction89"
+      ]
+    },
+    "_operateur/optimus-prime/regles-immuables/auto-validation-missions.md": {
+      "modifications": [
+        {
+          "date": "2026-09-18 07:25:44",
+          "action": "cree",
+          "detail": "MO-167 (EO-143, GO createur 2026-09-18) : REGLE IMMUABLE gravee -- une mission deja vue avec le createur s ENCHAINE sans redemander (serie stricte ; le CRITIQUE reste au createur ; un echec arrete le round). Avant elle, la garantie ne vivait que dans une ABSENCE (aucune porte d approbation dans la chaine) et une LECON (L-019). Carte d identite avec decide_par createur. Les trois jambes (L-078) sont nommees dans la regle : le code (champ), les documents relus (fiche + index), le garde (verifier-fiche).",
+          "tags": [
+            "MO-167",
+            "auto-validation",
+            "EO-143",
+            "regle-immuable",
+            "champ"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-167",
+        "auto-validation",
+        "EO-143",
+        "regle-immuable",
+        "champ"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/revert-fichier.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 07:59:55",
+          "action": "corrige",
+          "detail": "EO-159 (MO-170) : le secours devient OFFICIEL et DECLARE. Il ecrit SANS la porte, EXPRES (il sert quand la porte est la chose cassee). LF forces (la porte force LF), tri du .bak par mtime, REFUS nomme (code 2) s il n y a aucun point de restauration, et limites IMPRIMEES (aucune validation, aucun SHA, version courante non sauvee).",
+          "tags": [
+            "secours",
+            "EO-159",
+            "MO-170",
+            "porte-ecriture",
+            "combos"
+          ]
+        }
+      ],
+      "tags": [
+        "secours",
+        "EO-159",
+        "MO-170",
+        "porte-ecriture",
+        "combos"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/bdd-activites/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:30:58",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:30:58",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/bdd-conventions-matrice/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:30:58",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/bdd-historique/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:30:58",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/bdd-lecons/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:30:59",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/bdd-modifications/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:30:59",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/bdd-protocoles-matrice/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:30:59",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/bdd-regles-matrice/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:30:59",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/bdd-sessions/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:30:59",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/bdd-usages/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:00",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/bdd-variables/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:00",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/benchmark/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:00",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/dialoguer/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:00",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/dupliquer-template/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:01",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/editer-agents-md/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:01",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/executer/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:01",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/lire/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:02",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/machine-defcon/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:02",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/maintenir/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:02",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/pause-session/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:02",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/rechercher/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:03",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/signaler/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:03",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/suivi-optimus/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:03",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/theme-vivier/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:03",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/pilote/checklist/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:03",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/pilote/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:04",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/pilote/entonnoir/classer/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:04",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/pilote/entonnoir/retirer/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:04",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/pilote/entonnoir/urgencer/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:04",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/pilote/entonnoir/vrac/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:04",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/templates/outil-bdd/commun.py.moule": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:05",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/templates/theme-bdd/commun.py.moule": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:05",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/pilote/checklist/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:05",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/pilote/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:05",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/classer/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:05",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/retiqueter/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:06",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/urgencer/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:06",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/vrac/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:06",
+          "action": "corrige",
+          "detail": "EO-158 (MO-171) : le parseur d options est CONSOMME du DOMICILE partage data/commun/options.py (le motif est PARTAGE, jamais recopie -- 40 copies en 22 textes mesurees). Contrat : une valeur peut commencer par des tirets, seul un nom d option CONNU l arrete, une option privee de valeur est DITE sous CLE_SANS_VALEUR (plus jamais avalee en silence). Drapeaux propres a l outil CONSERVES (maintenir : etat ajoute, il ne marchait que par une valeur vide accidentelle).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "parseur-options",
+            "domicile"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "parseur-options",
+        "domicile"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/commun/options.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 08:31:06",
+          "action": "cree",
+          "detail": "EO-158 (MO-171) : DOMICILE unique du parseur d options (motif M-076, meme famille que cible.py de MO-166). Contrat : valeur a tirets acceptee, seul un nom d option connu l arrete, option privee de valeur INSCRITE sous CLE_SANS_VALEUR (jamais videe en silence), drapeaux declares valant 1 et restant PRESENTS, mode sans_tirets pour les outils qui nomment leurs options sans tirets (limite DITE). Consomme par 41 copies alignees, et par les 2 moules (les nouveaux outils naissent alignes).",
+          "tags": [
+            "EO-158",
+            "MO-171",
+            "domicile",
+            "parseur-options",
+            "motif-partage"
+          ]
+        }
+      ],
+      "tags": [
+        "EO-158",
+        "MO-171",
+        "domicile",
+        "parseur-options",
+        "motif-partage"
       ]
     }
   },

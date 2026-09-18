@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-17 09:17:25",
+  "date": "2026-09-18 07:26:16",
   "empreintes": {
     "parcours\\fins.json": "40255020f32f8418ac182e4371190a21acaa8a8288c112ad6e6f98b2d5f2afd5",
     "parcours\\index-parcours.json": "91b2049315443899f75eeefff5ac6087f0cb87fc6ec4b98ed668a1f07d9aecaa",
@@ -45,6 +45,7 @@
     "regles-immuables\\ascii-strict.md": "e844223ed505699290e4ffcc17dda86c0e5c9c7afd36f43808aa5ebfc91e292c",
     "regles-immuables\\attente-ne-prouve-rien.md": "945248a1c41b86a8c5358e15b0865781f13d4e60e0f821e0da9c9df094e91b00",
     "regles-immuables\\aucun-autre-agent.md": "cbadd42e29139719304891112cdc929b37b3120f26a4516b93b73936267381f8",
+    "regles-immuables\\auto-validation-missions.md": "4e2e464ce0c2dedc2bf64b9c47a4da9e47f2f8b0f65096284195c4b2e58f9b53",
     "regles-immuables\\entonnoir-des-demandes.md": "55c0369b1d252ccfe5c3efdc626660cd0a772ae782207095d92ed387291fa752",
     "regles-immuables\\faciliter-vie-llm.md": "5b540f5299131c5493557b83ca583c9e74ca3248b0c3bc99bb029332b83efabb",
     "regles-immuables\\hors-flux-formel.md": "0e88e5e49c5308476978e56abe9851c41ddd69a7dfa2cf65455d498c50560419",
@@ -53,10 +54,10 @@
     "regles-immuables\\perimetre-tmp.md": "4585572b1c4804ce6c962e639e27ed4917c0b90e3b394ddf82155331bb10bac0",
     "regles-immuables\\perimetre-write.md": "13870cd7c56a45ddd479cb107bf25ca5d260f10a503d720296cc2278c2611af2",
     "regles-immuables\\python-seul.md": "652ea446a1fa583636da1fd7fdab028d13b50a20149d35314f26a2b224dea13d",
-    "regles-immuables\\regles-immuables-readme.md": "e940240d8d36c042582b9bc8e33fc012487b41d2a76e921462347390a0b41d5b",
+    "regles-immuables\\regles-immuables-readme.md": "99a6a7e03abf1b5cd39d41a5431cc82f9a91e1e22d72f213810b61a50c9a8626",
     "regles-immuables\\serie-stricte.md": "5e98fb964252941cf9b1ce6f5f2f86175d60ac46581604426e9c3c8665dcda19",
     "regles-immuables\\suivi-optimus-marbre.md": "9e3c5621ea56cd2fb280222026bc1e885dc32e083ccf5bc1cc7d02f9250be579",
-    "optimus-prime.md": "672cbb4f8715a701fef5480d7bcdd59ec5e808e1c26d343e29a019d909a48c78",
+    "optimus-prime.md": "dfa8afbb280d6feba96a17ba30803f35267a953a5dfa28b9029dfeb4b8187e1d",
     "super-combos\\combos\\outils\\ajouter-case-theme.py": "551c8cd8e73c29f6cb03caa2f5b676b1b95df431b5bfd25a66b2bc18fe811409",
     "super-combos\\combos\\outils\\ajouter-redirect-theme.py": "b295401d4672738c4d2ebb96517d21d035f0c83403a390e3da7f3784872b266c",
     "super-combos\\combos\\outils\\audit-invisibilite.py": "18b192e9daff2f0c43f2fb7866e87c3a4d7db224122d4f55b658a31acde126e2",

@@ -149,18 +149,9 @@ def lire_journal(n=5):
 
 
 def extraire_options(arguments, noms_connus):
-    """Extrait les options --nom valeur d'une liste d'arguments (forme seulement)."""
-    options = {}
-    index = 0
-    while index < len(arguments):
-        nom = arguments[index]
-        if nom.startswith("--") and nom[2:] in noms_connus:
-            if index + 1 < len(arguments):
-                options[nom[2:]] = arguments[index + 1]
-            index += 2
-        else:
-            index += 1
-    return options
+    """Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici."""
+    from options import extraire_options as repartir  # domicile partage (EO-158)
+    return repartir(arguments, noms_connus)
 
 
 def lire_perimetre():

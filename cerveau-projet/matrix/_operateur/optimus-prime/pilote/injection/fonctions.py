@@ -6,6 +6,7 @@ from commun import (
     annoncer_debut,
     armer_lot,
     bilan_consolide,
+    declarer_auto_validation,
     defcon_bloque_theme,
     deposer_message,
     enregistrer_file,
@@ -28,6 +29,7 @@ from checklist.listes import TYPES
 from checklist.stockage import fabrique_checklist
 from constants import (
     BOITE_PILOTE_OUT,
+    CHAMP_AUTO_VALIDATION,
     CHEMIN_THEMES,
     ENCODAGE,
     GABARIT_COMMANDE_RECHERCHE,
@@ -83,6 +85,17 @@ def afficher_statut(file_missions):
         print("Aucune mission en cours. File : " + str(en_attente) + " en attente.")
         return 0
     print("Mission en cours : " + mission["id"] + " (theme : " + mission["theme"] + ") -- " + mission["objectif"])
+    # AUTO-VALIDATION (EO-143) : la garantie est AFFICHEE, et son ABSENCE se DIT.
+    # Une garantie qui ne vit que dans une absence se re-cree au premier garde qui
+    # l ignore (ecart mesure par MO-160) ; un repli muet la rendrait invisible.
+    auto_validation = mission.get(CHAMP_AUTO_VALIDATION, "")
+    if auto_validation:
+        print("Auto-validation : " + auto_validation
+              + " -- mission deja vue avec le createur : enchaine sans redemander"
+              + " (le CRITIQUE reste au createur).")
+    else:
+        print("Auto-validation : champ ABSENT (mission anterieure au champ, EO-143)"
+              + " -- la regle immuable auto-validation-missions s applique.")
     return 0
 
 
@@ -171,6 +184,10 @@ def preparer_injection(charger_file):
         return 2
     for ecart in role.get("ecarts", []):
         print("ALERTE : " + ecart)
+    # AUTO-VALIDATION (EO-143) : le champ est pose AVANT l injection -- l agent
+    # doit le LIRE, il ne le devine pas (un champ que personne ne lit est une
+    # absence, et c est exactement l ecart mesure par MO-160).
+    declarer_auto_validation(mission)
     injection = {
         "type": "injection",
         "date": horodater(),
@@ -178,6 +195,7 @@ def preparer_injection(charger_file):
         "theme": mission["theme"],
         "role": role,
         "objectif": mission["objectif"],
+        CHAMP_AUTO_VALIDATION: mission[CHAMP_AUTO_VALIDATION],
         "checklist": checklist,
         "lecons_utiles": charger_lecons_utiles(),
         "themes_utiles": charger_themes_utiles(),
@@ -249,6 +267,9 @@ def enchainer(charger_file):
         return 2
     for ecart in role.get("ecarts", []):
         print("ALERTE : " + ecart)
+    # Meme champ sur le chemin du LOT : le lot n est pas une porte derobee
+    # (meme garde, meme declararation -- une seule fonction pour les deux).
+    declarer_auto_validation(mission)
     injection = {
         "type": "injection",
         "date": horodater(),
@@ -257,6 +278,7 @@ def enchainer(charger_file):
         "role": role,
         "objectif": mission["objectif"],
         "lot": True,
+        CHAMP_AUTO_VALIDATION: mission[CHAMP_AUTO_VALIDATION],
         "checklist": checklist,
         "lecons_utiles": charger_lecons_utiles(),
         "themes_utiles": charger_themes_utiles(),

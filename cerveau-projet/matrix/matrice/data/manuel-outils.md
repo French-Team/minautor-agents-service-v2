@@ -456,9 +456,10 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 | `editer` | `python main.py editer --fichier <chemin> --ancien "<old|@fichier>" --nouveau "<new|@fichier>"` |
 |  | `python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fichier <chemin>` |
 
-**Protections** : perimetre `matrix/` seul (hors = code 2, allowlist `AGENTS.md`/`demarrer-*.md`) ; `--mode` ferme `creer|remplacer|ajouter` ; `creer` refuse si existe (code 2) ; `editer` exige 1 occurrence unique (0 ou >1 = code 2) ; validation `.py` (`py_compile`) et `.json` (`json.load`) -- echec = code 1 mais ecrit + `.bak` ; LF forces (L-001) ; `.bak` horodate ; SHA avant/apres ; ASCII signale ; `@file` anti-heredoc (`--contenu @chemin` ou `--contenu-fichier`) ; ecriture atomique `tmp+os.replace`.
+**Protections** : perimetre `matrix/` seul (hors = code 2, allowlist `AGENTS.md`/`demarrer-*.md`) ; `--mode` ferme `creer|remplacer|ajouter` ; `creer` refuse si existe (code 2) ; `editer` exige 1 occurrence unique (0 ou >1 = code 2) ; validation `.py` (`py_compile`) et `.json` (`json.load`) -- echec = code 1 mais ecrit + `.bak` ; LF forces (L-001) ; `.bak` horodate ; SHA avant/apres ; ASCII signale ; `@file` anti-heredoc (`--contenu @chemin` ou `--contenu-fichier`) ; ecriture atomique `tmp+os.replace` ; valeur a tirets acceptee (`---` : une carte d identite s ecrit en UNE passe) ; option PRIVEE de valeur = REFUS nomme (code 2, EO-156) -- jamais videe en silence ; garde d ORDRE (EO-159) : un import LOCAL dont le nom n est pas lie par le fournisseur = REFUS avant publication (un ImportError n est pas une SyntaxError : `py_compile` le laisse passer) ; secours DECLARE : le point de restauration `.bak` + `revert-fichier.py` (combos/outils) qui ecrit hors porte EXPRES, quand la porte est la chose cassee.
 **Benchmark** : 1000 lignes <30ms ; LF pur verifie (CRLF 0).
 **Quand** : toute ecriture ou edition par Optimus -- remplace `write_file`/`str_replace` natifs (non atomiques, pas de revert).
+**Domicile partage (EO-158)** : le parseur d options n est plus recopie -- `data/commun/options.py` porte le contrat (valeur a tirets, nom d option connu SEUL arrete, option privee de valeur DITE) et 41 outils le CONSOMMENT.
 
 ## 30. lister -- `matrice/data/outils/lister/` (MO-003)
 

@@ -96,6 +96,7 @@ pilote, BDD, espions.
 | **PERIMETRE DES FICHIERS TEMPORAIRES** | Tout fichier de travail va dans SA zone (`tmp-optimus/`), jamais ailleurs ; le contenu est vide en fin de mission et la suppression se TRACE (le PILOTE le fait). | `regles-immuables/perimetre-tmp.md` |
 | **DEUX FLUX DISTINCTS** | Flux 1 CAMELEON (la Matrice GUIDE) et Flux 2 MAINTENANCE (la Matrice me SURVEILLE) : serie stricte, jamais melanges. | `regles-immuables/hors-flux-formel.md` |
 | **SINGLE-LLM SERIE** | Le travail en serie est OBLIGATOIRE ; le pilote peut charger plusieurs missions, il les lance l une apres l autre. | `regles-immuables/serie-stricte.md` |
+| **AUTO-VALIDATION DES MISSIONS** | Une mission deja vue avec le createur s enchaine sans redemander (serie stricte ; le CRITIQUE reste au createur) ; le champ `auto_validation` la porte sur la mission. | `regles-immuables/auto-validation-missions.md` |
 | **OUTILS PYTHON** | Tous mes outils sont en Python (bash interdit : lent et instable), avec leurs protections d ouverture et de fermeture. | `regles-immuables/python-seul.md` |
 | **FACILITER LA VIE DU LLM** | Si le parcours fournit tout (arbre, ordres, outils), je n ai jamais a creer moi-meme. Plus on me fournit, plus je finis vainqueur. | `regles-immuables/faciliter-vie-llm.md` |
 | **MARBRE ANTI-SURCHAGE** | Les fichiers ne sont JAMAIS surcharges : chaque modification va en BDD modifications. | `regles-immuables/anti-surcharge.md` |

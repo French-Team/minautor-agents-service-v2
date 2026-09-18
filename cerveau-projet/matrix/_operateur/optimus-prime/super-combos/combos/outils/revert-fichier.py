@@ -1,42 +1,40 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-revert-fichier.py -- Revert un fichier depuis sa sauvegarde .bak la plus recente
+"""revert-fichier.py -- SECOURS : rendre un fichier a sa version d avant.
 
-Usage: python revert-fichier.py --fichier <path> [--depuis-bak]
-"""
+Usage: python revert-fichier.py --fichier <chemin> [--depuis-bak]
 
-import sys
+PORTE DE SECOURS (EO-159, mesure MO-169) : elle ecrit SANS passer par la porte
+ecrire, et c est VOULU -- elle sert precisement quand la porte est CASSEE (un
+import pose avant sa constante a rendu la porte injouable : plus aucune ecriture
+possible dans tout le workspace, toute ecriture passant par elle).
+Elle consomme le POINT DE RESTAURATION que la porte laisse derriere elle a
+chaque ecriture : le .bak horodate.
+Limites DITES : aucune validation, aucun SHA, aucun nouveau .bak (la version
+courante est perdue) -- le fichier rendu est celui du .bak le plus recent.
+"""
 import argparse
+import sys
 from pathlib import Path
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Revert fichier depuis .bak")
-    parser.add_argument("--fichier", required=True, help="Fichier a revert")
-    parser.add_argument("--depuis-bak", action="store_true", help="Utiliser le .bak le plus recent")
+    parser = argparse.ArgumentParser(description="Secours : revert depuis le point de restauration .bak")
+    parser.add_argument("--fichier", required=True, help="Fichier a rendre")
+    parser.add_argument("--depuis-bak", action="store_true", help="Prendre le .bak le plus recent (defaut)")
     args = parser.parse_args()
 
-    filepath = Path(args.fichier)
-    if not filepath.exists():
-        print(f"Fichier introuvable: {filepath}")
-        return 1
-
-    # Trouver le .bak le plus recent
-    bak_files = list(filepath.parent.glob(f"{filepath.name}.bak.*"))
-    if not bak_files:
-        print(f"Aucune sauvegarde .bak trouvee pour {filepath}")
-        return 1
-
-    latest_bak = max(bak_files, key=lambda p: p.stat().st_mtime)
-    print(f"Revert depuis: {latest_bak}")
-
-    # Lire la sauvegarde
-    content = latest_bak.read_text(encoding="utf-8")
-
-    # Ecrire dans le fichier original
-    filepath.write_text(content, encoding="utf-8")
-    print(f"Revert effectue: {filepath}")
+    fichier = Path(args.fichier)
+    baks = sorted(fichier.parent.glob(fichier.name + ".bak.*"), key=lambda p: p.stat().st_mtime)
+    if not baks:
+        print("REFUS : aucun point de restauration (.bak.*) pour " + str(fichier))
+        return 2
+    dernier = baks[-1]
+    contenu = dernier.read_text(encoding="utf-8")
+    # LF forces : la porte force LF, un secours qui rend du CRLF casserait l invariant.
+    contenu = contenu.replace("\r\n", "\n").replace("\r", "\n")
+    fichier.write_text(contenu, encoding="utf-8", newline="\n")
+    print("SECOURS : " + str(fichier) + " rendu depuis " + dernier.name)
+    print("Limites : aucune validation, aucun SHA, la version courante n a pas ete sauvee.")
     return 0
 
 

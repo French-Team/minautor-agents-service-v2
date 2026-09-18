@@ -134,27 +134,6 @@ def lister_dossier(chemin_relatif, filtre, recursif, inclure_invisible=False):
 
 
 def extraire_options(arguments, noms_connus):
-    """Extrait --nom valeur et drapeaux --recursif/--json/--prive sans valeur.
-
-    MO-152 : --prive a ete ajoute ici EN MEME TEMPS que dans la liste des
-    options connues -- un drapeau connu de l entree mais pas de ce lecteur
-    aurait ete avale en silence (meme famille que lire, meme jour).
-    """
-    options = {}
-    index = 0
-    while index < len(arguments):
-        morceau = arguments[index]
-        if morceau.startswith("--") and morceau[2:] in noms_connus:
-            nom = morceau[2:]
-            if nom in ("recursif", "json", "prive"):
-                options[nom] = "1"
-                index += 1
-            elif index + 1 < len(arguments):
-                options[nom] = arguments[index + 1]
-                index += 2
-            else:
-                options[nom] = ""
-                index += 1
-        else:
-            index += 1
-    return options
+    """Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici."""
+    from options import extraire_options as repartir  # domicile partage (EO-158)
+    return repartir(arguments, noms_connus, drapeaux=("recursif", "json", "prive"))
