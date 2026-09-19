@@ -15,6 +15,9 @@ if REPERTOIRE_DATA.name != "data":
 # data/commun (motif unique M-076) : le motif racine est PARTAGE, jamais recopie.
 sys.path.insert(0, str(REPERTOIRE_DATA / "commun"))
 from racine import detecter_racine  # noqa: E402
+# MO-236 : le domicile de la zone jetable d'Optimus se LIT au moteur partage
+# (`data/commun/zone_tmp.py`), jamais recopie (M-076).
+from zone_tmp import chemin_zone_optimus  # noqa: E402
 
 RACINE = detecter_racine(REPERTOIRE_OUTIL)
 PERIMETRE = RACINE / "cerveau-projet"
@@ -23,7 +26,11 @@ PERIMETRE = RACINE / "cerveau-projet"
 # passe par elle (garde, validation, .bak, SHA) -- mesure MO-171 : une passe
 # d'alignement qui ecrit en direct n'a AUCUNE de ces garanties.
 PORTE_ECRIRE = REPERTOIRE_DATA / "outils" / "ecrire" / "main.py"
-ZONE_FRAGMENTS = REPERTOIRE_DATA.parent / "tmp-optimus"
+# MO-236 : la RACINE MATRICE se derive du PERIMETRE deja declare -- `REPERTOIRE_DATA`
+# est `matrice/data`, donc son parent est `matrice/` et NON `matrix/`. L'ancienne
+# forme (`REPERTOIRE_DATA.parent / "tmp-optimus"`) visait `matrice/tmp-optimus`,
+# qui n'a jamais existe : un defaut PRE-EXISTANT, mesure en deplacant la zone.
+ZONE_FRAGMENTS = chemin_zone_optimus(PERIMETRE / "matrix")
 
 REPERTOIRE_PLANS = REPERTOIRE_OUTIL / "plans"
 NOM_PLAN_DEFAUT = "parseur-options.json"

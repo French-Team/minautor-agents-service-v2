@@ -30,6 +30,30 @@ def verifier_structure(donnees):
     return erreurs
 
 
+def controler_census(donnees):
+    """CONTROLE (volet 3 de la friction 88, MO-192) : les trois champs du
+    recensement (lecteurs/ecrivains/index) sont-ils remplis ?
+
+    Une colonne vide se lit comme un fait ("aucun lecteur") alors qu'elle dit
+    souvent "personne ne l'a ecrite". Ce controle REND LE COMPTE au lieu de le
+    laisser croire : il rapporte, il ne bloque pas (remplir le recensement est
+    un ACTE, pas une condition de validite -- cf. le refus d'archivage qui, lui,
+    est le garde-fou).
+    """
+    elements = donnees.get("elements", [])
+    total = len(elements)
+    vides = {"lecteurs": 0, "ecrivains": 0, "index": 0}
+    for entree in elements:
+        for nom in vides:
+            if not entree.get(nom):
+                vides[nom] += 1
+    return ("Recensement (lecteurs/ecrivains/index) : "
+            + str(total - vides["lecteurs"]) + "/" + str(total) + " lecteurs, "
+            + str(total - vides["ecrivains"]) + "/" + str(total) + " ecrivains, "
+            + str(total - vides["index"]) + "/" + str(total) + " index"
+            + " -- un 0 dit que le champ n'a jamais ete ECRIT, pas qu'il n'a rien.")
+
+
 def verifier_integrite(empreinte_reelle, empreinte_enregistree):
     if empreinte_reelle is None:
         return False, "ECART : BDD absente ou illisible"

@@ -58,3 +58,47 @@ else:
 from racine import detecter_racine  # noqa: E402
 
 RACINE = detecter_racine(REPERTOIRE_OUTIL)
+
+# --- LES DECLENCHEURS (voie A, 2026-09-19, EO-181) -------------------------
+# Un declencheur est une CONDITION MESUREE par une PORTE REELLE : jamais un
+# sentiment, jamais une valeur qu'on s'invente. Chaque entree NOMME les quatre
+# choses que la demande du createur exige -- le FAIT mesure, le MESUREUR (la
+# porte qui rend le verdict), le SEUIL (le verdict qui declenche) et la TRACE
+# du declenchement (celle de `monter` : defcon-historique.jsonl, append-only).
+# Un declencheur ecrit mais JAMAIS BRANCHE serait un declencheur MORT : c'est
+# exactement le defaut que l'audit EO-181 a trouve, et pourquoi la table est
+# consommee par le verbe `surveiller`, lui-meme appele par la veille.
+#
+# NIVEAU : chaque declencheur DIT le niveau qu'il pose. 5 = stop de l'agent par
+# defaut (mise en securite) ; 4 = suivi de bout en bout. JAMAIS de BAISSE : un
+# declencheur MONTE, il ne redescend pas -- la descente reste une DECISION, par
+# la porte de la machine (5 -> 4 -> 3 -> 2, et `valider` pour clore def3).
+# Un mesureur INTROUVABLE ou en echec n'est PAS un declenchement : il est
+# RAPPORTE (une mesure qu'on ne peut pas faire ne doit jamais passer pour une
+# mesure qui dit non).
+DECLENCHEURS = (
+    {
+        "id": "perimetre-write",
+        "fait": "une ecriture constatee HORS de matrix/ dans la fenetre du garde",
+        "mesureur": "_operateur/optimus-prime/super-combos/combos/outils/garde-perimetre-write.py",
+        "arguments": ("--racine", ".", "--jours", "7"),
+        "seuil": "code 1 (PERIMETRE VIOLE)",
+        "niveau": 5,
+    },
+    {
+        "id": "marbre-hors-porte",
+        "fait": "une BDD du MARBRE ne s'accorde plus avec sa porte (regles, protocoles, conventions)",
+        "mesureur": "matrice/data/outils/verifier-regles/main.py",
+        "arguments": ("verifier",),
+        "seuil": "code 1 (BDD en ecart)",
+        "niveau": 5,
+    },
+    {
+        "id": "perimetre-tmp",
+        "fait": "une zone jetable hors de son domicile, ou privee de son README",
+        "mesureur": "_operateur/optimus-prime/super-combos/combos/outils/garde-tmp.py",
+        "arguments": ("--racine", "."),
+        "seuil": "code 1 (ecarts de perimetre temporaire)",
+        "niveau": 4,
+    },
+)

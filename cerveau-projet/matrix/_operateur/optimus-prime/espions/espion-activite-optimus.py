@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-espion-activite-optimus.py -- File, frictions actives, verrous (M-111)
+espion-activite-optimus.py -- File, frictions actives (M-111)
 
-Signale : missions en attente (journal), frictions actives (bdd),
-verrous BDD non liberes. L espion SIGNALE, il ne repare jamais.
+Signale : missions en attente (journal), frictions actives (bdd).
+L espion SIGNALE, il ne repare jamais. Les VERROUS sont RETIRES (EO-154) :
+leur appui sqlite (modifications.db) est parti avec le domicile unique.
 
 Le vocabulaire des STATUTS n'est PAS recopie ici : il vient des DOMICILES des
 outils concernes (bdd-frictions, bdd-modifs), la ou le schema les declare
@@ -53,7 +54,6 @@ def charger_vocabulaire(nom_outil, nom_module):
 
 
 VOCABULAIRE_FRICTIONS = charger_vocabulaire("bdd-frictions", "bdd_frictions.py")
-VOCABULAIRE_MODIFS = charger_vocabulaire("bdd-modifs", "bdd_modifs.py")
 
 
 def journal_attente():
@@ -96,20 +96,10 @@ def frictions_actives():
         ).fetchone()[0]
 
 
-def verrous():
-    """Verrous non liberes (statut du domicile bdd-modifs), ou [] si indisponible."""
-    if VOCABULAIRE_MODIFS is None:
-        return []
-    db = DATA / "modifications.db"
-    if not db.is_file():
-        return []
-    with sqlite3.connect(db) as conn:
-        conn.row_factory = sqlite3.Row
-        rows = conn.execute(
-            "SELECT fichier, date FROM modifications WHERE statut = ?",
-            (VOCABULAIRE_MODIFS.STATUT_VERROUILLE,),
-        ).fetchall()
-    return [(r["fichier"], r["date"]) for r in rows]
+# EO-154 : la fonction verrous() est RETIREE. Elle lisait l'appui sqlite
+# modifications.db ; le domicile unique des modifications est desormais le JSON,
+# qui ne porte PAS de verrou. Un "0 verrou" affiche sur une notion disparue
+# serait un zero rassurant (lecon L-100) : l'espion n'en parle plus.
 
 
 def main():
@@ -117,8 +107,7 @@ def main():
     # Un vocabulaire de statuts ABSENT se SIGNALE : sans lui l'espion ne peut
     # pas interroger la BDD, et un zero silencieux se lirait comme une BDD saine
     # (lecon L-100 : une reponse vide doit dire ce qu'elle a cherche).
-    domiciles = (("bdd-frictions", VOCABULAIRE_FRICTIONS),
-                 ("bdd-modifs", VOCABULAIRE_MODIFS))
+    domiciles = (("bdd-frictions", VOCABULAIRE_FRICTIONS),)
     manquants = [nom for nom, vocabulaire in domiciles if vocabulaire is None]
     if manquants:
         alertes.append("vocabulaire de statuts introuvable (domicile illisible ou deplace) : "
@@ -129,14 +118,14 @@ def main():
     actives = frictions_actives()
     if actives and actives > 0:
         alertes.append(f"frictions actives non qualifiees : {actives}")
-    for f, d in verrous():
-        alertes.append(f"verrou non libere : {f} (depuis {d})")
     if alertes:
         print(f"ACTIVITE : {len(alertes)} signalement(s) :")
         for a in alertes:
             print(f"  - {a}")
         return 1
-    print("Activite Optimus saine : file vide, 0 friction active, 0 verrou.")
+    print("Activite Optimus saine : file vide, 0 friction active.")
+    print("  verrous : notion RETIREE (EO-154) -- le domicile unique des"
+          " modifications (modifications-par-fichier.json) ne porte pas de verrou.")
     return 0
 
 

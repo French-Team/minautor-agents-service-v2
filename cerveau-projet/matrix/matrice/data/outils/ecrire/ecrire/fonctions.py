@@ -3,6 +3,7 @@
 Atomique, LF, .bak, SHA, validation, BDD-ready.
 """
 from commun import (
+    corriger_contenu,
     ecrire_atomique,
     lire_contenu_source,
     verifier_ascii,
@@ -10,7 +11,12 @@ from commun import (
 
 
 def executer_ecrire(fichier, contenu, contenu_fichier, mode):
-    """Execute l'ecriture. Retourne code 0/1/2."""
+    """Execute l'ecriture. Retourne code 0/1/2.
+
+    LE PASSAGE OBLIGE CORRIGE (MO-210) : la correction ASCII se fait AVANT
+    l'ecriture, avec la MEME carte que le scan de maintenance. L'agent n'est pas
+    parfait ; ce qu'il ecrit l'est -- et ce qui a ete corrige est DIT, jamais muet.
+    """
     try:
         texte_source = lire_contenu_source(contenu, contenu_fichier)
     except (FileNotFoundError, ValueError, OSError) as e:
@@ -19,6 +25,11 @@ def executer_ecrire(fichier, contenu, contenu_fichier, mode):
     except UnicodeDecodeError as e:
         print("REFUS : source non-UTF8 : " + str(e))
         return 1
+
+    texte_source, refus = corriger_contenu(texte_source)
+    if refus:
+        print(refus)
+        return 2
 
     code, sha_avant, sha_apres, bak_path, msg_val = ecrire_atomique(fichier, texte_source, mode)
 

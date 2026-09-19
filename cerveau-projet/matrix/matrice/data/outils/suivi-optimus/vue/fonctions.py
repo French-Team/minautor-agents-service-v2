@@ -376,7 +376,19 @@ def composer_vue(evenements, actions, attente_pilote=None):
     # Missions TRACEES (presentes) et missions FINIES (evenement `fin`).
     missions_tracees = {e.get("mission", "") for e in evenements if e.get("mission")}
 
+    # CARTE D'IDENTITE (MO-235) : depuis le deplacement, la vue vit dans
+    # `_operateur/optimus-prime/`, que le controle `verifier-cartes-identite`
+    # SCANNE -- un document sans carte y est un ECART. La carte est donc EMISE par
+    # le generateur : le fichier n'est jamais edite a la main, une carte posee a
+    # la main serait perdue a la regeneration suivante.
     lignes = [
+        "---",
+        "identite:",
+        "  type: journal",
+        "  appartient_a: optimus-prime",
+        "  commun: false",
+        "---",
+        "",
         "# Suivi d'optimus-prime (v3)",
         "",
         "",
@@ -388,7 +400,8 @@ def composer_vue(evenements, actions, attente_pilote=None):
         "",
         "> VISUEL GENERE depuis data/suivi-optimus.jsonl -- jamais edite a la main.",
         "> Regenerer : python3 matrice/data/outils/suivi-optimus/main.py vue",
-        "> Etancheite : le cameleon n'accede JAMAIS a cette trace (zone suivi-optimus).",
+        "> Etancheite : le cameleon n'accede JAMAIS a cette trace -- elle vit dans la zone privee",
+        "> _operateur/optimus-prime/ (invisible PAR CONSTRUCTION, MO-235).",
         "> optimus reste INVISIBLE de la Matrice : pas d'encart dans le journal",
         "> multi-encarts, SON fichier est la seule vue de son travail.",
         "",

@@ -48,8 +48,8 @@ def afficher_schema():
     print("Un filtre RETIRE : il ne peut pas ajouter de resultat.")
 
 
-def main():
-    """Point d'entree : sac a dos + dispatch."""
+def principal(arguments):
+    """Point d'entree notable : le sac a dos NOTE l'usage (bdd-usages), puis dispatch."""
     # Garde d'encodage (EO-105) : une console cp1252 ne doit JAMAIS faire echouer
     # la porte. La sortie machine est deja en ASCII pur ; ce garde couvre la
     # sortie humaine (un extrait de fichier peut porter un caractere exotique).
@@ -58,8 +58,6 @@ def main():
             flux.reconfigure(errors="replace")
         except (AttributeError, ValueError):
             pass
-
-    arguments = sys.argv[1:]
 
     # Sans argument : aide
     if not arguments:
@@ -98,4 +96,5 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    from sac_a_dos import envelopper
+    sys.exit(envelopper(principal, sys.argv[1:]))

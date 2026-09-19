@@ -899,7 +899,8 @@ def crier_mission_muette(mission, fichiers):
                "tracee -- le constat est ecrit au marbre (action decouverte).")
 
 
-def declarer_borne_marbre(mission, action, detail, fichiers=None, portes=None):
+def declarer_borne_marbre(mission, action, detail, fichiers=None, portes=None,
+                          si_absent=True):
     """Faire DECLARER au pilote les BORNES d'une mission (debut/fin) -- MO-108.
 
     Mesure du 2026-09-15 : MO-105 et MO-106 ont ete closes SANS fin au marbre --
@@ -923,13 +924,19 @@ def declarer_borne_marbre(mission, action, detail, fichiers=None, portes=None):
     QUOI.
 
     NON bloquant : l'echec de la trace ne tue JAMAIS une mission (on alerte).
+
+    `si_absent` (EO-190) : les BORNES (debut/fin) sont idempotentes -- le pilote
+    comble le trou, il ne double jamais. Un EVENEMENT qui se repete legitimement,
+    comme le report d'une mission parquee plusieurs fois, passe `si_absent=False` :
+    sinon la 2e declaration serait SAUTEE, et le garde de coherence lirait la
+    PREMIERE borne au lieu de la DERNIERE.
     """
     code, sortie = noter_journal(
         mission.get("id", ""),
         mission.get("theme", "") or THEME_DEFCON,
         action,
         detail,
-        si_absent=True,
+        si_absent=si_absent,
         fichiers=fichiers,
         portes=portes,
     )
@@ -1331,6 +1338,179 @@ def enregistrer_entonnoir_pilote(etat):
     os.replace(chemin_tmp, CHEMIN_ENTONNOIR)
 
 
+def valider_role_item(item, contexte):
+    """(code, role|message) : le role d'un item du brin doit etre un theme du vivier.
+
+    UNE SEULE copie de cette regle : elle est consommee par les DEUX versements (la
+    tete du brin et le brin ENTIER). Deux copies divergeraient (L-100/L-102, M-076)
+    -- et c'est precisement la regle qui a fabrique 4 missions refusees a
+    l'injection, reparees a la main (L-061/MO-076). `contexte` dit QUI parle dans le
+    refus (la tete, l'item k/n). Rend (0, role_canonique) ou (code, message).
+    """
+    item_id = item.get("id", "E-???")
+    role_brut = item.get(CHAMP_ROLE_ITEM, "")
+    if not role_brut:
+        return 1, (
+            "REFUS : " + contexte + " (" + item_id + ") est SANS ROLE "
+            "-- l'injection refuse un theme hors vivier. Repare-le a SA porte :\n"
+            "  python " + str(CHEMIN_ENTONNOIR.parent / "entonnoir" / "main.py")
+            + " retiqueter --id " + item_id + " --role <THEME du vivier>"
+        )
+    code_role, role = valider_theme(role_brut)
+    if code_role != 0:
+        return code_role, (
+            "REFUS : le role de " + contexte + " (" + item_id + ") n'est pas "
+            "un theme du vivier. Repare-le a SA porte :\n"
+            "  python " + str(CHEMIN_ENTONNOIR.parent / "entonnoir" / "main.py")
+            + " retiqueter --id " + item_id + " --role <THEME du vivier>"
+        )
+    return 0, role
+
+
+def mission_depuis_item(file_missions, item, role, nom_lot=None):
+    """Fabrique la mission d'un item du brin (forme PARTAGEE par les deux versements).
+
+    Une seule forme : la tete et le brin entier doivent produire des missions
+    STRICTEMENT identiques (theme=role, titre, objectif, type, source) -- deux
+    fabriques divergeraient en silence.
+    """
+    mission = {
+        "id": prochain_id(file_missions),
+        "theme": role,
+        CHAMP_TITRE_MISSION: item.get("theme", ""),
+        "objectif": item.get("objectif", ""),
+        "type": item.get("type", ""),
+        "statut": STATUT_EN_ATTENTE,
+        "chargee_le": horodater(),
+        "source": "entonnoir:" + item.get("id", "E-???") + ":" + item.get("type", "?") + "/" + item.get("categorie", "?") + ":" + item.get("urgence", "?"),
+    }
+    if nom_lot:
+        mission["lot"] = nom_lot
+    return mission
+
+
+def item_deja_servi(file_missions, item_id):
+    """L'item a-t-il DEJA donne une mission ? (EO-153, friction 83)
+
+    Une mission nee de l'entonnoir porte `source` = "entonnoir:<id>:...". Si une
+    mission de la FILE COURANTE nomme deja cet item, il a ete SERVI : le re-servir
+    ferait naitre un DOUBLON (MO-161, objectif identique a MO-160). On regarde la
+    file courante : une mission archivee a deja ete servie, et un item qu'elle
+    nomme ne peut plus etre dans le brin.
+    """
+    prefixe = "entonnoir:" + str(item_id)
+    for mission in file_missions.get("missions", []):
+        source = str(mission.get("source") or "")
+        if source == prefixe or source.startswith(prefixe + ":"):
+            return True
+    return False
+
+
+def consommer_item(item_id):
+    """CONSOMME un item NOMME : il quitte le brin, sa file-type et le vrac (EO-153).
+
+    Le chemin AUTOMATIQUE (verser_tresse / consommer_tete_tresse) consommait deja.
+    Une mission DECLAREE A LA MAIN, elle, ne le consommait PAS : EO-136 a servi a
+    declarer MO-160 sans quitter le brin, puis le pont l'a RE-SERVI (MO-161, meme
+    objectif). Ce verbe ferme le trou -- la naissance d'une mission LIE la
+    consommation de son item. Refuse un identifiant inconnu (brin, file ou vrac).
+    Retourne (code, message).
+    """
+    etat = charger_entonnoir_pilote()
+    identifiant = str(item_id)
+    dans_brin = any(str(i.get("id")) == identifiant for i in etat.get("brin", []))
+    dans_file = retirer_de_ses_files(etat, item_id)
+    avant_vrac = len(etat.get("vrac", []))
+    etat["vrac"] = [i for i in etat.get("vrac", []) if str(i.get("id")) != identifiant]
+    dans_vrac = len(etat["vrac"]) != avant_vrac
+    if not dans_brin and not dans_file and not dans_vrac:
+        return 1, "item inconnu (ni brin, ni file, ni vrac) : " + identifiant
+    etat["brin"] = [i for i in etat.get("brin", []) if str(i.get("id")) != identifiant]
+    enregistrer_entonnoir_pilote(etat)
+    return 0, "item consomme : " + identifiant + " (retire du brin, de sa file et du vrac)"
+
+
+def retirer_de_ses_files(etat, item_id):
+    """Retire un item consomme de SA file-type (sinon le prochain tisser le remet)."""
+    for missions_du_type in etat.get("files", {}).values():
+        for rang, m in enumerate(missions_du_type):
+            if m.get("id") == item_id:
+                del missions_du_type[rang]
+                return True
+    return False
+
+
+def verser_tresse(file_missions, nom_lot=None):
+    """Verse le BRIN ENTIER dans la file du pilote, d'un seul geste, en LOT (EO-148).
+
+    Le pont ne versait que la TETE (consommer_tete_tresse) : N items classes
+    demandaient N appels a la main, et le LOT -- qui transporte N missions
+    (charger --lot, mesure MO-160) -- n'etait JAMAIS alimente par le pont. Ici le
+    brin entier devient UN LOT : l'injection le numerote k/n et le retour est
+    CONSOLIDE (bilan_consolide).
+
+    ATOMICITE : les roles de TOUS les items sont valides AVANT le premier
+    versement. Un seul item sans role et RIEN n'est consomme -- sinon la moitie du
+    brin disparaitrait pour un refus sur l'autre moitie.
+    REFUS : mission deja en cours (serie stricte), brin vide, ou lot deja arme avec
+    des missions en attente (un lot courant ne se remplace pas en silence).
+    Retourne (code, message).
+    """
+    if mission_en_cours(file_missions) is not None:
+        return 1, "REFUS : une mission est deja en cours (serie stricte). Termine-la d'abord."
+    if ids_en_lot(file_missions) and prochaine_du_lot(file_missions) is not None:
+        return 1, "REFUS : un lot est deja arme et en attente -- termine-le avant d'en verser un autre."
+    etat = charger_entonnoir_pilote()
+    brin = etat.get("brin", [])
+    if not brin:
+        return 0, "Brin vide : rien a verser au pilote (python entonnoir/main.py tresse tisser pour recomposer)."
+    # EO-153 (idempotence) : un item DEJA SERVI ne repart pas. On regarde AVANT
+    # de valider les roles : un item deja servi n'a pas a etre juge, il a deja
+    # produit sa mission. Il quitte le brin et sa file, il est DIT.
+    deja_servis = [i for i in brin if item_deja_servi(file_missions, i.get("id"))]
+    if deja_servis:
+        ids_deja = {i.get("id") for i in deja_servis}
+        for item in deja_servis:
+            retirer_de_ses_files(etat, item.get("id"))
+        etat["brin"] = [i for i in brin if i.get("id") not in ids_deja]
+        enregistrer_entonnoir_pilote(etat)
+        brin = etat["brin"]
+        print("IDEMPOTENCE (EO-153) : " + str(len(deja_servis))
+              + " item(s) DEJA SERVI(S) retire(s), non repartis : "
+              + ", ".join(sorted(str(i) for i in ids_deja)))
+    if not brin:
+        return 0, "Brin : rien de neuf a verser (tous les items ont deja ete servis, EO-153)."
+    nom = nom_lot or ("brin-" + horodater().replace(" ", "-").replace(":", ""))
+    # 1) VALIDER TOUT avant de consommer QUOI QUE CE SOIT.
+    roles = []
+    for rang, item in enumerate(brin, 1):
+        code_role, role_ou_message = valider_role_item(
+            item, "l'item " + str(rang) + "/" + str(len(brin)) + " du brin"
+        )
+        if code_role != 0:
+            return code_role, role_ou_message
+        roles.append(role_ou_message)
+    # 2) VERSER : le brin entier devient UN LOT.
+    ids = []
+    consommes = []
+    for item, role in zip(brin, roles):
+        mission = mission_depuis_item(file_missions, item, role, nom)
+        file_missions.setdefault("missions", []).append(mission)
+        ids.append(mission["id"])
+        consommes.append(item.get("id", "E-???"))
+    armer_lot(file_missions, ids)
+    # 3) Les items verses quittent le brin ET leur file-type (sinon tisser les remet).
+    for item_id in consommes:
+        retirer_de_ses_files(etat, item_id)
+    etat["brin"] = [item for item in brin if item.get("id") not in set(consommes)]
+    enregistrer_file(file_missions)
+    enregistrer_entonnoir_pilote(etat)
+    return 0, (
+        "Brin ENTIER verse au pilote : LOT " + nom + " = " + str(len(ids))
+        + " missions (" + ", ".join(ids) + "). Reste au brin : " + str(len(etat["brin"])) + "."
+    )
+
+
 def consommer_tete_tresse(file_missions):
     """Verse la TETE du brin dans la file du pilote (echelon 4 -> serie stricte).
 
@@ -1344,6 +1524,17 @@ def consommer_tete_tresse(file_missions):
     brin = etat.get("brin", [])
     if not brin:
         return 0, "Brin vide : rien a verser au pilote (python entonnoir/main.py tresse tisser pour recomposer)."
+    # EO-153 (idempotence) : une TETE deja servie ne repart pas -- on la retire et
+    # on AVANCE jusqu'a une tete neuve (ou le brin vide). Sans cela, un item qui a
+    # deja produit une mission renaitrait a l'identique (MO-161, friction 83).
+    while brin and item_deja_servi(file_missions, brin[0].get("id")):
+        retire = brin.pop(0)
+        retirer_de_ses_files(etat, retire.get("id"))
+        print("IDEMPOTENCE (EO-153) : item " + str(retire.get("id"))
+              + " DEJA SERVI -- retire, non reparti.")
+    if not brin:
+        enregistrer_entonnoir_pilote(etat)
+        return 0, "Brin vide apres retrait des items deja servis (EO-153)."
     # ROLE (L-061 / MO-076) : la tete du brin porte DEUX champs -- son TITRE
     # (item "theme", texte libre) et son ROLE (item "role", champ FERME du
     # vivier). C'est le ROLE qui devient le `theme` de la mission ; le titre est
@@ -1352,39 +1543,13 @@ def consommer_tete_tresse(file_missions):
     # mesures). La tete n'est PAS consommee si le role manque : on la VOIT, on la
     # repare a SA porte, elle repart.
     tete = brin[0]
-    role_brut = tete.get(CHAMP_ROLE_ITEM, "")
-    if not role_brut:
-        return 1, (
-            "REFUS : la tete du brin (" + tete.get("id", "E-???") + ") est SANS ROLE "
-            "-- l'injection refuse un theme hors vivier. Repare-la a SA porte :\n"
-            "  python " + str(CHEMIN_ENTONNOIR.parent / "entonnoir" / "main.py")
-            + " retiqueter --id " + tete.get("id", "EO-XXX") + " --role <THEME du vivier>"
-        )
-    code_role, role = valider_theme(role_brut)
+    code_role, role = valider_role_item(tete, "la tete du brin")
     if code_role != 0:
-        return code_role, (
-            "REFUS : le role de la tete du brin (" + tete.get("id", "E-???") + ") n'est pas "
-            "un theme du vivier. Repare-la a SA porte :\n"
-            "  python " + str(CHEMIN_ENTONNOIR.parent / "entonnoir" / "main.py")
-            + " retiqueter --id " + tete.get("id", "EO-XXX") + " --role <THEME du vivier>"
-        )
+        return code_role, role
     tete_consommee = brin.pop(0)
-    mission = {
-        "id": prochain_id(file_missions),
-        "theme": role,
-        CHAMP_TITRE_MISSION: tete_consommee.get("theme", ""),
-        "objectif": tete_consommee.get("objectif", ""),
-        "type": tete_consommee.get("type", ""),
-        "statut": STATUT_EN_ATTENTE,
-        "chargee_le": horodater(),
-        "source": "entonnoir:" + tete_consommee.get("id", "E-???") + ":" + tete_consommee.get("type", "?") + "/" + tete_consommee.get("categorie", "?") + ":" + tete_consommee.get("urgence", "?"),
-    }
+    mission = mission_depuis_item(file_missions, tete_consommee, role)
     file_missions.setdefault("missions", []).append(mission)
-    for missions_du_type in etat.get("files", {}).values():
-        for rang, m in enumerate(missions_du_type):
-            if m.get("id") == tete.get("id"):
-                del missions_du_type[rang]
-                break
+    retirer_de_ses_files(etat, tete.get("id"))
     enregistrer_file(file_missions)
     enregistrer_entonnoir_pilote(etat)
     return 0, (

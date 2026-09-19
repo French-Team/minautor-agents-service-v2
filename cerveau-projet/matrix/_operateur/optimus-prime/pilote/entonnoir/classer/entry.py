@@ -2,6 +2,7 @@
 
 Interface entre main.py et les fonctions simples (classer/fonctions.py).
 """
+from listes import CHAMP_TYPE_PROPOSE, CHAMP_TYPE_SOURCE, TYPES
 from stockage import charger_entonnoir, enregistrer_entonnoir
 from classer.fonctions import classer_mission
 
@@ -14,13 +15,46 @@ def extraire_options(arguments, noms_connus):
 
 NOMS_OPTIONS = ("id", "type", "categorie", "role")
 
+ORIGINE_INCONNUE = "inconnue (item anterieur au champ type_source)"
+
+
+def _type_porte(etat, identifiant):
+    """Rend (code, type, origine, message) pour le type que l ITEM PORTE.
+
+    code 0 = type trouve (message vide) ; 1 = rien a faire (deja classe, inconnu) ;
+    2 = refus DIRECTIONNEL (l item ne porte aucun type : le geste est nomme).
+    """
+    for mission in etat.get("vrac", []):
+        if mission.get("id") == identifiant:
+            type_porte = (mission.get(CHAMP_TYPE_PROPOSE) or "").strip()
+            origine = mission.get(CHAMP_TYPE_SOURCE) or ORIGINE_INCONNUE
+            if not type_porte:
+                return 2, "", "", (
+                    "Aucun type pour " + identifiant + " : l item n en porte AUCUN.\n"
+                    "  Donne-le :  python main.py classer --id " + identifiant
+                    + " --type <" + "|".join(TYPES) + ">")
+            return 0, type_porte, origine, ""
+    # Pas au vrac : DIRE pourquoi -- un item DEJA CLASSE n est pas un item inconnu
+    # (deux pannes differentes ne doivent pas porter le meme message).
+    for type_file, missions in (etat.get("files") or {}).items():
+        for mission in missions:
+            if mission.get("id") == identifiant:
+                return 1, "", "", (
+                    "Mission " + identifiant + " est DEJA classee (file " + type_file
+                    + ", categorie " + str(mission.get("categorie"))
+                    + ") : rien a faire. Pour REPARER une etiquette (categorie et/ou role) : "
+                    "python main.py retiqueter --id " + identifiant
+                    + " [--categorie <nom>] [--role <THEME>]")
+    return 1, "", "", ("Mission inconnue : " + identifiant
+                       + " (ni au vrac, ni dans une file).")
+
 
 def executer(arguments):
     options = extraire_options(arguments, NOMS_OPTIONS)
     identifiant = options.get("id", "")
-    type_cible = options.get("type", "")
-    if not identifiant or not type_cible:
-        print('Usage : python main.py classer --id EO-XXX --type <dev|reparation|doc|audit|revision> [--categorie <nom>] [--role THEME]')
+    if not identifiant:
+        print("Usage : python main.py classer --id EO-XXX [--type <dev|reparation|doc|audit|revision>] [--categorie <nom>] [--role THEME]")
+        print("  Sans --type, le classement CONSOMME le type que l item PORTE (R5) et DIT son origine.")
         return 2
 
     categorie = options.get("categorie", "")
@@ -29,6 +63,18 @@ def executer(arguments):
     # table est IMPRIME, donc toujours confirme ou corrige a la lecture.
     role = options.get("role", "")
     etat = charger_entonnoir()
+    type_cible = (options.get("type") or "").strip()
+    if not type_cible:
+        # R5 RENDU VRAI (EO-192, decision createur 2026-09-19) : le classement
+        # CONSOMME le type de l item au lieu de le re-deviner. C est le
+        # DECLENCHEUR SUR DEMANDE -- UNE commande suffit a sortir un item du vrac.
+        # L ORIGINE est IMPRIMEE : reprendre une identite sans dire d ou elle vient
+        # serait un mensonge de forme.
+        code, type_cible, origine, refus = _type_porte(etat, identifiant)
+        if code != 0:
+            print(refus)
+            return code
+        print("Type CONSOMME (R5) : " + type_cible + " -- origine : " + origine)
     code, message = classer_mission(etat, identifiant, type_cible, categorie, role)
     if code == 0:
         enregistrer_entonnoir(etat)

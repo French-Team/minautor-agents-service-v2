@@ -17,7 +17,15 @@ CONTRAT (identiquement celui de la porte ecrire, EO-156) :
   4. les DRAPEAUX (options sans valeur par nature : json, recursif, prive,
      verbose, integration, etat...) sont DECLARES par l appelant, valent "1" et
      restent PRESENTS -- un drapeau reste une option presente, c est la valeur
-     qui manque.
+     qui manque ;
+  5. un morceau qui a la FORME d une option (--xxx) SANS en etre une n est
+     JAMAIS avale en silence : il est INSCRIT sous CLE_INCONNUES, a charge pour
+     l appelant de le DIRE (EO-179). Avant, il etait simplement SAUTE : l appel
+     obtenait le resultat du DEFAUT, indiscernable d un resultat correct -- et
+     une limite muette se lit comme un FAIT (L-055, friction 77).
+     LIMITE DITE : seuls les morceaux qui COMMENCENT par -- sont retenus -- un
+     argument nu peut etre du texte libre legitime, et le declarer inconnu
+     fabriquerait des faux positifs. Le parseur ne devine pas, il SIGNALE.
 
 MODE sans_tirets (mesure MO-171 : deux outils nomment leurs options sans tirets
 de tete, un autre les prefixe) : le nom est reconnu par lstrip("-"), et c est la
@@ -29,6 +37,10 @@ ambigue -- hors mode, une valeur a tirets inconnue reste une valeur, toujours.
 # Sentinelle des options privees de valeur : le parseur ne pose JAMAIS "" a la
 # place de l appelant -- une option videe en silence se lit "pas de contenu".
 CLE_SANS_VALEUR = "__sans_valeur__"
+# Sentinelle des morceaux qui ONT LA FORME d une option SANS en etre une
+# (EO-179, 2026-09-19) : le parseur ne les avale plus en silence -- c est
+# l APPELANT qui decide de les DIRE (les ignorer en le disant, ou REFUSER).
+CLE_INCONNUES = "__inconnues__"
 VALEUR_DRAPEAU = "1"
 
 
@@ -51,10 +63,17 @@ def extraire_options(arguments, noms_connus, drapeaux=(), sans_tirets=False):
     """
     options = {}
     sans_valeur = []
+    inconnues = []
     index = 0
     while index < len(arguments):
         nom = _nom_option(arguments[index], noms_connus, sans_tirets)
         if nom is None:
+            # EO-179 : un morceau qui a la FORME d une option sans en etre une
+            # est RETENU, jamais avale en silence. Un argument NU ne l est pas :
+            # il peut etre du texte libre legitime -- le parseur ne devine pas,
+            # il signale, et l appelant decide (signaler_inconnues).
+            if arguments[index].startswith("--"):
+                inconnues.append(arguments[index])
             index += 1
             continue
         if nom in drapeaux:
@@ -71,4 +90,36 @@ def extraire_options(arguments, noms_connus, drapeaux=(), sans_tirets=False):
             index += 1
     if sans_valeur:
         options[CLE_SANS_VALEUR] = sans_valeur
+    if inconnues:
+        options[CLE_INCONNUES] = inconnues
     return options
+
+
+def signaler_inconnues(options, outil, noms_connus, usage="", refuser=True):
+    """DIT les morceaux qui ont la FORME d une option sans en etre une (EO-179).
+
+    Le parseur SIGNALE (CLE_INCONNUES), il ne juge pas :
+      - un outil dont TOUS les arguments sont des options REFUSE (defaut) :
+        c est la suite silencieuse qui mentait -- l appel obtenait le resultat
+        du DEFAUT, indiscernable d un resultat correct ;
+      - un appel qui accepte des arguments LIBRES les ignore, mais en le DISANT
+        (`refuser=False`) : taire une inconnue serait retomber dans le defaut.
+
+    Rend 2 quand il y a des inconnues ET que le refus est demande, 0 sinon :
+    l appelant retourne ce code tel quel.
+    """
+    inconnues = list(options.get(CLE_INCONNUES) or [])
+    if not inconnues:
+        return 0
+    print("OPTION INCONNUE : " + ", ".join(inconnues) + "  (outil : " + outil + ")")
+    print("  options reconnues : " + ", ".join(sorted(noms_connus)))
+    if usage:
+        print("  " + usage)
+    if refuser:
+        print("  REFUS : une option inconnue n est jamais ignoree en silence --"
+              " sans ce refus, l appel obtenait le resultat du DEFAUT,"
+              " indiscernable d un resultat correct (EO-179).")
+        return 2
+    print("  (l option est IGNOREE, et c est DIT : cet appel accepte des"
+          " arguments libres)")
+    return 0

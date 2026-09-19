@@ -339,3 +339,8 @@
 {"type": "demarrage", "intervalle": 900, "date": "2026-09-15 19:18:08"}
 {"type": "arret", "motif": "drapeau", "date": "2026-09-15 19:26:54"}
 {"type": "demarrage", "intervalle": 900, "date": "2026-09-15 19:26:58"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-19 08:04:04"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-19 08:23:48"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-19 08:24:39"}
+{"type": "arret", "motif": "drapeau", "date": "2026-09-19 08:52:50"}
+{"type": "demarrage", "intervalle": 900, "date": "2026-09-19 08:53:43"}

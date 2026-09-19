@@ -58,6 +58,7 @@ REFUS_HORS_PERIMETRE = "REFUS 4 (zone hors perimetre -- SIGNALE)"
 REFUS_DEJA_ARCHIVE = "REFUS 5 (deja archive -- idempotence)"
 # --- LES PROTECTIONS STRUCTURELLES DU PLAN ---------------------------------
 REFUS_SANS_DECISION = "REFUS (element sans decision : statut decide + verdict archiver attendus)"
+REFUS_SANS_LECTEUR = "REFUS (element sans LECTEUR recense -- plan-conservation section 5)"
 REFUS_POINT_INTROUVABLE = "REFUS (point de restauration introuvable sur le disque)"
 REFUS_DESTINATION_OCCUPEE = "REFUS (destination occupee par un contenu different)"
 
@@ -232,6 +233,16 @@ def controler(entree, donnees, depart):
         return REFUS_SANS_DECISION, (
             "statut=" + str(entree.get("statut")) + ", verdict=" + str(entree.get("verdict"))
         )
+
+    # PROTECTION DU PLAN section 5 (volet 1 de la friction 88, MO-192) -- jamais
+    # d'archivage d'un element SANS LECTEUR RECENSE : une archive qu'aucun
+    # lecteur connu ne reference est une disparition silencieuse, et le plan
+    # (plan-conservation, section 5) l'INTERDIT. Ce refus MANQUAIT : la
+    # contre-analyse MO-156 (5 refus de rotation) ne l'avait pas ecarte -- il
+    # n'avait simplement jamais ete ecrit. Meme ordre : APRES la decision
+    # (rien ne bouge sans verdict), AVANT de toucher au disque.
+    if not entree.get("lecteurs"):
+        return REFUS_SANS_LECTEUR, "aucun lecteur recense (plan-conservation section 5)"
 
     # REFUS 3 -- la FORME : ce qui n'est pas un point de restauration se SIGNALE.
     motif = motif_forme()

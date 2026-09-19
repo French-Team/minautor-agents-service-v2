@@ -1,6 +1,6 @@
 {
   "signature": "2fcc39db9e5b5dcd6f11198bb37157945e58b1893a2097ff5610c592a338b9b7",
-  "alerte_le": "2026-09-18 08:58:45",
+  "alerte_le": "2026-09-19 13:56:36",
   "alertes": [
     {
       "cle": "verbe:domicilier:plans",
@@ -45,7 +45,7 @@
     {
       "cle": "refus:lire",
       "niveau": "moyenne",
-      "detail": "mal utilisee : 12 refus (code 2) sur 23 appel(s) en 30 jours"
+      "detail": "mal utilisee : 19 refus (code 2) sur 31 appel(s) en 30 jours"
     }
   ]
 }

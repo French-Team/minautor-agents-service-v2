@@ -45,6 +45,10 @@ et separee du code.
 |---|---|
 | `README.md` | ce fichier (doctrine) |
 | `journal-preparation.md` | discussion brute datee (INVENTAIRE / CIBLES / SERIE) -- jamais de code |
+| `spec-chaine-pense-bete.md` | SPEC de la chaine pense-bete -> spec -> todo-list (EO-200 / MO-220) : proposition, aucun code avant GO |
+| `chaine-*.md` | les OBJETS de la chaine (EO-215 / MO-224) : un document a NOM STABLE, son ETAPE dans sa carte, pose par la porte `chaine-pense-bete` |
+| `index-chaine.md` | INDEX du domicile : une ligne par objet (id, etape, titre, fichier) -- tenu a jour par la porte, jamais a la main |
+| `chaine-compteurs.json` | compteurs des trois familles d'ids (PB / SP / TD) |
 | `../parcours/themes/theme-preparation.json` | parcours officiel (5 cases, fin-persistant) |
 
 ## Regles

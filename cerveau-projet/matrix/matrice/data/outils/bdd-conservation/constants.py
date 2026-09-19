@@ -22,7 +22,7 @@ STATUTS = (
     "repare", "dette", "signale", "restaure",
 )
 VERDICTS = ("conserver", "archiver", "reparer", "dette", "signaler")
-OPERATIONS = ("proposer", "classer", "decider", "preciser", "rejuger", "manifester",
+OPERATIONS = ("proposer", "classer", "decider", "preciser", "recenser", "rejuger", "manifester",
               "archiver", "restaurer")
 
 ENCODAGE = "utf-8"
@@ -47,7 +47,12 @@ NOM_MANIFESTE = "manifeste-archives.jsonl"
 NOM_TEMOIN = "temoin-avant.json"
 # La zone JETABLE du voisin (Flux 1) : un point qui s'y trouve est HORS
 # PERIMETRE et se SIGNALE (regle immuable perimetre-tmp, point 1).
-ZONES_CAMELEON = ("tmp-cameleon",)
+# Zone DECLAREE du cameleon : depuis la regle R-005 (MO-189) elle vit HORS de
+# la Matrice (workspace/tmp-cameleon), donc l'archiveur -- qui balaie matrix/ --
+# ne la rencontre plus EN SERVICE. Le critere n'est pas mort pour autant : il
+# sert encore les chemins en MIROIR des archives (purification/archives/...), ou
+# la zone apparait toujours. Un critere qui ne juge plus rien doit le DIRE.
+ZONES_CAMELEON = ('tmp-cameleon',)
 # La FORME du point de restauration a UN domicile : la porte qui le PRODUIT
 # (`data/outils/ecrire/constants.py`). Cette porte la CONSOMME -- elle ne la
 # recopie jamais (M-076 ; friction 42).

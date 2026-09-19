@@ -1,0 +1,129 @@
+---
+identite:
+  type: chaine
+  appartient_a: optimus-prime
+  commun: false
+  titre: Doctrine de la chaine
+  statut: spec
+  pense-bete: PB-001
+  nemesis: proto-4, 3 axes, 5 constats (2026-09-19, MO-225)
+  spec: SP-001
+---
+
+# Doctrine de la chaine
+
+## Pense-bete -- la demande clarifiee
+
+L'auto-validation est OUVERTE aux types dev, doc, audit et revision (decision createur
+du 2026-09-19, prise pendant MO-220). MO-203 avait fige l'inverse : seules les
+reparations s'enchaineaient. Ce que je dois obtenir : que l'axe serie de l'evaluateur
+cesse de voter CONTRE du seul fait du TYPE, sans que l'exigence de PREUVE ni la
+REVERSIBILITE ne s'affaissent.
+
+## Ce qui est deja mesure
+
+- La decision existe et elle est ecrite : spec-chaine-pense-bete.md, section 13.
+- Le lieu du vote est connu : l'evaluateur d'auto-validation de l'entonnoir, et la
+  liste des types auto-valides declarente dans constants.py (mesure MO-175/176 : deux
+  listes qui doivent dire la MEME chose, un controle les compare deja).
+- MO-203 a fige l'etroit : le type, a lui seul, suffisait a refuser.
+
+## Ce qui reste a mesurer
+
+- Combien d'items du vrac et des files rendent non AUJOURD'HUI du seul fait de leur
+  type, et combien rendraient auto si l'axe serie cessait de voter contre : le chiffre
+  n'est pas mesure.
+- Ce que la liste ouverte fait aux items d'audit et de revision, qui ne touchent aucun
+  fichier : l'axe perimetre n'a rien a y dire et personne ne l'a verifie.
+
+## Spec -- ce que la doctrine pose
+
+### La decision, en une phrase
+
+Un item dont le TYPE est dev, doc, audit ou revision peut s'auto-valider : l'axe serie
+cesse de voter CONTRE du seul fait du type. L'exigence de PREUVE et la REVERSIBILITE
+restent entieres -- elles, elles continuent de voter.
+
+### Ce qui change, exactement
+
+- L'axe serie lit la liste OUVERTE des types : il vote CONTRE pour un type qui n'y est
+  pas, et ne vote plus contre du seul fait qu'un item est dev, doc, audit ou revision.
+- La liste ouverte est DECLAREE a UN SEUL domicile (zero-valeur-en-dur) : la meme liste
+  ne peut pas vivre a deux endroits, sinon elle divergera -- c'est deja arrive
+  (MO-175 jambe 3), et le controle qui compare les deux listes en est ne.
+
+### Ce qui ne change PAS
+
+- Sans PREUVE exigee et declaree dans l'item, le verdict reste non.
+- Sans REVERSIBILITE, le verdict reste non.
+- Un perimetre non sain (chemin hors Matrice, fichier protege) reste non.
+- Le CRITIQUE reste au createur : une fiche, une regle immuable, un protocole ne
+  s'auto-valident jamais.
+
+### Preuves attendues
+
+1. Un item dev, avec preuve exigee et perimetre sain, rend auto.
+2. Un item sans preuve rend non.
+3. Contre-temoin (le temoin qui compte) : l'ANCIEN verdict, rejoue sur le MEME item,
+   doit dire non -- sans lui, on ne sait pas que c'est le changement qui a fait basculer.
+4. La liste ouverte dit la MEME chose a ses deux lecteurs (comparaison mecanique).
+
+### Ce qui reste au createur
+
+- La liste ouverte elle-meme : est-ce exactement dev, doc, audit, revision ?
+- Le sort des items d'audit et de revision qui ne touchent aucun fichier : l'axe
+  perimetre n'a rien a y dire, et l'auto-validation y perd-elle son sens ?
+
+## CONTRE-ANALYSE -- passage NEMESIS (proto-4, 3 axes, 2026-09-19, MO-225)
+
+Forme : Oui, MAIS... et pour eviter ce risque, voici l'amelioration necessaire.
+
+### Axe 1 -- cas limites (edge cases)
+
+- N1 : Oui, un dev avec preuve peut s'auto-valider ; MAIS le cas limite est l'item qui
+  DECLARE une preuve exigee et n'en fournit aucune au moment du verdict. Risque : le
+  verdict tombe auto sur une promesse, et preuve exigee se lit comme un fait.
+  Amelioration : le verdict rend non quand la preuve est EXIGEE mais ABSENTE du corps de
+  l'item -- la declaration n'est pas la preuve.
+- N2 : Oui, la liste ouverte sera lue par l'evaluateur ; MAIS un item dont l'objectif
+  touche une fiche, une regle immuable ou un protocole reste CRITIQUE, quel que soit son
+  type. Risque : un dev qui touche une regle immuable s'enchainerait sans le createur.
+  Amelioration : un garde sur les CHEMINS critiques, en plus de la liste des types.
+
+### Axe 2 -- optimisation
+
+- N3 : Oui, l'axe serie change de regle ; MAIS deux listes de types voudraient dire deux
+  verites, avec une divergence silencieuse a la cle (le projet a deja paye ce defaut).
+  Amelioration : UN SEUL domicile pour la liste ouverte, lu par l'evaluateur ET par le
+  controle qui compare deja les deux listes.
+
+### Axe 3 -- securite / integrite
+
+- N4 : Oui, un item auto-valide peut s'enchainer ; MAIS enchainer sans temoin ouvre la
+  porte a un item qui ecrit hors de sa zone ou modifie son propre item d'entree.
+  Amelioration : l'axe perimetre garde son veto, la reversibilite (point de restauration)
+  reste exigee, et le verdict est TRACE.
+- N5 : Oui, le verdict auto enchaine sans redemander ; MAIS une auto-validation muette se
+  lirait comme une reussite. Amelioration : le verdict DIT pourquoi il est auto (type,
+  preuve, perimetre) -- trois faits nommes, jamais un feu vert anonyme.
+
+### Effet du passage
+
+La spec sort renforcee : trois exigences s'y ajoutent (preuve ABSENTE = non ; garde des
+chemins critiques ; un seul domicile pour la liste). Elles entrent dans la todo-list
+ci-dessous comme des items a part entiere.
+
+## TODO -- ce que je fais, dans l'ordre
+
+1. MESURER l'etat actuel : combien d'items du vrac et des files rendent non du SEUL fait
+   de leur type (le chiffre, pas l'intuition), et ou vivent les deux listes de types.
+2. DECLARER la liste ouverte a UN SEUL domicile, et faire lire ce domicile par
+   l'evaluateur et par le controle de comparaison (N3).
+3. POSER l'axe serie sur la liste ouverte : vote CONTRE hors liste, plus de vote contre du
+   seul fait du type.
+4. POSER N1 : preuve EXIGEE et ABSENTE = non.
+5. POSER N2 : garde des CHEMINS critiques, quel que soit le type.
+6. POSER N4 et N5 : perimetre et reversibilite conservees, et le verdict DIT pourquoi.
+7. PROUVER : item dev avec preuve rend auto ; item sans preuve rend non ; CONTRE-TEMOIN,
+   l'ancien verdict rejoue sur le MEME item rend non ; la comparaison des listes dit la
+   MEME chose des deux cotes.

@@ -16,12 +16,23 @@ Controle les problemes FONDAMENTAUX (imperatif 24) :
     insertions  -- B-2 : la fabrique de sys.path.insert/append est surveillee
     prefixes    -- une famille d'ids = UN prefixe, jamais partage (revue CV-009/CV-011)
                    ET aucun prefixe ATTRIBUE en dur dans le code (fabrique de l'id)
+    prefixes-en-dur -- aucun prefixe d'id ATTRIBUE en dur dans le code
+    jumeaux     -- deux domiciles declarent le MEME litteral : une divergence
+                   COMPILE et change le SENS (c'est ce qui a fait tomber l'avis
+                   d'auto-validation a NON), donc le cobaye eprouve CHAQUE jumeau
+                   declare PAR SON NOM (MO-175, etendu MO-176)
     crochets    -- la liste FERMEE des crochets et sa convention
                    disent la MEME chose (deux sens), et un crochet qui
                    part a l'entonnoir declare un type de la liste TYPES
-    appels      -- aucun nom APPELE n'est orphelin (import manquant =
+    appels-non-lies -- aucun nom APPELE n'est orphelin (import manquant =
                    NameError a l execution : py_compile ne le voit pas)
-    tout        -- les dix + verdict
+    miroirs     -- les DEUX PILOTES (cameleon et Optimus) declarent la MEME chose :
+                   deux flux ISOLES ne peuvent PAS partager un domicile, donc c'est
+                   la RELATION qui est controlee -- un litteral declare des deux
+                   cotes porte la meme valeur, SAUF liberte declaree avec sa raison,
+                   et le vocabulaire partage (TYPES, URGENCES) est exige des DEUX
+                   cotes. Ce qui n'est pas comparable est CHIFFRE et DIT (MO-230)
+    tout        -- les treize + verdict
 
 Les controles `resolution` et `insertions` sont le PAS 1 du chantier natif
 (fiche I-00, controle B -- garde de resolution). Ils lisent le CODE (AST),
@@ -33,7 +44,7 @@ Il SIGNALE, il ne repare jamais (doctrine de l'espion).
 code 0 = conforme, code 1 = ecart(s) detecte(s).
 
 Usage:
-    python verifier-contrat-fondamental.py <chemins|noms|flags|collisions|imports|resolution|insertions|prefixes|crochets|jumeaux|tout> [options]
+    python verifier-contrat-fondamental.py <chemins|noms|flags|collisions|imports|resolution|insertions|prefixes|prefixes-en-dur|jumeaux|miroirs|crochets|appels-non-lies|tout> [options]
     python verifier-contrat-fondamental.py tout --strict   (parents[N] bloquant)
     python verifier-contrat-fondamental.py resolution --perimetre matrice/data/commun
 """
@@ -742,15 +753,45 @@ def controler_insertions(racine, perimetre=None):
 #    VALEUR_AUTO_VALIDATION face a VERDICT_AUTO) -- aucun automatisme ne peut
 #    les voir : cette liste est un PERIMETRE A MAINTENIR (un jumeau non declare
 #    reste invisible, comme une copie non listee dans un plan).
-PAIRE_JUMELLE = ("pilote/constants.py", "pilote/entonnoir/listes.py")
-NOMS_JUMEAUX_DECLARES = (
-    ("CHAMP_AUTO_VALIDATION", "champ ecrit par le pilote, relu par l entonnoir"),
-    ("CLE_AUTO_VALIDEES", "index auto-valide : ecrit par l entonnoir, lu par le pilote"),
-    ("NOM_ENTONNOIR", "le nom du fichier d etat, lu par les deux"),
-)
-COUPLES_DECLARES = (
-    ("VALEUR_AUTO_VALIDATION", "VERDICT_AUTO",
-     "la valeur du verdict auto : ecrite par le pilote, relue par l entonnoir"),
+# Un DOMICILE DE JUMEAUX : c est UNE LIGNE, jamais un chemin code a la main.
+# (etiquette, zone relative a la racine, paire de fichiers, noms jumeaux declares,
+# couples declares). Le CONTROLE et son COBAYE derivent BOTH de cette liste :
+# ajouter un flanc = ajouter une entree, aucun autre geste.
+#
+# MESURE 2026-09-19 (MO-233) : le registre ne portait que le flanc `optimus`, donc
+# le couple INTRA-CAMELEON etait surveille NULLE PART -- et le cameleon n a aucun
+# controle equivalent de son cote (audit MO-231). Les DEUX couples cameleon sont
+# desormais declares ; mesure avant declaration : `TYPES` et `NOM_ENTONNOIR`
+# portent DEJA la meme valeur des deux cotes (mesure : TYPES = (dev, reparation,
+# doc, audit, revision) ; NOM_ENTONNOIR = entonnoir-files.json). Les declarer ne
+# cree donc AUCUNE fausse alerte -- il rend leur divergence impossible a ignorer.
+JUMEAUX_PAR_DOMICILE = (
+    ("optimus",
+     ("_operateur", "optimus-prime"),
+     ("pilote/constants.py", "pilote/entonnoir/listes.py"),
+     (
+         ("CHAMP_AUTO_VALIDATION", "champ ecrit par le pilote, relu par l entonnoir"),
+         ("CLE_AUTO_VALIDEES", "index auto-valide : ecrit par l entonnoir, lu par le pilote"),
+         ("NOM_ENTONNOIR", "le nom du fichier d etat, lu par les deux"),
+     ),
+     (
+         ("VALEUR_AUTO_VALIDATION", "VERDICT_AUTO",
+          "la valeur du verdict auto : ecrite par le pilote, relue par l entonnoir"),
+     )),
+    ("cameleon-entonnoir",
+     ("matrice",),
+     ("pilote/constants.py", "pilote/entonnoir/listes.py"),
+     (
+         ("NOM_ENTONNOIR", "le nom du fichier d etat, lu par les deux"),
+     ),
+     ()),
+    ("cameleon-checklist",
+     ("matrice",),
+     ("pilote/entonnoir/listes.py", "pilote/checklist/listes.py"),
+     (
+         ("TYPES", "la liste fermee des types : l entonnoir REFUSE un depot hors liste, la checklist s en sert"),
+     ),
+     ()),
 )
 
 
@@ -775,14 +816,16 @@ def charger_fabrique():
     module = importlib.util.module_from_spec(specification)
     specification.loader.exec_module(module)
     return module
-def comparer_jumeaux(gauche, droite, noms_gauche, noms_droite):
+def comparer_jumeaux(gauche, droite, noms_gauche, noms_droite, noms_declares, couples_declares):
     """DECISION PURE (testable sans disque) : les litteraux jumeaux divergent-ils ?
 
     Rend la liste des ECARTS, chacun NOMME avec sa valeur ET sa ligne : un verdict
-    muet ne dit rien a reparer.
+    muet ne dit rien a reparer. Le PERIMETRE DECLARE (noms jumeaux, couples) est un
+    PARAMETRE : il vient du registre JUMEAUX_PAR_DOMICILE, jamais d un global -- un
+    flanc ajoute au registre est ainsi compare ET eprouve sans autre geste.
     """
     ecarts = []
-    for nom, pourquoi in NOMS_JUMEAUX_DECLARES:
+    for nom, pourquoi in noms_declares:
         manquants = [cote for cote, table in ((noms_gauche, gauche), (noms_droite, droite))
                      if nom not in table]
         if manquants:
@@ -795,7 +838,7 @@ def comparer_jumeaux(gauche, droite, noms_gauche, noms_droite):
             ecarts.append(nom + " DIVERGE : " + noms_gauche + ":" + str(ligne_g)
                           + " = " + repr(valeur_g) + " MAIS " + noms_droite + ":"
                           + str(ligne_d) + " = " + repr(valeur_d))
-    for nom_g, nom_d, pourquoi in COUPLES_DECLARES:
+    for nom_g, nom_d, pourquoi in couples_declares:
         if nom_g not in gauche or nom_d not in droite:
             ecarts.append(nom_g + " / " + nom_d + " : couple declare (" + pourquoi
                           + ") mais ABSENT d un des deux domiciles")
@@ -814,8 +857,12 @@ def comparer_jumeaux(gauche, droite, noms_gauche, noms_droite):
 # detecteur jamais eprouve ne prouve rien). Le piege est donc rejoue a CHAQUE
 # execution, et non plus prouve une seule fois dans un compte-rendu :
 #   - UNE epreuve NOMINALE doit PASSER (aucune fausse alerte) ;
-#   - TROIS PIEGES doivent ACCUSER : divergence par NOM, divergence d un COUPLE
-#     declare, et jumeau declare ABSENT de l un des deux domiciles.
+#   - CHAQUE jumeau declare et CHAQUE couple declare sont eprouves PAR LEUR NOM,
+#     dans les DEUX genres (valeur divergente, declaration RETIREE) : le perimetre
+#     declare est ainsi eprouve EN ENTIER, jamais par un seul exemple (mesure
+#     MO-176 : CLE_AUTO_VALIDEES etait compare mais JAMAIS eprouve, le cobaye ne
+#     jouant que le PREMIER jumeau declare -- un nom declare sans epreuve peut
+#     disparaitre d un cote sans que rien ne le dise).
 # Une epreuve n est OK que si l ecart NOMME la chose visee : un ecart quelconque
 # ne prouve pas que la bonne regle a parle.
 #
@@ -827,19 +874,31 @@ PREFIXE_COBAYE_JUMEAUX = "garde-jumeaux-"
 FABRIQUE_RELATIVE = ("matrice", "data", "commun", "cobayes_jetables.py")
 
 
-def jouer_epreuve_jumeaux(fabrique, zone, dossier, nom_cible, genre, fragment_attendu, accuse):
+def jouer_epreuve_jumeaux(fabrique, zone, dossier, etiquette, paire, noms_declares,
+                          couples_declares, nom_cible, genre, fragment_attendu, accuse):
     """Joue UNE epreuve sur fixtures NEUVES : rend (ok, message).
 
     `accuse` = True si la detection DOIT accuser, False si elle doit PASSER. Le
     verdict exige que l ecart NOMME la chose visee (`fragment_attendu`) : un ecart
     quelconque ne prouve pas que la bonne regle a parle.
+
+    COPIES SOUS UN NOM CHOISI (`copier_sous`), jamais `copier` : le couple
+    intra-cameleon `entonnoir/listes.py` <-> `checklist/listes.py` porte le MEME
+    nom de fichier -- `copier` poserait les deux cotes sous `listes.py`, la seconde
+    ecraserait la premiere, et le cobaye eprouverait DEUX FOIS le meme cote sans le
+    dire. Le nom porte l ETIQUETTE du flanc : on sait de quel cote vient la copie.
     """
-    gauche, droite = fabrique.copier(zone, dossier, PAIRE_JUMELLE)
+    gauche = fabrique.copier_sous(zone, dossier, paire[0],
+                                  etiquette + "/" + Path(paire[0]).parent.name
+                                  + "/" + Path(paire[0]).name)
+    droite = fabrique.copier_sous(zone, dossier, paire[1],
+                                  etiquette + "/" + Path(paire[1]).parent.name
+                                  + "/" + Path(paire[1]).name)
     if nom_cible is not None and not fabrique.muter_litteral(droite, nom_cible, genre):
         return False, ("fixture INUTILISABLE : " + str(nom_cible) + " absent de "
                        + droite.name)
     ecarts = comparer_jumeaux(fabrique.litteraux(gauche), fabrique.litteraux(droite),
-                              PAIRE_JUMELLE[0], PAIRE_JUMELLE[1])
+                              paire[0], paire[1], noms_declares, couples_declares)
     if accuse:
         ok = any(fragment_attendu in ecart for ecart in ecarts)
         return ok, ("ACCUSE (" + fragment_attendu + ")" if ok
@@ -848,41 +907,272 @@ def jouer_epreuve_jumeaux(fabrique, zone, dossier, nom_cible, genre, fragment_at
                         else "A ACCUSE A TORT : " + " | ".join(ecarts))
 
 
-def eprouver_jumeaux(fabrique, zone):
-    """Joue les QUATRE epreuves du cobaye : 1 doit PASSER, 3 doivent ACCUSER.
+def eprouver_jumeaux(fabrique, racine):
+    """Joue les epreuves du cobaye, DERIVEES du perimetre declare de CHAQUE flanc.
+
+    Une epreuve NOMINALE doit PASSER (aucune fausse alerte), puis CHAQUE jumeau
+    declare est eprouve PAR SON NOM dans les DEUX genres (valeur divergente,
+    declaration RETIREE) et CHAQUE couple declare a son tour : le perimetre
+    declare est eprouve EN ENTIER. Le compter par UN SEUL exemple laissait un
+    trou -- mesure MO-176 : CLE_AUTO_VALIDEES etait compare mais JAMAIS eprouve,
+    le cobaye ne jouant que le PREMIER jumeau declare. Une liste que personne
+    n eprouve est une liste que personne ne maintient, et un nom declare sans
+    epreuve peut disparaitre d un cote sans que rien ne le dise.
+
+    DEPUIS MO-233, le cobaye joue TOUS les flancs du registre (et non plus un
+    seul) : chaque flanc a SES noms, et l etiquette du flanc est dans le nom de
+    l epreuve -- sans elle, deux `TYPES` venus de deux flancs se liraient pareil.
 
     Rend la liste des ECARTS du cobaye (vide = le cobaye a joue son role). La
     fabrique retire TOUJOURS ses fixtures, et ce qui aurait resiste est DIT : une
     fixture qui survit ferait dire "sain" a un garde au-dessus d un residu.
     """
-    if not NOMS_JUMEAUX_DECLARES or not COUPLES_DECLARES:
-        return ["cobaye jumeaux : PLUS RIEN a eprouver (une declaration a disparu) : "
+    if not JUMEAUX_PAR_DOMICILE:
+        return ["cobaye jumeaux : REGISTRE VIDE (une declaration a disparu) : "
                 "le controle jumeaux ne prouve plus rien"]
-    nom_eprouve = NOMS_JUMEAUX_DECLARES[0][0]
-    nom_gauche, nom_droite, _ = COUPLES_DECLARES[0]
-    epreuves = (
-        ("fixtures-telles-quelles-pas-accusees", None, None, "", False),
-        ("jumeau-par-nom-divergent-accuse", nom_eprouve, fabrique.GENRE_VALEUR,
-         nom_eprouve + " DIVERGE", True),
-        ("couple-declare-divergent-accuse", nom_droite, fabrique.GENRE_VALEUR,
-         nom_gauche + " DIVERGE de " + nom_droite, True),
-        ("jumeau-declare-absent-accuse", nom_eprouve, fabrique.GENRE_ABSENT,
-         nom_eprouve + " : declare jumeau", True),
-    )
     ecarts = []
     residus = []
     with fabrique.fixtures(PREFIXE_COBAYE_JUMEAUX, residus) as dossier:
-        for nom_epreuve, cible, genre, fragment, accuse in epreuves:
-            ok, message = jouer_epreuve_jumeaux(fabrique, zone, dossier, cible, genre,
-                                                fragment, accuse)
-            print("  cobaye " + nom_epreuve + " : "
-                  + ("OK -- " + message if ok else "ECHEC -- " + message))
-            if not ok:
-                ecarts.append("cobaye jumeaux (" + nom_epreuve + ") : " + message)
+        for etiquette, cotes, paire, noms_declares, couples_declares in JUMEAUX_PAR_DOMICILE:
+            if not noms_declares and not couples_declares:
+                ecarts.append("cobaye jumeaux (" + etiquette + ") : AUCUN nom declare --"
+                              " un flanc sans nom n est plus eprouve")
+                continue
+            zone = racine.joinpath(*cotes)
+            epreuves = [("fixtures-telles-quelles-pas-accusees", None, None, "", False)]
+            for nom_jumeau, _ in noms_declares:
+                epreuves.append(("jumeau-" + nom_jumeau + "-divergent", nom_jumeau,
+                                 fabrique.GENRE_VALEUR, nom_jumeau + " DIVERGE", True))
+                epreuves.append(("jumeau-" + nom_jumeau + "-absent", nom_jumeau,
+                                 fabrique.GENRE_ABSENT, nom_jumeau + " : declare jumeau", True))
+            for nom_gauche, nom_droite, _ in couples_declares:
+                epreuves.append(("couple-" + nom_gauche + "-vs-" + nom_droite + "-divergent",
+                                 nom_droite, fabrique.GENRE_VALEUR,
+                                 nom_gauche + " DIVERGE de " + nom_droite, True))
+            for nom_epreuve, cible, genre, fragment, accuse in epreuves:
+                ok, message = jouer_epreuve_jumeaux(fabrique, zone, dossier, etiquette,
+                                                    paire, noms_declares, couples_declares,
+                                                    cible, genre, fragment, accuse)
+                titre = etiquette + "/" + nom_epreuve
+                print("  cobaye " + titre + " : "
+                      + ("OK -- " + message if ok else "ECHEC -- " + message))
+                if not ok:
+                    ecarts.append("cobaye jumeaux (" + titre + ") : " + message)
     for residu in residus:
         ecarts.append("cobaye jumeaux : fixture NON retiree (residu) : " + residu)
     return ecarts
 
+
+# --- MIROIRS INTER-FLUX : deux pilotes, un seul contrat (MO-230 / EO-224) -----
+#
+# Les DEUX pilotes -- cameleon (`matrice/pilote/`) et Optimus
+# (`_operateur/optimus-prime/pilote/`) -- sont deux flux ISOLES par decision :
+# chacun tourne SEUL, dans SON perimetre d'ecriture, et le pilote du cameleon ne
+# doit RIEN lire hors de `matrice/`. Un DOMICILE UNIQUE est donc IMPOSSIBLE : on
+# ne peut pas faire lire a l'un la declaration de l'autre sans les coupler.
+# Leur accord devient donc une RELATION CONTROLEE, et c'est ce que ce verbe fait.
+#
+# MESURE (MO-230) : 28 fichiers portent le MEME chemin relatif dans les deux
+# zones ; 38 declarations litterales y sont EGALES et 10 DIVERGENT. Ces 10 le
+# font LEGITIMEMENT (deux files, deux entonnoirs, deux prefixes CV-009, un nom de
+# flux, et la v2 qui porte des verbes que la v1 n'a pas). La regle est donc :
+#   1. une declaration LITTERALE des DEUX cotes porte la MEME valeur, SAUF si son
+#      nom est declare LIBRE avec sa raison (une liberte muette serait un angle mort) ;
+#   2. le VOCABULAIRE PARTAGE (les listes fermees qui font le contrat d'un pilote)
+#      est exige PRESENT des deux cotes ET egal -- une absence est un ecart ;
+#   3. une valeur CALCULEE (un chemin, une table de fonctions) n'est pas un
+#      litteral : elle n'est PAS comparable, et le controle la CHIFFRE et la DIT.
+#      C'est la limite de ce verbe, ecrite ici plutot que cachee.
+#
+# CE QU'IL A FALLU OUVRIR : la lecture des jumeaux ne voyait que les CHAINES
+# scalaires, donc `TYPES = ("dev", ...)` -- la liste fermee qu'un tel controle
+# doit justement surveiller -- etait INVISIBLE, et le controle se croyait sain.
+# La FABRIQUE PARTAGEE lit desormais tout LITTERAL : un seul domicile de lecture.
+PAIRE_MIROIR = (
+    ("cameleon", ("matrice", "pilote")),
+    ("optimus", ("_operateur", "optimus-prime", "pilote")),
+)
+# Le VOCABULAIRE PARTAGE : ce qui fait le CONTRAT d'un pilote, dans les deux flux.
+VOCABULAIRE_PARTAGE_MIROIR = (
+    ("TYPES", "la liste fermee des types de mission"),
+    ("URGENCES", "les niveaux d'urgence, du plus urgent au moins urgent"),
+)
+# Les LIBERTES declarees : ce qui DOIT pouvoir differer, AVEC sa raison. Une
+# divergence NON declaree est donc un ECART -- c'est la que se cache le vrai
+# danger : deux flux qui declarent autre chose sans que personne ne l'ait decide.
+NOMS_LIBRES_MIROIR = {
+    "NOM_FILE": "le fichier d'etat est PROPRE a chaque flux (deux files, deux flux)",
+    "NOM_ENTONNOIR": "idem : deux entonnoirs, un par flux",
+    "NOM_HISTORIQUE": "idem : deux journaux, un par flux",
+    "NOMS_OPTIONS": "la v2 porte des verbes que la v1 n'a pas : les options different",
+    "OPTIONS_MOTEUR_RECHERCHE": "Optimus interroge AUSSI sa zone privee (--prive)",
+    "PILOTE": "le nom du flux, par construction",
+    "PREFIXE_ID": "CV-009 : une famille d'ids = UN prefixe (M- / MO-)",
+    "PREFIXE_ITEM": "CV-009 : une famille d'items = UN prefixe (E- / EO-)",
+}
+PREFIXE_COBAYE_MIROIRS = "garde-miroirs-"
+# Le fichier eprouve : il porte le vocabulaire partage ET une divergence legitime,
+# donc les epreuves du cobaye tiennent sur le MEME couple de fichiers.
+MIROIR_EPROUVE = "entonnoir/listes.py"
+NOM_LIBRE_MIROIR_TEMOIN = "PREFIXE_ITEM"
+
+
+def fichiers_miroirs(zone_gauche, zone_droite):
+    """Les chemins RELATIFS portes par les DEUX zones (les miroirs), tries."""
+
+    def relatifs(zone):
+        return {chemin.relative_to(zone).as_posix() for chemin in zone.rglob("*.py")
+                if not any(partie in DOSSIERS_IGNORES for partie in chemin.parts)
+                and ".bak" not in chemin.name}
+
+    return sorted(relatifs(zone_gauche) & relatifs(zone_droite))
+
+
+def comparer_miroirs(relatif, tables, illisibles):
+    """DECISION PURE : deux fichiers MIROIRS declarent-ils la MEME chose ?
+
+    `tables` : etiquette de flux -> (nom -> (valeur, ligne)), lues en LITTERAL ;
+    `illisibles` : etiquette -> les NOMS qu'une valeur CALCULEE rend incomparables.
+
+    Rend (ecarts, egales, libres). Un ecart NOMME les DEUX valeurs ET leurs lignes :
+    un verdict muet ne dit pas quoi reparer.
+    """
+    cotes = tuple(etiquette for etiquette, _ in PAIRE_MIROIR)
+    gauche, droite = cotes
+    table_gauche, table_droite = tables[gauche], tables[droite]
+    ecarts, egales, libres = [], [], []
+    for nom in sorted(set(table_gauche) & set(table_droite)):
+        if nom in illisibles[gauche] or nom in illisibles[droite]:
+            continue
+        valeur_gauche, ligne_gauche = table_gauche[nom]
+        valeur_droite, ligne_droite = table_droite[nom]
+        if valeur_gauche == valeur_droite:
+            egales.append(nom)
+            continue
+        if nom in NOMS_LIBRES_MIROIR:
+            libres.append(nom)
+            continue
+        ecarts.append("MIROIR " + relatif + " :: " + nom + " DIVERGE : "
+                      + gauche + ":" + str(ligne_gauche) + " = " + repr(valeur_gauche)
+                      + " MAIS " + droite + ":" + str(ligne_droite) + " = "
+                      + repr(valeur_droite) + " -- divergence NON declaree (une liberte"
+                      " se declare, AVEC sa raison, dans NOMS_LIBRES_MIROIR)")
+    for nom, pourquoi in VOCABULAIRE_PARTAGE_MIROIR:
+        # Le vocabulaire n'est exige QUE la ou il est EN JEU : un fichier miroir qui
+        # ne declare ni TYPES ni URGENCES n'est pas un PORTEUR de ce contrat, et
+        # l'exiger partout accuserait des fichiers qui n'ont rien a voir (mesure du
+        # premier jet : 53 ecarts, tous faux). Le danger reel est ailleurs : un
+        # vocabulaire declare d'UN SEUL cote, ou non comparable.
+        presents = {etiquette: (nom in tables[etiquette] or nom in illisibles[etiquette])
+                    for etiquette in cotes}
+        if not any(presents.values()):
+            continue
+        absents = [etiquette for etiquette in cotes if not presents[etiquette]]
+        if absents:
+            ecarts.append("MIROIR " + relatif + " :: " + nom + " : vocabulaire partage ("
+                          + pourquoi + ") ABSENT de " + " et ".join(absents)
+                          + " -- une liste fermee qui disparait d'un cote laisse l'autre"
+                          " flux accueillir ce que le premier refuse")
+            continue
+        calcules = [etiquette for etiquette in cotes if nom in illisibles[etiquette]]
+        if calcules:
+            ecarts.append("MIROIR " + relatif + " :: " + nom + " : vocabulaire partage ("
+                          + pourquoi + ") NON COMPARABLE cote " + " et ".join(calcules)
+                          + " -- une valeur calculee n'est pas comparable, et le"
+                          " vocabulaire partage d'un pilote doit pouvoir l'etre")
+    return ecarts, egales, libres
+
+
+def eprouver_miroirs(fabrique, racine):
+    """COBAYE : la relation doit ACCUSER une divergence non declaree (DEUX sens) et
+    l'absence du vocabulaire partage, TENIR une liberte declaree, et PASSER sur le
+    couple tel quel.
+
+    Meme couple de fichiers a chaque epreuve : seule la MUTATION change. Sans le cas
+    de la liberte, le controle accuserait une divergence LEGITIME -- et un controle
+    qui crie a tort est desactive par ses lecteurs (donc inutile).
+    """
+    epreuves = (
+        ("couple-tel-quel", "", "", "", False),
+        ("vocabulaire-mute-a-gauche", "cameleon", "valeur", "TYPES", True),
+        ("vocabulaire-mute-a-droite", "optimus", "valeur", "TYPES", True),
+        ("vocabulaire-retire-a-gauche", "cameleon", "absent", "TYPES", True),
+        ("liberte-declaree-mutee", "optimus", "valeur", NOM_LIBRE_MIROIR_TEMOIN, False),
+    )
+    ecarts = []
+    residus = []
+    with fabrique.fixtures(PREFIXE_COBAYE_MIROIRS, residus) as dossier:
+        for nom_epreuve, cote, genre, cible, accuse in epreuves:
+            copies = {etiquette: fabrique.copier_sous(racine.joinpath(*cotes), dossier,
+                                                      MIROIR_EPROUVE,
+                                                      etiquette + "/listes.py")
+                      for etiquette, cotes in PAIRE_MIROIR}
+            if genre and not fabrique.muter_litteral(copies[cote], cible, genre):
+                ecarts.append("cobaye miroirs (" + nom_epreuve + ") : fixture"
+                              " INUTILISABLE -- " + str(cible) + " absent de la copie")
+                continue
+            tables = {etiquette: fabrique.litteraux(chemin)
+                      for etiquette, chemin in copies.items()}
+            illisibles = {etiquette: set(fabrique.litteraux_illisibles(chemin))
+                          for etiquette, chemin in copies.items()}
+            recus, _, _ = comparer_miroirs(MIROIR_EPROUVE, tables, illisibles)
+            ok = bool(recus) == accuse
+            print("  cobaye " + nom_epreuve + " : "
+                  + ("OK -- " + str(len(recus)) + " ecart(s)" if ok
+                     else "ECHEC -- " + str(len(recus)) + " ecart(s) au lieu de "
+                          + ("au moins 1" if accuse else "0")))
+            if not ok:
+                ecarts.append("cobaye miroirs (" + nom_epreuve + ") : " + str(len(recus))
+                              + " ecart(s) au lieu de " + ("au moins 1" if accuse else "0"))
+    for residu in residus:
+        ecarts.append("cobaye miroirs : fixture NON retiree (residu) : " + residu)
+    return ecarts
+
+
+def controler_miroirs(racine):
+    """Les DEUX PILOTES (miroirs) declarent-ils la MEME chose ? (MO-230 / EO-224)
+
+    Un domicile unique est impossible (deux flux isoles) : c'est donc la RELATION
+    qui est controlee -- un litteral declare des deux cotes porte la meme valeur,
+    sauf liberte DECLAREE avec sa raison, et le vocabulaire partage est exige
+    PRESENT et COMPARABLE partout ou il est en jeu. Ce qui n'est pas comparable est
+    CHIFFRE et DIT, jamais compte comme surveille.
+    """
+    zones = {etiquette: racine.joinpath(*cotes) for etiquette, cotes in PAIRE_MIROIR}
+    absentes = [str(zone) for zone in zones.values() if not zone.is_dir()]
+    if absentes:
+        return ["miroirs : zone ABSENTE " + " et ".join(absentes)], []
+    fabrique = charger_fabrique()
+    if fabrique is None:
+        return ["miroirs : fabrique de fixtures INTROUVABLE ("
+                + "/".join(FABRIQUE_RELATIVE) + ") : le controle se DIT"], []
+    etiquettes = tuple(zones)
+    miroirs = fichiers_miroirs(zones[etiquettes[0]], zones[etiquettes[1]])
+    if not miroirs:
+        return ["miroirs : aucun fichier MIROIR entre les deux pilotes (le controle"
+                " se DIT)"], []
+    ecarts = []
+    egales, libres, calculees, d_un_seul_cote = 0, 0, 0, 0
+    for relatif in miroirs:
+        tables = {etiquette: fabrique.litteraux(zone / relatif)
+                  for etiquette, zone in zones.items()}
+        illisibles = {etiquette: set(fabrique.litteraux_illisibles(zone / relatif))
+                      for etiquette, zone in zones.items()}
+        recus, egales_ici, libres_ici = comparer_miroirs(relatif, tables, illisibles)
+        ecarts += recus
+        egales += len(egales_ici)
+        libres += len(libres_ici)
+        calculees += len(set().union(*illisibles.values()))
+        d_un_seul_cote += len(set(tables[etiquettes[0]]) ^ set(tables[etiquettes[1]]))
+    for detail in eprouver_miroirs(fabrique, racine):
+        ecarts.append(detail)
+    if not ecarts:
+        print("  " + str(len(miroirs)) + " fichier(s) MIROIR entre les deux pilotes : "
+              + str(egales) + " declaration(s) EGALE(s), " + str(libres)
+              + " liberte(s) declaree(s), " + str(d_un_seul_cote)
+              + " declaration(s) litterale(s) d'UN SEUL cote (non comparee), "
+              + str(calculees) + " valeur(s) CALCULEE(s) non comparable(s) (dit)")
+    return ecarts, []
 
 # --- APPELS NON LIES : un nom APPELE que rien ne lie (R5, audit MO-174) -------
 #
@@ -1010,26 +1300,34 @@ def controler_jumeaux(racine):
     et le cobaye a fixtures jetables REJOUE le piege a chaque execution, pour que
     la detection ne soit pas seulement prouvee une fois.
     """
-    zone = zone_operateur()
-    if zone is None:
-        return ["jumeaux : zone optimus-prime INTROUVABLE (le controle se DIT)"], []
     fabrique = charger_fabrique()
     if fabrique is None:
         return ["jumeaux : fabrique de fixtures INTROUVABLE ("
                 + "/".join(FABRIQUE_RELATIVE) + ") : le controle se DIT"], []
-    gauche, droite = zone / PAIRE_JUMELLE[0], zone / PAIRE_JUMELLE[1]
-    absents = [str(chemin) for chemin in (gauche, droite) if not chemin.is_file()]
-    if absents:
-        return ["jumeaux : domicile ABSENT " + " et ".join(absents)], []
-    table_gauche = fabrique.litteraux(gauche)
-    table_droite = fabrique.litteraux(droite)
-    ecarts = comparer_jumeaux(table_gauche, table_droite,
-                              PAIRE_JUMELLE[0], PAIRE_JUMELLE[1])
-    if not ecarts:
-        communs = sorted(set(table_gauche) & set(table_droite))
-        print("  " + str(len(communs)) + " nom(s) commun(s) au deux domiciles, tous EGAUX : "
-              + ", ".join(communs))
-    ecarts.extend(eprouver_jumeaux(fabrique, zone))
+    ecarts = []
+    for etiquette, cotes, paire, noms_declares, couples_declares in JUMEAUX_PAR_DOMICILE:
+        zone = racine.joinpath(*cotes)
+        if not zone.is_dir():
+            ecarts.append("jumeaux (" + etiquette + ") : zone ABSENTE " + str(zone)
+                          + " -- le controle se DIT")
+            continue
+        gauche, droite = zone / paire[0], zone / paire[1]
+        absents = [str(chemin) for chemin in (gauche, droite) if not chemin.is_file()]
+        if absents:
+            ecarts.append("jumeaux (" + etiquette + ") : domicile ABSENT "
+                          + " et ".join(absents))
+            continue
+        table_gauche = fabrique.litteraux(gauche)
+        table_droite = fabrique.litteraux(droite)
+        locaux = comparer_jumeaux(table_gauche, table_droite, paire[0], paire[1],
+                                  noms_declares, couples_declares)
+        if not locaux:
+            communs = sorted(set(table_gauche) & set(table_droite))
+            print("  [" + etiquette + "] " + str(len(communs))
+                  + " nom(s) commun(s) aux deux domiciles, tous EGAUX : "
+                  + ", ".join(communs))
+        ecarts.extend(locaux)
+    ecarts.extend(eprouver_jumeaux(fabrique, racine))
     return ecarts, []
 
 
@@ -1257,6 +1555,7 @@ CONTROLES = {
     "prefixes": controler_prefixes,
     "prefixes-en-dur": prefixes_en_dur,
     "jumeaux": controler_jumeaux,
+    "miroirs": controler_miroirs,
     "crochets": controler_crochets,
     "appels-non-lies": controler_appels,
 }
@@ -1291,7 +1590,7 @@ def principal(arguments):
     parser = argparse.ArgumentParser(description="Verifier le contrat fondamental CV-007")
     parser.add_argument("verbe", choices=("chemins", "noms", "flags", "collisions", "imports",
                                           "resolution", "insertions", "prefixes",
-                                          "prefixes-en-dur", "jumeaux", "crochets", "appels-non-lies", "tout"))
+                                          "prefixes-en-dur", "jumeaux", "miroirs", "crochets", "appels-non-lies", "tout"))
     parser.add_argument("--racine", default=None, help="Racine a controler (defaut : matrix/)")
     parser.add_argument("--strict", action="store_true",
                         help="Rendre les dettes (parents[N]) bloquantes")

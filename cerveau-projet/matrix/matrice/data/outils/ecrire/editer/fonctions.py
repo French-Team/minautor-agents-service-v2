@@ -1,5 +1,5 @@
 """Fonctions simples de la categorie editer : une seule tache chacune."""
-from commun import editer_atomique, lire_contenu_source, resoudre_chemin, verifier_ascii
+from commun import corriger_contenu, editer_atomique, lire_contenu_source, resoudre_chemin, verifier_ascii
 
 
 def executer_editer(fichier, ancien, nouveau, ancien_fichier, nouveau_fichier):
@@ -37,6 +37,15 @@ def executer_editer(fichier, ancien, nouveau, ancien_fichier, nouveau_fichier):
 
     if not ancien_texte:
         print("REFUS : --ancien vide (rien a remplacer).")
+        return 2
+
+    # LE PASSAGE OBLIGE CORRIGE (MO-210) : la porte corrige ce que l'AGENT ecrit
+    # -- le fragment `nouveau`. Ce qui existait deja dans la cible n'est pas
+    # reecrit ici : c'est le metier de la routine de maintenance (corriger-ascii),
+    # qui seule a le droit de repasser sur un fichier entier.
+    nouveau_texte, refus = corriger_contenu(nouveau_texte)
+    if refus:
+        print(refus)
         return 2
 
     code, sha_avant, sha_apres, bak_path, msg_val = editer_atomique(fichier, ancien_texte, nouveau_texte)

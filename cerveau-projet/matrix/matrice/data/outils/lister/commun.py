@@ -9,17 +9,25 @@ from constants import (
     ALLOWLIST_PREFIXES,
     ALLOWLIST_RACINE,
     RACINE,
-    REPERTOIRE_MATRIX,
 )
 
 # Le contrat d invisibilite L-016/CV-006 (plancher + zones DECLAREES V-003 du
 # classeur) vit dans SON domicile : cette porte le CONSOMME, elle ne le recopie
 # pas (M-076 ; mesure MO-151 : 92 fichiers / 39 218 lignes atteignables).
+# Le PERIMETRE (est-ce DANS la Matrice ?) a le MEME statut : son domicile est
+# data/commun/cible.py, et il se CONSOMME, jamais recopie (M-076 -- mesure
+# MO-184 : cinq perimetres, quatre jugeaient un PREFIXE avant la resolution).
 from invisibilite import est_invisible  # noqa: E402
+from cible import est_dans_matrice, motif_hors_perimetre  # noqa: E402
 
 
 def dans_perimetre(chemin_relatif):
-    """True si le chemin est listable (dans matrix/ ou allowlist racine)."""
+    """True si le chemin RESOLU est listable (dans la Matrice, ou allowlist racine).
+
+    MO-184 (EO-178), meme contrat que la porte ecrire (MO-183) : on RESOUT avant
+    de juger. Un prefixe `matrix/...` n est plus un laissez-passer -- il ne vaut
+    que si le chemin resolu tombe VRAIMENT dans la Matrice.
+    """
     brut = str(chemin_relatif).replace("\\", "/").strip()
     if not brut:
         return False
@@ -30,20 +38,7 @@ def dans_perimetre(chemin_relatif):
     nom = brut.split("/")[-1]
     if "/" not in brut and (nom in ALLOWLIST_RACINE or any(nom.startswith(p) for p in ALLOWLIST_PREFIXES)):
         return True
-    if brut.startswith("matrix/") or brut.startswith("cerveau-projet/matrix/"):
-        return True
-    try:
-        p = (RACINE / brut).resolve()
-        for base in (RACINE / "matrix", RACINE / "cerveau-projet" / "matrix"):
-            if base.is_dir():
-                try:
-                    if str(p).startswith(str(base.resolve())):
-                        return True
-                except OSError:
-                    continue
-        return str(p).startswith(str(REPERTOIRE_MATRIX.resolve()))
-    except (OSError, RuntimeError):
-        return False
+    return est_dans_matrice(resoudre_chemin(brut))
 
 
 def resoudre_chemin(chemin_relatif):
@@ -66,7 +61,7 @@ def est_zone_invisible(path_absolu):
 def lister_dossier(chemin_relatif, filtre, recursif, inclure_invisible=False):
     """Liste un dossier (perimetre verifie). Retourne (fichiers, dossiers, code, msg)."""
     if not dans_perimetre(chemin_relatif):
-        return [], [], 2, "REFUS : hors perimetre lecture (matrix/ seul, allowlist AGENTS.md/demarrer-*.md) : " + chemin_relatif
+        return [], [], 2, motif_hors_perimetre(chemin_relatif, usage="lecture")
     dossier_absolu = resoudre_chemin(chemin_relatif)
     if not dossier_absolu.exists():
         return [], [], 1, "Dossier introuvable : " + chemin_relatif

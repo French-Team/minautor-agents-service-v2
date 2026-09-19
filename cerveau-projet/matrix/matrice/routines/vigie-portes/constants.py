@@ -163,3 +163,32 @@ MOTIF_DEJA_SIGNALE = "deja-signale"
 MOTIF_PLANCHER = "plancher"
 MOTIF_VIDE = "aucune-alerte-notable"
 MOTIF_RESOLU = "resolu"
+
+# --- 7. NEMESIS (EO-219, regle createur du 2026-09-19) --------------------------
+# La regle : apres la chaine pense-bete -> spec -> todo-list, TOUT process de
+# construction de fichiers passe par un passage NEMESIS (3 axes du proto-4,
+# forme Oui MAIS, en THEME jamais en agent). Ce controle permanent LIT la trace
+# DECLAREE : il ne croit pas une promesse.
+# Etats INITIAUX : un document qui n'a pas encore ete attaque porte ces statuts
+# et n'exige AUCUN nemesis -- le premier etat n'est pas une livraison.
+# MO-224 (2026-09-19) : le premier etat de la CHAINE est pense-bete. La porte
+# chaine-pense-bete REFUSE deja, elle, la sortie du spec sans la trace ; mais le
+# premier etat n'est pas une livraison -- il entre donc dans cette liste.
+ETATS_INITIAUX_NEMESIS = ("pense-bete", "proposition", "ebauche", "constat", "brouillon")
+# Trace = DECLAREE dans la carte d'identite (ce champ) ET ECRITE dans le corps
+# (un de ces marqueurs). DEUX conditions : un champ seul serait une promesse.
+CHAMP_STATUT_CARTE = "statut:"
+CHAMP_TRACE_NEMESIS = "nemesis:"
+MARQUEURS_PASSAGE_NEMESIS = ("NEMESIS", "CONTRE-ANALYSE")
+SEPARATEUR_CARTE = "---"
+# Domicile DECLARE du controle (decision A1 du 2026-09-19 : le domicile de la
+# chaine), relatif a matrix/. Le controle ne balaie pas tout matrix/ : il lit le
+# domicile ou les fichiers de la chaine se construisent.
+CHEMIN_RELATIF_CONSTRUITS = "_operateur/optimus-prime/preparation"
+# ANTERIEURS declares : construits AVANT la regle, avec leur RAISON. Une liste
+# d'exemptions se DIT ici, elle ne se cache pas dans le corps du controle.
+ANTERIEURS_NEMESIS = {
+    "inventaire-types.md": "construit le 2026-09-17, avant la regle du 2026-09-19",
+}
+NIVEAU_NEMESIS = "haute"
+PORTE_NEMESIS = "preparation"

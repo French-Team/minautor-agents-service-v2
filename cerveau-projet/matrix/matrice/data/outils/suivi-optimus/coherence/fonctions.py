@@ -17,6 +17,7 @@ import json
 from constants import (
     ACTION_DEBUT,
     ACTION_FIN,
+    ACTION_REPORT,
     CHEMIN_RELATIF_ARCHIVE_PILOTE,
     CHEMIN_RELATIF_BDD,
     CHEMIN_RELATIF_FILE_PILOTE,
@@ -65,12 +66,21 @@ def numero_mission(identifiant):
 
 
 def indexer_journal(evenements):
-    """Retourne (debuts, fins, hors_perimetre) : ids declares a chaque action.
+    """Retourne (debuts, fins, rapportees, hors_perimetre).
 
     hors_perimetre = identifiants NON MO- presents au journal (residus du
     cameleon qui ne concernent pas la file d'optimus) : signales, pas juges.
+
+    L'ORDRE COMPTE (EO-190). Depuis que le verbe `reporter` declare son report,
+    une mission parquee porte [debut, report] : le report NEUTRALISE le debut
+    (elle n'est plus en cours) sans la terminer. Un ENSEMBLE de debuts et de fins
+    ne peut pas le dire -- il ignore ce qui vient AVANT ou APRES -- donc on garde
+    la SEQUENCE par mission. `rapportees` ne retient que les missions dont la
+    DERNIERE borne connue est un report : un report suivi d'un nouveau debut
+    (re-injection) ne neutralise plus rien, et c'est voulu.
     """
     debuts, fins, hors_perimetre = set(), set(), set()
+    sequence = {}
     for evenement in evenements:
         mission = evenement.get("mission")
         if not mission:
@@ -78,29 +88,40 @@ def indexer_journal(evenements):
         if numero_mission(mission) is None:
             hors_perimetre.add(mission)
             continue
-        if evenement.get("action") == ACTION_DEBUT:
+        sequence.setdefault(mission, []).append(evenement.get("action"))
+    rapportees = set()
+    for mission, actions in sequence.items():
+        if ACTION_DEBUT in actions:
             debuts.add(mission)
-        elif evenement.get("action") == ACTION_FIN:
+        if ACTION_FIN in actions:
             fins.add(mission)
-    return debuts, fins, hors_perimetre
+        bornes = [a for a in actions
+                  if a in (ACTION_DEBUT, ACTION_FIN, ACTION_REPORT)]
+        if bornes and bornes[-1] == ACTION_REPORT:
+            rapportees.add(mission)
+    return debuts, fins, rapportees, hors_perimetre
 
 
-def croiser(missions, archivees, debuts, fins):
+def croiser(missions, archivees, debuts, fins, rapportees):
     """Croise la file (active + archivee) et le journal. Retourne (ecarts, dettes).
 
     Sept fautes detectees :
       (1) terminee dans la file SANS fin au journal ;
       (2) fin au journal alors que la file n'est PAS terminee ;
-      (3) declaree commencee au journal alors que la file la dit en-attente ;
+      (3) declaree commencee au journal alors que la file la dit en-attente
+          SANS report declare (un report la remet en attente LEGITIMEMENT : ce
+          cas bascule en DETTE, visible, jamais bloquant -- EO-190) ;
       (4) declaree au journal mais INCONNUE de la file (ni active, ni archivee) ;
       (5) plus d'une mission en cours (la serie stricte est violee) ;
       (6) compteur du pilote en retard sur le plus grand id utilise (un id
           DEJA PRIS serait reattribue a la prochaine charge) ;
       (7) fiche du pilote illisible.
-    Et deux dettes (non bloquantes) :
+    Et trois dettes (non bloquantes) :
       (a) en cours dans la file sans debut au journal (fenetre d'injection, ou
           declaration oubliee) ;
-      (b) identifiants hors perimetre presents au journal.
+      (b) identifiants hors perimetre presents au journal ;
+      (c) PARQUEE : en attente dans la file, un debut au journal, et un REPORT
+          declare apres ce debut -- c'est l'etat NORMAL du verbe `reporter`.
     """
     ecarts, dettes = [], []
 
@@ -121,10 +142,24 @@ def croiser(missions, archivees, debuts, fins):
                 + "' dans la file"
             )
         if statut == STATUT_EN_ATTENTE and identifiant in debuts:
-            ecarts.append(
-                identifiant + " : declaree commencee au journal, mais toujours"
-                + " en-attente dans la file (le pilote ne l'a pas chargee)"
-            )
+            if identifiant in rapportees:
+                # EO-190 : c'est l'ETAT NORMAL d'une mission parquee. Le report
+                # est un fait du PILOTE, pas un oubli de l'agent -- on le MONTRE
+                # (dette) au lieu de le taire, et on ne bloque pas le flux.
+                dettes.append(
+                    identifiant + " : REPORTEE (debut neutralise par le report"
+                    + " declare) : en attente, elle reprendra a sa re-injection"
+                )
+            else:
+                # Le message DIT la cause REELLE possible et le REMEDE : l'ancien
+                # "(le pilote ne l'a pas chargee)" accusait le pilote, alors que
+                # la cause etait le report non declare (mesure EO-190).
+                ecarts.append(
+                    identifiant + " : declaree commencee au journal, mais toujours"
+                    + " en-attente dans la file SANS report declare -- si elle a"
+                    + " ete parquee, elle doit l'etre par le verbe `reporter`"
+                    + " (qui declare le report)"
+                )
         if statut == STATUT_EN_COURS and identifiant not in debuts:
             dettes.append(
                 identifiant + " : en cours dans la file, sans debut au journal"
@@ -183,9 +218,9 @@ def controler(matrice):
     missions = [m for m in (file_pilote.get("missions") or []) if m.get("id")]
     archive = lire_json(chemin_archive) or {}
     archivees = [m for m in (archive.get("missions") or []) if m.get("id")]
-    debuts, fins, hors_perimetre = indexer_journal(evenements)
+    debuts, fins, rapportees, hors_perimetre = indexer_journal(evenements)
 
-    ecarts, dettes, connus = croiser(missions, archivees, debuts, fins)
+    ecarts, dettes, connus = croiser(missions, archivees, debuts, fins, rapportees)
     ecarts += controler_compteur(int(file_pilote.get("compteur") or 0), connus, debuts, fins)
     if hors_perimetre:
         dettes.append(

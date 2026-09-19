@@ -14,7 +14,7 @@ identite:
 | Toutes les commandes, protections | `matrice/data/manuel-outils.md` (fiche 14, entonnoir) |
 | Les listes FERMEES (types, categories, urgences, mots-cles, chemins) | `listes.py` (la SEULE source des valeurs) |
 | Deposer au vrac (echelon 0) | `vrac/entry.py` (type PROPOSE par mots-cles, reclassable a la main) |
-| Classer (echelons 1-2, categorie proposee auto -- M-027) / poser le ROLE / urgencer (echelon 3) | `classer/fonctions.py` (classer_mission : proposition + gardes + role) / `retiqueter/entry.py` (role d'un item existant) / `urgencer/entry.py` |
+| Classer (echelons 1-2, categorie proposee auto -- M-027) / poser le ROLE / urgencer (echelon 3) | `classer/fonctions.py` (classer_mission : proposition + gardes + role) / `retiqueter/entry.py` (reparer les ETIQUETTES d'un item : categorie et/ou role) / `urgencer/entry.py` |
 | La table (type, categorie) -> ROLE (vivier) | `roles.py` (table COMPLETE, verifiee au chargement) |
 | La tresse (echelon 4) : tisser le brin, l'afficher | `tresse/fonctions.py` (paliers d'urgence + round-robin) + `tresse/entry.py` |
 | Persistance + garde de racine | `stockage.py` (ecriture atomique, tmp + remplacement) |
@@ -23,7 +23,7 @@ identite:
 
     python main.py deposer --theme "..." --objectif "..." [--urgence u] [--source s] [--role THEME]
     python main.py classer --id EO-XXX --type <dev|reparation|doc|audit|revision> [--categorie c] [--role THEME]
-    python main.py retiqueter --id EO-XXX --role <THEME du vivier>  (pose le ROLE + retisse)
+    python main.py retiqueter --id EO-XXX [--categorie c] [--role THEME]  (REPARE les etiquettes + retisse)
     python main.py retirer  --id EO-XXX   (sortie PROPRE du vrac -- M-058)
     python main.py urgencer --id EO-XXX --urgence <bloquante|haute|normale|basse>
     python main.py tresse tisser / tresse brin / file

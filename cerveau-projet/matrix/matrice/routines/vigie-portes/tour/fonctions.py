@@ -59,6 +59,15 @@ from constants import (
     REQUETE_TEMOIN,
     SEUIL_REFUS_MIN,
     SEUIL_TEMOIN,
+    ANTERIEURS_NEMESIS,
+    CHAMP_STATUT_CARTE,
+    CHAMP_TRACE_NEMESIS,
+    CHEMIN_RELATIF_CONSTRUITS,
+    ETATS_INITIAUX_NEMESIS,
+    MARQUEURS_PASSAGE_NEMESIS,
+    NIVEAU_NEMESIS,
+    PORTE_NEMESIS,
+    SEPARATEUR_CARTE,
 )
 from etat_histoire import decision_fait, signature_fait
 
@@ -514,6 +523,7 @@ def executer_tour(racine, signaler_actif=True):
     alertes += controler_portes_fantomes(portes, comptes, racine / CHEMIN_RELATIF_ROUTINES)
     alertes += controler_citations(muettes, chemins["rechercher"], (str(REPERTOIRE_ROUTINE).replace("\\", "/"),))
 
+    alertes += controler_nemesis(racine)
     alertes.sort(key=lambda alerte: (alerte["niveau"], alerte["cle"]))
     # BORNE ANTI-SPAM (MO-073) : la "mission" de la vigie, c'est le jeu des
     # alertes NOTABLES -- celles qui partent dans l'inbox. La signature porte sur
@@ -586,3 +596,66 @@ def executer_tour(racine, signaler_actif=True):
         "alertes": [{"cle": alerte["cle"], "niveau": alerte["niveau"], "detail": alerte["detail"]} for alerte in notables],
     })
     return 1
+
+
+# --- 7. NEMESIS (EO-219, regle createur du 2026-09-19) --------------------------
+
+
+def lire_document(chemin):
+    """Lecture sans exception : un document illisible n'est pas un constat de
+    nemesis (la porte porte deja son controle de sante)."""
+    try:
+        return chemin.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return ""
+
+
+def statut_carte(texte):
+    """Statut DECLARE dans la carte d'identite -- jamais un statut de texte libre."""
+    lignes = texte.splitlines()
+    if not lignes or lignes[0].strip() != SEPARATEUR_CARTE:
+        return ""
+    for ligne in lignes[1:]:
+        nu = ligne.strip()
+        if nu == SEPARATEUR_CARTE:
+            break
+        if nu.startswith(CHAMP_STATUT_CARTE):
+            return nu.split(CHAMP_STATUT_CARTE, 1)[1].strip()
+    return ""
+
+
+def a_trace_nemesis(texte):
+    """DEUX conditions : la trace est DECLAREE (champ de carte) ET le passage est
+    ECRIT dans le corps. Un champ seul serait une promesse (L-055)."""
+    if not any(marqueur in texte for marqueur in MARQUEURS_PASSAGE_NEMESIS):
+        return False
+    return any(ligne.strip().startswith(CHAMP_TRACE_NEMESIS) for ligne in texte.splitlines())
+
+
+def controler_nemesis(racine):
+    """EO-219 : un document CONSTRUIT (carte + statut) doit porter son nemesis.
+
+    Le controle lit le DOMICILE DECLARE seulement : il ne juge pas tout matrix/,
+    sinon il accuserait a vie des documents construits avant la regle. Les
+    ANTERIEURS declares sont sautes et leur raison est ECRITE dans les constantes."""
+    constats = []
+    repertoire = racine / CHEMIN_RELATIF_CONSTRUITS
+    if not repertoire.is_dir():
+        return constats
+    for chemin in sorted(repertoire.rglob("*.md")):
+        if chemin.name in ANTERIEURS_NEMESIS:
+            continue
+        texte = lire_document(chemin)
+        statut = statut_carte(texte)
+        if not statut or statut in ETATS_INITIAUX_NEMESIS:
+            continue
+        if a_trace_nemesis(texte):
+            continue
+        constats.append({
+            "cle": "nemesis:" + chemin.relative_to(racine).as_posix(),
+            "niveau": NIVEAU_NEMESIS,
+            "porte": PORTE_NEMESIS,
+            "detail": "construction sans NEMESIS : statut " + statut
+                      + " declare sans trace de contre-analyse (EO-219)",
+        })
+    return constats

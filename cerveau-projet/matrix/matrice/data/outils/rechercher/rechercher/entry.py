@@ -16,7 +16,14 @@ import sys
 import os
 
 # Ajoute le repertoire courant au path pour les imports locaux
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# L-013 : aucun niveau compte a la main. Le dossier de CET outil est celui qui
+# porte son commun.py (marqueur) : la remontee est VERIFIEE, jamais supposee (MO-177).
+REPERTOIRE_ENTREE = os.path.dirname(os.path.abspath(__file__))
+REPERTOIRE_OUTIL = os.path.dirname(REPERTOIRE_ENTREE)
+if not os.path.isfile(os.path.join(REPERTOIRE_OUTIL, "commun.py")):
+    raise RuntimeError("Dossier de l'outil introuvable depuis " + REPERTOIRE_ENTREE
+                       + " : commun.py est absent de " + REPERTOIRE_OUTIL)
+sys.path.insert(0, REPERTOIRE_OUTIL)
 
 from commun import (
     scanner_fichiers,
@@ -25,6 +32,7 @@ from commun import (
     formatter_hit,
     extraire_options,
     periode_valide,
+    signaler_inconnues,
 )
 from constants import (
     BDD_SOURCES,
@@ -62,6 +70,19 @@ def rechercher(arguments):
       2 = refus (option manquante, illisible ou hors perimetre d'application)
     """
     options = extraire_options(arguments, NOMS_OPTIONS_RECHERCHER)
+    # EO-179 : cette porte DECLARE deja, en tete de fichier, qu une option
+    # illisible est REFUSEE (code 2), jamais ignoree en silence -- ce n etait
+    # vrai que du CONTENU. Une option INCONNUE (--dossier, --option-bidon) etait
+    # SAUTEE : mesure du 2026-09-19, code 0 et balayage par DEFAUT, alors que
+    # l appelant croyait avoir restreint sa recherche. Elle est desormais
+    # REFUSEE, NOMMEE, avec les options reconnues et l usage.
+    code_inconnues = signaler_inconnues(
+        options, "rechercher", NOMS_OPTIONS_RECHERCHER,
+        usage='Usage: rechercher --requete <texte> [--dans fichiers|bdd|tous]'
+              ' [--tag ...] [--mot-cle ...] [--source ...] [--periode 30j]'
+              ' [--limite N] [--json] [--prive]')
+    if code_inconnues != 0:
+        return code_inconnues
 
     # Validation
     requete = options.get("requete", "").strip()

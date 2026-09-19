@@ -1381,3 +1381,139 @@ visibles ; la declaration, elle, les nomme.
 > 1. **Rien ne se construit sur une resolution non fiable** (B, P, C avant tout) ;
 > 2. **Chaque module remplace une regle recopiee 4 a 63 fois** par une regle ecrite une fois ;
 > 3. **Un fichier nait EQUIPE ET VU** -- protection le jour 1, declaration le jour 1, preuve le jour 1.
+---
+
+## Entree -- [preparation] un outil COPIER/COLLER de fragments (2026-09-19)
+
+**Demande createur** : `on doit mettre en place un outil 'copier/coller' qui va permettre
+de contrer les problemes que tu rencontre quand tu recopies des fragments existants.`
+
+**Mode PREPARATION annonce** : oui (discussion hors code, flux 2).
+**Contexte** : la demande est arrivee pendant MO-208 (fermer les 2 trous des crochets) ;
+la mission a ete PARQUEE pour ouvrir cet espace -- elle reprend apres le GO.
+**Ce qui a ete construit** : RIEN. Aucun fichier matrice touche hors `preparation/`.
+
+### Phase 2 -- INVENTAIRE : les 5 pannes MESUREES du copier/coller
+
+> Ce ne sont pas des hypotheses : ce sont les pannes REELLES du 2026-09-19, avec leur trace.
+
+| # | Le geste de recopie | Ce qui a casse (mesure) | Ce que la cause etablit |
+|---|---|---|---|
+| 1 | Recopier un bloc d'import depuis un AFFICHAGE de lecture | **MO-207** : le bloc `--ancien` a ete REFUSE par la porte ("0 occurrence") : l'affichage rendait le texte replie AUTREMENT que le fichier (`URGENCE_DEFAUT,` d'un cote, `URGENCE_DEFAUT, VERDICT_NON,` de l'autre). `py_compile` passait : c'etait un **NameError A L'EXECUTION** | **l'affichage n'est PAS le fichier** : lire n'est pas copier |
+| 2 | Choisir un point de restauration par `ls \| head -1` | **MO-194 puis MO-204** : le `.bak` choisi etait un etat INTERMEDIAIRE ; le contre-temoin comparait la version **A ELLE-MEME** (4 KO, puis 21 OK apres correction ; meme faute 22 OK en MO-194) | le nom le plus ancien n'est pas forcement le pristine |
+| 3 | Recopier un texte francais | **MO-206** : deux **guillemets francais** sont entres dans le fichier (2 non-ASCII, signales par la porte, corriges) | un signe invisible ne se voit pas a la recopie |
+| 4 | Passer un texte par la LIGNE DE COMMANDE | **EO-192** : les accents graves ont ete **EXECUTES par le shell** et ont TROUE la trace deposee ; **EO-195** : un accent a glisse (corrige en place) | **le transport MODIFIE la donnee** |
+| 5 | Enchainer plusieurs editions du meme fichier | **EO-191** : 4 editions dans la MEME seconde -> UN SEUL point de restauration conserve : le pristine est PERDU | le retour arriere disparait sans le dire |
+
+**Ce que l'inventaire etablit** : le "copier/coller" n'est pas UN geste, c'est une
+**CHAINE** -- voir -> transposer -> transporter -> poser -- et **chaque maillon peut
+alterer la donnee SANS que rien ne le signale au moment ou ca arrive**. Les pannes 1 a 4
+sont des pannes de TRANSPORT ; la panne 5 est une panne de RETOUR ARRIERE.
+
+### Phase 3 -- DESSINER : la fiche cible
+
+| Champ | Valeur |
+|---|---|
+| **Nom propose** | `fragment.py` (couche native, `matrice/data/commun/`) |
+| **1 phrase** | Extraire d'un fichier EXISTANT le fragment EXACT (octets reels), prouver qu'il est UNIQUE, et composer la paire ancien/nouveau que la porte `editer` accepte -- sans jamais recopier un caractere a la main. |
+| **Verbes (3, pas plus)** | `extraire` (fichier + plage de lignes OU ancre -> le fragment, ses numeros de lignes, son empreinte) ; `verifier` (le fragment existe-t-il ? COMBIEN de fois ? ou ?) ; `poser` (composer les deux fichiers ancien/nouveau pour la porte) |
+| **Garanties** | 1) la donnee vient du **FICHIER**, jamais d'un affichage ; 2) l'unicite est **PROUVEE AVANT** l'edition (compte + numeros de lignes candidats) ; 3) l'ASCII est mesure **AVANT** ; 4) **aucun transport par shell** : les fichiers portent la donnee, pas la ligne de commande ; 5) refus **DIRECTIONNEL** si le fragment est ambigu, avec les lignes candidates |
+| **Pourquoi c'est meilleur que le natif** | le natif rend un AFFICHAGE (qui peut differer du fichier) et echoue **APRES COUP** ("0 occurrence") ; ici l'echec de recopie devient **impossible par construction** : la paire sort du fichier lui-meme |
+| **Ne fait PAS** | il n'edite pas : il **PREPARE**. La pose reste a la porte `editer` (backup, empreinte, BDD, garde). **Une seule maison par geste.** |
+| **Lien au reste** | il sert la limite deja inventoriee **numero 3** (`str_replace` : "fragile au whitespace, echec silencieux") et complete le pas **I-05 `texte.py`** (ASCII vu avant) |
+
+### Phase 4 -- PRIORISER
+
+- La serie **I-00 -> I-06** (GO du 2026-09-13) est le SOCLE (chemin, fichier, horloge,
+  execution, texte, empreinte) et **n'est pas construite** : `matrice/data/commun/` porte
+  **20 modules**, dont AUCUN des I-xx (mesure du 2026-09-19).
+- Cette cible est **TRANSVERSALE**, comme le pas P : elle ne remplace aucun module, elle
+  sert la porte `editer` deja en service.
+- Ordre propose : **APRES le socle** (I-02 `fichier.py` et I-05 `texte.py` lui donnent les
+  octets et l'ASCII) et **AVANT toute nouvelle serie d'editions lourdes**.
+
+### Ce qui reste a TRANCHER (pour le GO createur)
+
+1. **Le nom** : `fragment.py`, `copier.py` ou `extrait.py` ? (la couche a deja `cible.py`, `transport_listes.py`).
+2. **La designation** : plage de lignes, ancre textuelle, ou **les deux** (l'ancre resiste au
+   deplacement, la plage est exacte au caractere) ?
+3. **Le perimetre** : sert-il tout le projet, ou `matrix/` seul ?
+4. **La place** : apres le socle (proposition ci-dessus) ou en transversal immediat ?
+---
+
+## Cloture -- GO CREATEUR et 4 arbitrages (2026-09-19)
+
+**GO createur** : `GO sur la preparation : tranche les 4 arbitrages du fragment
+(nom, designation, perimetre, place) et cree les missions.`
+
+**Phase 5 -- CLORE.** Les 4 arbitrages sont TRANCHES ci-dessous (avec leur raison), et la
+sortie de PREPARATION est versee : une mission au vrac (voir plus bas).
+
+### Arbitrage 1 -- LE NOM : `fragment.py`
+
+Il nomme l'**OBJET** (le fragment), jamais le geste -- meme regle que `fichier.py`,
+`texte.py`, `cible.py`. `copier.py` serait un **verbe** (et le nom d'un natif : la
+confusion est exactement ce qu'on veut abolir). `extrait.py` nomme le resultat d'un
+geste, pas la chose ; `fragment.py` nomme la chose.
+
+### Arbitrage 2 -- LA DESIGNATION : les DEUX, dans un seul verbe
+
+- `extraire --lignes a,b` : **exact**, pour un BLOC CONTIGU. C'est la geste de la panne
+  numero 1 (un bloc d'imports recopie depuis un affichage).
+- `extraire --ancre "texte"` : **resiste au DEPLACEMENT**, pour un fragment qui bouge.
+  C'est la geste de la panne  numero 2 (retrouver un pristine dans une famille de `.bak`).
+- **Garde** : une ancre doit etre **UNIQUE**. Sinon refus DIRECTIONNEL qui **NOMME les
+  lignes candidates** (jamais un choix silencieux).
+
+Un seul verbe `extraire` (deux facons de designer), plus `verifier` et `poser` : **3 verbes
+au total**, comme la fiche le proposait.
+
+### Arbitrage 3 -- LE PERIMETRE : `matrix/`
+
+Lecture et pose dans la racine `matrix/` (la Matrice entiere). Hors de la : **REFUS qui
+NOMME le perimetre**. Une extension hors `matrix/` sera une **decision nommee**, jamais un
+glissement silencieux (lecon L-007 / EO-154 : un perimetre qui ne dit rien n'est pas un
+perimetre).
+
+### Arbitrage 4 -- LA PLACE : transversal IMMEDIAT, comme le pas P
+
+- La porte `editer` est **DEJA en service**, et la panne est **QUOTIDIENNE** : **deux**
+  occurrences le 2026-09-19 (MO-207 : bloc refuse ; MO-206 : deux guillemets non-ASCII).
+- Le socle **I-00 -> I-06** (GO du 2026-09-13) n'est **TOUJOURS PAS CONSTRUIT** : mesure du
+  2026-09-19, `matrice/data/commun/` porte **20 modules**, et **aucun** des I-xx. Placer ce
+  pas APRES le socle reviendrait a ne **jamais** traiter la panne.
+- Il est donc **transversal immediat**, de la meme famille que le pas **P** (qui a repare
+  une cecite PRESENTE, pas un risque futur).
+- **DEUX DETTES NOMMEES** (declarees, donc ce ne sont pas des crimes) : les **octets
+  atomiques** (I-02 `fichier.py`) et l'**ASCII vu avant** (I-05 `texte.py`) seront
+  **rebranches** quand ces modules naitront. D'ici la, le pas porte ces deux controles
+  lui-meme, et il le DIT dans son contrat.
+
+### La panne numero 5 n'est PAS de ce pas (et elle a deja son item)
+
+Le retour arriere perdu (4 editions dans la meme seconde -> 1 seul point de restauration)
+n'est pas un probleme de recopie : c'est **EO-191**, deja deposee au vrac ("la rafle
+d'editions ne laisse qu'UN point de restauration"). Deux problemes differents, deux items
+differents : un pas par defaut.
+
+### La sortie de PREPARATION : la mission
+
+| Champ | Valeur |
+|---|---|
+| Porte | entonnoir `deposer`, crochet `[mission]` |
+| Type | **DECLARE `dev`** (artefact NEUF : c'est un module natif) |
+| Theme a la naissance | `OUTIL` (TH-003, "construire ou reparer un outil dedie") -- route CREER-OUTIL |
+| Place dans la serie | **transversal immediat** (arbitrage 4) : elle attend son tour en file, elle n'est pas perdue |
+| Preuve exigee | cobaye : le fragment sort du FICHIER (pas d'un affichage) ; une ancre ambigue REFUSE en nommant les candidates ; les deux pannes du jour rejouees et rendues IMPOSSIBLES |
+### Trace de sortie (2026-09-19)
+
+| Objet | Id | Etat |
+|---|---|---|
+| La mission `fragment.py` (arbitrage 4 : transversal immediat) | item `EO-197` (type DECLARE `dev`) puis mission **`MO-209`** (theme `OUTIL`, type `dev`) | EN ATTENTE (elle attend son tour, serie stricte) |
+| L'item a ete **CLASSE A LA NAISSANCE** (declencheur de MO-207) | file `dev` | la preuve que le declencheur marche en reel |
+| Constat du PREMIER usage reel du declencheur | item **`EO-198`** (type DECLARE `reparation`) | au vrac de sa file : **la CATEGORIE d'un item classe n'a aucun verbe de reparation** (le role oui, par `retiqueter`) |
+
+**Fait a dire** : l'item `EO-197` est ne avec la categorie **`bdd`** -- FAUSSE, proposee a cause d'une
+**seule** occurrence du mot "BDD" dans l'objectif (une enumeration). Le role a suivi (BDD), et il a
+ete REPARE par la porte (`retiqueter --role OUTIL`, trace `role_avant = BDD`). La CATEGORIE, elle,
+est restee `bdd` : **aucun verbe ne la repare**. C'est le constat `EO-198`, depose le meme jour.

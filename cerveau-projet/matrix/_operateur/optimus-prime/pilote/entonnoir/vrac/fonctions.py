@@ -3,14 +3,15 @@
 Une seule tache chacune (convention-architecture-outils).
 """
 try:
-    from listes import (CHAMP_AUTO_AXES, CHAMP_AUTO_VALIDATION, MOTS_CLES_TYPES,
-                       PREFIXE_ITEM, URGENCE_DEFAUT, VERDICT_NON, CHAMP_TYPE_PROPOSE,
-                       MOT_CLE_DECLARE)
+    from listes import (CHAMP_AUTO_AXES, CHAMP_AUTO_VALIDATION, CHAMP_SOURCE_TRACE,
+                       CHAMP_TYPE_SOURCE, MOTS_CLES_TYPES, PREFIXE_ITEM, URGENCE_DEFAUT,
+                       VERDICT_NON, CHAMP_TYPE_PROPOSE, MOT_CLE_DECLARE)
     from mots import mot_parcourt, mots_de
     from roles import CHAMP_ROLE, CHAMP_TITRE
     from stockage import horodater
 except ImportError:  # importe comme paquet (depuis le pilote) : chemins complets
     from entonnoir.listes import (CHAMP_AUTO_AXES, CHAMP_AUTO_VALIDATION,
+                                  CHAMP_SOURCE_TRACE, CHAMP_TYPE_SOURCE,
                                   MOTS_CLES_TYPES, PREFIXE_ITEM, URGENCE_DEFAUT,
                                   VERDICT_NON, CHAMP_TYPE_PROPOSE, MOT_CLE_DECLARE)
     from entonnoir.mots import mot_parcourt, mots_de
@@ -19,7 +20,7 @@ except ImportError:  # importe comme paquet (depuis le pilote) : chemins complet
 
 
 def deposer_vrac(etat, theme, objectif, urgence, source, role="", verdict="",
-                 axes=None, type_propose=""):
+                 axes=None, type_propose="", trace="", type_source=""):
     """Depose UNE mission brute au vrac (echelon 0) et retourne son identifiant EO-XXX.
 
     Le prefixe vient de listes.py PREFIXE_ITEM (CV-009 : chaque porte attribue
@@ -47,6 +48,16 @@ def deposer_vrac(etat, theme, objectif, urgence, source, role="", verdict="",
         # re-deviner, et la trace dit qui a parle (le crochet ou la table).
         CHAMP_TYPE_PROPOSE: type_propose,
     }
+    # L ORIGINE du type part avec l item (EO-192) : c est elle qui dit au
+    # classement s il a le DROIT de consommer ce type tout seul (la declaration
+    # est souveraine) ou s il doit le proposer pour qu on le confirme.
+    if type_source:
+        mission[CHAMP_TYPE_SOURCE] = type_source
+    # TRACE de provenance (F1) : son PROPRE champ, jamais le champ ferme
+    # `source`. Vide, elle n est pas posee -- un champ vide qui aurait l air
+    # renseigne est un mensonge de forme.
+    if trace:
+        mission[CHAMP_SOURCE_TRACE] = trace
     if role:
         mission[CHAMP_ROLE] = role
     etat.setdefault("vrac", []).append(mission)

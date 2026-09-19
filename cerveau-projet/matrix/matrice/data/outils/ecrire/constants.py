@@ -32,6 +32,18 @@ else:
 ALLOWLIST_RACINE = ("AGENTS.md",)
 ALLOWLIST_PREFIXES = ("demarrer-",)
 
+# LA RACINE DE LA MATRICE est CONSOMMEE chez son domicile partage (data/commun/
+# cible.py) : le perimetre doit juger le chemin RESOLU, donc il a besoin de la
+# racine REELLE de la Matrice. Deux installations existent (depot :
+# cerveau-projet/matrix ; deploiement : matrix) -- rejouer cette detection ici en
+# ferait un SECOND domicile (M-076, EO-154). `racine_matrice_stricte` est
+# SEPAREE de `racine_matrice` (MO-184) : celle-ci a un repli sur la racine du
+# WORKSPACE (juste pour ANCRER une destination, FAUX pour JUGER un perimetre),
+# celle-la n en a AUCUN -- None veut dire aucune Matrice, et le perimetre REFUSE
+# alors NOMMEMENT (jamais en silence -- MO-183 / EO-177).
+from cible import racine_matrice_stricte  # noqa: E402
+RACINE_MATRICE = racine_matrice_stricte(REPERTOIRE_OUTIL)
+
 ENCODAGE = "utf-8"
 ENCODAGE_ERREUR = "strict"
 TAILLE_BLOC_LECTURE = 65536
@@ -48,7 +60,18 @@ SUFFIXE_BAK = ".bak"
 # d'integrite, remorque Optimus) compile CE motif au lieu de le redeviner :
 # une forme redevinee par un consommateur derive en silence (L-100/L-102).
 FORMAT_HORODATE_BAK = "%Y%m%d_%H%M%S"
-MOTIF_BAK_HORODATE = r"\.bak\.\d{8}_\d{6}$"
+MOTIF_BAK_HORODATE = r"\.bak\.\d{8}_\d{6}(-\d+)?$"
+
+# EO-191 (MO-223) : une RAFALE d'editions du meme fichier dans la MEME SECONDE
+# ne doit plus ECRASER le point pristine. Le nom canonique reste celui declare
+# juste au-dessus ; quand il est DEJA pris par un AUTRE etat, la porte ouvre un
+# point DISTINCT en suffixant un compteur -- et le motif DECLARE le couvre, donc
+# les consommateurs (espion d'integrite, remorque, contrat fondamental) le
+# recoivent par le domicile, sans avoir une seule ligne a changer.
+MARQUEUR_POINT_EN_PLUS = "-"
+RANG_POINT_EN_PLUS_MIN = 2
+RANG_POINT_EN_PLUS_MAX = 99
+MESSAGE_POINT_DISTINCT = "[BAK] nom canonique deja pris : point de restauration DISTINCT "
 
 # Modes
 MODES_PERMIS = ("creer", "remplacer", "ajouter")

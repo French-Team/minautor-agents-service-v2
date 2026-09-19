@@ -59,7 +59,7 @@ CHEMINS_MAINTENANCE = (
     "data/outils/suivi-optimus",
     "data/suivi-optimus.jsonl",
     "data/suivi-optimus.jsonl.sha256",
-    "suivi-optimus.md",
+    "_operateur/optimus-prime/suivi-optimus.md",
     "docs/suivi-optimus-conception.md",
 )
 

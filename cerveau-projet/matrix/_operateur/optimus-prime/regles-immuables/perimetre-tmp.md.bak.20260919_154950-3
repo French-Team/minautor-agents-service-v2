@@ -1,0 +1,121 @@
+---
+identite:
+  type: regle-immuable
+  appartient_a: optimus-prime
+  commun: false
+  decide_par: createur
+  date: 2026-09-15
+  amendee_le: 2026-09-19
+---
+
+
+# REGLE IMMUABLE -- PERIMETRE DES FICHIERS TEMPORAIRES
+
+> Grave le 2026-09-15 (GO createur, MO-104). Sources : la convention
+> `conventions/convention-tmp-optimus-cameleon.md` (M-094) et son renvoi
+> "Proposition au createur" ; le contre-exemple reel du cobaye M-090 ecrit
+> dans AppData/Temp, HORS perimetre ; et le residu constate le 2026-09-15
+> (zone `tmp-optimus` sans son README, 6 fichiers de missions passees).
+>
+> AMENDEE le 2026-09-19 (demande createur, MO-236) : ma zone vit desormais en
+> `cerveau-projet/matrix/_operateur/optimus-prime/tmp-optimus/` -- invisible PAR
+> CONSTRUCTION (la zone `_operateur` est exclue de la lecture du cameleon), et non
+> plus par une exclusion de NOM. La ligne du cameleon est corrigee au passage :
+> R-005 (MO-189) avait deplace cette zone vers `workspace/tmp-cameleon/`, et ce
+> marbre ne le disait pas encore.
+>
+> Declinaison de `perimetre-write.md` : celle-ci dit OU j ai le droit
+> d ecrire (`matrix/` seul, 2 exceptions de demarrage) ; celle-la dit OU va
+> un fichier JETABLE et QUAND il meurt. Une seule maison par idee : ici on
+> ne redefinit JAMAIS le perimetre general, on le precise pour le jetable.
+
+## La regle
+
+1. **Chaque zone a SON domicile.** Tout fichier temporaire -- script,
+   cobaye, mesure, brouillon, preuve -- va dans la zone de son auteur :
+   - moi : `cerveau-projet/matrix/tmp-optimus/`
+   - le cameleon : `cerveau-projet/matrix/tmp-cameleon/`
+2. **Aucun autre emplacement, jamais.** Sont interdits : la racine du
+   projet, `matrice/`, les dossiers d outils, AppData/Temp, tout dossier
+   hors `matrix/` (contre-exemple reel : le cobaye M-090). Ecrire un
+   jetable ailleurs est un ECART, jamais une commodite.
+3. **La zone est PERMANENTE et porte TOUJOURS son README.** Le dossier
+   `tmp-*` ne disparait pas entre deux missions : c est le chemin sur
+   lequel s appuient les cobayes et les outils (ex : `dry-run.py`). Un
+   `tmp-*` present SANS son README est une zone privee de son contrat :
+   c est un ecart, pas un etat normal.
+4. **En fin de mission, le CONTENU de la zone est VIDE** (fichiers ET
+   dossiers de cobaye) ; le README seul demeure. La preuve d un cobaye est
+   son **RESULTAT**, lu a l execution ; le fichier qui dort n est plus une
+   preuve. Sa suppression se TRACE (BDD des modifications ou marbre),
+   jamais silencieuse : une preuve citee puis supprimee sans trace
+   laisserait une citation pointant vers du vide.
+
+## L ARTEFACT DE PORTE n est PAS un temporaire d agent (arbitrage createur, 2026-09-16)
+
+Un POINT DE RESTAURATION de porte (`*.bak` horodate depose a cote de sa
+cible, ex : `commun.py.bak.20260916_070813`) suit une AUTRE regle que le
+jetable d agent :
+
+- il n est pas ecrit par un agent mais par la TRANSACTION d une porte
+  d ecriture (`matrice/data/outils/ecrire`), et il est EXIGE par proto-2
+  ("JAMAIS modifier sans point .bak") ;
+- il n a AUCUN autre domicile possible : un point de restauration doit
+  rester a portee de sa cible, sinon il ne restaure plus rien ;
+- il est CONSOMME par le revert, et sa forme est BORNEE par un motif :
+  `*.bak.<AAAAMMJJ_HHMMSS>`.
+
+Decision du createur : le point 2 ci-dessus ne vise PAS cet artefact. Ce
+n est pas un affaiblissement de la regle, c est la porte qui l ACCUSE : le
+CONTRAT FONDAMENTAL (CV-007) nomme l exemption, BORNEE par le motif (un
+`.bak` sans horodatage complet reste un ECART) et VISIBLE (chaque fichier
+epargne est RENDU par le rapport, jamais un silence -- doctrine MO-075).
+Tout autre fichier temporaire reste soumis au point 2, sans exception.
+
+Sources : friction 42 (mesuree le 2026-09-16 : 14 ecarts "fichier non
+canonique" fabriques par 14 ecritures d une seule session) ; contradiction
+entre cette regle et proto-2, arbitree par le createur le 2026-09-16
+(le .bak reste a cote de sa cible, le contrat s etend).
+
+## Ce que la garde voit, et ce qu elle ne voit PAS
+
+
+`garde-tmp.py` (M-100, appele par la porte du cockpit) ACCUSE sur deux
+choses SEULEMENT :
+
+1. un fichier temporaire HORS des zones `tmp-*` (motifs `_cobaye*`,
+   `*.tmp`, `_*.txt`, `.tmp-*`, `.zz-*`) ;
+2. une zone `tmp-*` presente SANS son README.
+
+Il INFORME du nombre de fichiers presents dans chaque zone, sans accuser :
+pendant une mission, des cobayes y vivent legitimement.
+
+Il ne peut PAS verifier le point 4 (le contenu vide en fin de mission) :
+cette partie est une DISCIPLINE, prouvee par la note de fin de mission, et
+non par la garde. Ce que la garde ne voit pas ne doit jamais etre cru
+garde.
+
+## Le texte PARTAGE (la meme regle pour les DEUX flux)
+
+> La regle de la zone jetable lie les DEUX flux, mais CE fichier-ci est PRIVE
+> (`commun: false` : il nomme mon domicile et ma trace), donc le flux voisin ne
+> peut pas le lire -- et il a du REFORMULER la regle a la main. Deux textes
+> copies divergent : mesure du 2026-09-16, les deux formulations avaient derive
+> (frictions 65 et 67). Le texte COMMUN vit desormais la ou les deux le lisent :
+> la BDD des conventions de la Matrice, entree `CV-012` (porte
+> `bdd-conventions-matrice`), ecrite SANS nommer aucun flux -- verifie.
+>
+> C EST le texte de reference. Ce fichier garde ce qui ne m appartient qu a moi :
+> MON domicile, MA trace, et le moment ou MON pilote purge.
+
+## Ou la regle se LIT (le garde la surveille)
+
+1. Ce fichier.
+2. `regles-immuables-readme.md` : l index des regles immuables.
+3. `optimus-prime.md` : la fiche (REGLES ABSOLUES).
+4. `protocoles/proto-1-reprise-mission.md` : le protocole relu au
+   demarrage.
+
+Le controle `regle-lue-a-l-allumage` de `garde-tmp.py` ACCUSE si l un de
+ces quatre emplacements perd la regle : une regle que personne ne relit ne
+protege rien.

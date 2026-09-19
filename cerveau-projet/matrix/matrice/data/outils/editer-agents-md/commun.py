@@ -18,6 +18,12 @@ from constants import (
     NOM_AGENTS_TMP,
     REPERTOIRE_OUTIL,
     TAILLE_BLOC_LECTURE,
+    # MO-216 (EO-209) : l outil etait MORT -- commun.py appelait detecter_racine
+    # (ligne 26) sans l importer : NameError a la premiere utilisation, la seule
+    # porte qui ecrit l encart v3 de AGENTS.md ne pouvait plus rien faire.
+    # constants.py le consomme DEJA du domicile partage (motif M-076) : commun.py
+    # le consomme A SON TOUR depuis constants, jamais d une 3e copie.
+    detecter_racine,
 )
 
 

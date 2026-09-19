@@ -181,3 +181,42 @@ def preciser_entree(donnees, identifiant, preuve, raison):
     entree["operation"] = "preciser"
     entree["date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return entree, ""
+
+
+def recenser_entrees(donnees, famille, lecteurs, ecrivains, index, motif):
+    """ECRIT le recensement (lecteurs/ecrivains/index) sur une FAMILLE de points.
+
+    Mesure MO-192 (friction 88) : ces trois champs existaient et AUCUNE porte ne
+    les ecrivait apres la proposition -- un recensement MESURE restait hors du
+    domicile, et une colonne vide se lisait comme un fait. Ce verbe EST cette
+    porte : il applique un recensement a TOUTE une famille d'un coup (famille =
+    les points dont la source CONTIENT le motif), sans toucher au statut, au
+    verdict, ni a la categorie. Il ne REMPLACE jamais un champ deja rempli par
+    autre chose (il n'ecrit que ce qui change), et REFUSE une famille vide ou un
+    recensement vide (aucune ecriture inutile). Le motif est ajoute UNE fois a la
+    preuve (idempotent : relancer ne duplique pas la trace).
+    """
+    if not famille:
+        return 0, "famille obligatoire (motif cherche dans la source)"
+    if not (lecteurs or ecrivains or index):
+        return 0, "aucun champ a ecrire (lecteurs/ecrivains/index)"
+    touches = 0
+    for entree in donnees.get("elements", []):
+        if famille not in str(entree.get("source") or ""):
+            continue
+        change = False
+        for nom, valeur in (("lecteurs", lecteurs), ("ecrivains", ecrivains),
+                            ("index", index)):
+            if valeur and entree.get(nom) != list(valeur):
+                entree[nom] = list(valeur)
+                change = True
+        if not change:
+            continue
+        entree["operation"] = "recenser"
+        entree["date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if motif and motif not in str(entree.get("preuve") or ""):
+            entree["preuve"] = (entree.get("preuve") or "") + " | RECENSEMENT : " + motif
+        touches += 1
+    if not touches:
+        return 0, "aucun point de la famille n'a change (rien a ecrire)"
+    return touches, ""

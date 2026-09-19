@@ -1,0 +1,254 @@
+---
+identite:
+  type: spec
+  appartient_a: optimus-prime
+  commun: false
+  statut: proposition
+  date: 2026-09-19
+  origine: EO-200 (demande createur du 2026-09-19, recue pendant MO-210), mission MO-220
+---
+
+# SPEC -- La chaine pense-bete -> spec -> todo-list
+
+> STATUT : PROPOSITION. Aucun code de la chaine n existe. Ce document est
+> lui-meme l ETAPE 2 de la chaine qu il decrit : il suit l etape 1 (le
+> pense-bete, ici la demande EO-200) et precede l etape 3 (la todo-list).
+> Le GO du createur est OBLIGATOIRE avant toute mise en oeuvre.
+
+## 1. La demande
+
+Demande du createur, arrivee entre crochets PENDANT un travail en cours (MO-210) :
+
+  Traduire en pratique la chaine pense-bete -> spec -> todo-list : une demande
+  du createur entre crochets, recue PENDANT un travail en cours, ne doit plus
+  interrompre le round -- elle devient un pense-bete (demande clarifiee et
+  developpee au propre), puis une spec (document detaille et organise), puis
+  une todo-list (taches et sous-taches). La v1 avait commence cette pratique :
+  la visiter et en extraire le meilleur avant de poser la mise en oeuvre dans
+  la Matrice.
+
+Le probleme a resoudre n est donc pas d ecrire trois documents : c est qu une
+demande recue EN TRAVAILLANT cesse d interrompre le round sans etre perdue.
+
+## 2. LA MESURE -- ce que la v1 avait commence
+
+| Ce que la v1 ANNONCE | Ce que le DISQUE porte (mesure du 2026-09-19) |
+|---|---|
+| dossier pense-betes/ (index-cerveau.md ligne 23) | ABSENT du disque |
+| pense-betes/ : idees, specs, todos (readme-dev.md ligne 61) | ABSENT |
+| trois agents : Athena (pense-betes), Promethee (specs), Minerve (todos) (readme-dev.md lignes 181 a 183) | les trois FICHES existent, et les QUATRE outils d Athena aussi (rechercher, generateurs, creer, valider : 4 .py + 4 .sh + 4 .md, statut prepare, deja executes, leurs __pycache__ le prouvent). Promethee et Minerve, eux, n ont AUCUN outil : 0 sur disque |
+| convention de renommage type-theme.ID.class.statut.md (conventions/renommage/convention-renommage.md) | PRESENTE (118 lignes) : le SEUL actif complet de la v1 sur ce sujet |
+| regles d Athena (statut ebauche, template obligatoire, anti-doublon, index a jour) | PRESENTES (athena.md) |
+| corrections d Athena | MEMOIRE GELEE le 2026-09-04 : plus aucune lecon ecrite |
+
+Conclusion mesuree : la v1 a laisse une DOCTRINE, un SQUELETTE et QUATRE OUTILS
+-- mais AUCUN DOMICILE. Ce qui a manque n est pas l outillage : c est l endroit
+ou les pense-betes vivent, et la chaine qui decide de l ouvrir.
+
+CE QUE LES OUTILS v1 PORTENT VRAIMENT (mesure du 2026-09-19) :
+
+- le SQUELETTE du pense-bete, en 6 sections : 1. Idee, 2. Probleme / Question,
+  3. Contexte, 4. Liens, 5. Structure prevue (RVAV par sous-partie),
+  6. RVAV du pense-bete ;
+- le NOMMAGE impose a la creation : [theme].[id].[class].[statut].md ;
+- l ANTI-DOUBLON (rechercher-pense-betes) et la VALIDATION (valider-pense-bete :
+  structure, header, sections, nommage, placeholders, ASCII) ;
+- la CHAINE v1 s arrete la : RIEN ne relie le pense-bete a une spec ni a une
+  todo-list -- Promethee et Minerve n ont aucun outil ;
+- le template lui-meme (pense-bete-template.md) est ABSENT : il vit en dur dans
+  le generateur (un seul domicile : pas de divergence possible a ce niveau).
+
+DEFAILLANCE DE MA PREMIERE MESURE, DITE : mon premier comptage cherchait les
+outils a la RACINE de agents/tools/ et n a vu que le premier niveau (0 trouve).
+Le CONTRE-TEMOIN exige par la section 7 a trouve 16 fichiers et corrige la spec.
+Une mesure qui ne peut pas se tromper ne prouve rien.
+
+## 3. LE MEILLEUR DE LA v1 -- ce qui SURVIT
+
+1. TROIS ETAPES, UN LIVRABLE PAR ETAPE : pense-bete = demande clarifiee et
+   developpee au propre ; spec = document detaille et organise ; todo-list =
+   taches et sous-taches.
+2. UN STATUT PORTE PAR L OBJET qui AVANCE (ebauche -> prepare -> dev -> test ->
+   valide) et qui ne recule pas sans trace.
+3. LA BOUCLE RVAV avant de declarer une etape finie : Rechercher, Verifier,
+   Analyser, Valider.
+4. L ANTI-DOUBLON avant toute creation : chercher un sujet proche (le moteur de
+   recherche existe deja en v3).
+5. LE NOMMAGE COMPOSE, jamais un identifiant en mot seul (regle du cerveau).
+6. UN INDEX TENU : ecrire sans index rend le document introuvable.
+
+## 4. CE QUI CHANGE EN v3 -- et pourquoi
+
+| v1 | v3 | Raison |
+|---|---|---|
+| chaine d AGENTS (Athena -> Promethee -> Minerve) | chaine d ETAPES sur UN objet | la v3 interdit tout agent nouveau (regle AUCUN AUTRE AGENT) : il n y a que l operateur (optimus-prime) et le cameleon. Recreer trois agents violerait la regle. |
+| le pense-bete est un fichier neuf | le pense-bete EXISTE deja : c est l ITEM de l entonnoir (regle des demandes dans l entonnoir) | la v3 depose deja toute demande quand elle est entendue ; un fichier de plus serait un SECOND domicile pour la meme verite |
+| un outil par agent | l entonnoir, la porte ecrire, le marbre, les BDD existent | la chaine doit CONSOMMER les portes existantes, jamais les doubler |
+| le document est la seule trace | la trace vit aussi en BDD (suivi-optimus, bdd-modifications) | en v3 une trace vide se lit comme un fait : une etape non tracee est une etape qui n a pas eu lieu |
+
+## 5. LA CHAINE, EN 3 ETAPES (fiches cibles)
+
+### P1 -- PENSE-BETE (statut ebauche)
+
+- Entree : une demande recue, DEPOSEE dans l entonnoir au moment ou elle est
+  entendue (deja en place : ce qui arrive pendant une mission est un ITEM, pas
+  une interruption).
+- Livrable : la demande CLARIFIEE et DEVELOPPEE au propre : le quoi, le
+  pourquoi, le perimetre, ce qui est deja mesure, ce qui reste a mesurer.
+- Portes : l entonnoir (naissance de l item) puis la porte ecrire (document).
+
+### P2 -- SPEC (statut prepare)
+
+- Entree : le pense-bete.
+- Livrable : le document DETAILLE ET ORGANISE : la demande, la mesure faite, les
+  etapes, les arbitrages a trancher, les preuves attendues, le hors perimetre.
+  C est CE document-ci, pour la chaine elle-meme.
+- Portes : la porte ecrire ; les arbitrages se tranchent avec le createur.
+
+### P2bis -- NEMESIS (OBLIGATOIRE -- regle createur du 2026-09-19)
+
+- REGLE CREATEUR, recue PENDANT cette mission : cette phase doit passer par
+  nemesis AVANT de finir, et etre auto-validee pour etre jetee dans l entonnoir.
+- Entree : la spec.
+- Livrable : l AVIS CONTRADICTOIRE sur les 3 axes du proto-4 (cas limites,
+  optimisation, securite / integrite), en forme Oui, MAIS : chaque attaque est un
+  RISQUE nomme, avec l amelioration necessaire.
+- Le nemesis est un THEME (TH-015 CONTRE-ANALYSE), jamais un agent : la v3 n a
+  pas d agent Nemesis et n en aura pas.
+- Une spec qui n a pas subi son nemesis n est PAS finie : elle ne descend pas en
+  todo-list.
+- Portes : la porte ecrire (l avis vit DANS le document, section dediee) et
+  l entonnoir pour les items nes de l attaque (source audit-nemesis).
+
+### P3 -- TODO-LIST (statut dev)
+
+- Entree : la spec approuvee.
+- Livrable : les taches et sous-taches ORDONNEES, chacune avec SA porte et SA
+  preuve attendue. La todo-list devient la source des missions : une sous-tache
+  donne un item d entonnoir, le pilote les enchaine en serie ; l item d origine
+  reste la tache mere.
+- Portes : la porte ecrire puis le pilote (les missions naissent de la).
+
+## 6. LES CINQ ARBITRAGES A TRANCHER (createur)
+
+A. DOMICILE des documents. Trois candidats mesures :
+   A1. _operateur/optimus-prime/preparation/ : l espace PREPARATION existe DEJA
+       et porte exactement cette matiere (fiches cibles, arbitrages, critere GO) ;
+   A2. un domicile neuf matrix/pense-betes/ avec son index : fidele a la v1,
+       mais risque de deuxieme domicile avec A1 ;
+   A3. aucun document : les trois etapes vivent dans les CHAMPS de l item.
+   Proposition : A1, car le domicile existe, il est deja dans le perimetre
+   d ecriture de la phase PREPARATION et il tient deja des fiches cibles.
+
+B. NOM STABLE ou RENOMMAGE. La v1 renommait le fichier a chaque avancement
+   (.02.dev.md). En v3 le nom est la cle du fichier, des liens et des traces :
+   renommer coute une porte et fait bouger toutes les references.
+   Proposition : nom STABLE, statut porte DANS la carte d identite : l avancement
+   se lit dans le document et en BDD, il ne se lit pas dans le nom.
+
+C. PREFIXE NUMEROTE. PB-, SP- et TD- seraient TROIS familles neuves ; la
+   convention CV-008 dit qu un namespace vivant ne partage jamais son prefixe et
+   qu une famille neuve se decide AVANT (inventaire rejoue). Une famille neuve
+   coute un compteur, des registres et des gardes.
+   Proposition : UN SEUL prefixe pour la chaine (PB-NNN), l ETAPE vivant dans le
+   statut. Autrement dit : un objet, un numero, trois etats.
+
+D. QUI DECLARE L AVANCEMENT. Proposition : Optimus SEUL, et le passage
+   spec -> todo-list se DECLARE puis attend le GO du createur. Chaque avancement
+   est TRACE (suivi-optimus + bdd-modifications) : c est la trace qui fait foi,
+   pas la memoire.
+
+E. UN CROCHET NOUVEAU ? La liste des crochets est FERMEE (convention-crochets.md,
+   10 mots) : un crochet neuf est une decision createur.
+   Proposition : AUCUN crochet neuf. La demande entre par les crochets existants
+   (mission, revision, question) et c est le TYPE de l item qui porte la suite.
+
+## 7. LES PREUVES ATTENDUES (criteres GO)
+
+1. COBAYE NOMINAL : un sujet reel traverse LES TROIS ETAPES ; les trois documents
+   sont lus sur disque et les trois traces sont en BDD.
+2. CONTRE-TEMOIN (obligatoire) : le MEME sujet traite SANS passer par les portes
+   ne laisse NI document NI trace : c est lui qui prouve que la chaine fait
+   quelque chose. Un cobaye qui ne peut pas dire non ne prouve rien.
+3. NIVEAU 2 : l etape sautee EST VISIBLE. Un document dont le statut reste a
+   l etape precedente alors que l etape suivante est revendiquee est un ecart,
+   et il est DIT.
+4. py_compile, la roue (/sante) et les 24 maillons de non-regression VERTS.
+5. ZERO agent nouveau, zero porte qui double une porte existante.
+
+## 8. CE QUI EST HORS PERIMETRE
+
+- Athena, Promethee et Minerve NE REVIENNENT PAS : aucun agent nouveau.
+- Aucun code de la chaine avant le GO : ce document est la seule piece produite.
+- Le contenu des documents (leur style, leurs sections) n est pas impose ici :
+  seule la CHAINE est specifiee.
+- Le crochet [preparation] et son parcours restent tels quels.
+
+## 9. CE QUE JE DEMANDE
+
+Un GO, ou des corrections, sur les cinq arbitrages de la section 6. Ce document
+devient alors l ETAPE 2 terminee ; la section 6 transformee en todo-list devient
+l ETAPE 3, et la mise en oeuvre nait de la, en serie stricte.
+
+## 10. CONTRE-ANALYSE (NEMESIS) -- les 3 axes du proto-4
+
+> Appliquee le 2026-09-19 sur CETTE spec, par le THEME TH-015 (jamais un agent),
+> forme du proto-4 : jamais un simple oui, toujours Oui, MAIS -- un risque nomme,
+> et l amelioration necessaire. Regle createur du jour : pas de fin sans nemesis.
+
+### Axe 1 -- CAS LIMITES (5 trous trouves)
+
+- N1. Une demande arrive SANS crochet (dialogue normal) : la chaine ne nait pas et
+  la demande se perd. REMEDE : la regle n est pas le crochet, c est le DEPOT ;
+  toute demande du createur est deposee (source createur), crochet ou pas.
+- N2. Une demande qui VISE l objet en cours de travail (celle d aujourd hui) :
+  ce n est pas un item de plus, c est un AMENDEMENT de la phase en cours --
+  integre, date et trace comme tel (le round n est pas interrompu).
+- N3. DEUX demandes sur un theme proche : la v1 verifiait avant de creer
+  (anti-doublon), la v3 n a aucun geste qui le fasse. REMEDE : un controle
+  obligatoire avant toute naissance, et un INDEX pour le rendre possible.
+- N4. Une demande arrive en DEFCON 5 : seules les missions DEFCON sont
+  injectables. Le pense-bete doit alors RESTER au vrac, et la spec le DIT.
+- N5. L ENTRETIEN du vrac : un item jamais promu y reste pour toujours (EO-194 y
+  est depuis ce matin). REMEDE : dire QUI reprend un item dormant et QUAND,
+  sinon la chaine fabrique des oublis au lieu d en supprimer.
+
+### Axe 2 -- OPTIMISATION (2 trous trouves)
+
+- N6. Le statut porte dans la carte d identite (proposition B) n est verifie par
+  AUCUN controle : une carte peut mentir et une colonne vide se lit comme un fait.
+  REMEDE : un controle PERMANENT lit le statut (pas un cobaye jetable, qui meurt
+  avec la zone temporary a chaque cloture).
+- N7. Sans INDEX, l anti-doublon coute un balayage complet a chaque demande.
+  REMEDE : l index du domicile est obligatoire des la premiere piece.
+
+### Axe 3 -- SECURITE / INTEGRITE (2 constats, dont un qui TRANCHE un arbitrage)
+
+- N8. INVISIBILITE (L-016) : un document pose dans matrix/ est LU par le cameleon ;
+  un document dans _operateur/ ne l est pas (sa zone privee). Or un pense-bete
+  contient les mots du createur, ses arbitrages et son nom d operateur.
+  CONSEQUENCE MESUREE : l arbitrage A se tranche par la securite -- A1 (_operateur)
+  est le seul domicile qui ne fuit pas ; A2 (matrix/pense-betes/) exposerait le
+  document au cameleon. Ce n est plus une preference, c est une contrainte.
+- N9. Le nemesis doit rester un THEME : aucune porte ne doit le presenter comme un
+  agent, sinon la v3 recree l armee d agents qu elle interdit.
+
+### VERDICT DU NEMESIS
+
+La spec tient sur le fond (mesure, etapes, arbitrages, preuves), mais elle etait
+INCOMPLETE sur deux points que l attaque a trouves : la FIN de chaine (pas de
+nemesis, alors qu il est desormais obligatoire) et l ENTRETIEN (vrac dormant,
+index absent, statut non garde). Les neuf constats N1 a N9 deviennent des items
+deposes dans l entonnoir a la cloture de la mission (section 11).
+
+## 11. AUTO-VALIDATION ET ENTONNOIR (regle createur du 2026-09-19)
+
+La phase ne se termine pas par un document : elle se termine par des ITEMS
+auto-valides DANS L ENTONNOIR, sinon rien ne nait.
+
+- Le depot dit SA SOURCE : createur pour la demande du createur, audit-nemesis
+  pour ce que l attaque a trouve -- la source est FERMEE (SOURCES, MO-203).
+- L auto-validation se LIT (les 5 axes), elle ne se suppose pas : un item non
+  auto-valide reste en attente et attend le createur -- on ne force pas la main.
+- Tant que les cinq arbitrages de la section 6 ne sont pas tranches, AUCUN code de
+  la chaine n est ecrit.

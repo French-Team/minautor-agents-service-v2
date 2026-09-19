@@ -1,0 +1,88 @@
+# OUTIL -- chaine-pense-bete -> spec -> todo-list
+
+> LA CHAINE (EO-215, MO-224) : une demande devient un PENSE-BETE, puis une SPEC,
+> puis une TODO-LIST -- dans UN SEUL document a NOM STABLE, dont l'AVANCEMENT est
+> pose par cette porte des que les conditions tiennent (arbitrages createur du
+> 2026-09-19). Elle ne fabrique aucun fichier a la main : elle CONSOMME la porte
+> unique d'ecriture (outil ecrire), le passage oblige du cerveau.
+
+## Verbes
+
+```
+python main.py naitre --titre "..." [--objectif "..."]
+python main.py avancer --id PB-001
+python main.py etat [--id PB-001]
+```
+
+- `naitre` : ouvre l'ETAPE 1 (pense-bete) au DOMICILE, ecrit le document par la
+  porte d'ecriture, incremente la famille d'ids et met l'index a jour.
+- `avancer` : pose l'etape SUIVANTE si -- et seulement si -- les conditions
+  tiennent. Un refus NOMME la condition manquante.
+- `etat` : ce qui EXISTE -- l'index du domicile, ou le detail d'un objet.
+
+## Les 3 etapes et les 3 familles d'ids (arbitrage C)
+
+| Etape | Famille | Ce que l'objet porte |
+|---|---|---|
+| `pense-bete` | `PB-001` | la demande clarifiee, ce qui est mesure, ce qui reste a mesurer |
+| `spec` | `SP-001` | le dessin, les arbitrages, les preuves attendues |
+| `todo` | `TD-001` | les items executables, dans l'ordre |
+
+Le nom du FICHIER ne change JAMAIS (arbitrage B : nom stable). L'etape vit dans la
+carte d'identite (`statut:`) et chaque etape franchie laisse SON id dans la carte
+(`pense-bete:`, `spec:`, `todo:`) : l'histoire de l'objet reste lisible.
+
+## Le NEMESIS est une CONDITION LUE, pas une promesse (arbitrage D)
+
+`avancer` REFUSE de quitter l'etape `spec` tant que la trace NEMESIS n'est pas
+presente -- et elle est exigee sous DEUX formes, une declaration ne suffisant pas :
+
+1. le champ `nemesis:` dans la carte d'identite (la trace est DECLAREE) ;
+2. un marqueur `NEMESIS` ou `CONTRE-ANALYSE` dans le CORPS (le passage est ECRIT).
+
+Un champ seul serait une promesse : le document dirait qu'il a ete contredit sans
+qu'aucune contradiction soit lisible. Le refus nomme le manque.
+
+## DOMICILE (arbitrage A1)
+
+`_operateur/optimus-prime/preparation/` -- l'espace PREPARATION, invisible du
+cameleon (L-016) : un pense-bete porte les mots du createur et ses arbitrages.
+Il abrite trois pieces : les objets (`chaine-*.md`), l'index
+(`index-chaine.md`) et les compteurs (`chaine-compteurs.json`).
+
+Si ce domicile est absent, l'outil REFUSE (code 2) : il n'ecrit jamais ailleurs.
+Le chemin n'est pas devine, il est verifie (L-006).
+
+## Garanties
+
+| Garantie | Comment |
+|---|---|
+| ATOMIQUE | toute ecriture passe par la porte `ecrire` (tmp + validation + os.replace) |
+| REVERSIBLE | chaque ecriture laisse son point de restauration horodate (`.bak`) |
+| PROUVE | SHA-256 avant / apres et empreinte annoncees par la porte d'ecriture |
+| UNIQUE | un seul domicile d'ecriture ; aucun `unlink`, aucun fichier fabrique a la main |
+| PARLE | chaque geste DIT ce qu'il a fait : naissance, etape franchie, ou refus nomme |
+
+## Ce que cette porte NE fait PAS
+
+- Elle ne remplit pas le CORPS a votre place : la matiere (mesures, arbitrages,
+  contre-analyse) vient de l'agent. La porte tient la STRUCTURE et les CONDITIONS ;
+  elle refuse une etape dont la matiere manque -- elle ne l'invente pas.
+- Elle ne decide pas qu'une demande merite un pense-bete : c'est l'entonnoir et le
+  createur.
+- Elle n'impose pas de crochet neuf (arbitrage E) : la chaine est un PROCESS, pas
+  une porte de plus a la reception.
+
+## Codes de sortie
+
+| Code | Sens |
+|---|---|
+| 0 | geste fait (naissance, etape franchie, etat rendu) -- le message le DIT |
+| 2 | REFUS : condition manquante, structure insuffisante, derniere etape, id introuvable, option inconnue, domicile absent |
+
+## Preuve (MO-224)
+
+Cobaye en zone jetable : le domicile est redirige, et les cinq cas sont joues --
+naissance, franchissement autorise, REFUS sans trace NEMESIS, franchissement avec
+trace, REFUS de la derniere etape. La preuve discriminante : le MEME document,
+avec la trace, avance ; sans elle, il est refuse.

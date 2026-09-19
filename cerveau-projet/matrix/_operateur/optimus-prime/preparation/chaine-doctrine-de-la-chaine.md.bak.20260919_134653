@@ -1,0 +1,24 @@
+---
+identite:
+  type: chaine
+  appartient_a: optimus-prime
+  commun: false
+  titre: Doctrine de la chaine
+  statut: pense-bete
+  pense-bete: PB-001
+---
+
+# Doctrine de la chaine
+
+## Pense-bete -- la demande clarifiee
+
+Ouvrir la chaine pense-bete -> spec -> todo-list dans la doctrine du code : elle existe, elle est eprouvee, et son mode d'emploi est lisible par le prochain round (EO-218).
+
+## Ce qui est deja mesure
+
+(a ecrire)
+
+## Ce qui reste a mesurer
+
+(a ecrire)
+

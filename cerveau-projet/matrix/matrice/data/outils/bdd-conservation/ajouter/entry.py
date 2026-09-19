@@ -1,12 +1,13 @@
 """Porte des propositions, classements et decisions de conservation."""
 from commun import charger_bdd, enregistrer_bdd, extraire_options
-from ajouter.fonctions import classer_entree, creer_entree, decider_entree, preciser_entree
+from ajouter.fonctions import (classer_entree, creer_entree, decider_entree,
+                              preciser_entree, recenser_entrees, separer_liste)
 
 NOMS_OPTIONS = (
     "source", "destination", "categorie", "raison", "lecteurs", "ecrivains",
     "index", "sha-avant", "sha-apres", "octets-avant", "octets-apres",
     "lignes-avant", "lignes-apres", "restaurable", "archive", "preuve",
-    "tags", "mission", "id", "verdict",
+    "tags", "mission", "id", "verdict", "famille", "motif",
 )
 
 
@@ -30,8 +31,26 @@ def executer(arguments):
         entree, message = preciser_entree(
             donnees, options.get("id", ""), options.get("preuve", ""), options.get("raison", "")
         )
+    elif verbe == "recenser":
+        # MO-192 (friction 88) : la PORTE qui ecrit le recensement dans les
+        # champs qui l'attendent (lecteurs/ecrivains/index), pour une FAMILLE
+        # entiere -- sans elle, un recensement mesure restait hors du domicile.
+        touches, message = recenser_entrees(
+            donnees, options.get("famille", ""),
+            separer_liste(options.get("lecteurs", "")),
+            separer_liste(options.get("ecrivains", "")),
+            separer_liste(options.get("index", "")),
+            options.get("motif", ""),
+        )
+        if touches <= 0:
+            print("Refus : " + message)
+            return 2
+        empreinte = enregistrer_bdd(donnees)
+        print("Recensement : " + str(touches) + " element(s) recense(s) (operation recenser)"
+              + " -- empreinte : " + empreinte[:16] + "...")
+        return 0
     else:
-        print("Usage : proposer | classer | decider | preciser")
+        print("Usage : proposer | classer | decider | preciser | recenser")
         return 2
 
     if entree is None:

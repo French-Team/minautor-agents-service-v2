@@ -95,3 +95,12 @@ def extraire_options(arguments, noms_connus):
     """Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici."""
     from options import extraire_options as repartir  # domicile partage (EO-158)
     return repartir(arguments, noms_connus, drapeaux=("json", "etat"))
+
+
+def signaler_inconnues(options, noms_connus, usage):
+    """DIT une option inconnue (mot du domicile partage, EO-179) : meme motif que
+    la porte rechercher -- l outil dit le PROBLEME et le GESTE (MO-239). Sans cet
+    appel, la mesure du 2026-09-19 rendait CODE 0 sur --option-bidon : le resultat
+    du DEFAUT, indiscernable d un resultat correct (L-055)."""
+    from options import signaler_inconnues as signaler  # domicile partage (EO-179)
+    return signaler(options, "maintenir", noms_connus, usage)

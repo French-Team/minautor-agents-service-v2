@@ -20,6 +20,11 @@ Les outils (`outils/`) ne sont PAS des combos : ils ne sont pas numerotes.
                                    + CONTRAT DE LANCEMENT ("verbe"/"verbes" : un objet
                                    sans contrat serait inlancable -- MO-071/EO-114)
                                    (DEUX familles : `c-` dans combos/, `sc-` dans super-combos/)
+    creer-super-combo <slug> --description "..." --phases "a,b" --verbes "x,y"
+                                [--verbe <defaut>]
+                                -- generer super-combos/sc-<NNN>-<slug>/
+                                   (main + README) et l enregistrer dans SON
+                                   registre (section super-combos, compteur sc)
     lister                      -- etat numerote des combos et super-combos
 
 Usage: python creer-combo.py <verbe> [args...]
@@ -92,7 +97,9 @@ REGISTRY_PATH = REPERTOIRE_COMBOS / REGISTRY_NOM
 # super-combos vivent dans super-combos/, un cran AU-DESSUS de combos/, avec
 # leur PROPRE source de verite. Cette porte lit les deux registres pour son
 # `lister` -- mais n'ecrit jamais que le sien : une porte n'ecrit pas le
-# registre d'une autre famille.
+# registre d une autre famille. ARBITRAGE CREATEUR du 2026-09-19 (MO-202) :
+# cette porte fait desormais NAITRE les deux familles (verbe creer-super-combo) ;
+# elle ecrit alors le registre de la famille du NOM, jamais un registre melange.
 REPERTOIRE_SUPER_COMBOS = REPERTOIRE_COMBOS.parent
 if REPERTOIRE_SUPER_COMBOS.name != "super-combos":
     raise RuntimeError(
@@ -490,6 +497,53 @@ def cmd_banque(arguments):
     return 0
 
 
+TEMPLATE_SUPER_README = "\n".join((
+    "# @@NOM@@",
+    "",
+    "> **Super-combo numerote @@ID@@** -- le numero est OBLIGATOIRE et jamais",
+    "> reutilise (contrat de nommage CV-008, BDD conventions-matrice).",
+    "",
+    "@@DESCRIPTION@@",
+    "",
+    "Phases declarees : @@PHASES@@",
+    "",
+    "Genere par `creer-combo.py creer-super-combo` le @@DATE@@.",
+    "",
+    "## Usage",
+    "",
+    "```bash",
+    "python main.py @@VERBE@@",
+    "python main.py status",
+    "python main.py auto-test",
+    "```",
+    ""))
+
+
+def enregistrer_registry_super(nom, identifiant, numero, slug, valeurs, phases, verbe, verbes):
+    # Enregistrer le super-combo dans SON registre (section super-combos, compteur sc).
+    registre = lire_json(REGISTRY_SUPER_PATH, {})
+    entrees = registre.setdefault(CLE_SUPER_COMBO, [])
+    entree = {
+        "id": identifiant,
+        "numero": numero,
+        "slug": slug,
+        "nom": nom,
+        "fichier": nom + "/" + DOSSIER_MAIN,
+        "description": valeurs["@@DESCRIPTION@@"],
+        "phases": list(phases),
+        "usage": "python main.py " + (verbe or "[verbe]") + " [--fichier <fichier>]",
+        CLE_CONTRAT_VERBE: verbe,
+        CLE_CONTRAT_VERBES: list(verbes),
+        "cree_le": valeurs["@@DATE@@"],
+    }
+    entrees[:] = [e for e in entrees if e.get("nom") != nom]
+    entrees.append(entree)
+    scores = registre.setdefault(CLE_COMPTEURS, {})
+    scores[PREFIXE_SUPER_COMBO] = max(scores.get(PREFIXE_SUPER_COMBO, 0), numero)
+    ecrire_atomique(REGISTRY_SUPER_PATH, json.dumps(registre, indent=2, ensure_ascii=True) + FINS_LIGNE)
+    return entree
+
+
 # --- Categorie : creer -----------------------------------------------------
 
 def cmd_creer(arguments):
@@ -547,6 +601,74 @@ def cmd_creer(arguments):
     print("  - " + DOSSIER_README)
     print("  - registry.json : " + entree["id"] + " -> bdd " + entree["bdd"])
     print("\nVerifier : python creer-combo.py verifier " + nom)
+    return 0
+
+
+def cmd_creer_super_combo(arguments):
+    # Generer un SUPER-COMBO numerote (famille sc-) et l enregistrer dans SON registre.
+    parser = argparse.ArgumentParser(description="Generer un super-combo numerote")
+    parser.add_argument("slug", help="Slug du super-combo (ex: auto-diagnostic)")
+    parser.add_argument("--description", default="", help="But du super-combo")
+    parser.add_argument("--phases", default="", help="Phases, separees par des virgules")
+    parser.add_argument("--verbe", default="", help="Verbe par defaut (vide = cycle a phases)")
+    parser.add_argument("--verbes", default="", help="Verbes acceptes, separes par des virgules")
+    parsed = parser.parse_args(arguments)
+
+    registre = lire_json(REGISTRY_SUPER_PATH, {})
+    analyse = analyser_nom(parsed.slug)
+    if analyse is not None:
+        prefixe, numero, slug = analyse
+        if prefixe != PREFIXE_SUPER_COMBO:
+            print("Refus : un super-combo porte le prefixe " + repr(PREFIXE_SUPER_COMBO)
+                  + " (recu : " + parsed.slug + ")")
+            return 1
+    else:
+        slug = parsed.slug
+        numero = numero_suivant(registre, PREFIXE_SUPER_COMBO, CLE_SUPER_COMBO)
+
+    nom = former_nom(PREFIXE_SUPER_COMBO, numero, slug)
+    identifiant = former_id(PREFIXE_SUPER_COMBO, numero)
+    base = REPERTOIRE_SUPER_COMBOS / nom
+    if base.exists():
+        print("Super-combo deja existant : " + str(base))
+        return 1
+
+    phases = [phase.strip() for phase in parsed.phases.split(",") if phase.strip()]
+    verbes = [item.strip() for item in parsed.verbes.split(",") if item.strip()]
+    verbe = parsed.verbe.strip()
+    if verbe and verbe not in verbes:
+        print("Refus : le verbe par defaut " + repr(verbe) + " est absent de --verbes ("
+              + ", ".join(verbes) + ")")
+        return 1
+    if not verbes:
+        print("Refus : un super-combo sans --verbes serait INLANCABLE par construction (MO-071).")
+        return 1
+
+    valeurs = {
+        "@@NOM@@": nom,
+        "@@ID@@": identifiant,
+        "@@DESCRIPTION@@": parsed.description,
+        "@@PHASES@@": repr(phases),
+        "@@VERBE@@": verbe,
+        "@@VERBES@@": repr(verbes),
+        "@@DATE@@": date_maintenant(),
+    }
+    contenu_main = rendre(TEMPLATE_SUPER_MAIN, valeurs)
+    contenu_readme = rendre(TEMPLATE_SUPER_README, valeurs)
+    if not est_ascii(contenu_main) or not est_ascii(contenu_readme):
+        print("Generation refusee : contenu non ASCII (convention du depot)")
+        return 1
+
+    ecrire_atomique(base / DOSSIER_MAIN, contenu_main)
+    ecrire_atomique(base / DOSSIER_README, contenu_readme)
+    entree = enregistrer_registry_super(nom, identifiant, numero, slug, valeurs, phases, verbe, verbes)
+
+    print("Super-combo cree : " + str(base))
+    print("  numero   : " + identifiant)
+    print("  phases   : " + ", ".join(phases))
+    print("  registre : " + str(REGISTRY_SUPER_PATH.name))
+    print("")
+    print("Verifier : python creer-combo.py verifier " + nom)
     return 0
 
 
@@ -756,8 +878,85 @@ def cmd_lister(arguments):
     return 0 if ecarts == 0 else 1
 
 
+TEMPLATE_SUPER_MAIN = "\n".join((
+    "#!/usr/bin/env python3",
+    "# -*- coding: utf-8 -*-",
+    "# @@NOM@@ -- super-combo numerote @@ID@@ (genere par creer-combo.py le @@DATE@@)",
+    "# @@DESCRIPTION@@",
+    "#",
+    "# Phases declarees : @@PHASES@@",
+    "# Usage : python main.py @@VERBE@@ | status | auto-test",
+    "",
+    "import sys",
+    "",
+    "SUPER_ID = \"@@ID@@\"",
+    "SUPER_NOM = \"@@NOM@@\"",
+    "DESCRIPTION = \"@@DESCRIPTION@@\"",
+    "PHASES = @@PHASES@@",
+    "VERBE_DEFAUT = \"@@VERBE@@\"",
+    "VERBES = @@VERBES@@",
+    "",
+    "CODE_OK = 0",
+    "CODE_ECHEC = 1",
+    "",
+    "",
+    "def cmd_status(arguments):",
+    "    # Etat de l objet : ce qu il DECLARE, et rien de plus.",
+    "    print(\"Super-combo  : \" + SUPER_NOM + \" (\" + SUPER_ID + \")\")",
+    "    print(\"Description  : \" + DESCRIPTION)",
+    "    print(\"Phases       : \" + \", \".join(PHASES))",
+    "    print(\"Verbe defaut : \" + (VERBE_DEFAUT or \"(aucun)\"))",
+    "    print(\"Verbes       : \" + \", \".join(VERBES))",
+    "    return CODE_OK",
+    "",
+    "",
+    "def cmd_auto_test(arguments):",
+    "    # Preuve que l objet SAIT ACCUSER : un verbe hors contrat est REFUSE.",
+    "    ecarts = []",
+    "    if not PHASES:",
+    "        ecarts.append(\"aucune phase declaree : l objet ne dirait rien\")",
+    "    if not VERBES:",
+    "        ecarts.append(\"aucun verbe declare : l objet serait inlancable\")",
+    "    if VERBE_DEFAUT and VERBE_DEFAUT not in VERBES:",
+    "        ecarts.append(\"verbe par defaut absent de la liste : \" + VERBE_DEFAUT)",
+    "    if principal([\"verbe-hors-contrat\"]) != CODE_ECHEC:",
+    "        ecarts.append(\"un verbe hors contrat est ACCEPTE\")",
+    "    if ecarts:",
+    "        print(\"AUTO-TEST \" + SUPER_ID + \" : \" + str(len(ecarts)) + \" ecart(s)\")",
+    "        for ecart in ecarts:",
+    "            print(\"  - \" + ecart)",
+    "        return CODE_ECHEC",
+    "    print(\"AUTO-TEST \" + SUPER_ID + \" : conforme (\" + str(len(PHASES))",
+    "          + \" phase(s), \" + str(len(VERBES)) + \" verbe(s))\")",
+    "    return CODE_OK",
+    "",
+    "",
+    "def principal(arguments):",
+    "    # Diriger : verbe connu -> sa fonction ; verdict du contrat, jamais un silence.",
+    "    if not arguments:",
+    "        print(\"Usage : python main.py @@VERBE@@ | status | auto-test\")",
+    "        return CODE_ECHEC",
+    "    verbe = arguments[0]",
+    "    if verbe == \"status\":",
+    "        return cmd_status(arguments[1:])",
+    "    if verbe == \"auto-test\":",
+    "        return cmd_auto_test(arguments[1:])",
+    "    if verbe in VERBES:",
+    "        print(\"REFUS : phase \" + verbe + \" declaree mais NON IMPLEMENTEE dans \"",
+    "              + SUPER_ID + \".\")",
+    "        return CODE_ECHEC",
+    "    print(\"REFUS : verbe inconnu : \" + verbe)",
+    "    print(\"  verbes acceptes : \" + \", \".join(list(VERBES) + [\"status\", \"auto-test\"]))",
+    "    return CODE_ECHEC",
+    "",
+    "",
+    "if __name__ == \"__main__\":",
+    "    sys.exit(principal(sys.argv[1:]))",
+    ""))
+
 VERBES = {
     "banque": cmd_banque,
+    "creer-super-combo": cmd_creer_super_combo,
     "creer": cmd_creer,
     "verifier": cmd_verifier,
     "lister": cmd_lister,

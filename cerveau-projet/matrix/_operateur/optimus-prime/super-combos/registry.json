@@ -75,9 +75,32 @@
         "auto-test"
       ],
       "cree_le": "2026-09-16"
+    },
+    {
+      "id": "sc-004",
+      "numero": 4,
+      "slug": "auto-diagnostic",
+      "nom": "sc-004-auto-diagnostic",
+      "fichier": "sc-004-auto-diagnostic/main.py",
+      "description": "Auto-diagnostic des outils : agreger les defauts DECLARES (R5) et sonder chaque outil, puis PREPARER les missions de reparation",
+      "phases": [
+        "diagnostic",
+        "inspection",
+        "preparer"
+      ],
+      "usage": "python main.py diagnostic [--fichier <fichier>]",
+      "verbe": "diagnostic",
+      "verbes": [
+        "diagnostic",
+        "inspection",
+        "preparer",
+        "status",
+        "auto-test"
+      ],
+      "cree_le": "2026-09-19 18:00:30"
     }
   ],
   "compteurs": {
-    "sc": 3
+    "sc": 4
   }
 }

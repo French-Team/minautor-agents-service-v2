@@ -1,4 +1,4 @@
-# USER-PROFIL -- profil racine de l'utilisateur
+# USER-PROFIL -- profil racine de l'utilisateur -- Utiliser seulement dans la V1 et V2
 
 > Fiche racine contenant la langue de l'utilisateur. Lue par le pilote
 > Oracle (fonctions/pilote.py) qui injecte un rappel de langue au debut

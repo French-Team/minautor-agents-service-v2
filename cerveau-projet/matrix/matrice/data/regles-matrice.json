@@ -33,7 +33,50 @@
         "versions"
       ],
       "source": "M-079 createur"
+    },
+    {
+      "id": "R-004",
+      "date": "2026-09-19 08:30:38",
+      "regle": "VERSIONS SEPAREES ET ANCETRES : v1, v2 et v3 NE COMMUNIQUENT PAS entre elles. Trois ensembles CLOS -- v1 (session-admin : Cerberus, Oracle), v2 (session-freelance : Stark, JARVIS), v3 (session-matrix : la Matrice, cameleon + Optimus). La v3 n adresse JAMAIS un agent, un serveur, un outil ou un fichier de v1 ou de v2, et reciproquement : aucune passerelle, aucune synchronisation, aucune demande inter-versions. La v1 et la v2 sont les ANCETRES de la v3 : elles sont gelees (aucun chantier de la v3 ne les prend pour cible). SEULE LA v3 VA VIVRE dans ce projet par la suite. Complement de R-003 : R-003 protege le FICHIER (jamais touche), celle-ci protege la RELATION (jamais adressee) -- les deux tiennent ensemble.",
+      "tags": [
+        "gouvernance",
+        "versions",
+        "v1",
+        "v2",
+        "v3",
+        "perimetre",
+        "ancetres",
+        "communication"
+      ],
+      "source": "createur (declaration 2026-09-19)"
+    },
+    {
+      "id": "R-005",
+      "date": "2026-09-19 15:52:00",
+      "regle": "PERIMETRES DES DEUX FLUX DE LA MATRICE (regle, 2026-09-19, MO-189/EO-146). La Matrice porte DEUX flux aux perimetres SEPARES, ecrits ici noir sur blanc. FLUX 2 (Optimus, _operateur/optimus-prime/) : LIT tout depuis la RACINE du workspace -- il mesure, diagnostique, surveille -- et ENTRETIENT matrix/ ENTIERE ; son perimetre d ECRITURE est matrix/ (c est ce que juge le garde-perimetre WRITE). FLUX 1 (le cameleon, matrice/) : CONSTRUIT dans workspace/ -- c est son perimetre d ECRITURE -- et LIT ce que la Matrice lui injecte (fiche, theme, role, checklist, lecons, objectif), jamais l inverse (R-001). CONSEQUENCE, et c est le point : chaque zone jetable vit dans le perimetre d ECRITURE de SON flux -- matrix/_operateur/optimus-prime/tmp-optimus/ pour Optimus, workspace/tmp-cameleon/ pour le cameleon -- et non a la racine de la Matrice par principe. Un fichier temporaire ne s ecrit JAMAIS hors du perimetre de son flux ; une zone qui vit ailleurs rend la regle muette (c est le cas mesure avant cette regle : tmp-cameleon vivait dans matrix/ alors que le cameleon ne doit rien y ecrire). AMENDEMENT 2026-09-19 (MO-236, demande createur) : la zone d'Optimus ne vit plus a la racine de la Matrice mais sous _operateur/optimus-prime/tmp-optimus/ -- invisible PAR CONSTRUCTION au cameleon, et non plus par une exclusion de nom.",
+      "tags": [
+        "gouvernance",
+        "perimetre",
+        "flux",
+        "cameleon",
+        "optimus",
+        "tmp"
+      ],
+      "source": "MO-189 (EO-146, decision createur)"
+    },
+    {
+      "id": "R-006",
+      "date": "2026-09-19 09:49:49",
+      "regle": "UN SEUL DOMICILE POUR LES MODIFICATIONS : matrice/data/modifications-par-fichier.json, tenu par la porte bdd-modifications (noter/lire/corriger/verifier). L appui sqlite modifications.db et l instrument bdd-modifs qui l ecrivait sont RETIRES (EO-154, 2026-09-19) : deux ecrivains pour une meme idee ont diverge en silence (le pilote lisait le JSON, l appui portait la modification ; une colonne vide s est lue aucun fichier touche).",
+      "tags": [
+        "modifications",
+        "domicile",
+        "bdd-modifications",
+        "bdd-modifs",
+        "EO-154"
+      ],
+      "source": ""
     }
   ],
-  "compteur": 3
+  "compteur": 6
 }

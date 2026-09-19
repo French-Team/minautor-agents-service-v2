@@ -1,0 +1,1441 @@
+---
+identite:
+  type: journal
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# Journal PREPARATION -- Discussion & preparation
+
+> Discussion brute, datee, sans code. Toute decision non ecrite ici est perdue.
+> Theme : `parcours/themes/theme-preparation.json` (5 phases). Crochet : `[preparation]`.
+> Flux 2 seul : cet espace est entre le createur et Optimus, invisible du cameleon.
+
+## Entree -- Creation du parcours PREPARATION (M-131, 2026-09-12)
+
+**Demande createur** : `on doit mettre en place une serie d'outils qui doivent devenir les outils natifs de optimus, je veux obtenir des versions ameliorees des outils natifs qui ne sont pas configurables. Le but etant de fournir a optimus des outils meilleurs que les outils natifs.`
+
+**Livrable discute** : parcours PREPARATION + espace dedie + crochet `[preparation]`.
+**Sortie attendue de PREPARATION** : inventaire + cibles + serie -> GO createur -> missions CREER-OUTIL au vrac.
+
+---
+
+## Phase 1 -- Ouverture (M-132, 2026-09-12)
+
+- Intention createur (1 phrase) : **Fournir a Optimus des outils natifs ameliores, non configurables, meilleurs que les natifs LLM (porte unique, deterministes, verifies), pour qu'il travaille sans improviser.**
+- Precision createur 2026-09-12 (direction confiee a Optimus) : `je voudrais resoudre toutes les lacunes qui pourront se presenter a nous, dans la v1, on a par exemple, mis en place des wappers pour bash. Tu es plus cale que moi, j'ai besoin que tu diriges cette phase. Je veux pouvoir remplacer les outils natifs par nos outils qui devront etre plus configurable, pratique, evolutif, compatible (windows/linux), etc...`
+- Ajustement createur 2026-09-12 M-132 : `pour rechercher, je voudrais que par la suite, on elabore un veritable moteur de recherche pour optimus et par la suite pour la matrice. pourquoi, je veux pouvoir permettre a optimus de lancer des recherche specifique qui lui permettrons de retrouver & savoir facilement ce qu'il veut. ce moteur de recherche pourra retrouver les tags, les mot-cles, chercher dans les bdd, etc.`
+- Mode PREPARATION annonce : **oui** (discussion hors code, flux 2 verrouille)
+- Debut suivi-optimus : **M-132** `PREPARATION phase 2 : inventorier les outils natifs`
+- Retrait vivier : **TH-027 retire** (2026-09-12, L-016) -- PREPARATION reste en `_operateur/` seul, 0 fuite, vivier 24 themes
+
+---
+
+## Phase 2 -- INVENTAIRE (outils natifs actuels)
+
+> Methode : chaque limite = exemple reel ou lecon. Pas de jugement sans preuve (L-007 : L'OUTIL NATIF PRODUIT, LA MATRICE POSSEDE ET VERIFIE).
+
+| # | Outil natif | Usage reel | Limite observee (preuve) | Piste d'amelioration (non configurable) |
+|---|---|---|---|---|
+| 1 | `read_files` | Lire 1..N fichiers, slice offset/limit, 2000 lignes max | **Troncature silencieuse** 2000 lignes (fichier >2000 lu incomplet sans alerte forte) ; pas de SHA ni empreinte ; pas de verif encodage ; divergence 2 canaux L-009 (outil montre fichier correct, disque porte la corruption) ; pas de perimetre (peut lire `_operateur` si cameleon) | `lire-optimus` : lecture complete ou tranchee avec annonce `total/lu`, hash SHA, verif ASCII, perimetre read, second canal systeme obligatoire, sortie tronquee alerte |
+| 2 | `write_file` | Creer/remplacer fichier complet | **Non atomique** (ecriture directe) ; LF non forces L-001 ; pas de `.bak` (pas de revert proto-2) ; pas de SHA ; pas d'ASCII ; hors perimetre possible (ecriture hors `matrix/` viole perimetre-write) | `ecrire-optimus` : tmp+replace atomique, LF forces, `.bak` horodate, empreinte, garde-ascii, verif write `matrix/` seul (allowlist 2 demarrages), BDD modifications |
+| 3 | `str_replace` | Remplacer oldString->newString exact | **Fragile au whitespace** (match exact, echec silencieux si non trouve) ; pas de relecture entiere avant (proto-2 viole) ; pas de validation syntaxe (json.tool/py_compile) ; pas de point restauration ; pas de diff trace | `editer-optimus` : relire entier avant, verif oldString unique, `.bak`, validation auto (JSON/MD/py), diff en BDD, refus si 0 modif |
+| 4 | `run_terminal_command` | Bash : git, python, cat, mv, etc | **Bash interdit** (regle absolue : Python seul) ; lent/instable ; processus fantome L-012 (boucle zombie) ; piege `PYTHONIOENCODING=replace` L-008 tue le fils ; masquage erreur `2>/dev/null` L-003 ; injection shell | `exec-python` : porte Python seule, pas de shell, env fixe (`utf-8:replace`), timeout collecte, code sortie vu, zero processus fantome, serie stricte |
+| 5 | `code_search` | ripgrep regex, max 15/file, 250 global | **Pas de perimetre** (peut fouiller `_operateur` pour cameleon) ; troncature 15/file cache des occurences ; pas de preuve ligne exacte ; pas de BDD ; **jamais de recherche BDD/tags** (la v1 a 7 BDD mais 0 moteur) | `chercher-optimus` -> **moteur-recherche** (voir Phase 3 N-04) : fichiers + BDD + tags + mots-cles en 1 porte |
+| 6 | `glob` | Recherche par motif fichier (`**/*.ts`) | **Pas de perimetre**, pas de tri, peut lister `_operateur` ; pas de preuve mtime ; doublon avec `list_directory` | Fusionne dans `lister-optimus` (voir 7) |
+| 7 | `list_directory` | Lister dossier (fichiers + dossiers) | **Expose structure privee** si perimetre absent ; pas de filtre zone invisible ; pas d'empreinte | `lister-optimus` : listage perimetre + exclusion zones invisibles + tri mtime + preuve, couvre `glob`+`list_directory` en 1 porte |
+| 8 | `web_search` / `read_url` | Recherche web temps reel | **Non deterministe** (resultats changeants) ; pas de cache disque ; hallucinations ; pas de porte unique ; hors perimetre `matrix/` | `chercher-web-verifie` : cache disque hashe + porte unique + optionnel hors mission core (analyse/recherche seule), jamais en mission standard |
+| 9 | `gravity_index` | Comparer/installer services tiers | **Choix externe non verrouille** (service peut disparaitre) ; setup link non trace ; pas de perimetre | `choisir-service` : catalogue local verrouille + preuve install, ou deconseille si hors `matrix/` (infra seulement) |
+| 10 | `ask_user` / `suggest_followups` / `render_ui` | Interaction createur | **Non utilisable en Flux 2 autonome** (bloque si pose de question sans reponse) ; pas de BDD ; fuite possible | `demander-createur` : porte unique avec timeout + BDD suivi-optimus `decision`, ou `render_ui` verrouille pour liens graves |
+| 11 | `write_todos` / `skill` | Plan & chargement skill | **Pas de trace BDD** ; skill install peut ecrire hors `matrix/` | `planifier-optimus` : todos -> BDD + journal-preparation, skill seulement via `creer-outil` (porte) |
+
+**Synthese** : les 3 families les plus critiques pour Optimus sont **fichier** (1-3), **recherche** (5-7), **execution** (4). Les externes (8-9) sont secondaires.
+Le natif le plus dangereux aujourd'hui est `run_terminal_command` (bash) car il casse les 3 regles absolues (Python seul, pas de fantome, pas de 2>/dev/null).
+
+---
+
+## Phase 3 -- CIBLES (versions ameliorees) -- DIRECTION OPTIMUS (M-132 ajuste)
+
+> Contradiction apparente createur : `non configurable` (M-131) vs `plus configurable` (M-132 suite).
+> Doctrine tranhee par Optimus : **Interface LLM fige (0 config) + Implementation configurable pour la Matrice.**
+> - Pour le LLM (Optimus quand il appelle) : 1 verbe, 1-3 args, 0 option exotique -> pas d'hesitation, pas d'erreur de flag.
+> - Pour la Matrice (qui maintient) : tout est configurable en interne via `constants.py` + BDD + `proto-2 auto-evolution` -> evolutif sans toucher l'interface.
+> - Potions v1 recyclees : wrappers bash (.sh) existaient pour compat win/linux mais avec double maintenance (py/sh parity). En v3 : **Python seul** (regle absolue), compat porte par `pathlib` + `os.replace` atomique + `CREATE_NO_WINDOW`/`start_new_session` + `newline='\n'` + `encoding='utf-8:replace'`. Pas de .sh.
+
+### Verif v1 avant de dessiner (lacunes a ne pas reproduire)
+
+- v1 wrappers bash : 87 outils d'action + 21 combos, chaque outil en `.py` + `.sh` (parity `py_compile` + `bash -n`). Cause : LLM lancait du bash direct (`run_terminal_command`) avec heredoc casse, `2>/dev/null` masquant les erreurs (L-003), `PYTHONIOENCODING=replace` tuant le fils (L-008), zombies (L-012).
+- v1 reponse : `executer-formulaire` (D6/D7, 2026-08-21) : catalogue `generateurs-commande/catalogue-commandes.json` -> l'outil affiche `--schema` (champs types/requis), l'agent ecrit un JSON de reponses via `creer-fichier` (anti-heredoc), l'outil valide (refus avant exec) puis compose+execute. Plus de ligne bash geante.
+- Lecon v3 : on garde l'esprit `formulaire` (valide avant d'agir) mais on supprime la dette `.sh` : 1 seul langage (Python), 1 seule verite (constants.py).
+
+### Les 6 outils natifs ameliores proposes (ajuste N-04 moteur)
+
+| # | Natif -> Ameliore (nom tiret) | Verbes (1-3 max) | Garanties (porte unique, atomique, SHA, ASCII, perimetre) | Pourquoi meilleur que natif |
+|---|---|---|---|---|
+| **N-01** | `read_files` + `lire-*` -> **`lire`** | `lire --fichier <chemin> [--lignes 1:200] [--hash]` | Porte unique lecture. Annonce `total/lu/troncature` (jamais silencieux), SHA-256 optionnel, verif ASCII relevee, 2e canal systeme (L-009), perimetre read (`matrix/` seul, `data/commun/racine` pattern), `LF`/`BOM` detecte, tri deterministe si multi-fichiers | Fini la troncature invisible 2000 lignes. Le LLM sait s'il a tout lu. Preuve disque vs outil. |
+| **N-02** | `write_file` + `str_replace` + `editer-fichier` -> **`ecrire`** | `ecrire --fichier <chemin> --contenu <str|@file> [--mode creer|remplacer|ajouter]` + `editer --fichier --ancien --nouveau` (meme binaire, 2 verbes) | Atomique `tmp+replace` + `LF forces` (L-001) + `.bak` horodate (proto-2) + empreinte + `garde-ascii` + `scan-valeurs-en-dur` si modif code + diff en BDD `modifications` + verif write `matrix/` seul (2 exceptions racine) + validation `json.tool`/`py_compile` auto | 1 porte au lieu de 4. Jamais de fichier a moitie ecrit. Revert possible. Validation avant de dire `OK`. |
+| **N-03** | `list_directory` + `glob` + `lister-*` -> **`lister`** | `lister --dossier <chemin> [--recursif] [--filtre *.py]` | Perimetre `L-016` integre (exclut `_operateur/tmp-optimus/suivi-optimus` si demande cameleon-like, jamais pour Optimus mais porte le filtre), tri `mtime` deterministe, preuve `nb fichiers/dossiers`, exclusion `__pycache__/.git`, sortie machine `--json` | Fusion 2 natifs incoherents. Plus de fuite de structure privee. Tri stable. |
+| **N-04** | `code_search` + `rechercher-*` + BDD `lire --tag` -> **`moteur-recherche`** | `rechercher --requete \"perimetre\" [--dans fichiers|bdd|tous] [--tag L-016] [--source lecons] [--periode 7j] [--json]` + `rechercher --indexer` (rebuild) + `rechercher --schema` | **MOTEUR UNIFIE** : 1) **Fichiers** : ripgrep encapsule (rapide) + fallback Python utf-8, perimetre `matrix/` par defaut, contexte `-B/-A`, annonce `trouve/limite`, inv detecte ligne exacte. 2) **BDD** : FTS5 SQLite si dispo sinon scan JSON deterministe sur `lecons.json` (tags/source/lecon), `modifications.json` (fichier/tags/detail), `historiques-missions.jsonl` (id/theme/objectif/bilan), `vivier-themes.json`, `suivi-optimus.jsonl`, `activites-recentes.json`, `usages-outils-combos.jsonl`, `classeur-variables.json`. 3) **Index** : cache `data/index-recherche.sqlite` (FTS5 + trie BDD) + `index-recherche.json.sha256`, rebuild atomique, TTL 1h ou `--indexer` force. 4) **Filtres** : `--tag` (exact), `--mot-cle` (OR), `--source` (BDD cible), `--periode` (date). 5) **Sortie** : score + source + extrait + chemin, tri pertinence, `--json` machine. Garanties : perimetre `L-016` filtre les hits `_operateur` si appel Flux 1 (jamais pour Optimus), deterministe, win/linux `pathlib` + `newline` | **Code_search** ne fouillait que les fichiers (250 max caches). Le **moteur** retrouve en 1 appel : fichier + tag BDD + mot-cle + periode. Optimus pose `rechercher --requete \"defcon\" --dans tous --tag GOUVERNANCE` et sait tout. Puis la Matrice reutilise le meme moteur (lecture seule) pour le cameleon une fois mure. |
+| **N-05** | `run_terminal_command` (bash) -> **`executer`** | `executer --cmd \"python3 -m ...\" [--timeout 60] [--env utf-8:replace]` | **Python seul** (refuse `bash`/`sh`/`curl ... | bash`), `constants.py` pour env/timeout, `subprocess.run` sans shell (pas d'injection), `CREATE_NO_WINDOW` win + `start_new_session` posix, collecte `stdout/stderr` + `code` + `duree`, anti-heredoc : `--contenu-chemin @file` si gros contenu, zero zombie (L-012), serie stricte | Le natif le plus dangereux remplace par le plus sur. Meme commande partout (win/linux). Plus de `2>/dev/null` possible. |
+| **N-06** | `ask_user` / `suggest_followups` / `render_ui` / `write_todos` -> **`dialoguer`** | `dialoguer --question \"...\" [--choix a,b] [--timeout 0]` + `plan --todos \"...\"` | Flux 2 seul (jamais cameleon), timeout explicite (0 = persistant), trace `suivi-optimus decision` + `journal-preparation` si en PREPARATION, `render_ui` verrouille si lien grave, todos en BDD `activites-recentes` (pas en memoire volatile) | Le seul outil qui parle au createur. Trace, pas de blocage aveugle. |
+
+**Evolutivite N-04 (2 paliers, 1 interface) :**
+- **Palier 1 (livraison N-04 v1)** : `rechercher --requete` fouille fichiers (ripgrep) ET BDD par scan JSON (sans SQLite). Suffit pour `tags`/`mots-cles` immediats, perf <300ms sur 7 BDD (<2000 lignes). Preuve : `found/limited` + extrait.
+- **Palier 2 (auto-evolution proto-2, apres N-04 vert)** : index FTS5 `index-recherche.sqlite` (1 BDD, 1 porte), rebuild atomique, TTL, requete SQL performante (<50ms). 1 evolution auto-validee FAIBLE (ajout `indexer` + FTS), preuve avant/apres. Puis ouverture Matrice : la Matrice appelle `rechercher --dans bdd --json` en lecture seule pour le cameleon (filtre L-016).
+
+**Hors perimetre natif (gardes, pas de remplacement)** : `web_search`/`read_url`/`gravity_index` restent des **aides externes** (analyse/recherche uniquement, cache disque hashe, jamais en mission standard). On ne pollue pas le quotidien d'Optimus avec du non-deterministe.
+
+### Configurable / Pratique / Evolutif / Compatible : comment c'est assure
+
+| Besoin createur | Reponse dans l'outil | Preuve |
+|---|---|---|
+| **Configurable** (pour la Matrice, pas pour le LLM) | Toute valeur en `constants.py` (zero en dur), BDD `classeur-variables.json` si runtime (ex: `veille-intervalle`), `CREER-OUTIL` modifie sans toucher l'interface | `scan-valeurs-en-dur.py` 0 violation |
+| **Pratique** | 1 porte au lieu de 4, `--schema` affiche les champs (D7), `--contenu-chemin @file` (anti-heredoc), `--json` machine, messages d'erreur qui disent quoi faire | `executer-formulaire` doctrine gardee |
+| **Evolutif** | `proto-2 auto-evolution` : friction -> 3/3 -> 1 pas reversible -> `.bak` -> tests -> `bdd-modifications` -> lecon. L'interface LLM ne bouge pas, l'interne evolue. Ex: N-04 palier 2 par auto-evolution | M-089..M-131 : 22 evolutions auto-validees |
+| **Compatible win/linux** | `pathlib` partout, `os.replace` atomique, `newline='\n'` force, `encoding='utf-8'` + `errors='replace'`, lancement `CREATE_NO_WINDOW`/`start_new_session`, pas de `bash -n` a maintenir | `data/commun/lancement.py` motif unique M-081 |
+
+---
+
+## Phase 4 -- SERIE (ordre serie stricte) -- PROPOSE PAR OPTIMUS (ajuste)
+
+> Ordre = dependances reelles. 1 outil a la fois, jamais de parallele. Critere GO chiffre obligatoire.
+
+| Ordre | Outil | Dependance | Critere GO (preuve chiffree) | Risque |
+|---|---|---|---|---|
+| **1** | **N-01 `lire`** | Aucune (fondation) | `lire` lit un fichier 5000 lignes sans troncature silencieuse (annonce `5000/5000`), vs natif qui tronque a 2000. `py_compile` 1, `garde-ascii` 0, `audit 0 fuite`, perimetre `matrix/` seul. Bench : <50ms pour 1000 lignes. | FAIBLE |
+| **2** | **N-02 `ecrire`** | N-01 (relit avant d'ecrire) | `ecrire` cree + `editer` remplace en atomique (tmp+replace + .bak + SHA avant/apres + diff BDD). Refuse hors `matrix/`. `py_compile` 1, `garde-ascii` 0. Bench : <30ms ecriture 1000 lignes. | FAIBLE |
+| **3** | **N-03 `lister`** | N-01 (reuse lecture perimetre) | `lister --recursif` liste `matrix/` complet trie mtime deterministe, `audit-invisibilite` 0 fuite, couvre `glob+list_directory`. Bench : <100ms pour 400 fichiers. | FAIBLE |
+| **4** | **N-04 `moteur-recherche`** | N-01+N-03 (dossiers + lecture BDD) | **Palier 1** : `rechercher --requete \"defcon\" --dans tous --tag GOUVERNANCE` trouve hits fichiers (ripgrep) + hits BDD (lecons + modifications + historiques) en <300ms, annonce `trouve/limite` + score + extrait, `--json` machine. **Palier 2** (auto-evolution) : meme requete <50ms via FTS5, `--indexer` rebuild atomique <1s, index `.sha256` vert. | FAIBLE |
+| **5** | **N-05 `executer`** | N-01..N-04 (alimente les commandes) | `executer --cmd \"python3 -m py_compile\"` et `\"python3 -m json.tool\"` sans shell, `CREATE_NO_WINDOW` win OK, timeout collecte, zombie 0, `2>/dev/null` impossible. Bench : var. | MOYEN (touche env) |
+| **6** | **N-06 `dialoguer`** | N-05 (peut executer un rendu) | `dialoguer --question` pose avec timeout, trace `suivi-optimus decision`, `render_ui` verrouille si lien. Non-bloquant. | FAIBLE |
+
+**Sequence moteur :** N-04 livre palier 1 (fichiers + BDD scan) -> usage -> friction 3/3 (lenteur scan) -> auto-evolution palier 2 (FTS5 index) -> exposition Matrice (lecture seule cameleon) -> palier 3 si besoin (synonymes/tags auto).
+
+**Reste hors serie** : `web_search`/`gravity_index` -> aides externes, pas prioritaires (on ne les native pas maintenant).
+
+---
+
+## Phase 5 -- Cloture (GO 2026-09-12 M-132)
+
+- Resume presente (M-132 ajuste -> GO) : 6 outils natifs ameliores proposes, interface fige 0 config / impl config, compat win/linux Python seul, N-04 promu veritable moteur-recherche unifie (fichiers + 7 BDD + tags/mots-cles/periode, scan puis FTS5 palier2) puis Matrice.
+- Decision createur : **GO** (apres AJUSTER moteur-recherche)
+- Missions versees au vrac (E-078..E-083, 6 missions, urgency haute, source createur) :
+  - E-078 LIRE (N-01) -> E-079 ECRIRE (N-02) -> E-080 LISTER (N-03) -> E-081 MOTEUR-RECHERCHE (N-04 palier1+2) -> E-082 EXECUTER (N-05) -> E-083 DIALOGUER (N-06)
+  - Serie stricte : classer/tisser/consommer au fil de l'eau (dependances N-01->N-02 etc.)
+- Journal verrouille : prepare -> execution (CREER-OUTIL un par un, Flux 2 prive)
+- Retour Flux 2 2026-09-12 (entonnoir purge manuelle) : E-078..083 classes dev/outil puis tisses brin 6 -> purge Flux 1 (files dev 6->0, brin 6->0, vrac 0) car pilote = cameleon (Flux 1). Serie gardee privee preparation/ (M-132), execution Flux 2 (suivi-optimus M-133+). Retir ne couvre que le vrac, purge manuelle files/brin appliquee.
+---
+
+## Phase 6 -- BENCHMARK : mise a l epreuve (MO-007..MO-010, 2026-09-12)
+
+**Mission createur** : `on va creer une serie de benchmark pour optimus; il va devoir pouvoir mettre a l epreuve tous ce qu il va creer, ajouter, modifier, supprimer.`
+
+**Traduction Optimus (pere-filles, serie stricte)** : 4 missions OUTIL en queue (MO-007..MO-010) -- meme theme, dependances, jamais de parallele. La serie globale passe a 10 : N-01..N-06 (natifs) + N-07..N-10 (benchmarks). MO-004 reste EN-COURS, la suite s enchaine fin par fin.
+
+| MO | Intitule | Porte | Ce qu il eprouve | Critere GO |
+|---|---|---|---|---|
+| MO-007 | BENCHMARK-COEUR | `benchmark --fichier <chemin> [--json] [--attendu existe\|absent]` | 1 fichier : 9 epreuves unitaires (voir ci-dessous) -> rapport human + JSON, code 0=tout passe / 1=validation echouee mais ecrit / 2=refus perimetre | `benchmark --fichier cerveau-projet/matrix/matrice/data/outils/lire/main.py --json` -> 9/9 vert en <50ms |
+| MO-008 | BENCHMARK-ACTIONS | etend `ecrire` avec `supprimer --fichier` + suites | 4 actions : `creer` (refuse si existe), `ajouter` (concatene LF, .bak), `modifier` (`editer` 1 occur unique), `supprimer` (backup .bak horodate, BDD `supprime`, revert possible). Chaque action = cas positif + negatif perimetre + preuve BDD/SHA/bak | 4 actions x 2 cas = 8 preuves : .bak present, BDD `supprime` notee, perimetre hors=code2, LF pur |
+| MO-009 | BENCHMARK-BATCH | `benchmark --dossier <chemin> [--recursif] [--filtre] [--json]` | batch & perfs : stress 100 fichiers, limites 250 global / 15 par fichier, tri mtime deterministe, bench `matrix/` 464 entrees <200ms, JSON machine avec seuils | `benchmark --dossier cerveau-projet/matrix/matrice/data/outils --recursif --filtre *.py --json` -> 182 trouves / 182 listes, <200ms |
+| MO-010 | BENCHMARK-INTEGRATION | `benchmark --integration` | croisement : `ecrire->lire` relecture L-009 second canal + `lister->rechercher` moteur unifie + invisibilite L-016 + perimetre read/write + BDD coherente (modifications/verifier + suivi-optimus) + rapport global JSON seuils. Doctrine : toute mission CREATE/ADD/MOD/DEL passe le benchmark avant `fin --bilan` (epreuve obligatoire) | rapport global JSON 4 actions x 9 epreuves = 36/36 vert, invisibilite 0 fuite, perimetre vert |
+
+**Les 9 epreuves (la grille qui ne change jamais, 1 fichier = 9 controles)** :
+
+1. **Perimetre** : dans `matrix/` ou allowlist `AGENTS.md/`demarrer-*.md` -> hors = code 2 REFUS (garde-perimetre-write).
+2. **LF L-001** : 0 CRLF, `newline="
+"` force, LF final -- meme donnee = memes octets = empreinte stable.
+3. **SHA** : annonce `SHA avant (..16) / SHA apres (..16)` (preuve disque, avant/apres diff).
+4. **Validation** : `.py` => `py_compile` OK, `.json` => `json.load` OK, `.md` => ASCII check -- echec = code 1 mais ecrit + .bak (revert).
+5. **ASCII** : 0 non-ASCII (garde-ascii) -- sauf docs createur explicitement listes, signale lignes.
+6. **BDD modifications** : entree presente dans `modifications-par-fichier.json` (porte `bdd-modifications noter --fichier --action cree/modifie/supprime`) + empreinte .sha256 verte.
+7. **Relecture L-009** : second canal -- `lire` relit ce que `ecrire/editer` a pose (outil != disque? alerte). `ecrire->lire` couple obligatoire.
+8. **.bak** : si fichier preexistait, `.bak.YYYYMMDD_HHMMSS` present (proto-2 revert, `os.replace` atomique sur `.tmp`).
+9. **L-016** : 0 fuite invisibilite -- `audit-invisibilite 0 fuite`, `filtrer_pour_cameleon` ne laisse passer aucun `_operateur/tmp-optimus/suivi-optimus`.
+
+**Doctrine d usage (quand le lancer)** : AVANT chaque `fin --bilan` d une mission qui a touche un fichier, Optimus lance `benchmark --fichier <cible> [--json]` (ou --dossier pour lot). Si benchmark code !=0, la mission ne se clot pas -- on corrige, on re-benchmark, puis seulement `fin`. C est l epreuve obligatoire, pas une option.
+
+**Etat pilote Optimus** : `MO-001..003 termines, MO-004 EN-COURS (MOTEUR-RECHERCHE palier1), MO-005..006 en-attente, MO-007..010 en-attente (BENCHMARK)` -- compteur 10, lot null, serie stricte `fin` auto-enchaine le suivant (plus de question humaine, voir pilote DESCRIPTION auto-suite).
+
+
+
+## Phase 7 -- LECON : jamais de code hors pilote (MO-011/MO-012, 2026-09-12 17:42)
+
+**Contexte** : creation de l'espion tracebacks + correction dialoguer/commun.py realisees
+**hors pilote** (sans MO, sans suivi-optimus, sans benchmark). Le createur a interroge :
+`as tu utilise le pilote de optimus pour faire ce que tu viens de faire ?`
+
+**Reponse** : non. Buffy a agi en mode developpeur v1/v2, pas en mode Optimus v3.
+
+**Lecon gravee** :
+1. En Flux 2, **TOUTE mission** passe par le pilote Optimus (MO-xxx).
+2. Pas de code, pas de correction, pas de creation **sans MO debut->benchmark->fin**.
+3. Le pilote n'est pas optionnel - c'est la colonne vertebrale de Flux 2.
+4. Si le pilote est vide, on **depose** d'abord, on n'improvise pas.
+
+**Correction appliquee** :
+- MO-011 retroactive : creation espion-tracebacks (7/9 benchmark, code 2 = perimetre `_operateur/` attendu)
+- MO-012 retroactive : correction dialoguer/commun.py (8/9 benchmark, code 1 = 1 signal info reste)
+- suivi-optimus trace les deux (debut->fin avec detail)
+- historique jsonl mis a jour
+
+---
+
+# ENTREE 2 -- NOUVEAU SUJET : LES IMPORTS (2026-09-13)
+
+**Demande createur** (texte integral, accents retires comme dans l'entree 1) :
+
+> on va travailler dans la remorque de optimus : "les imports" sont par les faits "une source de probleme", c'est un sujet qui se compose en 2 parties :
+> 1. les imports native (path, os_path, etc...)
+> 2. les imports interne au projet (nos fonctions dans nos fichiers)
+> - pour les imports native, je voudrais que l'on cree des fichiers qui vont remplacer les imports natif comme 'path', 'os_path', etc... pourquoi ? les rendre configurable, optimise, adaptatif, etc. donc au lieu d'importe directement l'import, on l'import dans le fichier, on le configure a notre guise, et c'est lui qu'on importe dans nos fichiers.
+> - pour les imports interne, tu dois refflechir pour obtenir plus de fiabilite pour eviter les erreurs 'betes' cause par les imports. (on a deja mis en 'quelque chose en place' dans le sac a dos, je pense (on utilise 'AGENTS.md' pour definir la racine du workspace).)
+> si nos fichiers futur sont construit et equipe de nos outils, protection, securites, etc . tout au long du dev, ils seront surveille par la matrice et ces routines.
+
+**Cadre** : PREPARATION, phases 1 a 5. Discussion seule, ZERO code.
+Perimetre d'ecriture : `preparation/` (+ `suivi-optimus` quand le slot est libre).
+
+**Lien avec l'entree 1 (ne pas confondre, ne pas dupliquer)** : l'entree 1 traite des
+**outils natifs vus par le LLM** (`read_files`, `write_file`, `run_terminal_command`...).
+Cette entree traite des **imports vus par le CODE PYTHON** (`pathlib`, `os.path`,
+`subprocess`...). Les deux se rejoignent par le bas : les outils N-01 `lire` / N-02
+`ecrire` / N-05 `executer` sont les **portes** (interface LLM) ; la couche dessinee ici
+est le **socle** (code). La porte s'appuie sur le socle -- on ne dessine pas deux fois.
+
+---
+
+## Phase 1 -- Ouverture (entree 2)
+
+- **Intention (1 phrase)** : qu'un nom importe designe TOUJOURS le meme fichier, et que les
+  capacites natives (chemin, fichier, horloge, execution, texte, empreinte) deviennent les
+  NOTRES -- configurables, deterministes, adaptatives, compatibles win/linux -- au lieu des
+  natifs Python bruts appeles 1100+ fois a la main.
+- **Mode PREPARATION** : annonce.
+- **`debut` suivi-optimus : NON pose, volontairement.** MO-057 tient encore le slot
+  `en-cours` de la file ; poser un `debut` au journal sans entree de file recreerait
+  exactement la dette que le controle de coherence nomme ("en cours dans la file, sans debut
+  au journal", et son symetrique "debut sans file"). On notera suivi-optimus des que le slot
+  est libre, ou sur decision du createur.
+
+---
+
+## Phase 2 -- INVENTAIRE (mesure directe sur 390 fichiers .py, 2026-09-13)
+
+> Methode : chaque chiffre est MESURE sur le disque (grep -c / find). Aucun chiffre de memoire.
+> Corpus : 390 .py -- `matrice/` 307, `_operateur/` 83.
+
+### A. Les imports NATIFS -- le poids reel
+
+| Natif | Fichiers l'important | Ce qu'il impose aujourd'hui | Limite observee |
+|---|---|---|---|
+| `sys` | 168 | `sys.path`, `sys.argv`, `sys.exit`, `sys.executable` | `sys.path` bricole par 65 fichiers : la resolution d'un import depend du dossier du script et de l'ordre des insertions |
+| `pathlib` | 133 | `Path`, `resolve()`, `/` | 133 facons d'ecrire un chemin ; le motif de racine est partage mais le reste est recopie |
+| `constants` (interne) | 133 | valeurs de l'outil | **38 fichiers differents** portent ce nom -- voir B |
+| `commun` (interne) | 109 | fonctions partagees | **37 fichiers differents** portent ce nom -- voir B |
+| `json` | 70 | `loads`/`dumps` | tri des cles, `ensure_ascii`, `indent` : jamais normalises, chaque outil a son gout |
+| `datetime` | 59 | `now()`, `strftime` | 70 `strftime` : **chacun sa formule** de date (ISO ? espace ? secondes ?) |
+| `os` / `os.path` | 58 / 52 | `path.join`, `dirname`, `abspath`, `replace` | **52 `os.path.*` dont 28 `dirname` + 19 `abspath`** = compter les `../` a la main, ce que L-013 INTERDIT |
+| `argparse` | 46 | `ArgumentParser` (73 fois) | 31 outils recopient la meme porte (verbes, aide, codes 0/1/2) |
+| `subprocess` | 38 | `run` (63), `Popen` (2) | env/encodage/timeout/invisibilite : recopies ; **2 pannes invisibles ce jour meme** par un chemin passe en relatif |
+| `hashlib` | 21 | `sha256` | format d'empreinte jamais centralise (16 ? 64 ? court ? .sha256 ?) |
+| `time` | 16 | `sleep` (21), `monotonic` (4) | **21 `time.sleep` bruts** : 5 boucles dormaient en UN BLOC (corrige MO-062, garde pose) |
+| `re` / `typing` / `importlib` / `sqlite3` / `tempfile` | 15 / 9 / 7 / 6 / 5 | motifs, typage, chargements, BDD, fichiers temporaires | 16 `sqlite3.connect` isoles ; `importlib` utilise en secours faute de resolution fiable |
+
+**Motifs bruts appeles a la main (le vrai volume a encapsuler)** :
+
+| Motif | Occurrences |
+|---|---|
+| `open(` | 166 |
+| `sys.argv` | 117 |
+| `sys.exit` | 102 |
+| `read_text` | 94 |
+| `sys.executable` | 86 |
+| `datetime.now` | 77 |
+| `argparse.ArgumentParser` | 73 |
+| `strftime` | 70 |
+| `subprocess.run` | 63 |
+| `json.dumps` | 62 |
+| `json.loads` | 54 |
+| `os.path.*` | 52 |
+| `write_text` | 32 |
+| `os.replace` | 28 |
+| `hashlib.sha256` | 21 |
+| `time.sleep` | 21 |
+| `sqlite3.connect` | 16 |
+| `tempfile` | 11 |
+
+**Lecture** : le code n'ecrit pas ses fichiers, ses horloges, ses executions, ses empreintes :
+**il appelle les natifs du Python 1100 fois**. Chaque appel est une occasion de divergence
+(encodage, LF, tri, fuseau, env, fenetre visible). C'est le sujet du createur.
+
+### B. Les imports INTERNES -- la fabrique d'erreurs betes
+
+| Constat | Mesure | Consequence |
+|---|---|---|
+| **Noms de modules en collision** | `entry.py` 111, `fonctions.py` 86, `main.py` 53, **`constants.py` 38**, **`commun.py` 37** | `from constants import ...` designe 38 fichiers differents selon QUI l'importe |
+| **Categories homonymes** | `lire/`, `verifier/`, `noter/`, `ajouter/`... dans les 31 outils | `from lire.entry import ...` dans `main.py` ne marche QUE parce que le dossier du script est `sys.path[0]` |
+| **`sys.path` bricole** | **65 fichiers sur 390** ; 66 insertions en **12 recettes differentes** | 15x `REPERTOIRE_DATA / "commun"`, 13x `_courant / "commun"`, 10x `os.path.dirname(...)`, 9x `dirname(dirname(...))`, 8x `REPERTOIRE_COMMUN`, plus 5 recettes uniques |
+| **`../` comptes a la main** | 28 `os.path.dirname` + 19 `os.path.abspath` | L-013 l'interdit explicitement. Ce matin : **deux chemins morts** dans `suivi-sync` (un cran de trop) -- l'insertion ne levait rien |
+| **Fichiers a TIRETS** | 35 `.py` | Non importables en Python. Ce sont des **portes** (lancees par subprocess), jamais des modules -- la regle doit etre ECRITE, elle est aujourd'hui implicite |
+| **Deux chemins d'import pour un meme module** | `sac_a_dos.py` : `try: from tokens ... except ImportError: from commun.tokens ...` | Le pansement est visible dans le code : le module ne sait pas COMMENT il sera importe |
+
+**Preuve de panne reelle (pas theorique)** :
+1. **2026-09-13 -- `commun/profil.py` a tue le pilote maintenance** alors que `pilote/profil/`
+   existait : le module a masque le paquet (documente dans `verifier-contrat-fondamental.py`,
+   verbe `collisions`).
+2. **2026-09-13 -- `suivi-sync`** : l'insertion montait d'un cran de trop ; elle etait MORTE
+   depuis toujours et personne ne le voyait, parce que la routine n'avait jamais eu besoin du
+   module partage. La premiere tentative d'import l'a revelee.
+3. **Ce qui n'est PAS garde** (voir D) : le nom de la couche native pourrait tuer un outil
+   entier sans qu'aucun controle ne le voie.
+
+### C. Ce qui EXISTE deja (a ne pas re-creer)
+
+| Deja la | Role |
+|---|---|
+| `commun/racine.py` | motif UNIQUE de racine : remontee jusqu'a `AGENTS.md` (L-013, decision M-008) |
+| `commun/sac_a_dos.py` | l'outil note LUI-MEME son usage (code, duree, tokens avant/apres) via la porte bdd-usages |
+| `commun/tokens.py` | estimation deterministe du poids (1 token ~ 4 caracteres) |
+| `commun/lancement.py` | **natif encapsule** : lancement invisible win/posix (M-081) -- le modele de ce qu'on veut generaliser |
+| `commun/attente.py` | **natif encapsule** : attente decoupee, arret vu en 2 s (MO-062) -- 2e modele |
+| `commun/fiche_profil.py` | lecture partagee de la fiche utilisateur |
+| `verifier-contrat-fondamental.py` | CV-007 : verbes `chemins`, `noms`, `flags`, `collisions`, `imports`, `prefixes`, `prefixes-en-dur` |
+| Lecons / regles | L-013 (racine), M-076 (motif unique), L-007 (natif produit / nous possedons) |
+
+### D. Ce qui N'EST PAS garde aujourd'hui (le trou a combler)
+
+| Trou | Preuve |
+|---|---|
+| `controler_imports` ne voit QUE l'import qui vise un fichier a tirets (une coquille) | lit le code : aucune verification de RESOLUTION, aucune detection d'ambiguite |
+| `controler_collisions` ne compare que `commun/*.py` aux dossiers-**pilote** | il ignore les **31 outils** et leurs categories (`lire/`, `ajouter/`...) -- or ce sont EUX qui mettent `data/commun` sur leur `sys.path` |
+| Rien ne surveille les **12 recettes** de `sys.path.insert` | 65 fichiers, 66 insertions, aucune regle ecrite |
+| Rien n'interdit `os.path.dirname` dans un `sys.path.insert` | 28 occ., alors que L-013 l'interdit |
+| Les collisions sont detectees APRES la panne (au runtime) | la panne `commun/profil.py` a tue le pilote avant d'etre connue |
+
+---
+
+## Phase 3 -- CIBLES (dessin)
+
+> Doctrine reprise de la Phase 3 de l'entree 1, transposee aux imports :
+> **l'appelant (le fichier qui importe) a une interface FIGEE et courte ; la Matrice a une
+> implementation CONFIGURABLE** (values dans `constants.py` / classeur-variables).
+> "Configurable" ne veut jamais dire "options pour l'appelant" : ca veut dire "reglable par
+> la Matrice, sans toucher les fichiers qui importent".
+
+### A. La couche NATIVE -- 6 modules partages (Partie 1 du createur)
+
+Contrainte de nommage MESUREE avant de nommer : un module de `data/commun/` est place sur le
+`sys.path` des outils ; son nom doit donc etre ABSENT des 37 noms de categories observees --
+`ajouter archiver benchmark bilan categoriser coherence construire corriger definir descendre
+dialoguer ecrire editer etat executer generer indexer journal lire lister maintenir modifier
+monter noter obsolete pause perimetre plan rechercher renommer reprendre retirer signaler
+valider verifier vue`. Les 6 noms proposes ci-dessous sont libres (verifie un par un).
+
+| # | Module propose | Remplace | Occurrences evitees | Garanties portees | Ce qui devient configurable / adaptatif |
+|---|---|---|---|---|---|
+| **I-01** | `chemin.py` | `pathlib` (133) + `os.path` (52) + une partie de `os` (58) | ~240 | UN seul motif de chemin ; racine via `racine.py` (jamais de `../` compte a la main) ; chemin toujours RELATIF a la racine quand il est persiste ; normalisation win/linux ; refus d'un chemin hors perimetre | profondeur de remontee, racine de reference, casse (win/linux), separateur de sortie |
+| **I-02** | `fichier.py` | `open(` (166) + `read_text` (94) + `write_text` (32) + `os.replace` (28) | ~320 | lecture complete OU tranchee avec ANNONCE `total/lu` (jamais de troncature muette) ; ecriture ATOMIQUE (tmp + replace) ; `.bak` horodate ; LF forces ; encodage utf-8 strict ; BOM vu ; empreinte avant/apres | encodage, newline, taille de tranche, politique `.bak`, retries |
+| **I-03** | `horloge.py` | `datetime` (59) + `strftime` (70) + `time` (16) | ~145 | UNE seule horloge et UN seul format de date (`AAAA-MM-JJ HH:MM:SS`) ; `monotonic` pour les durees ; fuseau explicite ; jamais de locale | format, fuseau, base de temps des durees |
+| **I-04** | `execution.py` | `subprocess` (38) + `os.environ` + `sys.executable` | ~110 | **Python seul, jamais de shell** ; env FIXE ; timeout collecte ; invisibilite win/posix (reprend `lancement.py`) ; code + stdout + stderr + duree rendus ensemble ; zero fantome | env, timeout par defaut, invisibilite, buffer, liste blanche d'executables |
+| **I-05** | `texte.py` | `json` (70) + `re` (15) + `unicodedata` | ~90 | JSON deterministe (tri des cles, indent, `ensure_ascii`) ; ASCII verifie avec LIGNES nommees ; normalisation des accents ; motif compile une fois | tri, indent, politique ASCII, tables de normalisation |
+| **I-06** | `empreinte.py` | `hashlib` (21) | 21 | UNE forme d'empreinte (courte 16 pour les traces, 64 pour l'etalon-or) ; fichier `.sha256` cote a cote ; empreinte de texte ET de fichier | longueur, algorithme, presence du `.sha256` |
+
+**Hors perimetre (a ne PAS encapsuler, pour ne pas inventer un faux besoin)** :
+`typing`, `collections`, `fnmatch`, `inspect`, `functools` -- la couche native n'a pas a
+re-emballer ce qui ne produit ni divergence ni panne. **`argparse` + `sys.argv` + `sys.exit`**
+(~250 occ.) ne sont PAS dans cette couche : c'est une **porte**, pas un natif -- elle
+appartient a la serie des outils (N-01..N-06 de l'entree 1), pas ici.
+
+**Capacite adaptative obligatoire** : chaque module doit DIRE ce qu'il a choisi quand le
+systeme ne permet pas la voie ideale (FTS5 absent, `tasklist`/`ps` absent, pas de `os.replace`
+sur le support) -- l'adaptation est une decison NOMMEE, jamais un silence.
+
+### B. Les IMPORTS INTERNES -- la fiabilite (Partie 2 du createur)
+
+**L'enonce exact du probleme** : aujourd'hui, **le nom d'un module ne determine pas le fichier
+charge**. C'est `sys.path` (le dossier du script, puis ce que chacun y a insere, dans l'ordre)
+qui decide -- avec 38 `constants.py`, 37 `commun.py`, 111 `entry.py` et des categories
+homonymes dans 31 outils, un nom = plusieurs fichiers possibles. La consequence n'est pas une
+erreur a la lecture : c'est **un mauvais module qui repond** (ou un `ModuleNotFoundError`
+depaysant), et seulement a l'execution -- parfois en production de routine.
+
+**Les 5 garanties a exiger** (c'est la definition de "plus de fiabilite") :
+
+| # | Garantie | Pourquoi |
+|---|---|---|
+| G1 | **Un nom = un fichier**, toujours, pour tous | supprime la classe "mauvais module silencieux" |
+| G2 | **Le dossier courant n'influence RIEN** | lancer un outil depuis un autre dossier ne doit rien changer |
+| G3 | **Aucun `../` compte a la main** (L-013) | une seule fonction de racine, eprouvee |
+| G4 | **Echec explicite** : si un nom est ambigu, on REFUSE au lieu de charger un voisin | une erreur bruyante vaut mieux qu'un mauvais service |
+| G5 | **Garde de FABRIQUE** (doctrine MO-059) : le controle lit le CODE, il ne se contente pas de constater les pannes deja survenues, et il nomme `fichier:ligne` | un controle qui ne voit que l'existant ne peut pas empecher la prochaine |
+
+**Trois options (a trancher par le createur)** :
+
+| Option | Principe | Gain | Cout / risque |
+|---|---|---|---|
+| **A -- paquets nommes** | `matrix/` devient LA racine d'import ; un seul `sys.path` (la racine) ; imports absolus (`from matrice.data.commun.chemin import ...`) ; plus aucune insertion | la cible doctrinaire : un nom = un chemin, cwd indifferent, outillage Python standard retrouve | **chantier** : 390 fichiers, 65 insertions a retirer, 35 tirets a statuer. A faire par etapes, jamais en bloc |
+| **B -- garde de resolution** | on garde l'existant ; un controle calcule, pour chaque fichier, les noms atteignables sur SON chemin et REFUSE toute ambiguite ; + interdiction de `sys.path.insert` hors socle et de `os.path.dirname` (fabrique) | **immediat**, bloque la classe d'erreur AVANT l'execution | ne repare pas la cause : c'est le garde-fou, pas le remede |
+| **C -- chargeur par chemin (socle)** | `commun/atelier.py` : `charger("<chemin relatif a la racine>")` charge un module PAR SON CHEMIN (nom unique, marche avec les tirets, cwd indifferent, refuse l'ambiguite) | les fichiers NOUVEAUX sont fiables TOUT DE SUITE, sans toucher l'existant ; se marie avec la couche native (le socle s'importe par le socle) | introduit une syntaxe propre au projet ; a borner (le socle seulement, pas "un import system maison") |
+
+**Recommandation (Optimus)** : **C + B tout de suite**, **A par etapes** au fil des ouvertures
+d'outils (jamais en bloc). B rend la panne impossible a ignorer, C rend les nouveaux fichiers
+sains des leur naissance -- ce que le createur demande exactement ("si nos fichiers futur sont
+construit et equipe de nos outils, protection, securites"). A reste la cible, atteinte par
+migration, un outil a la fois.
+
+**Regle a graver (aujourd'hui implicite)** : **un fichier a TIRETS est une PORTE (script,
+lance par subprocess) et n'est JAMAIS un module.** Les modules sont en minuscules a tirets
+bas (souligne). 35 fichiers sont concernes : la regle doit etre ecrite, pas supposee.
+
+**La surveillance par la Matrice (demande explicite du createur)** : la couche et la regle de
+resolution ne servent que si une **routine** les surveille en continu. Cible : une famille de
+controles (resolution, collisions etendues aux outils, insertions interdites, tirets) portee
+par `verifier-contrat-fondamental.py` (verbes existants : `collisions`, `imports`) et branchee
+comme les autres gardes -- bloquante dans la non-regression. Meme doctrine que MO-059 :
+surveiller la FABRIQUE (le code qui fabrique l'import), pas seulement les pannes deja vues.
+
+---
+
+## Phase 4 -- SERIE proposee (serie stricte, 1 pas a la fois)
+
+> Ordre = dependances reelles. Le socle d'abord : rien de fiable ne peut se construire sur une
+> resolution non fiable.
+
+| Ordre | Cible | Depend de | Critere GO (preuve chiffree) | Risque |
+|---|---|---|---|---|
+| **1** | **B -- garde de resolution** (+ insertion interdite + tirets) | aucune | sur un cobaye piege (2 `constants.py` atteignables) le garde REFUSE et nomme `fichier:ligne` ; sur l'arbre reel il ne rend que des ecarts reels (aucun faux positif sur 390 fichiers) ; bloque la non-regression | FAIBLE |
+| **2** | **C -- `commun/atelier.py`** (chargeur par chemin) | B (le socle doit etre surveille des sa naissance) | `charger()` d'un module a tirets ET d'un module homonyme rend LE bon fichier depuis 3 dossiers courants differents ; 0 insertion dans le socle | FAIBLE |
+| **3** | **I-01 `chemin.py`** | C (le socle s'importe par le socle) | 0 `os.path.dirname` dans les fichiers migres ; un chemin persiste en base est RELATIF a la racine et se resout depuis 3 cwd differents (preuve : non-regression verte + un cas win) | FAIBLE |
+| **4** | **I-02 `fichier.py`** | I-01 | ecriture atomique prouvee (coupure simulee -> soit l'ancien soit le nouveau, jamais un demi-fichier) ; `.bak` present ; LF purs ; annonce `total/lu` sur un fichier de 5000 lignes | MOYEN (touche toutes les ecritures) |
+| **5** | **I-03 `horloge.py`** | I-01 | une seule forme de date dans tout ce qui est ecrit apres migration ; 0 `strftime` restant dans les fichiers migres | FAIBLE |
+| **6** | **I-04 `execution.py`** | I-01 + I-02 | reprend `lancement.py` sans perte (les 6 routines tournent) ; `Popen`/`run` hors couche = 0 dans les fichiers migres ; zero fantome apres une suite de lancements | MOYEN (touche l'execution) |
+| **7** | **I-05 `texte.py`** | I-02 | JSON ecrit deux fois = octets identiques ; ASCII signale avec les LIGNES ; 0 `json.loads/dumps` hors couche dans les fichiers migres | FAIBLE |
+| **8** | **I-06 `empreinte.py`** | I-02 | la meme donnee rend la meme empreinte sur win et linux ; `.sha256` cote a cote sur les BDD | FAIBLE |
+| **A (transverse)** | migration vers les paquets nommes | apres 1+2 | **par etapes** : a chaque outil rouvert pour une autre raison, on retire ses insertions ; GO quand 0 `sys.path.insert` hors socle sur 390 fichiers | MOYEN, mais etale |
+
+---
+
+## Phase 5 -- ARBITRAGES demandes au createur (attente GO, aucun code avant)
+
+1. **Perimetre de la couche native** : les **6 modules** proposes (chemin, fichier, horloge,
+execution, texte, empreinte) -- ou commencer par MOINS (2-3) et elargir ?
+2. **Strategie de resolution** : la recommandation **C + B maintenant, A par etapes** est-elle
+retenue -- ou veut-on A d'abord (chantier) / B seul (pansement) ?
+3. **Ou vit la couche** : `matrice/data/commun/` (le sac a dos partage, deja sur le chemin de 32
+fichiers) -- ou une zone dediee ? Et faut-il **declarer les cibles dans `remorque/inventaire.json`**
+(les 6 modules + le socle comme equipements a naitre) ?
+4. **Le `debut` suivi-optimus** : on le pose des maintenant (et on solde MO-057 d'abord) ou on
+reste en journal seul jusqu'au GO ?
+
+**Ce qui N'EST PAS dans ce sujet** (pour borner) : les outils-portes (entree 1), le moteur de
+recherche (N-04), les tests de benchmark (N-07..N-10). Ici : les imports natifs (couche) et les
+imports internes (resolution).
+
+---
+
+# ANNEXE A -- FICHES CIBLES (detail avant GO)
+
+> Une fiche par cible. Chaque fiche : 1 phrase, verbes (1-3 MAX), garanties numerotees, ce qui
+devient configurable, ce qu'elle ne fait PAS, ce qu'elle remplace (mesure), critere GO CHIFFRE,
+le piege qui doit la prouver. Zero code : ce sont des contrats a valider, pas des fichiers.
+
+## Fiche I-01 -- `chemin.py` (couche native, premier de la serie)
+
+- **Nature** : module partage de la couche native (Partie 1 du sujet).
+- **Emplacement propose** : `matrice/data/commun/chemin.py`.
+- **Nom** : verifie LIBRE contre les 37 noms de categories observees (liste en Phase 3).
+- **Pourquoi CE chemin, et pas un autre** (mesure) : `matrix/matrice/data/commun/` est
+  **100% sans tiret** -- donc atteignable en POINTE (`from matrice.data.commun.chemin import ...`),
+  seul cas ou **le nom determine le fichier sans aucune insertion**. A l'inverse, **47 dossiers**
+  du projet portent un tiret (`bdd-activites/`, `optimus-prime/`...) et ne seront JAMAIS des
+  paquets : eux passeront par le socle (`charger(<chemin>)`). C'est la frontiere entre les deux
+  moities du sujet, et elle est mesuree, pas supposee.
+
+### 1 phrase
+
+**Toute question de chemin dans la Matrice se pose a CE module, et la reponse ne depend ni du
+dossier courant, ni de la machine, ni d'un `../` compte a la main.**
+
+### Les 3 verbes (pas un de plus)
+
+| Verbe | Signature | Rend | Repond a |
+|---|---|---|---|
+| **`racine`** | `racine()` | le `Path` de la racine d'ancrage (`matrix/`) | "ou suis-je ?" -- **la SEULE remontee du projet** |
+| **`resoudre`** | `resoudre(ref)` | un `Path` ABSOLU, ou un REFUS | "ce chemin-la, il est ou vraiment ?" |
+| **`relatif`** | `relatif(chemin)` | la forme PERSISTABLE (relative a la racine, separateur `/`) | "qu'est-ce que j'ecris en DONNEE ?" |
+
+**Pourquoi ces trois et pas plus** : ils couvrent les trois questions reelles du corpus, et
+`relatif` est l'**inverse exact** de `resoudre` -- une propriete TESTABLE, pas une intention
+(c'est ce qui manque aujourd'hui : 38 `relative_to` ad hoc, chacun dans son coin).
+
+### Les 10 garanties
+
+| # | Garantie | Preuve / mesure |
+|---|---|---|
+| **1** | **Un nom = un chemin** : importable d'UNE seule facon (pointee) | le dossier `matrice/data/commun/` est sans tiret (mesure) ; aucune autre voie n'est autorisee ni autorisable |
+| **2** | **Le dossier courant n'influence RIEN** | aucun verbe ne lit le cwd ; eprouve depuis 3 cwd differents |
+| **3** | **Aucun `../` compte a la main** (L-013) | remplace **78 `parent.parent`** + **28 `os.path.dirname`** + **19 `abspath`** + **66 occurrences** de `detecter_racine` |
+| **4** | **Inverse verifiable** : `relatif(resoudre(x)) == x` | propriete de test, verifiee sur 10 chemins (dont espaces et `..`) |
+| **5** | **Persistable** : ce qui est ECRIT en donnee ne porte JAMAIS de racine machine | panne reelle du 2026-09-13 : `Z:\...\commun.py` ecrit dans la file et dans la signature anti-spam -> non portable, et `cible_fichier_morte()` declarait mortes TOUTES les cibles |
+| **6** | **Perimetre** : `resoudre` refuse hors `matrix/` (allowlist existante : `AGENTS.md`, `demarrer-*.md`) | une SEULE source de perimetre ; `garde-perimetre-write` la consomme au lieu de la recopier |
+| **7** | **Refus explicites** (jamais un `None` muet) : hors perimetre, chemin absent, racine introuvable, module COPIE hors de sa position canonique | le message dit QUOI FAIRE ; code 2 comme les autres portes |
+| **8** | **Adaptatif win/linux NOMME** : casse comparee selon le systeme, antislash accepte en ENTREE mais jamais en SORTIE ; la capacite choisie est PUBLIEE | l'adaptation est une decision nommee, jamais un silence |
+| **9** | **Memoise / optimise** : UNE remontee par processus | aujourd'hui : jusqu'a 30 sondes `is_file()` par appel, ~66 appels |
+| **10** | **Configurable cote Matrice** : marqueur de racine, perimetre, disposition attendue, separateur de sortie = constantes du module (**0** pour l'appelant), reutilisees par le garde | `scan-valeurs-en-dur` 0 violation |
+
+### Ce qu'il remplace (mesure sur 390 .py)
+
+| Motif actuel | Occurrences |
+|---|---|
+| `Path(__file__).resolve().parent` | 78 |
+| `parent.parent` (comptage a la main) | 78 |
+| `os.path.dirname` / `abspath` / `join` | 28 / 19 / 2 |
+| `relative_to(` (chacun sa recette) | 38 |
+| `detecter_racine` (motif de racine) | 66 (34 fichiers) |
+| **Total des points touches** | **~470** |
+
+### Ce qu'il NE fait PAS (borner : pas de faux besoin)
+
+- Il **n'emballe pas** `is_file` (113), `exists` (210), `is_dir` (75), `glob` (22), `rglob` (27),
+  `iterdir` (11), `mkdir` (25) : ce sont des LECTURES natives sans divergence possible. Les
+  emballer serait un faux besoin -- et un module de 30 verbes au lieu de 3.
+- Il ne fait **aucune E/S** : la seule chose qu'il lit est le marqueur de racine, une fois.
+- Il ne **note pas d'usage** au sac a dos : le sac a dos note les OUTILS (portes), pas le code
+  appele des milliers de fois -- ce serait du bruit, pas une trace.
+- Il ne remplace pas `racine.py` : **il l'utilise** (motif unique M-076). Absorber `racine.py`
+  serait un deuxieme chantier ; l'absorption est une consolidation ULTERIEURE, pas le premier pas.
+
+### Le cas reel qui justifie le verbe `relatif` (preuve, 2026-09-13)
+
+| Cas | Ce qui s'est passe | Ce que le module impose |
+|---|---|---|
+| Chemin ABSOLU ecrit en donnee | `Z:\...\veille-flux\commun.py` dans une file de missions et dans une signature anti-spam | en DONNEE, seules les formes de `relatif()` entrent ; `resoudre` les rend absolues a l'usage |
+| Chemin relatif passe a un lanceur | le lanceur exige l'absolu : la routine n'est pas partie (relance detachee morte) | `resoudre` avant de lancer, jamais a la main |
+| Chemin d'une AUTRE machine | `Z:` sur une machine ou le projet vit ailleurs | `resoudre` REFUSE en nommant le drapeau (arbitrage C-4 ci-dessous) |
+| `..` qui sort du perimetre | 78 comptages a la main, 2 chemins MORTS ce jour (`suivi-sync`) | `resoudre` refuse tout ce qui sort ; la remontee est centralisee |
+
+### Critere GO (chiffre, 6 epreuves)
+
+1. **3 cwd differents** (racine, `_operateur/`, `matrice/routines/`) -> `racine()` rend la MEME valeur ;
+2. `relatif(resoudre(x)) == x` sur **10 chemins** (dont 1 avec espaces, 1 avec `..` interne, 1 en antislashs) ;
+3. **0** `os.path.dirname` / `abspath` / `parent.parent` dans les fichiers migres ; **0** insertion pour atteindre le module ;
+4. `racine()` **< 1 ms** (memoise) contre le motif actuel (jusqu'a 30 sondes `is_file()` par appel) ;
+5. **4 REFUS** prouves : hors perimetre (code 2), chemin absent, racine introuvable, module copie hors position canonique ;
+6. non-regression **verte**, ASCII **0 violation**, `verifier-contrat-fondamental` **vert**.
+
+### Le piege qui doit le prouver (cobaye, hors du projet)
+
+1. chemin hors perimetre -> REFUS nomme (jamais un chemin rendu) ;
+2. chemin inexistant -> REFUS qui dit quoi faire ;
+3. module COPIE dans un dossier d'essai -> l'auto-verification de position REFUSE (c'est ainsi qu'on
+   fabrique les "deux verites" : la file legacy copiee bit a bit dans la zone d'Optimus, MO-063) ;
+4. `..` qui remonte au-dessus de la racine -> REFUS ;
+5. **piege inverse** : un chemin legitime (fichier de `matrice/data/`) ne doit PAS etre refuse --
+   un module qui refuse du legitime est un module qu'on contourne (L-054).
+
+### Dependance et ordre
+
+`chemin.py` suppose que la racine est joignable (l'**amorce/socle**, cible I-00 de la serie) :
+la fiche du SOCLE reste a ecrire. Mesure deja faite pour elle : **47 dossiers a tiret** (donc non
+paquetables) et `matrice/data/commun/` **100% sans tiret**.
+
+### Les 4 arbitrages a trancher sur cette fiche
+
+| # | Question | Options |
+|---|---|---|
+| **C-1** | Nom du module | `chemin.py` (recommande) / `adresse.py` / `cheminage.py` |
+| **C-2** | `racine()` rend quelle racine ? | `matrix/` (recommande : c'est l'ancre des chemins persistes) / la racine du workspace (`AGENTS.md`) / les deux (1 verbe + 1 constante) |
+| **C-3** | Position canonique verifiee ? | OUI et le module REFUSE d'etre copie (recommande) / non (plus souple, deux verites possibles) |
+| **C-4** | Chemin absolu d'une AUTRE machine (drapeau `Z:` vs `C:`) | REFUS qui nomme le drapeau (recommande : bruyant) / traduction silencieuse vers la racine locale (pratique, mais c'est ainsi qu'on fabrique des signatures mortes) |
+
+---
+
+## Fiche I-00 -- LE SOCLE DE RESOLUTION (chargeur par chemin + garde bloquant)
+
+> **C'est la fondation de tout le sujet** : rien de fiable ne se construit sur une resolution
+> non fiable. A construire AVANT la couche native (`chemin.py` s'importe PAR le socle).
+
+- **Nature** : socle d'imports (Partie 2 du sujet) -- 3 pieces : l'**AMORCE**, le **CHARGEUR**, le **GARDE**.
+- **Emplacements proposes** : `matrice/data/commun/amorce.md` (la recette, 3 lignes) +
+  `matrice/data/commun/charger.py` (le chargeur) + le garde etendu dans
+  `verifier-contrat-fondamental.py` (verbes `collisions` et `imports` existants).
+- **Noms** : `charger` verifie LIBRE contre les 37 noms de categories (liste en Phase 3).
+
+### 1 phrase
+
+**On ne charge plus un module PAR SON NOM mais PAR SON CHEMIN : deux fichiers homonymes ne
+peuvent plus se masquer, un dossier courant ne peut plus changer la reponse, et un fichier a
+tirets devient chargeable.**
+
+### Pourquoi un socle -- l'enonce du probleme (mesure)
+
+Aujourd'hui **le nom d'un module ne determine pas le fichier charge** : c'est `sys.path` qui
+decide. Corpus : **38 `constants.py`**, **37 `commun.py`**, **111 `entry.py`**, **86 `fonctions.py`**,
+**65 fichiers sur 390** bricolent `sys.path` en **12 recettes** differentes, **35 fichiers a
+tirets** ne sont meme pas importables, et une categorie homonyme (`lire/`, `noter/`) existe dans
+les **31 outils**. La panne n'est pas une erreur a la lecture : c'est **un mauvais module qui
+repond**, decouvert a l'execution (2026-09-13 : `commun/profil.py` a tue le pilote maintenance).
+
+### Les 3 pieces
+
+| Piece | Role | Taille | Qui la verifie |
+|---|---|---|---|
+| **AMORCE** | la SEULE insertion du projet : poser la racine d'ancrage sur le chemin | 3 lignes, 1 recette, **byte-identique** partout | le garde (empreinte unique) |
+| **CHARGEUR** `charger.py` | charger un module du projet **par son chemin**, sous un nom unique derive du chemin | 3 verbes | ses propres refus + le piege |
+| **GARDE** | lire le CODE et refuser la fabrique fautive (jamais seulement constater la panne) | 4 controles | le piege (4 KO nommes + 0 faux positif) |
+
+### Les 3 verbes du chargeur (pas un de plus)
+
+| Verbe | Signature | Rend | Repond a |
+|---|---|---|---|
+| **`charger`** | `charger("<chemin relatif a la racine>")` | l'objet module, sous un nom **unique derive du chemin**, **memoise** par chemin resolu | "charge-moi CE fichier-la, sans ambiguite" |
+| **`plan`** | `plan()` | le registre vivant des modules charges (nom unique -> chemin) | "qu'est-ce qui est charge, et d'ou ?" -- **la preuve en direct, SANS fichier verrou** (un `resolution.lock` serait une 2e verite) |
+| **`capacites`** | `capacites()` | ce que la machine permet (remplacement atomique, `tasklist`/`ps`, FTS5, casse du systeme de fichiers) | l'**adaptatif NOMME** : une decision publiee, jamais un silence |
+
+### La regle UNIQUE des imports (le coeur du socle)
+
+| Ce qu'on importe | Syntaxe autorisee | Pourquoi |
+|---|---|---|
+| un natif Python non encapsule (`typing`, `collections`) | `import typing` | nom global unique : aucun risque de collision |
+| un natif DE LA COUCHE (`chemin`, `fichier`...) | `from matrice.data.commun.chemin import resoudre` | **POINTE** : le nom determine le chemin (dossier 100% sans tiret, mesure) |
+| un module du projet (outil, pilote, routine, zone Optimus) | `charger("matrice/data/outils/suivi-optimus/lire/entry.py")` | **CHARGE PAR CHEMIN** : deux homonymes ne se masquent jamais |
+| un fichier a TIRETS (35 cas) | `charger(...)` -- jamais `import` | ce sont des **PORTES**, pas des modules |
+| un module voisin dans un paquet sans tiret | `from .racine import detecter_racine` | relatif borne, resolu par le paquet, pas par le cwd |
+| **un import par NOM NU vers l'interieur** | **INTERDIT** | c'est la **classe de panne entiere** (38/37/111 homonymes) |
+
+### Les 4 controles du garde
+
+| # | Controle | Ce qu'il mesure (lecture du CODE) | Ce qu'il nomme |
+|---|---|---|---|
+| **B-1** | `resolution` | tout import par **nom nu vers l'interieur** (hors natifs declares et hors la famille pointee de la couche) | `fichier:ligne` + le nom fautif + la syntaxe a utiliser |
+| **B-2** | `insertions` (fabrique) | toute `sys.path.insert` **hors amorce**, et tout `os.path.dirname` dans une insertion (L-013) | `fichier:ligne` + "la seule insertion autorisee est l'amorce" |
+| **B-3** | `collisions` **etendu** | un module de `data/commun/` homonyme d'une categorie : **pilotes ET les 31 outils** (aujourd'hui : pilotes seulement -- trou mesure) | le module fautif + la categorie masquee |
+| **B-4** | `tirets` | un import qui vise la forme a tiret d'un fichier existant (existe deja) + l'amorce absente d'une porte / presente dans un module charge | `fichier:ligne` |
+
+### Comment le garde lit SANS executer (et ce qu'il fait quand il ne peut pas decider)
+
+- Lecture **AST** (analyse syntaxique) : jamais d'execution d'un fichier controle -- un garde qui
+  execute le code qu'il controle n'est pas un garde.
+- Un argument de `sys.path.insert` **non resolvable statiquement** (variable calculee) n'est pas
+  devine : il est declare **DETTE AVOUEE** avec son `fichier:ligne`. Deviner serait pire que ne rien dire.
+- **Une seule source de la regle** : les familles autorisees sont **declarees par le chargeur**
+  (`FAMILLES_AUTORISEES`) et le garde les **consomme** -- il ne les recopie jamais (M-076). Sinon,
+  le jour ou la regle bouge, une des deux verites ment.
+
+### Les 10 garanties
+
+| # | Garantie | Preuve prevue |
+|---|---|---|
+| **1** | **Un chemin = un module** (jamais un nom) ; le nom interne est derive du chemin | 2 homonymes charges dans le MEME processus = 2 objets distincts, aucun masquage |
+| **2** | **Le dossier courant n'influence RIEN** | charge depuis 3 cwd differents = meme module |
+| **3** | **Aucun `../` compte a la main** (L-013) | 0 `dirname`/`abspath`/`parent.parent` hors amorce |
+| **4** | **Un fichier a TIRETS est chargeable** (impossible aujourd'hui) | 1 module a tirets charge et utilise |
+| **5** | **Memoisation** : un seul objet par chemin | 2 appels -> `is` identique |
+| **6** | **Refus explicites** : hors racine, absent, chemin d'une autre machine, chemin relatif a un autre dossier | 4 refus nommes, code 2, message qui dit QUOI FAIRE |
+| **7** | **La fabrique est surveillee** (doctrine MO-059) | un `sys.path.insert` plante dans un cobaye est REFUSE et nomme `fichier:ligne` |
+| **8** | **L'amorce est UNE recette** | empreinte identique dans toutes les portes ; toute derive = KO |
+| **9** | **Aucun faux positif** (lecon L-054) | sur l'arbre reel, 0 KO sur les fichiers conformes ; la dette est LISTEE, jamais confondue avec un ecart |
+| **10** | **La dette DECROIT** | le nombre d'imports par nom nu et d'insertions legacy est compte a chaque passe : il ne remonte JAMAIS |
+
+### Ce que le socle NE fait PAS (borner : pas de mini-import system)
+
+- **Aucun hook d'import** (`importlib` finders/loaders, `sys.meta_path`) : on ne detourne pas le
+  mecanisme de Python, on **charge explicitement par chemin** quand c'est necessaire.
+- **Aucun fichier verrou / plan ecrit** : le plan se LIT (`plan()`), il ne se maintient pas
+  (un plan ecrit serait une seconde verite a tenir a jour).
+- **Aucune resolution transitive automatique** : le socle ne devine pas les dependances d'un module
+  charge -- c'est le fichier lui-meme qui declare ses `charger(...)`.
+- **Aucun renommage** : les fichiers a tirets restent a tirets (regle de nommage respectee) ; c'est
+  le chargement qui s'adapte, pas les noms.
+- **Aucune note au sac a dos** : le socle est du code, pas une porte.
+
+### Le piege qui doit le prouver (cobaye HORS du projet)
+
+| # | Epreuve | Attendu |
+|---|---|---|
+| 1 | 2 `constants.py` (deux dossiers) charges dans le meme processus | 2 objets distincts, aucun masquage |
+| 2 | 1 module a TIRETS charge | charge et utilisable |
+| 3 | 2 appels sur le meme chemin | meme objet (`is`) |
+| 4 | charge depuis 3 cwd differents | meme resultat |
+| 5 | chemin hors racine / absent / autre machine / relatif a un autre dossier | **4 refus** nommes |
+| 6 | cobaye PIEGE par le garde : 1 import par nom nu + 1 `sys.path.insert` + 1 amorce modifiee | **3 KO** nommes `fichier:ligne` |
+| 7 | cobaye CONFORME (import pointe + `charger`) | **0 KO** -- un garde qui refuse du legitime est un garde qu'on contourne |
+
+### Critere GO (chiffre, 8 epreuves)
+
+1. **2 homonymes** charges dans le meme processus : **2 objets distincts** (preuve que la classe de panne est morte) ;
+2. **3 cwd differents** -> meme module ; 1 module **a tirets** charge ; 2 appels -> **meme objet** (`is`) ;
+3. **4 refus** nommes (hors racine, absent, autre machine, relatif errone) ;
+4. garde sur cobaye piege : **3 KO nommes `fichier:ligne`** ; sur l'arbre reel : **0 faux positif** ;
+5. amorces **byte-identiques** (1 empreinte) dans N portes ; **0 insertion hors amorce** dans le perimetre migre ;
+6. **dette CHIFFREE et decroissante** : les imports par nom nu (**465** mesures le 2026-09-15, la fiche en annoncait 133) + les insertions legacy (**79** mesures, la fiche en annoncait 65) sont comptes a chaque passe, strictement pas plus a la passe 2 ;
+7. `plan()` rend le registre (nom unique -> chemin) sans aucun fichier ecrit ;
+8. non-regression **verte**, ASCII **0 violation**, contrat fondamental **vert**.
+
+### Dependances et ordre dans la serie
+
+`I-00` (ce socle) passe **AVANT** `I-01 chemin.py` : la couche native s'importe **par** le socle.
+Ordre revise de la Phase 4 : **1. I-00** (garde + chargeur + amorce) -> **2. I-01 `chemin.py`** ->
+**3. I-02 `fichier.py`** -> ... -> **I-06 `empreinte.py`** -> puis la migration `A` par etapes.
+
+### Les 4 arbitrages a trancher sur cette fiche
+
+| # | Question | Options |
+|---|---|---|
+| **S-1** | Comment l'amorce arrive-t-elle dans les 31 outils ? | **amorce de 3 lignes par porte, byte-verifiee** (recommande : additif, marche des aujourd'hui) / **porte d'INVOCATION unique** (`lancer <outil> <verbes>` qui pose le chemin : zero amorce, mais change la facon d'appeler tous les outils et touche les ~250 occurrences de `argparse`/`sys.argv` declarees hors perimetre) |
+| **S-2** | Ou vit le chargeur | `matrice/data/commun/charger.py` (recommande : deja sur le chemin de 32 fichiers, et `data/commun/` est sans tiret) / un dossier dedie |
+| **S-3** | Ou vit le garde | **etendre** `verifier-contrat-fondamental.py` (recommande : les verbes `collisions`/`imports` y sont deja, une seule porte pour le contrat) / un garde dedie |
+| **S-4** | Comment le garde traite les 133 imports par nom nu et les 65 insertions EXISTANTS | **dette chiffree qui ne remonte jamais**, bloquant sur le perimetre migre (recommande : sinon on ne peut pas l'allumer sans tout migrer) / blocage immediat sur 390 fichiers (impossible en l'etat) |
+
+---
+
+# ANNEXE B -- LES 5 FICHES CIBLES DE LA COUCHE NATIVE (detail avant GO)
+
+> Meme gabarit que la fiche I-01 : 1 phrase, verbes (1-3 MAX), garanties numerotees, ce qui
+> devient configurable, ce qu'elle remplace (MESURE), ce qu'elle ne fait PAS, critere GO
+> CHIFFRE, le piege, les arbitrages. Emplacement de toutes : `matrice/data/commun/<nom>.py`
+> (dossier **100% sans tiret** : import POINTE possible, mesure de l'Annexe A).
+> Tous les noms sont verifies LIBRES contre les 37 noms de categories.
+
+## L'evidence qui justifie CHAQUE fiche (la divergence MESUREE, pas supposee)
+
+| Module | La divergence constatee aujourd'hui | Mesure |
+|---|---|---|
+| `fichier.py` | **3 recettes** d'ecriture atomique pour le MEME travail | `.tmp` 39 + `os.replace` 28 + `NamedTemporaryFile` 3 ; `.bak` 31 ; `newline=` 63 ; `errors=` 33 ; `mkdir(` 25 |
+| `horloge.py` | **6 formes de date** pour le MEME instant | `%Y-%m-%d %H:%M:%S` 45, ISO (`isoformat`) 22, `%H:%M:%S` 11, `%Y-%m-%d %H:%M:%S.%f` 4, `%d/%m/%Y` 1, `%Y%m%d_%H%M%S` 1 |
+| `execution.py` | la politique d'execution **recopiee 63 fois**, et l'invisibilite **25 fois alors que le motif partage EXISTE** (`lancement.py`) | `subprocess.run` 63, `capture_output` 59, `text=True` 49, `timeout=` 29, `cwd=` 13, `CREATE_NO_WINDOW` 19 + `start_new_session` 6, **`shell=` 1 -- FAUX POSITIF (voir CORRECTION ci-dessous)** |
+| `texte.py` | `ensure_ascii` : **une regle RELLE mais NON ECRITE** (BDD vs createur) | `ensure_ascii=True` 48 (les outils `bdd-*`) vs `False` 39 (`benchmark`, `dialoguer`, `executer`, `maintenir`) ; `sort_keys` **4 seulement** ; `indent=2` 35 ; `JSONDecodeError` 37 |
+
+### CORRECTION (2026-09-13, apres verification de chaque chiffre)
+
+La premiere redaction de ce tableau portait **deux FAUX POSITIFS**, exactement de la famille que
+la lecon **L-046** (ecrite le matin meme) decrit : *une detection qui lit du texte juge aussi ses
+propres explications.* Corrige, nomme, et garde en trace -- c'est la regle du journal :
+
+| Affirmation initiale | Verite mesuree | Consequence sur la fiche |
+|---|---|---|
+| "`shell=` 1 : la regle absolue est VIOLEE quelque part" | l'unique occurrence est une **DOCSTRING** dans `executer/commun.py:142` qui ENONCE la regle (*"Pas de shell (subprocess.run sans shell=True)"*) | **0 violation reelle.** La fiche I-04 ne doit pas corriger un shell inexistant -- et le GARDE `B-2` devra ignorer commentaires et docstrings (meme piege que L-046) |
+| "`%d/%m/%Y` casse le tri lexicographique" | l'occurrence unique est dans `journal-multi-encarts/commun.py:142`, **paire d'affichage** avec `%H:%M:%S` (console), pas une date persistee ni triee | **Le risque n'est PAS prouve** : il est nomme comme **risque a eviter**, jamais comme panne constatee |
+| "`ensure_ascii` a pile ou face" | la repartition est **coherente** : `True` = les 7 outils `bdd-*` (octets deterministes), `False` = les outils qui PARLENT au createur (`benchmark`, `dialoguer`, `executer`, `maintenir`) | Ce n'est pas un desaccord, c'est **une regle implicite non ecrite** : `texte.py` doit la RENDRE EXPLICITE, pas trancher a la place de quelqu'un |
+| `empreinte.py` | l'empreinte courte **recopiee a la main** | `[:16]` **50**, `hexdigest()` 21, `sha256` 63 mentions, 9 fichiers `.sha256` |
+
+---
+
+## Fiche I-02 -- `fichier.py`
+
+**1 phrase** : *le projet n'ecrit plus des fichiers, il ecrit des OCTETS ATOMIQUES -- tout ou
+rien, LF forces, encodage declare, `.bak` horodate, et jamais de troncature muette en lecture.*
+
+| Verbe | Signature | Rend | Repond a |
+|---|---|---|---|
+| **`lire`** | `lire(ref)` | le contenu COMPLET + l'annonce `total/lu` (jamais muet) | "qu'y a-t-il dans ce fichier, en ENTIER ?" |
+| **`ecrire`** | `ecrire(ref, contenu, mode)` | le fichier ecrit, + `.bak` si remplacement | "pose ces octets, ou bien rien" |
+| **`retirer`** | `retirer(ref)` | la suppression, avec `.bak` (revert possible) | "retire-le, mais je peux revenir" |
+
+`mode` est une liste FERMEE (`creer|remplacer|ajouter`) : 1 choix, pas une option exotique.
+Aucun appelant ne choisit encodage/newline/tmp : c'est la Matrice qui les regle.
+
+**Garanties** : (1) **atomicite** : tmp + remplacement, jamais de fichier a moitie ecrit --
+*3 recettes aujourd'hui pour ce meme travail* ; (2) **LF forces** (L-001) et `newline` non
+negociable ; (3) **encodage declare** + politique d'erreur en UN endroit (`errors=` 33 fois
+aujourd'hui) ; (4) **`.bak` horodate** au remplacement, forme produite PAR le module (jamais un
+6e format de date) ; (5) **lecture annoncee** : `total/lu`, et troncature EXPLICITE si tranche ;
+(6) **second canal** (L-009) : apres ecriture, l'empreinte du disque est comparee a celle produite
+-- un desaccord est une ALERTE, jamais un silence ; (7) **ecriture dans un dossier absent**
+refusee (25 `mkdir(` disperses) ; (8) **validation** avant de dire OK (`py_compile`/`json.load`
+selon l'extension) ; (9) refus hors perimetre, code 2 ; (10) 0 valeur en dur.
+
+**Remplace (mesure)** : `open(` 166, `read_text` 94, `write_text` 32, `.tmp` 39, `os.replace` 28,
+`.bak` 31, `newline=` 63, `errors=` 33, `mkdir(` 25.
+
+**Ne fait PAS** : pas de `glob`/`rglob`/`iterdir` (60 appels = lectures natives sans divergence),
+pas de `shutil.copy`/`rmtree` (4 appels), pas de compression, pas de reseau, pas d'archive.
+
+**Critere GO (5 epreuves chiffrees)** : 1) coupure simulee pendant l'ecriture -> soit l'ANCIEN
+soit le NOUVEAU, jamais un demi-fichier (epreuve repetee 10 fois) ; 2) apres remplacement,
+`.bak` PRESENT et relecture L-009 egale (empreinte disque == empreinte produite) ; 3) 0 CRLF sur
+un fichier ecrit depuis un contenu qui en contient ; 4) lecture d'un fichier de 5000 lignes
+annonce `5000/5000` ; 5) non-regression verte + ASCII 0.
+
+**Le piege** : couper le processus au milieu d'une ecriture (cobaye) ; ecrire hors perimetre
+(REFUS) ; ecrire dans un dossier absent (REFUS qui dit quoi faire) ; ecrire un `.json` invalide
+(REFUS code 1 MAIS ecrit + `.bak`, revert possible).
+
+**Arbitrages** : (F-1) `retirer` dans ce module ou dans la porte `supprimer` (MO-008) ?
+(F-2) le second canal L-009 est-il OBLIGATOIRE (cout : 1 relecture par ecriture) ou sur demande ?
+
+---
+
+## Fiche I-03 -- `horloge.py`
+
+**1 phrase** : *il n'y a plus qu'UNE horloge et QU'UNE forme d'instant dans la Matrice -- les
+5 autres formes se derivent, elles ne se recopient pas.*
+
+| Verbe | Signature | Rend | Repond a |
+|---|---|---|---|
+| **`maintenant`** | `maintenant()` | l'instant canonique `AAAA-MM-JJ HH:MM:SS` | "quelle heure est-il, pour ECRIRE ?" |
+| **`chrono`** | `chrono()` | un marqueur MONOTONE (jamais l'heure murale) | "quand ai-je commence a MESURER ?" |
+| **`duree_ms`** | `duree_ms(marqueur)` | la duree en millisecondes | "combien de temps ca a pris ?" |
+
+**Garanties** : (1) **une seule forme persistee** (celle qui domine deja : **45 occurrences**) ;
+(2) les formes courtes (`HH:MM:SS` pour la console, 11 occ.) sont des **TRANCHEES de la
+canonique** -- jamais un second format ; (3) `isoformat` (22 occ.) est declare **hors forme
+persistee** : la Matrice ecrit la canonique, point ; (4) **durees monotones** : une duree ne se
+mesure JAMAIS avec l'heure murale (une remise a l'heure SYSTEME faussait les mesures) ;
+(5) **fuseau explicite** et jamais de locale ; (6) la forme de NOM DE FICHIER
+(`%Y%m%d_%H%M%S`, 1 occ. aujourd'hui) est produite par `fichier.py` A PARTIR de la canonique
+-- pas un 6e format ; (7) **configurable cote Matrice** : format, fuseau, base de temps.
+
+**Remplace (mesure)** : 5 formats `strftime` + `isoformat` 22 + `fromtimestamp` 7 +
+`time.time()` 11 + `datetime.now` 77 -- soit **~180 points** ramenes a 3 verbes.
+
+**Le risque a eviter (NON constate -- honnetete de mesure)** : `%d/%m/%Y` existe **une fois**
+(`journal-multi-encarts/commun.py:142`) et sert a l'**affichage** ; il n'est PAS prouve qu'il casse
+un tri aujourd'hui. Ce qui est vrai : une forme comme celle-la, si elle atteint un champ TRIE,
+rend l'ordre faux sans rien casser. La fiche la nomme comme risque a fermer par la forme unique,
+**jamais comme une panne constatee**.
+
+**Ne fait PAS** : pas de `timedelta` metier (13 occ. : les periodes du bilan appartiennent a
+`bilan-periode`), pas d'attente (`attente.py` existe, MO-062), pas de parse de date libre
+(l'entree reste la canonique).
+
+**Critere GO (5 epreuves)** : 1) `maintenant()` **rend le meme texte** que l'actuel
+`%Y-%m-%d %H:%M:%S` (compatibilite descendante, relu par les journaux) ; 2) une duree mesuree
+avec `chrono`/`duree_ms` est **insensible** a un changement d'heure simule ; 3) **0 `strftime`**
+dans les fichiers migres ; 4) `maintenant()` **> 100 000 appels/s** (pas de `strftime` par appel
+si le format est fige) ; 5) non-regression verte.
+
+**Le piege** : une date `%d/%m/%Y` melangee a des dates canoniques -> le TRI doit le REVELER
+(cobaye : ecrire les deux formes, trier, montrer l'inversion) ; une duree calculee a l'heure
+murale AVEC recul d'horloge -> doit rester positive et juste (cobaye).
+
+**Arbitrages** : (H-1) la forme courte est-elle une TRANCHE de la canonique (recommande : 1 seule
+source) ou un verbe de plus ? (H-2) `isoformat` : interdite a l'ecriture (recommande) ou toleree
+en lecture ?
+
+---
+
+## Fiche I-04 -- `execution.py`
+
+**1 phrase** : *la Matrice n'execute plus des commandes, elle OUVRE un processus avec une
+politique -- et cette politique est ecrite UNE fois.*
+
+| Verbe | Signature | Rend | Repond a |
+|---|---|---|---|
+| **`lancer`** | `lancer(commande)` | code + stdout + stderr + duree, ENSEMBLE | "execute et dis-moi TOUT" |
+| **`lancer_detache`** | `lancer_detache(commande)` | un PID, aucune fenetre | "demarre et laisse vivre" |
+
+**Absorbe `lancement.py`** (le motif invisible existe deja, M-081) : une seule source pour
+*ouvrir un processus*. `lancement.py` reste comme faade fine ou disparait -- arbitrage E-1.
+
+**Garanties** : (1) **Python seul, JAMAIS de shell** -- **0 violation reelle constatee**
+(l'unique `shell=` du corpus est une docstring qui enonce la regle ; piege L-046) ; (2) **env FIXE** (le piege
+`PYTHONIOENCODING=replace` qui tue le fils, L-008) ; (3) **timeout toujours collecte** (29 occ.
+recopiees) : un depassement est un RESULTAT, jamais un blocage ; (4) **invisibilite** win
+(`CREATE_NO_WINDOW`) / posix (`start_new_session`) -- le motif est recopie **25 fois** alors que
+`lancement.py` existe : la fiche le ramene a UN endroit ; (5) **code + stdout + stderr + duree**
+rendus ENSEMBLE (aujourd'hui : 59 `capture_output` + 49 `text=True` recopies) ; (6) **zero
+processus fantome** (L-012) : l'arret passe par les drapeaux cooperatifs existants ;
+(7) **chemin ABSOLU obligatoire** pour le programme (panne de ce jour : un chemin relatif a tue
+une relance detachee en silence) -- `resoudre` est appele AVANT ; (8) **stdin ferme** par defaut ;
+(9) **configurable cote Matrice** : env, timeout par defaut, liste blanche d'executables.
+
+**Remplace (mesure)** : `subprocess.run` 63, `Popen` 4, `capture_output` 59, `text=True` 49,
+`timeout=` 29, `cwd=` 13, `DEVNULL` 8, invisibilite 25, `os.environ`, `sys.executable` 86.
+
+**Le danger reel nomme** : aujourd'hui, `os.environ` apparait **1 fois** mais `sys.executable`
+**86 fois** -- l'environnement d'execution n'est pas pense, il est subi.
+
+**Ne fait PAS** : pas de shell, pas de pipeline, pas de `curl | bash`, pas de tuer un processus
+de l'exterieur (l'arret est cooperatif), pas de monitoring (les espions existent).
+
+**Critere GO (5 epreuves)** : 1) les **6 routines** tournent encore apres absorption de
+`lancement.py` (preuve : `vie etat` 6/6 + journaux) ; 2) un chemin RELATIF pour le programme est
+REFUSE avec un message qui dit d'utiliser `resoudre` ; 3) un `shell=True` plante dans un cobaye
+est **REFUSE par le garde** (fichier:ligne) ; 4) 0 fantome apres 20 lancements detaches
+(comparaison `ps` avant/apres) ; 5) non-regression verte.
+
+**Le piege** : commande a espaces et guillemets (aucun shell => pas d'injection : la chaine
+passe TELLE QUELLE) ; timeout (doit RENDRE, pas bloquer) ; programme absent (code + message, pas
+d'exception) ; sortie tres longue (troncature ANNONCEE, jamais muette).
+
+**Arbitrages** : (E-1) `lancement.py` absorbe ou faade ? (E-2) liste blanche d'executables
+(strict) ou confiance au perimetre (souple) ?
+
+---
+
+## Fiche I-05 -- `texte.py`
+
+**1 phrase** : *la meme donnee ecrite deux fois produit les MEMES OCTETS -- et tout texte qui
+entre dans la Matrice est vu pour ce qu'il est (ASCII ou pas).*
+
+| Verbe | Signature | Rend | Repond a |
+|---|---|---|---|
+| **`charger_json`** | `charger_json(ref)` | la donnee, ou un REFUS qui dit la ligne | "lis ce JSON, et dis-moi s'il est faux" |
+| **`ecrire_json`** | `ecrire_json(ref, donnee)` | les octets DETERMINISTES (tri, indent, ASCII figes) | "ecris ce JSON, toujours pareil" |
+| **`verifier_ascii`** | `verifier_ascii(texte)` | la LISTE DES LIGNES non-ASCII | "est-ce que je peux l'ecrire dans le projet ?" |
+
+**Garanties** : (1) **determinisme d'octets** : tri des cles (`sort_keys` n'est utilise que
+**4 fois** aujourd'hui), indent fige, `ensure_ascii` FIXE -- la meme donnee ecrite deux fois
+donne la MEME empreinte (sinon les `.sha256` etalons sont instables) ; (2) **`ensure_ascii`
+**rend EXPLICITE une regle qui l'est deja en pratique** : `True` (48 occ.) pour les **BDD**
+(octets deterministes, etalons stables), `False` (39 occ.) pour les **documents qui parlent au
+createur** (lisibles). Aujourd'hui cette repartition est COHERENTE mais NULLE PART ECRITE :
+c'est ca le defaut -- pas un desaccord entre outils ; (3) **erreur de parse nommee** :
+`JSONDecodeError` (37 occ. recopiees) devient un refus qui NOMME la ligne et la colonne ;
+(4) **ASCII verifie avec les LIGNES** : le garde ASCII peut consommer ce verbe (1 seule source de
+la regle) ; (5) **normalisation** (`unicodedata`, 3 occ.) : une seule politique, nommee ;
+(6) **configurable cote Matrice** : tri, indent, politique ASCII, table de normalisation.
+
+**La preuve par l'exemple, du 2026-09-13** : une ligne `entree` accentuee s'est glissee dans
+**431 lignes** de journal -- ecrite par l'agent en preparation. Le garde ASCII l'a vue APRES
+coup. `verifier_ascii` est le verbe qui la voit AVANT.
+
+**Remplace (mesure)** : `json.loads` 54, `json.dumps` 62, `json.load(` 51, `json.dump(` 29,
+`ensure_ascii` 87, `indent=` 56, `JSONDecodeError` 37, `unicodedata` 3.
+
+**Ne fait PAS** : **pas de `re`** (24 `re.compile` : les motifs sont de la logique LOCALE, pas une
+capacite partagee -- les centraliser serait un faux besoin), pas de YAML/TOML/CSV (aucune
+occurrence mesuree), pas de nettoyage de contenu (c'est `corriger-ascii`, un outil).
+
+**Critere GO (5 epreuves)** : 1) **deux ecritures** de la meme donnee -> empreintes IDENTIQUES
+(aujourd'hui : non garanti) ; 2) un JSON invalide -> refus qui NOMME ligne et colonne ;
+3) `verifier_ascii` trouve la ligne exacte d'un caractere non-ASCII plante dans un cobaye ;
+4) les 7 BDD JSON **se relisent** apres passage par `ecrire_json` (aucune perte de donnee --
+epreuve sur copie) ; 5) non-regression verte.
+
+**Le piege** : un JSON avec des cles dans le desordre ecrit deux fois -> octets identiques
+(cobaye) ; un JSON tronque -> refus nomme ; un texte avec 1 emoji -> ligne nommee ; **piege
+inverse** : un fichier deja conforme ne doit PAS etre signale (0 faux positif).
+
+**Arbitrages** : (T-1) `ensure_ascii` : FIGE a `True` (tout en echappement, octets stables) ou a
+`False` (lisible, mais octets non-ASCII) ? -- recommande **True** pour les BDD (determinisme),
+`False` seulement pour les documents destines au createur. (T-2) `sort_keys` : impose partout ou
+seulement pour les BDD ?
+
+---
+
+## Fiche I-06 -- `empreinte.py`
+
+**1 phrase** : *une seule forme d'empreinte pour tout le projet, et la forme COURTE cesse d'etre
+une troncature ecrite a la main 50 fois.*
+
+| Verbe | Signature | Rend | Repond a |
+|---|---|---|---|
+| **`empreinte`** | `empreinte(ref)` | le SHA-256 complet (64), texte ou fichier | "quelle est l'identite de CE contenu ?" |
+| **`empreinte_courte`** | `empreinte_courte(ref)` | la forme courte (16) des traces | "comment je le NOMME dans un journal ?" |
+| **`etalon`** | `etalon(ref)` | lit/ecrit le `.sha256` cote a cote | "est-ce que ce fichier a bouge depuis l'etalon ?" |
+
+**Garanties** : (1) **2 longueurs DECLAREES** (16 traces, 64 etalon), jamais un nombre improvise
+-- aujourd'hui `[:16]` apparait **50 fois** ecrit a la main ; (2) **meme donnee = meme empreinte**
+sur win et linux : lecture en **octets** (`read_bytes`, 5 occ.) et non en texte (un `\r\n`
+interprete change l'empreinte) ; (3) **`.`sha256` cote a cote** (9 fichiers aujourd'hui) produit par
+une seule porte ; (4) **comparaison** qui dit `EGAL`/`DIFFERENT` + les deux valeurs ; (5) **le
+format est declare, pas devine** ; (6) configurable cote Matrice : algorithme, longueurs.
+
+**Remplace (mesure)** : `sha256` 63 mentions, `hexdigest()` 21, `[:16]` 50, 9 `.sha256`, et
+l'outil `calculer-hash.py` (4 occ.) -- la recette existe deja en OUTIL alors qu'il manque le
+module partage. Rien de nouveau a inventer : tout est mesure.
+
+**Ne fait PAS** : pas d'algorithme multiple expose (1 algorithme par defaut), pas de signature
+cryptographique, pas de comparaison de deux FICHIERS entiers (l'empreinte suffit), pas de
+cache d'empreintes (ce serait une seconde verite a invalider).
+
+**Critere GO (5 epreuves)** : 1) un fichier ecrit en texte puis relu en OCTETS donne la MEME
+empreinte (et un fichier CRLF donne une empreinte DIFFERENTE d'un LF : c'est voulu et prouve) ;
+2) `empreinte_courte` == les 16 premiers caracteres de `empreinte` (coherence des 2 formes) ;
+3) `etalon` detecte une modification d'1 octet, et NE CRIE PAS sur un fichier intact ;
+4) les 9 `.sha256` existants se relisent avec le nouveau module (compatibilite descendante) ;
+5) non-regression verte.
+
+**Le piege** : 1 octet change (DIFFERENT nomme) ; fichier absent (refus nomme) ; **piege
+inverse** : un fichier intact ne doit PAS crier -- un etalon qui signale du bruit est un etalon
+qu'on ignore (lecon L-054, et la veille-flux a paye cette lecon : signatures mortes declarees
+"mortes" a tort).
+
+**Arbitrages** : (P-1) longueur courte : 16 (usage actuel) ou 12 ? -- recommande **16** (aucun
+changement, 50 sites l'utilisent) ; (P-2) `calculer-hash.py` : absorbe (devient une faade) ou
+conserve tel quel ?
+
+---
+
+## Ce que les 5 fiches ont en commun (et qui se voit a la mesure)
+
+1. **Aucun de ces modules n'invente une fonction** : chacun ramene a UNE regle ce qui est recopie
+   4 a 63 fois. Le besoin est mesure, pas suppose.
+2. **Le plus dangereux n'est pas le plus gros** : `texte.py` (regle d'octets NON ECRITE) et
+   `horloge.py` (5 formes de date pour le meme instant) sont des **regles tacites** : elles
+   produisent des divergences SILENCIEUSES, sans crash et sans garde.
+3. **Deux motifs partages existent DEJA** (`lancement.py`, `attente.py`) : la couche native n'est
+   pas une idee neuve, c'est une idee **appliquee a 4 modules de plus**.
+4. **Chaque fiche a son piege inverse** ("ne pas refuser / ne pas crier sur du legitime") : c'est
+   la lecon L-054 repetee, parce qu'un garde qui crie pour rien est un garde deja mort.
+
+---
+
+# ENTREE 3 -- ARBITRAGES TRANCHES + GO FIGE (2026-09-13)
+
+> Instruction du createur : *trancher les 10 arbitrages des 5 fiches et figer le GO de la serie
+> I-00 -> I-06.* Ce qui suit est **DECIDE**, plus "recommande" : chaque decision est motivee par
+> la mesure, et n'est reversible que si une mesure la contredit. Aucun code avant ce GO -- il est
+> donne ici.
+
+## A. Les 10 arbitrages des 5 fiches -- TRANCHES
+
+| # | Question posee | DECISION | La mesure qui tranche |
+|---|---|---|---|
+| **F-1** | `retirer` dans `fichier.py` ou dans la porte `supprimer` (MO-008) ? | **Dans `fichier.py`.** La porte `supprimer` reste la PORTE (contrat, journal, perimetre) et **delegue** : elle n'a plus le droit de toucher au disque elle-meme | 3 recettes d'ecriture atomique coexistent : une suppression hors module contournerait `.bak`, l'atomicite et L-009. Le module fait l'ACTE, la porte fait le CONTRAT |
+| **F-2** | second canal L-009 obligatoire (1 relecture par ecriture) ou sur demande ? | **Obligatoire pour `creer` et `remplacer`** ; pour `ajouter`, on relit **la tranche ecrite seule** | Jamais l'option "ne pas verifier" : seulement une verification MOINS CHERE pour les journaux append-only. Une porte qui peut sauter la preuve finit par la sauter |
+| **H-1** | forme courte = TRANCHE de la canonique ou verbe de plus ? | **Tranche produite PAR le module** (`heure_courte(instant)`) -- jamais un `[11:]` chez l'appelant | 11 occurrences d'affichage : un decoupage recopie est un **2e format de fait**, meme si la source est unique |
+| **H-2** | `isoformat` interdite a l'ecriture ou toleree en lecture ? | **Interdite a l'ecriture, toleree en LECTURE** (compatibilite des 22 occurrences historiques) | Les journaux deja ecrits doivent rester lisibles ; mais la Matrice n'en PRODUIT plus jamais. Refuser de lire casserait l'existant pour rien |
+| **E-1** | `lancement.py` absorbe ou facade ? | **Facade d'abord** (3 lignes qui appellent `execution.lancer_detache`), **absorption** quand le compte d'appelants atteint 0 | 25 sites l'utilisent : on ne change pas deux choses a la fois (L-053). Une facade se retire ensuite d'un coup, sans toucher aux appelants |
+| **E-2** | liste blanche d'executables (strict) ou confiance au perimetre (souple) ? | **Souple sur le BINAIRE, STRICT sur le CHEMIN** : `resoudre` obligatoire, refus hors `matrix/` pour les scripts du projet | La panne du jour : un chemin **relatif** a tue une relance detachee **en silence**. Une liste blanche serait une 2e verite a maintenir et a contredire |
+| **T-1** | `ensure_ascii` fige a `True` ou a `False` ? | **Deux politiques NOMMEES** : `bdd` (defaut : `ensure_ascii=True`, cles triees) et `lisible` (documents destines au createur). Aucun booleen nu | 48 vs 39 : la repartition est COHERENTE -> la regle est reelle mais non ecrite. On la REND EXPLICITE, on ne tranche pas a la place d'un autre |
+| **T-2** | `sort_keys` impose partout ou seulement pour les BDD ? | **Impose dans `bdd`**, libre dans `lisible` | Le determinisme des `.sha256` etalons l'exige cote BDD ; cote document, l'ordre peut porter du sens. `sort_keys` n'est utilise que **4 fois** aujourd'hui |
+| **P-1** | longueur courte : 16 ou 12 ? | **16** | **50 sites** l'utilisent : changer la longueur change toutes les traces du projet pour zero gain mesure |
+| **P-2** | `calculer-hash.py` absorbe ou conserve ? | **Devient une facade** : il garde son role de PORTE (CLI, journal), le calcul vient de `empreinte.py` | Meme regle qu'E-1 : un seul changement a la fois. Sa logique unique remonte au module, son contrat reste |
+
+**Ce que ces 10 decisions ont en commun** : aucune ne tranche un DESACCORD -- toutes rendent explicite une regle qui existait deja mais n'etait ECRITE nulle part (c'est exactement le defaut mesure sur `texte.py`). Et aucune ne change deux choses a la fois : `facade`, `politique nommee`, `tranche produite par le module` sont trois facons de dire "on ajoute la regle sans casser ce qui vit".
+
+## B. Les 4 arbitrages de serie -- TRANCHES
+
+| # | Question | DECISION | La mesure qui tranche |
+|---|---|---|---|
+| **1** | Perimetre : les 6 modules ou moins ? | **Les 6 modules (I-01 -> I-06) + le socle (I-00)**, mais executes en **8 pas strictement seriels** : jamais 2 cibles ouvertes en meme temps | Chaque module a son propre critere GO chiffre. Le perimetre est valide ENTIER (les besoins sont mesures) ; c'est l'EXECUTION qui est freinee, pas le perimetre |
+| **2** | Strategie : `C+B` puis `A` par etapes -- ou `A` d'abord / `B` seul ? | **`C+B` maintenant, `A` (paquets nommes) par etapes, apres le pas 2** | `A` est bloque par **47 dossiers a tiret** : renommer l'arbre entier est un chantier a fort risque pour un gain non mesurable aujourd'hui. `B` seul serait un pansement (garde sans chargeur) ; `A` d'abord serait un chantier avant la fondation |
+| **3** | Ou vit la couche -- et faut-il la declarer dans `remorque/inventaire.json` ? | **Dans `matrice/data/commun/`** (0 tiret, deja sur le chemin de 32 fichiers). **Declaration dans l'inventaire : NON avant la naissance** -- on declare **le jour de la creation**, pas avant | Declarer un equipement non-ne fabrique EXACTEMENT le bruit qu'on vient de corriger ce matin (la remorque criait `INATTENDU`/`MANQUANT` sur du legitime). Un inventaire qui crie pour rien est un inventaire deja mort (L-054) |
+| **4** | Le `debut` suivi-optimus : maintenant ou apres ? | **PAS maintenant.** MO-057 tient le slot `en-cours` (serie stricte). Le `debut` sera pose **au premier `creer-outil` (pas 1)**, **MO-057 soldee avant** | Poser un `debut` sans entree de file recree la dette que la coherence signale ("en cours dans la file, sans debut au journal") : on ne repare pas un ecart en fabriquant le meme |
+
+**C-1 -> C-4 (fiche I-01 `chemin.py`) -- confirmes** : le nom est **`chemin.py`** (un mot, 0 tiret, verifie libre) ; `racine()` rend **`matrix/`** (l'ancre des chemins persistes) ; le module **REFUSE d'etre copie** (c'est ainsi que naissent les deux verites -- la file legacy copiee, MO-063) ; un chemin d'une **autre machine** (`Z:` vs `C:`) provoque un **REFUS qui nomme le drapeau**, jamais une traduction silencieuse.
+
+## C. GO FIGE -- LA SERIE I-00 -> I-06
+
+> Etat : **GO ACCORDE** (2026-09-13). Le GO porte sur l'ENSEMBLE ; il se consomme **un pas a la
+> fois**, et un pas ne s'ouvre que si le precedent a PROUVE son critere (cobaye + non-regression
+> verte). Le GO d'un pas n'est jamais le GO du suivant.
+
+| Pas | Cible | Nature | Critere GO (preuve, pas avis) | Etat |
+|---|---|---|---|---|
+| **0** | MO-057 soldee | prealable (protocole) | coherence 0 ecart / 0 dette | **FAIT** (verifie le 2026-09-15 : MO-057 `terminee`, coherence file<->journal **0 ecart / 0 dette**) -- le pas 1 est donc OUVERT |
+| **1** | **B -- garde de resolution** (insertions interdites + tirets) | garde ETENDU (S-3 tranche) | sur un cobaye piege (2 `constants.py` atteignables) : REFUS qui nomme `fichier:ligne` ; sur l'arbre reel : **0 faux positif** sur les **434** fichiers (mesure MO-105) ; bloquant dans la non-regression | **FAIT (MO-105)** |
+| **1-P** | **P -- le PERIMETRE de la couche** (declaration unique, lue par tous les instruments) | socle de SURVEILLANCE (ajoute par la MESURE -- annexe C, section C.4) | la couche est DECLAREE et VUE : `remorque etat` la compte, `espion-integrite` empreinte ses fichiers, et un perimetre declare mais NON lu par un instrument **CRIE** (jamais de garde muet) | **GO** |
+| **2** | **C -- `commun/atelier.py`** (chargeur par chemin) | nouveau socle (depend de P : la couche nait HORS zone) | `charger()` d'un module a tirets ET d'un module homonyme rend LE bon fichier depuis **3 cwd differents** ; **0 insertion** dans le socle | **GO** |
+| **3** | **I-01 -- `chemin.py`** | module natif | **0 `dirname`/`abspath`/`parent.parent`** dans les fichiers migres ; 1 chemin persiste reste RELATIF et se resout depuis 3 cwd ; `racine()` < 1 ms ; 4 refus nommes | **GO** |
+| **4** | **I-02 -- `fichier.py`** | module natif | coupure simulee -> soit l'ANCIEN soit le NOUVEAU (10 fois) ; `.bak` present + relecture L-009 egale ; **0 CRLF** ; `5000/5000` annonce | **GO** (risque MOYEN : touche toutes les ecritures) |
+| **5** | **I-03 -- `horloge.py`** | module natif | `maintenant()` rend le MEME texte que `%Y-%m-%d %H:%M:%S` ; duree insensible a un recul d'horloge ; **0 `strftime`** dans les fichiers migres | **GO** |
+| **6** | **I-04 -- `execution.py`** | module natif (absorbe `lancement.py` en facade) | les **6 routines tournent** apres bascule (6/6 + journaux) ; chemin RELATIF pour le programme = REFUS nomme ; `shell=True` plante = REFUSE par le garde ; **0 fantome** apres 20 lancements | **GO** (risque MOYEN) |
+| **7** | **I-05 -- `texte.py`** | module natif | deux ecritures de la meme donnee -> empreintes IDENTIQUES ; JSON invalide -> refus qui NOMME ligne+colonne ; `verifier_ascii` trouve la ligne exacte ; **0 faux positif** sur un fichier deja conforme | **GO** |
+| **8** | **I-06 -- `empreinte.py`** | module natif | meme donnee = meme empreinte win/linux ; `empreinte_courte` == les **16 premiers** caracteres de la complete ; 1 octet change = DIFFERENT, fichier intact = SILENCE ; les 9 `.sha256` se relisent | **GO** |
+| **A** | migration vers les paquets nommes (transverse) | etalement, jamais un chantier | **a chaque outil rouvert** pour une autre raison, on retire ses insertions ; GO quand **0 `sys.path.insert` hors socle** sur 390 fichiers | **GO conditionnel** (apres le pas 2) |
+
+**Note de tracabilite (2026-09-15)** : un plan GO qui ne vit que dans un document n'existe
+pour PERSONNE -- la file du pilote etait vide et l'entonnoir aussi, alors que ce tableau
+portait 10 pas approuves. Le chantier est desormais DEPOSE et TISSE dans la file du pilote :
+**EO-116** (type dev, categorie outil, role CONSTRUCTEUR, urgence haute, source = ce journal).
+Regle du GO rappelee dans la mission : un pas a la fois, chaque pas ouvre sur la PREUVE du precedent.
+
+**Note de tracabilite MO-105 (2026-09-15) -- le document se CORRIGE par la MESURE :**
+
+1. **Arbitrage S-3 TRANCHE (decision createur)** : le garde de resolution ne nait PAS dans un
+   fichier neuf -- il est AJOUTE a `verifier-contrat-fondamental.py` (verbes `resolution` et
+   `insertions`). Motif : une seconde porte pour le meme contrat serait une SECONDE VERITE (L-029),
+   et les verbes `collisions`/`imports` y vivent deja. Consequence assumee : la remorque **ne bouge
+   pas** au pas 1 (l'outil existait deja) -- la projection ci-dessous est corrigee, pas le choix.
+2. **Les chiffres de cette fiche etaient PERIMES** (mesure du 2026-09-15) : 390 fichiers .py ->
+   **434** ; 133 imports par nom nu -> **465** (sur 304 fichiers) ; 65 insertions -> **79**
+   `sys.path.insert`/`append` (le premier comptage lisait 97 : il comptait aussi les `insert` de
+   listes et de dictionnaires). La couche `matrice/data/commun/` porte **10** modules, pas 6, et
+   **un seul** (`sac_a_dos.py:28`, import `tokens`) utilise encore un nom nu : c'est LUI le premier
+   fichier a migrer, et le garde le NOMME quand on force le perimetre sur la couche.
+3. **Projection corrigee** : **85** equipements aujourd'hui (mesure `remorque etat`) -> **85** au
+   pas 1 (outil ETENDU : aucune naissance) -> **95** au pas P (+10 modules de la couche REVELES) ->
+   **102** a la fin de la serie (+7 modules natifs). Le GO de sortie se lit sur **102**, jamais 87.
+4. **PAS 1 LIVRE (MO-105)** : les 4 controles (B-1 resolution, B-2 insertions, B-3 collisions
+   etendu aux 38 dossiers-categories d'OUTILS, B-4 tirets + l'amorce qui SE DIT inactive jusqu'au
+   pas 2), le blocage sur le PERIMETRE MIGRE (declare DANS l'outil, VIDE tant que la migration n'a
+   pas commence) et la DETTE CHIFFREE (`noms-nus=465`, `insertions=79`) qui ne remonte JAMAIS.
+   Preuves : cobaye 9/9 (3 pieges + 1 piege inverse), **0 faux positif** sur l'arbre reel, maillon
+   **23 BLOQUANT** de la non-regression, non-regression ZONE+FLUX verte, ASCII 0 violation.
+
+**Note (annexe C.4)** : le pas **1-P** a ete AJOUTE par la mesure. Les instruments de la zone (`remorque`, `espion-integrite`, `espion-tracebacks`) lisent un perimetre **NOMME** : `ZONE = ancetre "optimus-prime"`, et tout `chemin` est `relative_to(ZONE)`. La couche native vivant dans `matrice/data/commun/`, elle serait **equipee mais AVEUGLE** sans declaration de perimetre : personne ne verrait son empreinte changer, personne ne la declarerait manquante. C'est le seul ajout au tableau ; le reste de l'entree 3 est inchange.
+
+## D. Ce que ce GO AUTORISE -- et ce qu'il n'autorise pas
+
+**Autorise** : ouvrir le **pas 1** (garde de resolution) par la porte `creer-outil`, avec sa fiche
+cible pour contrat ; puis, seulement apres preuve, le pas suivant.
+
+**N'autorise pas** :
+
+1. **Deux pas ouverts en meme temps.** Serie stricte : un module est fini et prouve avant que le suivant existe. (La lecon du jour : deux choses changees a la fois rendent la panne illisible.)
+2. **Creer avant de declarer.** Chaque module entre dans `remorque/inventaire.json` **le jour de sa creation**, jamais avant.
+3. **Migrer en masse.** Aucun fichier ne se migre "parce que c'est pret" : on migre **un fichier quand on l'ouvre pour une autre raison** (meme regle que `A`).
+4. **Coder sans le piege.** Chaque pas a son piege inverse ; un critere GO qui n'a pas de cobaye n'est pas prouve.
+5. **Pousser hors du perimetre.** La couche vit dans `matrice/data/commun/` ; le socle refuse d'etre copie.
+
+## E. Ce qui reste ouvert (et ne bloque PAS le pas 1)
+
+| Reste | Quand il se tranchera |
+|---|---|
+| `suivi-sync/boucle/entry.py` -- module **mort-ne** (personne ne l'appelle) | au pas 6 (execution), ou quand on rouvre suivi-sync |
+| **EO-102 -> EO-104** au vrac de l'entonnoir | hors sujet imports : a classer dans un autre round |
+| Le **moteur de recherche** (N-04) et les tests de benchmark (N-07..N-10) | entree 1 (outils-portes), sujet distinct et borne |
+
+---
+
+## Fiche de synthese -- la serie, en une ligne par pas
+
+1. **B** : le nom ne decide plus seul -- un nom ambigu est un REFUS, pas un voisin silencieux.
+2. **C** : `charger("<chemin>")` -- le cwd n'influence plus rien, les tirets cessent d'etre un piege.
+3. **`chemin.py`** : toute question de chemin se pose a CE module (3 verbes).
+4. **`fichier.py`** : des octets atomiques, tout ou rien.
+5. **`horloge.py`** : une seule forme d'instant.
+6. **`execution.py`** : une seule politique d'execution, ecrite une fois.
+7. **`texte.py`** : meme donnee = memes octets (et l'ASCII vu AVANT).
+8. **`empreinte.py`** : une seule forme d'empreinte, la courte n'est plus une troncature a la main.
+
+> **Le fil rouge des 8 pas** : chacun remplace une regle RECOPIEE par une regle ECRITE UNE FOIS,
+> sans jamais changer deux choses a la fois. Aucun module n'invente une fonction : le besoin est
+> mesure (4 a 63 recopies selon la cible). C'est exactement le contrat que le createur a demande
+> -- des fichiers construits et EQUIPES des le depart, puis surveilles par la Matrice.
+
+---
+
+# ANNEXE C -- FICHE CIBLE CONSOLIDEE DE LA COUCHE NATIVE
+
+> **Reference unique de la serie.** Elle consolide : le CONTRAT, les INVARIANTS, l'ORDRE DE SERIE
+> (avec le pas P ajoute par la mesure), l'INVENTAIRE REMORQUE (le plan de declaration) et les
+> CRITERES GO consolides. Les annexes **I-00 -> I-06** restent les contrats de DETAIL ; cette
+> annexe est le **CONTRAT DE SERIE**. Toujours zero code : elle se lit avant chaque pas.
+
+## C.1 Le contrat (celui du createur, traduit en 3 obligations)
+
+> *"si nos fichiers futurs sont construits et equipes de nos outils, protections, securites tout au
+> long du dev, ils seront surveilles par la Matrice et ses routines."*
+
+| Obligation | Concretement | Comment on le PROUVE |
+|---|---|---|
+| **EQUIPE DES LE DEPART** | le fichier nait avec sa protection : refus de perimetre, code 2, zero valeur en dur, ASCII | `verifier-contrat-fondamental` + `garde-ascii` + `scan-valeurs-en-dur` |
+| **SURVEILLE PAR LA MATRICE** | le fichier nait **DECLARE** : la remorque le compte, un espion mesure son empreinte | `remorque etat` + `espion-integrite` sur le fichier |
+| **PROUVE AVANT DE SERVIR** | aucun fichier ne "sert" sans son cobaye ET son piege inverse | le critere GO chiffre du pas |
+
+C'est la reponse directe au "tout au long du dev" : la protection n'est pas posee apres, elle fait
+partie de la NAISSANCE du fichier.
+
+## C.2 Les invariants de serie (valables pour les 9 pas)
+
+1. **Un pas a la fois.** Jamais deux cibles ouvertes : un module fini et prouve avant que le suivant existe.
+2. **Le pas suivant ne s'ouvre que sur PREUVE.** Un "ca a l'air bon" n'ouvre rien ; le critere chiffre de la fiche ouvre.
+3. **Naissance = fichier + DECLARATION + SURVEILLANCE.** Un pas n'est pas fini si son fichier n'est pas declare (C.4) et empreinte. Un fichier neuf que personne ne surveille est deja un fichier mort (panne du 2026-09-13 : le garde muet qui disait "Coherence: OK").
+4. **3 verbes maximum** par module. Le 4e verbe "pratique" est un refus : c'est ainsi qu'un module de 3 verbes devient une couche de 30.
+5. **Piege inverse obligatoire** (L-054) : chaque critere doit aussi prouver qu'on ne crie PAS et qu'on ne refuse PAS du legitime.
+6. **Zero valeur en dur** (`convention-zero-valeurs-en-dur`) : tout seuil, format, limite vient de `constants.py`.
+7. **Refus explicites, code 2**, jamais un `None` muet ni un voisin silencieux.
+8. **Un seul changement a la fois** (L-053) : facade d'abord, absorption quand le compte d'appelants atteint 0.
+9. **Le critere se LIT, il ne s'attend pas** (MO-062/MO-064) : aucune preuve ne consiste a patienter une cadence.
+10. **Le perimetre se declare une fois** : aucun instrument ne recopie une liste de dossiers (lecon du jour : 12 recettes de `sys.path`, 5 formes de date).
+
+## C.3 L'ORDRE DE SERIE CONSOLIDE (10 pas : 9 nommes + 1 transversal)
+
+> `I-00` (le socle) n'est PAS un pas mais **trois** : `B` (garde), `P` (perimetre), `C` (chargeur).
+> Le detail des criteres est en C.5 ; le detail des contrats en annexes I-00 -> I-06.
+
+| Pas | Cible | Nature | Depend de | Ce que le pas PRODUIT | Ce qu'il DEBLOQUE | Risque |
+|---|---|---|---|---|---|---|
+| **0** | MO-057 soldee | prealable protocole | -- | le slot `en-cours` libre, la coherence a 0 dette | le `debut` suivi-optimus du pas 1 | FAIBLE |
+| **1** | **B** -- garde de resolution | outil (zone) | -- | un nom ambigu = un REFUS nomme `fichier:ligne` | le socle peut naitre SURVEILLE | FAIBLE |
+| **1-P** | **P** -- le perimetre declare | socle de surveillance | 1 | la couche `matrice/data/commun/` DECLAREE et VUE par les instruments | toute naissance hors zone | FAIBLE |
+| **2** | **C** -- `commun/atelier.py` | module (couche) | 1 + P + 1-P | `charger("<chemin>")` : cwd indifferent, tirets supportes | les 6 modules natifs | FAIBLE |
+| **3** | **I-01 `chemin.py`** | module (couche) | 2 | 3 verbes pour toute question de chemin | fichiers, execution | FAIBLE |
+| **4** | **I-02 `fichier.py`** | module (couche) | 3 | des octets atomiques (tout ou rien) | horloge, texte, empreinte | **MOYEN** (toutes les ecritures) |
+| **5** | **I-03 `horloge.py`** | module (couche) | 3 | une seule forme d'instant | tout ce qui date | FAIBLE |
+| **6** | **I-04 `execution.py`** | module (couche) | 3 + 4 | une seule politique d'execution (`lancement.py` en facade) | les routines, les lancements | **MOYEN** |
+| **7** | **I-05 `texte.py`** | module (couche) | 4 | memes octets pour la meme donnee + ASCII vu AVANT | les BDD, les etalons | FAIBLE |
+| **8** | **I-06 `empreinte.py`** | module (couche) | 4 | une seule forme d'empreinte (courte incluse) | `calculer-hash`, les `.sha256` | FAIBLE |
+| **A** | migration vers les paquets nommes | transverse, ETALEE | 2 | a chaque outil rouvert, ses insertions disparaissent | la fin des 65 recettes de `sys.path` | MOYEN mais etale |
+
+**Pourquoi cet ordre (et pas un autre)** : `B` avant tout (rien de fiable ne se construit sur une
+resolution non fiable) ; `P` avant la couche (sinon on fabrique des fichiers aveugles) ; `C` avant
+les modules (le socle s'importe par le socle) ; `chemin` avant `fichier` (un chemin faux fait
+rater une ecriture de facon opaque) ; `fichier` avant `horloge`/`texte`/`empreinte` (les trois
+ecrivent) ; `execution` apres `chemin` (le chemin absolu du programme est la panne du jour).
+
+## C.4 L'INVENTAIRE REMORQUE -- le plan de declaration
+
+### C.4.1 Le probleme, MESURE (2026-09-13)
+
+```
+remorque-optimus.py   ZONE = ancetre NOMME "optimus-prime"        (ligne 19)
+                      collecter() : 5 emplacements sous ZONE      (lignes 31-54)
+                      chemin = str(p.relative_to(ZONE))           (lignes 36-52)
+                      etat : difference d'ensembles sur `chemin`  (lignes 73-84)
+espion-integrite      meme ZONE ; 91 empreintes, toutes relatives a ZONE
+espion-tracebacks     rglob sur des dossiers declares, sous ZONE
+=> aucun instrument de la zone ne peut atteindre matrice/data/commun/
+!! `relative_to(ZONE)` leve une exception sur un chemin hors zone : ce n'est pas un oubli de
+   configuration, c'est une IMPOSSIBILITE par construction.
+```
+
+**Consequence, dite sans detour** : sans le pas `P`, la couche native serait un ensemble de
+fichiers **EQUIPES mais AVEUGLES** -- personne ne verrait leur empreinte changer, personne ne les
+declarerait manquants, personne ne crierait s'ils disparaissaient. C'est **exactement** la panne
+du matin (un garde qui ne dit rien), transposee a ce qu'on est en train de construire. Le pas `P`
+n'est donc pas un confort : c'est ce qui rend vraie la phrase du createur ("ils seront surveilles").
+
+### C.4.2 La DECISION : un seul perimetre, declare une fois, lu par tous
+
+**Pas de second inventaire.** Un second inventaire serait une **seconde verite**, et deux verites
+divergent toujours (les 38 `constants.py`, la file legacy copiee, les deux journaux de missions :
+le projet a deja paye trois fois cette lecon).
+
+Le pas `P` produit **une declaration unique**, lue par tous les instruments de la zone. **Elle vit
+DANS la zone** (`_operateur/optimus-prime/perimetres.json`) et non dans la couche : c'est une
+decision de BOOTSTRAP. Les instruments connaissent deja `ZONE` par son nom, donc leur configuration
+est a un chemin **constant et sans dependance**. L'inverse -- ranger la declaration dans la couche
+qu'elle declare -- obligerait chaque instrument a savoir OU est la couche avant de pouvoir
+l'apprendre : la poule et l'oeuf.
+
+```
+{
+  "perimetres": [
+    {"id": "zone-optimus",   "ancre": "optimus-prime", "role": "zone"},
+    {"id": "couche-native",  "ancre": "racine-sac-a-dos", "chemin": "matrice/data/commun",
+     "role": "couche", "type": "module-natif",
+     "surveille_par": ["remorque", "espion-integrite", "garde-ascii", "garde-perimetre-write"]}
+  ]
+}
+```
+
+**L'ancre de la couche** : `racine-sac-a-dos` = la racine du workspace trouvee par le mecanisme qui
+**existe deja** (le sac a dos, `detecter_racine`, 34 fichiers l'utilisent). Aucun `../` compte a la
+main (garantie G3, L-013) : une seule ancre DECLAREE, et c'est `chemin.py` (pas 3) qui l'unifiera --
+la couche sera le **premier consommateur** de sa propre regle.
+
+Puis, dans le meme pas :
+
+1. `remorque.collecter()` **itere les perimetres** (le premier reste `zone-optimus`, donc **aucune
+   regression** sur les 73 equipements actuels) ; chaque equipement porte desormais son
+   `perimetre`, et son `chemin` reste **relatif a SON perimetre**.
+2. `espion-integrite` empreinte **par perimetre**, cle `perimetre + chemin`. Sinon deux fichiers
+   homonymes de deux perimetres se telescopent -- c'est le piege des 38 `constants.py` transpose a
+   l'integrite.
+3. **Controle neuf, anti-garde-muet** : si un perimetre declare n'est lu par **aucun** instrument,
+   ou si un dossier de la couche existe sans etre declare, on **ALERTE**. Un fichier non surveille
+   doit CRIER, pas disparaitre. (Meme doctrine que MO-064 : on ne verifie pas en attendant, on lit.)
+4. `remorque` garde son filtre d'etat (`.pid`, `.log`, `.jsonl`...) : un module natif est un
+   **equipement permanent**, sa nature ne change pas avec la doctrine existante.
+
+### C.4.3 Ce que chaque pas DECLARE -- et QUAND
+
+**Regle absolue : declaration a la NAISSANCE, jamais avant.** Declarer un equipement non ne le fait
+crier `MANQUANT` a chaque passage -- c'est le bruit que la remorque vient precisement de corriger
+("un inventaire qui crie dans les deux sens ne dit plus rien").
+
+| Pas | Ce qui entre a l'inventaire | Type | Quand |
+|---|---|---|---|
+| 1 | le garde de resolution | `outil` | a sa naissance, **dans la zone** (rien de neuf : la remorque le ramasse seule) |
+| 1-P | le perimetre `couche-native` **declare** | (configuration) | a sa naissance -- il n'entre **PAS dans l'inventaire** : c'est la CONFIGURATION des instruments, elle ne se compte pas elle-meme |
+| 2 | `atelier.py` | `module-natif` | a sa naissance -- **1er equipement hors zone** |
+| 3 | `chemin.py` | `module-natif` | a sa naissance |
+| 4 | `fichier.py` | `module-natif` | a sa naissance |
+| 5 | `horloge.py` | `module-natif` | a sa naissance |
+| 6 | `execution.py` | `module-natif` | a sa naissance |
+| 7 | `texte.py` | `module-natif` | a sa naissance |
+| 8 | `empreinte.py` | `module-natif` | a sa naissance |
+
+**Projection chiffree** -- CORRIGEE par l'epreuve (C.8) PUIS par la mesure MO-105 (2026-09-15) :
+**85 equipements** aujourd'hui -> **102** a la fin de la serie :
+
+| Etape | Mouvement | Total |
+|---|---|---|
+| aujourd'hui | -- | **85** |
+| pas 1 (S-3 : l'outil `B` est ETENDU, aucune naissance) | 0 | **85** |
+| pas 1-P (la couche est DECLAREE) | **+10 REVELES** | **95** |
+| pas 2 -> 8 (les 7 modules naissent dans la couche) | +7 | **102** |
+
+La declaration de perimetre **ne se compte pas** : elle est la configuration, pas un equipement --
+sinon elle serait le seul equipement qui se declare lui-meme. La remorque doit dire 87, pas
+"environ" : un ecart de comptage est un signal, pas une broutille.
+
+**Et les +6 ne sont PAS une hypothese** : la couche EXISTE deja, avec 6 modules que la remorque ne
+voit pas aujourd'hui (`attente.py`, `lancement.py`, `racine.py`, `sac_a_dos.py`, `tokens.py`,
+`fiche_profil.py`). La mesure est en C.8 -- dont `attente.py`, consolide le jour meme (MO-062).
+
+## C.5 LES CRITERES GO CONSOLIDES
+
+### C.5.1 La definition de DONE (10 familles, identiques pour chaque pas)
+
+| # | Famille | Ce qui le dit | Ce qu'elle elimine |
+|---|---|---|---|
+| 1 | **compile** | `py_compile` (le pas ajoute ses fichiers au compte) | un fichier qui ne compile pas (souvent invisible avant l'execution) |
+| 2 | **ASCII** | `garde-ascii` 0 violation | le caractere invisible qui casse un journal (vecu le 2026-09-13, 431 lignes) |
+| 3 | **valeurs en dur** | `scan-valeurs-en-dur` | le seuil recopie a la main |
+| 4 | **contrat fondamental** | `verifier-contrat-fondamental` | un outil sans refus, sans perimetre, sans code 2 |
+| 5 | **cobaye du pas** | le critere CHIFFRE de la fiche (C.5.2) | "ca a l'air de marcher" |
+| 6 | **piege INVERSE** | ne crie pas / ne refuse pas du legitime | le garde mort-ne (L-054) |
+| 7 | **non-regression** | 8/8 verte, plus le garde ne du pas | une regression ailleurs dans la zone |
+| 8 | **declaration + surveillance** | `remorque etat` conforme (compteur +1) + empreinte du fichier neuf presente | l'equipement aveugle (C.4.1) |
+| 9 | **journal + BDD** | `enregistrer` (file + journal d'accord) + 1 lecon + modifs | l'idee qui n'est pas tracee = perdue |
+| 10 | **hygiene** | `garde-tmp` sain + `espion-integrite` sain | le residu qui fait crier le garde des residus |
+
+### C.5.2 La regle du GO
+
+1. **GO d'un pas = les 10 familles vertes + le critere chiffre de sa fiche.** Rien d'autre.
+2. **Le GO d'un pas n'est JAMAIS le GO du suivant** : le tableau de serie se relit avant chaque ouverture.
+3. **Un critere non mesurable n'est pas un critere** : il se reecrit, ou le pas ne s'ouvre pas.
+4. **La preuve s'ajoute a la non-regression** quand elle protege quelque chose de durable (comme
+   `verifier-sans-attendre`, MO-064) : un cobaye jetable ne protege rien.
+
+### C.5.3 Le GO DE SORTIE DE SERIE (ce qui prouvera que la couche existe vraiment)
+
+| Preuve | Seuil attendu |
+|---|---|
+| `sys.path.insert` hors socle | **0** sur les 390 fichiers |
+| `Path(__file__).resolve().parent` dans les fichiers migres | **0** |
+| `os.path.dirname` / `abspath` dans les fichiers migres | **0** |
+| `parent.parent` dans les fichiers migres | **0** |
+| formes de date PERSISTEES | **1** (la canonique) |
+| recettes d'ecriture atomique | **1** (le module) |
+| `ensure_ascii` nus (booleens en dur) | **0** (2 politiques NOMMEES) |
+| `[:16]` ecrits a la main | **0** |
+| perimetres declares et lus | **2 / 2, aucun muet** |
+| remorque | conforme, **102** equipements |
+| non-regression | verte, **avec une etape dediee a la couche** |
+
+## C.6 Ce qui n'est PAS dans cette fiche (pour borner)
+
+- les **outils-portes** (entree 1 : `sys.argv`, `argparse`, `sys.exit` -- ~250 occurrences) : c'est une PORTE, pas un natif ;
+- le **moteur de recherche** (N-04) et les tests de benchmark (N-07..N-10) ;
+- la **migration de masse** vers les paquets nommes : elle est etalee (pas `A`), outil par outil ;
+- l'**ecriture de code** : cette annexe est un contrat, pas un chantier.
+
+## C.7 Les deux points tranches ici (par la mesure)
+
+1. **La declaration vit DANS la zone, pas dans la couche.** Choix de BOOTSTRAP : les instruments
+   connaissent `ZONE` par son nom, donc leur configuration est a un chemin **constant**. Ranger la
+   declaration dans la couche qu'elle declare serait la poule et l'oeuf (il faudrait savoir ou est
+   la couche pour apprendre ou est la couche).
+2. **`perimetres.json` (fichier) et NON une constante Python du socle** : les instruments qui
+   doivent la lire **ne partagent pas d'import** (`remorque`, espions, gardes) ; une constante
+   exigerait que chacun importe le socle -- donc que `P` depende de `C`, alors que `P` doit exister
+   AVANT `C`. Le fichier ne depend de rien, se relit a l'oeil, et se met sous empreinte.
+
+**Micro-arbitrage TRANCHE (2026-09-13, decision utilisateur)** : le type des modules de la couche
+s'appelle **`module-natif`**. Il dit ce que le fichier EST (un module natif remplace, configure,
+unifie), pas ce qu'il rend ; < natif > et < partage > n'etaient pas exclusifs et le second decrirait
+aussi bien `commun.py` du pilote, qui n'est PAS de la couche. `module-natif` est donc le seul des
+deux noms qui **designe la couche sans ambiguite**. Ce nom est fige : il vaut pour la declaration
+de perimetre (`perimetres.json`), pour la remorque et pour le registre d'integrite.
+
+---
+
+## C.8 EPREUVE DU PAS P -- resultat MESURE (2026-09-13)
+
+> Le plan de C.4 a ete EPROUVE **avant tout code**, sur une COPIE : bac a sable hors projet, la
+> remorque REELLE copiee telle quelle, plus un PROTOTYPE du pas P. Cobaye rejouable :
+> `tmp-optimus/_cobaye-perimetre-remorque.py` (bac a sable detruit a la fin -- zero residu).
+
+| # | Epreuve | Resultat |
+|---|---|---|
+| **T1** | la remorque ACTUELLE ne peut pas voir la couche | **OK** -- 8 equipements (zone seule) ; `relative_to(ZONE)` sur un fichier de la couche -> **ValueError** ("is not in the subpath") : l'impossibilite est CONSTATEE, pas affirmee |
+| **T2** | le prototype du pas P voit la couche | **OK** -- 11 equipements (8 zone + 3 couche), `etat` conforme (code 0) |
+| **T2b** | la zone n'a PAS bouge | **OK** -- les 8 equipements identiques `(nom, type, chemin)` avant/apres : le pas P n'est pas une regression |
+| **T3** | deux couches jumelles (memes chemins relatifs) | **OK** -- cle `perimetre/chemin` -> **14** uniques ; cle `chemin` seul -> **11** ; un fichier retire d'une jumelle est **INVISIBLE** avec `chemin` seul, **DETECTE** (code 1) avec le perimetre |
+| **T4** | le controle anti-garde-muet | **OK** -- non-declare CRIE (meme avec un inventaire coherent) ; dossier declare absent CRIE ; tout legitime SE TAIT (piege inverse, L-054) |
+| **T5** | la zone reelle | **OK** -- **73** equipements, mesure en LECTURE SEULE |
+
+### C.8.1 Ce que l'epreuve a revele (et qui etait invisible)
+
+```
+couche native    : matrix/matrice/data/commun/  6 fichiers .py, PRESENTS AUJOURD'HUI
+                   attente.py  fiche_profil.py  lancement.py  racine.py  sac_a_dos.py  tokens.py
+remorque         : 73 equipements -- AUCUN de la couche
+espion-integrite : 91 empreintes, 8 racines scannees, TOUTES dans la zone -- 0 pour la couche
+```
+
+**Conclusion, sans detour** : l'etat "equipe mais AVEUGLE" n'est pas un risque futur, **c'est
+l'etat ACTUEL**. Six modules partages -- dont `attente.py` (consolide CE MATIN, MO-062) et
+`lancement.py` (le motif d'invisibilite que la serie doit justement unifier) -- echappent
+AUJOURD'HUI a la remorque **et** a l'espion d'integrite. Le pas P ne prepare donc pas seulement
+l'avenir : il REPARE une cecite presente.
+
+### C.8.2 Les deux corrections que l'epreuve a imposees
+
+| Ce que la fiche disait | Ce que la mesure dit | Corrige en |
+|---|---|---|
+| projection **73 -> 81** | les **6 modules deja presents** deviennent visibles des le pas P -> **73 -> 74 -> 80 -> 87** | C.4.3 + tableau du GO de sortie |
+| la collision d'homonymes etait **affirmee** | elle est desormais **PROUVEE** : avec `chemin` seul, un fichier disparu d'une jumelle passe INAPERCU ; avec `perimetre/chemin`, il est nomme | C.4.2 point 2 |
+
+### C.8.3 Ce que l'epreuve laisse OUVERT (mesure honnete)
+
+1. Le prototype lit la declaration par un chemin **conventionnel** (`ZONE / "perimetres.json"`) : le
+   nom exact du fichier se tranchera a la naissance.
+2. Le prototype resout l'ancre `racine-sac-a-dos` par `ZONE.parent.parent` : c'est un **stand-in** du
+   sac a dos (`detecter_racine`) que `chemin.py` (pas 3) unifiera. Il fonctionne, mais il ne doit
+   PAS devenir la regle.
+3. ~~Les 6 modules reveles n'ont pas encore de type arrete~~ : **tranche depuis** -- les 6 modules
+de la couche sont declares `module-natif` (decision utilisateur 2026-09-13). L'epreuve les a rendus
+visibles ; la declaration, elle, les nomme.
+
+---
+
+> **Ce qu'il faut retenir de la serie**, en trois lignes :
+> 1. **Rien ne se construit sur une resolution non fiable** (B, P, C avant tout) ;
+> 2. **Chaque module remplace une regle recopiee 4 a 63 fois** par une regle ecrite une fois ;
+> 3. **Un fichier nait EQUIPE ET VU** -- protection le jour 1, declaration le jour 1, preuve le jour 1.
+---
+
+## Entree -- [preparation] un outil COPIER/COLLER de fragments (2026-09-19)
+
+**Demande createur** : `on doit mettre en place un outil 'copier/coller' qui va permettre
+de contrer les problemes que tu rencontre quand tu recopies des fragments existants.`
+
+**Mode PREPARATION annonce** : oui (discussion hors code, flux 2).
+**Contexte** : la demande est arrivee pendant MO-208 (fermer les 2 trous des crochets) ;
+la mission a ete PARQUEE pour ouvrir cet espace -- elle reprend apres le GO.
+**Ce qui a ete construit** : RIEN. Aucun fichier matrice touche hors `preparation/`.
+
+### Phase 2 -- INVENTAIRE : les 5 pannes MESUREES du copier/coller
+
+> Ce ne sont pas des hypotheses : ce sont les pannes REELLES du 2026-09-19, avec leur trace.
+
+| # | Le geste de recopie | Ce qui a casse (mesure) | Ce que la cause etablit |
+|---|---|---|---|
+| 1 | Recopier un bloc d'import depuis un AFFICHAGE de lecture | **MO-207** : le bloc `--ancien` a ete REFUSE par la porte ("0 occurrence") : l'affichage rendait le texte replie AUTREMENT que le fichier (`URGENCE_DEFAUT,` d'un cote, `URGENCE_DEFAUT, VERDICT_NON,` de l'autre). `py_compile` passait : c'etait un **NameError A L'EXECUTION** | **l'affichage n'est PAS le fichier** : lire n'est pas copier |
+| 2 | Choisir un point de restauration par `ls \| head -1` | **MO-194 puis MO-204** : le `.bak` choisi etait un etat INTERMEDIAIRE ; le contre-temoin comparait la version **A ELLE-MEME** (4 KO, puis 21 OK apres correction ; meme faute 22 OK en MO-194) | le nom le plus ancien n'est pas forcement le pristine |
+| 3 | Recopier un texte francais | **MO-206** : deux **guillemets francais** sont entres dans le fichier (2 non-ASCII, signales par la porte, corriges) | un signe invisible ne se voit pas a la recopie |
+| 4 | Passer un texte par la LIGNE DE COMMANDE | **EO-192** : les accents graves ont ete **EXECUTES par le shell** et ont TROUE la trace deposee ; **EO-195** : un accent a glisse (corrige en place) | **le transport MODIFIE la donnee** |
+| 5 | Enchainer plusieurs editions du meme fichier | **EO-191** : 4 editions dans la MEME seconde -> UN SEUL point de restauration conserve : le pristine est PERDU | le retour arriere disparait sans le dire |
+
+**Ce que l'inventaire etablit** : le "copier/coller" n'est pas UN geste, c'est une
+**CHAINE** -- voir -> transposer -> transporter -> poser -- et **chaque maillon peut
+alterer la donnee SANS que rien ne le signale au moment ou ca arrive**. Les pannes 1 a 4
+sont des pannes de TRANSPORT ; la panne 5 est une panne de RETOUR ARRIERE.
+
+### Phase 3 -- DESSINER : la fiche cible
+
+| Champ | Valeur |
+|---|---|
+| **Nom propose** | `fragment.py` (couche native, `matrice/data/commun/`) |
+| **1 phrase** | Extraire d'un fichier EXISTANT le fragment EXACT (octets reels), prouver qu'il est UNIQUE, et composer la paire ancien/nouveau que la porte `editer` accepte -- sans jamais recopier un caractere a la main. |
+| **Verbes (3, pas plus)** | `extraire` (fichier + plage de lignes OU ancre -> le fragment, ses numeros de lignes, son empreinte) ; `verifier` (le fragment existe-t-il ? COMBIEN de fois ? ou ?) ; `poser` (composer les deux fichiers ancien/nouveau pour la porte) |
+| **Garanties** | 1) la donnee vient du **FICHIER**, jamais d'un affichage ; 2) l'unicite est **PROUVEE AVANT** l'edition (compte + numeros de lignes candidats) ; 3) l'ASCII est mesure **AVANT** ; 4) **aucun transport par shell** : les fichiers portent la donnee, pas la ligne de commande ; 5) refus **DIRECTIONNEL** si le fragment est ambigu, avec les lignes candidates |
+| **Pourquoi c'est meilleur que le natif** | le natif rend un AFFICHAGE (qui peut differer du fichier) et echoue **APRES COUP** ("0 occurrence") ; ici l'echec de recopie devient **impossible par construction** : la paire sort du fichier lui-meme |
+| **Ne fait PAS** | il n'edite pas : il **PREPARE**. La pose reste a la porte `editer` (backup, empreinte, BDD, garde). **Une seule maison par geste.** |
+| **Lien au reste** | il sert la limite deja inventoriee **numero 3** (`str_replace` : "fragile au whitespace, echec silencieux") et complete le pas **I-05 `texte.py`** (ASCII vu avant) |
+
+### Phase 4 -- PRIORISER
+
+- La serie **I-00 -> I-06** (GO du 2026-09-13) est le SOCLE (chemin, fichier, horloge,
+  execution, texte, empreinte) et **n'est pas construite** : `matrice/data/commun/` porte
+  **20 modules**, dont AUCUN des I-xx (mesure du 2026-09-19).
+- Cette cible est **TRANSVERSALE**, comme le pas P : elle ne remplace aucun module, elle
+  sert la porte `editer` deja en service.
+- Ordre propose : **APRES le socle** (I-02 `fichier.py` et I-05 `texte.py` lui donnent les
+  octets et l'ASCII) et **AVANT toute nouvelle serie d'editions lourdes**.
+
+### Ce qui reste a TRANCHER (pour le GO createur)
+
+1. **Le nom** : `fragment.py`, `copier.py` ou `extrait.py` ? (la couche a deja `cible.py`, `transport_listes.py`).
+2. **La designation** : plage de lignes, ancre textuelle, ou **les deux** (l'ancre resiste au
+   deplacement, la plage est exacte au caractere) ?
+3. **Le perimetre** : sert-il tout le projet, ou `matrix/` seul ?
+4. **La place** : apres le socle (proposition ci-dessus) ou en transversal immediat ?

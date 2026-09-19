@@ -10,6 +10,7 @@ from commun import (
     decoupage_lignes,
     lire_contenu,
     lister_fichiers,
+    motif_hors_perimetre,
     resoudre_chemin,
 )
 from constants import RACINE
@@ -53,7 +54,7 @@ def _afficher_resultat(chemin_relatif, lignes, total, lu, avec_hash, chemin_abso
 def lire_fichier(chemin_relatif, tranche, avec_hash, inclure_prive=False):
     """Lit UN fichier. Retourne code 0/1/2."""
     if not dans_perimetre(chemin_relatif):
-        print("REFUS : hors perimetre lecture (matrix/ seul, allowlist AGENTS.md/demarrer-*.md) : " + chemin_relatif)
+        print(motif_hors_perimetre(chemin_relatif, usage="lecture"))
         return 2
     # Zone invisible L-016 (domicile) : fermee par defaut. Seule la Matrice ouvre
     # par --prive ; le cameleon, lui, n ouvre jamais (regle 9 de sa fiche).
@@ -105,7 +106,7 @@ def lire_fichiers(chemins_relatifs, tranche, avec_hash, inclure_prive=False):
 def lire_dossier(chemin_relatif, tranche, avec_hash, filtre, recursif, inclure_prive=False):
     """Liste puis lit chaque fichier du dossier (perimetre verifie)."""
     if not dans_perimetre(chemin_relatif):
-        print("REFUS : hors perimetre lecture : " + chemin_relatif)
+        print(motif_hors_perimetre(chemin_relatif, usage="lecture"))
         return 2
     dossier_absolu = resoudre_chemin(chemin_relatif)
     try:

@@ -17,9 +17,10 @@ if REPERTOIRE_PILOTE.name != "pilote":
     )
 
 try:
-    from listes import NOM_ENTONNOIR, PREFIXE_ITEM
+    from listes import (CHAMP_SOURCE_TRACE, NOM_ENTONNOIR, PREFIXE_ITEM, SOURCES)
 except ImportError:  # importe comme paquet (depuis le pilote) : chemin complet
-    from entonnoir.listes import NOM_ENTONNOIR, PREFIXE_ITEM
+    from entonnoir.listes import (CHAMP_SOURCE_TRACE, NOM_ENTONNOIR, PREFIXE_ITEM,
+                                  SOURCES)
 
 CHEMIN_ENTONNOIR = REPERTOIRE_PILOTE / NOM_ENTONNOIR
 
@@ -43,6 +44,61 @@ def verifier_famille(identifiant):
         + PREFIXE_ITEM + "NNN pour cet entonnoir) -- un item de l'autre "
         "entonnoir ne se manipule pas ici."
     )
+
+
+def separer_source(source):
+    """Separe une source LEGACY (texte libre) en (provenance FERMEE, trace).
+
+    Une provenance CONNUE suivie d un separateur (espace, tiret, parenthese,
+    deux-points) ouvre la trace ; une source deja nue est rendue INCHANGEE avec
+    une trace vide (idempotent) ; une source INCONNUE est rendue TELLE QUELLE
+    avec une provenance vide -- jamais une conversion muette qui perdrait la
+    trace. Une provenance vide DIT que le split n a pas eu lieu : c est
+    l appelant qui decide quoi en faire, pas cette fonction.
+    """
+    texte = (source or "").strip()
+    if not texte:
+        return "", ""
+    if texte in SOURCES:
+        return texte, ""
+    for provenance in SOURCES:
+        if not texte.startswith(provenance):
+            continue
+        reste = texte[len(provenance):]
+        if reste and reste[0] in " -(:":
+            return provenance, reste.strip(" -:")
+    return "", texte
+
+
+def reparer_sources(etat):
+    """Applique l auto-soin des sources LEGACY sur TOUT l etat de l entonnoir.
+
+    Le BRIN porte des COPIES des missions des files (tresse.fonctions copie par
+    `dict(m)`) : reparer les seules files laisserait le brin mentir -- or c est
+    le BRIN que lit l enchainement. On reparcourt donc tout l etat.
+    Idempotent : un item qui porte deja CHAMP_SOURCE_TRACE n est jamais retouche.
+    Rend le nombre d items repares (0 quand l etat est deja sain).
+    """
+    repares = 0
+
+    def parcourir(noeud):
+        nonlocal repares
+        if isinstance(noeud, dict):
+            if "source" in noeud and CHAMP_SOURCE_TRACE not in noeud:
+                provenance, trace = separer_source(noeud.get("source"))
+                if provenance:
+                    noeud["source"] = provenance
+                    if trace:
+                        noeud[CHAMP_SOURCE_TRACE] = trace
+                    repares += 1
+            for valeur in noeud.values():
+                parcourir(valeur)
+        elif isinstance(noeud, list):
+            for valeur in noeud:
+                parcourir(valeur)
+
+    parcourir(etat)
+    return repares
 
 
 def normaliser_chargement(etat):
@@ -74,6 +130,10 @@ def normaliser_chargement(etat):
     etat.setdefault("files", {})
     if index:
         etat[CLE_AUTO_VALIDEES] = index
+    # SOURCE (F1, 2026-09-19) : auto-soin des sources LEGACY -- la provenance
+    # FERMEE dans `source`, la trace libre dans CHAMP_SOURCE_TRACE. Garde
+    # d IDEMPOTENCE dans la fonction : un etat deja repare n est pas retouche.
+    reparer_sources(etat)
     return etat
 
 

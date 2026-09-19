@@ -7,7 +7,10 @@ import subprocess
 import sys
 from pathlib import Path
 
-from listes import NOM_EVALUATEUR, TYPES, URGENCES, VERDICT_NON
+from classer.fonctions import classer_mission
+from listes import (CHAMP_TYPE_SOURCE, MOT_CLE_DECLARE, NOM_EVALUATEUR, SOURCES,
+                    SOURCE_TYPE_DECLARATION, SOURCE_TYPE_DEFAUT, SOURCE_TYPE_MOT_CLE,
+                    TYPES, URGENCES, VERDICT_NON)
 from roles import CHAMP_ROLE, valider_role
 from stockage import charger_entonnoir, enregistrer_entonnoir
 from vrac.fonctions import deposer_vrac, proposer_type, proposer_urgence
@@ -19,7 +22,7 @@ def extraire_options(arguments, noms_connus):
     return repartir(arguments, noms_connus)
 
 
-NOMS_OPTIONS = ("theme", "objectif", "urgence", "source", "role", "type")
+NOMS_OPTIONS = ("theme", "objectif", "urgence", "source", "trace", "role", "type")
 
 # L avis multi-axes est un SUPER-COMBO de l operateur (hors pilote). Le chemin se
 # resout par le MARQUEUR PARTAGE (L-013 / MO-088) : AUCUN parents[N] compte a la
@@ -81,10 +84,23 @@ def executer(arguments):
     theme = options.get("theme", "")
     objectif = options.get("objectif", "")
     urgence = proposer_urgence(options.get("urgence", ""))
-    source = options.get("source", "createur")
+    # PROVENANCE FERMEE (F1, 2026-09-19) : `source` n est plus un texte libre.
+    # La trace (date, motif) va dans --trace, JAMAIS ici -- un champ, un sens.
+    # Un refus DIRECTIONNEL : il nomme la liste fermee ET le bon geste.
+    source = (options.get("source") or SOURCES[0]).strip()
+    trace = (options.get("trace") or "").strip()
+    if source not in SOURCES:
+        print("Source inconnue : " + repr(source) + " -- sources fermees : "
+              + ", ".join(SOURCES) + ".")
+        print("  La trace libre (date, motif) se met dans --trace :  --source "
+              + SOURCES[0] + ' --trace "2026-09-19 (audit par la suite)"')
+        return 2
 
     if not theme or not objectif:
-        print('Usage : python main.py deposer --theme "..." --objectif "..." [--urgence bloquante|haute|normale|basse] [--source veille|createur] [--role THEME] [--type dev|reparation|doc|audit|revision]')
+        print('Usage : python main.py deposer --theme "..." --objectif "..."'
+              ' [--urgence bloquante|haute|normale|basse] [--source '
+              + "|".join(SOURCES) + '] [--trace "..."] [--role THEME]'
+              ' [--type dev|reparation|doc|audit|revision]')
         return 2
     if urgence not in URGENCES:
         print("Urgence inconnue : " + urgence + " (urgences fermees : " + ", ".join(URGENCES) + ")")
@@ -112,15 +128,42 @@ def executer(arguments):
         return 2
     etat = charger_entonnoir()
     type_propose, mot_cle = proposer_type(theme, objectif, type_declare)
+    # L ORIGINE du type (EO-192) : c est elle qui arme -- ou non -- le declencheur.
+    origine = (SOURCE_TYPE_DECLARATION if mot_cle == MOT_CLE_DECLARE
+               else SOURCE_TYPE_DEFAUT if not mot_cle else SOURCE_TYPE_MOT_CLE)
     # L AVIS est rendu AVANT l ecriture : le verdict part avec l item (MO-175).
     verdict, axes = avis_auto_validation(theme, objectif, type_propose, source)
     identifiant = deposer_vrac(etat, theme, objectif, urgence, source, role,
-                               verdict, axes, type_propose)
+                               verdict, axes, type_propose, trace, origine)
+    # DECLENCHEUR DE NAISSANCE (EO-192, decision createur 2026-09-19) : un item
+    # dont le type est DECLARE (le crochet du createur -- SOUVERAIN) est CLASSE A
+    # LA SECONDE : il entre dans SA file avec sa categorie et son role, poses par
+    # les tables et IMPRIMES (donc corrigeables). Une PROPOSITION par mot-cle ne
+    # classe PAS : une devinette n ouvre pas un domicile. Le vrac ne garde donc
+    # que ce qu aucune souverainete n a nomme -- et le depot DIT alors le geste
+    # exact qui le sort.
+    classe, message_classement = False, ""
+    if origine == SOURCE_TYPE_DECLARATION:
+        code_classement, message_classement = classer_mission(
+            etat, identifiant, type_propose, "", "")
+        classe = code_classement == 0
     enregistrer_entonnoir(etat)
+    if classe:
+        print("Mission " + identifiant + " : type DECLARE (" + type_propose
+              + ") -- CLASSEE A LA NAISSANCE.")
+        print("  " + message_classement)
+        print("  Corriger le ROLE si besoin : retiqueter --id " + identifiant
+              + " --role <THEME du vivier>")
+        return 0
     print(
         "Mission " + identifiant + " deposee au vrac (urgence " + urgence
-        + ", source " + source + ") -- type propose : " + type_propose
+        + ", source " + source
+        + ("" if not trace else " -- trace : " + trace)
+        + ") -- type propose : " + type_propose
         + ("" if not mot_cle else " (mot-cle : " + mot_cle + ")")
         + (" -- role : " + role if role else " -- role : (pose au classement)")
     )
+    print("  ATTENTION : un item du vrac n est PAS executable -- aucun type ne le"
+          " nomme. Sors-le :  python main.py classer --id " + identifiant
+          + " [--type <" + "|".join(TYPES) + ">]")
     return 0

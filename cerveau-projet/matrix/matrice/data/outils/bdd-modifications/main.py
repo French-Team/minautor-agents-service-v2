@@ -6,16 +6,22 @@ Aucune logique metier ici (convention-architecture-outils).
 Usage :
     python main.py noter --fichier <chemin> --action <action> --detail "..." --tags "a,b"
     python main.py lire  [--fichier <chemin>] [--tag <tag>]
+    python main.py corriger --fichier <chemin> --extrait "<texte du detail>" --tags "a,b" [--motif "..."] [--index N]
+                                   (reattribue UNE entree EN PLACE : date, action et detail
+                                   conserves, anciens tags traces dans l entree, puis la porte
+                                   RECALCULE l empreinte -- EO-155)
     python main.py verifier
 """
 import sys
 
+from corriger.entry import executer as corriger_executer
 from lire.entry import executer as lire_executer
 from noter.entry import executer as noter_executer
 from verifier.entry import executer as verifier_executer
 
 COMMANDES = {
     "noter": noter_executer,
+    "corriger": corriger_executer,
     "lire": lire_executer,
     "verifier": verifier_executer,
 }

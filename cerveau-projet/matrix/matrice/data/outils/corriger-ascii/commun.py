@@ -106,21 +106,11 @@ def scanner_texte(texte):
     return ecarts
 
 
-def convertir_texte(texte):
-    """Retourne (texte_converti, caracteres_non_convertis) via la carte."""
-    non_convertis = []
-    morceaux = []
-    for caractere in texte:
-        if ord(caractere) <= 127:
-            morceaux.append(caractere)
-            continue
-        remplacement = CARTE_CONVERSION.get(caractere)
-        if remplacement is None:
-            non_convertis.append(caractere)
-            morceaux.append(caractere)
-        else:
-            morceaux.append(remplacement)
-    return "".join(morceaux), non_convertis
+# convertir_texte n'est plus ecrit ici : il vit au domicile unique de la carte
+# (matrice/data/commun/carte_ascii.py), avec elle -- une carte sans sa fonction
+# serait un domicile a moitie, et la porte `ecrire` en a besoin (MO-210).
+# Re-export : les categories continuent d'ecrire `from commun import convertir_texte`.
+from carte_ascii import convertir_texte  # noqa: E402,F401  (re-export)
 
 
 def ecrire_texte_atomique(chemin, texte):

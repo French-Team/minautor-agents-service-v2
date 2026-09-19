@@ -19,7 +19,20 @@ ALLOWLIST = {"demarrer-optimus-prime.md", "demarrer-cameleon.md"}
 
 # Dossiers techniques exclus (activite git/python, jamais ecritures Optimus).
 EXCLUS_DIRS = {".git", "__pycache__"}
-EXCLUS_EXT = {".pyc", ".pid"}
+
+# La zone JETABLE du cameleon est une exception NOMMEE a ce perimetre : elle vit
+# HORS de la Matrice (workspace/tmp-cameleon) parce que le cameleon CONSTRUIT
+# dans workspace/ (regle R-005, MO-189). Son domicile se CITE -- il est declare
+# une seule fois dans le moteur partage des zones (data/commun/zone_tmp.py).
+import sys as _sys
+
+_MATRICE = Path(__file__).resolve()
+while _MATRICE.name != 'matrix' and _MATRICE.parent != _MATRICE:
+    _MATRICE = _MATRICE.parent
+_sys.path.insert(0, str(_MATRICE / 'matrice' / 'data' / 'commun'))
+from zone_tmp import est_dans_zone_cameleon  # noqa: E402
+
+EXCLUS_EXT = {'.pyc', '.pid'}
 
 
 def main():
@@ -89,6 +102,11 @@ def main():
                 continue
             except ValueError:
                 pass
+            # ZONE DECLAREE du cameleon (R-005) : elle vit HORS de la Matrice,
+            # donc elle serait suspecte ici a chaque mission du cameleon.
+            # L exemption est NOMMEE (exemptions visibles, MO-075), jamais muette.
+            if est_dans_zone_cameleon(p, racine):
+                continue
             if len(rel.parts) == 1 and rel.parts[0] in ALLOWLIST:
                 continue
             # Bruit technique exclu (.pyc, .pid ; dossiers deja elagues au walk)

@@ -222,7 +222,7 @@ def decision_enchainement(mission, depuis_lot, enchainer, index_auto):
                   " la chaine s arrete ici (le createur reprend la main).")
 
 
-def preparer_injection(charger_file, enchainer=False):
+def preparer_injection(charger_file, enchainer=False, mission_forcee=None):
     """Prepare et depose l'injection ordonnee de la mission suivante.
 
     Serie stricte : REFUS si une mission est deja en cours.
@@ -249,6 +249,21 @@ def preparer_injection(charger_file, enchainer=False):
         return 1
     index_auto = index_auto_valide()
     mission = prochaine_du_lot(file_missions)
+    if mission_forcee is not None:
+        # EO-185 : une mission CONDUITE et NOMMEE (verbe `conduire`) passe AVANT
+        # le lot arme -- c'est le SEUL chemin qui manquait pour conduire une
+        # mission chargee HORS lot sans consommer un creneau de la chaine. Le
+        # 2026-09-19, MO-200 est restee un FANTOME faute de ce chemin : `fin` a
+        # clos MO-190, la mission courante du lot.
+        mission = next((m for m in file_missions.get("missions", [])
+                        if m.get("id") == mission_forcee), None)
+        if mission is None:
+            print("REFUS : mission inconnue : " + mission_forcee)
+            return 2
+        if mission.get("statut") != STATUT_EN_ATTENTE:
+            print("REFUS : " + mission_forcee + " n'est pas en attente (statut : "
+                  + str(mission.get("statut")) + ").")
+            return 2
     if mission is None:
         # UN SEUL CANDIDAT, JUGE AVANT D ETRE TIRE (decision createur 2026-09-18) :
         # l auto-validee en TETE du brin passe avant la file chargee, et RIEN n est
@@ -333,6 +348,43 @@ def preparer_injection(charger_file, enchainer=False):
     rafraichir_vue_suivi()
     print("Injection deposee pour " + mission["id"] + " -> " + str(BOITE_PILOTE_OUT))
     return 0
+
+
+def conduire(charger_file, identifiant):
+    """CONDUIT une mission chargee HORS lot : elle devient COURANTE et injectee.
+
+    EO-185 (2026-09-19). Mesure : `injecter` et `fin` operent sur la mission
+    COURANTE, et `preparer_injection` priorise TOUJOURS le lot arme -- une mission
+    chargee hors lot ne pouvait donc JAMAIS etre conduite. Ce jour-la, MO-200
+    (chargee pour EO-184) est restee un FANTOME, et `fin` a clos MO-190, la
+    mission courante DU LOT : une demande du createur n'avait aucun chemin
+    conforme, d'ou trois missions menees HORS FILE le meme jour.
+
+    Refus NOMMES : une mission est deja en cours (parquer d'abord, `reporter`) ;
+    identifiant inconnu ; mission pas en attente ; mission du LOT arme (la chaine
+    a son propre chemin : `injecter`) -- `conduire` est fait pour le HORS lot.
+    """
+    file_missions = charger_file()
+    courante = mission_en_cours(file_missions)
+    if courante is not None:
+        print("REFUS : une mission est deja en cours (" + courante["id"]
+              + "). Parque-la d'abord : python main.py reporter --raison \"...\"")
+        return 1
+    mission = next((m for m in file_missions.get("missions", [])
+                    if m.get("id") == identifiant), None)
+    if mission is None:
+        print("REFUS : mission inconnue : " + identifiant)
+        return 2
+    if mission.get("statut") != STATUT_EN_ATTENTE:
+        print("REFUS : " + identifiant + " n'est pas en attente (statut : "
+              + str(mission.get("statut")) + ").")
+        return 2
+    if identifiant in ids_en_lot(file_missions):
+        print("REFUS : " + identifiant + " appartient au lot arme -- la chaine a son"
+              " propre chemin (python main.py injecter). `conduire` est pour une"
+              " mission HORS lot.")
+        return 2
+    return preparer_injection(charger_file, mission_forcee=identifiant)
 
 
 def enchainer(charger_file):

@@ -18,6 +18,13 @@ ne dit pas OU il a cherche coute trois essais (friction 77).
 La racine est DETECTEE par le motif partage (racine.py, L-013) : ce module la
 CONSOMME, il ne la recopie jamais (M-076 : une valeur recopiee derive en
 silence ; L-100/L-102).
+
+Ce module porte aussi le PERIMETRE : est-ce que ce chemin est DANS la Matrice ?
+Cinq outils (la porte ecrire + les quatre lecteurs lire, lister, rechercher,
+benchmark) posaient la meme question et y repondaient chacun a sa facon ; quatre
+d entre eux jugeaient un PREFIXE (`matrix/...`) avant toute resolution, donc un
+chemin declare dans le perimetre pouvait resoudre AILLEURS (MO-183/MO-184). La
+regle vit ICI, une seule fois : est_dans_matrice + motif_hors_perimetre.
 """
 import os
 from pathlib import Path
@@ -104,3 +111,57 @@ def resoudre_dans_matrice(fichier, depart):
             + str(base) + ")"
         )
     return candidat, "destination dans la Matrice : " + str(candidat)
+
+
+def racine_matrice_stricte(depart=None):
+    """La racine de la Matrice, ou None si AUCUNE n a ete trouvee.
+
+    Difference avec racine_matrice : celle-ci rend la racine du WORKSPACE en
+    repli, ce qui est juste pour ANCRER une destination (on ecrira dans la
+    Matrice si elle existe) mais FAUX pour JUGER un perimetre -- un perimetre
+    dont la base serait la racine du workspace accepterait tout le workspace.
+    Ici, AUCUN repli : None veut dire aucune Matrice, et l appelant REFUSE.
+    """
+    racine = detecter_racine(depart if depart is not None else __file__)
+    for nom in NOMS_MATRICE:
+        candidat = racine / nom
+        if candidat.is_dir():
+            return candidat
+    return None
+
+
+def est_dans_matrice(chemin, depart=None):
+    """True si <chemin>, RESOLU, tombe SOUS la racine REELLE de la Matrice.
+
+    MO-184 (EO-178) : des perimetres jugeaient un PREFIXE (`matrix/...`) avant
+    toute resolution -- un chemin declare dans le perimetre pouvait donc resoudre
+    AILLEURS (mesure MO-183 : la porte ecrire a cree une arborescence
+    <racine>/matrix/ HORS de la Matrice). La regle vit ICI, une seule fois : les
+    perimetres la CONSOMMENT au lieu de la recopier (M-076).
+    """
+    base = racine_matrice_stricte(depart)
+    if base is None:
+        return False
+    try:
+        Path(chemin).resolve().relative_to(Path(base).resolve())
+        return True
+    except (ValueError, OSError, RuntimeError):
+        return False
+
+
+def motif_hors_perimetre(chemin, usage="lecture", depart=None):
+    """Le refus NOMME la Matrice reelle et les formes acceptees (friction 77).
+
+    Un refus qui ne dit pas OU il a cherche coute trois essais. Un seul domicile
+    pour le MOTIF lui-meme : les cinq perimetres le consomment (M-076) -- le mot
+    `usage` dit seulement quel perimetre parle (lecture, ecriture).
+    """
+    base = racine_matrice_stricte(depart)
+    if base is None:
+        return ("REFUS : hors perimetre " + usage + " -- AUCUNE Matrice trouvee depuis "
+                + str(detecter_racine(depart if depart is not None else __file__))
+                + " (ni matrix/, ni cerveau-projet/matrix/) : " + str(chemin))
+    return ("REFUS : hors perimetre " + usage + " -- la Matrice vit sous " + str(base)
+            + " : formes acceptees = chemin ABSOLU dans la Matrice, chemin relatif a la "
+            "racine (cerveau-projet/matrix/...) ; allowlist racine = AGENTS.md, "
+            "demarrer-*.md : " + str(chemin))

@@ -1,0 +1,31 @@
+---
+identite:
+  type: spec
+  appartient_a: optimus-prime
+  commun: false
+  statut: proposition
+  date: 2026-09-19
+  origine: EO-200 (demande createur du 2026-09-19, recue pendant MO-210), mission MO-220
+---
+
+# SPEC -- La chaine pense-bete -> spec -> todo-list
+
+> STATUT : PROPOSITION. Aucun code de la chaine n existe. Ce document est
+> lui-meme l ETAPE 2 de la chaine qu il decrit : il suit l etape 1 (le
+> pense-bete, ici la demande EO-200) et precede l etape 3 (la todo-list).
+> Le GO du createur est OBLIGATOIRE avant toute mise en oeuvre.
+
+## 1. La demande
+
+Demande du createur, arrivee entre crochets PENDANT un travail en cours (MO-210) :
+
+  Traduire en pratique la chaine pense-bete -> spec -> todo-list : une demande
+  du createur entre crochets, recue PENDANT un travail en cours, ne doit plus
+  interrompre le round -- elle devient un pense-bete (demande clarifiee et
+  developpee au propre), puis une spec (document detaille et organise), puis
+  une todo-list (taches et sous-taches). La v1 avait commence cette pratique :
+  la visiter et en extraire le meilleur avant de poser la mise en oeuvre dans
+  la Matrice.
+
+Le probleme a resoudre n est donc pas d ecrire trois documents : c est qu une
+demande recue EN TRAVAILLANT cesse d interrompre le round sans etre perdue.

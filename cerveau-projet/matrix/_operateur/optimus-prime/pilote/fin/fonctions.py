@@ -235,6 +235,20 @@ def cloturer_mission(charger_file, bilan, defauts=None):
         enregistrer_file(file_missions)
         print("RETOUR : toutes les missions du lot sont terminees. Bilan consolide -> Matrice.")
         print("  " + retour["bilan_consolide"])
+        # F3 (2026-09-19, decision createur) : un lot desarme ne doit pas TUER la
+        # chaine. Avant, la fin d un lot rendait la main a la Matrice et ne
+        # regardait JAMAIS l entonnoir : une tete de brin auto-validee ne pouvait
+        # donc etre reprise qu apres une mission HORS lot (chemin rare, verbe
+        # `conduire`). Le lot est desormais desarme (ci-dessus) et la chaine
+        # REOUVRE sur l entonnoir. Si la tete n est PAS auto-validee, le STOP
+        # reste et RIEN n est consomme -- on ne force pas la main, on la donne.
+        if not session_en_pause():
+            from injection.fonctions import preparer_injection
+
+            print("Fin de lot : la chaine reouvre sur la tete auto-validee du brin...")
+            preparer_injection(charger_file, enchainer=True)
+        else:
+            print("SESSION EN PAUSE (M-080) : aucune relance automatique pendant la maintenance.")
     else:
         from injection.fonctions import preparer_injection
 

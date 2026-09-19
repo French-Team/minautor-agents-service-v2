@@ -1616,7 +1616,98 @@
         "fumee"
       ],
       "source": "MO-174 R5 (2026-09-18)"
+    },
+    {
+      "id": "L-127",
+      "date": "2026-09-19 07:25:04",
+      "lecon": "DEUX LECONS, MESUREES EN REPARANT LA MEME REGLE CINQ FOIS. (1) UNE REGLE RECOPIEE NE SE REPARE PAS PARTOUT D UN COUP -- ET CHAQUE COPIE A SA PROPRE FORME D OUTILLAGE. Les lecteurs (lire, lister, rechercher, benchmark) portaient la MEME regle que la porte ecrire (juger un PREFIXE matrix/... avant la resolution), mais PAS le meme outillage autour : benchmark n expose AUCUN resoudre_chemin (sa copie resoliait en ligne), donc le remplacement de sa fonction par est_dans_matrice(resoudre_chemin(brut)) a laisse un NOM ORPHELIN et casse l outil. Avant de remplacer le corps d une fonction d un JUMEAU, il faut MESURER ce que le jumeau EXPOSE (les listes d imports se ressemblent, les fonctions disponibles non). (2) UNE EDITION QUI LAISSE UN NOM ORPHELIN DANS LE PERIMETRE DE LA PORTE ECRIRE TUE LA PORTE ELLE-MEME. La porte ecrire juge son perimetre AVANT toute ecriture : un nom supprime mais encore appele (RACINE_MATRICE, puis chemin_dans_matrice) y declenche un NameError des le PREMIER appel, et plus AUCUNE ecriture n est possible dans tout le workspace -- y compris la reparation. Deux fois de suite la meme mecanique : l edition doit etre ATOMIQUE (imports + suppression + appels dans le MEME passage), jamais decoupee sur la ligne qui reste. La CURE est celle deja declaree (MO-170) : le point de restauration .bak + revert-fichier, qui ecrit hors porte EXPRES ; elle a servi DEUX fois dans la meme mission, et elle est la seule voie quand la porte ne peut plus rien faire.",
+      "tags": [
+        "perimetre",
+        "prefixe",
+        "resolution",
+        "domicile",
+        "M-076",
+        "jumeaux",
+        "copie",
+        "outil",
+        "casse",
+        "porte-ecrire",
+        "atomicite",
+        "MO-184"
+      ],
+      "source": "MO-184 : cinq perimetres, quatre jugeaient un PREFIXE (EO-177/EO-178)"
+    },
+    {
+      "id": "L-128",
+      "date": "2026-09-19 07:39:43",
+      "lecon": "UN NOM D IMPORT SE COMPTE AVANT D ETRE RETIRE : UNE FONCTION CORRIGEE N EST PAS L OUTIL PROUVE. MO-184 avait retire l import REPERTOIRE_MATRIX de rechercher/commun.py au motif qu il ne servait plus qu a la regle de PREFIXE supprimee. Mesure MO-185 : ce nom servait AUSSI, quinze lignes plus bas, la racine de BALAYAGE par defaut de scanner_fichiers -- une AUTRE fonction du meme fichier, un autre propos. L import parti, l outil entier est mort : NameError a CHAQUE recherche sans dossier, verdict identique a un outil qui ne trouve rien (la cecite de MO-055). Le cobaye de MO-184 ne l a pas vu, et c est le point : il eprouvait la FONCTION CORRIGEE (dans_perimetre, la fonction qui JUGE), jamais le chemin COMPLET (l entree -> scanner_fichiers -> le scan, la fonction qui SERT). Un cobaye qui appelle la fonction reparee prouve la reparation, pas l outil. Geste : avant tout retrait d import, GREP le nom dans TOUT le fichier et CLASSER ses usages par propos ; apres toute edition d une fonction, faire courir la PORTE REELLE au moins une fois en nominal ET en negatif (regle deja gravee en L-126, rejouee ici). Reparation : restaurer le nom, geste minimal -- la racine de balayage n est pas le jugement de perimetre, les deux usages sont distincts et seul le second etait mort.",
+      "tags": [
+        "MO-185",
+        "MO-184",
+        "EO-178",
+        "import",
+        "regression",
+        "cobaye",
+        "porte-reelle",
+        "greppe",
+        "cecite",
+        "rechercher"
+      ],
+      "source": "MO-185 / regression MO-184 (EO-178)"
+    },
+    {
+      "id": "L-129",
+      "date": "2026-09-19 07:55:49",
+      "lecon": "ANCER UNE SEULE FOIS, ET SE MEFIER D'UN CONTROLE QUI NE PEUT QUE ECHOUER. Deux mesures de MO-186, en alignant la PORTE du quatrieme lecteur (benchmark). (1) UN CHEMIN ANCRE DEUX FOIS RECOIT DEUX VERDICTS. La porte faisait Path(chemin).resolve() -- base = le CWD -- puis relative_to(RACINE), puis dans_perimetre qui RESOUT ENCORE : la MEME commande rendait Code 2 'HORS perimetre' lancee depuis la racine du workspace et Code 1 'VERT perimetre' lancee depuis matrix/ (friction 80 : deux verdicts pour un seul argument, et le refus de perimetre ne tombait jamais depuis matrix/). La porte passe desormais par le DOMICILE (cible.resoudre) : un seul ancrage, et les 9 epreuves courent sur le chemin ancre -- le chemin JUGE est le chemin LU. Controle de non-regression a garder : lancer la MEME commande depuis deux CWD et exiger le MEME verdict. (2) UN CONTROLE QUI NE PEUT QUE ECHOUER N'EST PAS UN CONTROLE. L'epreuve 'bdd' de benchmark comparait une cle calculee sous la racine du WORKSPACE ('cerveau-projet/matrix/matrice/...') a des cles ecrites sous la racine de la MATRICE ('matrice/...') : elle ne pouvait DONC jamais trouver une note et rendait 'absent de BDD' a chaque passage. Un ROUGE permanent se lit comme un fait -- il use la grille et masque le vrai defaut, exactement comme une limite muette (L-055). Avant de faire confiance a un controle rouge, MESURER s'il est capable de VERDIR sur un cas conforme : ici le nominal est passe de 8/9 a 9/9, et un fichier sans note reste ROUGE (le controle discrimine encore).",
+      "tags": [
+        "MO-186",
+        "benchmark",
+        "ancrage",
+        "friction-80",
+        "cwd",
+        "controle",
+        "rouge-permanent",
+        "greppe",
+        "domicile"
+      ],
+      "source": "MO-186 / 4e lecteur (EO-178)"
+    },
+    {
+      "id": "L-130",
+      "date": "2026-09-19 08:25:18",
+      "lecon": "UN CRITERE DE RETRAIT PLUS ETROIT QUE LA REALITE FABRIQUE UN RESIDU PERMANENT -- ET UNE PURGE SANS NOM EST UNE DISPARITION. Deux mesures de MO-187. (1) LA PORTE DE PURGE NE CONNAISSAIT QU'UN MOTIF : 'la cible fichier n'existe plus' (M-052). Or le cas le PLUS COURANT est l'inverse -- le defaut est REPARE, la cible EXISTE et compile, le caractere a ete converti. Ces alertes-la ne pouvaient donc JAMAIS sortir de la boite : mesure, les 11 alerte-grave de l'inbox Matrice etaient dans ce cas, AUCUNE n'etait un fantome, et le routeur les comptait comme anormales a CHAQUE passe (toutes les 30 s), pour toujours. Un residu qu'aucune regle ne peut retirer n'est pas une trace, c'est un bruit qui use la lecture -- et un compteur d'anomalies qui reste a 11 ne dit plus rien. La reparation n'invente pas un critere : la veille SAVAIT deja trancher (purger_signatures_resolues : un etat RE-TESTE et non re-detecte est resolu) -- elle n'appliquait ce verdict qu'a son etat anti-spam, jamais a la boite. Un seul critere, deux lieux : quand un verdict existe quelque part, chercher OU il n'est pas encore applique. (2) UNE PURGE SANS ARCHIVE EST INDISCERNABLE D'UNE DISPARITION. C'est la faute d'origine (10 alertes graves perdues sans trace). Le retrait ecrit donc une archive NOMINATIVE : le message COMPLET (detail et type conserves), augmente de purge_le, du MOTIF exact et du mode qui a re-teste. Controle a garder : apres une purge, l'archive doit se relire seule et dire POURQUOI chaque message est parti.",
+      "tags": [
+        "MO-187",
+        "veille-flux",
+        "boite",
+        "purge",
+        "critere",
+        "narrow",
+        "residu",
+        "archive",
+        "motif",
+        "routeur",
+        "anomalies"
+      ],
+      "source": "MO-187 / M-052 etendu"
+    },
+    {
+      "id": "L-131",
+      "date": "2026-09-19 08:37:15",
+      "lecon": "UN GESTE DE LOT VALIDE TOUT AVANT DE CONSOMMER QUOI QUE CE SOIT -- ET UNE CAPACITE QUE RIEN N ALIMENTE N EXISTE PAS. Deux mesures de MO-188 (EO-148), en donnant au pont entonnoir -> pilote le versement du BRIN ENTIER. (1) ATOMICITE D UN GESTE DE LOT. Le pont versait les items un par un ; des qu il en verse N, un refus sur le 3e ne doit PAS laisser les deux premiers partis : le brin est une FILE, pas une transaction partielle -- un demi-versement est invisible et le createur croit sa demande classee. verser_tresse valide donc les roles de TOUS les items AVANT le premier versement, et le refus NOMME le fautif (k/n) sans rien consommer. Controle a garder : tout refus doit pouvoir etre suivi d un ETAT INCHANGE -- verifier que le brin ET les files-type portent encore les N items. (2) UNE CAPACITE QUE RIEN N ALIMENTE N EXISTE PAS. Le LOT existait deja : charger --lot transportait N missions (mesure MO-160, 20/20), l injection le numerote k/n, le retour est consolide -- mais le PONT ne versait que la tete, donc le LOT n etait jamais alimente par la demande reelle : la capacite dormait. Avant d ecrire un mecanisme, chercher s il existe deja et QUI devrait l alimenter : le manque etait un APPEL, pas une fonction. Et quand une regle vivait dans un seul appelant, la factoriser AVANT d ajouter le second (ici valider_role_item : la regle du role etait le point qui avait deja fabrique 4 missions refusees a l injection).",
+      "tags": [
+        "MO-188",
+        "EO-148",
+        "pilote",
+        "pont",
+        "lot",
+        "atomicite",
+        "validateur",
+        "capacite-dormante",
+        "facteur"
+      ],
+      "source": "MO-188 / EO-148"
     }
   ],
-  "compteur": 126
+  "compteur": 131
 }

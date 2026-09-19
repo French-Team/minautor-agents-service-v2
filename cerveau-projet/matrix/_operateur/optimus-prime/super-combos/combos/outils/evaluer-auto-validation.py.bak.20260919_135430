@@ -1,0 +1,216 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""evaluer-auto-validation -- AVIS MULTI-AXES sur l auto-validation d un item du vrac.
+
+Demande du createur (MO-175, 2026-09-18) : la decision AUTO-VALIDATION ne doit PAS
+etre un simple drapeau. Elle est RENDUE par une evaluation a plusieurs axes, et son
+verdict est ecrit dans l ENREGISTREMENT DE LA MISSION au moment de la CREATION
+(l entonnoir l ecrit ; l entonnoir le lit ; une file AUTO-VALIDEE ne recoit que les
+items dont le verdict est AUTO).
+
+5 AXES -- chacun VOTE (jamais muet) :
+  A1 PERIMETRE  l item touche-t-il une zone CRITIQUE ? Les MOTS (regle immuable,
+                fiche, protocole, theme, parcours) ET les CHEMINS (fiches/,
+                protocoles/, themes/, parcours/, regles-immuables/, marbre,
+                AGENTS.md, demarrer-) -- quel que soit son TYPE -> vote CONTRE
+  A2 REVERSIBLE le livrable est-il du code / un outil ? -> vote POUR
+  A3 PREUVE     l item exige-t-il une preuve, ET NOMME-T-IL le moyen de preuve
+                (cobaye, mesure, test, verifier, contre-temoin) ? Une preuve
+                EXIGEE mais ABSENTE (constat N1) -> vote CONTRE
+  A4 DEJA-VU    la PROVENANCE est-elle le createur ?    -> vote POUR
+                (source FERMEE : la trace libre -- date, motif -- vit dans son
+                 propre champ, jamais dans `source` : un champ, un sens)
+  A5 SERIE      l item est-il de la liste OUVERTE des types -- reparation, dev,
+                doc, audit, revision (decision createur du 2026-09-19, EO-218) ?
+                                                        -> vote POUR
+
+VERDICT : AUTO si au moins un vote POUR et AUCUN vote CONTRE ; sinon NON.
+Un SEUL vote CONTRE suffit : la regle du createur est que l enchainement S ARRETE
+des qu un item NON auto-valide est en tete (le CRITIQUE reste au createur).
+
+Usage :
+    python evaluer-auto-validation.py --theme PILOTE --objectif "..." [--source createur]
+                                 [--type dev] [--json]
+"""
+
+import argparse
+import json
+import sys
+import unicodedata
+
+# --- REFERENCES (aucune valeur en dur dans la logique) -----------------------
+VERDICT_AUTO = "auto"
+VERDICT_NON = "non"
+AXE_PERIMETRE = "perimetre"
+AXE_REVERSIBLE = "reversible"
+AXE_PREUVE = "preuve"
+AXE_DEJA_VU = "deja-vu"
+AXE_SERIE = "serie"
+VOTE_POUR = "pour"
+VOTE_CONTRE = "contre"
+SOURCE_CREATEUR = "createur"
+
+# Les zones CRITIQUES : les nommer suffit a declencher le vote CONTRE (A1).
+MOTS_ZONES_CRITIQUES = (
+    "regle immuable", "regles immuables", "regle-immuable", "fiche", "protocole",
+    "constitution", "parcours", "theme", "index", "agenda",
+)
+# Ce qui est du CODE (reparable, avec un point de restauration) -> A2.
+MOTS_CODE = (
+    "outil", "porte", "pilote", "garde", "combo", "script", "code", "bug",
+    "service", "routine", "fonction", "py", "json", "bdd",
+)
+# Ce qui EXIGE une preuve executable -> A3.
+MOTS_PREUVE = ("cobaye", "preuve", "prouver", "mesure", "mesurer", "verifier", "test", "eprouver")
+# Ce qui est une REPARATION / correction (le cas a automatiser) -> A5.
+MOTS_REPARATION = (
+    "reparer", "reparation", "corriger", "correction", "bug", "erreur", "friction",
+    "ecart", "ko", "auto-correction", "auto correction", "defaut",
+)
+# LA LISTE OUVERTE DES TYPES (EO-218, decision createur du 2026-09-19). C'est le SEUL
+# domicile de cette liste : un second endroit voudrait dire deux verites, et le projet a
+# deja paye cette divergence (MO-175 jambe 3, dont le controle de comparaison est ne).
+TYPES_AUTO_VALIDES = ("reparation", "dev", "doc", "audit", "revision")
+# Les CHEMINS CRITIQUES (constat N2) : nommer un de ces chemins suffit a voter CONTRE,
+# QUEL QUE SOIT LE TYPE -- un dev qui touche une regle immuable reste CRITIQUE.
+CHEMINS_CRITIQUES = (
+    "regles-immuables", "fiches/", "protocoles/", "themes/", "parcours/",
+    "marbre", "AGENTS.md", "demarrer-",
+)
+# Les MOYENS de preuve (constat N1) : ce qui PROUVE. Ni la declaration seule
+# ("preuve exigee") n'en fait partie, ni les mots "mesure" et "mesurer" : ces deux-la
+# servent de MOTS ORDINAIRES dans un enonce ("un outil de mesure", "mesurer l etat") et
+# un mot ambigu ne peut pas temoigner d une preuve. Trouve par le cobaye de MO-226, qui
+# rejouait le cas "preuve exigee sans moyen nomme" : il rendait AUTO.
+MOTS_MOYENS_PREUVE = (
+    "cobaye", "test", "verifier", "verification", "eprouver", "contre-temoin",
+    "sha", "empreinte", "rejouer", "rejoue",
+)
+
+
+def normaliser(texte):
+    """Minuscule SANS accent : la comparaison de mots entiers doit etre stable."""
+    decompose = unicodedata.normalize("NFD", texte or "")
+    sans_accent = "".join(c for c in decompose if unicodedata.category(c) != "Mn")
+    return sans_accent.lower()
+
+
+def mot_present(texte_normalise, mot):
+    """Vrai si le mot est present EN ENTIER (jamais dans un autre mot)."""
+    mot_normalise = normaliser(mot)
+    debut = 0
+    while True:
+        position = texte_normalise.find(mot_normalise, debut)
+        if position < 0:
+            return False
+        avant = texte_normalise[position - 1] if position > 0 else " "
+        apres_position = position + len(mot_normalise)
+        apres = texte_normalise[apres_position] if apres_position < len(texte_normalise) else " "
+        if not avant.isalnum() and not apres.isalnum():
+            return True
+        debut = position + 1
+
+
+def mot_cle(texte_normalise, mots):
+    """Retourne le PREMIER mot-cle trouve (ou ""), pour que l avis soit LISIBLE."""
+    for mot in mots:
+        if mot_present(texte_normalise, mot):
+            return mot
+    return ""
+
+
+def evaluer(theme, objectif, type_propose="", source=""):
+    """Retourne (verdict, axes) -- chaque axe porte son vote ET sa JUSTIFICATION."""
+    texte = normaliser(" ".join([theme or "", objectif or "", type_propose or ""]))
+    axes = []
+
+    mot_critique = mot_cle(texte, MOTS_ZONES_CRITIQUES)
+    chemin_critique = mot_cle(texte, CHEMINS_CRITIQUES)
+    zone_critique = mot_critique or chemin_critique
+    axes.append({
+        "axe": AXE_PERIMETRE,
+        "vote": VOTE_CONTRE if zone_critique else VOTE_POUR,
+        "motif": ("zone CRITIQUE nommee : " + zone_critique) if zone_critique
+                 else "aucune zone critique nommee",
+    })
+    mot_code = mot_cle(texte, MOTS_CODE)
+    axes.append({
+        "axe": AXE_REVERSIBLE,
+        "vote": VOTE_POUR if mot_code else VOTE_CONTRE,
+        "motif": ("livrable de code : " + mot_code) if mot_code else "livrable non identifie comme du code",
+    })
+    mot_preuve = mot_cle(texte, MOTS_PREUVE)
+    mot_moyen = mot_cle(texte, MOTS_MOYENS_PREUVE)
+    # N1 (2026-09-19) : une preuve EXIGEE mais ABSENTE ne vaut pas une preuve. La
+    # declaration seule votait POUR -- le verdict tombait auto sur une promesse.
+    preuve_tenue = bool(mot_preuve) and bool(mot_moyen)
+    axes.append({
+        "axe": AXE_PREUVE,
+        "vote": VOTE_POUR if preuve_tenue else VOTE_CONTRE,
+        "motif": ((("preuve tenue : " + mot_preuve) + " + moyen nomme : " + mot_moyen) if preuve_tenue
+                  else ((("preuve EXIGEE (" + mot_preuve) + ") mais AUCUN moyen de preuve nomme (N1)")
+                        if mot_preuve else "aucune preuve exigee dans l enonce")),
+    })
+    # F1 (2026-09-19) : `source` est desormais une PROVENANCE FERMEE (l entonnoir
+    # REFUSE une valeur hors liste) et la trace libre vit dans son PROPRE champ.
+    # La comparaison reste donc EXACTE -- et c est voulu : elle porte sur un enum
+    # dont l agent ne peut plus detourner le sens en y glissant une date.
+    # Avant, la trace honnete ("createur 2026-09-19 (audit par la suite)") votait
+    # CONTRE, donc l avis refusait d enchainer ce que l agent avait trace.
+    est_createur = normaliser(source).strip() == SOURCE_CREATEUR
+    axes.append({
+        "axe": AXE_DEJA_VU,
+        "vote": VOTE_POUR if est_createur else VOTE_CONTRE,
+        "motif": ("source createur : deja vue avec lui") if est_createur else "source : " + (source or "inconnue"),
+    })
+    mot_serie = mot_cle(texte, MOTS_REPARATION)
+    type_ouvert = normaliser(type_propose).strip()
+    if type_ouvert not in TYPES_AUTO_VALIDES:
+        type_ouvert = ""
+    # EO-218 : l axe ne vote plus CONTRE du seul fait du TYPE -- c est ce que MO-203
+    # avait fige a l inverse. L enonce peut aussi dire "reparation" sans type pose.
+    axes.append({
+        "axe": AXE_SERIE,
+        "vote": VOTE_POUR if (mot_serie or type_ouvert) else VOTE_CONTRE,
+        "motif": (("type de la liste ouverte : " + type_ouvert) if type_ouvert
+                  else (("reparation / correction : " + mot_serie) if mot_serie
+                        else "type hors liste ouverte et pas une reparation")),
+    })
+
+    contre = [a for a in axes if a["vote"] == VOTE_CONTRE]
+    pour = [a for a in axes if a["vote"] == VOTE_POUR]
+    verdict = VERDICT_AUTO if (pour and not contre) else VERDICT_NON
+    return verdict, axes
+
+
+def main():
+    analyseur = argparse.ArgumentParser(description="Avis multi-axes sur l auto-validation")
+    analyseur.add_argument("--theme", default="")
+    analyseur.add_argument("--objectif", default="")
+    analyseur.add_argument("--type", dest="type_propose", default="")
+    analyseur.add_argument("--source", default="")
+    analyseur.add_argument("--json", action="store_true")
+    arguments = analyseur.parse_args()
+    if not arguments.objectif:
+        print("Usage : python evaluer-auto-validation.py --theme <theme> --objectif \"...\" [--source createur] [--json]")
+        return 2
+    verdict, axes = evaluer(arguments.theme, arguments.objectif, arguments.type_propose, arguments.source)
+    if arguments.json:
+        print(json.dumps({"verdict": verdict, "axes": axes}, ensure_ascii=False, indent=2))
+        return 0
+    print("AVIS AUTO-VALIDATION -- " + str(len(axes)) + " axes")
+    for a in axes:
+        print("  " + a["axe"] + " : " + a["vote"].upper() + " -- " + a["motif"])
+    print("VERDICT : " + verdict.upper())
+    if verdict == VERDICT_AUTO:
+        print("  -> AUTO, et l avis DIT pourquoi (N5, jamais un feu vert anonyme) : "
+              + " | ".join(a["axe"] + " = " + a["motif"] for a in axes if a["vote"] == VOTE_POUR))
+        print("  -> la mission part en FILE AUTO-VALIDEE : elle s enchaine sans redemander.")
+    else:
+        refus = ", ".join(a["axe"] for a in axes if a["vote"] == VOTE_CONTRE)
+        print("  -> la mission reste NON auto-validee (axes contre : " + refus + ") : elle rend la main.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

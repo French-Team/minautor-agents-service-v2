@@ -3,51 +3,41 @@
 """
 revert-periode.py -- Revert toutes les modifs BDD-tracees d une periode (M-106)
 
-Liste les modifications (bdd-modifs, statut valide) entre --depuis et
---jusquau, revert chacune depuis son .bak le plus recent, trace
-l annulation en BDD. Fichiers sans .bak = signales, non revertis.
+Liste les fichiers TRACES au domicile unique des modifications
+(modifications-par-fichier.json, EO-154) entre --depuis et --jusquau, revert
+chacun depuis son .bak le plus recent. Fichiers sans .bak = signales, non
+revertis. Le domicile ne porte PAS de statut : seule la fenetre filtre.
 Usage: python revert-periode.py --depuis "2026-09-11 00:00:00" [--jusquau "..."] [--executer]
   sans --executer : dry-run (liste seulement). code 0 = rien a revert ou tout reverti.
 """
 
 import sys
+import json
 import argparse
-import sqlite3
 import subprocess
-import importlib.util
 from datetime import datetime
 from pathlib import Path
 
-# Le vocabulaire des statuts de la BDD modifications a UN domicile (bdd-modifs).
-# Ce script le CONSOMME au lieu de recopier 'valide' (friction 49, balayage
-# MO-129) : meme chargement que la porte de l'outil (dossier a tiret = pas un
-# package, importlib + spec). Un domicile illisible est SIGNALE, jamais devine.
+# EO-154 (2026-09-19) : le vocabulaire des statuts n'a plus de domicile ici --
+# l'appui sqlite bdd-modifs est RETIRE, et le domicile unique des modifications
+# (modifications-par-fichier.json) ne porte PAS de statut. Ce script lit donc la
+# FENETRE de dates, sans filtre de statut, et ne devine rien.
 BORNES_REMONTEE = 30
 
 
-def charger_vocabulaire_modifs():
-    """Le module de fonctions de bdd-modifs, charge par son chemin, ou None."""
-    courant = Path(__file__).resolve().parent
-    for _ in range(BORNES_REMONTEE):
-        if (courant / "matrice" / "data" / "commun" / "racine.py").is_file():
-            break
-        courant = courant.parent
-    else:
-        return None
-    chemin = (courant / "_operateur" / "optimus-prime" / "super-combos" / "combos"
-              / "outils" / "bdd-modifs" / "fonctions" / "bdd_modifs.py")
-    if not chemin.is_file():
-        return None
+def fichiers_traces(db_json, depuis, jusquau):
+    """Fichiers du domicile unique ayant une entree dans la fenetre (liste)."""
     try:
-        spec = importlib.util.spec_from_file_location("bdd_modifs_domicile", str(chemin))
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-    except (ImportError, OSError, SyntaxError, AttributeError):
+        donnees = json.loads(Path(db_json).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
         return None
-    return module
-
-
-VOCABULAIRE_MODIFS = charger_vocabulaire_modifs()
+    trouves = []
+    for chemin, fiche in (donnees.get("fichiers") or {}).items():
+        for entree in (fiche or {}).get("modifications") or []:
+            date = entree.get("date") or ""
+            if depuis <= date <= jusquau and chemin not in trouves:
+                trouves.append(chemin)
+    return trouves
 
 
 def main():
@@ -68,12 +58,12 @@ def main():
     racine = Path(args.racine).resolve()
     db = None
     for cand in (racine, racine / "matrix", racine / "cerveau-projet" / "matrix"):
-        if (cand / "matrice" / "data" / "modifications.db").is_file():
-            db = cand / "matrice" / "data" / "modifications.db"
+        if (cand / "matrice" / "data" / "modifications-par-fichier.json").is_file():
+            db = cand / "matrice" / "data" / "modifications-par-fichier.json"
             base_matrix = cand if cand.name == "matrix" else None
             break
     if db is None:
-        print("BDD modifications.db introuvable")
+        print("Domicile des modifications (modifications-par-fichier.json) introuvable")
         return 2
     if base_matrix is None:
         # Racine matrix/ DETECTEE par le marqueur partage (M-076), jamais comptee (L-013).
@@ -86,18 +76,10 @@ def main():
             return 2
     outils = base_matrix / "_operateur" / "optimus-prime" / "super-combos" / "combos" / "outils"
 
-    if VOCABULAIRE_MODIFS is None:
-        print("Vocabulaire des statuts introuvable (domicile bdd-modifs) : refus de deviner")
-        print("la valeur d'une modification VALIDEE (friction 49, balayage MO-129).")
+    fichiers = fichiers_traces(db, args.depuis, args.jusquau)
+    if fichiers is None:
+        print("Domicile des modifications illisible : " + str(db))
         return 2
-
-    with sqlite3.connect(db) as conn:
-        conn.row_factory = sqlite3.Row
-        rows = conn.execute(
-            "SELECT DISTINCT fichier FROM modifications WHERE date >= ? AND date <= ? AND statut = ?",
-            (args.depuis, args.jusquau, VOCABULAIRE_MODIFS.STATUT_VALIDE),
-        ).fetchall()
-    fichiers = [r["fichier"] for r in rows]
 
     if not fichiers:
         print(f"Periode {args.depuis} -> {args.jusquau} : aucune modification validee, rien a revertir.")
@@ -124,11 +106,9 @@ def main():
                             "--fichier", str(cible), "--depuis-bak"],
                            capture_output=True, text=True)
         if r.returncode == 0:
+            # EO-154 : plus d'appel a bdd-modifs (appui retire). Le revert
+            # lui-meme est trace par la porte de revert, pas ici.
             revertis.append(f)
-            subprocess.run([sys.executable, str(outils / "bdd-modifs" / "main.py"),
-                            "annuler", "--fichier", f,
-                            "--raison", f"revert-periode {args.depuis}->{args.jusquau}"],
-                           capture_output=True, text=True)
         else:
             sans_bak.append(f"{f} (revert KO: {r.stdout.strip()[:100]})")
 

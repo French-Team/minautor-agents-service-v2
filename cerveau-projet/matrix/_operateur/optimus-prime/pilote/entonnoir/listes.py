@@ -34,6 +34,10 @@ CATEGORIES_DEFAUT = {
 # il est RENDU par un AVIS MULTI-AXES a la CREATION, et il ouvre la FILE
 # AUTO-VALIDEE -- transverse aux types : elle ne contient QUE les items declares
 # auto-valides au moment de la creation (decision du createur).
+# --- ETIQUETTES DE L ITEM (nom de champ : une seule declaration, L-035) ------
+# MO-213 : la categorie se REPARE comme le role (`retiqueter --categorie`), donc
+# son nom de champ devient une constante consommee, plus un litteral disperse.
+CHAMP_CATEGORIE = "categorie"
 CHAMP_AUTO_VALIDATION = "auto_validation"
 CHAMP_AUTO_AXES = "auto_validation_axes"
 VERDICT_AUTO = "auto"
@@ -50,8 +54,34 @@ CLE_LEGACY_AUTO_VALIDEE = "auto-validee"
 # perdu ne route rien, et le crochet redeviendrait decoratif.
 CHAMP_TYPE_PROPOSE = "type_propose"
 MOT_CLE_DECLARE = "type declare"
+# L ORIGINE du type (EO-192, decision createur 2026-09-19) : l item doit dire D OU
+# vient son type, sinon le classement ne peut pas savoir ce qu il a le DROIT de
+# consommer. Meme discipline que role_source (declaration / table). Trois valeurs,
+# aucune devinee :
+#   declaration -> le crochet du createur ou --type : SOUVERAIN, il CLASSE ;
+#   mot-cle     -> la table MOTS_CLES_TYPES a parle (mot ENTIER) : elle PROPOSE ;
+#   defaut      -> personne n a parle : c est un repli, il ne classe rien.
+CHAMP_TYPE_SOURCE = "type_source"
+SOURCE_TYPE_DECLARATION = "declaration"
+SOURCE_TYPE_MOT_CLE = "mot-cle"
+SOURCE_TYPE_DEFAUT = "defaut"
 # Le nom NU de l avis (super-combo hors pilote) : le chemin se resout chez qui appelle.
 NOM_EVALUATEUR = "evaluer-auto-validation.py"
+
+# --- SOURCES (F1, 2026-09-19, decision createur) ------------------------------
+# Le champ `source` etait LIBRE pour l agent et lu comme un ENUM a UNE seule
+# valeur par l avis d auto-validation (axe `deja-vu`) : un champ, DEUX sens
+# (meme classe que EO-154, deja tranchee). Mesure : la MEME mission rendait POUR
+# avec `createur` nu et CONTRE avec une trace honnete datee -- l avis refusait
+# donc d enchainer exactement ce que l agent avait pris soin de tracer.
+# La provenance est desormais FERMEE : une valeur hors liste se REFUSE (elle ne
+# se replie pas), et la trace libre (date, motif) vit dans CHAMP_SOURCE_TRACE.
+# ORDRE SIGNIFICATIF : SOURCES[0] est la provenance par DEFAUT, et c est le SEUL
+# cas ou l avis vote POUR sur `deja-vu` (une reparation vue avec le createur).
+SOURCES = ("createur", "veille", "redeport", "audit-nemesis")
+# La TRACE libre (date, motif, contexte) de la provenance : son PROPRE champ,
+# jamais le champ ferme `source` -- un champ, un sens.
+CHAMP_SOURCE_TRACE = "source_trace"
 
 URGENCES = ("bloquante", "haute", "normale", "basse")
 

@@ -123,6 +123,28 @@
             "liste",
             "cockpit"
           ]
+        },
+        {
+          "date": "2026-09-19 09:38:53",
+          "action": "modifie",
+          "detail": "EO-184 : le cockpit cesse d appeler ses seuils proto-2 DECLENCHEURS -- ce sont des SUGGESTIONS (rien ne se pose). Entete, suggestion et libelles renommes ; jamais de promesse d acte.",
+          "tags": [
+            "MO-200",
+            "eo-184",
+            "cockpit",
+            "honnetete"
+          ]
+        },
+        {
+          "date": "2026-09-19 09:38:53",
+          "action": "modifie",
+          "detail": "EO-184 : le cockpit LIT en direct les VRAIS declencheurs (machine-defcon surveiller --evaluer, LECTURE SEULE) au lieu de les citer -- motif du projet : objet DECLARE, objet PUBLIE, cockpit LIT.",
+          "tags": [
+            "MO-200",
+            "eo-184",
+            "machine-defcon",
+            "lecture-directe"
+          ]
         }
       ],
       "tags": [
@@ -159,7 +181,12 @@
         "MO-150",
         "friction73",
         "transport",
-        "liste"
+        "liste",
+        "MO-200",
+        "eo-184",
+        "honnetete",
+        "machine-defcon",
+        "lecture-directe"
       ]
     },
     "_operateur/optimus-prime/conventions/convention-crochets.md": {
@@ -274,6 +301,17 @@
             "contrat",
             "mo-104"
           ]
+        },
+        {
+          "date": "2026-09-19 15:55:57",
+          "action": "modifie",
+          "detail": "MO-236 (demande createur) : la zone jetable tmp-optimus passe sous _operateur/optimus-prime/ (invisible PAR CONSTRUCTION). Regles R-005/CV-012 et marbre perimetre-tmp amendes.",
+          "tags": [
+            "MO-236",
+            "tmp-optimus",
+            "deplacement",
+            "invisibilite"
+          ]
         }
       ],
       "tags": [
@@ -281,7 +319,11 @@
         "temporaire",
         "perimetre",
         "contrat",
-        "mo-104"
+        "mo-104",
+        "MO-236",
+        "tmp-optimus",
+        "deplacement",
+        "invisibilite"
       ]
     },
     "_operateur/optimus-prime/conventions/conventions-readme.md": {
@@ -742,6 +784,27 @@
             "prefixe",
             "protocole"
           ]
+        },
+        {
+          "date": "2026-09-19 09:38:53",
+          "action": "modifie",
+          "detail": "EO-184 : note VOCABULAIRE a la source -- DECLENCHEUR a deux sens : (1) AUTOMATIQUE (porte machine-defcon, branchee) (2) CONDITION D ENCHAINEMENT (rituel, l agent agit). Reparation a la source du piege de vocabulaire d EO-181.",
+          "tags": [
+            "MO-200",
+            "eo-184",
+            "proto-2",
+            "vocabulaire"
+          ]
+        },
+        {
+          "date": "2026-09-19 09:54:05",
+          "action": "modifie",
+          "detail": "EO-154 : la table des outils nomme le RETRAIT de bdd-modifs et la porte unique bdd-modifications -- ne plus l appeler.",
+          "tags": [
+            "MO-191",
+            "EO-154",
+            "proto-2"
+          ]
         }
       ],
       "tags": [
@@ -749,7 +812,13 @@
         "declencheurs",
         "protocole",
         "m030",
-        "prefixe"
+        "prefixe",
+        "MO-200",
+        "eo-184",
+        "proto-2",
+        "vocabulaire",
+        "MO-191",
+        "EO-154"
       ]
     },
     "_operateur/optimus-prime/protocoles/proto-6-route-mission.md": {
@@ -1424,6 +1493,17 @@
             "porte",
             "auto-evolution"
           ]
+        },
+        {
+          "date": "2026-09-19 09:54:04",
+          "action": "modifie",
+          "detail": "EO-154 : l ecrivain de l appui sqlite est FERME -- bdd-modifs REFUSE (code 2) et nomme le domicile unique et la porte officielle bdd-modifications. Zero-ecrivain-mort.",
+          "tags": [
+            "MO-191",
+            "EO-154",
+            "bdd-modifs",
+            "domicile-unique"
+          ]
         }
       ],
       "tags": [
@@ -1434,7 +1514,10 @@
         "mo-127",
         "bdd-modifs",
         "porte",
-        "auto-evolution"
+        "auto-evolution",
+        "MO-191",
+        "EO-154",
+        "domicile-unique"
       ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/bdd-modifs/main.py": {
@@ -1558,9 +1641,25 @@
             "auto-valide",
             "M-107"
           ]
+        },
+        {
+          "date": "2026-09-19 16:00:34",
+          "action": "modifie",
+          "detail": "MO-236 : le domicile de la zone jetable se LIT au moteur partage (zone_tmp.chemin_zone_optimus). Defaut PRE-EXISTANT corrige : chemin 'cerveau-projet/matrix/tmp-optimus' ecrit EN DUR, avec un repli vers combos/outils/tmp-dry-run -- un repli qui ecrivait HORS de la zone declaree (point 2 de la regle).",
+          "tags": [
+            "MO-236",
+            "tmp-optimus",
+            "dry-run",
+            "invisibilite"
+          ]
         }
       ],
-      "tags": []
+      "tags": [
+        "MO-236",
+        "tmp-optimus",
+        "dry-run",
+        "invisibilite"
+      ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/garde-ascii.py": {
       "modifications": [
@@ -1609,9 +1708,29 @@
             "auto-valide",
             "M-108"
           ]
+        },
+        {
+          "date": "2026-09-19 09:10:55",
+          "action": "modifie",
+          "detail": "MO-189 : exemption NOMMEE (est_dans_zone_cameleon) pour la SEULE zone declaree du cameleon : le cameleon ecrit dans son perimetre sans allumer le garde, et l exemption se CITE -- jamais une exception muette.",
+          "tags": [
+            "MO-189",
+            "perimetres",
+            "flux",
+            "cameleon",
+            "zone",
+            "R-005"
+          ]
         }
       ],
-      "tags": []
+      "tags": [
+        "MO-189",
+        "perimetres",
+        "flux",
+        "cameleon",
+        "zone",
+        "R-005"
+      ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/garde-tmp.py": {
       "modifications": [
@@ -1636,6 +1755,41 @@
             "regle-lue",
             "mo-104"
           ]
+        },
+        {
+          "date": "2026-09-18 20:49:18",
+          "action": "modifie",
+          "detail": "MO-180 (EO-173) : le garde TROUVE desormais les zones au lieu de les chercher a un chemin suppose. Controle 3 ajoute : toute zone tmp-* doit vivre a la RACINE (point 2 de la regle) et porter un nom de domicile declare (point 1) ; une zone d ARCHIVE est SPAREE et RENDUE (exemption visible, jamais muette). Preuve : 6 cobayes rejouables (bac a sable nomme matrix) + verdict du garde avant/apres la purge.",
+          "tags": [
+            "MO-180",
+            "EO-173",
+            "perimetre-tmp",
+            "garde"
+          ]
+        },
+        {
+          "date": "2026-09-19 09:10:55",
+          "action": "modifie",
+          "detail": "MO-189 : TMP_DIRS CITE le moteur partage, et la zone DECLAREE du cameleon est controlee a son DOMICILE (hors Matrice, donc invisible au rglob) : le garde DIT son absence au lieu d en faire un angle mort.",
+          "tags": [
+            "MO-189",
+            "perimetres",
+            "flux",
+            "cameleon",
+            "zone",
+            "R-005"
+          ]
+        },
+        {
+          "date": "2026-09-19 15:55:57",
+          "action": "modifie",
+          "detail": "MO-236 (demande createur) : la zone jetable tmp-optimus passe sous _operateur/optimus-prime/ (invisible PAR CONSTRUCTION). Regles R-005/CV-012 et marbre perimetre-tmp amendes.",
+          "tags": [
+            "MO-236",
+            "tmp-optimus",
+            "deplacement",
+            "invisibilite"
+          ]
         }
       ],
       "tags": [
@@ -1643,7 +1797,20 @@
         "garde",
         "perimetre",
         "regle-lue",
-        "mo-104"
+        "mo-104",
+        "MO-180",
+        "EO-173",
+        "perimetre-tmp",
+        "MO-189",
+        "perimetres",
+        "flux",
+        "cameleon",
+        "zone",
+        "R-005",
+        "MO-236",
+        "tmp-optimus",
+        "deplacement",
+        "invisibilite"
       ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py": {
@@ -1918,6 +2085,28 @@
             "maillon27",
             "mo175"
           ]
+        },
+        {
+          "date": "2026-09-19 11:50:30",
+          "action": "modifie",
+          "detail": "MO-214 : la non-regression gagne le maillon 30 -- les contrats des outils ne vivent plus dans les cobayes d une mission (purges a sa cloture), ils sont GARDES",
+          "tags": [
+            "mo-214",
+            "non-regression",
+            "maillon-30"
+          ]
+        },
+        {
+          "date": "2026-09-19 15:10:03",
+          "action": "modifie",
+          "detail": "MO-232 (audit MO-231) : le controle miroirs (inter-flux cameleon<->optimus, seul lecteur des declarations propres du cameleon) devient RECURRENT -- maillon 31 du lanceur. Avant : ABSENT du lanceur, il ne tournait que tape a la main (un controle qui ne tourne jamais est un constat de round, pas une surveillance, MO-214). Docstring : MIROIRS ajoute et l'ordre CROCHETS/APPELS repare (les continuations etaient interverties).",
+          "tags": [
+            "MO-232",
+            "EO-225",
+            "non-regression",
+            "miroirs",
+            "cameleon"
+          ]
         }
       ],
       "tags": [
@@ -1980,7 +2169,13 @@
         "jumeaux",
         "cobaye",
         "maillon27",
-        "mo175"
+        "mo175",
+        "mo-214",
+        "maillon-30",
+        "MO-232",
+        "EO-225",
+        "miroirs",
+        "cameleon"
       ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/revert-periode.py": {
@@ -2005,13 +2200,26 @@
             "ancrage",
             "l-013"
           ]
+        },
+        {
+          "date": "2026-09-19 09:54:04",
+          "action": "modifie",
+          "detail": "EO-154 : revert-periode lit le DOMICILE JSON (fichiers_traces), ne devine AUCUN statut (le domicile n en porte pas), et n appelle plus bdd-modifs.",
+          "tags": [
+            "MO-191",
+            "EO-154",
+            "revert-periode"
+          ]
         }
       ],
       "tags": [
         "MO-088",
         "chemins",
         "ancrage",
-        "l-013"
+        "l-013",
+        "MO-191",
+        "EO-154",
+        "revert-periode"
       ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/scan-valeurs-en-dur.py": {
@@ -2188,6 +2396,18 @@
             "flux2",
             "verrouille"
           ]
+        },
+        {
+          "date": "2026-09-19 12:11:07",
+          "action": "corrige",
+          "detail": "MO-217 : le libelle de la porte /sante disait 'garde-ascii matrice/' alors que la commande scanne REPERTOIRE_MATRIX = matrix/ ENTIER (matrice + _operateur + docs). Un libelle qui nomme une autre cible fait chercher une violation au mauvais endroit.",
+          "tags": [
+            "cockpit",
+            "sante",
+            "libelle",
+            "EO-211",
+            "MO-217"
+          ]
         }
       ],
       "tags": [
@@ -2195,7 +2415,11 @@
         "routes-privees",
         "server-distant",
         "flux2",
-        "verrouille"
+        "verrouille",
+        "sante",
+        "libelle",
+        "EO-211",
+        "MO-217"
       ]
     },
     "cerveau-projet/matrix/_operateur/optimus-prime/cockpit/routes-privees.json": {
@@ -2752,6 +2976,18 @@
             "ecrire",
             "demarrage"
           ]
+        },
+        {
+          "date": "2026-09-19 12:06:02",
+          "action": "modifie",
+          "detail": "MO-216 (EO-209) : protocole v3 reecrit -- SIMPLE, DIRECT, OBLIGATOIRE. Chemins COMPLETS dans chaque commande (copiables telles quelles), 7 gestes obligatoires (naitre/conduire/ecrire/prouver/tracer/verifier/clore), les portes du jour (defcon, gardes, roue, cockpit, benchmark, traces), la regle du refus directionnel, et l invisibilite dite (1 ROUGE par construction sur ta zone).",
+          "tags": [
+            "v3",
+            "protocole",
+            "demarrage",
+            "EO-209",
+            "MO-216"
+          ]
         }
       ],
       "tags": [
@@ -2771,7 +3007,11 @@
         "MO-150",
         "friction74",
         "porte",
-        "ecrire"
+        "ecrire",
+        "v3",
+        "protocole",
+        "EO-209",
+        "MO-216"
       ]
     },
     "demarrer-optimus-prime.md (racine, hors matrix/)": {
@@ -2930,6 +3170,16 @@
             "V-003",
             "correction-de-trace"
           ]
+        },
+        {
+          "date": "2026-09-19 08:50:47",
+          "action": "cree",
+          "detail": "MO-197 : V-004  = auto (posee par la porte bdd-variables). La decision de l interpreteur a desormais UNE maison : absente ou auto = interpreteur du processus courant ; un chemin absolu ou ancre sur la racine de la Matrice = cet interpreteur, s il existe.",
+          "tags": [
+            "MO-197",
+            "interpreteur",
+            "V-004"
+          ]
         }
       ],
       "tags": [
@@ -2941,7 +3191,10 @@
         "BDD",
         "invisibilite",
         "V-003",
-        "correction-de-trace"
+        "correction-de-trace",
+        "MO-197",
+        "interpreteur",
+        "V-004"
       ]
     },
     "matrice/data/commun/racine.py": {
@@ -3034,6 +3287,19 @@
             "conventions",
             "CV-012"
           ]
+        },
+        {
+          "date": "2026-09-19 09:10:55",
+          "action": "corrige",
+          "detail": "MO-189 : CV-012 alignee sur R-005 -- le domicile d une zone SUIT le perimetre d ecriture de son flux. L ancienne formulation (a la racine) rendait la regle MUETTE des que le cameleon ne devait rien ecrire dans matrix/, et c etait le cas mesure.",
+          "tags": [
+            "MO-189",
+            "perimetres",
+            "flux",
+            "cameleon",
+            "zone",
+            "R-005"
+          ]
         }
       ],
       "tags": [
@@ -3049,7 +3315,13 @@
         "mo-046",
         "MO-147",
         "EO-128",
-        "CV-012"
+        "CV-012",
+        "MO-189",
+        "perimetres",
+        "flux",
+        "cameleon",
+        "zone",
+        "R-005"
       ]
     },
     "matrice/data/data-readme.md": {
@@ -3523,6 +3795,17 @@
             "verite",
             "mo-173"
           ]
+        },
+        {
+          "date": "2026-09-19 15:33:06",
+          "action": "modifie",
+          "detail": "MO-235 (demande createur) : deplacer la vue suivi-optimus.md de matrice/ vers la zone privee _operateur/optimus-prime/ (invisible PAR CONSTRUCTION, plus par exclusion de nom). Chemin de la vue mis a jour.",
+          "tags": [
+            "MO-235",
+            "suivi-optimus",
+            "deplacement",
+            "invisibilite"
+          ]
         }
       ],
       "tags": [
@@ -3586,7 +3869,10 @@
         "ecrire",
         "base64",
         "verite",
-        "mo-173"
+        "mo-173",
+        "MO-235",
+        "deplacement",
+        "invisibilite"
       ]
     },
     "matrice/data/modifications-par-fichier.json": {
@@ -4069,9 +4355,50 @@
           "date": "2026-09-09 21:31:14",
           "detail": "Audit protections (decision createur) : sortie console defcon 5 neutralisee (maintenance reveillee au lieu du nom interne)",
           "tags": []
+        },
+        {
+          "date": "2026-09-19 09:24:19",
+          "action": "modifie",
+          "detail": "EO-181 voie A : la TABLE DES DECLENCHEURS est gravee ici (un seul domicile). Chaque entree nomme les QUATRE choses exigees : le FAIT mesure, le MESUREUR (une porte reelle), le SEUIL (le verdict qui declenche) et le NIVEAU pose (5 = stop de l agent, 4 = suivi). Trois declencheurs : perimetre-write (5), marbre-hors-porte (5), perimetre-tmp (4).",
+          "tags": [
+            "MO-198",
+            "EO-181",
+            "defcon",
+            "declencheurs",
+            "voie-A",
+            "veille"
+          ],
+          "corrections": [
+            {
+              "date": "2026-09-19 09:25:29",
+              "motif": "rattachement a MO-198 : les six notes de la voie A portaient le tag de l audit EO-181, pas celui de la mission -- la trace etait MUETTE pour MO-198, le garde l a dit.",
+              "tags_avant": [
+                "EO-181",
+                "defcon",
+                "declencheurs",
+                "voie-A",
+                "veille"
+              ],
+              "tags_apres": [
+                "MO-198",
+                "EO-181",
+                "defcon",
+                "declencheurs",
+                "voie-A",
+                "veille"
+              ]
+            }
+          ]
         }
       ],
-      "tags": []
+      "tags": [
+        "MO-198",
+        "EO-181",
+        "defcon",
+        "declencheurs",
+        "voie-A",
+        "veille"
+      ]
     },
     "matrice/data/outils/machine-defcon/main.py": {
       "modifications": [
@@ -4084,12 +4411,51 @@
             "defcon",
             "outil"
           ]
+        },
+        {
+          "date": "2026-09-19 09:24:20",
+          "action": "modifie",
+          "detail": "EO-181 voie A : le verbe surveiller est declare au routeur (import + COMMANDES + usage). Un verbe invisible n existe pas.",
+          "tags": [
+            "MO-198",
+            "EO-181",
+            "defcon",
+            "declencheurs",
+            "voie-A",
+            "veille"
+          ],
+          "corrections": [
+            {
+              "date": "2026-09-19 09:25:30",
+              "motif": "rattachement a MO-198 : les six notes de la voie A portaient le tag de l audit EO-181, pas celui de la mission -- la trace etait MUETTE pour MO-198, le garde l a dit.",
+              "tags_avant": [
+                "EO-181",
+                "defcon",
+                "declencheurs",
+                "voie-A",
+                "veille"
+              ],
+              "tags_apres": [
+                "MO-198",
+                "EO-181",
+                "defcon",
+                "declencheurs",
+                "voie-A",
+                "veille"
+              ]
+            }
+          ]
         }
       ],
       "tags": [
         "m059",
         "defcon",
-        "outil"
+        "outil",
+        "MO-198",
+        "EO-181",
+        "declencheurs",
+        "voie-A",
+        "veille"
       ]
     },
     "matrice/data/outils/pause-session": {
@@ -4331,9 +4697,29 @@
           "date": "2026-09-09 20:33:20",
           "detail": "R-002 modifiee via porte modifier bdd-regles-matrice : mention d'entite interne retiree (marbre lu par le cameleon)",
           "tags": []
+        },
+        {
+          "date": "2026-09-19 09:10:56",
+          "action": "cree",
+          "detail": "MO-189 : R-005 gravee -- les PERIMETRES DES DEUX FLUX ecrits noir sur blanc (Optimus lit tout depuis la racine et entretient matrix/ ; le cameleon construit dans workspace/).",
+          "tags": [
+            "MO-189",
+            "perimetres",
+            "flux",
+            "cameleon",
+            "zone",
+            "R-005"
+          ]
         }
       ],
-      "tags": []
+      "tags": [
+        "MO-189",
+        "perimetres",
+        "flux",
+        "cameleon",
+        "zone",
+        "R-005"
+      ]
     },
     "matrice/data/suivi-optimus.jsonl": {
       "modifications": [
@@ -4456,6 +4842,17 @@
             "cv-009",
             "prefixe"
           ]
+        },
+        {
+          "date": "2026-09-19 15:33:07",
+          "action": "modifie",
+          "detail": "MO-235 (demande createur) : deplacer la vue suivi-optimus.md de matrice/ vers la zone privee _operateur/optimus-prime/ (invisible PAR CONSTRUCTION, plus par exclusion de nom). Chemin de la vue mis a jour.",
+          "tags": [
+            "MO-235",
+            "suivi-optimus",
+            "deplacement",
+            "invisibilite"
+          ]
         }
       ],
       "tags": [
@@ -4464,7 +4861,11 @@
         "GO",
         "mo-045",
         "cv-009",
-        "prefixe"
+        "prefixe",
+        "MO-235",
+        "suivi-optimus",
+        "deplacement",
+        "invisibilite"
       ]
     },
     "matrice/indices.md + data/indices.md + intercom/indices.md + routines/indices.md + pilote/indices.md + _operateur/optimus-prime/indices.md": {
@@ -4575,6 +4976,17 @@
             "cv-009",
             "prefixe"
           ]
+        },
+        {
+          "date": "2026-09-19 15:33:07",
+          "action": "modifie",
+          "detail": "MO-235 (demande createur) : deplacer la vue suivi-optimus.md de matrice/ vers la zone privee _operateur/optimus-prime/ (invisible PAR CONSTRUCTION, plus par exclusion de nom). Chemin de la vue mis a jour.",
+          "tags": [
+            "MO-235",
+            "suivi-optimus",
+            "deplacement",
+            "invisibilite"
+          ]
         }
       ],
       "tags": [
@@ -4590,7 +5002,11 @@
         "CONTRATS",
         "mo-045",
         "cv-009",
-        "prefixe"
+        "prefixe",
+        "MO-235",
+        "suivi-optimus",
+        "deplacement",
+        "invisibilite"
       ]
     },
     "matrice/matrice/matrice-readme.md": {
@@ -4715,6 +5131,19 @@
             "zone-jetable",
             "cameleon"
           ]
+        },
+        {
+          "date": "2026-09-19 09:10:55",
+          "action": "modifie",
+          "detail": "MO-189 : nouveau verbe preparer_zone_temporaire -- non bloquant, TRACE au journal du flux, idempotent. La purge a la cloture est inchangee : la zone nait a l injection, son README y reste, seul le CONTENU est vide a la fin.",
+          "tags": [
+            "MO-189",
+            "perimetres",
+            "flux",
+            "cameleon",
+            "zone",
+            "R-005"
+          ]
         }
       ],
       "tags": [
@@ -4726,7 +5155,12 @@
         "garde",
         "mo-136",
         "zone-jetable",
-        "cameleon"
+        "cameleon",
+        "MO-189",
+        "perimetres",
+        "flux",
+        "zone",
+        "R-005"
       ]
     },
     "matrice/pilote/entonnoir-files.json": {
@@ -4863,6 +5297,19 @@
             "domicile",
             "copie-supprimee"
           ]
+        },
+        {
+          "date": "2026-09-19 09:10:55",
+          "action": "modifie",
+          "detail": "MO-189 : preparer_zone_temporaire est appele aux DEUX entrees d injection (mission simple ET lot) : la zone du cameleon nait AVANT le travail, jamais pendant.",
+          "tags": [
+            "MO-189",
+            "perimetres",
+            "flux",
+            "cameleon",
+            "zone",
+            "R-005"
+          ]
         }
       ],
       "tags": [
@@ -4877,7 +5324,12 @@
         "recherche",
         "invisibilite",
         "domicile",
-        "copie-supprimee"
+        "copie-supprimee",
+        "MO-189",
+        "perimetres",
+        "flux",
+        "zone",
+        "R-005"
       ]
     },
     "matrice/pilote/main.py": {
@@ -5267,6 +5719,57 @@
             "performance",
             "budget-declare"
           ]
+        },
+        {
+          "date": "2026-09-18 21:24:16",
+          "action": "corrige",
+          "detail": "lister_fichiers_python() ELIMINE desormais les zones jetables (tout dossier dont le nom commence par PREFIXE_ZONE, lu chez data/commun/zone_tmp.py) : la veille compile le CODE du projet, pas le jetable. MESURE du cobaye MO-181 (bac a sable conforme, verdict rendu par la veille elle-meme) : AVANT 29 fichiers compiles dont 1 jetable et 1 item depose sur tmp-optimus/cobaye/p11/cible.py (EO-140 reproduit) ; APRES 28 compiles dont 0 jetable et 0 item, alors qu un fichier casse HORS zone reste TOUJOURS vu (matrice/avancee/casse.py). Le domicile d une zone reste juge par garde-tmp (une seule maison par idee).",
+          "tags": [
+            "veille-flux",
+            "routine",
+            "perimetre",
+            "EO-175",
+            "MO-181"
+          ]
+        },
+        {
+          "date": "2026-09-19 07:10:53",
+          "action": "modifie",
+          "detail": "MO-182 (EO-176) : la passe de compilation de la veille est desormais EXHAUSTIVE. AVANT : lancer_py_compile n appelait compiler_lot qu UNE fois par lot ; or py_compile s ARRETE au premier fichier casse, donc un lot de deux casses ne citait que le premier, et extraire_fichiers_python_en_erreur ne remontait que les fichiers CITES -- un seul item depose par passe, les autres fichiers casses restant INVISIBLES tant que le premier n etait pas repare (masquage mesure par le cobaye de MO-181 : le cobaye n a pu poser qu UN fichier casse par bac a sable, il mesurait 1 sur 2). APRES : le lot est REJOUE en retirant les fichiers deja accuses (comparaison sur chemin normalise normcase+normpath), tant qu il en reste ; le code retourne reste le PREMIER code d echec, et la sortie concatene les passes (le contrat d extraction des fichiers en erreur est inchange, comme l annonce la docstring). Cout nul quand tout compile : un seul appel par lot, la cadence de MO-097 est preservee. PREUVES : cobaye piegeable tmp-optimus/cobaye-mo182-exhaustif.py, 7/7 vert APRES contre 4/5 AVANT (le controle d exhaustivite etait le ROUGE) -- deux .py casses citent desormais les DEUX, le fichier sain n est jamais accuse, un seul casse reste cite (temoin), le nominal donne code 0, la passe REELLE compile 470 fichiers de matrix/ en 885 ms sans un seul accuse, et les zones jetables restent hors perimetre (MO-181). Non-regression : 27 maillons de code OK (les maillons FLUX sont rouges pour des PID de routines morts, etat anterieur et non cause par ce changement).",
+          "tags": [
+            "MO-182",
+            "EO-176",
+            "veille-flux",
+            "py-compile",
+            "exhaustivite",
+            "masquage",
+            "reparation"
+          ]
+        },
+        {
+          "date": "2026-09-19 08:25:06",
+          "action": "modifie",
+          "detail": "MO-187 : la BOITE recoit la regle de l'ETAT. Deux fonctions ajoutees. (1) purger_alertes_resolues(mode, detections) : une alerte-grave dont l'etat est RE-TESTE par ce mode (ETATS_TESTES) et dont la signature n'est PLUS dans les detections est RESOLUE -- elle sort de la boite. Motif : M-052 (purger_alertes_fantomes) ne connaissait QU'UN critere, la cible fichier DISPARUE ; une alerte dont le defaut est REPARE (le fichier existe et compile, le caractere est converti) restait donc dans l'inbox POUR TOUJOURS et le routeur la comptait comme anormale a chaque passe -- mesure : 11 alerte-grave, AUCUNE fantome. Les autres messages (fin-mission, retour-lot, signaler) restent INTOUCHABLES (M-052), et un message deja marque traite_par_routeur n'est jamais repris. (2) archiver_messages + chemin_archive_boite : le retrait est TRACE par une archive NOMINATIVE du jour (message COMPLET + purge_le + motif + mode), posee a cote de la boite -- une purge sans archive est indiscernable d'une disparition (la faute qui a fait perdre 10 alertes graves). Jamais bloquant : tout incident est journalise, la passe continue. Preuves : boite 129 -> 118, archive 11 lignes, journal purge-boite-resolues {purgees: 11}, 2e passe = 0 (idempotent), routeur anormaux 11 -> 0.",
+          "tags": [
+            "MO-187",
+            "veille-flux",
+            "boite",
+            "purge",
+            "resolues",
+            "archive",
+            "M-052",
+            "routeur"
+          ]
+        },
+        {
+          "date": "2026-09-19 08:50:47",
+          "action": "modifie",
+          "detail": "MO-197 : le consommateur importe chemin_python du DOMICILE PARTAGE (interpreteur) au lieu de la copie locale de constants.py. Les deux appels (lancement de sous-processus et py_compile) sont inchanges : non-regression du flux prouvee par une passe reelle (0 detection, 0 alerte).",
+          "tags": [
+            "MO-197",
+            "interpreteur",
+            "consommateur"
+          ]
         }
       ],
       "tags": [
@@ -5283,7 +5786,27 @@
         "determinisme",
         "mo-097",
         "performance",
-        "budget-declare"
+        "budget-declare",
+        "routine",
+        "perimetre",
+        "EO-175",
+        "MO-181",
+        "MO-182",
+        "EO-176",
+        "py-compile",
+        "exhaustivite",
+        "masquage",
+        "reparation",
+        "MO-187",
+        "boite",
+        "purge",
+        "resolues",
+        "archive",
+        "M-052",
+        "routeur",
+        "MO-197",
+        "interpreteur",
+        "consommateur"
       ]
     },
     "matrice/routines/veille-flux/constants.py": {
@@ -5394,6 +5917,74 @@
             "p5",
             "routine"
           ]
+        },
+        {
+          "date": "2026-09-18 21:24:16",
+          "action": "corrige",
+          "detail": "La valeur PREFIXE_ZONE (motif des zones jetables) est desormais LUE chez son proprietaire matrice/data/commun/zone_tmp.py, au lieu d etre absente : la veille s en sert pour NE PLUS compiler les zones jetables (EO-175). Un .py qui ne compile pas dans une zone jetable est un etat PASSAGER (le contenu de la zone est vide en fin de mission, regle immuable perimetre-tmp.md point 4), jamais un defaut durable : les compiler a fabrique EO-140, item BLOQUANT ne dans le vide dont la cible avait disparu avant d etre lue. Aucune seconde definition du meme fait (M-076) : le motif vient du moteur partage.",
+          "tags": [
+            "veille-flux",
+            "routine",
+            "perimetre",
+            "EO-175",
+            "MO-181"
+          ]
+        },
+        {
+          "date": "2026-09-19 08:25:06",
+          "action": "modifie",
+          "detail": "MO-187 : NOM_ARCHIVE_BOITE_PREFIXE = 'inbox-archive' (declare avec le nom de l'etat des alertes) -- zero valeur en dur dans la logique : le nom de l'archive se LIT ici. Aucune autre constante touchee.",
+          "tags": [
+            "MO-187",
+            "veille-flux",
+            "constants",
+            "archive",
+            "boite"
+          ]
+        },
+        {
+          "date": "2026-09-19 08:50:47",
+          "action": "modifie",
+          "detail": "MO-197 : la copie PRIVEE de chemin_python() est retiree (sys.executable en dur). L interpreteur vient de son domicile partage data/commun/interpreteur.py : une valeur, une maison (M-076/L-029). env_console_sure reste ici (il n a pas d autre consommateur).",
+          "tags": [
+            "MO-197",
+            "interpreteur",
+            "copie-retiree"
+          ]
+        },
+        {
+          "date": "2026-09-19 09:24:20",
+          "action": "modifie",
+          "detail": "EO-181 voie A : CHEMIN_MACHINE_DEFCON declare (la porte des declencheurs) -- un seul domicile, aucune recopie de chemin.",
+          "tags": [
+            "MO-198",
+            "EO-181",
+            "defcon",
+            "declencheurs",
+            "voie-A",
+            "veille"
+          ],
+          "corrections": [
+            {
+              "date": "2026-09-19 09:25:30",
+              "motif": "rattachement a MO-198 : les six notes de la voie A portaient le tag de l audit EO-181, pas celui de la mission -- la trace etait MUETTE pour MO-198, le garde l a dit.",
+              "tags_avant": [
+                "EO-181",
+                "defcon",
+                "declencheurs",
+                "voie-A",
+                "veille"
+              ],
+              "tags_apres": [
+                "MO-198",
+                "EO-181",
+                "defcon",
+                "declencheurs",
+                "voie-A",
+                "veille"
+              ]
+            }
+          ]
         }
       ],
       "tags": [
@@ -5422,7 +6013,22 @@
         "p4",
         "valeur-morte",
         "p5",
-        "routine"
+        "routine",
+        "perimetre",
+        "EO-175",
+        "MO-181",
+        "MO-187",
+        "constants",
+        "archive",
+        "boite",
+        "MO-197",
+        "interpreteur",
+        "copie-retiree",
+        "MO-198",
+        "EO-181",
+        "defcon",
+        "declencheurs",
+        "voie-A"
       ]
     },
     "matrice/routines/veille-flux/main.py": {
@@ -5488,6 +6094,19 @@
             "cadence",
             "portabilite"
           ]
+        },
+        {
+          "date": "2026-09-19 08:25:07",
+          "action": "modifie",
+          "detail": "MO-187 : la passe RELAX/VIGILE appelle purger_alertes_resolues(mode, detections) JUSTE APRES purger_signatures_resolues(mode, detections) -- les deux verdicts viennent de la MEME mesure (les detections de la passe), appliques a deux objets differents : l'etat anti-spam et la BOITE. C'est le point : un seul critere, deux lieux. Preuve : une passe relax a retire les 11 alerte-grave ; la 2e n'en retire plus aucune.",
+          "tags": [
+            "MO-187",
+            "veille-flux",
+            "passe",
+            "entry",
+            "purge",
+            "boite"
+          ]
         }
       ],
       "tags": [
@@ -5498,7 +6117,12 @@
         "m-017",
         "routines",
         "cadence",
-        "portabilite"
+        "portabilite",
+        "MO-187",
+        "passe",
+        "entry",
+        "purge",
+        "boite"
       ]
     },
     "matrice/routines/veille-flux/passe/fonctions.py": {
@@ -5521,6 +6145,40 @@
             "cadence",
             "portabilite"
           ]
+        },
+        {
+          "date": "2026-09-19 09:24:20",
+          "action": "modifie",
+          "detail": "EO-181 voie A : passer_declencheurs() est la quatrieme etape de la passe VIGILE -- c est CE branchement qui fait d un declencheur declare un declencheur VIVANT. Un non-zero n est jamais avale (une surveillance qui echoue se DIT).",
+          "tags": [
+            "MO-198",
+            "EO-181",
+            "defcon",
+            "declencheurs",
+            "voie-A",
+            "veille"
+          ],
+          "corrections": [
+            {
+              "date": "2026-09-19 09:25:30",
+              "motif": "rattachement a MO-198 : les six notes de la voie A portaient le tag de l audit EO-181, pas celui de la mission -- la trace etait MUETTE pour MO-198, le garde l a dit.",
+              "tags_avant": [
+                "EO-181",
+                "defcon",
+                "declencheurs",
+                "voie-A",
+                "veille"
+              ],
+              "tags_apres": [
+                "MO-198",
+                "EO-181",
+                "defcon",
+                "declencheurs",
+                "voie-A",
+                "veille"
+              ]
+            }
+          ]
         }
       ],
       "tags": [
@@ -5528,7 +6186,13 @@
         "garde-fou",
         "routines",
         "cadence",
-        "portabilite"
+        "portabilite",
+        "MO-198",
+        "EO-181",
+        "defcon",
+        "declencheurs",
+        "voie-A",
+        "veille"
       ]
     },
     "matrice/routines/vie/": {
@@ -6878,13 +7542,25 @@
             "theme",
             "crochet"
           ]
+        },
+        {
+          "date": "2026-09-19 13:16:59",
+          "action": "modifie",
+          "detail": "MO-220 : le tableau Fichiers declare la piece nouvelle spec-chaine-pense-bete.md (le contrat dit la verite du domicile).",
+          "tags": [
+            "contrat",
+            "preparation",
+            "MO-220"
+          ]
         }
       ],
       "tags": [
         "M-131",
         "preparation",
         "theme",
-        "crochet"
+        "crochet",
+        "contrat",
+        "MO-220"
       ]
     },
     "cerveau-projet/matrix/_operateur/optimus-prime/preparation/journal-preparation.md": {
@@ -7058,6 +7734,18 @@
             "drapeau",
             "defaut-corrige"
           ]
+        },
+        {
+          "date": "2026-09-19 07:25:22",
+          "action": "modifie",
+          "detail": "MO-184 (EO-178) : dans_perimetre juge le chemin RESOLU (est_dans_matrice du domicile partage) au lieu du PREFIXE matrix/... ; import REPERTOIRE_MATRIX retire, commentaire du contrat ajoute. Preuve : cobaye 38/38 (piege refuse, invariant tenu, regle de prefixe absente du code vivant).",
+          "tags": [
+            "MO-184",
+            "EO-178",
+            "lire",
+            "perimetre",
+            "resolution"
+          ]
         }
       ],
       "tags": [
@@ -7066,7 +7754,11 @@
         "outil",
         "invisibilite",
         "drapeau",
-        "defaut-corrige"
+        "defaut-corrige",
+        "MO-184",
+        "EO-178",
+        "perimetre",
+        "resolution"
       ]
     },
     "matrice/data/outils/lire/lire/entry.py": {
@@ -7135,6 +7827,17 @@
             "invisibilite",
             "garde"
           ]
+        },
+        {
+          "date": "2026-09-19 07:25:22",
+          "action": "modifie",
+          "detail": "MO-184 : les DEUX refus de perimetre (lire_fichier, lire_dossier) passent par motif_hors_perimetre(usage=lecture) -- le refus NOMME la Matrice reelle au lieu de recopier la regle (friction 77). Preuve : la fonction REELLE rejouee par le cobaye refuse le piege en code 2 en nommant la Matrice.",
+          "tags": [
+            "MO-184",
+            "lire",
+            "refus",
+            "perimetre"
+          ]
         }
       ],
       "tags": [
@@ -7142,7 +7845,10 @@
         "lire",
         "outil",
         "invisibilite",
-        "garde"
+        "garde",
+        "MO-184",
+        "refus",
+        "perimetre"
       ]
     },
     "matrice/data/outils/lire/main.py": {
@@ -7252,6 +7958,18 @@
             "domicile",
             "sentinelle"
           ]
+        },
+        {
+          "date": "2026-09-19 13:29:47",
+          "action": "corrige",
+          "detail": "MO-223 (EO-191) : MOTIF_BAK_HORODATE devient un SUR-ENSEMBLE (compteur optionnel) et les constantes du point DISTINCT sont declarees (marqueur, bornes de rang, message). Aucun consommateur a changer : ils compilent le motif du domicile.",
+          "tags": [
+            "ecrire",
+            "bak",
+            "EO-191",
+            "MO-223",
+            "reparation"
+          ]
         }
       ],
       "tags": [
@@ -7266,7 +7984,11 @@
         "EO-158",
         "MO-171",
         "domicile",
-        "sentinelle"
+        "sentinelle",
+        "bak",
+        "EO-191",
+        "MO-223",
+        "reparation"
       ]
     },
     "cerveau-projet/matrix/matrice/data/outils/ecrire/commun.py": {
@@ -7318,6 +8040,18 @@
             "parseur-options",
             "domicile"
           ]
+        },
+        {
+          "date": "2026-09-19 13:29:47",
+          "action": "corrige",
+          "detail": "MO-223 (EO-191) : creer_bak_si_existe n ECRASE PLUS un point existant (reutilise le point du meme contenu, sinon ouvre un point DISTINCT et le DIT) ; chemin_bak prend un rang ; helpers _meme_contenu et _premier_point_libre.",
+          "tags": [
+            "ecrire",
+            "bak",
+            "EO-191",
+            "MO-223",
+            "reparation"
+          ]
         }
       ],
       "tags": [
@@ -7337,7 +8071,11 @@
         "EO-158",
         "MO-171",
         "parseur-options",
-        "domicile"
+        "domicile",
+        "bak",
+        "EO-191",
+        "MO-223",
+        "reparation"
       ]
     },
     "cerveau-projet/matrix/matrice/data/outils/ecrire/main.py": {
@@ -7778,13 +8516,41 @@
             "chemin",
             "L006"
           ]
+        },
+        {
+          "date": "2026-09-19 12:36:23",
+          "action": "modifie",
+          "detail": "MO-219 (balayage de classe) : 35e outil, MUET ; sac a dos pose et pont derive sur place car ce dossier n a AUCUN constants.py (recette incomplete, deja signalee par vigie-portes)",
+          "tags": [
+            "MO-219",
+            "sac-a-dos",
+            "instrumentation",
+            "balayage-classe"
+          ]
+        },
+        {
+          "date": "2026-09-19 12:39:53",
+          "action": "corrige",
+          "detail": "MO-219 : mon propre parents[2] NU a ete accuse par le garde chemins (suite 20.) -- remplace par le patron de la maison : .parent.parent.parent + verification du NOM du dossier (data/)",
+          "tags": [
+            "MO-219",
+            "sac-a-dos",
+            "chemins",
+            "self-reparation"
+          ]
         }
       ],
       "tags": [
         "m030",
         "selecteur-flux",
         "chemin",
-        "L006"
+        "L006",
+        "MO-219",
+        "sac-a-dos",
+        "instrumentation",
+        "balayage-classe",
+        "chemins",
+        "self-reparation"
       ]
     },
     "matrice/routines/selecteur-flux/verifier-selecteur.py": {
@@ -7893,6 +8659,17 @@
             "doublon",
             "doc"
           ]
+        },
+        {
+          "date": "2026-09-19 15:33:06",
+          "action": "modifie",
+          "detail": "MO-235 (demande createur) : deplacer la vue suivi-optimus.md de matrice/ vers la zone privee _operateur/optimus-prime/ (invisible PAR CONSTRUCTION, plus par exclusion de nom). Chemin de la vue mis a jour.",
+          "tags": [
+            "MO-235",
+            "suivi-optimus",
+            "deplacement",
+            "invisibilite"
+          ]
         }
       ],
       "tags": [
@@ -7900,7 +8677,11 @@
         "prefixe",
         "mo066",
         "doublon",
-        "doc"
+        "doc",
+        "MO-235",
+        "suivi-optimus",
+        "deplacement",
+        "invisibilite"
       ]
     },
     "matrice/data/selecteur-flux.json": {
@@ -8065,6 +8846,20 @@
             "trace",
             "friction89"
           ]
+        },
+        {
+          "date": "2026-09-19 10:38:08",
+          "action": "modifie",
+          "detail": "F3 (EO-189/MO-203) : au terme d un lot, apres le RETOUR consolide et le desarmement, la chaine REOUVRE sur l entonnoir (tete auto-validee du brin) ; en pause, aucune relance ; si la tete n est pas auto-validee, le STOP reste et rien n est consomme.",
+          "tags": [
+            "MO-203",
+            "chaine",
+            "entonnoir",
+            "pilote",
+            "source",
+            "auto-validation",
+            "EO-189"
+          ]
         }
       ],
       "tags": [
@@ -8106,7 +8901,13 @@
         "alerte",
         "MO-165",
         "republie",
-        "friction89"
+        "friction89",
+        "MO-203",
+        "chaine",
+        "entonnoir",
+        "source",
+        "auto-validation",
+        "EO-189"
       ]
     },
     "_operateur/optimus-prime/pilote/injection/fonctions.py": {
@@ -8217,6 +9018,17 @@
             "pilote",
             "champ"
           ]
+        },
+        {
+          "date": "2026-09-19 10:13:38",
+          "action": "modifie",
+          "detail": "EO-185 : parametre mission_forcee dans preparer_injection -- une mission CONDUITE et NOMMEE passe AVANT le lot (elle ecrase la selection du lot). Refus nommes : inconnue, pas en attente. Plus le verbe conduire().",
+          "tags": [
+            "MO-201",
+            "EO-185",
+            "pilote",
+            "injection"
+          ]
         }
       ],
       "tags": [
@@ -8252,7 +9064,9 @@
         "MO-167",
         "auto-validation",
         "EO-143",
-        "champ"
+        "champ",
+        "MO-201",
+        "EO-185"
       ]
     },
     "_operateur/optimus-prime/protocoles/proto-1-reprise-mission.md": {
@@ -8349,6 +9163,31 @@
             "suivi-optimus",
             "marbre"
           ]
+        },
+        {
+          "date": "2026-09-19 10:43:57",
+          "action": "modifie",
+          "detail": "EO-190/MO-204 : action 'report' ajoutee a ACTIONS (non singuliere : un report se repete) + ACTION_REPORT. Le vocabulaire d action reste a UN domicile : ici.",
+          "tags": [
+            "MO-204",
+            "EO-190",
+            "suivi-optimus",
+            "coherence",
+            "report",
+            "reporter",
+            "pilote"
+          ]
+        },
+        {
+          "date": "2026-09-19 15:33:05",
+          "action": "modifie",
+          "detail": "MO-235 (demande createur) : deplacer la vue suivi-optimus.md de matrice/ vers la zone privee _operateur/optimus-prime/ (invisible PAR CONSTRUCTION, plus par exclusion de nom). Chemin de la vue mis a jour.",
+          "tags": [
+            "MO-235",
+            "suivi-optimus",
+            "deplacement",
+            "invisibilite"
+          ]
         }
       ],
       "tags": [
@@ -8363,7 +9202,15 @@
         "constantes",
         "MO-140",
         "EO-123",
-        "marbre"
+        "marbre",
+        "MO-204",
+        "EO-190",
+        "report",
+        "reporter",
+        "pilote",
+        "MO-235",
+        "deplacement",
+        "invisibilite"
       ]
     },
     "matrice/data/outils/suivi-optimus/vue/fonctions.py": {
@@ -8399,6 +9246,17 @@
             "sc-003",
             "trace"
           ]
+        },
+        {
+          "date": "2026-09-19 15:36:48",
+          "action": "modifie",
+          "detail": "MO-235 : la vue deplacee vit dans _operateur/optimus-prime/, que verifier-cartes-identite SCANNE -- un document sans carte y est un ECART. Le generateur EMET donc la carte (type: journal, appartient_a: optimus-prime) ; une carte posee a la main serait perdue a la regeneration. Note d'etancheite mise a jour (domicile prive).",
+          "tags": [
+            "MO-235",
+            "suivi-optimus",
+            "cartes",
+            "vue"
+          ]
         }
       ],
       "tags": [
@@ -8412,7 +9270,9 @@
         "suivi",
         "pilote",
         "sc-003",
-        "trace"
+        "trace",
+        "MO-235",
+        "cartes"
       ]
     },
     "matrice/data/outils/suivi-optimus/vue/entry.py": {
@@ -8456,6 +9316,17 @@
             "vocabulaire",
             "auto-evolution"
           ]
+        },
+        {
+          "date": "2026-09-19 09:54:04",
+          "action": "modifie",
+          "detail": "EO-154 : verrous() RETIREE -- elle lisait l appui sqlite. L espion ne peut plus affirmer un 0 verrou sur une notion disparue (L-100) : il DIT la notion retiree. Registre repose apres trace.",
+          "tags": [
+            "MO-191",
+            "EO-154",
+            "espion",
+            "verrous"
+          ]
         }
       ],
       "tags": [
@@ -8464,7 +9335,10 @@
         "perimetre",
         "mo-128",
         "vocabulaire",
-        "auto-evolution"
+        "auto-evolution",
+        "MO-191",
+        "EO-154",
+        "verrous"
       ]
     },
     "_operateur/optimus-prime/parcours/themes/theme-auto-correction.json": {
@@ -8545,6 +9419,44 @@
             "auto-validation",
             "reparation"
           ]
+        },
+        {
+          "date": "2026-09-19 10:38:07",
+          "action": "modifie",
+          "detail": "F1 (EO-189/MO-203) : SOURCES (enum FERME : createur|veille|redeport|audit-nemesis) + CHAMP_SOURCE_TRACE. Le champ source etait libre pour l agent et lu comme un enum a UNE valeur par l avis : un champ, deux sens.",
+          "tags": [
+            "MO-203",
+            "chaine",
+            "entonnoir",
+            "pilote",
+            "source",
+            "auto-validation",
+            "EO-189"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:06:00",
+          "action": "modifie",
+          "detail": "EO-192/MO-207 : le champ type_source + ses trois origines (declaration / mot-cle / defaut). Sans lui, l item ne dit pas D OU vient son type, donc le classement ne peut pas savoir ce qu il a le DROIT de consommer. Meme discipline que role_source.",
+          "tags": [
+            "MO-207",
+            "EO-192",
+            "entonnoir",
+            "classement",
+            "declencheur",
+            "vrac",
+            "R5"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:46:33",
+          "action": "modifie",
+          "detail": "MO-213 : CHAMP_CATEGORIE devient une constante nommee (L-035) -- la categorie se repare comme le role, donc son nom de champ se consomme au lieu d etre un litteral disperse",
+          "tags": [
+            "mo-213",
+            "entonnoir",
+            "champ"
+          ]
         }
       ],
       "tags": [
@@ -8555,7 +9467,20 @@
         "optimus",
         "MO-175",
         "auto-validation",
-        "reparation"
+        "reparation",
+        "MO-203",
+        "chaine",
+        "pilote",
+        "source",
+        "EO-189",
+        "MO-207",
+        "EO-192",
+        "classement",
+        "declencheur",
+        "vrac",
+        "R5",
+        "mo-213",
+        "champ"
       ]
     },
     "_operateur/optimus-prime/pilote/entonnoir-files-optimus.json": {
@@ -8685,6 +9610,20 @@
             "entonnoir",
             "sortie"
           ]
+        },
+        {
+          "date": "2026-09-19 07:08:26",
+          "action": "modifie",
+          "detail": "MO-181 : EO-140 SORTI du vrac (sa cible, tmp-optimus/mo160-cobaye/p11/cible.py, est morte par la regle perimetre-tmp.md : une zone jetable est videe en fin de mission -- l item ne pouvait pas etre repare) et EO-176 DEPOSE + CLASSE + TISSE en tete de brin (le defaut DURABLE mesure par le cobaye : avec deux .py casses, py_compile n en cite qu UN, donc une passe de veille ne peut deposer qu un item et les autres fichiers casses restent masques). Vrac apres : 7 items. Auto_validation EO-176 : NON. NOTE DE RATTRAPAGE : ces deux gestes datent du 2026-09-18 21:16-21:18 mais la session a ete coupee AVANT la fermeture de MO-181 -- aucune note n avait ete ecrite (derniere note : 2026-09-17 10:06:32), la vue suivi-optimus s arretait a 20:52. Cloture le 2026-09-19.",
+          "tags": [
+            "MO-181",
+            "EO-140",
+            "EO-176",
+            "entonnoir",
+            "sortie",
+            "depot",
+            "trace"
+          ]
         }
       ],
       "tags": [
@@ -8714,7 +9653,11 @@
         "MO-159",
         "MO-163",
         "EO-147",
-        "sortie"
+        "sortie",
+        "MO-181",
+        "EO-140",
+        "EO-176",
+        "depot"
       ]
     },
     "_operateur/optimus-prime/pilote/entonnoir-files-legacy-archive.json": {
@@ -8854,11 +9797,27 @@
             "entonnoir",
             "mo-035"
           ]
+        },
+        {
+          "date": "2026-09-19 12:06:03",
+          "action": "modifie",
+          "detail": "MO-216 : l aide du verbe deposer dit desormais qu on peut DECLARER le type a la naissance (--type), et son EFFET (classe a la naissance) : le declencheur de MO-207 existait mais n etait ecrit NULLE PART ou un agent le lit.",
+          "tags": [
+            "entonnoir",
+            "aide",
+            "naissance",
+            "EO-209",
+            "MO-216"
+          ]
         }
       ],
       "tags": [
         "entonnoir",
-        "mo-035"
+        "mo-035",
+        "aide",
+        "naissance",
+        "EO-209",
+        "MO-216"
       ]
     },
     "cerveau-projet/matrix/_operateur/optimus-prime/remorque/inventaire.json": {
@@ -9664,6 +10623,26 @@
             "cartes",
             "outils"
           ]
+        },
+        {
+          "date": "2026-09-18 20:34:56",
+          "action": "modifie",
+          "detail": "La ligne du garde verifier-contrat-fondamental.py enumerait CINQ verbes sur les DOUZE reels (+ tout) : dix etaient invisibles a l operateur qui lit le README pour savoir ce qu il peut demander, dont jumeaux. Ligne reecrite : les douze + tout, chacun avec son effet, ou le garde est BLOQUANT (six verbes : maillons 6, 20, 23, 27, 28, 29) et le cobaye propre a chaque controle.",
+          "tags": [
+            "MO-179",
+            "doc",
+            "verbes"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:50:31",
+          "action": "modifie",
+          "detail": "MO-214 : l equipement neuf est DECLARE (remorque conforme : 93 equipements) -- un outil non declare est un ecart de pre-vol",
+          "tags": [
+            "mo-214",
+            "equipement",
+            "remorque"
+          ]
         }
       ],
       "tags": [
@@ -9712,7 +10691,12 @@
         "MO-148",
         "EO-133",
         "readme",
-        "cartes"
+        "cartes",
+        "MO-179",
+        "verbes",
+        "mo-214",
+        "equipement",
+        "remorque"
       ]
     },
     "_operateur/optimus-prime/super-combos/combos/combo-lecons/main.py": {
@@ -10268,6 +11252,52 @@
             "cv-007",
             "mo175"
           ]
+        },
+        {
+          "date": "2026-09-18 20:21:39",
+          "action": "modifie",
+          "detail": "MO-176 : le cobaye jumeaux eprouve TOUT le perimetre declare -- chaque jumeau par son nom dans les deux genres (valeur divergente, declaration retiree) et chaque couple declare. Avant, seul le PREMIER jumeau etait eprouve : CLE_AUTO_VALIDEES etait compare mais jamais eprouve par son nom.",
+          "tags": [
+            "MO-176",
+            "jumeaux",
+            "CLE_AUTO_VALIDEES"
+          ]
+        },
+        {
+          "date": "2026-09-18 20:34:56",
+          "action": "modifie",
+          "detail": "Docstring : la liste des verbes etait le SECOND domicile de la meme liste fausse (deux verbes absents, appels au lieu de appels-non-lies, ordre jumeaux/crochets inverse du parseur, verdict annonce les dix au lieu de douze). Les douze controles sont desormais decrits DANS L ORDRE du code, plus tout, et le verdict dit les douze.",
+          "tags": [
+            "MO-179",
+            "doc",
+            "verbes"
+          ]
+        },
+        {
+          "date": "2026-09-19 14:55:29",
+          "action": "modifie",
+          "detail": "MO-230 (EO-224) : nouveau verbe miroirs -- la relation CONTROLEE entre les deux pilotes (cameleon matrice/pilote et Optimus _operateur/optimus-prime/pilote). TRANCHAGE : les deux flux sont ISOLES par decision (chacun tourne SEUL, perimetres distincts, le pilote du cameleon ne lit rien hors de matrice/), donc un DOMICILE UNIQUE est IMPOSSIBLE -- ce n est pas la liste qui est mise en commun, c est la RELATION qui est controlee. Regle : (1) un litteral declare des DEUX cotes porte la MEME valeur, sauf les 8 LIBERTES declarees avec leur raison (nom des fichiers d etat, prefixes CV-009, nom du flux, options plus nombreuses en v2) ; (2) le VOCABULAIRE PARTAGE (TYPES, URGENCES) est exige present ET comparable partout ou il est EN JEU -- l exiger partout rendait 53 faux ecarts (premier jet, mesure et corrige) ; (3) une valeur CALCULEE n est pas comparable : elle est CHIFFREE et DITE, jamais comptee comme surveillee. MESURE DU REEL : 28 fichiers miroirs, 38 declarations litterales EGALES, 10 libertes declarees, 55 litterales d un seul cote (non comparees), 50 calculees, 0 ecart. COBAYE rejoue a chaque execution : couple tel quel (0 ecart), TYPES mute a gauche (1), a droite (1), TYPES RETIRE a gauche (1), et une LIBERTE declaree mutee (0 -- la liberte est TENUE ; sans ce cas le controle crierait sur une divergence legitime).",
+          "tags": [
+            "MO-230",
+            "EO-224",
+            "miroirs",
+            "jumeaux",
+            "pilote",
+            "CV-009",
+            "M-076"
+          ]
+        },
+        {
+          "date": "2026-09-19 15:21:47",
+          "action": "modifie",
+          "detail": "MO-233 (audit MO-231) : le controle jumeaux couvre desormais le flanc cameleon. Registre JUMEAUX_PAR_DOMICILE (etiquette, zone, paire, noms, couples) remplacant PAIRE_JUMELLE/NOMS_JUMEAUX_DECLARES/COUPLES_DECLARES ; comparer_jumeaux/jouer_epreuve_jumeaux/eprouver_jumeaux/controler_jumeaux parametres par le perimetre du flanc. Copie par copier_sous (les deux listes.py du couple intra-cameleon portent le MEME nom). Deux couples cameleon declares : entonnoir<->checklist (TYPES) et constants<->entonnoir (NOM_ENTONNOIR).",
+          "tags": [
+            "MO-233",
+            "EO-225",
+            "jumeaux",
+            "cameleon",
+            "non-regression"
+          ]
         }
       ],
       "tags": [
@@ -10305,7 +11335,21 @@
         "non-regression",
         "cv-007",
         "mo175",
-        "fabrique"
+        "fabrique",
+        "MO-176",
+        "CLE_AUTO_VALIDEES",
+        "MO-179",
+        "doc",
+        "verbes",
+        "MO-230",
+        "EO-224",
+        "miroirs",
+        "pilote",
+        "CV-009",
+        "M-076",
+        "MO-233",
+        "EO-225",
+        "cameleon"
       ]
     },
     "_operateur/optimus-prime/indices.md": {
@@ -11728,6 +12772,17 @@
             "pilote",
             "champ"
           ]
+        },
+        {
+          "date": "2026-09-19 15:55:57",
+          "action": "modifie",
+          "detail": "MO-236 (demande createur) : la zone jetable tmp-optimus passe sous _operateur/optimus-prime/ (invisible PAR CONSTRUCTION). Regles R-005/CV-012 et marbre perimetre-tmp amendes.",
+          "tags": [
+            "MO-236",
+            "tmp-optimus",
+            "deplacement",
+            "invisibilite"
+          ]
         }
       ],
       "tags": [
@@ -11774,7 +12829,11 @@
         "MO-167",
         "auto-validation",
         "EO-143",
-        "champ"
+        "champ",
+        "MO-236",
+        "tmp-optimus",
+        "deplacement",
+        "invisibilite"
       ]
     },
     "_operateur/optimus-prime/pilote/profil/fonctions.py": {
@@ -11878,6 +12937,40 @@
             "friction71",
             "pilote"
           ]
+        },
+        {
+          "date": "2026-09-19 08:37:01",
+          "action": "modifie",
+          "detail": "MO-188 : le verbe 'file verser' est DECLARE dans l usage (echelon 4 bis) -- un verbe invisible n existe pas pour l operateur. Aucune autre ligne touchee.",
+          "tags": [
+            "MO-188",
+            "EO-148",
+            "pilote",
+            "usage"
+          ]
+        },
+        {
+          "date": "2026-09-19 09:30:40",
+          "action": "modifie",
+          "detail": "MO-199 (EO-182) : reporter declare au routeur (usage + import + COMMANDES) -- un verbe invisible n existe pas.",
+          "tags": [
+            "MO-199",
+            "EO-182",
+            "reporter",
+            "pilote",
+            "serie-stricte"
+          ]
+        },
+        {
+          "date": "2026-09-19 10:13:39",
+          "action": "modifie",
+          "detail": "EO-185 : conduire route dans COMMANDES et nomme dans l usage du pilote (une porte non nommee n existe pas).",
+          "tags": [
+            "MO-201",
+            "EO-185",
+            "pilote",
+            "usage"
+          ]
         }
       ],
       "tags": [
@@ -11893,7 +12986,16 @@
         "MO-144",
         "EO-132",
         "friction70",
-        "friction71"
+        "friction71",
+        "MO-188",
+        "EO-148",
+        "usage",
+        "MO-199",
+        "EO-182",
+        "reporter",
+        "serie-stricte",
+        "MO-201",
+        "EO-185"
       ]
     },
     "_operateur/optimus-prime/pilote/README-profil.md": {
@@ -12781,6 +13883,17 @@
             "pilote",
             "lot"
           ]
+        },
+        {
+          "date": "2026-09-19 10:20:40",
+          "action": "modifie",
+          "detail": "EO-153 : charger et enregistrer acceptent --item EO-XXX -- la naissance d une mission LIE son item (source) ET le CONSOMME (friction 83 : la declaration a la main ne consommait pas, le pont re-servait).",
+          "tags": [
+            "MO-193",
+            "EO-153",
+            "item",
+            "portes"
+          ]
         }
       ],
       "tags": [
@@ -12829,7 +13942,11 @@
         "MO-150",
         "friction73",
         "transport",
-        "liste"
+        "liste",
+        "MO-193",
+        "EO-153",
+        "item",
+        "portes"
       ]
     },
     "_operateur/optimus-prime/pilote/DESCRIPTION.md": {
@@ -12884,6 +14001,26 @@
             "cartes-identite",
             "normalisation"
           ]
+        },
+        {
+          "date": "2026-09-19 11:46:35",
+          "action": "modifie",
+          "detail": "MO-213 : le contrat du pilote nomme la forme complete du geste de reparation d un item d entonnoir (--categorie et/ou --role)",
+          "tags": [
+            "mo-213",
+            "contrat"
+          ]
+        },
+        {
+          "date": "2026-09-19 15:33:07",
+          "action": "modifie",
+          "detail": "MO-235 (demande createur) : deplacer la vue suivi-optimus.md de matrice/ vers la zone privee _operateur/optimus-prime/ (invisible PAR CONSTRUCTION, plus par exclusion de nom). Chemin de la vue mis a jour.",
+          "tags": [
+            "MO-235",
+            "suivi-optimus",
+            "deplacement",
+            "invisibilite"
+          ]
         }
       ],
       "tags": [
@@ -12898,7 +14035,13 @@
         "docs",
         "MO-089",
         "cartes-identite",
-        "normalisation"
+        "normalisation",
+        "mo-213",
+        "contrat",
+        "MO-235",
+        "suivi-optimus",
+        "deplacement",
+        "invisibilite"
       ]
     },
     "_operateur/optimus-prime/pilote/file-missions-optimus.json": {
@@ -12990,6 +14133,20 @@
             "pilote",
             "mo-048"
           ]
+        },
+        {
+          "date": "2026-09-19 10:43:58",
+          "action": "modifie",
+          "detail": "EO-190/MO-204 : indexer_journal garde l ORDRE par mission et rend les 'rapportees' (derniere borne = report) ; l ecart (3) distingue le report LEGITIME (dette visible) du vrai oubli (ecart), et le message nomme le remede. Fini le faux diagnostic qui accusait le pilote.",
+          "tags": [
+            "MO-204",
+            "EO-190",
+            "suivi-optimus",
+            "coherence",
+            "report",
+            "reporter",
+            "pilote"
+          ]
         }
       ],
       "tags": [
@@ -12997,7 +14154,11 @@
         "coherence",
         "controle",
         "pilote",
-        "mo-048"
+        "mo-048",
+        "MO-204",
+        "EO-190",
+        "report",
+        "reporter"
       ]
     },
     "matrice/data/outils/suivi-optimus/coherence/entry.py": {
@@ -13040,6 +14201,17 @@
             "archivage",
             "mo-050"
           ]
+        },
+        {
+          "date": "2026-09-19 15:33:06",
+          "action": "modifie",
+          "detail": "MO-235 (demande createur) : deplacer la vue suivi-optimus.md de matrice/ vers la zone privee _operateur/optimus-prime/ (invisible PAR CONSTRUCTION, plus par exclusion de nom). Chemin de la vue mis a jour.",
+          "tags": [
+            "MO-235",
+            "suivi-optimus",
+            "deplacement",
+            "invisibilite"
+          ]
         }
       ],
       "tags": [
@@ -13047,7 +14219,10 @@
         "coherence",
         "mo-048",
         "archivage",
-        "mo-050"
+        "mo-050",
+        "MO-235",
+        "deplacement",
+        "invisibilite"
       ]
     },
     "matrice/_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression-flux.py": {
@@ -13656,6 +14831,48 @@
             "pilote",
             "champ"
           ]
+        },
+        {
+          "date": "2026-09-19 08:37:01",
+          "action": "modifie",
+          "detail": "MO-188 (EO-148) : le PONT verse desormais le BRIN ENTIER, d un seul geste, en LOT. Quatre fonctions ajoutees et UNE regle factorisee. (1) verser_tresse(file_missions, nom_lot) : le brin entier devient UN LOT (armer_lot + mission lot=<nom>), l injection le numerote k/n et le retour est CONSOLIDE. Le pont ne servait que la TETE (consommer_tete_tresse) alors que charger --lot transportait deja N missions (mesure MO-160) : le LOT n etait JAMAIS alimente par le pont. ATOMICITE : les roles de TOUS les items sont valides AVANT le premier versement -- un seul item sans role et RIEN n est consomme (sinon la moitie du brin disparaitrait pour un refus sur l autre moitie). REFUS NOMMES : mission deja en cours (serie stricte), lot deja arme et en attente, brin vide. (2) valider_role_item(item, contexte) : UNE SEULE copie de la regle du role (vivier), consommee par les DEUX versements -- elle etait recopiee et c est precisement la regle qui a fabrique 4 missions refusees a l injection (L-061/MO-076). Le refus NOMME l item et la porte de reparation. (3) mission_depuis_item : UNE SEULE forme de mission pour les deux ponts (theme=role, titre, objectif, type, source) -- deux fabriques divergeraient en silence. (4) retirer_de_ses_files : un item verse quitte le brin ET sa file-type. consommer_tete_tresse a ete ramene a ces trois fonctions (comportement IDENTIQUE : prouve par le cobaye, controle JUMEAU). Preuves : cobaye piegeable 30 OK / 0 KO (nominal 3 items -> 3 missions + 1 lot + brin et files VIDES ; 4 pieges refuses SANS rien consommer ; brin vide ; jumeau intact) ; py_compile 470 fichiers 0 casse.",
+          "tags": [
+            "MO-188",
+            "EO-148",
+            "pilote",
+            "pont",
+            "brin",
+            "lot",
+            "atomicite",
+            "role",
+            "facteur",
+            "M-076"
+          ]
+        },
+        {
+          "date": "2026-09-19 10:20:40",
+          "action": "modifie",
+          "detail": "EO-153 : item_deja_servi (une mission nomme deja cet item -> il a ete SERVI) + consommer_item (retire du brin, de sa file ET du vrac) + gardes d IDEMPOTENCE dans verser_tresse et consommer_tete_tresse (un item deja servi ne repart plus).",
+          "tags": [
+            "MO-193",
+            "EO-153",
+            "idempotence",
+            "pilote"
+          ]
+        },
+        {
+          "date": "2026-09-19 10:43:58",
+          "action": "modifie",
+          "detail": "EO-190/MO-204 : declarer_borne_marbre gagne si_absent (defaut True). Les BORNES restent idempotentes ; un EVENEMENT qui se repete (report) passe si_absent=False -- sinon la 2e declaration serait sautee et le garde lirait la 1re borne au lieu de la derniere.",
+          "tags": [
+            "MO-204",
+            "EO-190",
+            "suivi-optimus",
+            "coherence",
+            "report",
+            "reporter",
+            "pilote"
+          ]
         }
       ],
       "tags": [
@@ -13724,7 +14941,24 @@
         "MO-167",
         "auto-validation",
         "EO-143",
-        "champ"
+        "champ",
+        "MO-188",
+        "EO-148",
+        "pont",
+        "brin",
+        "lot",
+        "atomicite",
+        "role",
+        "facteur",
+        "M-076",
+        "MO-193",
+        "EO-153",
+        "idempotence",
+        "MO-204",
+        "EO-190",
+        "coherence",
+        "report",
+        "reporter"
       ]
     },
     "matrice/data/outils/rechercher/constants.py": {
@@ -13857,6 +15091,16 @@
             "p4",
             "valeur-morte"
           ]
+        },
+        {
+          "date": "2026-09-19 13:41:03",
+          "action": "corrige",
+          "detail": "Etats initiaux du controle NEMESIS : ajout de pense-bete, le premier etat de la chaine (la roue accusait a tort le premier etat d une construction neuve)",
+          "tags": [
+            "roue",
+            "nemesis",
+            "MO-224"
+          ]
         }
       ],
       "tags": [
@@ -13877,7 +15121,10 @@
         "anneau",
         "mo-099",
         "p4",
-        "valeur-morte"
+        "valeur-morte",
+        "roue",
+        "nemesis",
+        "MO-224"
       ]
     },
     "matrice/routines/vigie-portes/commun.py": {
@@ -14127,13 +15374,34 @@
             "reparation",
             "auto-soin"
           ]
+        },
+        {
+          "date": "2026-09-19 10:38:07",
+          "action": "modifie",
+          "detail": "F1 (EO-189/MO-203) : separer_source + reparer_sources (auto-soin des sources legacy a la lecture, IDEMPOTENT, sur tout l etat brin compris). La trace libre n est jamais perdue.",
+          "tags": [
+            "MO-203",
+            "chaine",
+            "entonnoir",
+            "pilote",
+            "source",
+            "auto-validation",
+            "EO-189"
+          ]
         }
       ],
       "tags": [
         "optimus",
         "MO-175",
         "reparation",
-        "auto-soin"
+        "auto-soin",
+        "MO-203",
+        "chaine",
+        "entonnoir",
+        "pilote",
+        "source",
+        "auto-validation",
+        "EO-189"
       ]
     },
     "_operateur/optimus-prime/pilote/entonnoir/vrac/fonctions.py": {
@@ -14163,6 +15431,34 @@
             "MO-175",
             "auto-validation"
           ]
+        },
+        {
+          "date": "2026-09-19 10:38:07",
+          "action": "modifie",
+          "detail": "F1 (EO-189/MO-203) : deposer_vrac accepte trace et la pose dans CHAMP_SOURCE_TRACE (jamais posee si vide).",
+          "tags": [
+            "MO-203",
+            "chaine",
+            "entonnoir",
+            "pilote",
+            "source",
+            "auto-validation",
+            "EO-189"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:06:00",
+          "action": "modifie",
+          "detail": "EO-192/MO-207 : deposer_vrac porte l ORIGINE du type (type_source). L item nait avec son identite COMPLETE : qui l a nomme, et par quel moyen.",
+          "tags": [
+            "MO-207",
+            "EO-192",
+            "entonnoir",
+            "classement",
+            "declencheur",
+            "vrac",
+            "R5"
+          ]
         }
       ],
       "tags": [
@@ -14171,7 +15467,19 @@
         "role",
         "optimus",
         "MO-175",
-        "auto-validation"
+        "auto-validation",
+        "MO-203",
+        "chaine",
+        "entonnoir",
+        "pilote",
+        "source",
+        "EO-189",
+        "MO-207",
+        "EO-192",
+        "classement",
+        "declencheur",
+        "vrac",
+        "R5"
       ]
     },
     "_operateur/optimus-prime/pilote/entonnoir/classer/fonctions.py": {
@@ -14289,12 +15597,45 @@
             "L-061",
             "role"
           ]
+        },
+        {
+          "date": "2026-09-19 11:06:00",
+          "action": "modifie",
+          "detail": "EO-192/MO-207 : DECLENCHEUR SUR DEMANDE. classer --id sans --type CONSOMME le type que l item PORTE (R5 rendu vrai) et DIT son origine. Le refus distingue trois pannes differentes : aucun type (code 2, geste nomme), DEJA classee, inconnue.",
+          "tags": [
+            "MO-207",
+            "EO-192",
+            "entonnoir",
+            "classement",
+            "declencheur",
+            "vrac",
+            "R5"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:46:34",
+          "action": "modifie",
+          "detail": "MO-213 : le refus deja classee NOMME desormais le geste de reparation (retiqueter --categorie/--role) au lieu de laisser l appelant sans issue",
+          "tags": [
+            "mo-213",
+            "entonnoir",
+            "refus-directionnel"
+          ]
         }
       ],
       "tags": [
         "MO-076",
         "L-061",
-        "role"
+        "role",
+        "MO-207",
+        "EO-192",
+        "entonnoir",
+        "classement",
+        "declencheur",
+        "vrac",
+        "R5",
+        "mo-213",
+        "refus-directionnel"
       ]
     },
     "_operateur/optimus-prime/pilote/entonnoir/urgencer/entry.py": {
@@ -14325,12 +15666,58 @@
             "L-061",
             "role"
           ]
+        },
+        {
+          "date": "2026-09-18 20:14:21",
+          "action": "modifie",
+          "detail": "EO-175 : le verbe corriger est cable (import, COMMANDES, usage).",
+          "tags": [
+            "MO-178",
+            "EO-175",
+            "corriger"
+          ]
+        },
+        {
+          "date": "2026-09-19 10:38:08",
+          "action": "modifie",
+          "detail": "F1 (EO-189/MO-203) : l affichage du vrac MONTRE la trace de provenance.",
+          "tags": [
+            "MO-203",
+            "chaine",
+            "entonnoir",
+            "pilote",
+            "source",
+            "auto-validation",
+            "EO-189"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:46:34",
+          "action": "modifie",
+          "detail": "MO-213 : l aide de l entonnoir decrit les TROIS etiquettes d un item (theme, role, categorie) et retiqueter comme le geste de REPARATION",
+          "tags": [
+            "mo-213",
+            "entonnoir",
+            "aide"
+          ]
         }
       ],
       "tags": [
         "MO-076",
         "L-061",
-        "role"
+        "role",
+        "MO-178",
+        "EO-175",
+        "corriger",
+        "MO-203",
+        "chaine",
+        "entonnoir",
+        "pilote",
+        "source",
+        "auto-validation",
+        "EO-189",
+        "mo-213",
+        "aide"
       ]
     },
     "_operateur/optimus-prime/pilote/entonnoir/indices.md": {
@@ -14360,6 +15747,15 @@
             "cartes-identite",
             "audit"
           ]
+        },
+        {
+          "date": "2026-09-19 11:46:34",
+          "action": "modifie",
+          "detail": "MO-213 : l index pointe retiqueter comme reparation des ETIQUETTES (categorie et/ou role)",
+          "tags": [
+            "mo-213",
+            "index"
+          ]
         }
       ],
       "tags": [
@@ -14368,7 +15764,9 @@
         "docs",
         "MO-089",
         "cartes-identite",
-        "audit"
+        "audit",
+        "mo-213",
+        "index"
       ]
     },
     "matrice/pilote/entonnoir/listes.py": {
@@ -14481,6 +15879,19 @@
             "EO-131",
             "recherche"
           ]
+        },
+        {
+          "date": "2026-09-19 09:10:54",
+          "action": "modifie",
+          "detail": "MO-189 : REPERTOIRE_ZONE_TMP pointe le domicile DECLARE (<racine>/workspace/tmp-cameleon) et le nom est CITE du moteur partage des zones -- plus aucun litteral recopie (M-076).",
+          "tags": [
+            "MO-189",
+            "perimetres",
+            "flux",
+            "cameleon",
+            "zone",
+            "R-005"
+          ]
         }
       ],
       "tags": [
@@ -14489,7 +15900,12 @@
         "cameleon",
         "MO-141",
         "EO-131",
-        "recherche"
+        "recherche",
+        "MO-189",
+        "perimetres",
+        "flux",
+        "zone",
+        "R-005"
       ]
     },
     "matrice/pilote/checklist/entry.py": {
@@ -15669,6 +17085,17 @@
             "friction71",
             "pilote"
           ]
+        },
+        {
+          "date": "2026-09-19 10:13:38",
+          "action": "modifie",
+          "detail": "EO-185 : le verbe conduire --id MO-00X route vers conduire() ; l usage le nomme.",
+          "tags": [
+            "MO-201",
+            "EO-185",
+            "pilote",
+            "conduire"
+          ]
         }
       ],
       "tags": [
@@ -15679,7 +17106,10 @@
         "EO-132",
         "friction70",
         "friction71",
-        "pilote"
+        "pilote",
+        "MO-201",
+        "EO-185",
+        "conduire"
       ]
     },
     "_operateur/optimus-prime/pilote/injection/cycle.py": {
@@ -16157,6 +17587,46 @@
             "moteur",
             "livraison"
           ]
+        },
+        {
+          "date": "2026-09-19 07:25:22",
+          "action": "modifie",
+          "detail": "MO-184 (EO-178) : dans_perimetre juge le chemin RESOLU (domicile partage) au lieu du PREFIXE ; import REPERTOIRE_MATRIX retire. Enjeu de LECTURE : un chemin declare lisible qui resout hors de la Matrice, c est l invisibilite percee (L-016).",
+          "tags": [
+            "MO-184",
+            "EO-178",
+            "rechercher",
+            "perimetre",
+            "resolution"
+          ]
+        },
+        {
+          "date": "2026-09-19 07:37:52",
+          "action": "modifie",
+          "detail": "MO-185 (regression MO-184) : l'import REPERTOIRE_MATRIX RETABLI dans le bloc from constants. Cause : MO-184 a retire ce nom parce qu'il servait la REGLE DE PREFIXE supprimee -- mais il servait AUSSI a la ligne 120 la racine de BALAYAGE par defaut de scanner_fichiers (repertoire = REPERTOIRE_MATRIX). Resultat : NameError a CHAQUE recherche sans dossier -- l'outil entierement casse, invisible au cobaye de MO-184 qui eprouvait dans_perimetre (la fonction qui juge) et pas le chemin COMPLET du scan. Geste minimal et voulu : la racine de balayage n'est PAS le jugement de perimetre -- les deux usages du nom sont distincts, seul le second etait mort. Preuve : porte reelle rejouee, recherche nominale fichiers (8 trouves) + BDD OK ; les 4 lecteurs refusent toujours le piege ; py_compile global 364 fichiers, 0 casse.",
+          "tags": [
+            "MO-185",
+            "MO-184",
+            "EO-178",
+            "rechercher",
+            "regression",
+            "import",
+            "balayage"
+          ]
+        },
+        {
+          "date": "2026-09-19 10:51:24",
+          "action": "modifie",
+          "detail": "EO-179/MO-194 : enveloppe locale de signaler_inconnues (le motif reste au domicile partage, jamais recopie).",
+          "tags": [
+            "MO-194",
+            "EO-179",
+            "options",
+            "parseur",
+            "rechercher",
+            "inconnue",
+            "L-055"
+          ]
         }
       ],
       "tags": [
@@ -16170,7 +17640,22 @@
         "invisibilite",
         "domicile",
         "copie-supprimee",
-        "livraison"
+        "livraison",
+        "MO-184",
+        "EO-178",
+        "rechercher",
+        "perimetre",
+        "resolution",
+        "MO-185",
+        "regression",
+        "import",
+        "balayage",
+        "MO-194",
+        "EO-179",
+        "options",
+        "parseur",
+        "inconnue",
+        "L-055"
       ]
     },
     "matrice/data/outils/rechercher/rechercher/entry.py": {
@@ -16205,6 +17690,31 @@
             "message",
             "hones"
           ]
+        },
+        {
+          "date": "2026-09-18 20:41:29",
+          "action": "corrige",
+          "detail": "MO-177 : la chaine dirname(dirname(abspath(__file__))) est remplacee par un ancrage VERIFIE -- le dossier de l outil est celui qui porte son commun.py (marqueur), et un marqueur absent REFUSE la suite NOMMEMENT au lieu de laisser un chemin faux. Un site par appel, preuve du garde : 8 -> 7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1 -> 0 site signale.",
+          "tags": [
+            "MO-177",
+            "chemins",
+            "dirname",
+            "L-013"
+          ]
+        },
+        {
+          "date": "2026-09-19 10:51:24",
+          "action": "modifie",
+          "detail": "EO-179/MO-194 : la porte REFUSE desormais une option inconnue (code 2, NOMMEE, avec les options reconnues et l usage). Elle DECLARAIT deja ce contrat en tete de fichier -- ce n etait vrai que du CONTENU ; c est maintenant vrai de l EXISTENCE de l option.",
+          "tags": [
+            "MO-194",
+            "EO-179",
+            "options",
+            "parseur",
+            "rechercher",
+            "inconnue",
+            "L-055"
+          ]
         }
       ],
       "tags": [
@@ -16217,7 +17727,18 @@
         "honnetete",
         "invisibilite",
         "message",
-        "hones"
+        "hones",
+        "MO-177",
+        "chemins",
+        "dirname",
+        "L-013",
+        "MO-194",
+        "EO-179",
+        "options",
+        "parseur",
+        "rechercher",
+        "inconnue",
+        "L-055"
       ]
     },
     "matrice/data/outils/rechercher/main.py": {
@@ -16231,12 +17752,25 @@
             "moteur",
             "console"
           ]
+        },
+        {
+          "date": "2026-09-19 12:36:22",
+          "action": "modifie",
+          "detail": "MO-219 : sac a dos pose (envelopper(principal)) -- l outil etait MUET au journal d usages (0 ligne sur 10478) alors que sa propre vigie l appelle (l.163 du tour)",
+          "tags": [
+            "MO-219",
+            "sac-a-dos",
+            "instrumentation"
+          ]
         }
       ],
       "tags": [
         "MO-069",
         "moteur",
-        "console"
+        "console",
+        "MO-219",
+        "sac-a-dos",
+        "instrumentation"
       ]
     },
     "matrice/data/outils/rechercher/DESCRIPTION.md": {
@@ -16863,6 +18397,16 @@
             "corriger-ascii",
             "exemption"
           ]
+        },
+        {
+          "date": "2026-09-19 11:28:02",
+          "action": "modifie",
+          "detail": "MO-210 : la carte n est plus ecrite ici, elle est CONSOMMEE depuis data/commun/carte_ascii.py (re-export) -- une carte recopiee aurait ete deux verites",
+          "tags": [
+            "mo-210",
+            "ascii",
+            "consommation"
+          ]
         }
       ],
       "tags": [
@@ -16873,7 +18417,9 @@
         "exclusion",
         "MO-159",
         "MO-160",
-        "exemption"
+        "exemption",
+        "mo-210",
+        "consommation"
       ]
     },
     "matrice/data/outils/corriger-ascii/commun.py": {
@@ -16907,6 +18453,16 @@
             "corriger-ascii",
             "exemption"
           ]
+        },
+        {
+          "date": "2026-09-19 11:28:02",
+          "action": "modifie",
+          "detail": "MO-210 : convertir_texte quitte ce fichier pour le domicile unique de la carte, et reste re-exporte (les categories continuent d ecrire from commun import convertir_texte)",
+          "tags": [
+            "mo-210",
+            "ascii",
+            "consommation"
+          ]
         }
       ],
       "tags": [
@@ -16916,7 +18472,10 @@
         "rapport",
         "MO-159",
         "MO-160",
-        "exemption"
+        "exemption",
+        "mo-210",
+        "ascii",
+        "consommation"
       ]
     },
     "matrice/data/outils/corriger-ascii/corriger/fonctions.py": {
@@ -17074,13 +18633,28 @@
             "role",
             "porte"
           ]
+        },
+        {
+          "date": "2026-09-19 11:46:33",
+          "action": "modifie",
+          "detail": "MO-213 (EO-198) : le geste REPARE la categorie comme le role -- trouver_item rend aussi la file (la categorie est fermee PAR TYPE), reparer_categorie valide contre la liste du type et TRACE l avant (categorie_avant/categorie_le), un item au vrac est refuse en nommant classer, et reparer la categorie ne reecrit JAMAIS le role en silence (divergence DITE)",
+          "tags": [
+            "mo-213",
+            "entonnoir",
+            "reparation",
+            "categorie"
+          ]
         }
       ],
       "tags": [
         "MO-076",
         "L-061",
         "role",
-        "porte"
+        "porte",
+        "mo-213",
+        "entonnoir",
+        "reparation",
+        "categorie"
       ]
     },
     "_operateur/optimus-prime/pilote/entonnoir/retiqueter/entry.py": {
@@ -17095,13 +18669,26 @@
             "role",
             "porte"
           ]
+        },
+        {
+          "date": "2026-09-19 11:46:33",
+          "action": "modifie",
+          "detail": "MO-213 : NOMS_OPTIONS gagne categorie (l option etait refusee par le parseur partage : la reparation etait IMPOSSIBLE) ; usage et aide nomment les deux etiquettes et exigent au moins l une",
+          "tags": [
+            "mo-213",
+            "entonnoir",
+            "usage"
+          ]
         }
       ],
       "tags": [
         "MO-076",
         "L-061",
         "role",
-        "porte"
+        "porte",
+        "mo-213",
+        "entonnoir",
+        "usage"
       ]
     },
     "_operateur/optimus-prime/pilote/entonnoir/vrac/entry.py": {
@@ -17136,6 +18723,34 @@
             "reparation",
             "chemins"
           ]
+        },
+        {
+          "date": "2026-09-19 10:38:07",
+          "action": "modifie",
+          "detail": "F1 (EO-189/MO-203) : --source valide contre SOURCES (refus DIRECTIONNEL : il nomme la liste ET le geste --trace), option --trace, trace passee au depot.",
+          "tags": [
+            "MO-203",
+            "chaine",
+            "entonnoir",
+            "pilote",
+            "source",
+            "auto-validation",
+            "EO-189"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:06:00",
+          "action": "modifie",
+          "detail": "EO-192/MO-207 : DECLENCHEUR DE NAISSANCE. Un item dont le type est DECLARE (le crochet du createur, souverain) est CLASSE A LA SECONDE : il entre dans SA file avec sa categorie et son role, poses par les tables et IMPRIMES. Une PROPOSITION par mot-cle ne classe PAS (une devinette n ouvre pas un domicile). Le depot DIT ce qui s est passe : classe, ou reste au vrac + le geste exact qui le sort.",
+          "tags": [
+            "MO-207",
+            "EO-192",
+            "entonnoir",
+            "classement",
+            "declencheur",
+            "vrac",
+            "R5"
+          ]
         }
       ],
       "tags": [
@@ -17146,7 +18761,19 @@
         "MO-175",
         "auto-validation",
         "reparation",
-        "chemins"
+        "chemins",
+        "MO-203",
+        "chaine",
+        "entonnoir",
+        "pilote",
+        "source",
+        "EO-189",
+        "MO-207",
+        "EO-192",
+        "classement",
+        "declencheur",
+        "vrac",
+        "R5"
       ]
     },
     "matrice/routines/espion-integrite/commun.py": {
@@ -18293,12 +19920,25 @@
             "cartes-identite",
             "normalisation"
           ]
+        },
+        {
+          "date": "2026-09-19 13:39:01",
+          "action": "modifie",
+          "detail": "Contrat du domicile : declare les objets chaine-*.md, l index et les compteurs",
+          "tags": [
+            "preparation",
+            "domicile",
+            "MO-224"
+          ]
         }
       ],
       "tags": [
         "MO-089",
         "cartes-identite",
-        "normalisation"
+        "normalisation",
+        "preparation",
+        "domicile",
+        "MO-224"
       ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/verifier-cartes-identite.py": {
@@ -18323,6 +19963,16 @@
             "cartes-identite",
             "contrat"
           ]
+        },
+        {
+          "date": "2026-09-19 13:39:01",
+          "action": "modifie",
+          "detail": "Vocabulaire ferme des types : ajout du type chaine (la decision est tracee chez lui, comme la convention l exige)",
+          "tags": [
+            "verificateur",
+            "cartes",
+            "MO-224"
+          ]
         }
       ],
       "tags": [
@@ -18331,7 +19981,10 @@
         "garde",
         "preuve",
         "MO-095",
-        "contrat"
+        "contrat",
+        "verificateur",
+        "cartes",
+        "MO-224"
       ]
     },
     "_operateur/optimus-prime/pilote/personnalites.py": {
@@ -18535,12 +20188,27 @@
             "PURIFICATION",
             "porte-unique"
           ]
+        },
+        {
+          "date": "2026-09-19 15:33:06",
+          "action": "modifie",
+          "detail": "MO-235 (demande createur) : deplacer la vue suivi-optimus.md de matrice/ vers la zone privee _operateur/optimus-prime/ (invisible PAR CONSTRUCTION, plus par exclusion de nom). Chemin de la vue mis a jour.",
+          "tags": [
+            "MO-235",
+            "suivi-optimus",
+            "deplacement",
+            "invisibilite"
+          ]
         }
       ],
       "tags": [
         "MO-093",
         "PURIFICATION",
-        "porte-unique"
+        "porte-unique",
+        "MO-235",
+        "suivi-optimus",
+        "deplacement",
+        "invisibilite"
       ]
     },
     "matrice/data/usages-outils-combos.jsonl": {
@@ -18746,6 +20414,29 @@
             "trace",
             "friction89"
           ]
+        },
+        {
+          "date": "2026-09-19 09:10:56",
+          "action": "modifie",
+          "detail": "MO-189 : le critere ZONES_CAMELEON DIT desormais qu il ne juge plus le service (la zone a quitte matrix/) et qu il sert encore les chemins en MIROIR des archives.",
+          "tags": [
+            "MO-189",
+            "perimetres",
+            "flux",
+            "cameleon",
+            "zone",
+            "R-005"
+          ]
+        },
+        {
+          "date": "2026-09-19 10:03:24",
+          "action": "modifie",
+          "detail": "MO-192 : OPERATIONS declare recenser ; main.py route le verbe et le nomme dans l usage (une porte non nommee n existe pas).",
+          "tags": [
+            "MO-192",
+            "friction-88",
+            "constants"
+          ]
         }
       ],
       "tags": [
@@ -18760,7 +20451,15 @@
         "MO-165",
         "republie",
         "trace",
-        "friction89"
+        "friction89",
+        "MO-189",
+        "perimetres",
+        "flux",
+        "cameleon",
+        "zone",
+        "R-005",
+        "MO-192",
+        "friction-88"
       ]
     },
     "matrice/data/outils/bdd-conservation/ajouter/fonctions.py": {
@@ -18808,6 +20507,16 @@
             "trace",
             "friction89"
           ]
+        },
+        {
+          "date": "2026-09-19 10:03:24",
+          "action": "modifie",
+          "detail": "MO-192 : verbe NEUF recenser -- ecrit lecteurs/ecrivains/index pour une FAMILLE, sans toucher statut/verdict. Porte qui manquait (proposer acceptait, preciser ignorait).",
+          "tags": [
+            "MO-192",
+            "friction-88",
+            "recenser"
+          ]
         }
       ],
       "tags": [
@@ -18826,7 +20535,10 @@
         "MO-165",
         "republie",
         "trace",
-        "friction89"
+        "friction89",
+        "MO-192",
+        "friction-88",
+        "recenser"
       ]
     },
     "matrice/data/outils/bdd-conservation/ajouter/entry.py": {
@@ -18891,12 +20603,25 @@
             "BDD",
             "conservation"
           ]
+        },
+        {
+          "date": "2026-09-19 10:03:24",
+          "action": "modifie",
+          "detail": "MO-192 : CONTROLE du recensement (controler_census) -- rapporte lecteurs/ecrivains/index remplis sur le total. Un 0 dit jamais ecrit, pas rien.",
+          "tags": [
+            "MO-192",
+            "friction-88",
+            "controle"
+          ]
         }
       ],
       "tags": [
         "MO-095",
         "BDD",
-        "conservation"
+        "conservation",
+        "MO-192",
+        "friction-88",
+        "controle"
       ]
     },
     "matrice/data/conservation.json": {
@@ -18941,6 +20666,17 @@
             "bdd-conservation",
             "purification"
           ]
+        },
+        {
+          "date": "2026-09-19 10:03:24",
+          "action": "modifie",
+          "detail": "MO-192 : 555 points de la famille .bak RECENSES par la porte -- lecteurs (revert-fichier, revert-periode), ecrivain (ecrire), index (le registre). Controle passe de 0/562 a 555/562.",
+          "tags": [
+            "MO-192",
+            "friction-88",
+            "recensement",
+            "donnees"
+          ]
         }
       ],
       "tags": [
@@ -18953,7 +20689,11 @@
         "decision",
         "MO-156",
         "MO-160",
-        "bdd-conservation"
+        "bdd-conservation",
+        "MO-192",
+        "friction-88",
+        "recensement",
+        "donnees"
       ]
     },
     "matrice/matrice/data/data-readme.md": {
@@ -19581,6 +21321,17 @@
             "perimetre-tmp",
             "conventions"
           ]
+        },
+        {
+          "date": "2026-09-19 15:55:57",
+          "action": "modifie",
+          "detail": "MO-236 (demande createur) : la zone jetable tmp-optimus passe sous _operateur/optimus-prime/ (invisible PAR CONSTRUCTION). Regles R-005/CV-012 et marbre perimetre-tmp amendes.",
+          "tags": [
+            "MO-236",
+            "tmp-optimus",
+            "deplacement",
+            "invisibilite"
+          ]
         }
       ],
       "tags": [
@@ -19595,7 +21346,11 @@
         "MO-147",
         "EO-128",
         "perimetre-tmp",
-        "conventions"
+        "conventions",
+        "MO-236",
+        "tmp-optimus",
+        "deplacement",
+        "invisibilite"
       ]
     },
     "_operateur/optimus-prime/regles-immuables/perimetre-write.md": {
@@ -20223,6 +21978,17 @@
             "purge",
             "tmp"
           ]
+        },
+        {
+          "date": "2026-09-18 20:49:18",
+          "action": "supprime",
+          "detail": "MO-180 (EO-173) : le DOSSIER de la zone jetable hors perimetre a ete retire apres sa purge (rmdir). La regle perimetre-tmp ne connait que deux domiciles, tous deux a la RACINE de matrix/ : une zone tmp-* ailleurs est un ecart, meme vide -- c est le controle 3 pose sur garde-tmp.py le meme jour.",
+          "tags": [
+            "MO-180",
+            "EO-173",
+            "perimetre-tmp",
+            "supprime"
+          ]
         }
       ],
       "tags": [
@@ -20230,7 +21996,11 @@
         "purge",
         "tmp",
         "mo-126",
-        "mo-128"
+        "mo-128",
+        "MO-180",
+        "EO-173",
+        "perimetre-tmp",
+        "supprime"
       ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/bdd-modifs/fonctions/bdd_modifs.py": {
@@ -20265,12 +22035,77 @@
             "zone-jetable",
             "moteur-partage"
           ]
+        },
+        {
+          "date": "2026-09-19 09:10:54",
+          "action": "modifie",
+          "detail": "MO-189 : le moteur PARTAGE des zones declAR la zone du cameleon DESORMAIS domiciliee hors Matrice ? moot.",
+          "tags": [
+            "MO-189",
+            "faute-auteur",
+            "note-inadvertance"
+          ],
+          "corrections": [
+            {
+              "date": "2026-09-19 09:11:49",
+              "motif": "note ecrite par inadvertance pendant MO-189 : texte de travail, jamais voulue comme trace ; conservee (BDD en ajout seul) et signalee au bilan.",
+              "tags_avant": [
+                "MO-189",
+                "perimetres",
+                "flux",
+                "cameleon",
+                "zone",
+                "R-005"
+              ],
+              "tags_apres": [
+                "MO-189",
+                "faute-auteur",
+                "note-inadvertance"
+              ]
+            }
+          ]
+        },
+        {
+          "date": "2026-09-19 09:10:54",
+          "action": "modifie",
+          "detail": "MO-189 : le moteur PARTAGE des zones DECLARE le domicile de la zone du cameleon (workspace/tmp-cameleon, regle R-005) et gagne le verbe preparer : il cree le dossier et son README (idempotent), refuse un nom qui n est pas tmp-*. C est le pilote DE SON FLUX qui fait naitre sa zone -- un flux ne cree jamais celle d un autre.",
+          "tags": [
+            "MO-189",
+            "perimetres",
+            "flux",
+            "cameleon",
+            "zone",
+            "R-005"
+          ]
+        },
+        {
+          "date": "2026-09-19 15:55:56",
+          "action": "modifie",
+          "detail": "MO-236 (demande createur) : la zone jetable tmp-optimus passe sous _operateur/optimus-prime/ (invisible PAR CONSTRUCTION). Regles R-005/CV-012 et marbre perimetre-tmp amendes.",
+          "tags": [
+            "MO-236",
+            "tmp-optimus",
+            "deplacement",
+            "invisibilite"
+          ]
         }
       ],
       "tags": [
         "mo-136",
         "zone-jetable",
-        "moteur-partage"
+        "moteur-partage",
+        "MO-189",
+        "faute-auteur",
+        "note-inadvertance",
+        "perimetres",
+        "flux",
+        "cameleon",
+        "zone",
+        "R-005",
+        "MO-236",
+        "tmp-optimus",
+        "deplacement",
+        "invisibilite"
       ]
     },
     "tmp-cameleon/README.md": {
@@ -20449,6 +22284,44 @@
             "ordre-publication",
             "mo-173"
           ]
+        },
+        {
+          "date": "2026-09-19 07:17:05",
+          "action": "modifie",
+          "detail": "MO-183 (EO-177) : le perimetre de la porte ecrire RESOUT avant de juger. AVANT : dans_perimetre_ecriture acceptait un chemin sur son PREFIXE (matrix/ ou cerveau-projet/matrix/) AVANT toute resolution, alors que resoudre_chemin joint le chemin a la RACINE -- dans ce depot la Matrice vit sous cerveau-projet/, donc un chemin matrix/... etait juge DANS le perimetre puis ECRIT HORS de la Matrice (arborescence parasite <racine>/matrix/, deux fichiers mesures). APRES : trois fonctions -- chemin_dans_matrice (le chemin RESOLU doit tomber sous RACINE_MATRICE), motif_hors_perimetre (le refus NOMME la Matrice reelle et les formes acceptees, friction 77), et dans_perimetre_ecriture qui resout PUIS juge ; les deux appelants (ecrire_atomique, editer_atomique) portent le MEME motif par la porte, plus aucun message en dur. L allowlist racine (nom nu) est inchangee : un nom sans separateur ne peut pas s echapper. PREUVES : cobaye piegeable tmp-optimus/cobaye-mo183-perimetre.py, 21/21 vert -- l INVARIANT (tout chemin accepte se resout DANS la Matrice) sur 4 chemins acceptes, 6 formes pieges REFUSEES (dont matrix/matrice/data/... qui lit comme un chemin interne), la PORTE REELLE refuse le piege en code 2 en NOMMANT la Matrice sans rien creer hors d elle, le nominal ecrit DANS la Matrice, et les versions ANTERIEURES (.bak) rejouees sont ACCUSEES (3 anciennes acceptent le piege, 2 corrigees acquittees, 0 ecart).",
+          "tags": [
+            "MO-183",
+            "EO-177",
+            "ecrire",
+            "perimetre",
+            "resolution",
+            "prefixe",
+            "reparation"
+          ]
+        },
+        {
+          "date": "2026-09-19 07:25:21",
+          "action": "modifie",
+          "detail": "MO-184 (EO-178) : la porte CONSOMME le perimetre partage au lieu de le recopier. chemin_dans_matrice et motif_hors_perimetre (locaux) SUPPRIMES ; dans_perimetre_ecriture appelle est_dans_matrice(resoudre_chemin(brut)) et les deux refus (ecrire_atomique, editer_atomique) passent le motif partage avec usage=ecriture. INCIDENT DIT : deux editions intermediaires ont laisse un nom orphelin (RACINE_MATRICE, puis chemin_dans_matrice) DANS le perimetre de la porte -- or elle juge son perimetre avant d ecrire : la porte est morte a son premier appel, plus aucune ecriture possible. CURE : revert-fichier + point de restauration .bak, DEUX FOIS (la porte ne peut pas se reparer elle-meme, MO-170) ; la seconde passe a ete faite ATOMIQUEMENT (imports + suppression + appels en une seule edition). Preuves : cobaye 38/38, dont l invariant et le refus nomme par la porte reelle.",
+          "tags": [
+            "MO-184",
+            "EO-178",
+            "ecrire",
+            "perimetre",
+            "domicile",
+            "incident",
+            "revert"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:28:03",
+          "action": "modifie",
+          "detail": "MO-210 : la porte ecrire CORRIGE avant d ecrire -- corriger_contenu applique la carte commune au contenu de l agent, DIT ce qu elle a corrige (jamais muet) et REFUSE (code 2, rien n est ecrit) les caracteres hors carte en nommant le caractere, sa ligne et le remede ; le message est 100% ASCII (un caractere brut sortait en cp1252)",
+          "tags": [
+            "mo-210",
+            "ascii",
+            "porte-ecrire"
+          ]
         }
       ],
       "tags": [
@@ -20461,7 +22334,21 @@
         "extrait",
         "lf",
         "ordre-publication",
-        "mo-173"
+        "mo-173",
+        "MO-183",
+        "EO-177",
+        "perimetre",
+        "resolution",
+        "prefixe",
+        "reparation",
+        "MO-184",
+        "EO-178",
+        "domicile",
+        "incident",
+        "revert",
+        "mo-210",
+        "ascii",
+        "porte-ecrire"
       ]
     },
     "matrice/data/outils/ecrire/ecrire/fonctions.py": {
@@ -20476,13 +22363,26 @@
             "ecrire",
             "friction68"
           ]
+        },
+        {
+          "date": "2026-09-19 11:28:03",
+          "action": "modifie",
+          "detail": "MO-210 : le verbe ecrire corrige le contenu AVANT ecriture -- le passage oblige ne laisse plus de non-ASCII que l agent devrait reparer apres coup",
+          "tags": [
+            "mo-210",
+            "ascii",
+            "porte-ecrire"
+          ]
         }
       ],
       "tags": [
         "MO-142",
         "EO-129",
         "ecrire",
-        "friction68"
+        "friction68",
+        "mo-210",
+        "ascii",
+        "porte-ecrire"
       ]
     },
     "matrice/data/outils/ecrire/editer/fonctions.py": {
@@ -20497,13 +22397,26 @@
             "ecrire",
             "friction68"
           ]
+        },
+        {
+          "date": "2026-09-19 11:28:03",
+          "action": "modifie",
+          "detail": "MO-210 : le verbe editer corrige le FRAGMENT nouveau que l agent ecrit (ce qui preexistait dans la cible reste le metier de la routine de maintenance)",
+          "tags": [
+            "mo-210",
+            "ascii",
+            "porte-ecrire"
+          ]
         }
       ],
       "tags": [
         "MO-142",
         "EO-129",
         "ecrire",
-        "friction68"
+        "friction68",
+        "mo-210",
+        "ascii",
+        "porte-ecrire"
       ]
     },
     "matrice/data/outils/ecrire/DESCRIPTION.md": {
@@ -20530,6 +22443,38 @@
             "contrat",
             "mo-173"
           ]
+        },
+        {
+          "date": "2026-09-19 07:17:06",
+          "action": "modifie",
+          "detail": "MO-183 (EO-177) : la carte de la porte dit desormais ce qu elle FAIT -- refus hors de la Matrice sur le chemin RESOLU, refus qui NOMME la Matrice, et la forme correcte selon l installation (cerveau-projet/matrix/... quand la Matrice n est pas sous la racine). Deux endroits corriges (ligne du tableau des risques, section Protections).",
+          "tags": [
+            "MO-183",
+            "EO-177",
+            "ecrire",
+            "description",
+            "doc"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:28:03",
+          "action": "modifie",
+          "detail": "MO-210 : le contrat de la porte ne dit plus seulement ASCII signale -- il dit CORRIGE puis REFUSE, avec les trois sorties et le domicile de la carte",
+          "tags": [
+            "mo-210",
+            "contrat",
+            "ascii"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:33:56",
+          "action": "corrige",
+          "detail": "MO-211 : alignement de MOT -- le contrat ecrivait REFUS code 2 la ou l aide et le message reel disent REFUS (code 2) : deux documents du meme contrat doivent nommer pareil (revele par le cobaye, pas par l oeil)",
+          "tags": [
+            "mo-211",
+            "contrat",
+            "alignement"
+          ]
         }
       ],
       "tags": [
@@ -20540,7 +22485,14 @@
         "outil",
         "description",
         "contrat",
-        "mo-173"
+        "mo-173",
+        "MO-183",
+        "EO-177",
+        "doc",
+        "mo-210",
+        "ascii",
+        "mo-211",
+        "alignement"
       ]
     },
     "_operateur/optimus-prime/pilote/fin/entry.py": {
@@ -20884,12 +22836,29 @@
             "domicile",
             "copie-supprimee"
           ]
+        },
+        {
+          "date": "2026-09-19 07:25:22",
+          "action": "modifie",
+          "detail": "MO-184 (EO-178) : dans_perimetre juge le chemin RESOLU (domicile partage) au lieu du PREFIXE ; le refus de lister_dossier NOMME la Matrice (motif partage, usage=lecture) ; import REPERTOIRE_MATRIX retire. Preuve : la fonction REELLE refuse le piege en code 2 en nommant la Matrice.",
+          "tags": [
+            "MO-184",
+            "EO-178",
+            "lister",
+            "perimetre",
+            "resolution"
+          ]
         }
       ],
       "tags": [
         "invisibilite",
         "domicile",
-        "copie-supprimee"
+        "copie-supprimee",
+        "MO-184",
+        "EO-178",
+        "lister",
+        "perimetre",
+        "resolution"
       ]
     },
     "matrice/data/outils/benchmark/commun.py": {
@@ -20903,12 +22872,65 @@
             "domicile",
             "copie-supprimee"
           ]
+        },
+        {
+          "date": "2026-09-19 07:25:23",
+          "action": "modifie",
+          "detail": "MO-184 (EO-178) : dans_perimetre juge le chemin RESOLU (domicile partage) ; la COPIE declaree de lire/commun.py disparait (commentaire corrige). MESURE UTILE : benchmark n expose AUCUN resoudre_chemin -- sa copie resoliait EN LIGNE ; le premier remplacement a donc laisse un nom orphelin (outil casse), mesure et repare dans la mission. La base reste la MEME (RACINE).",
+          "tags": [
+            "MO-184",
+            "EO-178",
+            "benchmark",
+            "perimetre",
+            "resolution",
+            "jumeaux"
+          ]
+        },
+        {
+          "date": "2026-09-19 07:55:11",
+          "action": "modifie",
+          "detail": "MO-186 (4e lecteur) : la porte benchmark juge desormais le chemin TEL QUE FOURNI. Trois changements. (1) epreuve_perimetre ne fait plus Path(chemin).resolve() (base = le CWD) puis relative_to(RACINE) : elle appelle dans_perimetre(str(chemin)), qui RESOUT avant de juger par le domicile partage (MO-184). ANCIEN DEFAUT MESURE : la MEME commande rendait Code 2 'HORS perimetre' depuis la racine du workspace et Code 1 avec 'VERT perimetre' depuis matrix/ -- deux verdicts pour un seul argument (friction 80), et le refus de perimetre ne tombait jamais depuis matrix/. (2) nouvelle fonction ancrer(chemin, depart) : l'ancrage UNIQUE par cible.resoudre, le meme domicile que les trois autres lecteurs -- le chemin juge est le chemin LU, et le motif NOMME les bases essayees (friction 77). (3) epreuve_bdd : les CLES de la BDD sont relatives a la RACINE DE LA MATRICE (plan de conservation), pas a la racine du workspace ; l'ancien calcul prefixait 'cerveau-projet/matrix/' et ne pouvait DONC JAMAIS trouver une note -- le controle rendait toujours 'absent de BDD' (un controle qui ne peut qu'echouer use la grille). Preuves : nominal 9/9 Code 0 (avant : controle bdd toujours ROUGE) ; fichier sans note -> bdd ROUGE (le controle discrimine encore) ; piege et fichier hors Matrice -> Code 2, refus NOMME ; meme verdict depuis deux CWD ; py_compile global 364 fichiers 0 casse.",
+          "tags": [
+            "MO-186",
+            "benchmark",
+            "perimetre",
+            "ancrage",
+            "friction-80",
+            "bdd",
+            "cle",
+            "domicile"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:54:58",
+          "action": "modifie",
+          "detail": "MO-195 (EO-180) : re-export de signaler_inconnues depuis le domicile partage (EO-179) -- patron identique a rechercher/commun.py.",
+          "tags": [
+            "benchmark",
+            "commun",
+            "EO-179",
+            "MO-195"
+          ]
         }
       ],
       "tags": [
         "invisibilite",
         "domicile",
-        "copie-supprimee"
+        "copie-supprimee",
+        "MO-184",
+        "EO-178",
+        "benchmark",
+        "perimetre",
+        "resolution",
+        "jumeaux",
+        "MO-186",
+        "ancrage",
+        "friction-80",
+        "bdd",
+        "cle",
+        "commun",
+        "EO-179",
+        "MO-195"
       ]
     },
     "matrice/data/outils/lister/lister/entry.py": {
@@ -21061,6 +23083,19 @@
             "cible",
             "chemin"
           ]
+        },
+        {
+          "date": "2026-09-19 07:25:21",
+          "action": "modifie",
+          "detail": "MO-184 (EO-178) : le DOMICILE du PERIMETRE. Trois fonctions ajoutees -- racine_matrice_stricte (la racine de la Matrice, ou None si aucune : AUCUN repli sur la racine du workspace, car un perimetre dont la base serait la racine accepterait tout le workspace), est_dans_matrice (le chemin RESOLU tombe-t-il sous cette racine) et motif_hors_perimetre (le refus NOMME la Matrice reelle et les formes acceptees, avec un mot d usage lecture/ecriture). Docstring etendue : ce module porte desormais la question de PERIMETRE, une seule fois, pour les cinq outils (M-076). Preuves : cobaye MO-184 38/38 ; ancien repli (racine_matrice) LAISSE INTACT pour les ancrages de destination -- les deux contrats sont separes et dits.",
+          "tags": [
+            "MO-184",
+            "EO-178",
+            "cible",
+            "perimetre",
+            "domicile",
+            "racine-matrice"
+          ]
         }
       ],
       "tags": [
@@ -21068,7 +23103,12 @@
         "chemin",
         "cible",
         "MO-157",
-        "MO-160"
+        "MO-160",
+        "MO-184",
+        "EO-178",
+        "perimetre",
+        "domicile",
+        "racine-matrice"
       ]
     },
     "_operateur/optimus-prime/regles-immuables/entonnoir-des-demandes.md": {
@@ -21082,12 +23122,32 @@
             "entonnoir",
             "MO-158"
           ]
+        },
+        {
+          "date": "2026-09-19 11:06:01",
+          "action": "modifie",
+          "detail": "EO-192/MO-207 : la regle 4 gagne son DECLENCHEUR (decision createur 2026-09-19) : a la NAISSANCE si le type est declare, SUR DEMANDE par classer --id sinon. Le vrac ne garde que ce qu aucune souverainete n a nomme.",
+          "tags": [
+            "MO-207",
+            "EO-192",
+            "entonnoir",
+            "classement",
+            "declencheur",
+            "vrac",
+            "R5"
+          ]
         }
       ],
       "tags": [
         "regle-immuable",
         "entonnoir",
-        "MO-158"
+        "MO-158",
+        "MO-207",
+        "EO-192",
+        "classement",
+        "declencheur",
+        "vrac",
+        "R5"
       ]
     },
     "_operateur/optimus-prime/regles-immuables/ascii-strict.md": {
@@ -21134,6 +23194,17 @@
             "temoin",
             "rotation"
           ]
+        },
+        {
+          "date": "2026-09-19 10:03:24",
+          "action": "modifie",
+          "detail": "MO-192 (friction 88) : le refus du plan section 5 AJOUTE -- archiver REFUSE un element sans LECTEUR recense. Il manquait (MO-156 ne l'avait pas ecarte).",
+          "tags": [
+            "MO-192",
+            "friction-88",
+            "conservation",
+            "refus"
+          ]
         }
       ],
       "tags": [
@@ -21143,7 +23214,11 @@
         "MO-162",
         "purification",
         "case8",
-        "temoin"
+        "temoin",
+        "MO-192",
+        "friction-88",
+        "conservation",
+        "refus"
       ]
     },
     "matrice/data/outils/bdd-conservation/archiver/entry.py": {
@@ -21689,13 +23764,32 @@
             "parseur-options",
             "domicile"
           ]
+        },
+        {
+          "date": "2026-09-19 12:06:02",
+          "action": "corrige",
+          "detail": "MO-216 (EO-209) : l outil ETAIT MORT (introduit le 18-09 08:16) -- commun.py appelait detecter_racine sans l importer : NameError des le premier appel, donc la SEULE porte qui ecrit l encart v3 de AGENTS.md ne pouvait plus rien faire. Import consomme depuis constants (domicile partage, motif M-076).",
+          "tags": [
+            "outil",
+            "defaut",
+            "reparation",
+            "AGENTS.md",
+            "EO-209",
+            "MO-216"
+          ]
         }
       ],
       "tags": [
         "EO-158",
         "MO-171",
         "parseur-options",
-        "domicile"
+        "domicile",
+        "outil",
+        "defaut",
+        "reparation",
+        "AGENTS.md",
+        "EO-209",
+        "MO-216"
       ]
     },
     "cerveau-projet/matrix/matrice/data/outils/executer/commun.py": {
@@ -22263,13 +24357,28 @@
             "constants",
             "mo-172"
           ]
+        },
+        {
+          "date": "2026-09-19 15:55:57",
+          "action": "modifie",
+          "detail": "MO-236 (demande createur) : la zone jetable tmp-optimus passe sous _operateur/optimus-prime/ (invisible PAR CONSTRUCTION). Regles R-005/CV-012 et marbre perimetre-tmp amendes.",
+          "tags": [
+            "MO-236",
+            "tmp-optimus",
+            "deplacement",
+            "invisibilite"
+          ]
         }
       ],
       "tags": [
         "outil",
         "domicilier",
         "constants",
-        "mo-172"
+        "mo-172",
+        "MO-236",
+        "tmp-optimus",
+        "deplacement",
+        "invisibilite"
       ]
     },
     "matrice/data/outils/domicilier/commun.py": {
@@ -22450,6 +24559,30 @@
             "transport",
             "mo-173"
           ]
+        },
+        {
+          "date": "2026-09-19 07:17:06",
+          "action": "modifie",
+          "detail": "MO-183 (EO-177) : la RACINE de la Matrice est CONSOMMEE chez son domicile partage (data/commun/cible.py, racine_matrice) au lieu d etre redevinee -- le perimetre a besoin de la racine REELLE puisqu il juge le chemin RESOLU. Deux installations couvertes (depot : cerveau-projet/matrix ; deploiement : matrix). Le domicile rend la racine du workspace quand il ne trouve AUCUNE Matrice : traduit par None, et le perimetre REFUSE alors NOMMEMENT, jamais en silence. Aucune valeur en dur ajoutee.",
+          "tags": [
+            "MO-183",
+            "EO-177",
+            "ecrire",
+            "constants",
+            "domicile",
+            "racine-matrice"
+          ]
+        },
+        {
+          "date": "2026-09-19 07:25:21",
+          "action": "modifie",
+          "detail": "MO-184 : RACINE_MATRICE vient desormais de racine_matrice_stricte (domicile data/commun/cible.py) -- l ancien bricolage local (racine_matrice + repli traduit en None) disparait : un seul domicile dit quand AUCUNE Matrice n est trouvee (M-076). Aucune valeur en dur.",
+          "tags": [
+            "MO-184",
+            "cible",
+            "constants",
+            "racine-matrice"
+          ]
         }
       ],
       "tags": [
@@ -22457,7 +24590,14 @@
         "ecrire",
         "base64",
         "transport",
-        "mo-173"
+        "mo-173",
+        "MO-183",
+        "EO-177",
+        "constants",
+        "domicile",
+        "racine-matrice",
+        "MO-184",
+        "cible"
       ]
     },
     "matrice/data/outils/ecrire/ecrire/entry.py": {
@@ -22544,13 +24684,63 @@
             "auto-validation",
             "super-combo"
           ]
+        },
+        {
+          "date": "2026-09-19 10:38:08",
+          "action": "modifie",
+          "detail": "F1 (EO-189/MO-203) : l axe deja-vu compare desormais un ENUM ferme (la doc dit que la trace vit ailleurs) + strip defensif. La comparaison exacte reste voulue : l agent ne peut plus y glisser une date.",
+          "tags": [
+            "MO-203",
+            "chaine",
+            "entonnoir",
+            "pilote",
+            "source",
+            "auto-validation",
+            "EO-189"
+          ]
+        },
+        {
+          "date": "2026-09-19 13:55:30",
+          "action": "modifie",
+          "detail": "EO-218 : la liste OUVERTE des types (reparation, dev, doc, audit, revision) est DECLAREE ici, a un seul domicile ; A5 ne vote plus CONTRE du seul fait du type. Constat N1 : la PREUVE exige un MOYEN nomme (une mesure etiquetee compte : 'mesure :', 'mesure MO-214 :' ; un mot nu non). Constat N2 : les CHEMINS critiques votent CONTRE quel que soit le type. N5 : le verdict DIT pourquoi il est auto.",
+          "tags": [
+            "evaluateur",
+            "auto-validation",
+            "EO-218",
+            "MO-226"
+          ]
+        },
+        {
+          "date": "2026-09-19 14:42:16",
+          "action": "modifie",
+          "detail": "MO-229 (EO-221) : l avis d auto-validation CONSOMME la liste des types declaree au pilote au lieu de la recopier. AVANT : TYPES_AUTO_VALIDES = (reparation, dev, doc, audit, revision) vivait DANS l avis -- un TROISIEME domicile de la meme liste que listes.py TYPES (constat N3 de MO-226, non tenu). APRES : l avis LIT la liste a son domicile (chargee PAR CHEMIN depuis le marqueur matrice/data/commun/racine.py, aucun niveau compte a la main, L-013) ; option --racine pour le cobayage ; un domicile introuvable ou illisible n est JAMAIS devine -- l axe serie vote CONTRE et le motif DIT la cause. Une divergence n est plus possible : un seul domicile. PREUVE : cobaye a racines jouets, MEME item, seule la liste change -- dev tombe quand TYPES = reparation seule, exploration (type que l avis n a jamais connu) est ACCEPTEE des que le pilote la declare, et une racine sans listes.py rend CONTRE avec la cause dans le motif. Contre-temoin : l avis d AVANT lit sa propre copie et refuse l option --racine.",
+          "tags": [
+            "MO-229",
+            "EO-221",
+            "liste-des-types",
+            "M-076",
+            "auto-validation"
+          ]
         }
       ],
       "tags": [
         "optimus",
         "MO-175",
         "auto-validation",
-        "super-combo"
+        "super-combo",
+        "MO-203",
+        "chaine",
+        "entonnoir",
+        "pilote",
+        "source",
+        "EO-189",
+        "evaluateur",
+        "EO-218",
+        "MO-226",
+        "MO-229",
+        "EO-221",
+        "liste-des-types",
+        "M-076"
       ]
     },
     "_operateur/optimus-prime/pilote/filtrer/entry.py": {
@@ -22697,6 +24887,19 @@
             "moteur-partage",
             "mo175"
           ]
+        },
+        {
+          "date": "2026-09-19 14:55:24",
+          "action": "modifie",
+          "detail": "MO-230 (EO-224) : la fabrique PARTAGEE de fixtures lit desormais tout LITTERAL, pas seulement les chaines scalaires. AVANT : litteraux ne retenait que les Assign d une chaine constante, donc une liste fermee comme TYPES = (dev, reparation, ...) etait INVISIBLE au controle des jumeaux -- et le controle se croyait sain (mesure MO-230 : 30 declarations partagees invisibles entre les deux pilotes, dont les quatre copies de TYPES). APRES : ast.literal_eval lit chaine, nombre, tuple, liste et dict de valeurs simples ; litteraux_illisibles DIT ce qui reste hors de portee (une valeur calculee ne se compare pas, elle se dit) ; muter_valeur mute chaque FORME (chaine, nombre, tuple, liste, dict) pour que le cobaye d un controle de LISTES puisse eprouver ; copier_sous pose une copie sous un nom CHOISI (les miroirs inter-flux portent le MEME nom de fichier : copier les aurait ecrases l un l autre sans le dire). Preuve : le controle miroirs et son cobaye (5 cas) passent, et le controle des jumeaux reste vert.",
+          "tags": [
+            "MO-230",
+            "EO-224",
+            "fixtures",
+            "litteraux",
+            "miroirs",
+            "M-076"
+          ]
         }
       ],
       "tags": [
@@ -22705,7 +24908,12 @@
         "cobaye",
         "data-commun",
         "moteur-partage",
-        "mo175"
+        "mo175",
+        "MO-230",
+        "EO-224",
+        "litteraux",
+        "miroirs",
+        "M-076"
       ]
     },
     "_operateur/optimus-prime/regles-immuables/defaut-outil-repare-sur-place.md": {
@@ -22825,6 +25033,1573 @@
         "MO-174",
         "R5",
         "audit"
+      ]
+    },
+    "_operateur/optimus-prime/pilote/entonnoir/corriger/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:14:21",
+          "action": "cree",
+          "detail": "EO-175, verbe corriger (entonnoir) : fonctions simples. Un item se corrige EN PLACE (vrac comme file), id CONSERVE ; la valeur precedente voyage dans une entree corrections portee PAR l item ; la garde des options sans valeur lit la LISTE rangee sous la sentinelle du parseur partage (la 1re version lisait une forme que le parseur ne produit jamais : garde muette, defaut trouve en relisant le cobaye).",
+          "tags": [
+            "MO-178",
+            "EO-175",
+            "corriger"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:46:34",
+          "action": "modifie",
+          "detail": "MO-213 : sa justification disait retiqueter ne pose que le ROLE -- c est devenu faux, corrige",
+          "tags": [
+            "mo-213",
+            "doc"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-178",
+        "EO-175",
+        "corriger",
+        "mo-213",
+        "doc"
+      ]
+    },
+    "_operateur/optimus-prime/pilote/entonnoir/corriger/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:14:21",
+          "action": "cree",
+          "detail": "EO-175, porte corriger (entonnoir) : echelons 0-2. Ordre des refus : id hors famille, option avalee, aucun champ, valeur vide, mission inconnue ; puis correction et RETISSAGE du brin dans le meme geste (le brin porte des COPIES : corriger sans retisser servirait l ANCIEN texte au pilote).",
+          "tags": [
+            "MO-178",
+            "EO-175",
+            "corriger"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:46:34",
+          "action": "modifie",
+          "detail": "MO-213 : le refus du verbe corriger dit que role ET categorie se reposent avec retiqueter",
+          "tags": [
+            "mo-213",
+            "entonnoir",
+            "refus-directionnel"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-178",
+        "EO-175",
+        "corriger",
+        "mo-213",
+        "entonnoir",
+        "refus-directionnel"
+      ]
+    },
+    "matrice/data/outils/bdd-modifications/corriger/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:14:21",
+          "action": "cree",
+          "detail": "EO-155, verbe corriger (bdd-modifications) : fonctions simples. Une entree est identifiee par un EXTRAIT de son detail (ambiguite REFUSEE, jamais devinee, --index pour desambiguer) ; reattribution EN PLACE (date, position, action et detail survivent) ; anciens tags traces DANS la ligne ; les tags de la fiche sont RECALCULES (valeur derivee) et le geste est DIT.",
+          "tags": [
+            "MO-178",
+            "EO-155",
+            "corriger"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-178",
+        "EO-155",
+        "corriger"
+      ]
+    },
+    "matrice/data/outils/bdd-modifications/corriger/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:14:21",
+          "action": "cree",
+          "detail": "EO-155 : la porte corriger reattribue la ligne PUIS laisse enregistrer_bdd recalculer l empreinte -- les DEUX moities du defaut mesure (reattribution impossible par la porte + empreinte cassee) sont fermees dans le meme geste.",
+          "tags": [
+            "MO-178",
+            "EO-155",
+            "corriger"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-178",
+        "EO-155",
+        "corriger"
+      ]
+    },
+    "matrice/data/outils/bdd-modifications/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:14:22",
+          "action": "modifie",
+          "detail": "EO-155 : le verbe corriger est cable (import, COMMANDES, usage).",
+          "tags": [
+            "MO-178",
+            "EO-155",
+            "corriger"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-178",
+        "EO-155",
+        "corriger"
+      ]
+    },
+    "matrice/data/outils/benchmark/benchmark/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:41:28",
+          "action": "corrige",
+          "detail": "MO-177 : la chaine dirname(dirname(abspath(__file__))) est remplacee par un ancrage VERIFIE -- le dossier de l outil est celui qui porte son commun.py (marqueur), et un marqueur absent REFUSE la suite NOMMEMENT au lieu de laisser un chemin faux. Un site par appel, preuve du garde : 8 -> 7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1 -> 0 site signale.",
+          "tags": [
+            "MO-177",
+            "chemins",
+            "dirname",
+            "L-013"
+          ]
+        },
+        {
+          "date": "2026-09-19 07:55:11",
+          "action": "modifie",
+          "detail": "MO-186 : les DEUX entrees de chemin ancrent UNE fois AVANT tout jugement et avant les 9 epreuves -- _benchmark_fichier et _benchmark_dossier appellent ancrer(..., REPERTOIRE_ENTREE) ; si l'ancrage echoue, la porte rend un REFUS NOMME (motif de cible.resoudre, qui liste les bases essayees) et Code 2, au lieu d'un Code 1 'fichier introuvable' muet. Les 9 epreuves courent sur le chemin ABSOLU ancre : le chemin juge = le chemin lu. La variable morte 'attendu' (declaree dans l'aide --attendu existe|absent, jamais lue) est retiree au passage : l'option reste declaree dans NOMS_OPTIONS_BENCHMARK mais n'a TOUJOURS aucun effet -- deposee en item.",
+          "tags": [
+            "MO-186",
+            "benchmark",
+            "entry",
+            "ancrage",
+            "refus",
+            "attendu",
+            "morte"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:54:59",
+          "action": "modifie",
+          "detail": "MO-195 (EO-180) : la porte DIT ses options inconnues (REFUS code 2, nommees) -- retirer la promesse muette sans dire aurait deplace le defaut dans le silence (EO-179) ; l aide dit le refus.",
+          "tags": [
+            "benchmark",
+            "portes",
+            "EO-179",
+            "EO-180",
+            "MO-195"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-177",
+        "chemins",
+        "dirname",
+        "L-013",
+        "MO-186",
+        "benchmark",
+        "entry",
+        "ancrage",
+        "refus",
+        "attendu",
+        "morte",
+        "portes",
+        "EO-179",
+        "EO-180",
+        "MO-195"
+      ]
+    },
+    "matrice/data/outils/dialoguer/dialoguer/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:41:28",
+          "action": "corrige",
+          "detail": "MO-177 : la chaine dirname(dirname(abspath(__file__))) est remplacee par un ancrage VERIFIE -- le dossier de l outil est celui qui porte son commun.py (marqueur), et un marqueur absent REFUSE la suite NOMMEMENT au lieu de laisser un chemin faux. Un site par appel, preuve du garde : 8 -> 7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1 -> 0 site signale.",
+          "tags": [
+            "MO-177",
+            "chemins",
+            "dirname",
+            "L-013"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-177",
+        "chemins",
+        "dirname",
+        "L-013"
+      ]
+    },
+    "matrice/data/outils/dialoguer/plan/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:41:28",
+          "action": "corrige",
+          "detail": "MO-177 : la chaine dirname(dirname(abspath(__file__))) est remplacee par un ancrage VERIFIE -- le dossier de l outil est celui qui porte son commun.py (marqueur), et un marqueur absent REFUSE la suite NOMMEMENT au lieu de laisser un chemin faux. Un site par appel, preuve du garde : 8 -> 7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1 -> 0 site signale.",
+          "tags": [
+            "MO-177",
+            "chemins",
+            "dirname",
+            "L-013"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-177",
+        "chemins",
+        "dirname",
+        "L-013"
+      ]
+    },
+    "matrice/data/outils/executer/executer/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:41:29",
+          "action": "corrige",
+          "detail": "MO-177 : la chaine dirname(dirname(abspath(__file__))) est remplacee par un ancrage VERIFIE -- le dossier de l outil est celui qui porte son commun.py (marqueur), et un marqueur absent REFUSE la suite NOMMEMENT au lieu de laisser un chemin faux. Un site par appel, preuve du garde : 8 -> 7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1 -> 0 site signale.",
+          "tags": [
+            "MO-177",
+            "chemins",
+            "dirname",
+            "L-013"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-177",
+        "chemins",
+        "dirname",
+        "L-013"
+      ]
+    },
+    "matrice/data/outils/maintenir/maintenir/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:41:29",
+          "action": "corrige",
+          "detail": "MO-177 : la chaine dirname(dirname(abspath(__file__))) est remplacee par un ancrage VERIFIE -- le dossier de l outil est celui qui porte son commun.py (marqueur), et un marqueur absent REFUSE la suite NOMMEMENT au lieu de laisser un chemin faux. Un site par appel, preuve du garde : 8 -> 7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1 -> 0 site signale.",
+          "tags": [
+            "MO-177",
+            "chemins",
+            "dirname",
+            "L-013"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-177",
+        "chemins",
+        "dirname",
+        "L-013"
+      ]
+    },
+    "matrice/data/outils/rechercher/indexer/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:41:29",
+          "action": "corrige",
+          "detail": "MO-177 : la chaine dirname(dirname(abspath(__file__))) est remplacee par un ancrage VERIFIE -- le dossier de l outil est celui qui porte son commun.py (marqueur), et un marqueur absent REFUSE la suite NOMMEMENT au lieu de laisser un chemin faux. Un site par appel, preuve du garde : 8 -> 7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1 -> 0 site signale.",
+          "tags": [
+            "MO-177",
+            "chemins",
+            "dirname",
+            "L-013"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-177",
+        "chemins",
+        "dirname",
+        "L-013"
+      ]
+    },
+    "matrice/data/outils/signaler/signaler/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:41:29",
+          "action": "corrige",
+          "detail": "MO-177 : la chaine dirname(dirname(abspath(__file__))) est remplacee par un ancrage VERIFIE -- le dossier de l outil est celui qui porte son commun.py (marqueur), et un marqueur absent REFUSE la suite NOMMEMENT au lieu de laisser un chemin faux. Un site par appel, preuve du garde : 8 -> 7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1 -> 0 site signale.",
+          "tags": [
+            "MO-177",
+            "chemins",
+            "dirname",
+            "L-013"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-177",
+        "chemins",
+        "dirname",
+        "L-013"
+      ]
+    },
+    "matrice/tmp-optimus/mo172-ancien-copie-a-54.txt": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:49:16",
+          "action": "supprime",
+          "detail": "MO-180 (EO-173) : purge de la zone jetable ECRITE HORS PERIMETRE (matrice/tmp-optimus/, interdite par perimetre-tmp point 2) par le moteur PARTAGE zone_tmp.vider -- 6 fichiers de MO-172, jamais vus ni par le garde (il ne cherchait les zones qu a racine/<nom>) ni par le purgeur de cloture (qui ne connait que la zone de son flux). Le dossier interdit lui-meme a ete retire ensuite (une zone tmp-* hors racine est un ecart, meme vide).",
+          "tags": [
+            "MO-180",
+            "EO-173",
+            "perimetre-tmp",
+            "supprime"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-180",
+        "EO-173",
+        "perimetre-tmp",
+        "supprime"
+      ]
+    },
+    "matrice/tmp-optimus/mo172-ancien-copie-a-54.txt.bak.20260918_084402": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:49:17",
+          "action": "supprime",
+          "detail": "MO-180 (EO-173) : purge de la zone jetable ECRITE HORS PERIMETRE (matrice/tmp-optimus/, interdite par perimetre-tmp point 2) par le moteur PARTAGE zone_tmp.vider -- 6 fichiers de MO-172, jamais vus ni par le garde (il ne cherchait les zones qu a racine/<nom>) ni par le purgeur de cloture (qui ne connait que la zone de son flux). Le dossier interdit lui-meme a ete retire ensuite (une zone tmp-* hors racine est un ecart, meme vide).",
+          "tags": [
+            "MO-180",
+            "EO-173",
+            "perimetre-tmp",
+            "supprime"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-180",
+        "EO-173",
+        "perimetre-tmp",
+        "supprime"
+      ]
+    },
+    "matrice/tmp-optimus/mo172-ancien-etranger-55.txt": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:49:17",
+          "action": "supprime",
+          "detail": "MO-180 (EO-173) : purge de la zone jetable ECRITE HORS PERIMETRE (matrice/tmp-optimus/, interdite par perimetre-tmp point 2) par le moteur PARTAGE zone_tmp.vider -- 6 fichiers de MO-172, jamais vus ni par le garde (il ne cherchait les zones qu a racine/<nom>) ni par le purgeur de cloture (qui ne connait que la zone de son flux). Le dossier interdit lui-meme a ete retire ensuite (une zone tmp-* hors racine est un ecart, meme vide).",
+          "tags": [
+            "MO-180",
+            "EO-173",
+            "perimetre-tmp",
+            "supprime"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-180",
+        "EO-173",
+        "perimetre-tmp",
+        "supprime"
+      ]
+    },
+    "matrice/tmp-optimus/mo172-nouveau-copie-a-54.txt": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:49:17",
+          "action": "supprime",
+          "detail": "MO-180 (EO-173) : purge de la zone jetable ECRITE HORS PERIMETRE (matrice/tmp-optimus/, interdite par perimetre-tmp point 2) par le moteur PARTAGE zone_tmp.vider -- 6 fichiers de MO-172, jamais vus ni par le garde (il ne cherchait les zones qu a racine/<nom>) ni par le purgeur de cloture (qui ne connait que la zone de son flux). Le dossier interdit lui-meme a ete retire ensuite (une zone tmp-* hors racine est un ecart, meme vide).",
+          "tags": [
+            "MO-180",
+            "EO-173",
+            "perimetre-tmp",
+            "supprime"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-180",
+        "EO-173",
+        "perimetre-tmp",
+        "supprime"
+      ]
+    },
+    "matrice/tmp-optimus/mo172-nouveau-copie-a-54.txt.bak.20260918_084402": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:49:17",
+          "action": "supprime",
+          "detail": "MO-180 (EO-173) : purge de la zone jetable ECRITE HORS PERIMETRE (matrice/tmp-optimus/, interdite par perimetre-tmp point 2) par le moteur PARTAGE zone_tmp.vider -- 6 fichiers de MO-172, jamais vus ni par le garde (il ne cherchait les zones qu a racine/<nom>) ni par le purgeur de cloture (qui ne connait que la zone de son flux). Le dossier interdit lui-meme a ete retire ensuite (une zone tmp-* hors racine est un ecart, meme vide).",
+          "tags": [
+            "MO-180",
+            "EO-173",
+            "perimetre-tmp",
+            "supprime"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-180",
+        "EO-173",
+        "perimetre-tmp",
+        "supprime"
+      ]
+    },
+    "matrice/tmp-optimus/mo172-nouveau-etranger-55.txt": {
+      "modifications": [
+        {
+          "date": "2026-09-18 20:49:17",
+          "action": "supprime",
+          "detail": "MO-180 (EO-173) : purge de la zone jetable ECRITE HORS PERIMETRE (matrice/tmp-optimus/, interdite par perimetre-tmp point 2) par le moteur PARTAGE zone_tmp.vider -- 6 fichiers de MO-172, jamais vus ni par le garde (il ne cherchait les zones qu a racine/<nom>) ni par le purgeur de cloture (qui ne connait que la zone de son flux). Le dossier interdit lui-meme a ete retire ensuite (une zone tmp-* hors racine est un ecart, meme vide).",
+          "tags": [
+            "MO-180",
+            "EO-173",
+            "perimetre-tmp",
+            "supprime"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-180",
+        "EO-173",
+        "perimetre-tmp",
+        "supprime"
+      ]
+    },
+    "_operateur/optimus-prime/pilote/file/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 08:37:01",
+          "action": "modifie",
+          "detail": "MO-188 (EO-148) : nouveau verbe 'file verser [--lot <nom>]' -- le BRIN ENTIER vers la file du pilote en UN lot. Il voisine 'file consommer' (la tete, une par une) ; les deux passent par les MEMES fonctions (valider_role_item, mission_depuis_item, retirer_de_ses_files). Preuve : cobaye 30 OK / 0 KO, dont l atomicite des refus.",
+          "tags": [
+            "MO-188",
+            "EO-148",
+            "pilote",
+            "entry",
+            "verser",
+            "verbe"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-188",
+        "EO-148",
+        "pilote",
+        "entry",
+        "verser",
+        "verbe"
+      ]
+    },
+    "matrice/data/commun/interpreteur.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 08:50:46",
+          "action": "cree",
+          "detail": "MO-197 : DOMICILE PARTAGE de l interpreteur des sous-processus. chemin_python() n est plus une copie privee d une routine : ce module lit sa declaration dans le classeur des variables (cle interpreteur-python, V-004=auto), ancre un chemin relatif sur la racine de la Matrice (moteur cible.py) et REFUSE NOMME un interpreteur declare introuvable (L-006, jamais de repli muet). Zero binaire commite : utiliser un interpreteur local ou embarque se DECLARE.",
+          "tags": [
+            "MO-197",
+            "interpreteur",
+            "domicile-partage",
+            "M-076"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-197",
+        "interpreteur",
+        "domicile-partage",
+        "M-076"
+      ]
+    },
+    "matrice/tmp-cameleon/README.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 09:10:56",
+          "action": "supprime",
+          "detail": "MO-189 : ancienne zone du cameleon RETIREE -- elle vivait HORS du perimetre d ecriture de son flux (regle R-005). ARCHIVEE en miroir (README + ses 2 points de restauration) dans _operateur/optimus-prime/purification/archives/matrice/tmp-cameleon/ : rien de supprime sec.",
+          "tags": [
+            "MO-189",
+            "perimetres",
+            "flux",
+            "cameleon",
+            "zone",
+            "R-005"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-189",
+        "perimetres",
+        "flux",
+        "cameleon",
+        "zone",
+        "R-005"
+      ]
+    },
+    "matrice/data/outils/machine-defcon/surveiller/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 09:24:19",
+          "action": "cree",
+          "detail": "EO-181 voie A : fonctions PURES de la surveillance -- evaluer (un mesureur non joignable ou en echec n est PAS rempli, il est RAPPORTE : un echec de mesure ne passe jamais pour un non-declenchement) et decider (JAMAIS de baisse, JAMAIS de re-pose inutile). Le lancement du mesureur est injecte, donc un cobaye eprouve la decision sans mettre la Matrice en securite.",
+          "tags": [
+            "MO-198",
+            "EO-181",
+            "defcon",
+            "declencheurs",
+            "voie-A",
+            "veille"
+          ],
+          "corrections": [
+            {
+              "date": "2026-09-19 09:25:29",
+              "motif": "rattachement a MO-198 : les six notes de la voie A portaient le tag de l audit EO-181, pas celui de la mission -- la trace etait MUETTE pour MO-198, le garde l a dit.",
+              "tags_avant": [
+                "EO-181",
+                "defcon",
+                "declencheurs",
+                "voie-A",
+                "veille"
+              ],
+              "tags_apres": [
+                "MO-198",
+                "EO-181",
+                "defcon",
+                "declencheurs",
+                "voie-A",
+                "veille"
+              ]
+            }
+          ]
+        }
+      ],
+      "tags": [
+        "MO-198",
+        "EO-181",
+        "defcon",
+        "declencheurs",
+        "voie-A",
+        "veille"
+      ]
+    },
+    "matrice/data/outils/machine-defcon/surveiller/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 09:24:19",
+          "action": "cree",
+          "detail": "EO-181 voie A : le verbe surveiller -- il EVALUE les declencheurs declares et POSE le niveau par la PORTE monter (qui journalise la transition et, a 5, declenche la pause). Option --evaluer : rapporte SANS poser (c est ce qui a permis de mesurer que le mesureur du marbre exige l argument verifier).",
+          "tags": [
+            "MO-198",
+            "EO-181",
+            "defcon",
+            "declencheurs",
+            "voie-A",
+            "veille"
+          ],
+          "corrections": [
+            {
+              "date": "2026-09-19 09:25:29",
+              "motif": "rattachement a MO-198 : les six notes de la voie A portaient le tag de l audit EO-181, pas celui de la mission -- la trace etait MUETTE pour MO-198, le garde l a dit.",
+              "tags_avant": [
+                "EO-181",
+                "defcon",
+                "declencheurs",
+                "voie-A",
+                "veille"
+              ],
+              "tags_apres": [
+                "MO-198",
+                "EO-181",
+                "defcon",
+                "declencheurs",
+                "voie-A",
+                "veille"
+              ]
+            }
+          ]
+        }
+      ],
+      "tags": [
+        "MO-198",
+        "EO-181",
+        "defcon",
+        "declencheurs",
+        "voie-A",
+        "veille"
+      ]
+    },
+    "_operateur/optimus-prime/pilote/reporter/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 09:30:40",
+          "action": "cree",
+          "detail": "MO-199 (EO-182) : le verbe de REPORT. Quatre garanties, chacune un REFUS plutot qu une facilite : raison OBLIGATOIRE (un report sans raison est un abandon muet), REFUS s il n y a rien a reporter, RIEN n est perdu (id et sujet conserves, compteur de reports, ids du LOT inchanges -- la numerotation k/n reste vraie), ZONE JETABLE NON videe (un report n est pas une cloture) et ce fait est DIT.",
+          "tags": [
+            "MO-199",
+            "EO-182",
+            "reporter",
+            "pilote",
+            "serie-stricte"
+          ]
+        },
+        {
+          "date": "2026-09-19 10:43:58",
+          "action": "modifie",
+          "detail": "EO-190/MO-204 : le verbe reporter DECLARE desormais son report au journal suivi (declarer_borne_marbre, action 'report', porte pilote:reporter, si_absent=False). Sans cette declaration, le garde voyait un debut sans fin sur une mission en attente.",
+          "tags": [
+            "MO-204",
+            "EO-190",
+            "suivi-optimus",
+            "coherence",
+            "report",
+            "reporter",
+            "pilote"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-199",
+        "EO-182",
+        "reporter",
+        "pilote",
+        "serie-stricte",
+        "MO-204",
+        "EO-190",
+        "suivi-optimus",
+        "coherence",
+        "report"
+      ]
+    },
+    "_operateur/optimus-prime/pilote/reporter/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 09:30:40",
+          "action": "cree",
+          "detail": "MO-199 (EO-182) : l entree du verbe reporter -- usage et refus quand la raison manque. Ce que le verbe ne fait PAS est delibered : il n EFFACE rien, ne VIDE rien, ne SORT la mission d aucune file -- il la remet EN ATTENTE avec sa raison.",
+          "tags": [
+            "MO-199",
+            "EO-182",
+            "reporter",
+            "pilote",
+            "serie-stricte"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-199",
+        "EO-182",
+        "reporter",
+        "pilote",
+        "serie-stricte"
+      ]
+    },
+    "_operateur/optimus-prime/super-combos/combos/outils/verifier-vocabulaire-etat.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 09:54:05",
+          "action": "modifie",
+          "detail": "EO-154 : l entree matrice/data/modifications.db retiree de la carte des domiciles -- l appui sqlite n existe plus.",
+          "tags": [
+            "MO-191",
+            "EO-154",
+            "vocabulaire"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-191",
+        "EO-154",
+        "vocabulaire"
+      ]
+    },
+    "matrice/data/modifications.db": {
+      "modifications": [
+        {
+          "date": "2026-09-19 09:54:05",
+          "action": "supprime",
+          "detail": "EO-154 : l appui sqlite ARCHIVE en miroir (purification/archives/matrice/data) -- plus de seconde verite sur disque. Contre-temoin : il portait des lignes posterieures a l arret du domicile (la divergence).",
+          "tags": [
+            "MO-191",
+            "EO-154",
+            "archive",
+            "domicile-unique"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-191",
+        "EO-154",
+        "archive",
+        "domicile-unique"
+      ]
+    },
+    "matrice/data/commun/options.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 10:51:23",
+          "action": "modifie",
+          "detail": "EO-179/MO-194 : le parseur PARTAGE retient les morceaux qui ont la FORME d une option sans en etre une (CLE_INCONNUES) + signaler_inconnues (refus NOMME ou ignore EN LE DISANT). Une option inconnue n est plus jamais avalee : avant, l appel obtenait le resultat du DEFAUT, indiscernable d un resultat correct. Contrat du domicile porte a 5 points.",
+          "tags": [
+            "MO-194",
+            "EO-179",
+            "options",
+            "parseur",
+            "rechercher",
+            "inconnue",
+            "L-055"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-194",
+        "EO-179",
+        "options",
+        "parseur",
+        "rechercher",
+        "inconnue",
+        "L-055"
+      ]
+    },
+    "CROCHETS.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 10:58:43",
+          "action": "cree",
+          "detail": "EO-193/MO-206 : LEXIQUE DES CROCHETS, cree a cote de USER-PROFIL.md (matrice). Rassemble TOUS les mots entre crochets avec une definition pour chacun, en distinguant 3 familles : (1) 10 crochets de DEMANDE officiels (liste fermee, convention-crochets.md) ; (2) 7 crochets de TRAVAIL du pilote (MOTS-CLES.md + detecteur-mots-cles.py) ; (3) 9 cases de CHAINE du theme PURIFICATION (dont 2 collisions : audit et bilan vivent dans deux familles). Plus 2 crochets EMPLOYES SANS ETRE RECONNUS (corriger, super-combos nu : introuvables dans tout cerveau-projet hors ce fichier), l echelle defcon (5 niveaux), et les FAUX crochets a ecarter (placeholders d usage et classes de regex). Total mesure : 28 lignes de tableau, 26 mots distincts. ASCII strict (0 non-ASCII). Emplacement : a cote du USER-PROFIL.md de la MATRICE (v3) -- la racine en porte un AUTRE (v1, simple champ Langue lu par Oracle) et sa liste blanche est FERMEE (garde test-097 : un fichier non autorise y est un KO).",
+          "tags": [
+            "MO-206",
+            "EO-193",
+            "crochets",
+            "lexique",
+            "doc",
+            "USAGE-CROCHETS"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-206",
+        "EO-193",
+        "crochets",
+        "lexique",
+        "doc",
+        "USAGE-CROCHETS"
+      ]
+    },
+    "matrice/data/commun/carte_ascii.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 11:28:02",
+          "action": "cree",
+          "detail": "Domicile unique de la carte ASCII (MO-210) : la carte et convertir_texte quittent les constantes de l outil corriger-ascii, ou elles etaient prisonnieres -- deux consommateurs les lisent desormais (le scan de maintenance et la porte ecrire)",
+          "tags": [
+            "mo-210",
+            "ascii",
+            "domicile-unique"
+          ]
+        }
+      ],
+      "tags": [
+        "mo-210",
+        "ascii",
+        "domicile-unique"
+      ]
+    },
+    "matrice/data/outils/ecrire/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 11:33:56",
+          "action": "modifie",
+          "detail": "MO-211 : l AIDE de la porte dit desormais son contrat ASCII (MO-210) -- trois sorties (silence, corriger et dire, refuser en nommant le caractere et le remede) et le domicile unique de la carte ; l aide disait la meme chose que la DESCRIPTION.md, elle ne le disait pas du tout",
+          "tags": [
+            "mo-211",
+            "contrat",
+            "aide",
+            "ascii"
+          ]
+        },
+        {
+          "date": "2026-09-19 11:42:54",
+          "action": "modifie",
+          "detail": "MO-212 : l AIDE porte le contrat ENTIER -- 11 garanties (atomique, LF forces, .bak reversible, SHA-256, validation avant publication, perimetre resolu, occurrence unique, mode ferme et option sans valeur, transport @fichier et --contenu-base64, garde d ORDRE des imports locaux, ASCII corrige puis refuse) + les CODES de sortie 0/1/2 ; la ligne d usage --contenu-base64 manquait aussi",
+          "tags": [
+            "mo-212",
+            "contrat",
+            "aide",
+            "garanties"
+          ]
+        }
+      ],
+      "tags": [
+        "mo-211",
+        "contrat",
+        "aide",
+        "ascii",
+        "mo-212",
+        "garanties"
+      ]
+    },
+    "_operateur/optimus-prime/super-combos/combos/outils/verifier-contrats-outils.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 11:50:30",
+          "action": "cree",
+          "detail": "MO-214 (EO-204) : garde PERMANENT des contrats -- quatre exigences (la carte ASCII a un seul domicile, la porte ecrire corrige les futiles et refuse le reste en nommant le caractere et le remede, l aide affichee porte les douze groupes de garanties de la DESCRIPTION.md, l entonnoir repare la categorie comme le role) + AUTOTEST DU PIEGE L-032 (chaque juge eprouve sur donnee saine ET donnee cassee, ce qui a attrape un faux verdict de la premiere version : comparaison sensible a la casse) ; travaille en sous-processus isoles (deux outils ont chacun un module constants)",
+          "tags": [
+            "mo-214",
+            "garde",
+            "contrats",
+            "permanent"
+          ]
+        },
+        {
+          "date": "2026-09-19 12:36:24",
+          "action": "modifie",
+          "detail": "MO-219 : 5e controle PERMANENT 'aucune porte muette au journal' (relever_muet/juger_muet + 2 pieges d autotest) -- remplace le cobaye qui meurt a la cloture (EO-204)",
+          "tags": [
+            "MO-219",
+            "garde",
+            "contrats",
+            "sac-a-dos"
+          ]
+        }
+      ],
+      "tags": [
+        "mo-214",
+        "garde",
+        "contrats",
+        "permanent",
+        "MO-219",
+        "sac-a-dos"
+      ]
+    },
+    "matrice/data/outils/benchmark/constants.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 11:54:58",
+          "action": "modifie",
+          "detail": "MO-195 (EO-180) : l option --attendu RETIREE de NOMS_OPTIONS_BENCHMARK -- elle etait declaree et sans effet (mesure : rendait 0 et 9/9 VERT, comme sans elle).",
+          "tags": [
+            "benchmark",
+            "contrat",
+            "EO-180",
+            "MO-195"
+          ]
+        }
+      ],
+      "tags": [
+        "benchmark",
+        "contrat",
+        "EO-180",
+        "MO-195"
+      ]
+    },
+    "matrice/data/outils/benchmark/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 11:54:58",
+          "action": "modifie",
+          "detail": "MO-195 (EO-180) : l aide ne promet plus --attendu (elle ne lisait rien). Le contrat affiche et le contrat declare disent desormais la meme chose.",
+          "tags": [
+            "benchmark",
+            "aide",
+            "EO-180",
+            "MO-195"
+          ]
+        },
+        {
+          "date": "2026-09-19 12:36:22",
+          "action": "modifie",
+          "detail": "MO-219 : sac a dos pose + pont vers data/commun ; l outil etait MUET (0 ligne) et la roue le declarait orphelin a partir d une mesure aveugle",
+          "tags": [
+            "MO-219",
+            "sac-a-dos",
+            "instrumentation"
+          ]
+        }
+      ],
+      "tags": [
+        "benchmark",
+        "aide",
+        "EO-180",
+        "MO-195",
+        "MO-219",
+        "sac-a-dos",
+        "instrumentation"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/selecteur-flux/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 12:06:03",
+          "action": "modifie",
+          "detail": "MO-216 : les deux libelles du pilote ne mentent plus -- ils etaient ECRITS EN DUR (print par branche). L operateur lit maintenant QUEL pilote le concerne (le sien : _operateur/optimus-prime/pilote) et le cameleon le sien (matrice/pilote).",
+          "tags": [
+            "selecteur",
+            "pilote",
+            "mensonge",
+            "EO-209",
+            "MO-216"
+          ]
+        }
+      ],
+      "tags": [
+        "selecteur",
+        "pilote",
+        "mensonge",
+        "EO-209",
+        "MO-216"
+      ]
+    },
+    "AGENTS.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 12:06:03",
+          "action": "modifie",
+          "detail": "MO-216 (EO-209) : l encart v3 (seule zone v3 du fichier, ecrite par son outil) DIT desormais que tout le reste est un HERITAGE v1/v2 en lecture seule -- un demarrage v3 ne confond plus le census v1 (Buffy, Cerberus, Oracle) avec ses propres agents.",
+          "tags": [
+            "AGENTS.md",
+            "v1",
+            "v3",
+            "melange",
+            "EO-209",
+            "MO-216"
+          ]
+        },
+        {
+          "date": "2026-09-19 12:09:36",
+          "action": "modifie",
+          "detail": "MO-217 (EO-211) : TRANCHE -- le census v1/v2 est RETIRE du fichier que lit tout demarrage v3 (222 -> 124 lignes) et ARCHIVE verbatim dans cerveau-projet/matrix/docs/heritage-v1-v2-AGENTS.md. Un bandeau 'HERITAGE v1/v2 -- LECTURE SEULE' marque ce qui reste (blocs de session v1/v2 + MARBRE protege) et un pointeur dit qui est le demarrage de la v3. Le MARBRE est intact octet pour octet.",
+          "tags": [
+            "AGENTS.md",
+            "v1",
+            "v3",
+            "census",
+            "EO-211",
+            "MO-217"
+          ]
+        }
+      ],
+      "tags": [
+        "AGENTS.md",
+        "v1",
+        "v3",
+        "melange",
+        "EO-209",
+        "MO-216",
+        "census",
+        "EO-211",
+        "MO-217"
+      ]
+    },
+    "cerveau-projet/matrix/docs/heritage-v1-v2-AGENTS.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 12:09:36",
+          "action": "cree",
+          "detail": "MO-217 (EO-211) : ARCHIVE du census v1/v2 et des procedures d activation, DEPLACE VERBATIM depuis AGENTS.md (aucune perte, aucune reecriture). Porte sa carte d identite (type archive) : le garde des cartes l accepte.",
+          "tags": [
+            "archive",
+            "heritage",
+            "v1",
+            "v2",
+            "EO-211",
+            "MO-217"
+          ]
+        }
+      ],
+      "tags": [
+        "archive",
+        "heritage",
+        "v1",
+        "v2",
+        "EO-211",
+        "MO-217"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-cartes-identite.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 12:14:41",
+          "action": "corrige",
+          "detail": "MO-218 (EO-212) : le garde des cartes disait FAUX pour DEUX raisons. (1) son AUTOTEST passait par controler_zone, qui ecrit dans RESULTATS et IMPRIME [KO] : ses 3 accusations ATTENDUES (sans-carte.md, app-chemin.md, type-inconnu.md -- des fichiers qui n existent nulle part) etaient lues comme de vrais ecarts par le lanceur de non-regression, qui lit la sortie -> suite ROUGE a chaque run. Isolation (collecteur + silencieux) et affichage du piege en [--]. (2) le corpus scanne incluait les ARCHIVES (purification) : ZONES_EXCLUES nommees, comme les deux autres gardes de la maison.",
+          "tags": [
+            "garde",
+            "cartes",
+            "autotest",
+            "faux-ecart",
+            "EO-212",
+            "MO-218"
+          ]
+        }
+      ],
+      "tags": [
+        "garde",
+        "cartes",
+        "autotest",
+        "faux-ecart",
+        "EO-212",
+        "MO-218"
+      ]
+    },
+    "matrice/data/outils/dialoguer/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 12:36:22",
+          "action": "modifie",
+          "detail": "MO-219 : sac a dos pose + pont vers data/commun (outil MUET au journal, donc tout verdict d usage etait aveugle)",
+          "tags": [
+            "MO-219",
+            "sac-a-dos",
+            "instrumentation"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-219",
+        "sac-a-dos",
+        "instrumentation"
+      ]
+    },
+    "matrice/data/outils/maintenir/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 12:36:23",
+          "action": "modifie",
+          "detail": "MO-219 : sac a dos pose + pont vers data/commun (outil MUET au journal, donc tout verdict d usage etait aveugle)",
+          "tags": [
+            "MO-219",
+            "sac-a-dos",
+            "instrumentation"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-219",
+        "sac-a-dos",
+        "instrumentation"
+      ]
+    },
+    "matrice/data/outils/signaler/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 12:36:23",
+          "action": "modifie",
+          "detail": "MO-219 : sac a dos pose + pont vers data/commun (outil MUET au journal, donc tout verdict d usage etait aveugle)",
+          "tags": [
+            "MO-219",
+            "sac-a-dos",
+            "instrumentation"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-219",
+        "sac-a-dos",
+        "instrumentation"
+      ]
+    },
+    "matrice/data/outils/executer/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 12:36:23",
+          "action": "modifie",
+          "detail": "MO-219 (balayage de classe L-102, revele par le garde des contrats) : 34e outil, MUET lui aussi ; sac a dos pose + pont",
+          "tags": [
+            "MO-219",
+            "sac-a-dos",
+            "instrumentation",
+            "balayage-classe"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-219",
+        "sac-a-dos",
+        "instrumentation",
+        "balayage-classe"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/preparation/spec-chaine-pense-bete.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:16:59",
+          "action": "cree",
+          "detail": "MO-220 (EO-200) : SPEC de la chaine pense-bete -> spec -> todo-list -- mesure de la v1 (doctrine sans pratique), ce qui survit, ce qui change en v3, 3 fiches cibles, 5 arbitrages a trancher, preuves attendues. Proposition, aucun code avant GO.",
+          "tags": [
+            "spec",
+            "pense-bete",
+            "todo-list",
+            "EO-200",
+            "MO-220"
+          ]
+        },
+        {
+          "date": "2026-09-19 13:23:50",
+          "action": "corrige",
+          "detail": "MO-221 (suite de MO-220) : la section 6 porte desormais le TABLEAU DES DECISIONS du createur (A1 domicile invisible, nom stable + statut en carte, trois familles PB-/SP-/TD-, avancement automatique par la porte, aucun crochet neuf) ; les propositions restent comme historique.",
+          "tags": [
+            "spec",
+            "pense-bete",
+            "arbitrages",
+            "CV-008",
+            "MO-221"
+          ]
+        }
+      ],
+      "tags": [
+        "spec",
+        "pense-bete",
+        "todo-list",
+        "EO-200",
+        "MO-220",
+        "arbitrages",
+        "CV-008",
+        "MO-221"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/routines/vigie-portes/constants.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:27:16",
+          "action": "modifie",
+          "detail": "MO-222 (EO-219) : constantes du controle NEMESIS -- etats initiaux, champ et marqueurs de trace, domicile declare, anterieurs declares avec leur raison, niveau et porte.",
+          "tags": [
+            "nemesis",
+            "roue",
+            "EO-219",
+            "MO-222"
+          ]
+        }
+      ],
+      "tags": [
+        "nemesis",
+        "roue",
+        "EO-219",
+        "MO-222"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/routines/vigie-portes/tour/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:27:17",
+          "action": "modifie",
+          "detail": "MO-222 (EO-219) : controler_nemesis pose dans la passe de la roue (lire_document, statut_carte, a_trace_nemesis) ; la passe l appelle avant le tri des alertes.",
+          "tags": [
+            "nemesis",
+            "roue",
+            "EO-219",
+            "MO-222"
+          ]
+        }
+      ],
+      "tags": [
+        "nemesis",
+        "roue",
+        "EO-219",
+        "MO-222"
+      ]
+    },
+    "matrice/data/outils/chaine-pense-bete/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:38:54",
+          "action": "cree",
+          "detail": "Porte chaine-pense-bete : point d entree global (verbes naitre / avancer / etat), aucun metier ici",
+          "tags": [
+            "outil",
+            "chaine-pense-bete",
+            "MO-224"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "chaine-pense-bete",
+        "MO-224"
+      ]
+    },
+    "matrice/data/outils/chaine-pense-bete/constants.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:38:54",
+          "action": "cree",
+          "detail": "Declarations : 3 etapes (pense-bete/spec/todo), familles PB/SP/TD, domicile A1, motif partage M-076",
+          "tags": [
+            "outil",
+            "chaine-pense-bete",
+            "MO-224"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "chaine-pense-bete",
+        "MO-224"
+      ]
+    },
+    "matrice/data/outils/chaine-pense-bete/commun.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:38:54",
+          "action": "cree",
+          "detail": "Fonctions communes : carte, trace nemesis, compteurs, rafraichir_index (l index ne ment pas), ecriture par la porte unique",
+          "tags": [
+            "outil",
+            "chaine-pense-bete",
+            "MO-224"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "chaine-pense-bete",
+        "MO-224"
+      ]
+    },
+    "matrice/data/outils/chaine-pense-bete/etape/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:38:54",
+          "action": "cree",
+          "detail": "Porte de la categorie etape : valide le verbe, delegue le geste",
+          "tags": [
+            "outil",
+            "chaine-pense-bete",
+            "MO-224"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "chaine-pense-bete",
+        "MO-224"
+      ]
+    },
+    "matrice/data/outils/chaine-pense-bete/etape/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:38:55",
+          "action": "cree",
+          "detail": "naitre / avancer / etat : l avancement est POSE par la porte, la trace NEMESIS est une condition LUE (deux formes exigees)",
+          "tags": [
+            "outil",
+            "chaine-pense-bete",
+            "MO-224"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "chaine-pense-bete",
+        "MO-224"
+      ]
+    },
+    "matrice/data/outils/chaine-pense-bete/DESCRIPTION.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:38:55",
+          "action": "cree",
+          "detail": "Charte de l outil : verbes, 3 etapes, condition nemesis, domicile, garanties, codes de sortie",
+          "tags": [
+            "outil",
+            "chaine-pense-bete",
+            "MO-224"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "chaine-pense-bete",
+        "MO-224"
+      ]
+    },
+    "_operateur/optimus-prime/preparation/spec-chaine-pense-bete.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:39:01",
+          "action": "corrige",
+          "detail": "Carte : type spec hors vocabulaire ferme -> type analyse (ecart vu par le verificateur de cartes)",
+          "tags": [
+            "preparation",
+            "cartes",
+            "MO-224"
+          ]
+        }
+      ],
+      "tags": [
+        "preparation",
+        "cartes",
+        "MO-224"
+      ]
+    },
+    "_operateur/optimus-prime/preparation/index-chaine.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:39:01",
+          "action": "corrige",
+          "detail": "L index genere ne portait pas de carte d identite -> carte type index (ecart vu par le verificateur)",
+          "tags": [
+            "preparation",
+            "cartes",
+            "MO-224"
+          ]
+        },
+        {
+          "date": "2026-09-19 13:48:17",
+          "action": "modifie",
+          "detail": "L index suit l objet jusqu a [todo] (la porte le tient a jour a chaque franchissement)",
+          "tags": [
+            "chaine",
+            "preparation",
+            "MO-225"
+          ]
+        }
+      ],
+      "tags": [
+        "preparation",
+        "cartes",
+        "MO-224",
+        "chaine",
+        "MO-225"
+      ]
+    },
+    "_operateur/optimus-prime/preparation/chaine-doctrine-de-la-chaine.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:39:01",
+          "action": "cree",
+          "detail": "PB-001, premier objet de la chaine (doctrine, EO-218) : nom stable, statut dans la carte",
+          "tags": [
+            "preparation",
+            "chaine",
+            "MO-224"
+          ]
+        },
+        {
+          "date": "2026-09-19 13:48:16",
+          "action": "modifie",
+          "detail": "PB-001 conduit de bout en bout par la porte : matiere du pense-bete, SPEC (decision, ce qui change, ce qui ne change pas, 4 preuves attendues, 2 questions au createur), passage NEMESIS proto-4 3 axes (5 constats N1 a N5) et todo-list en 7 items -- statut todo, TD-001 pose",
+          "tags": [
+            "chaine",
+            "preparation",
+            "MO-225"
+          ]
+        }
+      ],
+      "tags": [
+        "preparation",
+        "chaine",
+        "MO-224",
+        "MO-225"
+      ]
+    },
+    "_operateur/optimus-prime/preparation/chaine-compteurs.json": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:39:02",
+          "action": "cree",
+          "detail": "Compteurs des trois familles d ids (PB/SP/TD) du domicile de la chaine",
+          "tags": [
+            "preparation",
+            "chaine",
+            "MO-224"
+          ]
+        },
+        {
+          "date": "2026-09-19 13:48:17",
+          "action": "modifie",
+          "detail": "PB 1 / SP 1 / TD 1 : les trois familles ont chacune emis un id au cours de la conduite",
+          "tags": [
+            "chaine",
+            "preparation",
+            "MO-225"
+          ]
+        }
+      ],
+      "tags": [
+        "preparation",
+        "chaine",
+        "MO-224",
+        "MO-225"
+      ]
+    },
+    "tmp-optimus/cobaye-chaine.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:39:02",
+          "action": "supprime",
+          "detail": "Cobaye de preuve retire de la zone jetable : son resultat a ete lu a l execution (aucun echec)",
+          "tags": [
+            "zone-jetable",
+            "preuve",
+            "MO-224"
+          ]
+        }
+      ],
+      "tags": [
+        "zone-jetable",
+        "preuve",
+        "MO-224"
+      ]
+    },
+    "tmp-optimus/cobaye-nemesis": {
+      "modifications": [
+        {
+          "date": "2026-09-19 13:41:03",
+          "action": "supprime",
+          "detail": "Cobaye discriminant du controle NEMESIS retire de la zone jetable : meme arbre, spec accuse / pense-bete muet",
+          "tags": [
+            "zone-jetable",
+            "preuve",
+            "MO-224"
+          ]
+        }
+      ],
+      "tags": [
+        "zone-jetable",
+        "preuve",
+        "MO-224"
+      ]
+    },
+    "_operateur/optimus-prime/suivi-optimus.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 15:33:07",
+          "action": "cree",
+          "detail": "MO-235 (demande createur) : deplacer la vue suivi-optimus.md de matrice/ vers la zone privee _operateur/optimus-prime/ (invisible PAR CONSTRUCTION, plus par exclusion de nom). La vue elle-meme (generee par le verbe vue, jamais editee a la main).",
+          "tags": [
+            "MO-235",
+            "suivi-optimus",
+            "deplacement"
+          ]
+        }
+      ],
+      "tags": [
+        "MO-235",
+        "suivi-optimus",
+        "deplacement"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/creer-combo.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 18:02:28",
+          "action": "modifie",
+          "detail": "MO-202 : porte etendue du verbe creer-super-combo (la famille sc- n avait aucune porte de creation) + commentaire de registre corrige",
+          "tags": [
+            "porte",
+            "super-combos",
+            "MO-202"
+          ]
+        }
+      ],
+      "tags": [
+        "porte",
+        "super-combos",
+        "MO-202"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-004-auto-diagnostic/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 18:02:28",
+          "action": "cree",
+          "detail": "MO-202 : sc-004-auto-diagnostic, phases diagnostic (R5) / inspection (sonde) / preparer (entonnoir)",
+          "tags": [
+            "super-combo",
+            "diagnostic",
+            "MO-202"
+          ]
+        },
+        {
+          "date": "2026-09-19 18:05:43",
+          "action": "modifie",
+          "detail": "MO-237 : politique de depot -- urgence graduee (haute=panne, normale=refus-muet), plafond 5 par passe (--plafond), ordre par gravite stable, reste DIT et jamais perdu",
+          "tags": [
+            "super-combo",
+            "politique",
+            "diagnostic",
+            "MO-237"
+          ]
+        },
+        {
+          "date": "2026-09-19 18:08:16",
+          "action": "corrige",
+          "detail": "MO-238 : idempotence par MARQUEUR [outil=<nom>] (fini la sous-chaine qui masquait lire / chaine-pense-bete / suivi-optimus), forme legacy conservee",
+          "tags": [
+            "super-combo",
+            "idempotence",
+            "diagnostic",
+            "MO-238"
+          ]
+        }
+      ],
+      "tags": [
+        "super-combo",
+        "diagnostic",
+        "MO-202",
+        "politique",
+        "MO-237",
+        "idempotence",
+        "MO-238"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-004-auto-diagnostic/README.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 18:02:28",
+          "action": "cree",
+          "detail": "MO-202 : README de sc-004, genere par la porte",
+          "tags": [
+            "super-combo",
+            "README",
+            "MO-202"
+          ]
+        }
+      ],
+      "tags": [
+        "super-combo",
+        "README",
+        "MO-202"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/registry.json": {
+      "modifications": [
+        {
+          "date": "2026-09-19 18:02:28",
+          "action": "modifie",
+          "detail": "MO-202 : entree sc-004-auto-diagnostic + compteur sc=4 (ecrit par la porte)",
+          "tags": [
+            "registre",
+            "super-combos",
+            "MO-202"
+          ]
+        }
+      ],
+      "tags": [
+        "registre",
+        "super-combos",
+        "MO-202"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/maintenir/maintenir/entry.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 18:11:06",
+          "action": "corrige",
+          "detail": "MO-239 : refus DIRECTIONNEL des options inconnues (le seul outil qui AVALAIT : code 0 sur --option-bidon). Motif du domicile partage (EO-179), usage dit par l outil.",
+          "tags": [
+            "maintenir",
+            "refus-directionnel",
+            "diagnostic",
+            "MO-239"
+          ]
+        }
+      ],
+      "tags": [
+        "maintenir",
+        "refus-directionnel",
+        "diagnostic",
+        "MO-239"
       ]
     }
   },

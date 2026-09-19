@@ -3,8 +3,8 @@
 Interface entre main.py et les fonctions simples (injection/fonctions.py).
 Integre le gestionnaire de cycle pour les injections automatiques.
 """
-from commun import charger_file, lire_bilan
-from injection.fonctions import afficher_statut, enchainer, preparer_injection
+from commun import charger_file, extraire_options, lire_bilan
+from injection.fonctions import afficher_statut, conduire, enchainer, preparer_injection
 
 # Le gestionnaire de cycle vit DANS la porte qu'il sert : import qualifie, et
 # AUCUNE insertion dans sys.path. Le nom qualifie determine le fichier charge.
@@ -24,6 +24,14 @@ def executer(arguments):
         return preparer_injection(charger_file)
     if arguments and arguments[0] == "enchainer":
         return enchainer(charger_file)
+    if arguments and arguments[0] == "conduire":
+        # EO-185 : conduit une mission chargee HORS lot (elle devient courante).
+        options = extraire_options(arguments[1:], ("id",))
+        identifiant = options.get("id", "")
+        if not identifiant:
+            print('Usage : python main.py conduire --id MO-00X')
+            return 2
+        return conduire(charger_file, identifiant)
     if arguments and arguments[0] == "mission":
         # Gestion des phases de mission via le cycle
         if len(arguments) < 2:
@@ -73,5 +81,6 @@ def executer(arguments):
         else:
             print("ERREUR : action invalide (debut, pendant, fin)")
             return 2
-    print('Usage : python main.py statut | injecter | enchainer | mission --action <debut|pendant|fin>')
+    print('Usage : python main.py statut | injecter | enchainer | conduire --id MO-00X'
+          ' | mission --action <debut|pendant|fin>')
     return 2

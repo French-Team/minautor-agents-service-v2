@@ -1,0 +1,68 @@
+"""Categorie corriger : echelons 0-2 -- rectifier le theme ou l'objectif d'un item.
+
+Interface entre main.py et les fonctions simples (corriger/fonctions.py).
+"""
+from corriger.fonctions import (CHAMPS_CORRIGEABLES, champs_demandes, corriger_item,
+                                options_sans_valeur, trouver_item, valeur_vide)
+from stockage import charger_entonnoir, enregistrer_entonnoir, verifier_famille
+from tresse.fonctions import marquer_brin, tresser
+
+
+def extraire_options(arguments, noms_connus):
+    """Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici."""
+    from options import extraire_options as repartir  # domicile partage (EO-158)
+    return repartir(arguments, noms_connus)
+
+
+NOMS_OPTIONS = ("id", "theme", "objectif", "motif")
+
+USAGE = ('Usage : python main.py corriger --id EO-XXX '
+         '( --theme "..." | --objectif "..." ) [--motif "..."]')
+
+
+def executer(arguments):
+    options = extraire_options(arguments, NOMS_OPTIONS)
+    identifiant = options.get("id", "")
+    if not identifiant:
+        print(USAGE)
+        return 2
+    # Une option PRIVEE de valeur est DITE avant toute validation (EO-156) : sinon
+    # un --theme suivi d'un autre nom d'option passerait pour un texte court.
+    sans_valeur = option_sans_valeur(options, NOMS_OPTIONS)
+    if sans_valeur:
+        print("REFUS : --" + sans_valeur + " est present SANS valeur "
+              "(option avalee : le texte manque, aucune ecriture).")
+        return 2
+    code, message = verifier_famille(identifiant)
+    if code != 0:
+        print(message)
+        return code
+    champs = champs_demandes(options)
+    if not champs:
+        print("REFUS : aucun champ a corriger -- ce verbe ne rectifie que "
+              + " et ".join(CHAMPS_CORRIGEABLES)
+              + " (le role se repose avec retiqueter, l'urgence avec urgencer).")
+        return 2
+    vides = valeur_vide(champs)
+    if vides:
+        print("REFUS : valeur VIDE pour " + ", ".join(vides)
+              + " -- un champ vide n'est pas une correction (EO-156).")
+        return 2
+
+    etat = charger_entonnoir()
+    mission = trouver_item(etat, identifiant)
+    if mission is None:
+        print("Mission inconnue a l'entonnoir (vrac et files) : " + identifiant)
+        return 1
+    code, message = corriger_item(mission, champs, options.get("motif", ""))
+    if code != 0:
+        print(message)
+        return code
+    # Le brin est RECOMPOSE dans le meme geste : il porte des COPIES des items
+    # (tresser recopie), donc corriger sans retisser laisserait le brin servir
+    # l'ANCIEN texte au pilote. Meme geste que la porte voisine retiqueter.
+    etat["brin"] = marquer_brin(tresser(etat.get("files", {})))
+    enregistrer_entonnoir(etat)
+    print(message)
+    print("Brin recompose : " + str(len(etat["brin"])) + " mission(s).")
+    return 0

@@ -3,7 +3,8 @@
 > VALIDEE par le createur (GO 2026-09-09) : construction livree -- outil
 > `data/outils/suivi-optimus/` (noter/lire/vue/verifier), trace
 > `data/suivi-optimus.jsonl` (append-only + etalon SHA-256), vue markdown
-> dediee `matrice/suivi-optimus.md` (tableaux par action), registre espion,
+> dediee `_operateur/optimus-prime/suivi-optimus.md` (tableaux par action ;
+> MO-235 : deplacee dans la zone privee, invisible PAR CONSTRUCTION), registre espion,
 > zones `suivi-optimus` + `suivi-optimus.md` exclues du perimetre-cameleon
 > (regle 9 de sa fiche).
 > EVOLUTION 2026-09-09 (decision createur) : optimus n'a PLUS d'encart au
@@ -20,7 +21,7 @@
 | Fichier | `matrice/data/suivi-optimus.jsonl` (append-only, LF, une ligne par evenement) |
 | Format ligne | JSON : `date`, `mission`, `theme`, `action`, `detail`, `fichiers[]`, `portes[]`, `duree_s` (optionnel) |
 | Ecriture | via l'outil dedie SEUL (porte unique, jamais d'echo direct) ; empreinte SHA-256 (CV-003) -> registre espion |
-| Lecture | verbe `lire` a la demande + verbe `vue` qui genere `matrice/suivi-optimus.md` (fichier dedie, UN TABLEAU PAR ACTION) -- PAS d'encart au journal multi-encarts (invisibilite) |
+| Lecture | verbe `lire` a la demande + verbe `vue` qui genere `_operateur/optimus-prime/suivi-optimus.md` (fichier dedie, UN TABLEAU PAR ACTION) -- PAS d'encart au journal multi-encarts (invisibilite) |
 
 ## 2. Exemple de ligne
 

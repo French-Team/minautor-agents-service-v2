@@ -11,7 +11,7 @@ Usage :
     python main.py coherence [--racine <matrix>]  (croise la file du pilote et le journal)
     python main.py archiver [--racine <matrix>]   (sort du journal les evenements hors
                                                    perimetre OPTIMUS, en les ARCHIVANT)
-    python main.py vue   (genere la vue markdown dediee matrice/suivi-optimus.md)
+    python main.py vue   (genere la vue markdown dediee _operateur/optimus-prime/suivi-optimus.md)
 """
 import sys
 

@@ -9,13 +9,22 @@ verdict est ecrit dans l ENREGISTREMENT DE LA MISSION au moment de la CREATION
 items dont le verdict est AUTO).
 
 5 AXES -- chacun VOTE (jamais muet) :
-  A1 PERIMETRE  l item touche-t-il une zone CRITIQUE (regle immuable, fiche,
-                protocole, theme, parcours) ?            -> vote CONTRE
+  A1 PERIMETRE  l item touche-t-il une zone CRITIQUE ? Les MOTS (regle immuable,
+                fiche, protocole, theme, parcours) ET les CHEMINS (fiches/,
+                protocoles/, themes/, parcours/, regles-immuables/, marbre,
+                AGENTS.md, demarrer-) -- quel que soit son TYPE -> vote CONTRE
   A2 REVERSIBLE le livrable est-il du code / un outil ? -> vote POUR
-  A3 PREUVE     l item exige-t-il une preuve (cobaye) ? -> vote POUR
-  A4 DEJA-VU    la source est-elle le createur ?        -> vote POUR
-  A5 SERIE      l item est-il une REPARATION / correction (le cas a automatiser) ?
-                                                        -> vote POUR
+  A3 PREUVE     l item exige-t-il une preuve, ET NOMME-T-IL le moyen de preuve
+                (cobaye, mesure, test, verifier, contre-temoin) ? Une preuve
+                EXIGEE mais ABSENTE (constat N1) -> vote CONTRE
+  A4 DEJA-VU    la PROVENANCE est-elle le createur ?    -> vote POUR
+                (source FERMEE : la trace libre -- date, motif -- vit dans son
+                 propre champ, jamais dans `source` : un champ, un sens)
+  A5 SERIE      l item est-il de la liste OUVERTE des types -- decision createur
+                du 2026-09-19, EO-218 ? Cette liste est LUE AU DOMICILE DU PILOTE
+                (pilote/entonnoir/listes.py, TYPES), jamais recopiee ici : une
+                seconde copie compile et change le SENS sans un bruit (constat N3
+                de MO-226, motif M-076).                   -> vote POUR
 
 VERDICT : AUTO si au moins un vote POUR et AUCUN vote CONTRE ; sinon NON.
 Un SEUL vote CONTRE suffit : la regle du createur est que l enchainement S ARRETE
@@ -23,13 +32,19 @@ des qu un item NON auto-valide est en tete (le CRITIQUE reste au createur).
 
 Usage :
     python evaluer-auto-validation.py --theme PILOTE --objectif "..." [--source createur]
-                                 [--type dev] [--json]
+                                 [--type dev] [--racine <dossier>] [--json]
+    --racine <dossier> : redirige le DOMICILE de la liste des types (cobayage) -- un
+                         dossier qui porte _operateur/optimus-prime/pilote/entonnoir/
+                         listes.py. Sans lui, la racine matrix est DETECTEE par son
+                         marqueur partage (L-013).
 """
 
 import argparse
+import importlib.util
 import json
 import sys
 import unicodedata
+from pathlib import Path
 
 # --- REFERENCES (aucune valeur en dur dans la logique) -----------------------
 VERDICT_AUTO = "auto"
@@ -60,6 +75,103 @@ MOTS_REPARATION = (
     "reparer", "reparation", "corriger", "correction", "bug", "erreur", "friction",
     "ecart", "ko", "auto-correction", "auto correction", "defaut",
 )
+# --- LE DOMICILE DE LA LISTE DES TYPES (M-076 : une seule maison par idee) ----
+# La liste OUVERTE des types (EO-218, decision createur du 2026-09-19) appartient
+# au PILOTE : c est LUI qui la DECLARE (pilote/entonnoir/listes.py, TYPES) et qui
+# la consomme a ses portes. Cet avis ne la RECOPIE pas, il la LIT. Un troisieme
+# domicile est exactement la divergence que le projet paie le plus cher : les deux
+# copies compilent et un seul mot change le SENS sans un bruit (constat N3 de
+# MO-226 ; meme famille que MO-175 jambe 3, dont le controle des jumeaux est ne).
+BORNES_REMONTEE = 30
+MARQUEUR_MATRICE = ("matrice", "data", "commun", "racine.py")
+CHEMIN_TYPES_DECLARES = ("_operateur", "optimus-prime", "pilote", "entonnoir", "listes.py")
+NOM_DECLARATION_TYPES = "TYPES"
+NOM_MODULE_TYPES_DECLARES = "types_declares_par_le_pilote"
+
+
+def trouver_racine_matrice(depart):
+    """Le dossier qui PORTE le marqueur partage `matrice/data/commun/racine.py`.
+
+    Aucun niveau compte a la main (L-013) : un marqueur introuvable rend None, il
+    ne devine JAMAIS un chemin -- l appelant le DIT (EO-129).
+    """
+    courant = Path(depart).resolve()
+    for _ in range(BORNES_REMONTEE):
+        if courant.joinpath(*MARQUEUR_MATRICE).is_file():
+            return courant
+        if courant.parent == courant:
+            break
+        courant = courant.parent
+    return None
+
+
+def lire_types_declares(racine=None):
+    """(types, avis) : la liste des types LUE au domicile du pilote, ou l avis.
+
+    Un domicile introuvable ou illisible ne rend JAMAIS une liste devinee : il rend
+    une liste VIDE et l avis qui DIT pourquoi -- l axe serie vote alors CONTRE et
+    porte cet avis. Un repli muet serait pire que le refus (L-037 : un garde-fou qui
+    peut etre vide est un garde-fou absent).
+    """
+    if racine is None:
+        racine = trouver_racine_matrice(Path(__file__).resolve().parent)
+    if racine is None:
+        return (), ("racine matrix INTROUVABLE (marqueur "
+                    + "/".join(MARQUEUR_MATRICE) + " absent en remontant)")
+    chemin = Path(racine).joinpath(*CHEMIN_TYPES_DECLARES)
+    if not chemin.is_file():
+        return (), "liste des types INTROUVABLE : " + str(chemin)
+    # Charge PAR CHEMIN (un nom nu se resoudrait a l aveugle dans le sys.path, L-029) :
+    # le fichier vise est celui du pilote, quel que soit le dossier courant.
+    try:
+        specification = importlib.util.spec_from_file_location(NOM_MODULE_TYPES_DECLARES,
+                                                              str(chemin))
+        module = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(module)
+        types = tuple(getattr(module, NOM_DECLARATION_TYPES))
+    except (ImportError, OSError, AttributeError, TypeError, SyntaxError) as erreur:
+        return (), ("liste des types ILLISIBLE (" + type(erreur).__name__ + " : "
+                    + str(erreur)[:60] + ") : " + str(chemin))
+    if not types:
+        return (), "liste des types VIDE : " + str(chemin)
+    return types, ""
+
+
+# Les CHEMINS CRITIQUES (constat N2) : nommer un de ces chemins suffit a voter CONTRE,
+# QUEL QUE SOIT LE TYPE -- un dev qui touche une regle immuable reste CRITIQUE.
+CHEMINS_CRITIQUES = (
+    "regles-immuables", "fiches/", "protocoles/", "themes/", "parcours/",
+    "marbre", "AGENTS.md", "demarrer-",
+)
+# Les MOYENS de preuve (constat N1) : ce qui PROUVE. Ni la declaration seule
+# ("preuve exigee") n'en fait partie, ni les mots "mesure" et "mesurer" : ces deux-la
+# servent de MOTS ORDINAIRES dans un enonce ("un outil de mesure", "mesurer l etat") et
+# un mot ambigu ne peut pas temoigner d une preuve. Trouve par le cobaye de MO-226, qui
+# rejouait le cas "preuve exigee sans moyen nomme" : il rendait AUTO.
+MOTS_MOYENS_PREUVE = (
+    "cobaye", "test", "verifier", "verification", "eprouver", "contre-temoin",
+    "sha", "empreinte", "rejouer", "rejoue",
+)
+# La MESURE COMPTABLE : le projet ECRIT ses faits mesures sous etiquette -- "mesure :",
+# "mesure MO-214 : cartes KO". Un mot NU ("un outil de mesure") ne compte pas : il
+# decrit un outil, il ne prouve rien. C est la LIMITE de ce controle et elle est DITE ici
+# plutot que cachee (L-055) : la detection est TEXTUELLE, elle ne comprend pas le sens --
+# un enonce qui parle de preuve sans en porter une est juge sur ses mots, et le cobaye de
+# MO-226 a montre que "mesure" nu suffisait a faire passer une promesse pour une preuve.
+LONGUEUR_ETIQUETTE_MESURE = 34
+
+
+def mesure_etiquetee(texte_normalise):
+    """Un fait mesure est ecrit SOUS ETIQUETTE : 'mesure :' ou 'mesure MO-214 : ...'."""
+    debut = 0
+    while True:
+        position = texte_normalise.find("mesure", debut)
+        if position < 0:
+            return ""
+        suite = texte_normalise[position + len("mesure"):position + LONGUEUR_ETIQUETTE_MESURE]
+        if ":" in suite:
+            return "mesure etiquetee (" + suite.split(":", 1)[0].strip() + ")"
+        debut = position + 1
 
 
 def normaliser(texte):
@@ -93,16 +205,25 @@ def mot_cle(texte_normalise, mots):
     return ""
 
 
-def evaluer(theme, objectif, type_propose="", source=""):
-    """Retourne (verdict, axes) -- chaque axe porte son vote ET sa JUSTIFICATION."""
+def evaluer(theme, objectif, type_propose="", source="", types_declares=None, avis_types=""):
+    """Retourne (verdict, axes) -- chaque axe porte son vote ET sa JUSTIFICATION.
+
+    `types_declares` vient du DOMICILE du pilote (voir `lire_types_declares`). Omis,
+    il est LU ici : un appelant qui importe `evaluer` obtient le meme comportement que
+    la ligne de commande.
+    """
+    if types_declares is None:
+        types_declares, avis_types = lire_types_declares()
     texte = normaliser(" ".join([theme or "", objectif or "", type_propose or ""]))
     axes = []
 
     mot_critique = mot_cle(texte, MOTS_ZONES_CRITIQUES)
+    chemin_critique = mot_cle(texte, CHEMINS_CRITIQUES)
+    zone_critique = mot_critique or chemin_critique
     axes.append({
         "axe": AXE_PERIMETRE,
-        "vote": VOTE_CONTRE if mot_critique else VOTE_POUR,
-        "motif": ("zone CRITIQUE nommee : " + mot_critique) if mot_critique
+        "vote": VOTE_CONTRE if zone_critique else VOTE_POUR,
+        "motif": ("zone CRITIQUE nommee : " + zone_critique) if zone_critique
                  else "aucune zone critique nommee",
     })
     mot_code = mot_cle(texte, MOTS_CODE)
@@ -112,22 +233,51 @@ def evaluer(theme, objectif, type_propose="", source=""):
         "motif": ("livrable de code : " + mot_code) if mot_code else "livrable non identifie comme du code",
     })
     mot_preuve = mot_cle(texte, MOTS_PREUVE)
+    mot_moyen = mot_cle(texte, MOTS_MOYENS_PREUVE) or mesure_etiquetee(texte)
+    # N1 (2026-09-19) : une preuve EXIGEE mais ABSENTE ne vaut pas une preuve. La
+    # declaration seule votait POUR -- le verdict tombait auto sur une promesse.
+    preuve_tenue = bool(mot_preuve) and bool(mot_moyen)
     axes.append({
         "axe": AXE_PREUVE,
-        "vote": VOTE_POUR if mot_preuve else VOTE_CONTRE,
-        "motif": ("preuve exigee : " + mot_preuve) if mot_preuve else "aucune preuve exigee dans l enonce",
+        "vote": VOTE_POUR if preuve_tenue else VOTE_CONTRE,
+        "motif": ((("preuve tenue : " + mot_preuve) + " + moyen nomme : " + mot_moyen) if preuve_tenue
+                  else ((("preuve EXIGEE (" + mot_preuve) + ") mais AUCUN moyen de preuve nomme (N1)")
+                        if mot_preuve else "aucune preuve exigee dans l enonce")),
     })
-    est_createur = normaliser(source) == SOURCE_CREATEUR
+    # F1 (2026-09-19) : `source` est desormais une PROVENANCE FERMEE (l entonnoir
+    # REFUSE une valeur hors liste) et la trace libre vit dans son PROPRE champ.
+    # La comparaison reste donc EXACTE -- et c est voulu : elle porte sur un enum
+    # dont l agent ne peut plus detourner le sens en y glissant une date.
+    # Avant, la trace honnete ("createur 2026-09-19 (audit par la suite)") votait
+    # CONTRE, donc l avis refusait d enchainer ce que l agent avait trace.
+    est_createur = normaliser(source).strip() == SOURCE_CREATEUR
     axes.append({
         "axe": AXE_DEJA_VU,
         "vote": VOTE_POUR if est_createur else VOTE_CONTRE,
         "motif": ("source createur : deja vue avec lui") if est_createur else "source : " + (source or "inconnue"),
     })
     mot_serie = mot_cle(texte, MOTS_REPARATION)
+    type_ouvert = normaliser(type_propose).strip()
+    if type_ouvert not in types_declares:
+        type_ouvert = ""
+    # EO-218 : l axe ne vote plus CONTRE du seul fait du TYPE -- c est ce que MO-203
+    # avait fige a l inverse. L enonce peut aussi dire "reparation" sans type pose.
+    # La liste vient du PILOTE (constat N3 de MO-226) : elle n est plus recopiee ici,
+    # donc une divergence n est plus possible. Quand son domicile est ILLISIBLE, l axe
+    # le DIT dans son motif -- il ne fait pas comme si la liste etait vide.
+    if mot_serie or type_ouvert:
+        vote_serie = VOTE_POUR
+        motif_serie = (("type de la liste declaree au pilote : " + type_ouvert) if type_ouvert
+                       else "reparation / correction : " + mot_serie)
+    else:
+        vote_serie = VOTE_CONTRE
+        motif_serie = "type hors liste declaree et pas une reparation"
+    if avis_types:
+        motif_serie = motif_serie + " ; " + avis_types
     axes.append({
         "axe": AXE_SERIE,
-        "vote": VOTE_POUR if mot_serie else VOTE_CONTRE,
-        "motif": ("reparation / correction : " + mot_serie) if mot_serie else "pas une reparation",
+        "vote": vote_serie,
+        "motif": motif_serie,
     })
 
     contre = [a for a in axes if a["vote"] == VOTE_CONTRE]
@@ -142,20 +292,33 @@ def main():
     analyseur.add_argument("--objectif", default="")
     analyseur.add_argument("--type", dest="type_propose", default="")
     analyseur.add_argument("--source", default="")
+    analyseur.add_argument("--racine", default="",
+                           help="dossier qui porte _operateur/optimus-prime/pilote/entonnoir/"
+                                "listes.py (cobayage) ; defaut : racine DETECTEE par son marqueur")
     analyseur.add_argument("--json", action="store_true")
     arguments = analyseur.parse_args()
     if not arguments.objectif:
-        print("Usage : python evaluer-auto-validation.py --theme <theme> --objectif \"...\" [--source createur] [--json]")
+        print("Usage : python evaluer-auto-validation.py --theme <theme> --objectif \"...\" "
+              "[--source createur] [--type dev] [--racine <dossier>] [--json]")
         return 2
-    verdict, axes = evaluer(arguments.theme, arguments.objectif, arguments.type_propose, arguments.source)
+    racine = Path(arguments.racine) if arguments.racine else None
+    types_declares, avis_types = lire_types_declares(racine)
+    verdict, axes = evaluer(arguments.theme, arguments.objectif, arguments.type_propose,
+                            arguments.source, types_declares, avis_types)
     if arguments.json:
-        print(json.dumps({"verdict": verdict, "axes": axes}, ensure_ascii=False, indent=2))
+        print(json.dumps({"verdict": verdict, "axes": axes,
+                          "types_declares": {"liste": list(types_declares),
+                                             "avis": avis_types}}, ensure_ascii=False, indent=2))
         return 0
     print("AVIS AUTO-VALIDATION -- " + str(len(axes)) + " axes")
+    print("  liste des types LUE au pilote : "
+          + (", ".join(types_declares) if types_declares else "AUCUNE -- " + avis_types))
     for a in axes:
         print("  " + a["axe"] + " : " + a["vote"].upper() + " -- " + a["motif"])
     print("VERDICT : " + verdict.upper())
     if verdict == VERDICT_AUTO:
+        print("  -> AUTO, et l avis DIT pourquoi (N5, jamais un feu vert anonyme) : "
+              + " | ".join(a["axe"] + " = " + a["motif"] for a in axes if a["vote"] == VOTE_POUR))
         print("  -> la mission part en FILE AUTO-VALIDEE : elle s enchaine sans redemander.")
     else:
         refus = ", ".join(a["axe"] for a in axes if a["vote"] == VOTE_CONTRE)

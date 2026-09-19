@@ -31,9 +31,8 @@ def afficher_aide():
     print('  executer --contenu-chemin @commande.txt --timeout 120')
 
 
-def main():
-    """Point d'entree : sac a dos + dispatch."""
-    arguments = sys.argv[1:]
+def principal(arguments):
+    """Point d'entree notable : le sac a dos NOTE l'usage (bdd-usages), puis dispatch."""
 
     if not arguments:
         afficher_aide()
@@ -60,4 +59,6 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    import constants  # noqa: F401  -- pose le pont vers data/commun (le pont vit dans constants.py)
+    from sac_a_dos import envelopper
+    sys.exit(envelopper(principal, sys.argv[1:]))

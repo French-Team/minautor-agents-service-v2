@@ -8,6 +8,9 @@ Usage :
     python main.py monter    --niveau <3-5> --raison "..."
     python main.py descendre --niveau <cible> --raison "..."
     python main.py valider   --raison "..."   (clot def3 -> defcon 2)
+    python main.py surveiller [--evaluer]   (les DECLENCHEURS declares : evalue, et
+                                       POSE le niveau du plus haut declencheur rempli
+                                       -- par la porte monter, jamais autrement)
 
 L'echelle est FERMEE : 2 = normal, 3 = surveiller puis valider,
 4 = suivi de bout en bout, 5 = stop agent par defaut / maintenance reveillee.
@@ -18,12 +21,14 @@ import sys
 from descendre.entry import executer as descendre_executer
 from lire.entry import executer as lire_executer
 from monter.entry import executer as monter_executer
+from surveiller.entry import executer as surveiller_executer
 from valider.entry import executer as valider_executer
 
 COMMANDES = {
     "lire": lire_executer,
     "monter": monter_executer,
     "descendre": descendre_executer,
+    "surveiller": surveiller_executer,
     "valider": valider_executer,
 }
 

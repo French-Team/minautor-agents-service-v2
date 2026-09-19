@@ -15,14 +15,24 @@ Usage :
     python main.py retiqueter --id MO-00X [--theme <nom>] [--type <t>]   (corrige le
                                        theme et/ou le TYPE, quel que soit le statut --
                                        trace conservee)
+    python main.py reporter --raison "..."   (PARQUE la mission en cours : retour
+                                       EN ATTENTE, TRACEE -- raison OBLIGATOIRE ; la zone
+                                       jetable reste PLEINE, un report n est pas une
+                                       cloture ; EO-182)
     python main.py statut
     python main.py injecter
+    python main.py conduire --id MO-00X   (CONDUIT une mission chargee HORS lot :
+                                       elle devient COURANTE et injectee, sans
+                                       consommer un creneau de la chaine ; EO-185)
     python main.py fin --bilan "..."   (la mission suivante reste en attente)
                                        --bilan-fichier <chemin> lit le MEME recit
                                        dans un fichier (EO-132) : un argument
                                        traverse le shell, ou un accent grave
                                        EXECUTE du shell et troue la trace
     python main.py file consommer      (echelon 4 : tete du brin -> file du pilote)
+    python main.py file verser         (echelon 4 BIS : le BRIN ENTIER -> UN lot, une
+                                       seule fois -- numerotation k/n et retour
+                                       consolide ; [--lot <nom>] ; EO-148)
     python main.py enregistrer --id MO-XXX --theme <nom> [--type <t>] --objectif "..."
                                        --bilan "..."   (le TYPE est ACCEPTE EN OPTION --
                                        jamais exige : une porte de reparation ne refuse pas
@@ -43,6 +53,8 @@ from fin.entry import executer as fin_executer
 from filtrer.entry import executer as filtrer_executer
 from profil.entry import executer as profil_executer
 
+from reporter.entry import executer as reporter_executer  # noqa: E402
+
 COMMANDES = {
     "file": file_executer,
     "charger": file_executer,
@@ -50,9 +62,11 @@ COMMANDES = {
     "transformer": file_executer,
     "retiqueter": file_executer,
     "enregistrer": file_executer,
+    "reporter": reporter_executer,
     "statut": injection_executer,
     "injecter": injection_executer,
     "enchainer": injection_executer,
+    "conduire": injection_executer,
     "mission": injection_executer,
     "fin": fin_executer,
     "checklist": checklist_executer,

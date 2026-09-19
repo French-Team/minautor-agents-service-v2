@@ -168,7 +168,7 @@ def route_sante(racine):
             body += f"\n[... {len(short)-20} lignes masquees]"
         out.append(f"\n[{label}] code={code}\n" + body)
     for cmd, label in [
-        ([sys.executable, str(REPERTOIRE_OP / "super-combos" / "combos" / "outils" / "garde-ascii.py"), str(REPERTOIRE_MATRIX)], "garde-ascii matrice/"),
+        ([sys.executable, str(REPERTOIRE_OP / "super-combos" / "combos" / "outils" / "garde-ascii.py"), str(REPERTOIRE_MATRIX)], "garde-ascii matrix/ (matrice + _operateur + docs)"),
         ([sys.executable, str(REPERTOIRE_OP / "super-combos" / "combos" / "outils" / "garde-perimetre-write.py"), "--jours", "1", "--racine", str(racine)], "garde-perimetre WRITE (1j)"),
         ([sys.executable, str(REPERTOIRE_OP / "super-combos" / "combos" / "outils" / "garde-tmp.py"), "--racine", str(racine)], "garde-tmp"),
     ]:
@@ -337,7 +337,7 @@ def _suggere_perfs(txt_metriques):
                     continue
             if moy > seuil:
                 cible = "PERFORMANCE-ROUTINES" if "veille" in outil else "PERFORMANCE-OUTILS"
-                suggestions.append(f"{outil} moy {moy}ms > budget declare {seuil}ms -> declencher {cible}")
+                suggestions.append(f"{outil} moy {moy}ms > budget declare {seuil}ms -> suggere d'enchainer {cible}")
     # Capacite du journal usages (MO-101/P3) : la valeur est LUE chez son
     # proprietaire (publiee par `bdd-usages lire`), et comparee a la taille
     # REELLE du journal. Un depassement ne veut plus dire "le journal a grossi"
@@ -355,8 +355,8 @@ def _suggere_perfs(txt_metriques):
             " -> la ROTATION n'a pas tourne (PERFORMANCE-OUTILS)"
         )
     if suggestions:
-        return "\n[SUGGESTION AUTO (seuils proto-2 DECLENCHEURS)]\n" + "\n".join("  - " + s for s in suggestions)
-    return "\n[SUGGESTION AUTO] aucun seuil depasse (proto-2 B : rien a declencher)"
+        return "\n[SUGGESTION AUTO (seuils proto-2 de SUGGESTION -- rien ne se pose ici, ce ne sont PAS des declencheurs)]\n" + "\n".join("  - " + s for s in suggestions)
+    return "\n[SUGGESTION AUTO] aucun seuil depasse (proto-2 B : aucune suggestion d'enchainement)"
 
 
 def _resumer_moteur(texte):
@@ -419,7 +419,7 @@ def route_chercher(racine):
 
 def route_metriques(racine):
     out = []
-    out.append(_section("metriques") + "Performances + activite (lecture seule) -- seuils proto-2 DECLENCHEURS")
+    out.append(_section("metriques") + "Performances + activite (lecture seule) -- seuils proto-2 de SUGGESTION (rien ne se pose ici ; les VRAIS declencheurs sont LUS en bas)")
     out.append(
         "Seuils de MESURE du cockpit : "
         + (", ".join(f"{k}={v}" for k, v in SEUILS_PERFS.items()) or "aucun (tout seuil de mesure est declare par l'objet mesure)")
@@ -469,6 +469,28 @@ def route_metriques(racine):
         + (str(budget_outil) + " ms" if budget_outil is not None else "NON PUBLIE par l'outil"),
     )
     out.append(_suggere_perfs(metriques_txt))
+    # --- LES VRAIS DECLENCHEURS (voie A, EO-181/MO-198) ----------------------
+    # Le mot "declencheur" avait DEUX sens dans ce cockpit : ici, le FAUX (des
+    # seuils de performance qui ne declenchent rien). Les VRAIS vivent ailleurs :
+    # AUTOMATIQUES, POSES par la porte machine-defcon, branches sur la passe
+    # VIGILE de la veille. Le cockpit les LIT en direct (`surveiller --evaluer`)
+    # au lieu de les citer de memoire -- motif du projet : l'objet DECLARE,
+    # l'objet PUBLIE, le cockpit LIT. `--evaluer` est LECTURE SEULE : il rapporte
+    # et NE POSE RIEN (aucun niveau n'est monte par une lecture).
+    code_decl, txt_decl = _run(
+        [sys.executable,
+         str(REPERTOIRE_DATA / "outils" / "machine-defcon" / "main.py"),
+         "surveiller", "--evaluer"]
+    )
+    out.append(
+        "DECLENCHEURS REELS (AUTOMATIQUES -- poses par machine-defcon/surveiller,"
+        " branches sur la passe VIGILE de la veille) : code=" + str(code_decl)
+    )
+    out.append("  " + (txt_decl.strip() or "aucun rapport de la porte"))
+    out.append(
+        "  -> les seuils proto-2 ci-dessus NE SONT PAS ces declencheurs : ce sont des"
+        " SUGGESTIONS faites a l'operateur (rien ne se pose tout seul)."
+    )
     return "\n".join(out)
 
 

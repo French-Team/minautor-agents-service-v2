@@ -528,8 +528,133 @@
       "action": "injection",
       "categorie": "demarrage",
       "timestamp": "2026-09-18T08:55:37.239414"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T19:57:59.395468"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T20:36:14.990121"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T20:43:46.428037"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T20:52:41.635346"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T07:04:10.168117"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T07:08:30.503256"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T07:08:59.642540"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T07:14:32.172839"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T07:18:26.956693"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T07:34:18.920721"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T07:47:33.962818"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T08:22:10.621796"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T08:29:41.570093"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T08:38:00.801048"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T08:57:28.407958"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T09:29:48.618931"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T09:35:21.167965"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T09:45:29.511192"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T12:18:21.656404"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T13:09:28.329319"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T13:10:59.910273"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T13:46:04.689328"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T14:37:36.188357"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T17:48:24.569983"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T18:09:39.297231"
     }
   ],
-  "archive_le": "2026-09-18 08:55:37",
+  "archive_le": "2026-09-19 18:09:39",
   "origine": "cycle-state.json archive par MO-110 (EO-119) le 2026-09-15 : l ETAT disparait, l HISTORIQUE est conserve"
 }

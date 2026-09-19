@@ -13,8 +13,14 @@ Ce qu'elle DONNE :
                                 partielle ne se tait JAMAIS
     copier(zone, dossier, ...)  des COPIES de fichiers reels (l'original n'est
                                 jamais touche : c'est la copie qu'on eprouve)
-    litteraux(chemin)           les declarations de chaine de MODULE (lecture
-                                par AST : aucun import, la SOURCE fait foi)
+    litteraux(chemin)           les declarations LITTERALES de MODULE (lecture
+                                par AST : aucun import, la SOURCE fait foi) :
+                                chaine, nombre, tuple, liste, dict de valeurs
+                                simples
+    litteraux_illisibles(chemin) celles qu'on ne PEUT PAS comparer : une valeur
+                                calculee se DIT, elle ne se tait pas
+    copier_sous(zone, ...)      une copie sous un nom CHOISI (miroirs : deux
+                                fichiers portent le meme nom, chacun son cote)
     muter_litteral(...)         change (genre `valeur`) ou RETIRE (genre
                                 `absent`) une de ces declarations, dans une
                                 COPIE seulement
@@ -99,21 +105,82 @@ def copier(zone, dossier, relatifs):
 
 
 def litteraux(chemin):
-    """Les declarations de chaine au niveau MODULE d'un fichier : nom -> (valeur, ligne).
+    """Les declarations LITTERALES de MODULE d'un fichier : nom -> (valeur, ligne).
 
     Lecture par AST : AUCUN import du fichier lu (un module importe peut avoir des
     effets) et la SOURCE fait foi -- c'est elle qu'on compare, pas ce qu'un import
     en aurait fait.
+
+    LITTERAL, pas seulement CHAINE (MO-230/EO-224) : `ast.literal_eval` lit la
+    chaine, le nombre, le tuple, la liste et le dict de valeurs simples. Avant,
+    seules les chaines etaient lues, donc une LISTE FERMEE comme
+    `TYPES = ("dev", "reparation", ...)` -- exactement ce qu'un controle de
+    jumeaux doit surveiller -- etait INVISIBLE, et le controle se croyait sain
+    (mesure MO-230 : 30 declarations partagees invisibles entre les deux pilotes,
+    dont les quatre copies de TYPES).
     """
     arbre = ast.parse(Path(chemin).read_text(encoding="utf-8"))
     trouves = {}
     for noeud in arbre.body:
-        if (isinstance(noeud, ast.Assign) and isinstance(noeud.value, ast.Constant)
-                and isinstance(noeud.value.value, str)):
-            for cible in noeud.targets:
-                if isinstance(cible, ast.Name):
-                    trouves[cible.id] = (noeud.value.value, noeud.lineno)
+        if not isinstance(noeud, ast.Assign):
+            continue
+        try:
+            valeur = ast.literal_eval(noeud.value)
+        except (ValueError, TypeError, SyntaxError, RecursionError):
+            continue
+        for cible in noeud.targets:
+            if isinstance(cible, ast.Name):
+                trouves[cible.id] = (valeur, noeud.lineno)
     return trouves
+
+
+def litteraux_illisibles(chemin):
+    """Les declarations de MODULE qu'on ne PEUT PAS comparer : nom -> ligne.
+
+    Une valeur CALCULEE (un nom, un appel, un chemin construit) n'est pas un
+    litteral : deux jumeaux ne peuvent pas la comparer. Elle se DIT -- un angle
+    mort muet se lit comme une couverture (doctrine des exemptions visibles,
+    MO-075). Rend une table VIDE quand tout est lisible : l'appelant peut alors
+    DIRE qu'il couvre tout, au lieu de le supposer.
+    """
+    arbre = ast.parse(Path(chemin).read_text(encoding="utf-8"))
+    illisibles = {}
+    for noeud in arbre.body:
+        if not isinstance(noeud, ast.Assign):
+            continue
+        try:
+            ast.literal_eval(noeud.value)
+            continue
+        except (ValueError, TypeError, SyntaxError, RecursionError):
+            pass
+        for cible in noeud.targets:
+            if isinstance(cible, ast.Name):
+                illisibles[cible.id] = noeud.lineno
+    return illisibles
+
+def muter_valeur(valeur, suffixe):
+    """La MEME valeur, MUTEE : la plus petite difference qu'une comparaison VOIT.
+
+    Un litteral peut etre une chaine, un nombre, un tuple, une liste ou un dict
+    (MO-230) : la mutation suit la FORME de la valeur. Sans cela, le cobaye d'un
+    controle de LISTES ne pourrait rien eprouver -- il muterait une chaine qui
+    n'existe pas, ou leverait une TypeError au lieu de dire son echec.
+    """
+    if isinstance(valeur, bool):
+        return not valeur
+    if isinstance(valeur, str):
+        return valeur + suffixe
+    if isinstance(valeur, int):
+        return valeur + 1
+    if isinstance(valeur, float):
+        return valeur + 1.0
+    if isinstance(valeur, tuple):
+        return tuple(valeur) + (suffixe,)
+    if isinstance(valeur, list):
+        return list(valeur) + [suffixe]
+    if isinstance(valeur, dict):
+        return dict(valeur, **{suffixe: suffixe})
+    return valeur
 
 
 def muter_litteral(chemin, nom, genre, suffixe=SUFFIXE_VALEUR):
@@ -122,6 +189,10 @@ def muter_litteral(chemin, nom, genre, suffixe=SUFFIXE_VALEUR):
     Rend False si la declaration n'est pas la : l'appelant le DIT alors, au lieu de
     faire semblant d'avoir eprouve. Le contenu est reecrit en LF (convention du
     depot) : la copie doit rester lisible par le meme lecteur que l'original.
+
+    Le genre `valeur` vaut pour TOUT litteral depuis MO-230 : la mutation est
+    ecrite en `repr`, donc la comparaison voit la difference quel que soit le type
+    -- c'est ce qui rend un controle de LISTES eprouvable.
     """
     table = litteraux(chemin)
     if nom not in table:
@@ -130,7 +201,7 @@ def muter_litteral(chemin, nom, genre, suffixe=SUFFIXE_VALEUR):
     chemin = Path(chemin)
     lignes = chemin.read_text(encoding="utf-8").split("\n")
     if genre == GENRE_VALEUR:
-        lignes[ligne - 1] = nom + " = " + repr(valeur + suffixe)
+        lignes[ligne - 1] = nom + " = " + repr(muter_valeur(valeur, suffixe))
     elif genre == GENRE_ABSENT:
         lignes[ligne - 1] = "# " + nom + COMMENTAIRE_ABSENT
     else:
@@ -138,3 +209,19 @@ def muter_litteral(chemin, nom, genre, suffixe=SUFFIXE_VALEUR):
     with open(str(chemin), "w", encoding="utf-8", newline="\n") as flux:
         flux.write("\n".join(lignes))
     return True
+
+
+def copier_sous(zone, dossier, relatif, nom):
+    """Pose UNE copie sous un nom CHOISI -- pour les couples qui portent le MEME nom.
+
+    Les MIROIRS inter-flux ont exactement ce cas : `matrice/pilote/entonnoir/
+    listes.py` et `_operateur/optimus-prime/pilote/entonnoir/listes.py` portent le
+    MEME nom de fichier. `copier` les poserait cote a cote sous ce nom : la seconde
+    ecraserait la premiere, et le cobaye eprouverait DEUX FOIS le meme cote sans le
+    dire. Ici le nom de la copie est CHOISI par l'appelant -- il DIT de quel cote
+    elle vient -- et les dossiers intermediaires sont crees.
+    """
+    destination = Path(dossier) / nom
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(str(Path(zone) / relatif), str(destination))
+    return destination

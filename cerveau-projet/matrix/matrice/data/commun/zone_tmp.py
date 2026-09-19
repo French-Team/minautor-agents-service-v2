@@ -65,3 +65,106 @@ def vider(zone, nom_readme=NOM_README):
         except OSError:
             echecs.append(element.name)
     return supprimes, echecs
+
+# --- LE DOMICILE DES ZONES JETABLES (declare ICI, une seule fois) ----------
+# Regle R-005 : une zone jetable vit dans le PERIMETRE D'ECRITURE de SON flux.
+# Les DEUX zones se DECLARENT ici (un seul domicile -- M-076), et leurs
+# consommateurs (les deux pilotes, les gardes, domicilier) les CITENT au lieu de
+# recopier un nom ou un chemin.
+# Les DEUX RACINES ne sont PAS les memes, et c'est DIT : la zone du cameleon se
+# resout depuis la RACINE DU WORKSPACE (elle vit hors Matrice), celle d'Optimus
+# depuis la RACINE DE LA MATRICE.
+#
+# MO-236 (demande createur) : la zone d'Optimus vivait a `matrix/tmp-optimus/`,
+# donc DANS `matrice/` -- le perimetre du cameleon -- et n'etait invisible que par
+# une exclusion de NOM. Elle vit desormais a
+# `_operateur/optimus-prime/tmp-optimus/`, invisible PAR CONSTRUCTION.
+NOM_ZONE_CAMELEON = "tmp-cameleon"
+NOM_ZONE_OPTIMUS = "tmp-optimus"
+
+# Le domicile du cameleon, relatif a la RACINE du workspace (celle qui porte
+# AGENTS.md) : le dossier `workspace/`, puis le nom de la zone.
+DOMICILE_ZONE_CAMELEON = ("workspace", NOM_ZONE_CAMELEON)
+
+
+def chemin_zone_cameleon(racine):
+    """Le chemin ABSOLU de la zone du cameleon depuis la racine du workspace."""
+    return Path(racine).joinpath(*DOMICILE_ZONE_CAMELEON)
+
+
+def est_dans_zone_cameleon(chemin_resolu, racine):
+    """True si <chemin_resolu> tombe DANS la zone DECLAREE du cameleon.
+
+    Un perimetre qui accepte une exception doit la NOMMER (doctrine des
+    exemptions visibles, MO-075) : c'est cette fonction qui la nomme, et le refus
+    la cite. Une exemption muette serait un angle mort.
+    """
+    try:
+        Path(chemin_resolu).resolve().relative_to(
+            chemin_zone_cameleon(racine).resolve()
+        )
+        return True
+    except (ValueError, OSError):
+        return False
+
+
+# Le domicile d'Optimus, relatif a la RACINE DE LA MATRICE (matrix/) -- voir le
+# commentaire du bloc de declaration plus haut : la racine d'Optimus n'est pas
+# celle du cameleon.
+DOMICILE_ZONE_OPTIMUS = ("_operateur", "optimus-prime", NOM_ZONE_OPTIMUS)
+
+
+def chemin_zone_optimus(racine_matrix):
+    """Le chemin ABSOLU de la zone d'Optimus depuis la racine matrix/."""
+    return Path(racine_matrix).joinpath(*DOMICILE_ZONE_OPTIMUS)
+
+
+# Le README d'une zone : UN texte pour les DEUX zones (une zone ne se raconte pas
+# differemment selon son proprietaire). Il CITE la regle commune (CV-012) et les
+# perimetres (R-005) au lieu de les recopier -- un texte recopie diverge
+# (frictions 65 et 67), un texte cite non.
+CONTENU_README_ZONE = """# Zone jetable
+
+> Zone PERMANENTE des fichiers temporaires d'un flux de la Matrice : tout
+> script temporaire, cobaye, preuve ou fichier de travail jetable va ICI, et
+> nulle part ailleurs.
+
+## Regles
+
+1. La zone est PERMANENTE : ce README reste TOUJOURS en place (c'est le chemin
+   sur lequel s'appuient les cobayes et les outils).
+2. La zone vit dans le PERIMETRE D'ECRITURE de SON flux (regle R-005) : chaque
+   flux prepare et vide la sienne, jamais celle d'un autre.
+3. En fin de mission, son CONTENU est vide (fichiers ET dossiers de cobaye) :
+   c'est le PILOTE de son flux qui le fait a la cloture, et il le TRACE.
+4. La regle COMPLETE n'est PAS recopiee ici : elle vit en texte COMMUN aux deux
+   flux dans la BDD des conventions de la Matrice (entree CV-012, lue par la
+   porte bdd-conventions-matrice).
+"""
+
+
+def preparer(zone, nom_readme=NOM_README, contenu_readme=CONTENU_README_ZONE):
+    """Cree la zone `tmp-*` et son README s'ils manquent ; rend ce qui a eu lieu.
+
+    C'est le PILOTE DE SON FLUX qui prepare sa zone (regle R-005) : une zone
+    jetable vit dans le perimetre d'ecriture de son flux, donc celui qui a le
+    droit d'y ecrire est celui qui la fait naitre. Un flux ne cree JAMAIS la zone
+    d'un autre.
+
+    Rend (cree_zone, cree_readme) : deux booleens, pour que l'appelant puisse
+    TRACER ce qui s'est reellement passe (un acte muet ne se relit pas).
+
+    Leve ValueError si la zone ne s'appelle pas `tmp-*` : meme refus que `vider`,
+    et pour la meme raison (L-006 : la cible est verifiee avant d'agir).
+    """
+    zone = Path(zone)
+    if not zone.name.startswith(PREFIXE_ZONE):
+        raise ValueError("Refus : " + str(zone) + " n'est pas une zone " + PREFIXE_ZONE + "*")
+    cree_zone = not zone.is_dir()
+    if cree_zone:
+        zone.mkdir(parents=True, exist_ok=True)
+    cible_readme = zone / nom_readme
+    cree_readme = not cible_readme.is_file()
+    if cree_readme:
+        cible_readme.write_text(contenu_readme, encoding="utf-8", newline="\n")
+    return cree_zone, cree_readme

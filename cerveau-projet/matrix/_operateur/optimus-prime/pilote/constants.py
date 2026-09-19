@@ -37,6 +37,12 @@ REPERTOIRE_COMMUN = REPERTOIRE_DATA / "commun"
 if REPERTOIRE_COMMUN.name == "commun" and (REPERTOIRE_COMMUN / "tokens.py").is_file():
     _sys.path.insert(0, str(REPERTOIRE_COMMUN))
 
+# MO-236 : le NOM et le DOMICILE de la zone jetable d'Optimus se LISENT au moteur
+# PARTAGE (`data/commun/zone_tmp.py`), comme ceux de la zone du cameleon (M-076).
+# Ils y etaient en DOUBLE avant (ici et dans l'outil domicilier) : deux copies
+# d'une meme verite, et deux endroits a corriger le jour du deplacement.
+from zone_tmp import NOM_ZONE_OPTIMUS as NOM_ZONE_TMP, chemin_zone_optimus  # noqa: E402
+
 # Intercom prive Flux 2 : _operateur/maintenance (zone invisible cameleon, L-016)
 REPERTOIRE_INTERCOM_OPTIMUS = REPERTOIRE_MATRIX / "_operateur" / "maintenance"
 # Compat : ancien REPERTOIRE_INTERCOM pointe vers intercom Optimus prive
@@ -181,9 +187,10 @@ LONGUEUR_MESURE_ALERTE_CONSERVATION = 1200
 # garde tmp dit lui-meme qu'il ne peut pas la verifier : une discipline non
 # verifiee depend de la memoire, donc elle est oubliee. Un domicile, une
 # constante (zero-valeur-en-dur).
-NOM_ZONE_TMP = "tmp-optimus"
-REPERTOIRE_ZONE_TMP = REPERTOIRE_MATRIX / NOM_ZONE_TMP
+# MO-236 : le nom ET le chemin sont LUS au domicile partage (zone_tmp.py) ; le
+# domicile a change (demande createur) -- `_operateur/optimus-prime/tmp-optimus/`.
 NOM_README_ZONE_TMP = "README.md"
+REPERTOIRE_ZONE_TMP = chemin_zone_optimus(REPERTOIRE_MATRIX)
 
 # MOTEUR DE RECHERCHE (EO-131) : le projet se souvient mieux que l'agent, mais
 # encore faut-il le lui DEMANDER au bon moment -- le sujet de la mission. Le

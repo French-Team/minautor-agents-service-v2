@@ -12,6 +12,7 @@ from commun import (
 )
 from constants import (
     CHEMIN_CORRIGER_ASCII,
+    CHEMIN_MACHINE_DEFCON,
     PAUSE_REPRISE_SECONDES,
     VERIFIERS_MARBRE,
 )
@@ -98,6 +99,27 @@ def passer_marbre():
     return detections
 
 
+def passer_declencheurs():
+    '''Etape 4 (VIGILE seulement) : les DECLENCHEURS de defcon (voie A, EO-181).
+
+    C'est ICI qu'un declencheur cesse d'etre un mot : la veille EVALUE les
+    conditions declarees chez machine-defcon et POSE le niveau -- par la PORTE
+    monter, qui journalise la transition et, a 5, met la session en pause.
+    Un non-zero n'est JAMAIS avale : une surveillance qui echoue se DIT.
+    '''
+    try:
+        code, sortie = lancer_combo(CHEMIN_MACHINE_DEFCON, ['surveiller'])
+    except OSError as erreur:
+        return [{'etat': 'incident-combo', 'cible': 'machine-defcon', 'detail': str(erreur)}]
+    if code == 0:
+        return []
+    if sortie_en_crash(sortie):
+        return [{'etat': 'incident-combo', 'cible': 'machine-defcon',
+                 'detail': 'crash du sous-processus (signature de crash)'}]
+    return [{'etat': 'defcon', 'cible': 'machine-defcon',
+             'detail': 'surveillance non nulle (code ' + str(code) + ') : ' + sortie[:160]}]
+
+
 def executer_passe(vigile):
     """Orchestre UNE passe : corriger-ascii + py_compile (+ marbre si VIGILE)."""
     detections = []
@@ -105,4 +127,5 @@ def executer_passe(vigile):
     detections.extend(passer_py_compile())
     if vigile:
         detections.extend(passer_marbre())
+        detections.extend(passer_declencheurs())
     return detections

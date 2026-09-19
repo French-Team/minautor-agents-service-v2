@@ -12,13 +12,22 @@ from constants import (
     ALLOWLIST_RACINE,
     ENCODAGE,
     RACINE,
-    REPERTOIRE_MATRIX,
     TAILLE_BLOC_LECTURE,
 )
 
+# Le PERIMETRE (est-ce DANS la Matrice ?) vit dans SON domicile (data/commun/
+# cible.py) : cette porte le CONSOMME, elle ne le recopie pas (M-076 -- mesure
+# MO-184 : cinq perimetres, quatre jugeaient un PREFIXE avant la resolution).
+from cible import est_dans_matrice, motif_hors_perimetre  # noqa: E402
+
 
 def dans_perimetre(chemin_relatif):
-    """True si le chemin est lisible (dans matrix/ ou allowlist racine)."""
+    """True si le chemin RESOLU est lisible (dans la Matrice, ou allowlist racine).
+
+    MO-184 (EO-178), meme contrat que la porte ecrire (MO-183) : on RESOUT avant
+    de juger. Un prefixe `matrix/...` n est plus un laissez-passer -- il ne vaut
+    que si le chemin resolu tombe VRAIMENT dans la Matrice.
+    """
     brut = str(chemin_relatif).replace("\\", "/").strip()
     if not brut:
         return False
@@ -27,19 +36,12 @@ def dans_perimetre(chemin_relatif):
         brut = brut[2:]
     while brut.startswith("/"):
         brut = brut[1:]
-    # Allowlist racine : AGENTS.md et demarrer-*.md (a la racine du workspace).
+    # Allowlist racine : AGENTS.md et demarrer-*.md (nom NU, sans separateur : il
+    # ne peut pas s echapper, et il se resout a la racine par construction).
     nom = brut.split("/")[-1]
     if "/" not in brut and (nom in ALLOWLIST_RACINE or any(nom.startswith(p) for p in ALLOWLIST_PREFIXES)):
         return True
-    # matrix/ (avec ou sans prefixe cerveau-projet/).
-    if brut.startswith("matrix/") or brut.startswith("cerveau-projet/matrix/"):
-        return True
-    # Chemin deja sous REPERTOIRE_MATRIX (absolu ou relatif resolu).
-    try:
-        p = (RACINE / brut).resolve()
-        return str(p).startswith(str(REPERTOIRE_MATRIX.resolve()))
-    except (OSError, RuntimeError):
-        return False
+    return est_dans_matrice(resoudre_chemin(brut))
 
 
 def resoudre_chemin(chemin_relatif):

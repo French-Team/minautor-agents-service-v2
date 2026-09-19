@@ -2,7 +2,14 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# L-013 : aucun niveau compte a la main. Le dossier de CET outil est celui qui
+# porte son commun.py (marqueur) : la remontee est VERIFIEE, jamais supposee (MO-177).
+REPERTOIRE_ENTREE = os.path.dirname(os.path.abspath(__file__))
+REPERTOIRE_OUTIL = os.path.dirname(REPERTOIRE_ENTREE)
+if not os.path.isfile(os.path.join(REPERTOIRE_OUTIL, "commun.py")):
+    raise RuntimeError("Dossier de l'outil introuvable depuis " + REPERTOIRE_ENTREE
+                       + " : commun.py est absent de " + REPERTOIRE_OUTIL)
+sys.path.insert(0, REPERTOIRE_OUTIL)
 
 from commun import (
     lire_signalements,
@@ -10,8 +17,12 @@ from commun import (
     enregistrer_traitement,
     formater_signal,
     extraire_options,
+    signaler_inconnues,
 )
 from constants import NOMS_OPTIONS, BOITE_MAINTENANCE_IN, HISTORIQUE
+
+# Le GESTE, dit par l outil lui-meme (MO-239) : ce que l appel doit etre.
+USAGE = "Usage : maintenir --lister | --traiter | --etat [--json]"
 
 
 def maintenir(arguments):
@@ -23,6 +34,12 @@ def maintenir(arguments):
       2 = erreur
     """
     options = extraire_options(arguments, NOMS_OPTIONS)
+    # MO-239 : une option INCONNUE se REFUSE et se NOMME (motif de la porte
+    # rechercher). Avant, elle etait AVALEE : l appel rendait la liste par DEFAUT
+    # et le resultat etait indiscernable d un resultat correct (L-055).
+    refus = signaler_inconnues(options, NOMS_OPTIONS, USAGE)
+    if refus != 0:
+        return refus
     mode_json = "json" in options
 
     # Mode etat

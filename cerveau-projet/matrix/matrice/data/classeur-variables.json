@@ -39,6 +39,20 @@
       ],
       "statut": "[OK]",
       "id": "V-003"
+    },
+    {
+      "id": "V-004",
+      "cle": "interpreteur-python",
+      "valeur": "auto",
+      "source": "2026-09-19 : domicile partage data/commun/interpreteur.py (promotion de chemin_python)",
+      "date": "2026-09-19 08:48:36",
+      "statut": "[OK]",
+      "tags": [
+        "matrice",
+        "config",
+        "interpreteur",
+        "python"
+      ]
     }
   ]
 }

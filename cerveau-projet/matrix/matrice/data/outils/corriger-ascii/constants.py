@@ -73,28 +73,13 @@ MOTIF_JOURNAL = "journal en ajout seul (.jsonl) -- non cible"
 # Carte de conversion : caractere non-ASCII -> ASCII (echappements Unicode
 # explicites, inalterables par l'edition). Tout caractere absent de la carte
 # est LAISSE TEL QUEL et signale (probleme plus grave).
-CARTE_CONVERSION = {
-    "\u00e0": "a", "\u00e2": "a", "\u00e4": "a",
-    "\u00e9": "e", "\u00e8": "e", "\u00ea": "e", "\u00eb": "e",
-    "\u00ee": "i", "\u00ef": "i",
-    "\u00f4": "o", "\u00f6": "o",
-    "\u00f9": "u", "\u00fb": "u", "\u00fc": "u",
-    "\u00e7": "c",
-    "\u00ff": "y",
-    "\u00c0": "A", "\u00c2": "A", "\u00c4": "A",
-    "\u00c9": "E", "\u00c8": "E", "\u00ca": "E",
-    "\u00ce": "I",
-    "\u00d4": "O",
-    "\u00d9": "U", "\u00db": "U",
-    "\u00c7": "C",
-    "\u0153": "oe", "\u0152": "OE",
-    "\u2018": "'", "\u2019": "'",
-    "\u201c": '"', "\u201d": '"',
-    "\u00ab": "<", "\u00bb": ">",
-    "\u2013": "-", "\u2014": "-",
-    "\u2026": "...",
-    "\u00a0": " ",
-    "\u2192": "->",
-}
+# La carte n'est plus un domicile de cet outil : elle vit dans la couche
+# PARTAGEE (matrice/data/commun/carte_ascii.py), ou DEUX consommateurs la lisent
+# -- ce scan de maintenance et la porte `ecrire`, passage oblige de toute
+# ecriture. Recopiee, elle aurait ete deux verites (l'une corrigeant ce que
+# l'autre ignorait) : c'est le module partage qui la porte depuis MO-210
+# (revision createur 2026-09-19). L'import est local : constants a installe
+# data/commun dans sys.path plus haut dans ce fichier.
+from carte_ascii import CARTE_CONVERSION  # noqa: E402,F401  (re-export pour les categories)
 
 ENCODAGE = "utf-8"

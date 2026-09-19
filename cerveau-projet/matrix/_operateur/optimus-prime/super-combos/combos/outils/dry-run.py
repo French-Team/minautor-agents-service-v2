@@ -19,15 +19,21 @@ import shutil
 from datetime import datetime
 from pathlib import Path
 
+# data/commun (motif M-076) : la racine matrix/ et le DOMICILE de la zone jetable
+# se LISENT, jamais recopies. MO-236 : ce fichier ecrivait `cerveau-projet/matrix/
+# tmp-optimus` EN DUR, avec un repli vers `combos/outils/tmp-dry-run` -- un repli
+# qui ecrivait HORS de la zone declaree, ce que le point 2 de la regle
+# `perimetre-tmp` interdit. Une seule verite, et un seul domicile.
+_MATRICE = Path(__file__).resolve()
+while _MATRICE.name != "matrix" and _MATRICE.parent != _MATRICE:
+    _MATRICE = _MATRICE.parent
+sys.path.insert(0, str(_MATRICE / "matrice" / "data" / "commun"))
+from zone_tmp import chemin_zone_optimus  # noqa: E402
+
 
 def _tmp_copy(fichier: Path, contenu: dict) -> Path:
-    tmpdir = Path("cerveau-projet/matrix/tmp-optimus")
-    if not tmpdir.is_dir():
-        alt = Path(__file__).parent / "tmp-dry-run"
-        alt.mkdir(exist_ok=True)
-        tmpdir = alt
-    else:
-        tmpdir.mkdir(exist_ok=True)
+    tmpdir = chemin_zone_optimus(_MATRICE)
+    tmpdir.mkdir(parents=True, exist_ok=True)
     dest = tmpdir / f"_dryrun-{datetime.now().strftime('%H%M%S')}-{fichier.name}"
     dest.write_text(json.dumps(contenu, ensure_ascii=False, indent=2), encoding="utf-8")
     return dest

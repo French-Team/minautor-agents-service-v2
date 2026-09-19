@@ -1,0 +1,86 @@
+"""Point d'entree global de l'entonnoir (echelons 0-3).
+
+Role : DIRIGER (parser la commande, router vers la categorie).
+Aucune logique metier ici (convention-architecture-outils).
+
+LES DEUX CHAMPS D'UN ITEM (L-061/MO-076) :
+    `theme` = le TITRE de la demande (texte libre) ;
+    `role`  = le ROLE de la mission, choisi dans le VIVIER (champ ferme).
+Un item classe SANS role bloquerait l'injection plus tard : c'est le classement
+qui le pose (propose par la table type/categorie, confirme ou corrige a la
+declaration), et `retiqueter` repare un item ne avant ce champ.
+
+Usage :
+    python main.py deposer  --theme "..." --objectif "..." [--urgence u] [--source s] [--trace "..."] [--role THEME]
+    python main.py classer  --id EO-XXX --type <dev|reparation|doc|audit|revision> [--categorie c] [--role THEME]
+    python main.py urgencer --id EO-XXX --urgence <bloquante|haute|normale|basse>
+    python main.py retiqueter --id EO-XXX --role <THEME du vivier>  (pose le ROLE + retisse)
+    python main.py corriger --id EO-XXX ( --theme "..." | --objectif "..." ) [--motif "..."]
+                                       (rectifie EN PLACE, id CONSERVE + trace
+                                       dans l item, puis retisse -- EO-175)
+    python main.py retirer  --id EO-XXX   (sortie PROPRE du vrac ou d'une file, M-058/MO-035)
+    python main.py tresse brin    (affiche le brin tisse)
+    python main.py tresse tisser  (recompose le brin : deterministe)
+    python main.py file     (affiche vrac + files, echelon par echelon)
+"""
+import sys
+
+from classer.entry import executer as classer_executer
+from corriger.entry import executer as corriger_executer
+from retiqueter.entry import executer as retiqueter_executer
+from retirer.entry import executer as retirer_executer
+from listes import CHAMP_SOURCE_TRACE
+from stockage import charger_entonnoir
+from tresse.entry import executer as tresse_executer
+from urgencer.entry import executer as urgencer_executer
+from vrac.entry import executer as deposer_executer
+
+COMMANDES = {
+    "deposer": deposer_executer,
+    "classer": classer_executer,
+    "corriger": corriger_executer,
+    "urgencer": urgencer_executer,
+    "retiqueter": retiqueter_executer,
+    "retirer": retirer_executer,
+    "tresse": tresse_executer,
+}
+
+
+def afficher_file():
+    """Affiche l'entonnoir echelon par echelon (le vrac puis chaque file-type)."""
+    etat = charger_entonnoir()
+    vrac = etat.get("vrac", [])
+    print("== ECHELON 0 : vrac (" + str(len(vrac)) + " mission(s)) ==")
+    for mission in vrac:
+        print(
+            "  " + mission["id"] + "  urgence " + mission["urgence"]
+            + "  role " + (mission.get("role") or "(a poser au classement)")
+            + "  " + mission["theme"] + " -- " + mission["objectif"]
+            + "  (source " + mission["source"] + ")"
+        )
+    files = etat.get("files", {})
+    for type_file, missions in files.items():
+        print("== FILE " + type_file + " (" + str(len(missions)) + " mission(s)) ==")
+        for mission in missions:
+            print(
+                "  " + mission["id"] + "  [" + mission["categorie"] + "]  urgence "
+                + mission["urgence"] + "  role " + (mission.get("role") or "(MANQUANT)")
+                + "  " + mission["theme"]
+            )
+    return 0
+
+
+def principal(arguments):
+    if not arguments:
+        print(__doc__)
+        return 2
+    if arguments[0] == "file":
+        return afficher_file()
+    if arguments[0] not in COMMANDES:
+        print(__doc__)
+        return 2
+    return COMMANDES[arguments[0]](arguments[1:])
+
+
+if __name__ == "__main__":
+    sys.exit(principal(sys.argv[1:]))

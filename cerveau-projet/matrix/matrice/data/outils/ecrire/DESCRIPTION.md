@@ -33,9 +33,9 @@ python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fic
 | Pas de .bak (pas de revert proto-2) | **.bak horodate** si fichier existait (revert possible) |
 | Pas de SHA | **SHA-256 avant/apres** annonce (preuve disque) |
 | Pas de validation syntaxe | **py_compile** (.py) et **json** (.json) VALIDES AVANT publication : un contenu invalide est REFUSE (code 1) et la cible reste INTACTE (EO-129) |
-| Hors perimetre possible | **Refuse hors `matrix/`** (sauf allowlist `AGENTS.md`/`demarrer-*.md`), code 2 |
-| str_replace fragile whitespace | **Occurrence unique imposee** (0 ou >1 = REFUS code 2, message explicite) |
-| Pas d'ASCII | **ASCII signale** (nb non-ASCII + lignes) |
+| Hors perimetre possible | **Refuse hors de la Matrice, chemin RESOLU d abord** (sauf allowlist `AGENTS.md`/`demarrer-*.md`), code 2, refus qui NOMME la Matrice (MO-183/EO-177) |
+| str_replace fragile whitespace | **Occurrence unique imposee** (0 ou >1 = REFUS (code 2), message explicite) |
+| Pas d'ASCII | **ASCII CORRIGE, puis refuse** (MO-210) : ce que la carte commune sait convertir est corrige AVANT l ecriture et DIT ; ce qu elle IGNORE = **REFUS (code 2)**, RIEN n est ecrit, caractere et ligne NOMMES |
 | Heredoc casse | **@file** (anti-heredoc) |
 | Contenu hostile au transport (antislash, triples guillemets imbriques) | **`--contenu-base64`** (MO-173) : le blob traverse la chaine sans qu aucune couche puisse le deformer. Epreuve : le MEME contenu, en brut, arrive CORROMPU (l antislash consomme) ; en base64 il est **BIT-EXACT** |
 | ImportError invisible a la compilation | **Garde d ORDRE** (EO-159) : un import LOCAL dont le nom n est pas lie par le module fournisseur est REFUSE avant publication -- `py_compile` ne dit rien d un ImportError (mesure MO-169 : la porte est morte de son propre contenu) |
@@ -52,11 +52,12 @@ python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fic
 
 ## Protections
 
-- Perimetre `matrix/` seul (allowlist racine) -- hors perimetre = code 2.
+- Perimetre : le chemin RESOLU doit tomber DANS la Matrice (allowlist racine : `AGENTS.md`, `demarrer-*.md`) -- hors perimetre = code 2, refus NOMME. La forme `matrix/...` n est acceptee que si la Matrice vit sous la racine ; dans ce depot la Matrice vit sous `cerveau-projet/`, donc la forme correcte est `cerveau-projet/matrix/...` (MO-183/EO-177 : juger un PREFIXE avant la resolution a fait ecrire la porte HORS de la Matrice, arborescence parasite creee).
 - Mode ferme (`creer|remplacer|ajouter`) -- inconnu = code 2.
 - `creer` refuse si existe (code 2).
 - Option PRIVEE de valeur = **REFUS nomme** (code 2, `REFUS : option --X sans valeur`) : le parseur n'ecrit plus `""` en silence -- une option videe en silence se lit "pas de contenu" et accuse a tort l'appelant (EO-156).
 - `editer` : 0 occurrence = code 2, >1 = code 2 (unique).
+- **ASCII avant publication (MO-210)** : les DEUX verbes passent par `corriger_contenu` AVANT la publication. Trois sorties : (1) rien a corriger, silence ; (2) non-ASCII couverts par la carte, corriges et DITS (`[ASCII] CORRIGE : n caractere(s) en lignes ...`) ; (3) non-ASCII HORS carte, **REFUS (code 2), RIEN n est ecrit**, avec le caractere et sa ligne (`\xB0 (U+00B0)` pour le degre) et le remede. La carte vit au **domicile unique** `matrice/data/commun/carte_ascii.py` : deux consommateurs (cette porte et le scan `corriger-ascii`), une seule carte -- recopiee, elle aurait ete deux verites (l une corrigeant ce que l autre ignorait). Le message est 100% ASCII : un caractere brut sortait en cp1252 et cassait tout appelant qui capture la sortie (mesure du cobaye MO-210).
 - Validation : `.py` via `py_compile`, `.json` via `json.load`, faite sur le TEMPORAIRE **AVANT** le remplacement. Echec = code 1, RIEN n'est ecrit, la cible est INTACTE (EO-129 : avant, la porte publiait d'abord et un fichier invalide restait en place).
 - Ecriture atomique : `tmp`, VALIDATION, puis `os.replace`, LF forces (le temporaire est retire si le contenu est refuse).
 

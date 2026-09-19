@@ -28,6 +28,18 @@ identite:
    ecart mesure ; `basse` pour une proposition en attente de GO.
 4. **Un item est CLASSE** (type + role) : un item du vrac n'est pas executable,
    et le classement est ce qui pose le role dont l'injection a besoin.
+   **Le classement a un DECLENCHEUR** (decision createur 2026-09-19, EO-192) : il
+   ne depend plus de la memoire de qui relit la file.
+   - **A LA NAISSANCE** : un item dont le type est **DECLARE** (le crochet du
+     createur, ou `--type` -- souverain) est classe A LA SECONDE : il entre dans
+     SA file avec sa categorie et son role, poses par les tables et IMPRIMES
+     (donc corrigeables). Une **proposition** par mot-cle ne classe PAS : une
+     devinette n'ouvre pas un domicile.
+   - **SUR DEMANDE** : `classer --id EO-XXX` sans `--type` **CONSOMME** le type
+     que l'item PORTE (R5 rendu vrai) et DIT son origine. S'il n'en porte aucun,
+     le refus est DIRECTIONNEL (il nomme le geste).
+   Le vrac ne garde donc que les items qu'AUCUNE souverainete n'a nommes : ceux
+   la attendent une decision -- et le depot les NOMME avec le geste exact.
 5. **Un item RESOLU sort du vrac** (`retirer`) : la trace de ce qui l'a resolu
    vit dans la mission, le rapport et le journal -- jamais dans la file, sinon
    la file ment sur ce qui reste a faire.

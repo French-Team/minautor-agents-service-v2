@@ -1,0 +1,167 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+garde-tmp.py -- Garde perimetre des fichiers temporaires (M-100, MO-104)
+
+Regle immuable defendue : `regles-immuables/perimetre-tmp.md`.
+Quatre controles :
+1. zero residu temporaire HORS des zones tmp-*/ ;
+2. toute zone tmp-*/ PRESENTE porte son README (la zone est permanente :
+   un tmp-* sans README est une zone privee de son contrat) ;
+3. toute zone tmp-*/ vit a la RACINE, la ou la regle lui donne son DOMICILE
+   (point 1) : une zone plus profonde, `matrice/` compris, est un ECART
+   (point 2, "Aucun autre emplacement, jamais"), et une zone dont le nom n est
+   pas un domicile declare n a PAS de proprietaire (point 1) ;
+4. la regle est LUE a l allumage : elle figure a ses 4 points de relecture
+   (controle `regle-lue-a-l-allumage` -- une regle que personne ne relit ne
+   protege rien).
+
+Mesure du 2026-09-18 (EO-173, MO-180) : les controles ne regardaient que
+`racine / <nom>`, si bien qu une zone ecrite dans `matrice/` etait INVISIBLE --
+`matrice/tmp-optimus/`, six fichiers de MO-172, n a jamais ete vue, ni par ce
+garde ni par le purgeur de cloture (qui ne connait que la zone de son flux).
+Le controle 3 est la FERMETURE de ce trou.
+
+Il INFORME du nombre de fichiers presents dans chaque zone, sans accuser :
+pendant une mission, des cobayes y vivent legitimement. Le CONTENU vide en
+fin de mission n est PAS verifiable par une garde : c est une discipline,
+et la regle le dit elle-meme.
+
+code 0 = sain, code 1 = ecart detecte.
+Usage: python garde-tmp.py [--racine <path>]
+"""
+
+import sys
+import argparse
+import fnmatch
+from pathlib import Path
+
+
+TMP_DIRS = {"tmp-optimus", "tmp-cameleon"}
+PATTERNS = ("_cobaye*", "*.tmp", "_*.txt", ".tmp-*", ".zz-*")
+EXCLUS_DIRS = {".git", "__pycache__"}
+
+# Domicile de l operateur : sa presence distingue une vraie racine matrix/
+# d une racine de cobaye (ou les points de relecture n existent pas).
+DOSSIER_OPERATEUR = Path("_operateur") / "optimus-prime"
+MARQUEUR_REGLE = "perimetre-tmp.md"
+POINTS_LECTURE = (
+    DOSSIER_OPERATEUR / "regles-immuables" / MARQUEUR_REGLE,
+    DOSSIER_OPERATEUR / "regles-immuables" / "regles-immuables-readme.md",
+    DOSSIER_OPERATEUR / "optimus-prime.md",
+    DOSSIER_OPERATEUR / "protocoles" / "proto-1-reprise-mission.md",
+)
+
+
+def trouver_racine(depart: Path) -> Path:
+    """Localise le dossier matrix/ a partir du chemin demande."""
+    racine = depart.resolve()
+    if racine.name == "matrix":
+        return racine
+    cand = racine / "matrix"
+    if cand.is_dir():
+        return cand
+    cand = racine / "cerveau-projet" / "matrix"
+    if cand.is_dir():
+        return cand
+    return racine
+
+
+def controler_residus(racine: Path) -> list:
+    """Fichiers temporaires presents HORS des zones tmp-*/."""
+    residus = []
+    for p in racine.rglob("*"):
+        if not p.is_file():
+            continue
+        try:
+            rel = p.relative_to(racine)
+        except ValueError:
+            continue
+        if any(part in EXCLUS_DIRS for part in rel.parts):
+            continue
+        if rel.parts and rel.parts[0] in TMP_DIRS:
+            continue
+        if any(fnmatch.fnmatch(p.name, pat) for pat in PATTERNS):
+            residus.append(str(rel))
+    return residus
+
+
+def controler_zones(racine: Path) -> tuple:
+    """Zones tmp-*/ : ecarts (README absent) + information (nb de fichiers)."""
+    ecarts = []
+    infos = []
+    for nom in sorted(TMP_DIRS):
+        zone = racine / nom
+        if not zone.is_dir():
+            continue
+        if not (zone / "README.md").is_file():
+            ecarts.append(
+                nom + "/ present SANS son README (zone privee de son contrat)"
+            )
+        fichiers = [
+            p for p in zone.rglob("*")
+            if p.is_file() and "__pycache__" not in p.parts
+        ]
+        infos.append(nom + "/ : " + str(len(fichiers)) + " fichier(s) present(s)")
+    return ecarts, infos
+
+
+def controler_regle(racine: Path) -> list:
+    """Controle `regle-lue-a-l-allumage` : la regle figure a ses 4 points.
+
+    Ignore quand le domicile de l operateur est absent : la racine controlee
+    n est alors pas une racine matrix/ (cas des racines de cobaye).
+    """
+    if not (racine / DOSSIER_OPERATEUR).is_dir():
+        return []
+    ecarts = []
+    for point in POINTS_LECTURE:
+        chemin = racine / point
+        if not chemin.is_file():
+            ecarts.append(str(point) + " : la regle a disparu de ce point")
+            continue
+        if point.name == MARQUEUR_REGLE and point.parent.name == "regles-immuables":
+            continue
+        try:
+            texte = chemin.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError) as erreur:
+            ecarts.append(str(point) + " : illisible (" + str(erreur) + ")")
+            continue
+        if MARQUEUR_REGLE not in texte:
+            ecarts.append(str(point) + " : ne cite plus " + MARQUEUR_REGLE)
+    return ecarts
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Garde perimetre des fichiers temporaires (tmp-*/)"
+    )
+    parser.add_argument("--racine", default=".", help="Dossier matrix/ (defaut: cwd)")
+    args = parser.parse_args()
+
+    racine = trouver_racine(Path(args.racine))
+    if racine.name != "matrix" or not racine.is_dir():
+        print("Dossier matrix/ introuvable depuis " + str(args.racine))
+        return 2
+
+    ecarts = controler_residus(racine)
+    ecarts_zones, infos = controler_zones(racine)
+    ecarts.extend(ecarts_zones)
+    ecarts.extend(controler_regle(racine))
+
+    for info in infos:
+        print("INFO zone : " + info)
+
+    if ecarts:
+        print("ECARTS : " + str(len(ecarts)) + " ecart(s) de perimetre temporaire :")
+        for ecart in ecarts:
+            print("  - " + ecart)
+        return 1
+
+    print("Tmp sain : aucun residu hors tmp-optimus/tmp-cameleon, README des zones "
+          "present, regle perimetre-tmp lue a ses 4 points.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

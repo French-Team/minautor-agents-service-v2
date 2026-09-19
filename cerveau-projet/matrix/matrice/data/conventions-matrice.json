@@ -163,15 +163,29 @@
     {
       "id": "CV-012",
       "date": "2026-09-16 19:10:52",
-      "convention": "PERIMETRE DES FICHIERS TEMPORAIRES (regle COMMUNE aux DEUX flux) : tout fichier temporaire, cobaye ou preuve jetable va dans SA zone tmp-<agent>/ a la racine, et JAMAIS ailleurs (ni la racine du projet, ni matrice/, ni AppData/Temp). La zone est PERMANENTE et porte TOUJOURS son README : une zone tmp-* sans son README est un ecart, pas un etat normal. En fin de mission, son CONTENU est vide (fichiers ET dossiers de cobaye) : c'est le PILOTE qui le fait a la cloture, et la suppression se TRACE dans le journal de SON flux, jamais silencieuse -- une preuve citee puis supprimee sans trace laisse une citation vers du vide. La preuve d'un cobaye est son RESULTAT, lu a l'execution : le fichier qui dort n'est plus une preuve. Domicile PARTAGE : cette convention est le texte de reference des DEUX flux ; chaque flux garde sa regle propre pour ce qui n'appartient qu'a lui.",
+      "convention": "PERIMETRE DES FICHIERS TEMPORAIRES (regle COMMUNE aux DEUX flux) : tout fichier temporaire, cobaye ou preuve jetable va dans SA zone tmp-<agent>/, et JAMAIS ailleurs (ni la racine du projet, ni un dossier d'outil, ni AppData/Temp). La zone vit dans le PERIMETRE D'ECRITURE de SON flux -- matrix/_operateur/optimus-prime/tmp-optimus/ pour Optimus, workspace/tmp-cameleon/ pour le cameleon : le domicile n'est plus 'la racine' par principe, il SUIT le perimetre (regle R-005, ecrite noir sur blanc le 2026-09-19 ; une zone qui vit hors du perimetre de son flux rend la regle muette, et c'etait le cas mesure de tmp-cameleon dans matrix/). La zone est PERMANENTE et porte TOUJOURS son README : une zone tmp-* sans son README est un ecart, pas un etat normal. En fin de mission, son CONTENU est vide (fichiers ET dossiers de cobaye) : c'est le PILOTE qui le fait a la cloture, et la suppression se TRACE dans le journal de SON flux, jamais silencieuse -- une preuve citee puis supprimee sans trace laisse une citation vers du vide. La preuve d'un cobaye est son RESULTAT, lu a l'execution : le fichier qui dort n'est plus une preuve. Domicile PARTAGE : cette convention est le texte de reference des DEUX flux ; chaque flux garde sa regle propre pour ce qui n'appartient qu'a lui. AMENDEMENT 2026-09-19 (MO-236, demande createur) : la zone d'Optimus ne vit plus a la racine de la Matrice mais sous _operateur/optimus-prime/tmp-optimus/ -- invisible PAR CONSTRUCTION au cameleon, et non plus par une exclusion de nom.",
       "tags": [
         "perimetre",
         "tmp",
         "commun",
         "dual-flux"
       ],
-      "source": "MO-147 / EO-128 (friction 65 et 67)"
+      "source": "MO-189 (EO-146) : alignement sur R-005",
+      "modifie_le": "2026-09-19 15:52:00"
+    },
+    {
+      "id": "CV-013",
+      "date": "2026-09-19 18:01:58",
+      "convention": "REFUS DIRECTIONNEL DES OUTILS (auto-diagnostic) : un outil qui refuse DIT le probleme ET le geste -- l option fautive est NOMMEE, les options reconnues et l usage sont imprimes. Un refus MUET (usage seul, ou option inconnue avalee en silence) est un ECART : l appel obtient alors le resultat du DEFAUT, indiscernable d un resultat correct (EO-179, L-055). Le modele vit au domicile matrice/data/commun/options.py (signaler_inconnues) ; la MESURE et la PREPARATION des missions vivent dans le super-combo sc-004-auto-diagnostic (phases diagnostic = defauts declares R5, inspection = sonde de chaque outil, preparer = depot a l entonnoir). Regle : l auto-diagnostic DIAGNOSTIQUE et PREPARE, il ne repare JAMAIS lui-meme.",
+      "tags": [
+        "outil",
+        "diagnostic",
+        "refus",
+        "convention",
+        "sc-004"
+      ],
+      "source": "MO-202 (EO-188), arbitrage createur 2026-09-19"
     }
   ],
-  "compteur": 12
+  "compteur": 13
 }

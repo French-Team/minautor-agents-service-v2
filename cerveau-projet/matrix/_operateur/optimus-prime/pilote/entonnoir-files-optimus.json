@@ -1,96 +1,60 @@
 {
-  "vrac": [
-    {
-      "id": "EO-140",
-      "theme": "reparer tmp-optimus/mo160-cobaye/p11/cible.py",
-      "objectif": "python-compile : ne compile pas (confirme apres re-test)",
-      "urgence": "bloquante",
-      "source": "veille",
-      "deposee_le": "2026-09-17 08:57:55"
-    },
-    {
-      "id": "EO-146",
-      "theme": "Perimetres des deux flux : le cameleon construit dans workspace/, Optimus sur la racine",
-      "objectif": "Ecrire noir sur blanc les deux perimetres et les APPLIQUER : le cameleon construit dans workspace/ (sa zone jetable tmp-cameleon doit y passer depuis matrix/) ; Optimus lit tout depuis la racine et entretient matrix/ entiere. Verifier ensuite la chaine du flux 1 (matrice -> pilote -> cameleon -> pilote -> matrice) et du flux 2 (declenchement -> Optimus reveille -> son pilote -> retour au flux 1). REDEPOT : la demande avait ete consommee par la creation de MO-162 (reaffectee a la purification sur demande du createur), elle ne doit pas etre perdue.",
-      "urgence": "haute",
-      "source": "createur",
-      "deposee_le": "2026-09-17 09:47:36",
-      "role": "PILOTE"
-    },
-    {
-      "id": "EO-148",
-      "theme": "Pilote : le pont entonnoir -> pilote ne verse que la TETE du brin (un item par appel)",
-      "objectif": "Ecrire le verbe qui verse le BRIN ENTIER dans la file du pilote d un seul geste : N missions classees dans l entonnoir injectees en LOT (numerotation k/n, retour consolide), au lieu de la tete une par une (consommer_tete_tresse). Mesure MO-160 : charger --lot transporte N missions (prouve 20/20) mais le pont ne verse que la tete. REDEPOT : la demande avait ete consommee par la creation de MO-163 (reaffectee a EO-147 sur demande du createur), elle ne doit pas etre perdue.",
-      "urgence": "haute",
-      "source": "createur",
-      "deposee_le": "2026-09-17 09:53:35",
-      "role": "PILOTE"
-    },
-    {
-      "id": "EO-150",
-      "theme": "Pilote : charger_lot ne refuse pas un 2e lot pendant une mission en cours",
-      "objectif": "Mesure MO-160 : charger_lot n a AUCUNE garde de serie stricte ; armer un 2e lot REMPLACE les ids du lot courant (mesure : ['MO-160','MO-161'] -> ['MO-162']) et la mission en cours perd sa portee (0/0). Consequence lue dans fin/fonctions.py : la mission devient HORS lot, donc le RETOUR CONSOLIDE du lot A est perdu en SILENCE. Attendu : REFUS nomme, comme les deux autres chemins d injection. REDEPOT : la demande etait portee par MO-164, repurpose (priorite createur sur la fermeture du theme PURIFICATION) ; elle ne doit pas etre perdue.",
-      "urgence": "haute",
-      "source": "friction MO-160 / redepot depuis MO-164",
-      "deposee_le": "2026-09-17 19:52:05",
-      "role": "PILOTE"
-    },
-    {
-      "id": "EO-151",
-      "theme": "Conservation : remplir et faire respecter les lecteurs/ecrivains/index (friction 88)",
-      "objectif": "Reparer la friction 88 revelee par la fermeture du theme PURIFICATION (MO-164) : la BDD de conservation porte 200 points mais les champs lecteurs, ecrivains et index sont remplis 0/200, alors que le plan valide (plan-conservation section 4) en fait une REGLE, que sa section 5 impose a la porte d archive de REFUSER un element sans lecteur recense, et que la case 2 du theme demande le recensement. Trois volets mesures : (1) la porte archiver doit reprendre le refus du plan (sans lecteur recense) ou DIRE pourquoi il a ete ecarte par la contre-analyse MO-156 ; (2) le recensement deja MESURE (revert-fichier, revert-periode) doit etre ECRIT dans les champs qui l attendent, pour les 193 points de la famille .bak au moins, par une porte et non a la main ; (3) aucun controle ne mesure aujourd hui ces trois champs : en ajouter un, car une colonne vide se lit comme un fait.",
-      "urgence": "haute",
-      "source": "friction 88 / MO-164",
-      "deposee_le": "2026-09-17 19:56:26",
-      "role": "PURIFICATION"
-    },
-    {
-      "id": "EO-153",
-      "theme": "Pilote : un item de l entonnoir peut etre consomme DEUX FOIS",
-      "objectif": "Mesure MO-161 (friction 83) : EO-136 a servi a declarer MO-160 a la main (mission nee sans consommer le brin), puis la tete du brin a ete versee automatiquement a la cloture de MO-160 -- MO-161 est nee avec l OBJECTIF IDENTIQUE a MO-160, deja executee. Rien n a ete perdu mais une mission fantome a occupe un creneau et la demande reelle a ete retardee. A FAIRE : lier la naissance d une mission a la consommation de son item (ou rendre la consommation IDEMPOTENTE : un item deja servi ne doit plus repartir). Contournement employe : retrait manuel de l item consomme (EO-144). REDEPOT : la demande etait portee par MO-165, repurpose (priorite createur sur la reparation d EO-152) ; elle ne doit pas etre perdue.",
-      "urgence": "haute",
-      "source": "friction 83 / redepot depuis MO-165",
-      "deposee_le": "2026-09-17 20:03:54",
-      "role": "PILOTE"
-    },
-    {
-      "id": "EO-154",
-      "theme": "Trace : DEUX DOMICILES pour les modifications (appui modifications.db vs domicile modifications-par-fichier.json)",
-      "objectif": "MESURE 2026-09-17 (inter-round EO-152). Le pilote LIT la BDD modifications-par-fichier.json (CHEMIN_MODIFICATIONS) et l espion/les outils recents ECRIVENT dans matrice/data/modifications.db (appui sqlite, instrument bdd-modifs). Les deux ont DIVERGE : le domicile s est arrete au 2026-09-17 10:06:31 alors que l appui recevait les 12 lignes de MO-164 (ids 27 a 31) et MO-165 (ids 32 a 42, la livraison d EO-152). CONSEQUENCE MESUREE : la vue a affiche '-' pour la colonne Fichiers de MO-164 et MO-165, la cloture a crie TRACE MUETTE deux fois, et le travail d EO-152 etait INVISIBLE -- une colonne vide se lit 'aucun fichier touche'. REPARATION FAITE ce jour : les 15 lignes de l appui ont ete REPUBLIEES au domicile par la porte officielle (idempotent, origine et date de l appui DITES dans le detail), le rattrapage a rendu 2 missions / 14 fichiers VISIBLES, la vue est regeneree. A TRANCHER (createur) : UN SEUL domicile pour une seule verite (M-076) -- soit les ecrivains recents ecrivent le domicile JSON, soit le domicile devient l appui sqlite et TOUS les lecteurs (pilote, vue, espions, outils) sont re-pointes. Tant que les deux vivent, la divergence reviendra et la trace sera muette sans que personne ne le voie.",
-      "urgence": "haute",
-      "source": "veille",
-      "deposee_le": "2026-09-17 20:54:36",
-      "role": "PILOTE"
-    },
-    {
-      "id": "EO-155",
-      "theme": "Porte bdd-modifications : aucun verbe pour CORRIGER une entree (reparer une attribution fautive est impossible par sa porte)",
-      "objectif": "MESURE 2026-09-17 (inter-round EO-152). La porte bdd-modifications n a que noter/lire/verifier. Or le RATTACHEMENT d une ligne a sa mission se fait par TAG ou par MENTION en tete du detail -- et la mention de CONTEXTE est un piege DEJA documente (note MO-148 : 'MO-032 : fin retroactive MO-027' attribue a MO-027 une ligne de MO-032). CAS REEL mesure ce jour : la republication de la ligne d appui 41 (controler_borne_conservation, pilote/commun.py) a ete taggee MO-164 parce que sa RAISON cite 'mesure MO-164' -- alors qu elle appartient a MO-165. Sans verbe de correction, la faute a du etre reparee par la porte GENERIQUE d ecriture, ce qui a casse l EMPREINTE de la BDD (le verifier a crie 'la BDD a ete modifiee hors de l outil', correctement) et a exige de la recalculer avec la fonction de la porte. A FAIRE : un verbe  (et/ou ) dans la porte, qui reattribue une entree ET recalcule l empreinte -- sinon toute faute d attribution est definitive, et une trace qui MENT est pire qu une trace muette.",
-      "urgence": "normale",
-      "source": "veille",
-      "deposee_le": "2026-09-17 20:54:36",
-      "role": "PILOTE"
-    },
-    {
-      "id": "EO-157",
-      "theme": "Moins d erreurs de syntaxe : lanceur unique et garde des commandes",
-      "objectif": "Proposition repondant a la question du createur : (P1) un lanceur unique matrix/lancer.py qui resout l outil par son nom et porte l interpreteur et le chemin, pour que la commande ne soit plus jamais ecrite a la main ; (P3) un garde des COMMANDES qui accuse un appel sans interpreteur, un chemin d argument non ancre, un heredoc ou un python -c -- les gardes actuels ne surveillent que les fichiers.",
-      "urgence": "basse",
-      "source": "re-depot : MO-168 ecartee sur priorite createur (EO-156 d abord)",
-      "deposee_le": "2026-09-18 07:30:54",
-      "role": "OUTIL"
-    }
-  ],
+  "vrac": [],
   "files": {
-    "dev": [],
-    "reparation": [
+    "dev": [
       {
-        "id": "EO-169",
-        "theme": "PILOTE",
-        "objectif": "PILOTE reparation : reparer les 8 chaines dirname hors zone signalees par le garde chemins, une reparation a la fois, avec preuve avant/apres rendue par le garde lui-meme (cobaye rejouable)",
+        "id": "EO-263",
+        "theme": "Audit continu du watchdog d Optimus (super-combo dedie)",
+        "objectif": "[preparation] DEMANDE CREATEUR (2026-09-19) : un super-combo dedie au WATCHDOG d Optimus a ete cree mais il ne sert pas a grand chose pour l instant -- on doit obtenir un AUDIT COMPLET ET CONTINU pour suivre les ameliorations, corrections, modifications et optimisations qu on va lui faire. PORTE : le crochet [preparation] ouvre l espace de DISCUSSION et PREPARATION hors code (inventorier, dessiner, prioriser) : AUCUN code avant le GO createur. A FAIRE : (1) MESURER ce que le watchdog fait aujourd hui (ou il vit, ce qu il surveille, ce qu il publie, ce qui le lit) ; (2) DESSINER l audit continu (ce qui est suivi, ou c est ecrit, qui le lit, comment une amelioration se VOIT dans le temps) ; (3) PRIORISER la serie et attendre le GO.",
         "urgence": "normale",
         "source": "createur",
-        "deposee_le": "2026-09-18 09:46:31",
+        "deposee_le": "2026-09-19 18:08:40",
+        "auto_validation": "non",
+        "auto_validation_axes": [
+          {
+            "axe": "perimetre",
+            "vote": "pour",
+            "motif": "aucune zone critique nommee"
+          },
+          {
+            "axe": "reversible",
+            "vote": "pour",
+            "motif": "livrable de code : porte"
+          },
+          {
+            "axe": "preuve",
+            "vote": "contre",
+            "motif": "preuve EXIGEE (mesurer) mais AUCUN moyen de preuve nomme (N1)"
+          },
+          {
+            "axe": "deja-vu",
+            "vote": "pour",
+            "motif": "source createur : deja vue avec lui"
+          },
+          {
+            "axe": "serie",
+            "vote": "pour",
+            "motif": "type de la liste declaree au pilote : dev"
+          }
+        ],
+        "type_propose": "dev",
+        "type_source": "declaration",
+        "source_trace": "2026-09-19 (crochet [preparation] du createur)",
+        "type": "dev",
+        "categorie": "autre",
+        "role": "CONSTRUCTEUR",
+        "role_source": "table",
+        "classee_le": "2026-09-19 18:08:40"
+      }
+    ],
+    "reparation": [
+      {
+        "id": "EO-264",
+        "theme": "Pourquoi le pilote s arrete apres CHAQUE mission",
+        "objectif": "[bug] DEMANDE CREATEUR (2026-09-19) : pourquoi le pilote ne charge-t-il pas PLUSIEURS missions pour les executer a la suite, de bout en bout ? Chaque mission close rend STOP ENCHAINEMENT et l operateur doit relancer a la main. A MESURER : (1) les chemins d enchainement qui existent (lot arme k/n, tete de brin AUTO-VALIDEE, file du pilote) et celui qui s applique REELLEMENT aujourd hui ; (2) la raison EXACTE du STOP sur l etat reel -- quelle tete, quel verdict d auto-validation, et pourquoi ; (3) ce qui manque pour un enchainement de bout en bout (MO-205 : garde de serie stricte de charger_lot ; MO-203 F3 : reprise de la tete auto-validee au terme d un lot). PREUVE EXIGEE : une mesure rejouee qui nomme la tete du brin, son verdict d auto-validation et l etat du lot.",
+        "urgence": "haute",
+        "source": "createur",
+        "deposee_le": "2026-09-19 18:08:40",
         "auto_validation": "auto",
         "auto_validation_axes": [
           {
@@ -106,7 +70,7 @@
           {
             "axe": "preuve",
             "vote": "pour",
-            "motif": "preuve exigee : cobaye"
+            "motif": "preuve tenue : preuve + moyen nomme : mesure etiquetee (r)"
           },
           {
             "axe": "deja-vu",
@@ -116,67 +80,40 @@
           {
             "axe": "serie",
             "vote": "pour",
-            "motif": "reparation / correction : reparer"
+            "motif": "type de la liste declaree au pilote : reparation"
           }
         ],
+        "type_propose": "reparation",
+        "type_source": "declaration",
+        "source_trace": "2026-09-19 (crochet [bug] du createur)",
         "type": "reparation",
-        "categorie": "outil",
-        "role": "PILOTE",
-        "role_source": "declaration",
-        "classee_le": "2026-09-18 09:46:31"
+        "categorie": "pilote",
+        "role": "REPARATION",
+        "role_source": "table",
+        "classee_le": "2026-09-19 18:08:40"
       }
     ],
     "doc": [],
     "audit": [],
     "revision": []
   },
-  "compteur": 172,
-  "brin": [
-    {
-      "id": "EO-169",
-      "theme": "PILOTE",
-      "objectif": "PILOTE reparation : reparer les 8 chaines dirname hors zone signalees par le garde chemins, une reparation a la fois, avec preuve avant/apres rendue par le garde lui-meme (cobaye rejouable)",
-      "urgence": "normale",
-      "source": "createur",
-      "deposee_le": "2026-09-18 09:46:31",
-      "auto_validation": "auto",
-      "auto_validation_axes": [
-        {
-          "axe": "perimetre",
-          "vote": "pour",
-          "motif": "aucune zone critique nommee"
-        },
-        {
-          "axe": "reversible",
-          "vote": "pour",
-          "motif": "livrable de code : pilote"
-        },
-        {
-          "axe": "preuve",
-          "vote": "pour",
-          "motif": "preuve exigee : cobaye"
-        },
-        {
-          "axe": "deja-vu",
-          "vote": "pour",
-          "motif": "source createur : deja vue avec lui"
-        },
-        {
-          "axe": "serie",
-          "vote": "pour",
-          "motif": "reparation / correction : reparer"
-        }
-      ],
-      "type": "reparation",
-      "categorie": "outil",
-      "role": "PILOTE",
-      "role_source": "declaration",
-      "classee_le": "2026-09-18 09:46:31",
-      "position_brin": 2,
-      "tresse_le": "2026-09-18 09:46:34"
-    }
-  ],
+  "compteur": 264,
+  "brin": [],
   "auto_validees": [
-    "EO-169"
+    "EO-169",
+    "EO-191",
+    "EO-199",
+    "EO-207",
+    "EO-208",
+    "EO-211",
+    "EO-212",
+    "EO-213",
+    "EO-214",
+    "EO-221",
+    "EO-224",
+    "EO-225",
+    "EO-228",
+    "EO-234",
+    "EO-264"
   ]
 }

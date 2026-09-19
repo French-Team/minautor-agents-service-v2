@@ -63,9 +63,18 @@ CHEMIN_ETAT_PAUSE = REPERTOIRE_DATA / NOM_ETAT_PAUSE
 # PILOTE la VIDE a la cloture (MO-136), comme le pilote Optimus, et par le MEME
 # moteur (data/commun/zone_tmp.py) -- point 1 de la regle : chaque zone a SON
 # domicile, donc seule la zone change d'un flux a l'autre.
-NOM_ZONE_TMP = "tmp-cameleon"
-REPERTOIRE_ZONE_TMP = REPERTOIRE_MATRICE.parent / NOM_ZONE_TMP
-NOM_README_ZONE_TMP = "README.md"
+# Nom et DOMICILE de la zone jetable viennent du moteur PARTAGE
+# (data/commun/zone_tmp.py) : une valeur, une maison (M-076). Regle R-005
+# (MO-189) : la zone d'un flux vit dans SON PERIMETRE D'ECRITURE -- celui du
+# cameleon est workspace/, donc sa zone n'est plus matrix/tmp-cameleon mais
+# <racine>/workspace/tmp-cameleon. La racine se DETECTE (motif partage racine.py).
+from racine import detecter_racine  # noqa: E402
+from zone_tmp import NOM_ZONE_CAMELEON, chemin_zone_cameleon  # noqa: E402
+
+RACINE_WORKSPACE = detecter_racine(REPERTOIRE_PILOTE)
+NOM_ZONE_TMP = NOM_ZONE_CAMELEON
+REPERTOIRE_ZONE_TMP = chemin_zone_cameleon(RACINE_WORKSPACE)
+NOM_README_ZONE_TMP = 'README.md'
 
 # Porte de la VUE du journal (M-079) : le pilote la regenere a la cloture, comme
 # le pilote Optimus regenere `suivi-optimus.md` (MO-136). La vue est une

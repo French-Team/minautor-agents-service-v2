@@ -41,6 +41,12 @@ from pathlib import Path
 
 # --- REFERENCES (aucune valeur en dur dans la logique) -----------------------
 ZONE = Path("_operateur") / "optimus-prime"
+# ZONES EXCLUES (MO-218/EO-212) : le corpus SCANNE est le vivant. Les autres gardes
+# excluent DEJA ces memes zones (verifier-vocabulaire-etat.py : EXCLUS, avec
+# 'purification' ; verifier-contrat-fondamental.py : EXCLUS_DIRS, avec les zones
+# jetables). Une ARCHIVE n a pas de carte a porter : elle est morte, et exiger sa
+# normalisation rendait la suite ROUGE a vie.
+ZONES_EXCLUES = ("purification", "tmp-optimus", "tmp-cameleon", "tmp-test", "__pycache__", ".git")
 EXTENSION = ".md"
 MARQUEUR_FRONT = "---"
 CLE_IDENTITE = "identite:"
@@ -50,6 +56,7 @@ CLES_OBLIGATOIRES = ("type", "appartient_a", "commun")
 TYPES_RECONNUS = (
     "analyse",
     "carte-mission",
+    "chaine",
     "convention",
     "fiche",
     "fiche-agent",
@@ -83,9 +90,20 @@ def trouver_matrix(racine):
     return None
 
 
-def controler(nom, condition, detail=""):
-    RESULTATS.append((nom, bool(condition), detail))
-    print("[" + ("OK" if condition else "KO") + "] " + nom + " : " + detail)
+def controler(nom, condition, detail="", collecteur=None, silencieux=False):
+    """Enregistre et affiche un controle.
+
+    MO-218 (EO-212) : `collecteur` et `silencieux` existent parce que l AUTOTEST
+    passait par ici avec ses PROPRES cobayes : ses accusations ATTENDUES
+    s imprimaient en `[KO]`, indiscernables d un ecart REEL pour qui lit la
+    sortie -- et le lanceur de non-regression LIT la sortie. Trois faux ecarts
+    (sans-carte.md, app-chemin.md, type-inconnu.md : des fichiers qui n existent
+    NULLE PART) ont fait passer la suite pour ROUGE a chaque run. Un garde qui
+    crie pour ses cobayes apprend a ne plus etre ecoute (L-055).
+    """
+    (RESULTATS if collecteur is None else collecteur).append((nom, bool(condition), detail))
+    if not silencieux:
+        print("[" + ("OK" if condition else "KO") + "] " + nom + " : " + detail)
     return bool(condition)
 
 
@@ -128,11 +146,20 @@ def carte_de(texte):
     return carte
 
 
-def controler_zone(zone):
+def controler_zone(zone, collecteur=None, silencieux=False):
     """Chaque .md porte une carte complete, un nom d'appartenance et un type reconnu."""
+    # `dire` relaie le collecteur et le silence : l autotest ne parle plus au nom
+    # du corpus reel (MO-218/EO-212).
+    def dire(nom, condition, detail=""):
+        return controler(nom, condition, detail, collecteur, silencieux)
+
     if not zone.is_dir():
         return ("zone-lisible", False, "zone introuvable : " + str(zone)), ["zone introuvable"]
-    fichiers = sorted(zone.rglob("*" + EXTENSION))
+    # Le corpus SCANNE est le VIVANT : archives, zones jetables et caches sont hors
+    # sujet (une archive ne porte pas de carte, elle est morte -- MO-218/EO-212).
+    fichiers = [chemin for chemin in sorted(zone.rglob("*" + EXTENSION))
+                if not any(partie in ZONES_EXCLUES
+                           for partie in chemin.relative_to(zone).parts)]
     if not fichiers:
         return ("zone-lisible", False, "aucun document sous " + str(zone)), ["aucun document"]
 
@@ -154,26 +181,26 @@ def controler_zone(zone):
         if type_doc and type_doc not in TYPES_RECONNUS:
             type_inconnu.append(relatif + " -> " + type_doc)
 
-    controler("cartes-presentes", not sans_carte,
+    dire("cartes-presentes", not sans_carte,
               str(len(fichiers)) + " document(s), chacun porte une carte"
               if not sans_carte else "SANS CARTE (" + str(len(sans_carte)) + ") : "
               + ", ".join(sans_carte[:8]) + (" ..." if len(sans_carte) > 8 else ""))
     if sans_carte:
         ecarts.append("documents sans carte : " + ", ".join(sans_carte))
 
-    controler("cles-completes", not cle_manquante,
+    dire("cles-completes", not cle_manquante,
               "les trois cles (" + ", ".join(CLES_OBLIGATOIRES) + ") sont presentes"
               if not cle_manquante else "CLES MANQUANTES : " + ", ".join(cle_manquante))
     if cle_manquante:
         ecarts.append("cles manquantes : " + ", ".join(cle_manquante))
 
-    controler("appartenance-est-un-nom", not app_fautif,
+    dire("appartenance-est-un-nom", not app_fautif,
               "aucun appartient_a n'est un CHEMIN"
               if not app_fautif else "APPARTENANCE EN CHEMIN : " + ", ".join(app_fautif))
     if app_fautif:
         ecarts.append("appartient_a en chemin : " + ", ".join(app_fautif))
 
-    controler("type-reconnu", not type_inconnu,
+    dire("type-reconnu", not type_inconnu,
               "chaque type vient du vocabulaire ferme (" + str(len(TYPES_RECONNUS)) + " types)"
               if not type_inconnu else "TYPES HORS VOCABULAIRE : " + ", ".join(type_inconnu))
     if type_inconnu:
@@ -199,30 +226,32 @@ def controler_autotest():
     epreuves = []
     try:
         poser("doc-sain.md", carte("convention", "optimus-prime"))
-        _, ecarts = controler_zone(zone)
+        _, ecarts = controler_zone(zone, collecteur=[], silencieux=True)
         epreuves.append(("cobaye complet ACCEPTE", not ecarts))
 
         shutil.rmtree(zone)
         zone.mkdir(parents=True, exist_ok=True)
         poser("sans-carte.md", "# Doc sans carte\n")
-        _, ecarts = controler_zone(zone)
+        _, ecarts = controler_zone(zone, collecteur=[], silencieux=True)
         epreuves.append(("carte ABSENTE ACCUSEE", any("sans carte" in e for e in ecarts)))
 
         shutil.rmtree(zone)
         zone.mkdir(parents=True, exist_ok=True)
         poser("app-chemin.md", carte("convention", "_operateur/optimus-prime/pilote"))
-        _, ecarts = controler_zone(zone)
+        _, ecarts = controler_zone(zone, collecteur=[], silencieux=True)
         epreuves.append(("appartenance EN CHEMIN ACCUSEE", any("chemin" in e for e in ecarts)))
 
         shutil.rmtree(zone)
         zone.mkdir(parents=True, exist_ok=True)
         poser("type-inconnu.md", carte("preparation-readme", "optimus-prime"))
-        _, ecarts = controler_zone(zone)
+        _, ecarts = controler_zone(zone, collecteur=[], silencieux=True)
         epreuves.append(("type HORS VOCABULAIRE ACCUSE", any("hors vocabulaire" in e for e in ecarts)))
     finally:
         shutil.rmtree(racine, ignore_errors=True)
 
-    reussies = sum(1 for _, ok in epreuves if ok)
+    for nom, ok in epreuves:
+        print("[--] cobaye " + ("ACCEPTE" if ok else "NON REPERE") + " : " + nom)
+    reussies = sum(1 for ok in [ok for _, ok in epreuves] if ok)
     detail = ("piege (" + str(reussies) + "/4)" if reussies == len(epreuves)
               else "rate : " + ", ".join(nom for nom, ok in epreuves if not ok))
     return ("autotest-cartes", reussies == len(epreuves), detail)
@@ -244,7 +273,11 @@ def main():
     resultat, ecarts = controler_zone(matrix / ZONE)
     resultats.append(resultat)
     ecarts_nommes.extend(ecarts)
-    resultats.append(controler_autotest())
+    autotest = controler_autotest()
+    resultats.append(autotest)
+    # L-032 : le PIEGE doit etre VU crier -- mais jamais en `[KO]`, sinon l humain
+    # (et la suite qui lit la sortie) le prend pour un ecart reel (MO-218/EO-212).
+    print("[--] " + autotest[0] + " : " + autotest[2])
 
     print("VERIFIER CARTES D'IDENTITE -- un document qui ne dit pas QUOI il est ne peut pas etre injecte")
     if any(not ok for _, ok, _ in resultats) or ecarts_nommes:

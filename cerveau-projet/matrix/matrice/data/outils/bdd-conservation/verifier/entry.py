@@ -1,7 +1,7 @@
 """Porte de verification du registre de conservation."""
 from commun import charger_bdd, calculer_empreinte_si_existe, lire_empreinte
 from constants import CHEMIN_BDD
-from verifier.fonctions import verifier_integrite, verifier_structure
+from verifier.fonctions import controler_census, verifier_integrite, verifier_structure
 
 
 def executer(arguments):
@@ -14,4 +14,7 @@ def executer(arguments):
         print("ECARTS structurels : " + " | ".join(erreurs))
         return 1
     print(message)
+    # Le recensement est RAPPORTE a chaque verification (MO-192) : sans ce
+    # compte, ses trois champs resteraient invisibles et se liraient comme vides.
+    print(controler_census(donnees))
     return 0 if ok else 1

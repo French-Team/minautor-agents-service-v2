@@ -60,13 +60,13 @@ def actuel():
         print("\n--- FLUX 1: CAMELEON ---")
         print("Mode: COMMUNICATION")
         print("Agent: cameleon")
-        print("Pilote: actif")
+        print("Pilote: matrice/pilote -- il te dirige")
         print("Watchdog: flux1")
     elif flux == "flux2":
         print("\n--- FLUX 2: OPTIMUS ---")
         print("Mode: MAINTENANCE")
         print("Agent: optimus-prime")
-        print("Pilote: inactif (hors pilote)")
+        print("Pilote: _operateur/optimus-prime/pilote -- tu le conduis")
         print("Watchdog: flux2")
     
     return 0
@@ -150,7 +150,7 @@ def historique(derniers: int = 10):
     return 0
 
 
-def main():
+def principal(arguments):
     parser = argparse.ArgumentParser(description="Selecteur de flux Matrice")
     subparsers = parser.add_subparsers(dest="commande", help="Commande a executer")
     
@@ -181,4 +181,12 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    # Pas de constants.py ici (recette incomplete, deja signalee) : le pont vers
+    # data/commun est derive sur place, ANCRE par le NOM du dossier (aucun parents[N]).
+    REPERTOIRE_DATA = Path(__file__).resolve().parent.parent.parent
+    if REPERTOIRE_DATA.name != "data":
+        raise RuntimeError("Structure inattendue : " + str(REPERTOIRE_DATA)
+                           + " n'est pas le dossier data/")
+    sys.path.insert(0, str(REPERTOIRE_DATA / "commun"))
+    from sac_a_dos import envelopper
+    sys.exit(envelopper(principal, sys.argv[1:]))

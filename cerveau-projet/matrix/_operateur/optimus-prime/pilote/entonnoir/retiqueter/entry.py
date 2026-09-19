@@ -1,4 +1,5 @@
-"""Categorie retiqueter : poser le ROLE d'un item, puis recomposer le brin.
+"""Categorie retiqueter : poser ou REPARER les ETIQUETTES d'un item -- categorie et/ou
+role -- puis recomposer le brin.
 
 Interface entre main.py et les fonctions simples (retiqueter/fonctions.py).
 """
@@ -13,18 +14,25 @@ def extraire_options(arguments, noms_connus):
     return repartir(arguments, noms_connus)
 
 
-NOMS_OPTIONS = ("id", "role")
+NOMS_OPTIONS = ("id", "categorie", "role")
+
+USAGE = ("Usage : python main.py retiqueter --id EO-XXX "
+         "[--categorie <nom>] [--role <THEME du vivier>]")
+AIDE = ("  au moins une etiquette : la CATEGORIE (liste fermee de SON type) et/ou le ROLE "
+        "(vivier) -- le classement POSE, retiqueter REPOSE.")
 
 
 def executer(arguments):
     options = extraire_options(arguments, NOMS_OPTIONS)
     identifiant = options.get("id", "")
     role = options.get("role", "")
-    if not identifiant or not role:
-        print('Usage : python main.py retiqueter --id EO-XXX --role <THEME du vivier>')
+    categorie = options.get("categorie", "")
+    if not identifiant or not (role or categorie):
+        print(USAGE)
+        print(AIDE)
         return 2
     etat = charger_entonnoir()
-    code, message = retiqueter_mission(etat, identifiant, role)
+    code, message = retiqueter_mission(etat, identifiant, role, categorie)
     if code != 0:
         if message:
             print(message)

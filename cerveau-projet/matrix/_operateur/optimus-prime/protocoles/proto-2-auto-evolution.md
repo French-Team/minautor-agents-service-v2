@@ -114,6 +114,20 @@ identite:
 > Fixe le createur a la question : que doit declencher une auto-*
 > et QUAND ? Reponse : 3 familles, 3 capteurs, 3 rituels.
 
+> **VOCABULAIRE (2026-09-19, EO-184) -- le mot "DECLENCHEUR" a DEUX sens, et il
+> ne faut pas les confondre.** (1) **DECLENCHEUR AUTOMATIQUE** : une condition
+> MESUREE par une PORTE REELLE et POSEE toute seule par `machine-defcon
+> surveiller` (table `matrice/data/outils/machine-defcon/constants.py` :
+> DECLENCHEURS), branchee sur la passe VIGILE de la veille. C'est le sens que
+> porte desormais le mot dans la Matrice -- et le SEUL mecanisme qui monte un
+> niveau defcon sans la main du createur. (2) **CONDITION D'ENCHAINEMENT (ce
+> protocole)** : la condition sous laquelle OPTIMUS, PAR RITUEL, enchaine une
+> auto-* (familles A/B/C ci-dessous). Ici c'est l'AGENT qui agit -- aucune
+> machine ne pose rien. Les seuils de performance du cockpit ne sont PAS des
+> declencheurs au sens (1) : ce sont des **SUGGESTIONS** faites a l'operateur.
+> Nommer les deux pareil etait le piege de vocabulaire que l'audit EO-181 a
+> trouve (un mot qui promet un acte et ne rend qu'un texte).
+
 | Famille | Theme | Declencheur = QUAND ? | Capteur (preuve sur disque) | Seuil / condition |
 |---|---|---|---|---|
 | **A. EVOLUTION** | `AUTO-EVOLUTION` (ce protocole) | **Apres chaque mission**, si une friction notee passe le test 3/3 | `bdd-frictions lister --mission MO-XXX` (phrase "Quand <situation>, <probleme>, car <cause>" notee pendant la mission) | 3/3 criteres : reutilisable + cause racine + reversible |
@@ -161,7 +175,7 @@ Si `/sante` rouge, ne prends PAS de nouvelle mission : tu REPARES d'abord.
 | Outil | Fonction |
 |---|---|
 | `bdd-frictions.py` | CRUD frictions : ajouter, lister, archiver, stats |
-| `bdd-modifs.py` | CRUD modifications : ajouter, verrouiller, deverrouiller, annuler, lister |
+| `bdd-modifs.py` | RETIRE (EO-154, 2026-09-19) : le domicile UNIQUE des modifications est `modifications-par-fichier.json`, tenu par la porte `bdd-modifications`. Cet instrument refusait deja d ecrire son appui sqlite (deux ecrivains = divergence muette). NE PLUS L APPELER : utiliser `bdd-modifications` (ajouter -> noter). |
 | `lire-fichier-complet.py` | Lecture complete fichier (controle encodage, taille) |
 | `tester-theme.py` | Test theme case par case (accessibilite, boucles, fins) |
 | `ajouter-case-theme.py` | Ajout case securise dans theme JSON |

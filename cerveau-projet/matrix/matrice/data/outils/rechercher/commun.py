@@ -43,12 +43,22 @@ from constants import (
 from invisibilite import est_invisible  # noqa: E402
 from vocabulaire_invisible import contient_invisible  # noqa: E402
 
+# Le PERIMETRE (est-ce DANS la Matrice ?) vit dans SON domicile (data/commun/
+# cible.py) : cette porte le CONSOMME, elle ne le recopie pas (M-076 -- mesure
+# MO-184 : cinq perimetres, quatre jugeaient un PREFIXE avant la resolution).
+from cible import est_dans_matrice  # noqa: E402
+
 
 # --- Perimetre ---
 
 
 def dans_perimetre(chemin_relatif):
-    """True si le chemin est dans matrix/ ou allowlist racine."""
+    """True si le chemin RESOLU est dans la Matrice (ou allowlist racine).
+
+    MO-184 (EO-178), meme contrat que la porte ecrire (MO-183) : on RESOUT avant
+    de juger. Un prefixe `matrix/...` n est plus un laissez-passer -- il ne vaut
+    que si le chemin resolu tombe VRAIMENT dans la Matrice.
+    """
     brut = str(chemin_relatif).replace("\\", "/").strip()
     if not brut:
         return False
@@ -62,20 +72,7 @@ def dans_perimetre(chemin_relatif):
         or any(nom.startswith(p) for p in ALLOWLIST_PREFIXES)
     ):
         return True
-    if brut.startswith("matrix/") or brut.startswith("cerveau-projet/matrix/"):
-        return True
-    try:
-        p = (RACINE / brut).resolve()
-        for base in (RACINE / "matrix", RACINE / "cerveau-projet" / "matrix"):
-            if base.is_dir():
-                try:
-                    if str(p).startswith(str(base.resolve())):
-                        return True
-                except OSError:
-                    continue
-        return str(p).startswith(str(REPERTOIRE_MATRIX.resolve()))
-    except (OSError, RuntimeError):
-        return False
+    return est_dans_matrice(resoudre_chemin(brut))
 
 
 def est_zone_invisible(path_absolu):
@@ -505,3 +502,9 @@ def extraire_options(arguments, noms_connus):
     """Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici."""
     from options import extraire_options as repartir  # domicile partage (EO-158)
     return repartir(arguments, noms_connus, drapeaux=NOMS_OPTIONS_DRAPEAU)
+
+
+def signaler_inconnues(options, outil, noms_connus, usage=""):
+    """Voir le CONTRAT du domicile partage (EO-179) : refus NOMME d une inconnue."""
+    from options import signaler_inconnues as repartir  # domicile partage (EO-179)
+    return repartir(options, outil, noms_connus, usage=usage)

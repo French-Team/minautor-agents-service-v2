@@ -3,18 +3,27 @@
 Role : DIRIGER (parser la commande, router vers la categorie).
 Aucune logique metier ici (convention-architecture-outils).
 
-LES DEUX CHAMPS D'UN ITEM (L-061/MO-076) :
-    `theme` = le TITRE de la demande (texte libre) ;
-    `role`  = le ROLE de la mission, choisi dans le VIVIER (champ ferme).
+LES ETIQUETTES D'UN ITEM (L-061/MO-076, MO-213) :
+    `theme`     = le TITRE de la demande (texte libre) ;
+    `role`      = le ROLE de la mission, choisi dans le VIVIER (champ ferme) ;
+    `categorie` = la CATEGORIE de l'item, fermee PAR TYPE (listes.CATEGORIES).
 Un item classe SANS role bloquerait l'injection plus tard : c'est le classement
 qui le pose (propose par la table type/categorie, confirme ou corrige a la
-declaration), et `retiqueter` repare un item ne avant ce champ.
+declaration), et `retiqueter` REPARE les deux etiquettes d'un item deja classe
+-- la categorie se repare COMME le role (EO-198/MO-213).
 
 Usage :
-    python main.py deposer  --theme "..." --objectif "..." [--urgence u] [--source s] [--role THEME]
+    python main.py deposer  --theme "..." --objectif "..." [--urgence u] [--source s] [--trace "..."] [--role THEME] [--type <dev|reparation|doc|audit|revision>]
+                                       (le type DECLARE classe A LA NAISSANCE : file,
+                                       categorie et role posees par les tables, et DITES ;
+                                       sans lui, une PROPOSITION par mot-cle ne classe pas
+                                       et l item reste au vrac)
     python main.py classer  --id EO-XXX --type <dev|reparation|doc|audit|revision> [--categorie c] [--role THEME]
     python main.py urgencer --id EO-XXX --urgence <bloquante|haute|normale|basse>
-    python main.py retiqueter --id EO-XXX --role <THEME du vivier>  (pose le ROLE + retisse)
+    python main.py retiqueter --id EO-XXX [--categorie c] [--role THEME]  (REPARE les etiquettes + retisse)
+    python main.py corriger --id EO-XXX ( --theme "..." | --objectif "..." ) [--motif "..."]
+                                       (rectifie EN PLACE, id CONSERVE + trace
+                                       dans l item, puis retisse -- EO-175)
     python main.py retirer  --id EO-XXX   (sortie PROPRE du vrac ou d'une file, M-058/MO-035)
     python main.py tresse brin    (affiche le brin tisse)
     python main.py tresse tisser  (recompose le brin : deterministe)
@@ -23,8 +32,10 @@ Usage :
 import sys
 
 from classer.entry import executer as classer_executer
+from corriger.entry import executer as corriger_executer
 from retiqueter.entry import executer as retiqueter_executer
 from retirer.entry import executer as retirer_executer
+from listes import CHAMP_SOURCE_TRACE
 from stockage import charger_entonnoir
 from tresse.entry import executer as tresse_executer
 from urgencer.entry import executer as urgencer_executer
@@ -33,6 +44,7 @@ from vrac.entry import executer as deposer_executer
 COMMANDES = {
     "deposer": deposer_executer,
     "classer": classer_executer,
+    "corriger": corriger_executer,
     "urgencer": urgencer_executer,
     "retiqueter": retiqueter_executer,
     "retirer": retirer_executer,
@@ -50,7 +62,9 @@ def afficher_file():
             "  " + mission["id"] + "  urgence " + mission["urgence"]
             + "  role " + (mission.get("role") or "(a poser au classement)")
             + "  " + mission["theme"] + " -- " + mission["objectif"]
-            + "  (source " + mission["source"] + ")"
+            + "  (source " + mission["source"]
+            + ("" if not mission.get(CHAMP_SOURCE_TRACE)
+               else " -- trace " + mission[CHAMP_SOURCE_TRACE]) + ")"
         )
     files = etat.get("files", {})
     for type_file, missions in files.items():

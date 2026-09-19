@@ -2,12 +2,21 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# L-013 : aucun niveau compte a la main. Le dossier de CET outil est celui qui
+# porte son commun.py (marqueur) : la remontee est VERIFIEE, jamais supposee (MO-177).
+REPERTOIRE_ENTREE = os.path.dirname(os.path.abspath(__file__))
+REPERTOIRE_OUTIL = os.path.dirname(REPERTOIRE_ENTREE)
+if not os.path.isfile(os.path.join(REPERTOIRE_OUTIL, "commun.py")):
+    raise RuntimeError("Dossier de l'outil introuvable depuis " + REPERTOIRE_ENTREE
+                       + " : commun.py est absent de " + REPERTOIRE_OUTIL)
+sys.path.insert(0, REPERTOIRE_OUTIL)
 
 from commun import (
+    ancrer,
     lancer_9_epreuves,
     lister_fichiers,
     extraire_options,
+    signaler_inconnues,
 )
 from constants import NOMS_OPTIONS_BENCHMARK
 
@@ -18,9 +27,26 @@ def benchmark(arguments):
     Codes retour :
       0 = toutes epreuves passees
       1 = au moins 1 echec
-      2 = refus (perimetre)
+      2 = refus (perimetre, ou option INCONNUE -- nommee avec celles qui sont
+          reconnues : une option inconnue n est jamais ignoree en silence, EO-179)
     """
     options = extraire_options(arguments, NOMS_OPTIONS_BENCHMARK)
+    # MO-195 (EO-180) : la porte DIT desormais ses options inconnues. L attestation
+    # --attendu a ete RETIREE du contrat : mesure, elle rendait 0 et 9/9 VERT,
+    # exactement comme sans elle -- une promesse muette se lit comme un fait
+    # (L-055). Mais retirer SANS dire aurait seulement deplace le defaut dans le
+    # silence : le parseur partage RETIENT l inconnue (CLE_INCONNUES, EO-179),
+    # c est l APPELANT qui doit la DIRE. Mesure du 2026-09-19 :
+    # `benchmark --fichier <sain> --attendu existe` rendait 0 et 9/9 VERT,
+    # indiscernable d un appel correct. Desormais : REFUS code 2, l option est
+    # NOMMEE avec celles qui sont reconnues (patron identique a rechercher).
+    code_inconnues = signaler_inconnues(
+        options, "benchmark", NOMS_OPTIONS_BENCHMARK,
+        usage="Usage : benchmark --fichier <chemin> [--json]"
+              " | --dossier <chemin> [--recursif] [--filtre] [--json]"
+              " | --integration [--json]")
+    if code_inconnues != 0:
+        return code_inconnues
 
     mode_json = "json" in options
 
@@ -45,7 +71,20 @@ def benchmark(arguments):
 
 def _benchmark_fichier(chemin, options, mode_json):
     """Benchmark d'un seul fichier."""
-    attendu = options.get("attendu", "")
+    # MO-186 : le chemin est ancre UNE fois (domicile cible.resoudre) AVANT tout
+    # jugement et avant les 9 epreuves -- le chemin juge est le chemin LU, et le
+    # verdict ne depend plus de QUI lance (friction 80). La variable morte
+    # `attendu` (declaree dans l'aide, jamais lue) est retiree au passage.
+    # MO-195 (EO-180) : l'OPTION elle-meme disparait du contrat -- elle etait
+    # declaree dans NOMS_OPTIONS_BENCHMARK et dans l'aide, et personne ne
+    # l'appelait (mesure : `--attendu existe` rendait 0 et 9/9 VERT, comme sans
+    # elle). Une option declaree qui n'agit pas se lit comme un fait : le mode
+    # "attendu" se DECIDERA dans une mission a lui, s'il devient necessaire.
+    chemin_ancre, motif = ancrer(chemin, REPERTOIRE_ENTREE)
+    if chemin_ancre is None:
+        print("REFUS : " + motif)
+        return 2
+    chemin = str(chemin_ancre)
     
     resultats, code = lancer_9_epreuves(chemin)
 
@@ -78,7 +117,12 @@ def _benchmark_fichier(chemin, options, mode_json):
 
 def _benchmark_dossier(options, mode_json):
     """Benchmark batch d'un dossier."""
-    dossier = options["dossier"]
+    # MO-186 : meme ancrage UNIQUE que --fichier, par le domicile partage.
+    dossier_ancre, motif = ancrer(options["dossier"], REPERTOIRE_ENTREE)
+    if dossier_ancre is None:
+        print("REFUS : " + motif)
+        return 2
+    dossier = str(dossier_ancre)
     recursif = "recursif" in options
     filtre = options.get("filtre", None)
 

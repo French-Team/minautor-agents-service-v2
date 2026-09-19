@@ -2,7 +2,13 @@
 
 Interface entre main.py et les fonctions simples (file/fonctions.py).
 """
-from commun import charger_file, consommer_tete_tresse, enregistrer_file
+from commun import (
+    charger_file,
+    consommer_tete_tresse,
+    enregistrer_file,
+    extraire_options,
+    verser_tresse,
+)
 from file.fonctions import (
     afficher_file,
     charger_lot,
@@ -20,6 +26,14 @@ def executer(arguments):
         code, message = consommer_tete_tresse(file_missions)
         if code == 0:
             enregistrer_file(file_missions)
+        print(message)
+        return code
+    if len(arguments) >= 2 and arguments[0] == "file" and arguments[1] == "verser":
+        # 'python main.py file verser [--lot <nom>]' : le BRIN ENTIER -> UN lot (EO-148).
+        # Le pont ne servait que la tete : N items demandaient N appels a la main.
+        options = extraire_options(arguments[2:], ("lot",))
+        file_missions = charger_file()
+        code, message = verser_tresse(file_missions, options.get("lot", ""))
         print(message)
         return code
     if arguments and arguments[0] == "charger":

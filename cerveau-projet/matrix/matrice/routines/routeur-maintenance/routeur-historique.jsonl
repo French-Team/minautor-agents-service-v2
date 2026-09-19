@@ -528,3 +528,11 @@
 {"date": "2026-09-17 08:58:19", "routes": 1, "ignores": 107, "ignores_par_type": {"fin-mission": 89, "retour-lot": 7, "alerte-grave": 11}, "anormaux": 11, "passes_absorbes": 130}
 {"date": "2026-09-18 08:43:51", "routes": 1, "ignores": 107, "ignores_par_type": {"fin-mission": 89, "retour-lot": 7, "alerte-grave": 11}, "anormaux": 11, "passes_absorbes": 2849}
 {"date": "2026-09-18 08:58:51", "routes": 1, "ignores": 107, "ignores_par_type": {"fin-mission": 89, "retour-lot": 7, "alerte-grave": 11}, "anormaux": 11, "passes_absorbes": 29}
+{"date": "2026-09-19 08:04:04", "demarrage": 30}
+{"date": "2026-09-19 08:24:30", "routes": 0, "ignores": 96, "ignores_par_type": {"fin-mission": 89, "retour-lot": 7}, "anormaux": 0, "passes_absorbes": 1351, "identite": [{"transition": {"avant": "{\"anomalies_par_type\": {\"alerte-grave\": 11}}", "apres": "{\"anomalies_par_type\": {}}"}}]}
+{"date": "2026-09-19 08:24:40", "demarrage": 30}
+{"date": "2026-09-19 08:53:43", "demarrage": 30}
+{"date": "2026-09-19 12:05:18", "routes": 1, "ignores": 96, "ignores_par_type": {"fin-mission": 89, "retour-lot": 7}, "anormaux": 0, "passes_absorbes": 440, "identite": [{"index": 118, "type": "signaler", "outil": "vigie-portes", "niveau": "moyenne", "expediteur": "routine"}]}
+{"date": "2026-09-19 12:26:18", "routes": 1, "ignores": 96, "ignores_par_type": {"fin-mission": 89, "retour-lot": 7}, "anormaux": 0, "passes_absorbes": 41, "identite": [{"index": 119, "type": "signaler", "outil": "vigie-portes", "niveau": "moyenne", "expediteur": "routine"}]}
+{"date": "2026-09-19 13:40:20", "routes": 1, "ignores": 96, "ignores_par_type": {"fin-mission": 89, "retour-lot": 7}, "anormaux": 0, "passes_absorbes": 147, "identite": [{"index": 120, "type": "signaler", "outil": "vigie-portes", "niveau": "moyenne", "expediteur": "routine"}]}
+{"date": "2026-09-19 13:56:50", "routes": 1, "ignores": 96, "ignores_par_type": {"fin-mission": 89, "retour-lot": 7}, "anormaux": 0, "passes_absorbes": 32, "identite": [{"index": 121, "type": "signaler", "outil": "vigie-portes", "niveau": "moyenne", "expediteur": "routine"}]}

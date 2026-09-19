@@ -32,6 +32,14 @@ ACTIONS = (
                     # porte noter REFUSAIT l'evenement et la suppression d'une preuve
                     # partait sans trace (mesure MO-136 : "Action inconnue : 'purge'").
     "bilan",        # bilan-periode demande et rendu
+    "report",       # mission PARQUEE par le verbe `reporter` (EO-182 / MO-199) :
+                    # le pilote la remet en attente, donc le DEBUT est NEUTRALISE
+                    # (elle n'est plus en cours) SANS etre termine. Mesure EO-190 :
+                    # sans cette action, le garde de coherence voyait un debut sans
+                    # fin sur une mission en attente, et son message ACCUSAIT le
+                    # pilote de ne pas l'avoir chargee -- un faux diagnostic.
+                    # NON SINGULIERE (hors ACTIONS_SINGULIERES) : une mission peut
+                    # etre parquee plusieurs fois.
 )
 
 ENCODAGE = "utf-8"
@@ -52,10 +60,17 @@ from racine import detecter_racine  # noqa: E402
 RACINE = detecter_racine(REPERTOIRE_OUTIL)
 
 # Vue markdown dediee (decision createur 2026-09-09) : visuel lisible de la
-# trace, dans matrice/ (comme journal-multi-encarts.md), jamais edite a la main.
+# trace, jamais edite a la main.
+# DOMICILE DEPLACE (MO-235, demande createur) : la vue vivait dans `matrice/`
+# (comme journal-multi-encarts.md) et n'etait cachee au cameleon que par une
+# EXCLUSION DE NOM (`suivi-optimus` est un plancher de data/commun/invisibilite.py).
+# Elle vit desormais dans la zone privee `_operateur/optimus-prime/` : elle est
+# invisible PAR CONSTRUCTION (la zone `_operateur` est exclue), et non plus par le
+# nom d'un fichier -- une protection de FORME tient tant que le nom ne change pas.
 REPERTOIRE_MATRICE = RACINE / "cerveau-projet" / "matrix" / "matrice"
+REPERTOIRE_OPTIMUS = REPERTOIRE_MATRICE.parent / "_operateur" / "optimus-prime"
 NOM_VUE = "suivi-optimus.md"
-CHEMIN_VUE = REPERTOIRE_MATRICE / NOM_VUE
+CHEMIN_VUE = REPERTOIRE_OPTIMUS / NOM_VUE
 
 # Inbox OPTIMUS (zone privee _operateur/maintenance, invisible cameleon L-016).
 # Correction MO-032 : pointait sur l'inbox du CAMELEON (intercom/matrice/inbox.jsonl),
@@ -109,6 +124,10 @@ STATUT_TERMINEE = "terminee"
 # Libelles des actions du journal que le croisement consomme.
 ACTION_DEBUT = "debut"
 ACTION_FIN = "fin"
+# Action qui NEUTRALISE le debut SANS terminer la mission (EO-190) : elle dit
+# "la mission n'est plus en cours" sans dire "elle est finie". C'est l'etat que
+# cree le verbe `reporter` -- et le garde de coherence la lit dans l'ORDRE.
+ACTION_REPORT = "report"
 
 # --- Archivage des evenements HORS PERIMETRE (verbe `archiver`) --------------
 # Le journal est la trace d'OPTMUS. Il a recemporte le 2026-09-12 les missions du
@@ -128,6 +147,9 @@ CHEMIN_RELATIF_EMPREINTE = Path("matrice") / "data" / (NOM_BDD + ".sha256")
 # qui existait deja. Meme discipline que l'archivage hors perimetre : on ne
 # SUPPRIME pas, on ARCHIVE, et le PREMIER evenement fait foi (c'est le fait
 # d'origine ; le second est la copie accidentelle).
+# Le REPORT est volontairement ABSENT de cette liste (EO-190) : un debut et une
+# fin sont des BORNES (une seule fois), un report est un EVENEMENT -- une mission
+# peut etre parquee plusieurs fois, et c'est la DERNIERE borne qui fait foi.
 ACTIONS_SINGULIERES = (ACTION_DEBUT, ACTION_FIN)
 NOM_ARCHIVE_DOUBLONS = "suivi-optimus-doublons.jsonl"
 CHEMIN_RELATIF_ARCHIVE_DOUBLONS = Path("matrice") / "data" / NOM_ARCHIVE_DOUBLONS

@@ -2,7 +2,14 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# L-013 : aucun niveau compte a la main. Le dossier de CET outil est celui qui
+# porte son commun.py (marqueur) : la remontee est VERIFIEE, jamais supposee (MO-177).
+REPERTOIRE_ENTREE = os.path.dirname(os.path.abspath(__file__))
+REPERTOIRE_OUTIL = os.path.dirname(REPERTOIRE_ENTREE)
+if not os.path.isfile(os.path.join(REPERTOIRE_OUTIL, "commun.py")):
+    raise RuntimeError("Dossier de l'outil introuvable depuis " + REPERTOIRE_ENTREE
+                       + " : commun.py est absent de " + REPERTOIRE_OUTIL)
+sys.path.insert(0, REPERTOIRE_OUTIL)
 
 
 def indexer(arguments):

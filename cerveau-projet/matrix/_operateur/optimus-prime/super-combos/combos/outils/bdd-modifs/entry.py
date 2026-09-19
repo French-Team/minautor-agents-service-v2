@@ -41,6 +41,21 @@ DB_PATH = _courant / "matrice" / "data" / "modifications.db"
 
 
 def run(commande, args):
+    # EO-154 (2026-09-19) : LE DOMICILE UNIQUE des modifications est
+    # matrice/data/modifications-par-fichier.json, tenu par la porte
+    # bdd-modifications (noter / lire / corriger / verifier). Cet instrument
+    # ecrivait un APPUI sqlite (modifications.db) -- un SECOND domicile, qui a
+    # DIVERGE en silence le 2026-09-17 : le pilote lisait le JSON, l'appui
+    # portait la modification, et la vue affichait "aucun fichier touche".
+    # Un mot ne suffisait pas : il fallait FERMER la porte (zero-ecrivain-mort).
+    print("REFUS (EO-154) : l'appui sqlite modifications.db est RETIRE -- le")
+    print("domicile UNIQUE des modifications est matrice/data/")
+    print("modifications-par-fichier.json, tenu par la porte bdd-modifications")
+    print("(noter / lire / corriger / verifier). Aucune ecriture ici.")
+    return 2
+
+
+def _run_retire(commande, args):
     init_db(DB_PATH)
 
     if commande == "ajouter":

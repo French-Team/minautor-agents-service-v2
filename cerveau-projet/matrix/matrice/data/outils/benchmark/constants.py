@@ -48,4 +48,4 @@ EPREUVES = (
 # Actions testees (MO-008)
 ACTIONS = ("creer", "ajouter", "modifier", "supprimer")
 
-NOMS_OPTIONS_BENCHMARK = ("fichier", "dossier", "recursif", "filtre", "integration", "json", "attendu")
+NOMS_OPTIONS_BENCHMARK = ("fichier", "dossier", "recursif", "filtre", "integration", "json")

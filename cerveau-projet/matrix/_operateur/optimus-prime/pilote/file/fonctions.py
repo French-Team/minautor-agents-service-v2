@@ -1,6 +1,7 @@
 """Fonctions simples de la categorie file : une seule tache chacune."""
 from commun import (
     armer_lot,
+    consommer_item,
     crier_mission_muette,
     defcon_bloque_theme,
     enregistrer_file,
@@ -16,6 +17,20 @@ from commun import (
     extraire_options,
     valider_theme,
 )
+
+
+def _consommer_item_lie(item_id):
+    """CONSOMME l'item d'une mission declaree A LA MAIN (EO-153, friction 83).
+
+    Le pont automatique consommait ; la declaration manuelle, NON -- EO-136 a servi
+    a declarer MO-160 sans quitter le brin, puis le pont l'a RE-SERVI (MO-161, meme
+    objectif). Une consommation impossible (item inconnu) n'est PAS bloquante -- la
+    declaration reste liee par `source`, donc l'idempotence la rattrapera -- mais
+    elle est DITE.
+    """
+    code, message = consommer_item(item_id)
+    print(("Consommation (EO-153) : " if code == 0 else "ALERTE consommation (EO-153) : ")
+          + message)
 from constants import PREFIXE_ID, STATUT_EN_ATTENTE, STATUT_TERMINEE
 
 # CONTRAT DE TRANSPORT des listes (frictions 72 et 73) : les listes du LOT (--theme
@@ -57,7 +72,7 @@ def charger_mission(arguments, charger_file, afficher_file):
     EO-120 : le TYPE est exige, comme pour un lot (EO-118). Sans lui la mission
     nait SANS posture et sa checklist perd le specifique de son type.
     """
-    options = extraire_options(arguments, ("theme", "objectif", "type"))
+    options = extraire_options(arguments, ("theme", "objectif", "type", "item"))
     theme = options.get("theme", "")
     objectif = options.get("objectif", "")
     type_cible = (options.get("type") or "").strip().lower()
@@ -85,8 +100,16 @@ def charger_mission(arguments, charger_file, afficher_file):
         "statut": STATUT_EN_ATTENTE,
         "chargee_le": horodater(),
     }
+    # EO-153 : une mission DECLAREE avec son item est LIEE a lui (`source`) ET le
+    # CONSOMME -- c'est le chemin qui manquait (friction 83 : EO-136 a servi a
+    # declarer MO-160 sans quitter le brin, puis le pont l'a re-servi).
+    item = (options.get("item") or "").strip()
+    if item:
+        mission["source"] = "entonnoir:" + item
     file_missions.setdefault("missions", []).append(mission)
     enregistrer_file(file_missions)
+    if item:
+        _consommer_item_lie(item)
     print("Mission " + mission["id"] + " chargee (theme : " + theme
           + ", type : " + type_cible + ").")
     return 0
@@ -238,7 +261,7 @@ def enregistrer_mission(arguments, charger_file):
     champ obligatoire manquant, type HORS vocabulaire (s'il est donne).
     """
     options = extraire_options(
-        arguments, ("id", "theme", "objectif", "bilan", "bilan-fichier", "type"))
+        arguments, ("id", "theme", "objectif", "bilan", "bilan-fichier", "type", "item"))
     identifiant = (options.get("id") or "").strip().upper()
     theme = options.get("theme", "")
     objectif = options.get("objectif", "")
@@ -280,6 +303,11 @@ def enregistrer_mission(arguments, charger_file):
         "bilan": bilan,
         "hors_file": True,
     }
+    # EO-153 : meme lien que `charger` -- declarer avec son item le LIE (`source`)
+    # et le CONSOMME, pour qu'il ne reparte pas (friction 83).
+    item = (options.get("item") or "").strip()
+    if item:
+        mission["source"] = "entonnoir:" + item
     # Le type n'est ecrit QUE s'il est declare : une cle absente dit "nature
     # inconnue", une cle vide dirait "nature vide" -- ce n'est pas la meme chose.
     if type_cible:
@@ -288,6 +316,8 @@ def enregistrer_mission(arguments, charger_file):
     if numero > int(file_missions.get("compteur", 0)):
         file_missions["compteur"] = numero
     enregistrer_file(file_missions)
+    if item:
+        _consommer_item_lie(item)
 
     # UN SEUL evenement a ecrire : la FIN. Le DEBUT n'est pas note ici, et ce
     # n'est pas un oubli -- c'est la correction du doublon MO-061.

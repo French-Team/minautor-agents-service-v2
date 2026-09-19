@@ -19,16 +19,41 @@ from constants import (
     CLE_SANS_VALEUR,
     ENCODAGE,
     FORMAT_HORODATE_BAK,
+    MARQUEUR_POINT_EN_PLUS,
+    MESSAGE_POINT_DISTINCT,
     RACINE,
-    REPERTOIRE_MATRIX,
+    RANG_POINT_EN_PLUS_MAX,
+    RANG_POINT_EN_PLUS_MIN,
     REPERTOIRE_MATRICE,
     SUFFIXE_BAK,
     TAILLE_BLOC_LECTURE,
 )
 
+# Le PERIMETRE (est-ce DANS la Matrice ?) vit dans SON domicile (data/commun/
+# cible.py) : cette porte le CONSOMME, elle ne le recopie pas (M-076 -- MO-183 a
+# pose le contrat, MO-184 l a porte au domicile partage et a supprime les copies
+# des cinq outils). est_dans_matrice RESOUT avant de juger, et
+# motif_hors_perimetre NOMME la Matrice reelle dans le refus (friction 77).
+
+# La CARTE ASCII n'est plus un domicile d'outil : elle vit dans la couche partagee
+# (matrice/data/commun/carte_ascii.py) et la porte la CONSOMME, comme cible.py
+# juste au-dessus (M-076). Ce passage oblige corrige donc ce que l'agent ecrit
+# avec la MEME carte que la routine de maintenance (MO-210).
+from carte_ascii import CARTE_CONVERSION  # noqa: E402
+from cible import est_dans_matrice, motif_hors_perimetre  # noqa: E402
+
 
 def dans_perimetre_ecriture(chemin_relatif):
-    """True si le chemin est ecrivible (dans matrix/ ou allowlist racine)."""
+    """True si le chemin RESOLU est ecrivable (dans la Matrice, ou allowlist racine).
+
+    MO-183 (EO-177), mesure du 2026-09-19 : un chemin `matrix/...` etait accepte
+    sur son PREFIXE puis RESOLU contre la RACINE -- or dans ce depot la Matrice
+    vit sous cerveau-projet/ : la porte disait OK et ecrivait HORS de la Matrice
+    (arborescence parasite <racine>/matrix/ creee, deux fichiers). Un perimetre qui
+    juge un PREFIXE ment des que la Matrice n est pas a la racine : ici on RESOUT
+    d abord, on juge ensuite. MO-184 : la regle elle-meme vit au domicile partage,
+    et les cinq outils la CONSOMMENT.
+    """
     brut = str(chemin_relatif).replace("\\", "/").strip()
     if not brut:
         return False
@@ -39,22 +64,7 @@ def dans_perimetre_ecriture(chemin_relatif):
     nom = brut.split("/")[-1]
     if "/" not in brut and (nom in ALLOWLIST_RACINE or any(nom.startswith(p) for p in ALLOWLIST_PREFIXES)):
         return True
-    if brut.startswith("matrix/") or brut.startswith("cerveau-projet/matrix/"):
-        return True
-    try:
-        p = (RACINE / brut).resolve()
-        # Accepte tout sous RACINE/matrix ou RACINE/cerveau-projet/matrix
-        for base in (RACINE / "matrix", RACINE / "cerveau-projet" / "matrix"):
-            if base.is_dir():
-                try:
-                    if str(p).startswith(str(base.resolve())):
-                        return True
-                except OSError:
-                    continue
-        # Fallback : sous REPERTOIRE_MATRIX
-        return str(p).startswith(str(REPERTOIRE_MATRIX.resolve()))
-    except (OSError, RuntimeError):
-        return False
+    return est_dans_matrice(resoudre_chemin(brut))
 
 
 def resoudre_chemin(chemin_relatif):
@@ -82,28 +92,74 @@ def normaliser_lf(contenu):
     return contenu
 
 
-def chemin_bak(chemin_absolu):
+def chemin_bak(chemin_absolu, rang=1):
     """Retourne le chemin .bak horodate pour proto-2.
 
     La forme vient de SES constantes (SUFFIXE_BAK + FORMAT_HORODATE_BAK) : le
     motif qui la reconnait est declare a cote d'elles, donc jamais redevine par
     un consommateur (contrat fondamental, espions, remorque).
+
+    Le RANG 1 est la forme CANONIQUE ; un rang superieur suffixe un compteur et
+    reste couvert par le motif DECLARE (EO-191, MO-223).
     """
     horodate = datetime.now().strftime(FORMAT_HORODATE_BAK)
-    return chemin_absolu.with_name(chemin_absolu.name + SUFFIXE_BAK + "." + horodate)
+    nom = chemin_absolu.name + SUFFIXE_BAK + "." + horodate
+    if rang > 1:
+        nom = nom + MARQUEUR_POINT_EN_PLUS + str(rang)
+    return chemin_absolu.with_name(nom)
+
+
+def _meme_contenu(chemin, contenu):
+    """Vrai si ce fichier porte EXACTEMENT ces octets -- jamais suppose."""
+    try:
+        return chemin.read_bytes() == contenu
+    except OSError:
+        return False
+
+
+def _premier_point_libre(chemin_absolu, contenu):
+    """Premier nom de point LIBRE pour cet etat : un point existant n'est jamais ecrase.
+
+    Un point qui porte DEJA ce contenu est REUTILISE (idempotent) ; les points
+    d'un AUTRE etat sont sautes ; rend None si tous les rangs declares sont pris.
+    """
+    for rang in range(RANG_POINT_EN_PLUS_MIN, RANG_POINT_EN_PLUS_MAX + 1):
+        candidat = chemin_bak(chemin_absolu, rang)
+        if not candidat.exists():
+            return candidat
+        if _meme_contenu(candidat, contenu):
+            return candidat
+    return None
 
 
 def creer_bak_si_existe(chemin_absolu):
-    """Cree un .bak si le fichier existe. Retourne le Path bak ou None."""
+    """Cree un point de restauration si le fichier existe. Rend le Path, ou None.
+
+    EO-191 (MO-223) : un point de restauration n'est JAMAIS ECRASE. Si le nom
+    canonique est deja pris :
+      - par le MEME contenu, c'est deja LE point de cet etat : on le REUTILISE ;
+      - par un AUTRE etat, on ouvre un point DISTINCT (compteur) et on le DIT.
+    """
     if not chemin_absolu.exists() or not chemin_absolu.is_file():
         return None
+    try:
+        contenu = chemin_absolu.read_bytes()
+    except OSError:
+        return None
     bak = chemin_bak(chemin_absolu)
+    if bak.exists():
+        if _meme_contenu(bak, contenu):
+            return bak
+        bak = _premier_point_libre(chemin_absolu, contenu)
+        if bak is None:
+            return None
+        print(MESSAGE_POINT_DISTINCT + bak.name)
     try:
         shutil.copy2(str(chemin_absolu), str(bak))
     except OSError:
         # Fallback copie bytes
         try:
-            bak.write_bytes(chemin_absolu.read_bytes())
+            bak.write_bytes(contenu)
         except OSError:
             return None
     return bak
@@ -251,6 +307,67 @@ def valider_syntaxe(chemin_absolu, suffixe=None, cible=None):
     return True, "pas de validation pour " + suffix
 
 
+def corriger_contenu(texte):
+    """Corrige les non-ASCII FUTILES de ce que l'agent ecrit, AVANT l'ecriture.
+
+    MO-210 (revision createur 2026-09-19) : la porte DETECTAIT les non-ASCII
+    apres coup et les signalait -- l'agent devait alors re-editer caractere par
+    caractere, et la roue garde-ascii rougissait entre-temps. Un passage oblige
+    doit laisser une SORTIE PROPRE : ce que la carte sait convertir est corrige
+    ici, avec la MEME carte que le scan de maintenance (domicile unique
+    matrice/data/commun/carte_ascii.py -- jamais une copie locale).
+
+    Ce que la carte IGNORE n'est pas devine : la porte REFUSE (code 2, RIEN
+    n'est ecrit) et NOMME le caractere, sa ligne et le remede. Deux sorties
+    seulement -- corrige, ou refuse ; jamais un fichier non-ASCII qui aurait
+    fait croire a un travail propre (L-055 : une correction muette est un
+    mensonge, ici elle est DITE).
+
+    Retourne (texte_corrige, message_refus) -- message_refus vide si tout est
+    convertible.
+    """
+    morceaux = []
+    corriges = []
+    restants = []
+    ligne = 1
+    for caractere in texte:
+        if caractere == "\n":
+            ligne += 1
+            morceaux.append(caractere)
+            continue
+        if ord(caractere) <= 127:
+            morceaux.append(caractere)
+            continue
+        remplacement = CARTE_CONVERSION.get(caractere)
+        if remplacement is None:
+            restants.append((ligne, caractere))
+            morceaux.append(caractere)
+        else:
+            corriges.append((ligne, caractere, remplacement))
+            morceaux.append(remplacement)
+    if corriges:
+        lignes = sorted({l for l, _c, _r in corriges})
+        print("[ASCII] CORRIGE : " + str(len(corriges)) + " caractere(s) en lignes "
+              + ",".join(str(l) for l in lignes[:5]) + ("..." if len(lignes) > 5 else "")
+              + " -- carte commune (data/commun/carte_ascii.py)")
+    if not restants:
+        return "".join(morceaux), ""
+    detail = " ; ".join(
+        "ligne " + str(l) + " : " + c.encode("unicode_escape").decode("ascii")
+        + " (U+" + format(ord(c), "04X") + ")"
+        for l, c in restants[:5]
+    )
+    return "".join(morceaux), (
+        "REFUS (code 2) : " + str(len(restants)) + " caractere(s) non-ASCII que la CARTE "
+        "ne sait PAS convertir -- RIEN n'a ete ecrit. " + detail
+        + ("..." if len(restants) > 5 else "")
+        + ". REMEDE : soit reformuler (la carte corrige le reste toute seule), soit DECIDER "
+        "la conversion et l'ajouter a son domicile unique -- "
+        "matrice/data/commun/carte_ascii.py (CARTE_CONVERSION). Jamais dans un outil, "
+        "jamais une copie locale."
+    )
+
+
 def verifier_ascii(chemin_absolu):
     """Retourne (nb_non_ascii, lignes_concernees) pour garde-ascii."""
     try:
@@ -276,7 +393,7 @@ def ecrire_atomique(chemin_relatif, contenu, mode="remplacer"):
     la cible est INTACTE) ; 2 = refus perimetre/mode.
     """
     if not dans_perimetre_ecriture(chemin_relatif):
-        return 2, None, None, None, "REFUS : hors perimetre ecriture (matrix/ seul, allowlist AGENTS.md/demarrer-*.md) : " + chemin_relatif
+        return 2, None, None, None, motif_hors_perimetre(chemin_relatif, usage="ecriture")
     if mode not in ("creer", "remplacer", "ajouter"):
         return 2, None, None, None, "REFUS : --mode doit etre creer|remplacer|ajouter (recu : " + mode + ")"
     chemin_absolu = resoudre_chemin(chemin_relatif)
@@ -371,7 +488,7 @@ def editer_atomique(chemin_relatif, ancien, nouveau):
     2 refus (perimetre, ancien non trouve ou multiple).
     """
     if not dans_perimetre_ecriture(chemin_relatif):
-        return 2, None, None, None, "REFUS : hors perimetre ecriture : " + chemin_relatif
+        return 2, None, None, None, motif_hors_perimetre(chemin_relatif, usage="ecriture")
     chemin_absolu = resoudre_chemin(chemin_relatif)
     if not chemin_absolu.exists() or not chemin_absolu.is_file():
         return 1, None, None, None, "Fichier introuvable : " + chemin_relatif

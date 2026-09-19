@@ -1,0 +1,77 @@
+"""Fonctions simples de la categorie reporter : une seule tache chacune.
+
+Le verbe MANQUAIT (EO-182). Une demande du createur arrivee pendant une mission
+n'avait AUCUN chemin conforme : la serie stricte refuse toute seconde mission, et
+rien ne permettait de PARQUER la premiere. Les deux seules issues etaient donc de
+NE PAS servir le createur, ou de travailler HORS FILE -- le contournement mesure,
+signale a EO-182, et repete trois fois en une journee.
+"""
+from commun import (
+    declarer_borne_marbre,
+    enregistrer_file,
+    horodater,
+    journaliser_mission,
+    mission_en_cours,
+    portee_lot,
+)
+from constants import STATUT_EN_ATTENTE
+
+
+def reporter_mission(charger_file, raison):
+    """PARQUE la mission en cours : elle retourne EN ATTENTE, TRACEE.
+
+    Quatre garanties, et chacune est un REFUS plutot qu'une facilite :
+      1. la raison est OBLIGATOIRE : un report sans raison est un abandon muet ;
+      2. REFUS s'il n'y a rien a reporter (aucune mission en cours) ;
+      3. RIEN n'est perdu : la mission GARDE son id et son sujet, retourne EN
+         ATTENTE avec son compteur de reports, et les ids du LOT ne changent pas
+         -- la numerotation k/n de la chaine reste VRAIE ;
+      4. la ZONE JETABLE n'est PAS videe : un report n'est pas une cloture, le
+         travail en cours doit survivre (et ce fait est DIT, pour que l'agent
+         sache qu'il reprendra la ou il s'etait arrete).
+    """
+    if not raison or not raison.strip():
+        print("REFUS : un report sans --raison est un ABANDON silencieux : dis pourquoi.")
+        return 1
+
+    file_missions = charger_file()
+    mission = mission_en_cours(file_missions)
+    if mission is None:
+        print("REFUS : aucune mission en cours a reporter (rien a parquer).")
+        return 1
+
+    # La position dans le LOT est lue AVANT la bascule : apres, la mission n'est
+    # plus `en-cours` et la portee ne serait plus calculable (meme motif que la
+    # cloture, MO-102).
+    portee = portee_lot(file_missions)
+    dans_le_lot = bool(portee[0]) and mission.get("id") in portee[0]
+
+    mission["statut"] = STATUT_EN_ATTENTE
+    mission["reporte_le"] = horodater()
+    mission["reports"] = int(mission.get("reports", 0)) + 1
+    mission["raison_report"] = raison
+    enregistrer_file(file_missions)
+
+    journaliser_mission(
+        {
+            "type": "mission-reportee",
+            "date": horodater(),
+            "id": mission.get("id", ""),
+            "theme": mission.get("theme", ""),
+            "raison": raison,
+            "reports": mission["reports"],
+            "reste_dans_le_lot": dans_le_lot,
+            "detail": ("mission " + str(mission.get("id", "")) + " REPORTEE (retour en "
+                       "attente, " + str(mission["reports"]) + "e report) : " + raison),
+        }
+    )
+
+    position = ""
+    if portee[0]:
+        position = (" -- lot : elle reste EN PLACE, la chaine k/n ne bouge pas"
+                    if dans_le_lot else " -- lot : elle est HORS lot")
+    print("Mission " + str(mission.get("id", ""))
+          + " REPORTEE : retour EN ATTENTE, tracee" + position + ".")
+    print("Zone jetable NON videe (un report n'est pas une cloture) -- "
+          "la prochaine injection sert cette mission a nouveau.")
+    return 0

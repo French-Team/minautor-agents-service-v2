@@ -38,10 +38,13 @@ Rejoue : PRE-VOL (integrite + activite/frictions + remorque)
  muets au journal, AVANT la vue qui ne lit que le journal, EO-133).
 + JUMEAUX (deux domiciles declarent le meme nom : une divergence compile
  et change le SENS, MO-175)
++ MIROIRS (les DEUX flancs declarent la MEME chose : chaque litteral lu dans
+ les 28 fichiers miroirs des deux pilotes dit la MEME valeur, SAUF si son nom
+ est declare LIBRE avec sa raison ; une absence de vocabulaire partage ou une
+ divergence non declaree est un ECART, MO-230/EO-224, rendu RECURRENT par EO-225)
 + CROCHETS (la liste fermee et sa convention disent la MEME chose, dans les
-+ APPELS NON LIES (un appel orphelin est un NameError en puissance,
- R5)
  deux sens, et le type transmis appartient a la liste fermee, R5)
++ APPELS NON LIES (un appel orphelin est un NameError en puissance, R5)
 Verdict OK/KO. code 0 = OK, code 1 = KO.
 
 Bloquants : le controle des PREFIXES du contrat fondamental (CV-009/CV-011) et,
@@ -773,6 +776,63 @@ def main():
             ko.append("appels-non-lies: " + ("; ".join(ecarts[:6]) if ecarts
                                              else "voir verifier-contrat-fondamental.py"))
 
+
+    # 30. CONTRATS DES OUTILS (MO-214 / EO-204) : les controles qui vivaient dans les
+    #     cobayes d'une mission MOURAIENT avec elle -- `tmp-optimus` est purge a chaque
+    #     cloture, donc une preuve d'aujourd'hui ne surveille rien demain. Trois contrats
+    #     gagnes le 2026-09-19 sont desormais GARDES : l'aide de la porte dit son contrat
+    #     (MO-212), la carte ASCII a un seul domicile et la porte corrige les fautes
+    #     futiles / refuse le reste (MO-210), l'entonnoir repare la categorie comme le
+    #     role (MO-213). Le garde porte son AUTOTEST du piege (L-032) et travaille en
+    #     SOUS-PROCESSUS ISOLES (deux outils ont chacun un module `constants`).
+    print("== 30. contrats des outils (aide <-> contrat, carte ascii, categorie) ==")
+    garde_contrats = outils / "verifier-contrats-outils.py"
+    if not garde_contrats.is_file():
+        print("  contrats: ABSENT")
+        ko.append("manquant: verifier-contrats-outils.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_contrats), "--racine", str(zone.parent.parent)],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        print(f"  contrats: {etat}")
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines()
+                      if l.strip().startswith(("[KO", "ECART"))]
+            ko.append("contrats: " + ("; ".join(ecarts) if ecarts
+                      else "voir verifier-contrats-outils.py"))
+
+    # 31. MIROIRS INTER-FLUX (MO-230 / EO-224, rendu RECURRENT par EO-225) : le
+    #     flanc cameleon avait ses DECLARATIONS PROPRES couvertes par AUCUN
+    #     controle de son cote -- le seul lecteur etait ce verbe, et il ne tournait
+    #     que si quelqu'un le tapait a la main. Un controle qui ne tourne JAMAIS
+    #     est un constat de round, pas une surveillance (meme piege que MO-214 :
+    #     un controle qui vit dans un cobaye meurt avec lui). Il devient donc le
+    #     maillon 31. Les DEUX pilotes sont deux flux ISOLES par decision, on ne
+    #     peut pas leur donner un domicile unique -- mais leur accord devient une
+    #     RELATION CONTROLEE : chaque litteral lu dans les 28 fichiers miroirs dit
+    #     la MEME valeur, SAUF si son nom est declare LIBRE avec sa raison. Une
+    #     absence de vocabulaire partage, une divergence non declaree ou une zone
+    #     absente est un ECART. Les 5 epreuves du cobaye (couple tel quel, mutation
+    #     a gauche, a droite, retrait, liberte mutee) sont rejouees a CHAQUE
+    #     execution : on le DIT, sinon la lecture croirait que seul le cas nominal
+    #     a ete mesure.
+    print("== 31. miroirs (deux flancs, un seul contrat) ==")
+    garde_miroirs = outils / "verifier-contrat-fondamental.py"
+    if not garde_miroirs.is_file():
+        print("  miroirs: ABSENT")
+        ko.append("manquant: verifier-contrat-fondamental.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_miroirs), "miroirs"],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        cobaye = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith("cobaye ")]
+        print(f"  miroirs: {etat}"
+              + (f" (cobaye : {len(cobaye)} epreuve(s) rejouee(s))" if cobaye else ""))
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines()
+                      if l.strip().startswith(("ECART", "DETTE"))]
+            ko.append("miroirs: " + ("; ".join(ecarts[:6]) if ecarts
+                                     else "voir verifier-contrat-fondamental.py"))
 
     if ko:
         print(f"\nVERDICT KO : {len(ko)} echec(s) :")

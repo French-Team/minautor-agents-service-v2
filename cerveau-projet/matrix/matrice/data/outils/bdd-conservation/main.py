@@ -13,6 +13,7 @@ COMMANDES = {
     "classer": ajouter_executer,
     "decider": ajouter_executer,
     "preciser": ajouter_executer,
+    "recenser": ajouter_executer,
     "balayer": balayer_executer,
     "archiver": archiver_executer,
     "restaurer": archiver_executer,
@@ -27,8 +28,8 @@ COMMANDES = {
 def principal(arguments):
     if not arguments or arguments[0] not in COMMANDES:
         print(__doc__)
-        print("Usage : proposer | classer | decider | preciser | balayer | archiver | restaurer"
-              " | controler-archives | controler-borne | lire | manifeste | verifier")
+        print("Usage : proposer | classer | decider | preciser | recenser | balayer | archiver"
+              " | restaurer | controler-archives | controler-borne | lire | manifeste | verifier")
         return 2
     return COMMANDES[arguments[0]](arguments)
 

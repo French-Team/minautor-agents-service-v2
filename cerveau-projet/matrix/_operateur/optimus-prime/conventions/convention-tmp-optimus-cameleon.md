@@ -20,8 +20,9 @@ identite:
 
 1. Tout script temporaire, cobaye, preuve ou fichier jetable va dans
    SON dossier dedie, jamais ailleurs :
-   - Optimus -> `cerveau-projet/matrix/tmp-optimus/`
-   - Cameleon -> `cerveau-projet/matrix/tmp-cameleon/`
+   - Optimus -> `cerveau-projet/matrix/_operateur/optimus-prime/tmp-optimus/`
+     (MO-236 : invisible PAR CONSTRUCTION, et non plus par exclusion de nom)
+   - Cameleon -> `workspace/tmp-cameleon/` (racine du workspace, HORS Matrice -- R-005)
 2. Interdits : racine projet, dossiers d outils, AppData/Temp,
    tout autre emplacement (contre-exemple : cobaye M-090).
 3. La zone est PERMANENTE et porte TOUJOURS son README (decision createur

@@ -20,7 +20,7 @@ Detecte les `[mot]` et route vers la bonne porte.
 
 ### 2. Routinier (automatique, sans intervention)
 - **Vue suivi-optimus DEBUT** : apres `injecter`, le pilote REGENERE la vue
-  derivee `matrice/suivi-optimus.md`
+  derivee `_operateur/optimus-prime/suivi-optimus.md`
 - **Vue suivi-optimus FIN** : apres `fin`, le pilote REGENERE la meme vue
 
 > ATTENTION (marbre L-020, 2026-09-11) : le pilote ne note RIEN au JOURNAL.
@@ -77,8 +77,10 @@ python main.py filtrer --message "..."    -> DETECTE [mot] et ROUTE automatiquem
   qui couvre l'entonnoir, `charger` et une file modifiee a la main, sans
   dupliquer la lecture du vivier (une seule source : `commun.valider_theme`).
   La mission reste en attente jusqu'a sa correction : `retiqueter` pour une
-  mission, et **`entonnoir retiqueter --id EO-XXX --role <THEME>`** quand elle
-  vient d'un item d'entonnoir (le refus NOMME la bonne porte, selon l'origine).
+  mission, et **`entonnoir retiqueter --id EO-XXX [--categorie c] [--role <THEME>]`**
+  quand elle vient d'un item d'entonnoir (le refus NOMME la bonne porte, selon
+  l'origine). MO-213 : ce meme geste REPARE les etiquettes de l'item -- la
+  categorie (liste fermee de son type) comme le role (vivier).
   Le chemin du LOT passe par le meme garde (plus de porte derobee).
 - **ROLE DE L'ITEM D'ENTONNOIR (2026-09-13, L-061)** : le garde des themes etait
   juste, mais l'identite manquait en amont -- l'item portait son TITRE en texte

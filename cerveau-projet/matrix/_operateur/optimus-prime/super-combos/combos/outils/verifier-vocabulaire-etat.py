@@ -48,9 +48,10 @@ BASE = Path(__file__).resolve().parent
 RACINE_MATRIX = next(p for p in [BASE, *BASE.parents] if p.name == "matrix")
 
 # --- Donnees ou l'etat s'ECRIT (observation de terrain) --------------------
+# EO-154 : l'appui sqlite modifications.db est RETIRE -- le domicile unique
+# des modifications est le JSON, qui ne declare aucun vocabulaire d'etat.
 BDD = {
     "matrice/data/frictions.db": "frictions",
-    "matrice/data/modifications.db": "modifications",
 }
 CHAMPS_OBS = ("type", "gravite", "frequence", "statut")
 JSONS = (

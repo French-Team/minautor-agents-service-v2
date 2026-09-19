@@ -23,14 +23,20 @@ from constants import (
     MISSION_SIGNAL,
     NIVEAU_DEFAUT,
     NIVEAU_PAR_ETAT,
+    NOM_ARCHIVE_BOITE_PREFIXE,
     OUTIL_SIGNAL,
+    PREFIXE_ZONE,
     REPERTOIRE_MATRIX,
     TIMEOUT_COMBO_SECONDES,
     THEME_REPARATION,
     URGENCE_VEILLE,
-    chemin_python,
     env_console_sure,
 )
+
+# L'interpreteur vient de son DOMICILE PARTAGE (data/commun/interpreteur.py), non
+# de constants.py : une valeur, une maison (M-076). data/commun est deja installe
+# dans sys.path par l'import de constants juste au-dessus.
+from interpreteur import chemin_python  # noqa: E402
 
 
 def horodater():
@@ -247,6 +253,100 @@ def purger_alertes_fantomes():
     journaliser({"type": "purge-boite", "purgees": purges})
 
 
+def chemin_archive_boite(maintenant=None):
+    """Le chemin de l'archive NOMINATIVE du jour, posee a cote de la boite."""
+    jour = (maintenant or datetime.now()).strftime("%Y%m%d")
+    return CHEMIN_BOITE_MATRICE_IN.parent / (NOM_ARCHIVE_BOITE_PREFIXE + "-" + jour + ".jsonl")
+
+
+def archiver_messages(messages, motif, mode):
+    """Ecrit les messages retires dans l'archive du jour, AVEC leur motif.
+
+    Le message COMPLET est conserve, augmente de purge_le, motif et mode : une
+    purge sans archive est indiscernable d'une disparition. Ajout seul ; rend le
+    chemin de l'archive, ou None si l'ecriture a echoue (l'incident est journalise,
+    la passe continue).
+    """
+    chemin = chemin_archive_boite()
+    try:
+        with open(chemin, "a", encoding=ENCODAGE) as fichier:
+            for message in messages:
+                enregistre = dict(message)
+                enregistre["purge_le"] = horodater()
+                enregistre["motif"] = motif
+                enregistre["mode"] = mode
+                fichier.write(json.dumps(enregistre, ensure_ascii=True) + chr(10))
+    except Exception as erreur:
+        journaliser({"type": "incident-archive-boite", "detail": str(erreur)})
+        return None
+    return chemin
+
+
+def purger_alertes_resolues(mode, detections):
+    """Retire de la BOITE les alerte-grave dont l'etat est RE-TESTE et plus detecte.
+
+    M-052 (purger_alertes_fantomes) ne connait QU'UN motif de retrait : la cible
+    fichier DISPARUE. Une alerte dont le defaut est REPARE -- le fichier existe et
+    compile, le caractere a ete converti -- restait donc dans la boite POUR
+    TOUJOURS, comptee comme anormale par le routeur a chaque passe. Mesure MO-187 :
+    les 11 alerte-grave de la boite etaient dans ce cas, AUCUNE n'etait un fantome.
+
+    Ici la BOITE recoit la MEME regle que l'etat anti-spam
+    (purger_signatures_resolues) : une alerte dont l'etat est RE-TESTE par ce mode
+    (ETATS_TESTES) et dont la signature n'est PLUS dans les detections est
+    RESOLUE. Les autres messages (fin-mission, retour-lot, signaler) sont
+    INTOUCHABLES (M-052). Le retrait est TRACE : archive nominative + journal.
+    Jamais bloquant : tout incident est journalise et la passe continue.
+    """
+    etats_testes = ETATS_TESTES.get(mode, ())
+    if not etats_testes or not CHEMIN_BOITE_MATRICE_IN.exists():
+        return
+    try:
+        lignes = CHEMIN_BOITE_MATRICE_IN.read_text(encoding=ENCODAGE).splitlines()
+        messages = [json.loads(ligne) for ligne in lignes if ligne.strip()]
+    except Exception as erreur:
+        journaliser({"type": "incident-purge-boite", "detail": str(erreur)})
+        return
+    vivantes = set(
+        str(detection["etat"]) + ":" + str(detection["cible"])
+        for detection in detections
+    )
+    resolues = []
+    gardees = []
+    for message in messages:
+        etat = str(message.get("etat", ""))
+        signature = etat + ":" + str(message.get("cible", ""))
+        if (
+            message.get("type") == "alerte-grave"
+            and not message.get("traite_par_routeur")
+            and etat in etats_testes
+            and signature not in vivantes
+        ):
+            resolues.append(message)
+            continue
+        gardees.append(message)
+    if not resolues:
+        return
+    chemin_archive = archiver_messages(
+        resolues,
+        "etat re-teste par la passe " + mode + " : plus detecte",
+        mode,
+    )
+    try:
+        CHEMIN_BOITE_MATRICE_IN.write_text(
+            "".join(json.dumps(m, ensure_ascii=True) + chr(10) for m in gardees),
+            encoding=ENCODAGE,
+        )
+    except Exception as erreur:
+        journaliser({"type": "incident-purge-boite", "detail": str(erreur)})
+        return
+    journaliser({
+        "type": "purge-boite-resolues", "mode": mode, "purgees": len(resolues),
+        "archive": str(chemin_archive) if chemin_archive else "",
+        "signatures": [str(m.get("etat", "")) + ":" + str(m.get("cible", "")) for m in resolues],
+    })
+
+
 def charger_alertes_emises():
     """Retourne l'etat des alertes deja emises {signature: date} (ou {})."""
     if not CHEMIN_ETAT_ALERTES.exists():
@@ -387,10 +487,28 @@ def lancer_combo(chemin_outil, arguments):
 
 
 def lister_fichiers_python():
-    """Retourne la liste triee des .py de matrix/ (hors __pycache__)."""
+    """Retourne la liste triee des .py de matrix/ (hors __pycache__ et jetables).
+
+    EO-175 : les ZONES JETABLES (`tmp-*`, motif PREFIXE_ZONE lu chez son
+    moteur data/commun/zone_tmp.py) sont HORS PERIMETRE de la veille. Leur
+    contenu est vide en fin de mission (regle immuable `perimetre-tmp.md`,
+    point 4) : un .py qui ne compile pas y est un etat PASSAGER, jamais un
+    defaut durable. Les compiler a fabrique EO-140 -- une mission de
+    reparation BLOQUANTE et SANS ROLE dont la cible
+    (`tmp-optimus/mo160-cobaye/p11/cible.py`) avait deja disparu : un item ne
+    dans le vide, que personne ne pouvait reparer.
+
+    Une zone `tmp-*` trouvee ailleurs qu a la racine reste un ECART -- mais
+    c est le DOMICILE que juge le garde des zones (garde-tmp), pas la veille :
+    une seule maison par idee. La veille regarde le CODE du projet, pas le
+    jetable.
+    """
     fichiers = []
     for racine, dossiers, noms in os.walk(str(REPERTOIRE_MATRIX)):
-        dossiers[:] = [d for d in dossiers if d != "__pycache__"]
+        dossiers[:] = [
+            dossier for dossier in dossiers
+            if dossier != "__pycache__" and not dossier.startswith(PREFIXE_ZONE)
+        ]
         for nom in noms:
             if nom.endswith(".py"):
                 fichiers.append(os.path.join(racine, nom))
@@ -464,6 +582,13 @@ def lancer_py_compile(fichiers=None):
     d'echec (1 = ecart confirme, 124 = lot tue par timeout).
     MO-097 : les lots se decoupent sur la LONGUEUR de commande (decouper_lots),
     pas sur un nombre fixe de fichiers -- moins de processus, donc moins de tare.
+    MO-182 : la passe est EXHAUSTIVE. Mesure du cobaye de MO-181 : avec DEUX .py
+    casses dans un meme lot, py_compile ne cite QUE le premier (le processus
+    s arrete la) ; or la passe ne remonte que les fichiers CITES, donc un seul
+    item par passe -- les autres fichiers casses restaient INVISIBLES tant que
+    le premier n etait pas repare. Le lot est donc REJOUE en RETIRANT les
+    fichiers deja accuses, tant qu il en reste : cout nul quand tout compile
+    (un seul appel par lot, la cadence de MO-097 est preservee).
     """
     if fichiers is None:
         fichiers = lister_fichiers_python()
@@ -471,10 +596,25 @@ def lancer_py_compile(fichiers=None):
     code_global = 0
     sorties = []
     for lot in decouper_lots(fichiers):
-        code, sortie = compiler_lot(lot)
-        sorties.append(sortie)
-        if code != 0 and code_global == 0:
-            code_global = code
+        restants = lot
+        while True:
+            code, sortie = compiler_lot(restants)
+            sorties.append(sortie)
+            if code != 0 and code_global == 0:
+                code_global = code
+            if code == 0:
+                break
+            accuses = [
+                os.path.normcase(os.path.normpath(str(chemin)))
+                for chemin in extraire_fichiers_python_en_erreur(sortie)
+            ]
+            suivants = [
+                fichier for fichier in restants
+                if os.path.normcase(os.path.normpath(str(fichier))) not in accuses
+            ]
+            if not suivants or len(suivants) == len(restants):
+                break
+            restants = suivants
     return code_global, "".join(sorties)
 
 

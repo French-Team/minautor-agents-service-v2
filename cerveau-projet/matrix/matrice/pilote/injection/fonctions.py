@@ -15,6 +15,7 @@ from commun import (
     prochaine_du_lot,
     prochaine_en_attente,
     puiser_tresse,
+    preparer_zone_temporaire,
     rafraichir_vue_journal,
     session_en_pause,
     journaliser_mission,
@@ -138,7 +139,14 @@ def preparer_injection(charger_file):
     _code_vue, message_vue = rafraichir_vue_journal()
     if _code_vue != 0:
         print("ALERTE vue : " + message_vue)
+    # Zone jetable (regle R-005, MO-189) : le pilote DE CE FLUX fait NAITRE sa
+    # zone -- elle vit dans SON perimetre d'ecriture, personne d'autre ne peut
+    # l'y creer. Non bloquant : un echec n'empeche pas la mission de demarrer.
+    _code_zone, message_zone = preparer_zone_temporaire()
+    if _code_zone != 0:
+        print("ALERTE zone jetable : " + message_zone)
     print("Injection deposee pour " + mission["id"] + " -> " + str(BOITE_PILOTE_OUT))
+
     return 0
 
 
@@ -190,6 +198,11 @@ def enchainer(charger_file):
     _code_vue, message_vue = rafraichir_vue_journal()
     if _code_vue != 0:
         print("ALERTE vue : " + message_vue)
+    # Meme preparation qu'a l'injection simple (R-005, MO-189) : le LOT aussi
+    # fait naitre la zone de son flux -- les deux chemins, jamais un seul.
+    _code_zone, message_zone = preparer_zone_temporaire()
+    if _code_zone != 0:
+        print("ALERTE zone jetable : " + message_zone)
     print("Chaine armee : chaque 'fin' enchainra la mission suivante du lot.")
     return 0
 

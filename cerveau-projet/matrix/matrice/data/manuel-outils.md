@@ -358,7 +358,7 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 
 **Encarts (ordre ferme, jamais en vrac)** : matrice (defcon + boucles), missions (en cours + vrac/files/brin), routines (dernieres passes veille), alertes (veille + intercom), cameleon (messages RECUS par le cameleon, M-080), usages (8 derniers appels), modifications (5 derniers fichiers), lecons (5 dernieres), variables (classeur).
 > PAS d'encart optimus (decision createur 2026-09-09) : optimus reste INVISIBLE --
-> son suivi vit UNIQUEMENT dans son fichier dedie `matrice/suivi-optimus.md`. Chaque encart est present meme vide -- aucune entree en vrac. Format createur (M-080) : chaque encart porte SA ligne de FLUX (d'ou viennent les infos, vers ou elles vont) + un TABLEAU `| Entree | Heure | Date |` (heure et date separees, format HH:MM:SS JJ/MM/AAAA, jamais en debut de ligne).
+> son suivi vit UNIQUEMENT dans son fichier dedie `_operateur/optimus-prime/suivi-optimus.md`. Chaque encart est present meme vide -- aucune entree en vrac. Format createur (M-080) : chaque encart porte SA ligne de FLUX (d'ou viennent les infos, vers ou elles vont) + un TABLEAU `| Entree | Heure | Date |` (heure et date separees, format HH:MM:SS JJ/MM/AAAA, jamais en debut de ligne).
 
 ## 25. pause-session -- `matrice/data/outils/pause-session/` (M-080)
 
@@ -420,14 +420,14 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 |---|---|
 | `noter` | `python main.py noter --mission M-XXX --theme SUIVI --action <action> --detail "..." [--fichiers "a,b"] [--portes "a,b"] [--duree-s N]` |
 | `lire` | `python main.py lire [--mission M] [--action a] [--n N]` (filtres + n derniers) |
-| `vue` | `python main.py vue` (genere le markdown dedie `matrice/suivi-optimus.md`, tous les evenements) |
+| `vue` | `python main.py vue` (genere le markdown dedie `_operateur/optimus-prime/suivi-optimus.md`, tous les evenements) |
 | `verifier` | `python main.py verifier` (integrite SHA-256, etalon-or) |
 | `coherence` | `python main.py coherence [--racine <matrix>]` (croise la file du pilote et ce journal) |
 | `archiver` | `python main.py archiver [--racine <matrix>]` (sort du journal les evenements hors perimetre OPTIMUS en les ARCHIVANT dans `suivi-optimus-hors-perimetre.jsonl` ; journal reecrit, empreinte recalculee, idempotent) -- `--doublons` sort les 2e debut / 2e fin d'une meme mission (l'ECART que `verifier` remonte) vers `suivi-optimus-doublons.jsonl`, le PREMIER evenement faisant foi |
 
 **Actions fermees (enum, anti-bruit par EVENEMENT)** : `debut`, `fin`, `porte`, `depot`, `decision`, `decouverte`, `bilan` -- hors enum refusee (code 2). Format d'une ligne : `date, mission, theme, action, detail, fichiers[], portes[], duree_s`.
-**Vue** : `vue` genere le fichier markdown dedie `matrice/suivi-optimus.md` avec UN TABLEAU PAR ACTION (sections fermees dans l'ordre de l'enum) -- decision createur 2026-09-09 : optimus n'a PAS d'encart au journal multi-encarts (il reste invisible), SON fichier est la seule vue de son travail. Le fichier est genere, jamais edite a la main.
-**Etancheite (philosophie d'invisibilite, CV-006/L-016)** : le cameleon n'accede JAMAIS a cette trace ; la zone `suivi-optimus` (et `suivi-optimus.md`) est exclue du perimetre-cameleon.
+**Vue** : `vue` genere le fichier markdown dedie `_operateur/optimus-prime/suivi-optimus.md` avec UN TABLEAU PAR ACTION (sections fermees dans l'ordre de l'enum) -- decision createur 2026-09-09 : optimus n'a PAS d'encart au journal multi-encarts (il reste invisible), SON fichier est la seule vue de son travail. Le fichier est genere, jamais edite a la main.
+**Etancheite (philosophie d'invisibilite, CV-006/L-016)** : le cameleon n'accede JAMAIS a cette trace. MO-235 : son fichier dedie vit desormais dans la zone privee `_operateur/optimus-prime/suivi-optimus.md` -- il est invisible PAR CONSTRUCTION (la zone `_operateur` est exclue), et non plus par une exclusion de NOM ; la zone `suivi-optimus` (journal et archives sous `matrice/data/`) reste exclue du perimetre-cameleon.
 **Quand** : a chaque action significative d'optimus (GO/arbitrage, fin de mission, porte utilisee, depot au vrac, decouverte d'audit, bilan).
 **Coherence (verbe `coherence`, MO-048)** : le pilote ecrit la FILE, l'agent declare au JOURNAL (marbre L-020 : le pilote ne note RIEN) -- deux traces separees que rien ne compare. Le verbe les croise : un ECART est une divergence a reparer (code 1 : mission close dans la file sans fin declaree, fin declaree sans cloture, mission du journal inconnue de la file, serie stricte violee, COMPTEUR en retard sur le plus grand id utilise -- donc un id sur le point d'etre reattribue) ; une DETTE est un etat transitoire legitime ou un residu hors perimetre (`en-cours` sans debut au journal = fenetre d'injection ; identifiants non `MO-` au journal = residus du cameleon), signalee sans bloquer. Cable comme MAILLON 9 de `lanceur-non-regression-flux.py` : un ecart fait tomber le flux.
 

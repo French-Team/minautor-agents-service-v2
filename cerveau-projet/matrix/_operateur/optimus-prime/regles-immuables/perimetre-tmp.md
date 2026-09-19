@@ -5,7 +5,7 @@ identite:
   commun: false
   decide_par: createur
   date: 2026-09-15
-  amendee_le: 2026-09-16
+  amendee_le: 2026-09-19
 ---
 
 
@@ -17,6 +17,13 @@ identite:
 > dans AppData/Temp, HORS perimetre ; et le residu constate le 2026-09-15
 > (zone `tmp-optimus` sans son README, 6 fichiers de missions passees).
 >
+> AMENDEE le 2026-09-19 (demande createur, MO-236) : ma zone vit desormais en
+> `cerveau-projet/matrix/_operateur/optimus-prime/tmp-optimus/` -- invisible PAR
+> CONSTRUCTION (la zone `_operateur` est exclue de la lecture du cameleon), et non
+> plus par une exclusion de NOM. La ligne du cameleon est corrigee au passage :
+> R-005 (MO-189) avait deplace cette zone vers `workspace/tmp-cameleon/`, et ce
+> marbre ne le disait pas encore.
+>
 > Declinaison de `perimetre-write.md` : celle-ci dit OU j ai le droit
 > d ecrire (`matrix/` seul, 2 exceptions de demarrage) ; celle-la dit OU va
 > un fichier JETABLE et QUAND il meurt. Une seule maison par idee : ici on
@@ -26,8 +33,8 @@ identite:
 
 1. **Chaque zone a SON domicile.** Tout fichier temporaire -- script,
    cobaye, mesure, brouillon, preuve -- va dans la zone de son auteur :
-   - moi : `cerveau-projet/matrix/tmp-optimus/`
-   - le cameleon : `cerveau-projet/matrix/tmp-cameleon/`
+   - moi : `cerveau-projet/matrix/_operateur/optimus-prime/tmp-optimus/`
+   - le cameleon : `workspace/tmp-cameleon/` (racine du workspace, HORS Matrice -- R-005)
 2. **Aucun autre emplacement, jamais.** Sont interdits : la racine du
    projet, `matrice/`, les dossiers d outils, AppData/Temp, tout dossier
    hors `matrix/` (contre-exemple reel : le cobaye M-090). Ecrire un

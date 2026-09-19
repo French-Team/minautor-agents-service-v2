@@ -21,6 +21,13 @@ if REPERTOIRE_PARENT.name != "routines" or REPERTOIRE_PARENT.parent.name != "mat
 sys.path.insert(0, str(REPERTOIRE_PARENT.parent / "data" / "commun"))
 from lancement import delai_sous_processus  # noqa: E402
 from racine import detecter_racine  # noqa: E402
+# Zones JETABLES (motif `tmp-*`) : la valeur est LUE chez son proprietaire
+# (data/commun/zone_tmp.py), jamais recopiee ici -- meme doctrine que
+# TIMEOUT_COMBO_SECONDES plus bas. La veille s'en sert pour NE PAS compiler
+# les zones jetables (EO-175) : leur contenu est vide en fin de mission
+# (regle immuable `perimetre-tmp.md`, point 4), donc un .py qui ne compile
+# pas y est un etat PASSAGER, jamais un defaut durable.
+from zone_tmp import PREFIXE_ZONE  # noqa: E402
 
 RACINE = detecter_racine(REPERTOIRE_ROUTINE)
 REPERTOIRE_MATRIX = RACINE / "cerveau-projet" / "matrix"
@@ -31,6 +38,11 @@ CHEMIN_VERIFIER_CONVENTIONS = (
     REPERTOIRE_MATRIX / "matrice" / "data" / "outils" / "verifier-conventions"
 )
 CHEMIN_VERIFIER_REGLES = REPERTOIRE_MATRIX / "matrice" / "data" / "outils" / "verifier-regles"
+# Les DECLENCHEURS de defcon (voie A, EO-181) sont portes par machine-defcon :
+# la veille lance son verbe `surveiller` dans la passe VIGILE -- c est ce qui
+# fait d un declencheur declare un declencheur BRANCHE (un mot sans appelant
+# serait un declencheur mort, le defaut que l audit EO-181 a trouve).
+CHEMIN_MACHINE_DEFCON = REPERTOIRE_MATRIX / "matrice" / "data" / "outils" / "machine-defcon"
 CHEMIN_VERIFIER_PROTOCOLES = (
     REPERTOIRE_MATRIX / "matrice" / "data" / "outils" / "verifier-protocoles"
 )
@@ -65,6 +77,11 @@ EVENEMENTS_GARDES_JOURNAL = 5000
 ESSAIS_ROTATION = 3
 CHEMIN_RELATIF_JOURNAL = Path("matrice") / "routines" / "veille-flux" / NOM_JOURNAL
 NOM_ETAT_ALERTES = "alertes-emises.json"
+# Archive NOMINATIVE des alertes retirees de la BOITE (MO-187) : une purge qui
+# ne laisse derriere elle ni le message ni son MOTIF est indiscernable d une
+# disparition (c est la faute qui a fait perdre 10 alertes graves, M-052). Une
+# purge ECRIT donc l archive du jour, a cote de la boite.
+NOM_ARCHIVE_BOITE_PREFIXE = "inbox-archive"
 INTERVALLE_SECONDES = 300
 # Nom CANONIQUE de la cadence declaree, lu par `vie etat` : on LIT la cadence
 # au lieu de l'attendre (attendre n'est pas verifier). Meme valeur, meme objet.
@@ -181,9 +198,11 @@ CHEMIN_ETAT_ALERTES = REPERTOIRE_ROUTINE / NOM_ETAT_ALERTES
 ENCODAGE = "utf-8"
 
 
-def chemin_python():
-    """Retourne l'executable python du processus courant (pour les sous-processus)."""
-    return sys.executable or "python"
+# L'INTERPRETEUR des sous-processus n'a plus de copie ici (2026-09-19) : il vit
+# au DOMICILE PARTAGE data/commun/interpreteur.py, qui lit sa declaration dans le
+# classeur des variables (cle `interpreteur-python`). Une fonction privee par
+# consommateur, c'est une decision par consommateur -- et deux copies divergent
+# en silence (M-076, L-029).
 
 
 def env_console_sure():

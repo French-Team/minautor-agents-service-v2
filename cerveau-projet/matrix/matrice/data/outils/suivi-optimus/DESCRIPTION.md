@@ -15,7 +15,7 @@ python main.py verifier
 python main.py coherence [--racine <matrix>]  (croise la file du pilote et le journal)
 python main.py archiver [--racine <matrix>] [--doublons]   (sort du journal les hors
                                                perimetre OPTIMUS, en les ARCHIVANT)
-python main.py vue   (genere la vue markdown dediee matrice/suivi-optimus.md)
+python main.py vue   (genere la vue markdown dediee _operateur/optimus-prime/suivi-optimus.md)
 ```
 
 - `--action` : action fermee (enum, voir constants.py) -- obligatoire.
@@ -82,7 +82,7 @@ Plus un etalon `suivi-optimus.jsonl.sha256` (empreinte recalculee a chaque ajout
 | commun.py | fonctions communes : lire, ajouter (atomique, LF), empreinte, options |
 | noter/ | noter un evenement (action fermee) |
 | lire/ | lister (tout ou par mission/action, n derniers) |
-| vue/ | generer la vue markdown dediee (matrice/suivi-optimus.md) |
+| vue/ | generer la vue markdown dediee (_operateur/optimus-prime/suivi-optimus.md) |
 | verifier/ | integrite SHA-256 (etalon-or) |
 | coherence/ | croiser la file du pilote et le journal (verbe `coherence`) |
 | archiver/ | sortir du journal actif ce qui ne doit pas y etre : evenements HORS PERIMETRE, ou DOUBLONS debut/fin (verbe `archiver`, option `--doublons`) |

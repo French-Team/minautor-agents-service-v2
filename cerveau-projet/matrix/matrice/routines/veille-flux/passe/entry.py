@@ -11,6 +11,7 @@ from commun import (
     journaliser,
     lancer_combo,
     purger_alertes_fantomes,
+    purger_alertes_resolues,
     purger_signatures_mortes,
     purger_signatures_resolues,
 )
@@ -66,6 +67,10 @@ def executer(arguments):
     # Une signature re-testee et non re-detectee est RESOLUE : anti-spam reconcilie
     # (sinon une alerte morte bloque pour toujours la suivante de meme signature).
     purger_signatures_resolues(mode, detections)
+    # MO-187 : le MEME verdict s'applique a la BOITE. Sans lui, une alerte dont le
+    # defaut est repare restait dans l'inbox pour toujours -- le routeur la comptait
+    # comme anormale a chaque passe (mesure : 11 alerte-grave, aucune fantome).
+    purger_alertes_resolues(mode, detections)
     nouvelles = 0
     for detection in detections:
         if alerte_grave(detection["etat"], detection["cible"], detection["detail"]):

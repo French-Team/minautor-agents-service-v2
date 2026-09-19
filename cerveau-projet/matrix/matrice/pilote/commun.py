@@ -36,7 +36,7 @@ from constants import (
 # Moteur PARTAGE des zones jetables (M-076 : data/commun est installe dans
 # sys.path par constants.py). Les DEUX pilotes purgent leur zone par ce code :
 # deux copies divergeraient, et l'une des deux zones resterait pleine (MO-136).
-from zone_tmp import vider as vider_zone_tmp  # noqa: E402
+from zone_tmp import preparer as preparer_zone_tmp, vider as vider_zone_tmp  # noqa: E402
 
 
 def horodater():
@@ -296,6 +296,40 @@ def rafraichir_vue_journal():
                    + erreur.strip()[:160])
     lignes = resultat.stdout.decode(ENCODAGE, errors="replace").strip().splitlines()
     return 0, (lignes[0] if lignes else "vue du journal regeneree")
+
+
+def preparer_zone_temporaire():
+    '''Fait NAITRE la zone jetable du cameleon (dossier + README) a l'injection.
+
+    Regle R-005 (MO-189) : la zone jetable vit dans le PERIMETRE D'ECRITURE de
+    son flux, donc c'est le pilote DE CE FLUX qui la fait naitre -- jamais un
+    autre. La zone est PERMANENTE (point 3 de la regle) : elle nait a la premiere
+    mission, son README y reste, et seul son CONTENU est vide a la cloture.
+
+    NON bloquant : un echec de preparation n'empeche JAMAIS une mission de
+    demarrer (on alerte). Retourne (code, message), imprime par l'appelant.
+    '''
+    try:
+        cree_zone, cree_readme = preparer_zone_tmp(
+            REPERTOIRE_ZONE_TMP, NOM_README_ZONE_TMP)
+    except (ValueError, OSError) as erreur:
+        print('ALERTE zone jetable : ' + str(erreur))
+        return 1, 'preparation de la zone refusee'
+    if not cree_zone and not cree_readme:
+        return 0, 'zone ' + NOM_ZONE_TMP + ' deja prete (rien a tracer).'
+    journaliser_mission({
+        'type': 'preparer-zone-tmp',
+        'date': horodater(),
+        'zone': NOM_ZONE_TMP,
+        'dossier_cree': cree_zone,
+        'readme_cree': cree_readme,
+        'detail': ('zone ' + NOM_ZONE_TMP + ' preparee par son pilote : dossier '
+                   + ('cree' if cree_zone else 'deja la') + ', README '
+                   + ('cree' if cree_readme else 'deja la') + ', a '
+                   + str(REPERTOIRE_ZONE_TMP) + '.'),
+    })
+    return 0, ('zone ' + NOM_ZONE_TMP + ' preparee (' + str(REPERTOIRE_ZONE_TMP)
+               + '), trace au journal.')
 
 
 def purger_zone_temporaire(mission):

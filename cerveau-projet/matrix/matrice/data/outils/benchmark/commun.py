@@ -18,7 +18,6 @@ from constants import (
     ENCODAGE,
     RACINE,
     REPERTOIRE_DATA,
-    REPERTOIRE_MATRIX,
 )
 
 # Le contrat d invisibilite L-016/CV-006 (plancher + zones DECLAREES V-003 du
@@ -27,10 +26,21 @@ from constants import (
 from invisibilite import est_invisible  # noqa: E402
 
 
-# --- Helpers perimetre (copie desde lire/commun.py) ---
+# Le PERIMETRE (est-ce DANS la Matrice ?) vit dans SON domicile (data/commun/
+# cible.py) : cette porte le CONSOMME, elle ne le recopie pas. AVANT MO-184, cet
+# outil portait une COPIE declaree de lire/commun.py -- et la copie jugeait un
+# PREFIXE avant la resolution, donc un chemin declare dans le perimetre pouvait
+# resoudre ailleurs (mesure MO-183/MO-184 : cinq perimetres, un seul domicile).
+from cible import est_dans_matrice, motif_hors_perimetre, racine_matrice, resoudre  # noqa: E402
+
 
 def dans_perimetre(chemin_relatif):
-    """True si dans matrix/ ou allowlist racine."""
+    """True si le chemin RESOLU est dans la Matrice (ou allowlist racine).
+
+    MO-184 (EO-178), meme contrat que la porte ecrire (MO-183) : on RESOUT avant
+    de juger. Un prefixe `matrix/...` n est plus un laissez-passer -- il ne vaut
+    que si le chemin resolu tombe VRAIMENT dans la Matrice.
+    """
     brut = str(chemin_relatif).replace("\\", "/").strip()
     if not brut:
         return False
@@ -44,20 +54,24 @@ def dans_perimetre(chemin_relatif):
         or any(nom.startswith(p) for p in ALLOWLIST_PREFIXES)
     ):
         return True
-    if brut.startswith("matrix/") or brut.startswith("cerveau-projet/matrix/"):
-        return True
-    try:
-        p = (RACINE / brut).resolve()
-        for base in (RACINE / "matrix", RACINE / "cerveau-projet" / "matrix"):
-            if base.is_dir():
-                try:
-                    if str(p).startswith(str(base.resolve())):
-                        return True
-                except OSError:
-                    continue
-        return str(p).startswith(str(REPERTOIRE_MATRIX.resolve()))
-    except (OSError, RuntimeError):
-        return False
+    # Ce lecteur n expose PAS resoudre_chemin (sa copie resoliait en ligne) : la
+    # base est la MEME que celle des autres outils (RACINE), et le chemin est
+    # resolu AVANT d etre juge -- c est tout le contrat (MO-184).
+    return est_dans_matrice((RACINE / brut).resolve())
+
+
+def ancrer(chemin, depart):
+    """(chemin_absolu, motif) : ancre <chemin> UNE fois sur le domicile partage.
+
+    MO-186 : la PORTE ancrait DEUX fois -- Path(chemin).resolve() (base = le CWD)
+    puis dans_perimetre qui resout a nouveau (base = la racine du workspace). Un
+    seul argument recevait donc DEUX verdicts selon qui lance (friction 80), et
+    le refus de perimetre ne tombait jamais depuis matrix/.
+    Ici l'ancrage est UNIQUE, par le MEME domicile que les autres lecteurs
+    (cible.resoudre) : le chemin juge est le chemin LU. Le motif rendu NOMME les
+    bases essayees quand la cible est introuvable (friction 77).
+    """
+    return resoudre(chemin, depart)
 
 
 def est_zone_invisible(path_absolu):
@@ -78,16 +92,16 @@ def calculer_sha256(chemin):
 
 def epreuve_perimetre(chemin):
     """E1 : Le fichier est-il dans le perimetre matrix/ ?"""
-    try:
-        p = Path(chemin).resolve()
-        rel = p.relative_to(RACINE)
-        ok = dans_perimetre(str(rel))
-    except (ValueError, OSError):
-        ok = False
+    # MO-186 : le chemin est juge TEL QUE FOURNI, par le MEME contrat que les
+    # trois autres lecteurs -- dans_perimetre RESOUT avant de juger (domicile
+    # data/commun/cible.py, MO-184). L'ancien ancrage Path(chemin).resolve()
+    # dependait du CWD : deux verdicts pour un seul argument (friction 80), et
+    # le refus de perimetre ne tombait jamais depuis matrix/.
+    ok = dans_perimetre(str(chemin))
     return {
         "nom": "perimetre",
         "passe": ok,
-        "detail": "dans matrix/" if ok else "HORS perimetre",
+        "detail": "dans matrix/" if ok else motif_hors_perimetre(str(chemin)),
         "code": 0 if ok else 2,
     }
 
@@ -188,7 +202,12 @@ def epreuve_bdd(chemin):
     """E6 : Entree dans modifications-par-fichier.json ?"""
     try:
         p = Path(chemin).resolve()
-        rel = str(p.relative_to(RACINE)).replace("\\", "/")
+        # MO-186 : les CLES de la BDD sont relatives a la RACINE DE LA MATRICE
+        # (plan de conservation), pas a la racine du workspace. L'ancien calcul
+        # prefixait `cerveau-projet/matrix/` et ne pouvait DONC jamais trouver une
+        # note : le controle rendait toujours "absent de BDD" -- un controle qui
+        # ne peut que echouer use la grille (le ROUGE permanent ne se lit plus).
+        rel = str(p.relative_to(racine_matrice(REPERTOIRE_DATA))).replace("\\", "/")
         bdd = REPERTOIRE_DATA / "modifications-par-fichier.json"
         if not bdd.is_file():
             return {"nom": "bdd", "passe": False, "detail": "BDD absente", "code": 1}
@@ -331,3 +350,10 @@ def extraire_options(arguments, noms_connus):
     """Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici."""
     from options import extraire_options as repartir  # domicile partage (EO-158)
     return repartir(arguments, noms_connus, drapeaux=("json", "recursif", "integration"))
+
+
+def signaler_inconnues(options, outil, noms_connus, usage=""):
+    """Voir le CONTRAT du domicile partage (EO-179) : refus NOMME d une inconnue."""
+    from options import signaler_inconnues as repartir  # domicile partage (EO-179)
+    return repartir(options, outil, noms_connus, usage=usage)
+
