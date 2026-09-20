@@ -1,5 +1,6 @@
 """Fonctions simples de la categorie injection : une seule tache chacune."""
 import json
+import re
 
 from commun import (
     annoncer,
@@ -36,6 +37,7 @@ from constants import (
     CLE_AUTO_VALIDEES,
     ENCODAGE,
     GABARIT_COMMANDE_RECHERCHE,
+    RAPPEL_CHAINE_ARMEE,
     RAPPEL_ROUTE_OUTIL,
     REPERTOIRE_DATA,
     STATUT_EN_ATTENTE,
@@ -319,7 +321,7 @@ def preparer_injection(charger_file, enchainer=False, mission_forcee=None):
         "objectif": mission["objectif"],
         CHAMP_AUTO_VALIDATION: mission[CHAMP_AUTO_VALIDATION],
         "checklist": checklist,
-        "lecons_utiles": charger_lecons_utiles(),
+        "lecons_utiles": charger_lecons_utiles(mission),
         "themes_utiles": charger_themes_utiles(),
         "recherche": preparer_recherche_mission(mission),
         CHAMP_RAPPEL: charger_rappel_route(mission),
@@ -440,7 +442,7 @@ def enchainer(charger_file):
         "lot": True,
         CHAMP_AUTO_VALIDATION: mission[CHAMP_AUTO_VALIDATION],
         "checklist": checklist,
-        "lecons_utiles": charger_lecons_utiles(),
+        "lecons_utiles": charger_lecons_utiles(mission),
         "themes_utiles": charger_themes_utiles(),
         "recherche": preparer_recherche_mission(mission),
         CHAMP_RAPPEL: charger_rappel_route(mission),
@@ -551,18 +553,109 @@ def charger_rappel_route(mission):
     present ne se lit plus. Le champ est PESE avec les autres (CHAMPS_PESES) --
     c'est du contexte offert a l'agent, il se compte comme le reste.
     """
-    if str(mission.get("type", "") or "").strip() != TYPE_ROUTE_OUTIL:
-        return ""
-    return RAPPEL_ROUTE_OUTIL
+    morceaux = []
+    # CHAINE ARMEE (EO-274) : une mission de lot DIT qu elle doit etre suivie -- une
+    # mission hors lot ne le dit pas (un rappel permanent ne se lit plus).
+    if mission.get("lot"):
+        morceaux.append(RAPPEL_CHAINE_ARMEE)
+    if str(mission.get("type", "") or "").strip() == TYPE_ROUTE_OUTIL:
+        morceaux.append(RAPPEL_ROUTE_OUTIL)
+    return " ".join(morceaux)
 
 
-def charger_lecons_utiles():
-    """Charge les lecons de la BDD lecons.json (liste vide si absente ou illisible).
+# PLAFOND DU SAC-A-DOS (EO-270) : la commande de travail pese 750 tokens ; le
+# savoir injecte d office en pesait 23378, soit 89 pour cent de l injection
+# (mesure MO-241). Le poids d une injection a ete multiplie par 5.4 en six jours
+# (4865 tokens le 2026-09-13 contre 26295 le 2026-09-19) : le contexte d une
+# session se remplissait donc en un a trois rounds, et la chaine k/n s arretait
+# faute de place. Le sac-a-dos est desormais BORNE : les lecons PERTINENTES pour
+# la mission d abord, puis les plus RECENTES, jusqu au plafond. Les ecartees ne
+# sont PAS perdues : elles restent dans matrice/data/lecons.json et leur nombre
+# est DIT a chaque injection (un reste tu redevient une absence).
+PLAFOND_LEGONS_TOKENS = 6000
+PLAFOND_LEGONS_NOMBRE = 30
+FACTEUR_ESTIMATION = 4  # repli (caracteres -> tokens) si le motif tokens manque
+
+
+def _vocabulaire_mission(mission):
+    """Mots de la mission qui decident de la PERTINENCE d une lecon."""
+    if not isinstance(mission, dict):
+        return set()
+    morceaux = [str(mission.get("theme", "")), str(mission.get("type", "")),
+                str(mission.get("source", ""))]
+    role = mission.get("role")
+    if isinstance(role, dict):
+        for cle in ("id", "nom", "theme", "but"):
+            morceaux.append(str(role.get(cle, "")))
+    elif role:
+        morceaux.append(str(role))
+    morceaux.append(str(mission.get("objectif", "")))
+    mots = set()
+    for morceau in morceaux:
+        for mot in re.split(r"[^0-9A-Za-z_]+", morceau.lower()):
+            if len(mot) >= 4:
+                mots.add(mot)
+    return mots
+
+
+def _score_lecon(lecon, vocabulaire):
+    """Nombre de tags de la lecon presents dans le vocabulaire de la mission."""
+    tags = lecon.get("tags") or []
+    if not isinstance(tags, list):
+        return 0
+    score = 0
+    for tag in tags:
+        if str(tag).lower() in vocabulaire:
+            score += 1
+    return score
+
+
+def _poids_lecon(lecon):
+    """Poids d une lecon (motif partage si present, repli declare sinon)."""
+    texte = json.dumps(lecon, ensure_ascii=True)
+    if peser_tokens is None:
+        return max(1, len(texte) // FACTEUR_ESTIMATION)
+    return peser_tokens(texte)
+
+
+def selectionner_lecons(lecons, mission=None, plafond_tokens=None, plafond_nombre=None):
+    """LE PLAFOND (EO-270) : rend (retenues, ecartees), ordre stable et dicte.
+
+    Ordre : pertinence (tags de la lecon presents dans la mission) d abord, puis
+    recence (date, puis id) -- deux passes ne prennent donc jamais une autre
+    suite. Un plafond atteint ECARTE la suite sans la perdre : l appelant la DIT.
+    La premiere lecon passe toujours, meme plus lourde que le plafond : un
+    plafond qui viderait le sac-a-dos serait pire que pas de plafond.
+    """
+    if plafond_tokens is None:
+        plafond_tokens = PLAFOND_LEGONS_TOKENS
+    if plafond_nombre is None:
+        plafond_nombre = PLAFOND_LEGONS_NOMBRE
+    vocabulaire = _vocabulaire_mission(mission)
+    classees = sorted(lecons, key=lambda l: (str(l.get("date", "")), str(l.get("id", ""))),
+                      reverse=True)
+    classees.sort(key=lambda l: -_score_lecon(l, vocabulaire))
+    retenues = []
+    ecartees = []
+    poids = 0
+    for lecon in classees:
+        cout = _poids_lecon(lecon)
+        if retenues and (len(retenues) >= plafond_nombre or poids + cout > plafond_tokens):
+            ecartees.append(lecon)
+            continue
+        retenues.append(lecon)
+        poids += cout
+    return retenues, ecartees
+
+
+def charger_lecons_utiles(mission=None):
+    """Charge les lecons de la BDD lecons.json, BORNEES par le plafond (EO-270).
 
     BDD en cours de construction : jamais de faux blocage, jamais de type surprenant.
     Format prevu (contrat data) : {"lecons": [{...tags...}, ...]}.
-    Filtre L-016 : les lecons qui nomment l'invisible sont retirees de l'injection
+    Filtre L-016 : les lecons qui nomment l invisible sont retirees de l injection
     (le cameleon ne doit jamais lire _operateur/optimus/suivi-optimus -- audit-invisibilite).
+    Le plafond ne bloque rien : il selectionne, et il DIT combien il ecarte.
     """
     chemin_lecons = REPERTOIRE_DATA / "lecons.json"
     if not chemin_lecons.exists():
@@ -571,9 +664,16 @@ def charger_lecons_utiles():
         with open(chemin_lecons, "r", encoding=ENCODAGE) as flux:
             donnees = json.load(flux)
         lecons = donnees.get("lecons", []) if isinstance(donnees, dict) else []
-        return filtrer_pour_cameleon(lecons)
+        lecons = filtrer_pour_cameleon(lecons)
     except (OSError, ValueError):
         return []
+    retenues, ecartees = selectionner_lecons(lecons, mission)
+    if ecartees:
+        print("lecons_utiles : " + str(len(retenues)) + " injectees / " + str(len(ecartees))
+              + " ecartees (plafond " + str(PLAFOND_LEGONS_TOKENS) + " tokens, EO-270)"
+              + " -- pertinentes d abord puis recentes ; les ecartees restent lisibles"
+              + " dans matrice/data/lecons.json.")
+    return retenues
 
 
 def charger_themes_utiles():

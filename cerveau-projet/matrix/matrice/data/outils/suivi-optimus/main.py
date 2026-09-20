@@ -9,8 +9,13 @@ Usage :
     python main.py lire [--mission M] [--action <action>] [--n N]
     python main.py verifier
     python main.py coherence [--racine <matrix>]  (croise la file du pilote et le journal)
-    python main.py archiver [--racine <matrix>]   (sort du journal les evenements hors
-                                                   perimetre OPTIMUS, en les ARCHIVANT)
+    python main.py archiver [--racine <matrix>] [--doublons]
+                                       (sort du journal, en les ARCHIVANT : par defaut
+                                       les evenements HORS PERIMETRE OPTIMUS ; avec
+                                       --doublons, les 2e debut / 2e fin d une meme
+                                       mission -- l ECART que `verifier` remonte, le
+                                       PREMIER evenement fait foi ; archive dediee
+                                       suivi-optimus-doublons.jsonl)
     python main.py vue   (genere la vue markdown dediee _operateur/optimus-prime/suivi-optimus.md)
 """
 import sys

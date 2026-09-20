@@ -18,6 +18,51 @@ except ImportError:  # importe comme paquet (depuis le pilote) : chemins complet
     from entonnoir.roles import CHAMP_ROLE, CHAMP_TITRE
     from entonnoir.stockage import horodater
 
+# DOUBLON POSSIBLE (MO-243, constat N2 de l audit MO-220) : au moment ou un item
+# NAIT, l entonnoir ne disait RIEN des items proches -- mesure du 2026-09-19 : le
+# createur a depose TROIS fois la meme demande (EO-264, EO-271, EO-274) sans
+# qu aucune porte ne le signale. La regle est SIMPLE et DITE : deux demandes se
+# ressemblent quand leurs themes partagent au moins SEUIL_PROCHES mots
+# significatifs. Aucune similarite floue, et le verdict NOMME les mots communs.
+MOTS_VIDES_THEME = ("pilote", "optimus", "matrice", "agent", "mission", "item", "suivi",
+                    "elle", "cette", "dans", "pour", "avec", "sans", "plus")
+# SEUIL MESURE (2026-09-19, 10 items au vivant) : a DEUX mots communs, ZERO paire --
+# le triplement de la meme demande (EO-264, EO-271, EO-274) serait passe INAPERCU ; a UN
+# mot, DEUX paires seulement, dont EO-264 nomme pour la recurrence. Un doute se dit, la
+# porte ne bloque pas, et le verdict NOMME le mot commun : le seuil est UN.
+SEUIL_PROCHES = 1
+
+
+def _mots_significatifs(texte):
+    """Les mots qui COMPTENT dans un theme : quatre lettres ou plus, hors mots vides."""
+    return set(mot for mot in mots_de(str(texte))
+               if len(mot) >= 4 and mot not in MOTS_VIDES_THEME)
+
+
+def items_de_etat(etat):
+    """Tous les items visibles d un etat d entonnoir : le vrac et toutes les files."""
+    items = list(etat.get("vrac", []) or [])
+    for contenu in (etat.get("files", {}) or {}).values():
+        if isinstance(contenu, list):
+            items.extend(contenu)
+    return items
+
+
+def themes_proches(etat, theme):
+    """Les items dont le theme partage assez de mots avec celui qu on depose.
+
+    Rend des triplets (id, titre, mots communs) ; ne bloque JAMAIS.
+    """
+    mots = _mots_significatifs(theme)
+    if not mots:
+        return []
+    proches = []
+    for item in items_de_etat(etat):
+        communs = sorted(mots & _mots_significatifs(item.get(CHAMP_TITRE, "")))
+        if len(communs) >= SEUIL_PROCHES:
+            proches.append((item.get("id", "?"), item.get(CHAMP_TITRE, ""), communs))
+    return proches
+
 
 def deposer_vrac(etat, theme, objectif, urgence, source, role="", verdict="",
                  axes=None, type_propose="", trace="", type_source=""):
@@ -60,7 +105,16 @@ def deposer_vrac(etat, theme, objectif, urgence, source, role="", verdict="",
         mission[CHAMP_SOURCE_TRACE] = trace
     if role:
         mission[CHAMP_ROLE] = role
+    # DOUBLON POSSIBLE (MO-243) : calcule AVANT l ajout (l item ne se voit pas
+    # lui-meme), DIT apres -- et rien n est bloque : un doute se dit, il ne se tait pas.
+    proches = themes_proches(etat, theme)
     etat.setdefault("vrac", []).append(mission)
+    if proches:
+        print("ATTENTION DOUBLON POSSIBLE (" + str(len(proches)) + " item(s) proche(s), "
+              + str(SEUIL_PROCHES) + " mot(s) commun(s) ou plus) :")
+        for ident, titre, communs in proches:
+            print("  - " + str(ident) + " : " + str(titre) + " [communs : " + ", ".join(communs) + "]")
+        print("  (rien n est bloque : si c est le meme travail, REUNIR les items ; sinon continuer.)")
     return identifiant
 
 

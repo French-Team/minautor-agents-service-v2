@@ -30,9 +30,9 @@ python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fic
 |---|---|
 | Ecriture directe non atomique | **tmp+replace** (`os.replace`) : jamais de fichier a moitie ecrit |
 | LF non forces (L-001) | **LF forces** (`newline="\n"`, normalise CRLF/CR) |
-| Pas de .bak (pas de revert proto-2) | **.bak horodate** si fichier existait (revert possible) |
+| Pas de .bak (pas de revert proto-2) | **.bak horodate** si fichier existait (revert possible) -- pose AVANT la publication, JAMAIS pour une ecriture REFUSEE : un refus ne laisse aucun point derriere lui (MO-286) |
 | Pas de SHA | **SHA-256 avant/apres** annonce (preuve disque) |
-| Pas de validation syntaxe | **py_compile** (.py) et **json** (.json) VALIDES AVANT publication : un contenu invalide est REFUSE (code 1) et la cible reste INTACTE (EO-129) |
+| Pas de validation syntaxe | **py_compile** (.py) et **json** (.json) VALIDES AVANT publication : un contenu invalide est REFUSE (code 1) et la cible reste INTACTE (EO-129) ; un `.py` qui AVERTIT (echappement INVALIDE, ce que py_compile ne dit pas) est REFUSE de meme, ligne et REMEDE nommes (MO-286) |
 | Hors perimetre possible | **Refuse hors de la Matrice, chemin RESOLU d abord** (sauf allowlist `AGENTS.md`/`demarrer-*.md`), code 2, refus qui NOMME la Matrice (MO-183/EO-177) |
 | str_replace fragile whitespace | **Occurrence unique imposee** (0 ou >1 = REFUS (code 2), message explicite) |
 | Pas d'ASCII | **ASCII CORRIGE, puis refuse** (MO-210) : ce que la carte commune sait convertir est corrige AVANT l ecriture et DIT ; ce qu elle IGNORE = **REFUS (code 2)**, RIEN n est ecrit, caractere et ligne NOMMES |

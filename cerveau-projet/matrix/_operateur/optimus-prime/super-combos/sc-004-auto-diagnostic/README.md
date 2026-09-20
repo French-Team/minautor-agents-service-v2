@@ -1,3 +1,10 @@
+---
+identite:
+  type: readme
+  appartient_a: optimus-prime
+  commun: false
+---
+
 # sc-004-auto-diagnostic
 
 > **Super-combo numerote sc-004** -- le numero est OBLIGATOIRE et jamais

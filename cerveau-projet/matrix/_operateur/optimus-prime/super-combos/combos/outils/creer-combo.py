@@ -498,6 +498,18 @@ def cmd_banque(arguments):
 
 
 TEMPLATE_SUPER_README = "\n".join((
+    # CARTE D IDENTITE en TETE (EO-266, 2026-09-19) : le garde verifier-cartes-identite
+    # exige une carte sur CHAQUE .md de la zone -- sans elle, tout sc- cree par cette
+    # porte naissait HORS convention et le garde accusait chaque nouveau super-combo
+    # (mesure : cartes-presentes SANS CARTE (1) sur sc-004-auto-diagnostic/README.md).
+    # Le type vaut `readme` (vocabulaire FERME du garde), appartient_a est un NOM.
+    "---",
+    "identite:",
+    "  type: readme",
+    "  appartient_a: optimus-prime",
+    "  commun: false",
+    "---",
+    "",
     "# @@NOM@@",
     "",
     "> **Super-combo numerote @@ID@@** -- le numero est OBLIGATOIRE et jamais",

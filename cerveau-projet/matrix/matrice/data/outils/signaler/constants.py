@@ -30,6 +30,15 @@ REPERTOIRE_MATRICE = REPERTOIRE_MATRIX / "matrice"
 
 ENCODAGE = "utf-8"
 
+# LES VERBES (MO-244) : l aide annoncait le verbe signal alors que le dispatch n acceptait
+# que signaler -- DEUX sources pour un seul mot, donc une porte qui MENTAIT sur son propre
+# contrat (mesure du 2026-09-19 : le verbe annonce rendait verbe inconnu signal, et l agent
+# qui suivait l aide etait bloque). Une seule source desormais : le canonique, et l alias
+# que l aide a annonce -- il est ACCEPTE, sinon on punit celui qui a suivi l aide. L aide
+# ET le message d erreur lisent tous les deux CETTE liste.
+VERBE = "signaler"
+VERBES_ACCEPTES = (VERBE, "signal")
+
 # Boite d'entree Matrice (le cameleon y depose ses signalements)
 BOITE_MATRICE_INBOX = REPERTOIRE_MATRICE / "intercom" / "matrice" / "inbox.jsonl"
 

@@ -1,6 +1,6 @@
 {
-  "date": "2026-09-19 11:50:23",
-  "total": 93,
+  "date": "2026-09-19 19:38:06",
+  "total": 96,
   "equipements": [
     {
       "nom": "theme-auto-audit-nemesis",
@@ -333,6 +333,11 @@
       "chemin": "super-combos\\combos\\outils\\verifier-cartes-identite.py"
     },
     {
+      "nom": "verifier-chaines.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-chaines.py"
+    },
+    {
       "nom": "verifier-chapitres-espion.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\verifier-chapitres-espion.py"
@@ -376,6 +381,11 @@
       "nom": "verifier-passes-non-redondantes.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\verifier-passes-non-redondantes.py"
+    },
+    {
+      "nom": "verifier-placeholders.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-placeholders.py"
     },
     {
       "nom": "verifier-rattrapage.py",
@@ -466,6 +476,11 @@
       "nom": "sc-003-auto-suivi",
       "type": "super-combo",
       "chemin": "super-combos\\sc-003-auto-suivi"
+    },
+    {
+      "nom": "sc-004-auto-diagnostic",
+      "type": "super-combo",
+      "chemin": "super-combos\\sc-004-auto-diagnostic"
     }
   ]
 }

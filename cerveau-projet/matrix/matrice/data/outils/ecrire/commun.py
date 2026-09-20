@@ -10,6 +10,7 @@ import json
 import os
 import py_compile
 import shutil
+import warnings
 from datetime import datetime
 from pathlib import Path
 
@@ -272,6 +273,44 @@ def verifier_imports_locaux(chemin_ecrit, cible):
     return True, "imports locaux resolus"
 
 
+def avertissements_compilation(chemin_absolu):
+    """Les AVERTISSEMENTS de compilation d un .py : ce que py_compile NE DIT PAS.
+
+    Defaut R5 declare par MO-246 (2026-09-19) et REPARE ici (MO-286) : une
+    sequence d echappement INVALIDE (un antislash SIMPLE la ou un DOUBLE est
+    requis, dans une chaine ordinaire) n est PAS une SyntaxError. Mesure du
+    cobaye : le fichier fautif a donc ete PUBLIE avec le code 0 et le rapport
+    py_compile OK ; le seul mot du probleme etait un avertissement BRUT de
+    Python sur stderr, nommant le fichier TEMPORAIRE et sans remede -- le
+    CONTRAT de la porte (code + rapport) annoncait une sortie propre sur un
+    contenu douteux (L-055).
+
+    PORTEE MESUREE AVANT de refuser (defaut R5, NEMESIS proto-4 axe portee) :
+    0 fichier sur 486 .py du perimetre ne portait deja un tel avertissement --
+    le refus ne bloque donc aucune edition legitime.
+    """
+    try:
+        source = chemin_absolu.read_text(encoding=ENCODAGE)
+    except (OSError, UnicodeDecodeError):
+        return []
+    with warnings.catch_warnings(record=True) as captes:
+        warnings.simplefilter("always")
+        try:
+            compile(source, str(chemin_absolu), "exec")
+        except (SyntaxError, ValueError):
+            return []
+    return [capte for capte in captes if issubclass(capte.category, SyntaxWarning)]
+
+
+def refus_avertissement(avertissements):
+    """Le REFUS NOMME : la ligne, le texte de l avertissement, le REMEDE."""
+    premier = avertissements[0]
+    ligne = getattr(premier, "lineno", 0) or 0
+    return ("py_compile AVERTIT (ligne " + str(ligne) + ") : " + str(premier.message)
+            + " -- REMEDE : DOUBLER l antislash, ou ecrire la chaine en BRUT (prefixe r)"
+            + " ; RIEN n a ete ecrit (un passage oblige garantit une sortie PROPRE : MO-286)")
+
+
 def valider_syntaxe(chemin_absolu, suffixe=None, cible=None):
     """Valide .py (py_compile) et .json (json.load). Retourne (ok, message).
 
@@ -296,6 +335,11 @@ def valider_syntaxe(chemin_absolu, suffixe=None, cible=None):
         ok_imports, msg_imports = verifier_imports_locaux(chemin_absolu, cible if cible is not None else chemin_absolu)
         if not ok_imports:
             return False, msg_imports
+        # MO-286 : la syntaxe peut etre valide ET le fichier DOUTEUX. py_compile
+        # ne dit rien d un SyntaxWarning ; ce controle RELIT ce qu il ne dit pas.
+        averts = avertissements_compilation(chemin_absolu)
+        if averts:
+            return False, refus_avertissement(averts) + " ; " + msg_imports
         return True, "py_compile OK ; " + msg_imports
     if suffix == ".json":
         try:
@@ -413,7 +457,16 @@ def ecrire_atomique(chemin_relatif, contenu, mode="remplacer"):
         return 1, None, None, None, "Erreur creation dossier parent : " + str(e)
 
     sha_avant = calculer_sha256(chemin_absolu) if existe else None
-    bak_path = creer_bak_si_existe(chemin_absolu) if existe and mode != "ajouter" else (creer_bak_si_existe(chemin_absolu) if mode == "ajouter" and existe else None)
+    # Le POINT DE RESTAURATION n est plus pose ICI (MO-286, mesure du cobaye) : il
+    # l etait AVANT la validation, si bien qu une ecriture REFUSEE laissait un
+    # .bak derriere elle -- alors que le message annonce "RIEN n a ete ecrit", et
+    # alors qu un .bak dont le contenu EGALE la version courante ne temoigne
+    # d AUCUNE modification : il ne sert pas au revert, et il fait mentir le
+    # comptage des points de restauration (le nombre de .bak est lu comme
+    # "fichiers touches" -- bilan createur du 2026-09-19 : 232 points pour 231
+    # fichiers). Le point est desormais pose AVANT la publication, la ou il est le
+    # temoin de la version que cette publication va remplacer.
+    bak_path = None
 
     # Prepare contenu normalise
     contenu_norm = normaliser_lf(contenu)
@@ -436,8 +489,9 @@ def ecrire_atomique(chemin_relatif, contenu, mode="remplacer"):
     # 2026-09-16 : le registre des super-combos est reste invalide sans qu'aucun
     # controle ne le crie. Une porte d'ecriture qui laisse un fichier casse
     # derriere elle n'est pas un garde, c'est un conduit.
-    # On REFUSE desormais AVANT : la cible n'est JAMAIS touchee, et le .bak reste
-    # disponible pour l'audit de ce qui a ete tente.
+    # On REFUSE desormais AVANT : la cible n'est JAMAIS touchee. Le contenu TENTE
+    # vivait dans le temporaire, qui est retire avec le refus ; le .bak, lui,
+    # n aurait porte que la version INCHANGEE de la cible (MO-286).
     tmp = chemin_absolu.with_name(chemin_absolu.name + ".tmp")
     try:
         with open(tmp, "w", encoding=ENCODAGE, newline="\n") as flux:
@@ -453,9 +507,13 @@ def ecrire_atomique(chemin_relatif, contenu, mode="remplacer"):
     ok, msg_val = valider_syntaxe(tmp, chemin_absolu.suffix, chemin_absolu)
     if not ok:
         _supprimer_silencieux(tmp)
-        return 1, sha_avant, None, bak_path, (
+        return 1, sha_avant, None, None, (
             "REFUS : contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine "
             "est INTACT -- " + msg_val)
+    # Le contenu est VALIDE : la porte VA publier. Le point de restauration est
+    # donc pose MAINTENANT -- toujours AVANT le remplacement (l invariant du
+    # revert tient), et JAMAIS pour une ecriture refusee (MO-286).
+    bak_path = creer_bak_si_existe(chemin_absolu) if existe else None
     try:
         os.replace(tmp, chemin_absolu)
     except OSError as e:

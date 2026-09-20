@@ -653,8 +653,23 @@
       "action": "injection",
       "categorie": "demarrage",
       "timestamp": "2026-09-19T18:09:39.297231"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T18:47:33.306497"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T20:34:02.684552"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-20T04:39:43.809625"
     }
   ],
-  "archive_le": "2026-09-19 18:09:39",
+  "archive_le": "2026-09-20 04:39:43",
   "origine": "cycle-state.json archive par MO-110 (EO-119) le 2026-09-15 : l ETAT disparait, l HISTORIQUE est conserve"
 }

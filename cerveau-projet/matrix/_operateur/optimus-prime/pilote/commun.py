@@ -54,6 +54,7 @@ from constants import (
     STATUTS_DEFAUT,
     STATUT_EN_ATTENTE,
     STATUT_EN_COURS,
+    STATUT_RETIREE,
     STATUT_TERMINEE,
     THEME_DEFCON,
     VALEUR_AUTO_VALIDATION,
@@ -465,6 +466,79 @@ def armer_lot(file_missions, ids):
     file_missions["lot"] = {"ids": ids}
 
 
+def retirer_du_lot(file_missions, ids_demandes, motif=""):
+    """Retire des missions d un LOT ARME (EO-265) : le lot ne porte QUE ses ids.
+
+    Retirer, c est donc REDUIRE cette liste -- jamais reecrire les missions des
+    autres (le champ nominatif des survivantes ne bouge pas). Refus NOMMES, un
+    par cas mesure :
+      (1) aucun lot arme : il n y a rien a retirer ;
+      (2) id HORS lot : l intrus est nomme AVEC les ids du lot, pour que l appel
+          se corrige au premier essai (friction 77) ;
+      (3) la mission EN COURS : son debut est pose, on ne defait pas un round
+          commence -- la terminer (fin) ou la parquer (reporter) d abord ;
+      (4) une mission TERMINEE : elle est dans le retour consolide du lot, on
+          n efface pas l histoire (L-040) ;
+      (5) une mission DEJA retiree : l idempotence est DITE, jamais muette.
+
+    SORT des retirees, DIT et VISIBLE : elles restent dans la file, HORS lot,
+    sous le statut retiree + date + motif -- aucune ne reste en-attente hors lot
+    a jamais, la chaine ne les reprend plus, le retour consolide ne les compte
+    plus. Si le lot devient vide, il est DESARME et le dit.
+    Retourne (code, message).
+    """
+    ids_lot = ids_en_lot(file_missions)
+    if not ids_lot:
+        return 2, ("REFUS : aucun lot arme -- il n y a rien a retirer."
+                   " Armer d abord : file verser [--lot <nom>].")
+    introduits = [i for i in ids_demandes if i not in ids_lot]
+    if introduits:
+        return 2, ("REFUS : id(s) HORS du lot : " + ", ".join(introduits)
+                   + " -- le lot porte " + str(len(ids_lot)) + " mission(s) : "
+                   + ", ".join(ids_lot) + ".")
+    par_id = {m.get("id"): m for m in file_missions.get("missions", [])}
+    en_cours = mission_en_cours(file_missions)
+    identifiant_en_cours = en_cours.get("id") if en_cours else None
+    for identifiant in ids_demandes:
+        mission = par_id.get(identifiant)
+        if mission is None:
+            return 2, ("REFUS : " + identifiant + " est dans le lot mais"
+                       " INTROUVABLE dans la file -- divergence file/lot,"
+                       " a mesurer AVANT tout retrait.")
+        if identifiant == identifiant_en_cours:
+            return 2, ("REFUS : " + identifiant + " est la mission EN COURS --"
+                       " on ne defait pas un round commence ; la terminer (fin)"
+                       " ou la parquer (reporter) d abord.")
+        statut = mission.get("statut")
+        if statut == STATUT_TERMINEE:
+            return 2, ("REFUS : " + identifiant + " est TERMINEE -- elle est"
+                       " dans le retour consolide du lot ; on n efface pas"
+                       " l histoire (L-040).")
+        if statut == STATUT_RETIREE:
+            return 2, ("REFUS : " + identifiant + " est DEJA retiree le "
+                       + str(mission.get("retiree_le", "?")) + " (motif : "
+                       + str(mission.get("motif_retrait", "")) + ").")
+    for identifiant in ids_demandes:
+        mission = par_id[identifiant]
+        mission["statut"] = STATUT_RETIREE
+        mission["retiree_le"] = horodater()
+        mission["motif_retrait"] = motif
+    restants = [i for i in ids_lot if i not in ids_demandes]
+    file_missions["lot"] = {"ids": restants} if restants else None
+    enregistrer_file(file_missions)
+    message = ("Lot reduit : " + str(len(ids_demandes)) + " mission(s) retiree(s)"
+               " (" + ", ".join(ids_demandes) + ") ; le lot garde "
+               + str(len(restants)) + " mission(s) sur " + str(len(ids_lot))
+               + " : " + (", ".join(restants) if restants else "AUCUNE") + ".")
+    message += ("\n  SORT des retirees : elles restent dans la file, HORS lot,"
+                " statut retiree + date + motif ("
+                + (motif if motif else "motif vide") + ") -- la chaine ne les"
+                " reprend plus, le retour consolide ne les compte plus.")
+    if not restants:
+        message += "\n  Le lot etait COMPLET : il est DESARME (lot = aucun)."
+    return 0, message
+
+
 def lot_termine(file_missions):
     """Retourne True si le lot est arme et qu'aucune de ses missions n'est en attente."""
     ids = ids_en_lot(file_missions)
@@ -517,7 +591,12 @@ def _transporter_liste(commande, option, valeurs):
         print("  " + raison)
 
 
-def noter_journal(mission, theme, action, detail, duree_s="0", si_absent=False,
+# EO-267 : la duree par DEFAUT etait "0" -- un placeholder qui MENT (il dit
+# "duree nulle", alors que le pilote ne MESURE pas le temps : il ne le SAIT pas).
+# C est ce 0 declare qui a fige la colonne Duree de la vue a zero. Un appelant qui
+# connait la duree la declare ; sinon la vue la CALCULE des deux bornes (debut/fin)
+# qu elle a -- voir suivi-optimus/vue/fonctions.py, fonction calculer_duree.
+def noter_journal(mission, theme, action, detail, duree_s="", si_absent=False,
                   fichiers=None, portes=None):
     """Note UN evenement au journal suivi-optimus PAR SA PORTE (jamais a la main).
 

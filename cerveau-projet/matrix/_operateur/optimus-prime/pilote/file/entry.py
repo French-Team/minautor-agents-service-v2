@@ -7,6 +7,7 @@ from commun import (
     consommer_tete_tresse,
     enregistrer_file,
     extraire_options,
+    retirer_du_lot,
     verser_tresse,
 )
 from file.fonctions import (
@@ -38,6 +39,18 @@ def executer(arguments):
         return code
     if arguments and arguments[0] == "charger":
         return charger_mission(arguments[1:], charger_file, afficher_file)
+    if len(arguments) >= 2 and arguments[0] == "lot" and arguments[1] == "retirer":
+        # lot retirer --ids MO-001,MO-002 [--motif ...] : REDUIT un lot ARME
+        # (EO-265). Les refus nommes vivent dans commun.retirer_du_lot : ici on
+        # ne fait que router (convention-architecture-outils).
+        options = extraire_options(arguments[2:], ("ids", "motif"))
+        ids = [i.strip() for i in options.get("ids", "").split(",") if i.strip()]
+        if not ids:
+            print("Usage : python main.py lot retirer --ids MO-001,MO-002 [--motif ...]")
+            return 2
+        code, message = retirer_du_lot(charger_file(), ids, options.get("motif", ""))
+        print(message)
+        return code
     if arguments and arguments[0] == "lot":
         return charger_lot(arguments[1:], charger_file)
     if arguments and arguments[0] == "transformer":

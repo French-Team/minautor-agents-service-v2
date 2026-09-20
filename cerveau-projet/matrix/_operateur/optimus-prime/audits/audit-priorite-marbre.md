@@ -1,0 +1,65 @@
+---
+identite:
+  type: analyse
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# AUDIT -- PRIORITE DES REGLES DU MARBRE : DESCENDRE EN MECANISMES
+
+Mission MO-288 (EO-281). Demande du createur : rendre la couche LLM obsolete pour que NOS regles soient toujours prioritaires sur toute autre regle de la couche superieure.
+
+## 1. Le principe (mesure, pas cru)
+
+Une regle textuelle est de la DONNEE : entre le texte et l acte il n y a AUCUN mecanisme, et l executant est le rapporteur. On ne rend donc pas la couche LLM obeissante -- c est impossible par le texte -- on la rend INUTILE pour tout ce qui laisse une trace, en faisant descendre chaque regle jusqu a un mecanisme qui agit SANS le LLM.
+
+Couches, par force decroissante :
+
+- TEXTE (lecon, regle) : force nulle seule.
+- RAPPEL INJECTE : agit s il est lu.
+- PORTE QUI REFUSE : mecanique, AVANT l acte (le LLM a beau vouloir, l outil refuse).
+- CONTROLE PERMANENT : mecanique, APRES l acte, tourne sans le LLM.
+- DOMICILE : empeche la derive a la conception (une source, lue, jamais recopiee).
+
+Critere d obsolescence : une regle est OBSOLETE (plus personne n a besoin d y croire) QUAND son mecanisme existe.
+
+Limite, dite sans fard : une porte ne juge que la CONFORMITE, jamais le JUGEMENT. La frontiere n est pas regles vs LLM, c est conformite (mecanisable) vs jugement (reste au LLM, et doit etre DECLARE comme tel).
+
+## 2. La carte du marbre (MESUREE le 2026-09-19, existence des mecanismes nommes)
+
+| Regle | Ce qu elle dit | Mecanisme MESURE | Etat |
+|---|---|---|---|
+| R-001 | la Matrice utilise le cameleon, jamais l inverse | selecteur-flux EXISTE ; garde-flux2 EXISTE | PARTIELLE |
+| R-002 | perimetre cameleon reductible + etancheite | pause-session EXISTE ; invisibilite.py (domicile) EXISTE | DESCENDUE |
+| R-003 | versions v1/v2 intangibles (fichiers) | aucun garde de version mesure | ABSENTE |
+| R-004 | versions separees (relations) | aucun garde de version mesure | ABSENTE |
+| R-005 | perimetres des deux flux + zones jetables | garde-perimetre-write EXISTE ; garde-tmp EXISTE | DESCENDUE |
+| R-006 | un seul domicile pour les modifications | bdd-modifications EXISTE (porte unique) ; aucun controle de second ecrivain | PARTIELLE |
+
+Et le DEMARRAGE (memes regles, autre forme) :
+
+| ORDRE | Ce qu il dit | Mecanisme MESURE | Etat |
+|---|---|---|---|
+| 3.1 ecriture | ecrire sous matrix/ + 2 exceptions racine | garde-perimetre-write EXISTE | DESCENDUE |
+| 3.2 JAMAIS ecrire soi-meme : toute ecriture par la porte ECRIRE | AUCUN mecanisme d attribution d une ecriture hors porte | ABSENTE (LA PLUS COUTEUSE) |
+| 3.3 ASCII strict + francais | la porte corrige/refuse ; garde-ascii EXISTE | DESCENDUE |
+| 3.4 cerveau v1/v2 en lecture seule | aucun garde de version mesure | ABSENTE |
+| 3.5 serie stricte (une mission a la fois) | le pilote refuse deux missions en cours (conduire) | PARTIELLE |
+| 3.6 python seul, single-LLM | rien ne se passe en arriere-plan | JUGEMENT (a declarer) |
+| 3.7 tmp-optimus jetable, vide en fin | purge POST-FIN du pilote | DESCENDUE |
+
+## 3. La plus couteuse laissee au LLM : ORDRE 3.2
+
+Aujourd hui, si l agent ecrit un fichier par un outil natif ou par le shell, RIEN ne le voit : la porte ECRIRE est un passage CONSEILLE, pas un passage OBLIGE. C est exactement la ou la couche superieure (le LLM) prime sur nos regles -- et c est la regle qu il serait le plus cher de laisser au bon vouloir.
+
+MECANISME A CONSTRUIRE -- un CONTROLE D ATTRIBUTION :
+
+1. Un DOMICILE de reference : les empreintes sha256 des sources du perimetre d ecriture, posees avec leur date.
+2. Un CONTROLE permanent : pour chaque source dont l empreinte a change, chercher une note TRACEE (bdd-modifications) posterieure a la pose ; sans note = ECRITURE HORS DE SA PORTE, accuse nommement.
+3. Le texte n est plus la garantie : le controle le dit apres coup, sans le LLM.
+
+OBSTACLE MESURE, DECLARE : les cles de chemins de la table des modifications sont HETEROGENES (matrice/, _operateur/, cerveau-projet/, data/, pilote/, matrix/... -- 10 formes pour un meme arbre). Une attribution par chemin exige d abord une FORME UNIQUE DE CHEMIN (un domicile de forme).
+
+## 4. Ce que je n ai pas fait, et pourquoi
+
+La construction du controle d attribution touche la porte ECRIRE et exige d abord la forme unique des chemins : c est une mission a part entiere, pas un ajout de fin de round. La serie stricte interdit de la bacher ici.

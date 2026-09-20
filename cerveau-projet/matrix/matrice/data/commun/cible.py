@@ -149,6 +149,30 @@ def est_dans_matrice(chemin, depart=None):
         return False
 
 
+def arbres_matrice(depart=None):
+    """Les ARBRES a BALAYER : la Matrice ENTIERE, a UN SEUL domicile (M-076).
+
+    EO-277 : un balayage ecrivait ses dossiers EN DUR dans son propre corps
+    (`for dossier in ("matrice", "_operateur")` -- scan-valeurs: cite). La RACINE
+    donc HORS du balayage : deux points de restauration y vivaient, jamais vus,
+    et le balayage rendait EN ORDRE.
+
+    Le defaut n etait PAS un oubli de liste : la notion `les arbres de la
+    Matrice` n avait aucun domicile, donc le premier appelant l a mise dans sa
+    poche -- M-076 ne protege qu une valeur qui A une maison (L-100 : une valeur
+    recopiee derive en silence).
+
+    Elle vit ICI, et elle est COMPLETE : la racine REELLE, sans repli -- un
+    perimetre dont la base serait le workspace accepterait tout le workspace
+    (voir racine_matrice_stricte). Un consommateur qui doit EXCLURE une zone l
+    exclut EN LE DISANT chez lui ; il ne retrecit pas le domicile.
+    """
+    racine = racine_matrice_stricte(depart)
+    if racine is None:
+        return []
+    return [racine]
+
+
 def motif_hors_perimetre(chemin, usage="lecture", depart=None):
     """Le refus NOMME la Matrice reelle et les formes acceptees (friction 77).
 

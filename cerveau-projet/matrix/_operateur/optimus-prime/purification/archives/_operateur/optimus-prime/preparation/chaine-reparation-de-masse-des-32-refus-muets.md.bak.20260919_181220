@@ -1,0 +1,32 @@
+---
+identite:
+  type: chaine
+  appartient_a: optimus-prime
+  commun: false
+  titre: Reparation de masse des 32 refus muets
+  statut: spec
+  pense-bete: PB-002
+  spec: SP-002
+---
+
+# Reparation de masse des 32 refus muets
+
+## Pense-bete -- la demande clarifiee
+
+CONSTAT MESURE (MO-202/MO-239) : 32 des 35 outils de la Matrice rendent un refus MUET -- code 2 et usage SEUL, l option fautive n est jamais NOMMEE ; l appel doit alors deviner parmi toutes les options, et le refus coute trois essais (friction 77). Le motif vit DEJA au domicile partage matrice/data/commun/options.py (signaler_inconnues, EO-179 -- le parseur RETIENT l inconnue) mais c est l APPELANT qui doit la DIRE : mesure, 110 fichiers appellent extraire_options et 3 lieux seulement la disent. PISTE A EXAMINER : que le domicile rende le refus IMPOSSIBLE A OUBLIER (signaler par DEFAUT au lieu d une fonction a appeler), puis generaliser par FAMILLE d outils au lieu de 32 rounds separes. PORTEE A MESURER AVANT TOUTE ECRITURE : 83 a 110 appelants, dont des appels qui acceptent des arguments LIBRES (refuser=False) et qui casseraient sur un refus global. INTERDIT : recopier le motif outil par outil (M-076, un seul domicile).
+
+## Ce qui est deja mesure
+
+- SONDE sc-004-auto-diagnostic (MO-202), sur les 35 outils de matrice/data/outils : 2 conformes, 32 refus-MUETS (code 2 + usage SEUL, l option fautive n est pas nommee) et 1 qui AVALAIT. MO-239 a repare le dernier : 3 conformes / 32 ecarts.
+- LE MOTIF EXISTE DEJA, au DOMICILE PARTAGE : matrice/data/commun/options.py, fonction signaler_inconnues (EO-179). Le parseur RETIENT l inconnue sous CLE_INCONNUES ; c est l APPELANT qui doit la DIRE.
+- PORTEE : 110 fichiers .py appellent extraire_options (matrice + _operateur) ; 83 cote matrice (mesure MO-215). Seuls 3 lieux DISENT l inconnue : rechercher, benchmark, chaine-pense-bete (+ maintenir depuis MO-239).
+- CE QUE LE REFUS MUET FAIT : les 32 rendent bien code 2 ET un usage -- l appel ne part donc PAS ; mais ils ne NOMMENT pas l option fautive, et l appel doit deviner parmi la liste. Mesure du 2026-09-19 : bdd-activites et lire rendent le meme code 2, usage seul, sans le mot de l option.
+- COUT MESURE D UNE REPARATION UNITAIRE : MO-239 = 2 fichiers, 4 editions par la porte (un relais local dans commun.py + l appel dans entry.py). A 32 outils, la voie unitaire coute environ 128 editions : c est ce que la demande veut eviter.
+
+## Ce qui reste a mesurer
+
+- COMBIEN DE CES 32 OUTILS PARTAGENT UN RELAIS LOCAL (commun.py) : si une seule edition de relais couvre plusieurs outils, le groupe se reduit fortement. A mesurer AVANT de decouper.
+- COMBIEN DES 110 APPELANTS ACCEPTENT DES ARGUMENTS LIBRES (refuser=False) : un refus global au domicile les casserait. C est la mesure qui decide entre les deux voies.
+- LES DEUX VOIES POSSIBLES, a trancher sur mesure : (1) le DOMICILE rend le refus impossible a oublier -- le parseur signale par DEFAUT, l appelant ne peut plus avaler ; (2) une REPARATION PAR FAMILLE, outil par outil dans le lot courant. La voie (1) est plus forte mais elle change un contrat partage : portee a mesurer et NEMESIS obligatoire.
+- LE GAIN REEL, chiffre : nombre d outils devenus conformes par voie, nombre d editions evitees, et contre-temoin avant/apres sur la MEME sonde.
+

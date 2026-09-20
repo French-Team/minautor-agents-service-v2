@@ -213,6 +213,10 @@ BOITE_MATRICE_IN = REPERTOIRE_INTERCOM / "matrice" / "inbox.jsonl"
 STATUT_EN_ATTENTE = "en-attente"
 STATUT_EN_COURS = "en-cours"
 STATUT_TERMINEE = "terminee"
+# Statut des missions RETIREES D UN LOT (EO-265) : elles quittent le lot et la
+# chaine, mais RESTENT dans la file pour que leur sort soit VISIBLE (afficher_file
+# les montre). Un statut nomme vaut mieux qu une disparition silencieuse.
+STATUT_RETIREE = "retiree"
 
 # IDENTITE D'UNE MISSION : DEUX champs distincts (L-061 / MO-076).
 # Un item d'entonnoir porte son TITRE en texte libre (`theme`, nom historique)
@@ -278,6 +282,19 @@ STATUTS_DEFAUT = (STATUT_DEFAUT_REPARE, "signale", "hors-perimetre", "bloque")
 # liste ou ce type serait renomme rendrait le rappel MUET sans rien dire.
 TYPE_ROUTE_OUTIL = "reparation"
 CHAMP_RAPPEL = "rappel"
+
+# RAPPEL DE LA CHAINE ARMEE (EO-274) : le pilote lance depuis toujours la suivante du
+# lot (chaque fin injecte la mission suivante), mais RIEN dans le sac-a-dos ne le disait
+# a l agent : il devait s en souvenir, et il s arretait apres chaque mission. L instruction
+# doit voyager AVEC la mission, au moment ou l agent en a besoin. Une mission HORS lot ne
+# la porte pas (un rappel toujours present ne se lit plus).
+RAPPEL_CHAINE_ARMEE = (
+    "CHAINE ARMEE (lot) : cette mission fait partie d une CHAINE armee -- chaque fin "
+    "lance la mission suivante du lot, automatiquement. Conduis-la jusqu a sa cloture "
+    "DANS LE MEME TOUR, puis lance la suivante : la chaine ne te redemande rien et ne "
+    "s arrete que sur son RETOUR CONSOLIDE. Une mission qui attend est une mission que "
+    "personne ne conduit."
+)
 RAPPEL_ROUTE_OUTIL = (
     "ROUTE OUTIL (protocole 10, regle immuable defaut-outil-repare-sur-place) : "
     "un defaut d'OUTIL se REPRODUIT, se REPARE DANS L'OUTIL (jamais a la main), "

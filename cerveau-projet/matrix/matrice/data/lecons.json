@@ -1707,7 +1707,23 @@
         "facteur"
       ],
       "source": "MO-188 / EO-148"
+    },
+    {
+      "id": "L-132",
+      "date": "2026-09-19 20:42:17",
+      "lecon": "UN CONTROLE QUI ACCUSE TOUT PASSE TOUS SES TESTS NEGATIFS -- ET UNE PREUVE POSITIVE QUI NE PEUT PAS DIRE NON NE PROUVE RIEN. Mesure MO-246 (reprise d'un controle commence avant une coupure). Le garde verifier-chaines accusait bien le statut vide, le hors-liste, l'id trop avance et la famille fautive : cinq epreuves sur six passaient. La sixieme, dite chaine coherente ACCEPTEE, etait un ARTIFICE : lambda l: True applique a une liste toujours vide -- elle ne pouvait pas echouer. Or son cobaye dit coherent etait en REALITE accuse par la regle de l'index (l'index disait spec, la carte disait todo) : le controle ne distinguait donc pas n'accuser que le fautif de accuser tout. La reparation a rendu la preuve discriminante (la chaine coherente doit rester NON accusee, ET la meme assertion appliquee a une chaine coherente CASSEE doit etre FAUSSE) et a conserve le CONTRE-TEMOIN de la lecture d'avant (un statut vide saute comme un etat initial, donc AVEUGLE) a l'interieur du garde, pour que le defaut mesure reste rejouable. Recette generale : (1) pour chaque controle, compter les epreuves NEGATIVES et se demander s'il pourrait ACCUSER A TORT -- c'est presque toujours l'epreuve positive manquante ; (2) toute epreuve positive s'accompagne de sa MUTATION (le meme cobaye casse doit etre accuse), sinon elle est un decor ; (3) un garde qui remplace une regle garde la lecture d'AVANT comme contre-temoin, il ne la supprime pas -- sans elle, plus personne ne sait ce que la reparation a ferme.",
+      "tags": [
+        "MO-246",
+        "controle",
+        "cobaye",
+        "preuve",
+        "faux-vert",
+        "contre-temoin",
+        "garde",
+        "porte"
+      ],
+      "source": "MO-246 / reprise du garde verifier-chaines (constat N6 de MO-220)"
     }
   ],
-  "compteur": 131
+  "compteur": 132
 }

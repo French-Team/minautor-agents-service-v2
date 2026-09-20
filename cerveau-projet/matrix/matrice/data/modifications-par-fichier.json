@@ -2107,6 +2107,36 @@
             "miroirs",
             "cameleon"
           ]
+        },
+        {
+          "date": "2026-09-19 18:34:05",
+          "action": "modifie",
+          "detail": "EO-226 : le pre-vol du lanceur nommait un .bak EXEMPTE au lieu du vrai coupable -- il prenait la DERNIERE ligne de stdout, or la remorque accuse sur UNE ligne puis DIT 59 points de restauration. Remede : ligne_accusation() prend la PREMIERE ligne accusatrice (-/+) ; mesure : le meme ecart nomme desormais + INATTENDU super-combos/sc-004-auto-diagnostic.",
+          "tags": [
+            "pre-vol",
+            "clue",
+            "EO-226"
+          ]
+        },
+        {
+          "date": "2026-09-19 18:41:22",
+          "action": "modifie",
+          "detail": "EO-268 : etape 21 bis -- le controle permanent des placeholders entre dans la suite (il refuse de laisser un declare contredire la mesure).",
+          "tags": [
+            "placeholders",
+            "EO-268",
+            "lanceur"
+          ]
+        },
+        {
+          "date": "2026-09-19 19:37:50",
+          "action": "modifie",
+          "detail": "Etape 21 quater : le scan des valeurs en dur devient un CONTROLE PERMANENT (tout le .py de la Matrice, 484 fichiers, 0 valeur). Le lanceur n ecrit AUCUNE liste de dossiers (ce serait la faute fermee).",
+          "tags": [
+            "non-regression",
+            "valeur-en-dur",
+            "controle-permanent"
+          ]
         }
       ],
       "tags": [
@@ -2175,7 +2205,13 @@
         "MO-232",
         "EO-225",
         "miroirs",
-        "cameleon"
+        "cameleon",
+        "clue",
+        "EO-226",
+        "placeholders",
+        "EO-268",
+        "valeur-en-dur",
+        "controle-permanent"
       ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/revert-periode.py": {
@@ -2233,9 +2269,27 @@
             "auto-valide",
             "M-102"
           ]
+        },
+        {
+          "date": "2026-09-19 19:37:50",
+          "action": "modifie",
+          "detail": "Precision (dette MO-093 fermee) : motif chemin-win ANCRE (il attrapait l adresse https et la sequence d echappement : 167 lignes dont 164 legitimes, donc jamais branche). Motif perimetre-en-dur AJOUTE : une liste de dossiers REELS recopiee, jugee par le FAIT (24 paires litterales dans le code, UNE fautive). Exemption declaree et COMPTEE : marqueur scan-valeurs: cite.",
+          "tags": [
+            "valeur-en-dur",
+            "m102",
+            "precision",
+            "perimetre",
+            "m076"
+          ]
         }
       ],
-      "tags": []
+      "tags": [
+        "valeur-en-dur",
+        "m102",
+        "precision",
+        "perimetre",
+        "m076"
+      ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/tester-theme.py": {
       "modifications": [
@@ -2988,6 +3042,20 @@
             "EO-209",
             "MO-216"
           ]
+        },
+        {
+          "date": "2026-09-19 21:10:02",
+          "action": "corrige",
+          "detail": "MO-289 (EO-284, demande createur) : ORDRE 4.5 corrige pour dire la VERITE du flux. Le DEBUT est pose par le PILOTE a l injection (declarer_borne_marbre, injection/fonctions.py, mode idempotent) -- l agent ne le redeclare JAMAIS de routine, car un 2e debut fabrique le DOUBLON que verifier accuse (MO-202, MO-240, MO-288 ; racine : MO-250). La FIN reste declaree avec le bilan (idempotente). SEUL cas d un debut declare par l agent : la REPRISE (mission menee en deux sessions).",
+          "tags": [
+            "mo289",
+            "eo284",
+            "mo250",
+            "demarrage",
+            "ordre45",
+            "doublon",
+            "suivi"
+          ]
         }
       ],
       "tags": [
@@ -3011,7 +3079,13 @@
         "v3",
         "protocole",
         "EO-209",
-        "MO-216"
+        "MO-216",
+        "mo289",
+        "eo284",
+        "mo250",
+        "ordre45",
+        "doublon",
+        "suivi"
       ]
     },
     "demarrer-optimus-prime.md (racine, hors matrix/)": {
@@ -7907,6 +7981,17 @@
             "contrat",
             "doc"
           ]
+        },
+        {
+          "date": "2026-09-19 20:47:48",
+          "action": "corrige",
+          "detail": "Contrat aligne sur le comportement REPARE (MO-286) : la ligne de validation syntaxe dit le REFUS d un .py qui avertit (ligne + remede nommes) et la ligne du .bak dit qu il est pose avant la publication, jamais pour une ecriture refusee.",
+          "tags": [
+            "ecrire",
+            "contrat",
+            "description",
+            "mo286"
+          ]
         }
       ],
       "tags": [
@@ -7919,7 +8004,9 @@
         "contrat",
         "doc",
         "EO-159",
-        "MO-170"
+        "MO-170",
+        "description",
+        "mo286"
       ]
     },
     "cerveau-projet/matrix/matrice/data/outils/ecrire/constants.py": {
@@ -8052,6 +8139,22 @@
             "MO-223",
             "reparation"
           ]
+        },
+        {
+          "date": "2026-09-19 20:47:47",
+          "action": "corrige",
+          "detail": "Reparation de DEUX defauts de la porte, mesures puis prouves par cobaye (MO-286, demande createur, defaut R5 declare par MO-246). (1) VALIDATION : valider_syntaxe ne lisait que py_compile, qui ne dit RIEN d un SyntaxWarning -- un .py a echappement INVALIDE etait donc PUBLIE avec le code 0 et le rapport py_compile OK ; le seul mot du probleme etait un avertissement BRUT de Python sur stderr, nommant le fichier TEMPORAIRE, sans remede et sans effet sur le code de sortie. La porte RELIT desormais ce que py_compile ne dit pas (avertissements_compilation : compile sous catch_warnings) et REFUSE (code 1) en nommant la LIGNE, le texte et le REMEDE (doubler l antislash ou ecrire la chaine en brut), RIEN n etant ecrit et la cible restant INTACTE. PORTEE MESUREE AVANT le refus : 0 fichier sur 487 .py du perimetre ne portait deja l avertissement, le refus ne bloque donc aucune edition legitime. (2) POINT DE RESTAURATION : le .bak etait cree AVANT la validation, donc une ecriture REFUSEE laissait un point derriere elle -- alors que le message annonce RIEN n a ete ecrit, et alors que son contenu EGALE la version courante : il ne temoigne d aucune modification, ne sert pas au revert, et fait mentir le comptage des points de restauration (lu comme fichiers touches). Le point est desormais pose JUSTE AVANT la publication, jamais pour un refus ; l invariant du revert est garde (le point existe avant le remplacement).",
+          "tags": [
+            "ecrire",
+            "porte",
+            "validation",
+            "syntaxwarning",
+            "refus",
+            "bak",
+            "point-de-restauration",
+            "mo286",
+            "defaut-r5"
+          ]
         }
       ],
       "tags": [
@@ -8075,7 +8178,12 @@
         "bak",
         "EO-191",
         "MO-223",
-        "reparation"
+        "reparation",
+        "syntaxwarning",
+        "refus",
+        "point-de-restauration",
+        "mo286",
+        "defaut-r5"
       ]
     },
     "cerveau-projet/matrix/matrice/data/outils/ecrire/main.py": {
@@ -8089,12 +8197,26 @@
             "ecrire",
             "MO-002"
           ]
+        },
+        {
+          "date": "2026-09-19 20:47:48",
+          "action": "corrige",
+          "detail": "Aide alignee sur le contrat REPARE (MO-286) : la ligne VALIDE dit desormais qu un .py qui AVERTIT est REFUSE de meme, la ligne et le remede nommes ; la ligne REVERSIBLE dit que le point de restauration est pose AVANT la publication et JAMAIS pour une ecriture refusee.",
+          "tags": [
+            "ecrire",
+            "aide",
+            "contrat",
+            "mo286"
+          ]
         }
       ],
       "tags": [
         "outil",
         "ecrire",
-        "MO-002"
+        "MO-002",
+        "aide",
+        "contrat",
+        "mo286"
       ]
     },
     "cerveau-projet/matrix/matrice/data/outils/ecrire/ecrire/entry.py": {
@@ -9257,6 +9379,36 @@
             "cartes",
             "vue"
           ]
+        },
+        {
+          "date": "2026-09-19 18:37:41",
+          "action": "modifie",
+          "detail": "EO-267 : la colonne Duree ne pouvait que valoir zero -- la vue ne lisait qu un champ duree_s DECLARE (--duree-s) que NUL appel ne posait, alors que l agregat calcule deja debut et fin. La duree est desormais CALCULEE des deux bornes par calculer_duree() ; sans fin, aucune duree (rien d invente).",
+          "tags": [
+            "duree",
+            "EO-267",
+            "suivi"
+          ]
+        },
+        {
+          "date": "2026-09-19 18:45:28",
+          "action": "modifie",
+          "detail": "Demande createur 2026-09-19 : dans les tableaux d ACTION de la vue, la colonne Duree n a pas de sens (un EVENEMENT est un instant, il n a pas de duree) et la colonne Fichiers valait - pour tout le monde. Remplacees par l HEURE DE DEBUT de la MISSION, lue dans l agregat du domicile (agreger_par_mission) -- aucune recopie. Le RECAP par mission garde Duree (calculee des deux bornes) et Fichiers : la, elles ont un sens.",
+          "tags": [
+            "vue",
+            "suivi",
+            "colonnes"
+          ]
+        },
+        {
+          "date": "2026-09-19 18:46:02",
+          "action": "modifie",
+          "detail": "Decision createur : dans les tableaux d ACTION, la colonne HEURE porte deja l heure du fait -- la colonne Heure debut posee juste avant est RETIREE, avec son plombage (agregat des debuts, parametres debuts). Colonnes de l action : Heure, Date, Mission, Detail, Portes. Le RECAP par mission garde Debut, Fin, Duree, Fichiers : la, elles ont un sens.",
+          "tags": [
+            "vue",
+            "suivi",
+            "colonnes"
+          ]
         }
       ],
       "tags": [
@@ -9272,7 +9424,10 @@
         "sc-003",
         "trace",
         "MO-235",
-        "cartes"
+        "cartes",
+        "duree",
+        "EO-267",
+        "colonnes"
       ]
     },
     "matrice/data/outils/suivi-optimus/vue/entry.py": {
@@ -9923,6 +10078,17 @@
             "R5",
             "non-regression"
           ]
+        },
+        {
+          "date": "2026-09-19 19:22:49",
+          "action": "modifie",
+          "detail": "Etape 21 ter : la suite principale execute le garde des chaines (controle PERMANENT, jamais un cobaye jetable).",
+          "tags": [
+            "non-regression",
+            "chaine",
+            "etape",
+            "mo246"
+          ]
         }
       ],
       "tags": [
@@ -9933,7 +10099,10 @@
         "garde",
         "jumeaux",
         "MO-174",
-        "R5"
+        "R5",
+        "chaine",
+        "etape",
+        "mo246"
       ]
     },
     "cerveau-projet/matrix/matrice/pilote/detecteur/entry.py": {
@@ -10147,6 +10316,17 @@
             "R5",
             "contrat"
           ]
+        },
+        {
+          "date": "2026-09-19 19:06:37",
+          "action": "modifie",
+          "detail": "EO-274 (recurrence deposee par le createur : l agent s arrete au lieu d enchainer). Mesure : le pilote enchaine depuis toujours (chaque fin injecte la suivante du lot) mais RIEN dans le sac-a-dos ne le disait a l agent -- charger_rappel_route ne rendait un rappel que pour le type reparation, donc une mission de lot en dev ne recevait AUCUN rappel et l agent devait s en souvenir. Ajout de RAPPEL_CHAINE_ARMEE : l instruction voyage AVEC la mission de lot, au moment ou l agent en a besoin.",
+          "tags": [
+            "pilote",
+            "injection",
+            "rappel",
+            "EO-274"
+          ]
         }
       ],
       "tags": [
@@ -10159,7 +10339,10 @@
         "auto-validation",
         "MO-174",
         "R5",
-        "contrat"
+        "contrat",
+        "injection",
+        "rappel",
+        "EO-274"
       ]
     },
     "cerveau-projet/matrix/_operateur/optimus-prime/pilote/injection/fonctions.py": {
@@ -10205,6 +10388,28 @@
             "MO-174",
             "R5"
           ]
+        },
+        {
+          "date": "2026-09-19 18:56:26",
+          "action": "modifie",
+          "detail": "PLAFOND DU SAC-A-DOS (EO-270) : charger_lecons_utiles injectait les 131 lecons du domicile (23378 tokens, 89 pour cent de l injection) et le poids d une injection etait passe de 4865 a 26295 tokens en six jours, ce qui remplissait le contexte d une session en un a trois rounds. La fonction est desormais BORNEE : selectionner_lecons classe par pertinence (tags de la lecon presents dans le theme, le type ou l objectif de la mission) puis par recence, retient jusqu au plafond (6000 tokens ou 30 lecons, la premiere passe toujours) et REND les ecartees, que charger_lecons_utiles DIT a chaque injection -- les deux chemins d injection (mission simple et lot) passent la mission. Mesure reelle sur MO-241 : injection de 26295 a 8899 tokens, champ lecons de 28643 a 5984.",
+          "tags": [
+            "outil",
+            "pilote",
+            "injection",
+            "plafond"
+          ]
+        },
+        {
+          "date": "2026-09-19 19:06:38",
+          "action": "modifie",
+          "detail": "EO-274 : charger_rappel_route rend desormais une LISTE de rappels -- la chaine armee si la mission porte un lot, la route outil si son type est reparation (les deux se cumulent). Preuves : cobaye 6/6 dont 4 cas synthetiques (lot dev dit la chaine, hors lot dev ne dit RIEN, lot plus reparation dit les deux, reparation hors lot dit la route seule) et le REEL (96 missions lues : 52 de lot portent la chaine, 44 hors lot ne la portent pas) ; poids du rappel 87 tokens, compte avec le reste (R5).",
+          "tags": [
+            "pilote",
+            "injection",
+            "rappel",
+            "EO-274"
+          ]
         }
       ],
       "tags": [
@@ -10218,7 +10423,11 @@
         "auto-validation",
         "stop",
         "MO-174",
-        "R5"
+        "R5",
+        "outil",
+        "plafond",
+        "rappel",
+        "EO-274"
       ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/creer-combo.py": {
@@ -10287,6 +10496,16 @@
             "CV-008",
             "reparation"
           ]
+        },
+        {
+          "date": "2026-09-19 18:36:03",
+          "action": "modifie",
+          "detail": "EO-266 : le gabarit TEMPLATE_SUPER_README n ecrivait AUCUNE carte d identite -- tout sc- cree naissait hors convention (mesure : cartes-presentes SANS CARTE (1) sur sc-004-auto-diagnostic/README.md). La carte est posee DANS le gabarit (type readme, appartient_a optimus-prime, commun false) : la source est unique et le garde est repasse OK.",
+          "tags": [
+            "carte",
+            "EO-266",
+            "gabarit"
+          ]
         }
       ],
       "tags": [
@@ -10311,7 +10530,10 @@
         "reparation",
         "MO-067",
         "super-combos",
-        "CV-008"
+        "CV-008",
+        "carte",
+        "EO-266",
+        "gabarit"
       ]
     },
     "_operateur/optimus-prime/super-combos/combos/outils/banque-combos-bdd.json": {
@@ -14873,6 +15095,16 @@
             "reporter",
             "pilote"
           ]
+        },
+        {
+          "date": "2026-09-19 18:38:05",
+          "action": "modifie",
+          "detail": "EO-267 : noter_journal declarait duree_s par DEFAUT a 0 -- un placeholder qui ment (duree nulle au lieu d inconnue) et qui a fige la colonne Duree a zero. Defaut remplace par une duree INCONNUE (vide) : la vue CALCULE des deux bornes. Preuve : MO-285=104s, MO-284=149s, MO-239=88s ; MO-240 (sans fin) affiche -.",
+          "tags": [
+            "duree",
+            "EO-267",
+            "pilote"
+          ]
         }
       ],
       "tags": [
@@ -14958,7 +15190,9 @@
         "EO-190",
         "coherence",
         "report",
-        "reporter"
+        "reporter",
+        "duree",
+        "EO-267"
       ]
     },
     "matrice/data/outils/rechercher/constants.py": {
@@ -20677,6 +20911,18 @@
             "recensement",
             "donnees"
           ]
+        },
+        {
+          "date": "2026-09-19 19:22:49",
+          "action": "modifie",
+          "detail": "Purification des points de restauration : la famille .bak recensee (311 elements, lecteurs revert-fichier/revert-periode, ecrivain ecrire -- le precedent de 555 elements) puis 213 points decides OBSOLETE ARCHIVES par la porte de rotation. Aucun octet perdu : archive+actif=origine (14292806). Vivants 444 -> 231.",
+          "tags": [
+            "purification",
+            "conservation",
+            "bak",
+            "rotation",
+            "mo-volet"
+          ]
         }
       ],
       "tags": [
@@ -20693,7 +20939,10 @@
         "MO-192",
         "friction-88",
         "recensement",
-        "donnees"
+        "donnees",
+        "bak",
+        "rotation",
+        "mo-volet"
       ]
     },
     "matrice/matrice/data/data-readme.md": {
@@ -23096,6 +23345,17 @@
             "domicile",
             "racine-matrice"
           ]
+        },
+        {
+          "date": "2026-09-19 19:37:49",
+          "action": "modifie",
+          "detail": "Domicile de la notion manquante : arbres_matrice() (EO-277). Une valeur de perimetre s ecrit chez elle (M-076) ; le balayage des points de restauration la CONSOMME au lieu de la recopier.",
+          "tags": [
+            "domicile",
+            "perimetre",
+            "m076",
+            "eo277"
+          ]
         }
       ],
       "tags": [
@@ -23108,7 +23368,9 @@
         "EO-178",
         "perimetre",
         "domicile",
-        "racine-matrice"
+        "racine-matrice",
+        "m076",
+        "eo277"
       ]
     },
     "_operateur/optimus-prime/regles-immuables/entonnoir-des-demandes.md": {
@@ -23205,6 +23467,17 @@
             "conservation",
             "refus"
           ]
+        },
+        {
+          "date": "2026-09-19 19:37:49",
+          "action": "modifie",
+          "detail": "points_sans_decision consomme arbres_matrice : la paire en dur ('matrice','_operateur') disparait, et la RACINE de la Matrice rentre dans le balayage (2 .bak y vivaient sans jamais etre juges).",
+          "tags": [
+            "purification",
+            "balayage",
+            "racine",
+            "eo277"
+          ]
         }
       ],
       "tags": [
@@ -23218,7 +23491,10 @@
         "MO-192",
         "friction-88",
         "conservation",
-        "refus"
+        "refus",
+        "balayage",
+        "racine",
+        "eo277"
       ]
     },
     "matrice/data/outils/bdd-conservation/archiver/entry.py": {
@@ -26029,6 +26305,18 @@
             "EO-212",
             "MO-218"
           ]
+        },
+        {
+          "date": "2026-09-19 19:00:03",
+          "action": "modifie",
+          "detail": "MO-241 : le garde des cartes excluait les archives par le NOM DU PARENT (purification) et non par la NATURE du document -- une archive posee ailleurs (tout dossier nomme archives) etait donc accusee de nouveau, alors que la regle est la meme partout : une archive est de l histoire, elle ne se normalise pas. archives est desormais declare zone morte PAR NATURE dans ZONES_EXCLUES, et le garde DIT combien de documents il met hors corpus ([--] zones-mortes : 13 documents, zones declarees). Preuves : la meme epreuve avant/apres -- cobaye d une archive hors purification accusee AVANT puis non accusee APRES, contre-temoin du document VIVANT sans carte toujours accuse (2 echecs a 0 echec) ; sur le corpus reel le nombre de documents SCANNES reste identique (80), donc aucun document vivant n a ete perdu par l elargissement ; autotest 4/4 ; verdict OK.",
+          "tags": [
+            "outil",
+            "garde",
+            "cartes",
+            "archives",
+            "MO-241"
+          ]
         }
       ],
       "tags": [
@@ -26037,7 +26325,10 @@
         "autotest",
         "faux-ecart",
         "EO-212",
-        "MO-218"
+        "MO-218",
+        "outil",
+        "archives",
+        "MO-241"
       ]
     },
     "matrice/data/outils/dialoguer/main.py": {
@@ -26600,6 +26891,353 @@
         "refus-directionnel",
         "diagnostic",
         "MO-239"
+      ]
+    },
+    "_operateur/optimus-prime/super-combos/sc-004-auto-diagnostic/README.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 18:36:03",
+          "action": "corrige",
+          "detail": "EO-266 : rattrapage du sc-004 deja ne -- la carte d identite est posee par la porte ECRIRE, remede au meme defaut que la porte creer-super-combo (gabarit muet).",
+          "tags": [
+            "carte",
+            "EO-266",
+            "sc-004"
+          ]
+        }
+      ],
+      "tags": [
+        "carte",
+        "EO-266",
+        "sc-004"
+      ]
+    },
+    "_operateur/optimus-prime/super-combos/combos/outils/verifier-placeholders.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 18:41:22",
+          "action": "cree",
+          "detail": "EO-268 : garde PERMANENT des placeholders -- un champ DECLARE ne doit pas CONTREDIRE une mesure calculable (L-055). Regle prise au DOMICILE (vue du suivi), autotest 4/4, accuse 144 declarations mensongeres du journal (duree_s=0 contre 88/104/149 s mesurees). Branche comme etape 21 bis du lanceur de non-regression.",
+          "tags": [
+            "placeholders",
+            "EO-268",
+            "garde"
+          ]
+        }
+      ],
+      "tags": [
+        "placeholders",
+        "EO-268",
+        "garde"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/audits/audit-defcon-declenchement.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 19:01:24",
+          "action": "cree",
+          "detail": "MO-242 (audit, lecture seule) : le rapport refute le verdict instruit. Mesure : la passe VIGILE de la veille-flux (vivante, intervalle 300 s) appelle machine-defcon surveiller, qui evalue les 3 declencheurs declares (perimetre-write et marbre-hors-porte en niveau 5, perimetre-tmp en niveau 4) et POSE le niveau par la porte monter -- les 3 mesureurs existent reellement. Le cockpit separe deja les seuils proto-2 (suggestions) des DECLENCHEURS REELS automatiques, et defcon-historique.jsonl porte 12 transitions sourcees. Reste un seul ecart, signale a la Matrice en EO-272 : l allumage POSITIF n a jamais ete observe en production (detections 0, aucune transition depuis le 2026-09-09), donc rien ne prouve qu un mesureur a code 1 ferait monter le niveau et armerait la pause. Lecon : troisieme premisse de la journee refutee par la mesure (MO-240, MO-241, MO-242).",
+          "tags": [
+            "audit",
+            "defcon",
+            "veille",
+            "MO-242"
+          ]
+        }
+      ],
+      "tags": [
+        "audit",
+        "defcon",
+        "veille",
+        "MO-242"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/preparation/chaine-suivi-du-pilote-d-optimus.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 19:03:42",
+          "action": "cree",
+          "detail": "EO-273 (demande createur) : ouverture de la chaine de preparation SUIVI DU PILOTE D OPTIMUS, franchie en trois etapes (PB-003 pense-bete, SP-003 spec, TD-003 todo). La spec pose un tableau par PARTIE du pilote (injection, file, lot, entonnoir, brin, clotures et enchainement, demandes filtrees, gardes) plus une Table 0 PANNES qui CRIE sur le SILENCE ; la regle des colonnes est ecrite une fois (une colonne se garde si elle VARIE ou si elle PORTE UN VERDICT, jamais de duree sur un evenement, un vide se dit inconnu jamais 0) ; le suivi est une VUE DERIVEE plus un journal de VERDICTS (jamais une sixieme copie des faits) ; les templates vivent dans _operateur/optimus-prime/templates/ (invisible, patron cameleon) avec un README a carte et une porte qui les lit. Contre-analyse NEMESIS en 4 axes (panne muette, sixieme copie, colonnes, invisibilite). TD : T1 liste fermee des pannes, T2 porte suivi-pilote, T3 templates, T4 controle permanent.",
+          "tags": [
+            "preparation",
+            "pilote",
+            "suivi",
+            "EO-273"
+          ]
+        }
+      ],
+      "tags": [
+        "preparation",
+        "pilote",
+        "suivi",
+        "EO-273"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/suivi-pilote/pannes-declarees.json": {
+      "modifications": [
+        {
+          "date": "2026-09-19 19:04:58",
+          "action": "cree",
+          "detail": "T1 de la chaine PB-003/SP-003/TD-003 (EO-273) : la LISTE FERMEE des pannes du pilote, confrontee aux 4 maillons mesures (4 pilote : repond et serie stricte, ne regarde ni l age d une mission en cours ni le lot ni les refus ; 5 entonnoir : brin == somme des files, ne regarde pas l age ; 7 fantomes : les PID ; 9 file-journal : ECART mission close sans fin, DETTE fenetre d injection). Douze pannes declarees, chacune avec le fait attendu, la source, le seuil, la gravite, qui la voit et la porte qui repare. HUIT ne sont vues par PERSONNE : mission qui n avance pas (30 min sans fait), enchainement STOP (le bug du createur), lot perdu, injection refusee, poids qui derive, item qui dort, pause oubliee, bilan absent. Ce que les maillons ne savent pas voir : le SILENCE (un fait attendu qui n arrive pas), l AGE (ce qui dort) et le LOT (la forme de la chaine) -- d ou la colonne Fait attendu et la colonne Silence de la Table 0. Fichier ecrit par la porte, avec un README a carte dans le domicile invisible _operateur/optimus-prime/suivi-pilote/.",
+          "tags": [
+            "preparation",
+            "pilote",
+            "suivi",
+            "pannes",
+            "EO-273"
+          ]
+        }
+      ],
+      "tags": [
+        "preparation",
+        "pilote",
+        "suivi",
+        "pannes",
+        "EO-273"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/vrac/fonctions.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 19:08:33",
+          "action": "modifie",
+          "detail": "MO-243 (constat N2 de l audit MO-220) : au moment ou un item NAISSAIT, l entonnoir ne disait RIEN des items proches -- mesure du jour, le createur a depose TROIS fois la meme demande (EO-264, EO-271, EO-274) sans qu aucune porte ne le signale. Ajout de themes_proches et de items_de_etat dans le domicile du depot : la porte DIT, elle ne bloque jamais, et le verdict NOMME les items voisins ET le mot commun. SEUIL MESURE sur le vivant (10 items) : a DEUX mots communs ZERO paire (le triplement serait passe inapercu), a UN mot DEUX paires dont EO-264 pour ma recurrence -- seuil 1, justifie dans le code. Preuves : DOUBLON DIT sur le cas reel, SILENCE sur un autre sujet, l alerte nomme les DEUX voisins et JAMAIS l item lui-meme (auto-exclusion par l ORDRE de l appel), aucun item perdu (5/5).",
+          "tags": [
+            "pilote",
+            "entonnoir",
+            "vrac",
+            "doublon",
+            "MO-243"
+          ]
+        }
+      ],
+      "tags": [
+        "pilote",
+        "entonnoir",
+        "vrac",
+        "doublon",
+        "MO-243"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/signaler/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 19:09:42",
+          "action": "modifie",
+          "detail": "MO-244 : l outil signaler MENTAIT sur son propre contrat -- afficher_aide() annoncait le verbe signal, le message d erreur aussi, alors que le dispatch n acceptait que signaler (mesure : signal rendait verbe inconnu signal. Verbs : signal, et l agent qui suivait l aide etait bloque). Deux sources pour un seul mot : desormais une SEULE liste VERBES_ACCEPTES dans le domicile des constantes, lue par l aide, par le dispatch ET par le message d erreur ; le canonique signaler est annonce et l alias signal, que l aide avait annonce, est ACCEPTE (on ne punit pas celui qui a suivi l aide). Preuves : le verbe annonce est accepte, le canonique donne un resultat IDENTIQUE, un vrai inconnu est refuse en nommant la liste REELLE, l aide annonce le canonique et declare l alias.",
+          "tags": [
+            "outil",
+            "signaler",
+            "contrat",
+            "MO-244"
+          ]
+        },
+        {
+          "date": "2026-09-19 19:10:02",
+          "action": "modifie",
+          "detail": "MO-244 (suite) : deuxieme defaut du meme contrat, trouve par le cobaye -- le verbe --aide, CONVENTION du projet, n etait pas reconnu : le dispatch l avalait vers l entree (branch startswith --), qui repondait Nom d outil requis. L aide etait donc INATTEIGNABLE par le mot que tout le monde tape. --aide rejoint la liste de l aide. Preuves apres reparation : 6/6 -- le verbe annonce est accepte, le canonique donne le meme resultat, un vrai inconnu nomme la liste REELLE (signaler, signal), --aide ATTEINT l aide, l aide annonce le canonique et declare l alias.",
+          "tags": [
+            "outil",
+            "signaler",
+            "contrat",
+            "aide",
+            "MO-244"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "signaler",
+        "contrat",
+        "MO-244",
+        "aide"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/signaler/constants.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 19:09:42",
+          "action": "modifie",
+          "detail": "MO-244 : VERBE (canonique) et VERBES_ACCEPTES (canonique plus l alias annonce par l aide) poses dans le domicile des constantes -- source UNIQUE des verbes, pour que l aide, le dispatch et le message d erreur ne puissent plus diverger.",
+          "tags": [
+            "outil",
+            "signaler",
+            "contrat",
+            "MO-244"
+          ]
+        }
+      ],
+      "tags": [
+        "outil",
+        "signaler",
+        "contrat",
+        "MO-244"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-chaines.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 19:22:49",
+          "action": "modifie",
+          "detail": "Controle permanent du statut des cartes de chaine (MO-246) : lit les etapes au domicile (M-076), affiche au format de la famille [OK]/[KO], porte son autotest.",
+          "tags": [
+            "controle",
+            "chaine",
+            "permanent",
+            "mo246"
+          ]
+        },
+        {
+          "date": "2026-09-19 20:41:06",
+          "action": "modifie",
+          "detail": "Reprise MO-246 (le garde existait deja depuis la coupure, sa preuve positive etait FAUSSE). 1) La preuve positive de l autotest etait un artifice qui ne pouvait pas dire non (lambda toujours vrai sur une liste toujours vide) alors que son cobaye dit coherent etait en REALITE accuse par la regle de l index : remplacee par une epreuve qui exige que la chaine coherente reste NON accusee. 2) CONTRE-TEMOIN ajoute et conserve dans le garde (documents_sautes_par_ancienne_regle) : il rejoue la lecture d AVANT (un statut vide saute comme un etat initial), qui doit rester AVEUGLE -- mesure 6/6 avant, 7/7 apres. 3) La declaration n est plus RECOPIEE : les prefixes (PB/SP/TD) sont lus au domicile via NOM_PREFIXES (FAMILLES en dur supprime, M-076) et CHAMPS_ETAPE est desormais CONSOMME (nom_de_champ) au lieu d etre un parametre mort. 4) Une declaration INCOMPLETE est un AVIS NOMME (l etape fautive est citee) au lieu d une liste courte lue en silence. 5) Le motif d index est DECOUPE sur la forme fixe de la ligne (plus de motif a echappement : le FutureWarning de compilation disparait de la sortie d un controle). 6) Deux declarations mortes retirees (CLE_TITRE, ecarts). Preuves : cobaye tmp-optimus/cobaye-mo246.py 8/8 ; garde VERDICT OK (5 regles, autotest 7/7) ; benchmark 8/9 (seul invisibilite ROUGE par construction) ; py_compile ; non-regression ; roue ; sante.",
+          "tags": [
+            "controle",
+            "chaine",
+            "permanent",
+            "mo246",
+            "reprise",
+            "preuve",
+            "contrat",
+            "nemesis"
+          ]
+        },
+        {
+          "date": "2026-09-19 21:21:00",
+          "action": "modifie",
+          "detail": "MO-247 : la regle de PLAGE ajoutee au garde des chaines (regle 5). Un id dont le numero DEPASSE le compteur de sa famille (lu au domicile chaine-compteurs.json) est ACCUSE : un id hors plage n a jamais ete emis. Un compteur ABSENT rend None -- la plage n est pas jugee, elle est DITE. Cobaye hors_plage.md (PB-1000 > 999) ajoute ; autotest 6/6 -> 7/7 -> 8/8 ; la chaine coherente reste NON accuseE.",
+          "tags": [
+            "mo247",
+            "garde",
+            "chaine",
+            "plage",
+            "compteur",
+            "hors-plage"
+          ]
+        }
+      ],
+      "tags": [
+        "controle",
+        "chaine",
+        "permanent",
+        "mo246",
+        "reprise",
+        "preuve",
+        "contrat",
+        "nemesis",
+        "mo247",
+        "garde",
+        "plage",
+        "compteur",
+        "hors-plage"
+      ]
+    },
+    "cerveau-projet/matrix/_operateur/optimus-prime/audits/audit-priorite-marbre.md": {
+      "modifications": [
+        {
+          "date": "2026-09-19 21:00:26",
+          "action": "cree",
+          "detail": "MO-288 (EO-281, demande createur) : audit MESURE de la priorite des regles du marbre -- carte des 6 regles R-001..R-006 et des 7 limites du demarrage (ORDRE 3.1 a 3.7), chacune etiquetee DESCENDUE / PARTIELLE / ABSENTE / JUGEMENT selon l EXISTENCE MESUREE de son mecanisme. Nomme la plus couteuse laissee au LLM (ORDRE 3.2 : aucune attribution d une ecriture hors porte) et specifie son mecanisme. Declare l obstacle mesure (cles de chemins heterogenes de la table des modifications).",
+          "tags": [
+            "mo288",
+            "eo281",
+            "priorite",
+            "marbre",
+            "audit",
+            "llm",
+            "mecanisme"
+          ]
+        }
+      ],
+      "tags": [
+        "mo288",
+        "eo281",
+        "priorite",
+        "marbre",
+        "audit",
+        "llm",
+        "mecanisme"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/outils/suivi-optimus/main.py": {
+      "modifications": [
+        {
+          "date": "2026-09-19 21:15:22",
+          "action": "corrige",
+          "detail": "MO-290 (EO-285, demande createur) : le verbe de retrait EXISTAIT DEJA -- archiver --doublons (categorie archiver) archive le 2e debut / 2e fin d une meme mission (le PREMIER fait foi) dans suivi-optimus-doublons.jsonl, reecrit le journal atomiquement et recalcule l empreinte. MAIS le contrat de la porte NE L ANNONCAIT PAS (docstring de main.py : archiver [--racine] seulement) -- la porte mentait sur son propre contrat (famille MO-244). Le contrat dit desormais --doublons et ce qu il fait. AUCUN verbe neuf ajoute : un retirer libre contredirait la doctrine APPEND-ONLY du journal (commun.py) ; l archivage est la voie conforme.",
+          "tags": [
+            "mo290",
+            "eo285",
+            "mo250",
+            "suivi",
+            "archiver",
+            "doublons",
+            "contrat",
+            "append-only"
+          ]
+        }
+      ],
+      "tags": [
+        "mo290",
+        "eo285",
+        "mo250",
+        "suivi",
+        "archiver",
+        "doublons",
+        "contrat",
+        "append-only"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/suivi-optimus.jsonl": {
+      "modifications": [
+        {
+          "date": "2026-09-19 21:15:22",
+          "action": "corrige",
+          "detail": "MO-290 : les 3 doublons debut/fin ANTERIEURS soldes par archiver --doublons -- MO-202 (debut 17:54:55), MO-240 (18:50:04), MO-288 (21:00:46) ont DEMENAGE dans suivi-optimus-doublons.jsonl. Journal 753 -> 750 evenements, empreinte recalculee (916cc0183ef132ab). Aucun octet perdu. verifier : OK (0 orpheline, 0 doublon).",
+          "tags": [
+            "mo290",
+            "suivi",
+            "doublons",
+            "solde",
+            "journal"
+          ]
+        }
+      ],
+      "tags": [
+        "mo290",
+        "suivi",
+        "doublons",
+        "solde",
+        "journal"
+      ]
+    },
+    "cerveau-projet/matrix/matrice/data/conventions-matrice.json": {
+      "modifications": [
+        {
+          "date": "2026-09-19 21:21:00",
+          "action": "modifie",
+          "detail": "MO-247 (decision createur arbitrage C) : CV-008 amenagee par sa porte (modifier --id CV-008) pour accueillir TROIS familles numerotees NEUVES -- PB- (pense-bete), SP- (spec), TD- (todo), de la meme forme que sc-/c- (un prefixe = une famille = un registre). Declare : PROPRIETAIRE chaine-pense-bete, DOMICILE _operateur/optimus-prime/preparation/, COMPTEUR chaine-compteurs.json, REGISTRE index-chaine.md, GARDE le controle des chaines. Texte 1836 -> 2841, verificateur des conventions OK.",
+          "tags": [
+            "mo247",
+            "cv008",
+            "nommage",
+            "pb",
+            "sp",
+            "td",
+            "familles",
+            "contrat"
+          ]
+        }
+      ],
+      "tags": [
+        "mo247",
+        "cv008",
+        "nommage",
+        "pb",
+        "sp",
+        "td",
+        "familles",
+        "contrat"
       ]
     }
   },

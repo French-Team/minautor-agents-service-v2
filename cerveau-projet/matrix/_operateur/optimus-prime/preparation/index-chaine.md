@@ -11,4 +11,5 @@ identite:
 > Une ligne par objet. Pose par la porte chaine-pense-bete.
 
 - PB-001 [todo] Doctrine de la chaine -- chaine-doctrine-de-la-chaine.md
-- PB-002 [spec] Reparation de masse des 32 refus muets -- chaine-reparation-de-masse-des-32-refus-muets.md
+- PB-002 [todo] Reparation de masse des 32 refus muets -- chaine-reparation-de-masse-des-32-refus-muets.md
+- PB-003 [todo] Suivi du pilote d Optimus -- chaine-suivi-du-pilote-d-optimus.md

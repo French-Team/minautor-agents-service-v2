@@ -46,7 +46,12 @@ ZONE = Path("_operateur") / "optimus-prime"
 # 'purification' ; verifier-contrat-fondamental.py : EXCLUS_DIRS, avec les zones
 # jetables). Une ARCHIVE n a pas de carte a porter : elle est morte, et exiger sa
 # normalisation rendait la suite ROUGE a vie.
-ZONES_EXCLUES = ("purification", "tmp-optimus", "tmp-cameleon", "tmp-test", "__pycache__", ".git")
+# MO-241 : l exclusion tenait au NOM DU PARENT (purification) et non a la NATURE du
+# document -- une archive posee ailleurs (tout autre dossier nomme archives) etait donc
+# accusee de nouveau, alors que la regle est la meme partout : une archive est de
+# l histoire, elle ne se normalise pas. archives est declare zone morte PAR NATURE,
+# et le garde DIT combien de documents il met hors corpus.
+ZONES_EXCLUES = ("purification", "archives", "tmp-optimus", "tmp-cameleon", "tmp-test", "__pycache__", ".git")
 EXTENSION = ".md"
 MARQUEUR_FRONT = "---"
 CLE_IDENTITE = "identite:"
@@ -157,9 +162,16 @@ def controler_zone(zone, collecteur=None, silencieux=False):
         return ("zone-lisible", False, "zone introuvable : " + str(zone)), ["zone introuvable"]
     # Le corpus SCANNE est le VIVANT : archives, zones jetables et caches sont hors
     # sujet (une archive ne porte pas de carte, elle est morte -- MO-218/EO-212).
-    fichiers = [chemin for chemin in sorted(zone.rglob("*" + EXTENSION))
+    tous = sorted(zone.rglob("*" + EXTENSION))
+    fichiers = [chemin for chemin in tous
                 if not any(partie in ZONES_EXCLUES
                            for partie in chemin.relative_to(zone).parts)]
+    morts = [chemin for chemin in tous if chemin not in fichiers]
+    # Le DIT de MO-241 : une exclusion que personne ne voit redevient une absence
+    # (lecon MO-218). Le silence de l autotest, lui, reste respecte.
+    if not silencieux:
+        print("[--] zones-mortes : " + str(len(morts)) + " document(s) hors corpus (zones declarees : "
+              + ", ".join(ZONES_EXCLUES) + ")")
     if not fichiers:
         return ("zone-lisible", False, "aucun document sous " + str(zone)), ["aucun document"]
 

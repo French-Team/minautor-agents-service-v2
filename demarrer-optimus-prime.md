@@ -133,14 +133,25 @@ D ABORD (c est lui qui montre que le defaut etait reel).
 
 ### 4.5 TRACER (le marbre : 1 debut + 1 fin, et chaque fichier touche)
 
-    python3 cerveau-projet/matrix/matrice/data/outils/suivi-optimus/main.py noter --mission MO-XXX --theme <THEME> --action debut --detail "..."
+Le DEBUT est pose par le PILOTE a l injection (mode idempotent : il COMBLE le trou,
+il ne double jamais). TU NE LE REDECLARES JAMAIS de routine : un 2e debut fabrique
+le DOUBLON que `verifier` accuse (MO-202, MO-240 ; racine : MO-250). Mesure du
+2026-09-19 : `declarer_borne_marbre` est appele par `injection/fonctions.py` (debut)
+et par `fin/fonctions.py` (fin).
+
+La FIN, tu la declares AVEC le bilan :
+
     python3 cerveau-projet/matrix/matrice/data/outils/suivi-optimus/main.py noter --mission MO-XXX --theme <THEME> --action fin --detail "..."
     python3 cerveau-projet/matrix/matrice/data/outils/suivi-optimus/main.py verifier
     python3 cerveau-projet/matrix/matrice/data/outils/suivi-optimus/main.py vue
     python3 cerveau-projet/matrix/matrice/data/outils/bdd-modifications/main.py noter --fichier <chemin> --action <cree|modifie|corrige|supprime> --detail "..." --tags "a,b"
 
-Le pilote ne note RIEN pour toi : c est TA declaration qui fait foi. Un oubli est
-attrape par `verifier` et par le COCKPIT.
+SEUL cas ou tu declares un DEBUT toi-meme : la REPRISE -- une mission menee en DEUX
+sessions (apres une coupure). Alors, et seulement alors, `--action debut` : c est
+une 2e borne LEGITIME, et `verifier` la compte.
+
+Chaque FICHIER touche se trace par bdd-modifications. Un oubli est attrape par
+`verifier` et par le COCKPIT.
 
 ### 4.6 VERIFIER AVANT DE CLORE (dans cet ordre)
 

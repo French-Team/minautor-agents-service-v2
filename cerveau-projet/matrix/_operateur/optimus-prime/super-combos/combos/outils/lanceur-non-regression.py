@@ -109,6 +109,22 @@ def main():
         ([zone / "remorque" / "remorque-optimus.py", "etat"], "remorque",
          "declarer l'equipement (outils-readme + remorque-optimus inventorier)"),
     ]
+    def ligne_accusation(sortie):
+        """Premiere ligne ACCUSATRICE de la sortie d un controle (EO-226).
+
+        Prendre la DERNIERE ligne etait un indice qui MENTAIT : la remorque
+        accuse un equipement (UNE ligne) puis DIT ses points de restauration
+        (59 lignes le 2026-09-19) -- le pre-vol nommait donc un .bak EXEMPTE au
+        lieu du vrai coupable, et envoyait reparer un fichier innocent. Une
+        accusation qui designe le mauvais fichier coute plus cher qu aucune
+        accusation (friction 77, L-055).
+        """
+        lignes = [l.strip() for l in sortie.splitlines() if l.strip()]
+        for ligne in lignes:
+            if ligne[0] in "-+":
+                return ligne
+        return lignes[-1] if lignes else "?"
+
     pre_vol_ko = []
     for commande, nom, remede in pre_vol:
         if not Path(commande[0]).is_file():
@@ -120,7 +136,7 @@ def main():
         etat = "OK" if resultat.returncode == 0 else "KO"
         print(f"  {nom}: {etat}")
         if resultat.returncode != 0:
-            detail = resultat.stdout.strip().splitlines()[-1] if resultat.stdout.strip() else "?"
+            detail = ligne_accusation(resultat.stdout)
             pre_vol_ko.append(f"{nom}: {detail}")
             print(f"        -> A FAIRE AVANT DE LANCER : {remede}")
     if pre_vol_ko:
@@ -576,6 +592,82 @@ def main():
             ecarts = [l.strip() for l in r.stdout.splitlines()
                       if l.strip().startswith(("[KO", "ECART"))]
             ko.append("cartes: " + ("; ".join(ecarts) if ecarts else "voir verifier-cartes-identite.py"))
+
+    # 21 BIS. PLACEHOLDERS (EO-268, 2026-09-19) : un champ DECLARE ne doit pas
+    #     CONTREDIRE une mesure calculable depuis le MEME document. Le pilote
+    #     declarait duree_s = 0 a chaque cloture et la vue affichait zero alors que
+    #     les bornes du meme journal donnaient 149 s (L-055) : personne ne s en
+    #     plaignait. Le garde rejoue la regle du DOMICILE (la vue du suivi), il ne
+    #     la recopie pas, et il porte son autotest : contradiction ACCUSEE, silence
+    #     NON accuse, zero legitime NON accuse.
+    print("== 21 bis. placeholders (un declare ne contredit pas la mesure) ==")
+    garde_placeholders = outils / "verifier-placeholders.py"
+    if not garde_placeholders.is_file():
+        print("  placeholders: ABSENT")
+        ko.append("manquant: verifier-placeholders.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_placeholders), "--racine", str(zone.parent.parent)],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        print(f"  placeholders: {etat}")
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith("[KO")]
+            ko.append("placeholders: " + ("; ".join(ecarts) if ecarts else "voir verifier-placeholders.py"))
+
+    # 21 TER. CHAINES (MO-246, 2026-09-19) : le STATUT porte dans la carte d identite
+    #     d une chaine n etait verifie par AUCUN controle -- une colonne vide se lit
+    #     comme un fait (constat N6 de l audit MO-220). Le garde LIT les etapes au
+    #     domicile (chaine-pense-bete/constants.py, M-076), il ne les recopie pas, et
+    #     il porte son AUTOTEST : le controle est PERMANENT, jamais un cobaye jetable
+    #     qui meurt avec tmp-optimus.
+    print("== 21 ter. chaines (le statut declare est coherent) ==")
+    garde_chaines = outils / "verifier-chaines.py"
+    if not garde_chaines.is_file():
+        print("  chaines: ABSENT")
+        ko.append("manquant: verifier-chaines.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_chaines), "--racine", str(zone.parent.parent)],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        print(f"  chaines: {etat}")
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith("[KO")]
+            ko.append("chaines: " + ("; ".join(ecarts) if ecarts else "voir verifier-chaines.py"))
+
+    # 21 QUATER. VALEURS EN DUR (M-102 : dette de precision FERMEE le 2026-09-19) : le
+    #     scan existait depuis MO-093 mais n etait JAMAIS branche -- il exigeait une
+    #     cible (donc aucun controle permanent) et il accusait 167 lignes dont 164
+    #     legitimes (les journaux et les archives de missions portent de VRAIS chemins).
+    #     Deux corrections mesurees : le motif `chemin-win` est ANCRE (il attrapait le
+    #     `s:` d une adresse web et le `e:` d une sequence d echappement -- un scan qui
+    #     crie a tort n est jamais branche), et un motif `perimetre-en-dur` est AJOUTE
+    #     (une liste de dossiers REELS recopiee dans un corps de fonction : c est AINSI
+    #     que la racine de la Matrice etait sortie du balayage des points de
+    #     restauration, EO-277). Le controle tourne sur les ZONES DE CODE, ou le scan
+    #     est propre (mesure : 373 fichiers, 0 valeur) ; les journaux, qui portent des
+    #     chemins par nature, ne sont pas le juge -- et ce fait est DIT.
+    print("== 21 quater. valeurs en dur (tout le .py de la Matrice) ==")
+    scan_valeurs = outils / "scan-valeurs-en-dur.py"
+    if not scan_valeurs.is_file():
+        print("  valeurs-en-dur: ABSENT")
+        ko.append("manquant: scan-valeurs-en-dur.py")
+    else:
+        # AUCUNE LISTE ICI : la cible est la Matrice ENTIERE en .py. Ecrire une paire
+        # de dossiers aurait ete la MEME faute que celle qu on vient de fermer (le
+        # scan l accuse d ailleurs) -- une valeur de perimetre s ecrit UNE fois, chez
+        # elle (M-076). La racine vient de l ancrage deja connu du lanceur.
+        racine_mat = zone.parent.parent
+        r = subprocess.run(
+            [sys.executable, str(scan_valeurs), str(racine_mat),
+             "--ext", ".py", "--racine", str(racine_mat)],
+            capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        print("  valeurs-en-dur (.py de la Matrice): " + etat)
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines()
+                      if l.strip().startswith("- ")]
+            ko.append("valeurs-en-dur: "
+                      + ("; ".join(ecarts) if ecarts else "voir scan-valeurs-en-dur.py"))
 
     # 22. ROLES (MAILLON 2/5 de la revision, 2026-09-14) : le cameleon recoit UNE
     #     personnalite par mission ; Optimus n'en recevait AUCUNE -- ses missions

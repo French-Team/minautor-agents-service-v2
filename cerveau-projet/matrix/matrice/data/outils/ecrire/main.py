@@ -16,10 +16,15 @@ GARANTIES -- ce que cette porte tient, et ce qu'elle REFUSE :
                   trouvable : l'ancien est cherche en DEUX formes (exacte, puis sans son
                   LF final) et si le LF est perdu, le nouveau le perd aussi (MO-173).
     REVERSIBLE    .bak horodate a chaque ecriture : point de restauration, jamais de
-                  retour silencieux (le secours est revert-fichier.py).
+                  retour silencieux (le secours est revert-fichier.py). Il est pose
+                  AVANT la publication et JAMAIS pour une ecriture REFUSEE (MO-286) :
+                  un refus ne laisse aucun point derriere lui.
     PROUVE        SHA-256 avant et apres, annonces.
     VALIDE        .py par py_compile, .json par json.load, sur le TEMPORAIRE avant de
                   publier : echec = code 1, RIEN n'est ecrit, la cible est INTACTE (EO-129).
+                  Un .py qui AVERTIT (echappement INVALIDE -- ce que py_compile ne dit
+                  pas) est REFUSE de meme, la ligne et le REMEDE nommes (MO-286) : un
+                  passage oblige garantit une sortie PROPRE, pas une sortie annotee.
     PERIMETRE     le chemin RESOLU doit tomber DANS la Matrice (allowlist racine :
                   AGENTS.md, demarrer-*.md) ; hors perimetre = code 2, refus qui NOMME la
                   Matrice (MO-183/EO-177).

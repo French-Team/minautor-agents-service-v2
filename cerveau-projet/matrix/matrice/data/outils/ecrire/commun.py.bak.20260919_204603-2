@@ -1,0 +1,674 @@
+"""Fonctions communes de l'outil ecrire : perimetre, SHA, atomique, validation.
+
+Chaque fonction fait UNE chose (convention-architecture-outils).
+"""
+import ast
+import base64
+import binascii
+import hashlib
+import json
+import os
+import py_compile
+import shutil
+import warnings
+from datetime import datetime
+from pathlib import Path
+
+from constants import (
+    ALLOWLIST_PREFIXES,
+    ALLOWLIST_RACINE,
+    CLE_SANS_VALEUR,
+    ENCODAGE,
+    FORMAT_HORODATE_BAK,
+    MARQUEUR_POINT_EN_PLUS,
+    MESSAGE_POINT_DISTINCT,
+    RACINE,
+    RANG_POINT_EN_PLUS_MAX,
+    RANG_POINT_EN_PLUS_MIN,
+    REPERTOIRE_MATRICE,
+    SUFFIXE_BAK,
+    TAILLE_BLOC_LECTURE,
+)
+
+# Le PERIMETRE (est-ce DANS la Matrice ?) vit dans SON domicile (data/commun/
+# cible.py) : cette porte le CONSOMME, elle ne le recopie pas (M-076 -- MO-183 a
+# pose le contrat, MO-184 l a porte au domicile partage et a supprime les copies
+# des cinq outils). est_dans_matrice RESOUT avant de juger, et
+# motif_hors_perimetre NOMME la Matrice reelle dans le refus (friction 77).
+
+# La CARTE ASCII n'est plus un domicile d'outil : elle vit dans la couche partagee
+# (matrice/data/commun/carte_ascii.py) et la porte la CONSOMME, comme cible.py
+# juste au-dessus (M-076). Ce passage oblige corrige donc ce que l'agent ecrit
+# avec la MEME carte que la routine de maintenance (MO-210).
+from carte_ascii import CARTE_CONVERSION  # noqa: E402
+from cible import est_dans_matrice, motif_hors_perimetre  # noqa: E402
+
+
+def dans_perimetre_ecriture(chemin_relatif):
+    """True si le chemin RESOLU est ecrivable (dans la Matrice, ou allowlist racine).
+
+    MO-183 (EO-177), mesure du 2026-09-19 : un chemin `matrix/...` etait accepte
+    sur son PREFIXE puis RESOLU contre la RACINE -- or dans ce depot la Matrice
+    vit sous cerveau-projet/ : la porte disait OK et ecrivait HORS de la Matrice
+    (arborescence parasite <racine>/matrix/ creee, deux fichiers). Un perimetre qui
+    juge un PREFIXE ment des que la Matrice n est pas a la racine : ici on RESOUT
+    d abord, on juge ensuite. MO-184 : la regle elle-meme vit au domicile partage,
+    et les cinq outils la CONSOMMENT.
+    """
+    brut = str(chemin_relatif).replace("\\", "/").strip()
+    if not brut:
+        return False
+    while brut.startswith("./"):
+        brut = brut[2:]
+    while brut.startswith("/"):
+        brut = brut[1:]
+    nom = brut.split("/")[-1]
+    if "/" not in brut and (nom in ALLOWLIST_RACINE or any(nom.startswith(p) for p in ALLOWLIST_PREFIXES)):
+        return True
+    return est_dans_matrice(resoudre_chemin(brut))
+
+
+def resoudre_chemin(chemin_relatif):
+    """Retourne le Path absolu (depuis RACINE)."""
+    brut = str(chemin_relatif).strip()
+    p = (RACINE / brut).resolve()
+    return p
+
+
+def calculer_sha256(chemin_absolu):
+    """SHA-256 hex du fichier (lecture binaire, blocs). None si absent."""
+    if not chemin_absolu.exists() or not chemin_absolu.is_file():
+        return None
+    h = hashlib.sha256()
+    with open(chemin_absolu, "rb") as flux:
+        for bloc in iter(lambda: flux.read(TAILLE_BLOC_LECTURE), b""):
+            h.update(bloc)
+    return h.hexdigest()
+
+
+def normaliser_lf(contenu):
+    """Force LF (L-001) : CRLF et CR -> LF, assure LF final si non vide."""
+    # Normalise d'abord CRLF -> LF puis CR -> LF
+    contenu = contenu.replace("\r\n", "\n").replace("\r", "\n")
+    return contenu
+
+
+def chemin_bak(chemin_absolu, rang=1):
+    """Retourne le chemin .bak horodate pour proto-2.
+
+    La forme vient de SES constantes (SUFFIXE_BAK + FORMAT_HORODATE_BAK) : le
+    motif qui la reconnait est declare a cote d'elles, donc jamais redevine par
+    un consommateur (contrat fondamental, espions, remorque).
+
+    Le RANG 1 est la forme CANONIQUE ; un rang superieur suffixe un compteur et
+    reste couvert par le motif DECLARE (EO-191, MO-223).
+    """
+    horodate = datetime.now().strftime(FORMAT_HORODATE_BAK)
+    nom = chemin_absolu.name + SUFFIXE_BAK + "." + horodate
+    if rang > 1:
+        nom = nom + MARQUEUR_POINT_EN_PLUS + str(rang)
+    return chemin_absolu.with_name(nom)
+
+
+def _meme_contenu(chemin, contenu):
+    """Vrai si ce fichier porte EXACTEMENT ces octets -- jamais suppose."""
+    try:
+        return chemin.read_bytes() == contenu
+    except OSError:
+        return False
+
+
+def _premier_point_libre(chemin_absolu, contenu):
+    """Premier nom de point LIBRE pour cet etat : un point existant n'est jamais ecrase.
+
+    Un point qui porte DEJA ce contenu est REUTILISE (idempotent) ; les points
+    d'un AUTRE etat sont sautes ; rend None si tous les rangs declares sont pris.
+    """
+    for rang in range(RANG_POINT_EN_PLUS_MIN, RANG_POINT_EN_PLUS_MAX + 1):
+        candidat = chemin_bak(chemin_absolu, rang)
+        if not candidat.exists():
+            return candidat
+        if _meme_contenu(candidat, contenu):
+            return candidat
+    return None
+
+
+def creer_bak_si_existe(chemin_absolu):
+    """Cree un point de restauration si le fichier existe. Rend le Path, ou None.
+
+    EO-191 (MO-223) : un point de restauration n'est JAMAIS ECRASE. Si le nom
+    canonique est deja pris :
+      - par le MEME contenu, c'est deja LE point de cet etat : on le REUTILISE ;
+      - par un AUTRE etat, on ouvre un point DISTINCT (compteur) et on le DIT.
+    """
+    if not chemin_absolu.exists() or not chemin_absolu.is_file():
+        return None
+    try:
+        contenu = chemin_absolu.read_bytes()
+    except OSError:
+        return None
+    bak = chemin_bak(chemin_absolu)
+    if bak.exists():
+        if _meme_contenu(bak, contenu):
+            return bak
+        bak = _premier_point_libre(chemin_absolu, contenu)
+        if bak is None:
+            return None
+        print(MESSAGE_POINT_DISTINCT + bak.name)
+    try:
+        shutil.copy2(str(chemin_absolu), str(bak))
+    except OSError:
+        # Fallback copie bytes
+        try:
+            bak.write_bytes(contenu)
+        except OSError:
+            return None
+    return bak
+
+
+def _supprimer_silencieux(chemin):
+    """Retire un fichier de travail sans jamais faire echouer l'appelant.
+
+    Un temporaire qui resiste ne doit pas masquer la vraie raison d'un refus :
+    on essaie, et on continue -- le message rendu a l'agent dit le REFUS, pas
+    l'incident de menage.
+    """
+    try:
+        if chemin.exists():
+            chemin.unlink()
+    except OSError:
+        pass
+
+
+def noms_de_cible(cible):
+    """Noms lies par une cible d assignation (nom simple, tuple, liste)."""
+    if isinstance(cible, ast.Name):
+        return {cible.id}
+    if isinstance(cible, (ast.Tuple, ast.List)):
+        noms = set()
+        for element in cible.elts:
+            noms |= noms_de_cible(element)
+        return noms
+    return set()
+
+
+def noms_lies_module(chemin_py):
+    """Noms lies au niveau MODULE par un fichier .py, SANS l executer.
+
+    Le nom cherche chez le fournisseur est le nom IMPORTE, jamais le nom local
+    de l appelant : `from constants import X as Y` exige X chez constants.py --
+    un alias renomme la liaison locale, pas la source. Mesure MO-170 : lire
+    l alias condamnait 776 imports locaux LEGITIMES (faux refus en serie).
+    """
+    noms = set()
+    for noeud in ast.parse(chemin_py.read_text(encoding=ENCODAGE)).body:
+        if isinstance(noeud, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            noms.add(noeud.name)
+        elif isinstance(noeud, ast.Assign):
+            for cible in noeud.targets:
+                noms |= noms_de_cible(cible)
+        elif isinstance(noeud, (ast.AnnAssign, ast.AugAssign)):
+            noms |= noms_de_cible(noeud.target)
+        elif isinstance(noeud, ast.Import):
+            for alias in noeud.names:
+                noms.add(alias.asname or alias.name.split(".")[0])
+        elif isinstance(noeud, ast.ImportFrom):
+            for alias in noeud.names:
+                if alias.name != "*":
+                    noms.add(alias.asname or alias.name)
+    return noms
+
+
+def chemin_fournisseur_local(nom_module, cible):
+    """Chemin du module LOCAL nomme par un import, ou None s il est externe.
+
+    Trois bases, MESUREES (MO-170) : a cote du fichier ecrit, un cran au-dessus
+    (une categorie importe le commun de son outil), et le domicile partage
+    data/commun/. Un module introuvable n est JAMAIS accuse : le garde ne devine
+    pas, il ne parle que du fournisseur qu il a TROUVE.
+    """
+    relatif = nom_module.replace(".", "/") + ".py"
+    for base in (cible.parent, cible.parent.parent, REPERTOIRE_MATRICE / "data" / "commun"):
+        candidat = base / relatif
+        if candidat.is_file():
+            return candidat
+    return None
+
+
+def verifier_imports_locaux(chemin_ecrit, cible):
+    """Garde d ORDRE (EO-159) : le fournisseur AVANT le consommateur.
+
+    Mesure MO-169 : l import de CLE_SANS_VALEUR pose dans commun.py AVANT la
+    constante dans constants.py a rendu la porte INJOUABLE (ImportError) -- et
+    py_compile ne dit RIEN d un ImportError, qui n est pas une SyntaxError : le
+    controle passait pendant que la porte mourait, sans aucun moyen d ecrire
+    ensuite (toute ecriture passe par elle). Le garde lit les imports locaux du
+    CONTENU ECRIT et verifie que chaque nom importe est bien lie par le module
+    fournisseur. Zero faux refus mesure : 776 imports locaux du perimetre
+    verifies, 0 nom manquant (mesure MO-170).
+    """
+    try:
+        arbre = ast.parse(chemin_ecrit.read_text(encoding=ENCODAGE))
+    except (OSError, SyntaxError, UnicodeDecodeError):
+        return True, "imports locaux non verifies (contenu illisible)"
+    manquants = []
+    for noeud in ast.walk(arbre):
+        if not isinstance(noeud, ast.ImportFrom):
+            continue
+        if noeud.level or not noeud.module or any(a.name == "*" for a in noeud.names):
+            continue
+        fournisseur = chemin_fournisseur_local(noeud.module, cible)
+        if fournisseur is None or fournisseur == cible:
+            continue
+        try:
+            lies = noms_lies_module(fournisseur)
+        except (OSError, SyntaxError, UnicodeDecodeError):
+            continue
+        for alias in noeud.names:
+            if alias.name not in lies:
+                manquants.append(alias.name + " <- " + fournisseur.name)
+    if manquants:
+        return False, ("imports locaux NON RESOLUS : " + ", ".join(sorted(set(manquants)))
+                       + " -- POSER LE FOURNISSEUR AVANT LE CONSOMMATEUR (friction 29)")
+    return True, "imports locaux resolus"
+
+
+def avertissements_compilation(chemin_absolu):
+    """Les AVERTISSEMENTS de compilation d un .py : ce que py_compile NE DIT PAS.
+
+    Defaut R5 declare par MO-246 (2026-09-19) et REPARE ici (MO-286) : une
+    sequence d echappement INVALIDE (un antislash SIMPLE la ou un DOUBLE est
+    requis, dans une chaine ordinaire) n est PAS une SyntaxError. Mesure du
+    cobaye : le fichier fautif a donc ete PUBLIE avec le code 0 et le rapport
+    py_compile OK ; le seul mot du probleme etait un avertissement BRUT de
+    Python sur stderr, nommant le fichier TEMPORAIRE et sans remede -- le
+    CONTRAT de la porte (code + rapport) annoncait une sortie propre sur un
+    contenu douteux (L-055).
+
+    PORTEE MESUREE AVANT de refuser (defaut R5, NEMESIS proto-4 axe portee) :
+    0 fichier sur 486 .py du perimetre ne portait deja un tel avertissement --
+    le refus ne bloque donc aucune edition legitime.
+    """
+    try:
+        source = chemin_absolu.read_text(encoding=ENCODAGE)
+    except (OSError, UnicodeDecodeError):
+        return []
+    with warnings.catch_warnings(record=True) as captes:
+        warnings.simplefilter("always")
+        try:
+            compile(source, str(chemin_absolu), "exec")
+        except (SyntaxError, ValueError):
+            return []
+    return [capte for capte in captes if issubclass(capte.category, SyntaxWarning)]
+
+
+def refus_avertissement(avertissements):
+    """Le REFUS NOMME : la ligne, le texte de l avertissement, le REMEDE."""
+    premier = avertissements[0]
+    ligne = getattr(premier, "lineno", 0) or 0
+    return ("py_compile AVERTIT (ligne " + str(ligne) + ") : " + str(premier.message)
+            + " -- REMEDE : DOUBLER l antislash, ou ecrire la chaine en BRUT (prefixe r)"
+            + " ; RIEN n a ete ecrit (un passage oblige garantit une sortie PROPRE : MO-286)")
+
+
+def valider_syntaxe(chemin_absolu, suffixe=None, cible=None):
+    """Valide .py (py_compile) et .json (json.load). Retourne (ok, message).
+
+    `suffixe` permet de valider un fichier TEMPORAIRE (`x.json.tmp`) COMME S'IL
+    portait le suffixe de sa CIBLE : c'est ce qui rend la validation possible
+    AVANT le remplacement (EO-129). La validation lit le suffixe de la cible,
+    jamais celui du temporaire -- un `.tmp` ne serait reconnu par personne et
+    l'ecriture invalide repasserait pour valide (un controle muet ne controle
+    rien).
+    """
+    suffix = (suffixe if suffixe is not None else chemin_absolu.suffix).lower()
+    if suffix == ".py":
+        try:
+            py_compile.compile(str(chemin_absolu), doraise=True)
+        except py_compile.PyCompileError as e:
+            return False, "py_compile ECHEC : " + str(e)
+        except OSError as e:
+            return False, "py_compile illisible : " + str(e)
+        # Garde d ORDRE (EO-159) : la syntaxe ne suffit pas -- un ImportError
+        # n est pas une SyntaxError, et la porte peut mourir de son propre
+        # contenu (mesure MO-169). La CIBLE sert a trouver le fournisseur local.
+        ok_imports, msg_imports = verifier_imports_locaux(chemin_absolu, cible if cible is not None else chemin_absolu)
+        if not ok_imports:
+            return False, msg_imports
+        return True, "py_compile OK ; " + msg_imports
+    if suffix == ".json":
+        try:
+            with open(chemin_absolu, "r", encoding=ENCODAGE) as flux:
+                json.load(flux)
+            return True, "json OK"
+        except (OSError, json.JSONDecodeError) as e:
+            return False, "json ECHEC : " + str(e)
+    return True, "pas de validation pour " + suffix
+
+
+def corriger_contenu(texte):
+    """Corrige les non-ASCII FUTILES de ce que l'agent ecrit, AVANT l'ecriture.
+
+    MO-210 (revision createur 2026-09-19) : la porte DETECTAIT les non-ASCII
+    apres coup et les signalait -- l'agent devait alors re-editer caractere par
+    caractere, et la roue garde-ascii rougissait entre-temps. Un passage oblige
+    doit laisser une SORTIE PROPRE : ce que la carte sait convertir est corrige
+    ici, avec la MEME carte que le scan de maintenance (domicile unique
+    matrice/data/commun/carte_ascii.py -- jamais une copie locale).
+
+    Ce que la carte IGNORE n'est pas devine : la porte REFUSE (code 2, RIEN
+    n'est ecrit) et NOMME le caractere, sa ligne et le remede. Deux sorties
+    seulement -- corrige, ou refuse ; jamais un fichier non-ASCII qui aurait
+    fait croire a un travail propre (L-055 : une correction muette est un
+    mensonge, ici elle est DITE).
+
+    Retourne (texte_corrige, message_refus) -- message_refus vide si tout est
+    convertible.
+    """
+    morceaux = []
+    corriges = []
+    restants = []
+    ligne = 1
+    for caractere in texte:
+        if caractere == "\n":
+            ligne += 1
+            morceaux.append(caractere)
+            continue
+        if ord(caractere) <= 127:
+            morceaux.append(caractere)
+            continue
+        remplacement = CARTE_CONVERSION.get(caractere)
+        if remplacement is None:
+            restants.append((ligne, caractere))
+            morceaux.append(caractere)
+        else:
+            corriges.append((ligne, caractere, remplacement))
+            morceaux.append(remplacement)
+    if corriges:
+        lignes = sorted({l for l, _c, _r in corriges})
+        print("[ASCII] CORRIGE : " + str(len(corriges)) + " caractere(s) en lignes "
+              + ",".join(str(l) for l in lignes[:5]) + ("..." if len(lignes) > 5 else "")
+              + " -- carte commune (data/commun/carte_ascii.py)")
+    if not restants:
+        return "".join(morceaux), ""
+    detail = " ; ".join(
+        "ligne " + str(l) + " : " + c.encode("unicode_escape").decode("ascii")
+        + " (U+" + format(ord(c), "04X") + ")"
+        for l, c in restants[:5]
+    )
+    return "".join(morceaux), (
+        "REFUS (code 2) : " + str(len(restants)) + " caractere(s) non-ASCII que la CARTE "
+        "ne sait PAS convertir -- RIEN n'a ete ecrit. " + detail
+        + ("..." if len(restants) > 5 else "")
+        + ". REMEDE : soit reformuler (la carte corrige le reste toute seule), soit DECIDER "
+        "la conversion et l'ajouter a son domicile unique -- "
+        "matrice/data/commun/carte_ascii.py (CARTE_CONVERSION). Jamais dans un outil, "
+        "jamais une copie locale."
+    )
+
+
+def verifier_ascii(chemin_absolu):
+    """Retourne (nb_non_ascii, lignes_concernees) pour garde-ascii."""
+    try:
+        texte = chemin_absolu.read_text(encoding=ENCODAGE)
+    except (OSError, UnicodeDecodeError):
+        return 0, []
+    lignes = texte.splitlines()
+    cibles = []
+    total = 0
+    for idx, ligne in enumerate(lignes, start=1):
+        non_ascii = [c for c in ligne if ord(c) > 127]
+        if non_ascii:
+            total += len(non_ascii)
+            cibles.append(idx)
+    return total, cibles
+
+
+def ecrire_atomique(chemin_relatif, contenu, mode="remplacer"):
+    """Ecriture atomique tmp+replace, LF, .bak, SHA, validation.
+
+    Retourne (code, sha_avant, sha_apres, bak_path, message_validation).
+    code 0 = OK ; 1 = validation ECHOUEE, RIEN n'a ete ecrit (sha_apres None,
+    la cible est INTACTE) ; 2 = refus perimetre/mode.
+    """
+    if not dans_perimetre_ecriture(chemin_relatif):
+        return 2, None, None, None, motif_hors_perimetre(chemin_relatif, usage="ecriture")
+    if mode not in ("creer", "remplacer", "ajouter"):
+        return 2, None, None, None, "REFUS : --mode doit etre creer|remplacer|ajouter (recu : " + mode + ")"
+    chemin_absolu = resoudre_chemin(chemin_relatif)
+    existe = chemin_absolu.exists()
+    if mode == "creer" and existe:
+        return 2, None, None, None, "REFUS : --mode creer mais le fichier existe deja : " + chemin_relatif
+    if mode == "ajouter" and not existe:
+        # ajouter sur inexistant = creer
+        pass
+    # Perimetre parent : assure dossier parent dans matrix/
+    try:
+        parent = chemin_absolu.parent
+        # Verifie que parent reste dans perimetre (empeche traversal)
+        # On cree les dossiers si besoin
+        parent.mkdir(parents=True, exist_ok=True)
+    except OSError as e:
+        return 1, None, None, None, "Erreur creation dossier parent : " + str(e)
+
+    sha_avant = calculer_sha256(chemin_absolu) if existe else None
+    bak_path = creer_bak_si_existe(chemin_absolu) if existe and mode != "ajouter" else (creer_bak_si_existe(chemin_absolu) if mode == "ajouter" and existe else None)
+
+    # Prepare contenu normalise
+    contenu_norm = normaliser_lf(contenu)
+    # Mode ajouter : concatene
+    if mode == "ajouter" and existe:
+        try:
+            ancien = chemin_absolu.read_text(encoding=ENCODAGE)
+            ancien_norm = normaliser_lf(ancien)
+            # Assure saut entre ancien et nouveau si besoin
+            if ancien_norm and not ancien_norm.endswith("\n"):
+                ancien_norm += "\n"
+            contenu_norm = ancien_norm + contenu_norm
+        except OSError as e:
+            return 1, sha_avant, None, bak_path, "Erreur lecture pour ajouter : " + str(e)
+
+    # ECRITURE ATOMIQUE : temporaire, VALIDATION, PUIS publication (EO-129).
+    # Avant, la porte PUBLIAIT d'abord et validait ensuite : un fichier invalide
+    # (une virgule manquante dans un JSON, une erreur de syntaxe dans un .py)
+    # RESTAIT en place, et l'alerte se perdait dans le tuyau avec lui. Mesure du
+    # 2026-09-16 : le registre des super-combos est reste invalide sans qu'aucun
+    # controle ne le crie. Une porte d'ecriture qui laisse un fichier casse
+    # derriere elle n'est pas un garde, c'est un conduit.
+    # On REFUSE desormais AVANT : la cible n'est JAMAIS touchee, et le .bak reste
+    # disponible pour l'audit de ce qui a ete tente.
+    tmp = chemin_absolu.with_name(chemin_absolu.name + ".tmp")
+    try:
+        with open(tmp, "w", encoding=ENCODAGE, newline="\n") as flux:
+            flux.write(contenu_norm)
+            if contenu_norm and not contenu_norm.endswith("\n"):
+                flux.write("\n")
+    except OSError as e:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, "Erreur ecriture atomique : " + str(e)
+
+    # La validation lit le suffixe de la CIBLE : le temporaire, lui, s'appelle
+    # `.tmp` et ne serait reconnu par personne (cf. valider_syntaxe).
+    ok, msg_val = valider_syntaxe(tmp, chemin_absolu.suffix, chemin_absolu)
+    if not ok:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, (
+            "REFUS : contenu INVALIDE, RIEN n'a ete ecrit -- le fichier d'origine "
+            "est INTACT -- " + msg_val)
+    try:
+        os.replace(tmp, chemin_absolu)
+    except OSError as e:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, "Erreur ecriture atomique : " + str(e)
+
+    sha_apres = calculer_sha256(chemin_absolu)
+    return 0, sha_avant, sha_apres, bak_path, msg_val
+
+
+def variantes_extrait(texte):
+    """Les formes d un EXTRAIT a essayer, dans l ordre (MO-173).
+
+    Mesure : `ecrire` FORCE un LF final (L-001) -- un extrait de MILIEU de ligne
+    ecrit par la porte arrive donc avec un LF que la cible ne contient pas, et il
+    ne pouvait JAMAIS correspondre (deux refus en serie sur le manuel). La porte
+    essaie la forme EXACTE d abord, puis la forme SANS son LF final, et elle DIT
+    laquelle a servi. Aucune forme n est devinee : chacune doit exister UNE fois.
+    """
+    if texte.endswith("\n"):
+        return (("exacte", texte), ("sans LF final", texte[:-1]))
+    return (("exacte", texte),)
+
+
+def editer_atomique(chemin_relatif, ancien, nouveau):
+    """Remplace UNE occurrence exacte ancien->nouveau (atomique, .bak, validation).
+
+    Retourne (code, sha_avant, sha_apres, bak_path, msg).
+    code 0 OK ; 1 validation ECHOUEE, RIEN n'a ete ecrit (la cible est INTACTE) ;
+    2 refus (perimetre, ancien non trouve ou multiple).
+    """
+    if not dans_perimetre_ecriture(chemin_relatif):
+        return 2, None, None, None, motif_hors_perimetre(chemin_relatif, usage="ecriture")
+    chemin_absolu = resoudre_chemin(chemin_relatif)
+    if not chemin_absolu.exists() or not chemin_absolu.is_file():
+        return 1, None, None, None, "Fichier introuvable : " + chemin_relatif
+    try:
+        texte = chemin_absolu.read_text(encoding=ENCODAGE)
+    except OSError as e:
+        return 1, None, None, None, "Erreur lecture : " + str(e)
+    except UnicodeDecodeError as e:
+        return 1, None, None, None, "REFUS : non-UTF8 : " + str(e)
+
+    # L extrait a DEUX formes possibles (MO-173) : la forme EXACTE, puis la forme
+    # SANS son LF final -- `ecrire` en ajoute un (L-001), donc un extrait de
+    # milieu de ligne ne pouvait jamais correspondre. On DIT laquelle a servi.
+    forme, occurrences, ancien_utilise = None, 0, ancien
+    for etiquette, candidat in variantes_extrait(ancien):
+        if not candidat:
+            continue
+        nombre = texte.count(candidat)
+        if nombre:
+            forme, occurrences, ancien_utilise = etiquette, nombre, candidat
+            break
+    if forme is None:
+        return 2, None, None, None, ("REFUS : --ancien introuvable (0 occurrence) : verifiez whitespace exact"
+                                     " (formes essayees : exacte, puis sans LF final)")
+    if occurrences > 1:
+        return 2, None, None, None, ("REFUS : --ancien trouve " + str(occurrences) + " fois (attendu 1 unique)"
+                                     " : precisez plus de contexte (forme : " + forme + ")")
+
+    # Le COMPTE-RENDU est construit AVANT la publication : apres `os.replace`, plus
+    # rien ne doit pouvoir echouer -- une porte qui a ecrit PUIS crie laisse
+    # l appelant croire que rien n a change (mesure MO-173 : un NameError declenche
+    # APRES l ecriture, donc un fichier modifie annonce en erreur).
+    note_extrait = "" if forme == "exacte" else (
+        " ; extrait retenu : " + forme + " (LF final ajoute par ecrire, L-001)")
+
+    sha_avant = calculer_sha256(chemin_absolu)
+    bak_path = creer_bak_si_existe(chemin_absolu)
+
+    # SYMETRIE : la forme retenue ayant perdu son LF final, le NOUVEAU perd le
+    # sien -- sinon l edition injecterait un saut de ligne DANS la ligne.
+    nouveau_utilise = nouveau[:-1] if (forme != "exacte" and nouveau.endswith("\n")) else nouveau
+    nouveau_texte = texte.replace(ancien_utilise, nouveau_utilise, 1)
+    nouveau_texte = normaliser_lf(nouveau_texte)
+
+    tmp = chemin_absolu.with_name(chemin_absolu.name + ".tmp")
+    try:
+        with open(tmp, "w", encoding=ENCODAGE, newline="\n") as flux:
+            flux.write(nouveau_texte)
+    except OSError as e:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, "Erreur ecriture atomique editer : " + str(e)
+
+    # Meme regle que `ecrire_atomique` (EO-129) : on VALIDE le temporaire avant
+    # de publier. Une edition qui casse la syntaxe ne doit pas atteindre la cible.
+    ok, msg_val = valider_syntaxe(tmp, chemin_absolu.suffix, chemin_absolu)
+    if not ok:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, (
+            "REFUS : l'edition rend le contenu INVALIDE, RIEN n'a ete ecrit -- le "
+            "fichier d'origine est INTACT -- " + msg_val)
+    msg_val = msg_val + note_extrait
+    try:
+        os.replace(tmp, chemin_absolu)
+    except OSError as e:
+        _supprimer_silencieux(tmp)
+        return 1, sha_avant, None, bak_path, "Erreur ecriture atomique editer : " + str(e)
+
+    sha_apres = calculer_sha256(chemin_absolu)
+    return 0, sha_avant, sha_apres, bak_path, msg_val
+
+
+def extraire_options(arguments, noms_connus):
+    """Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici."""
+    from options import extraire_options as repartir  # domicile partage (EO-158)
+    return repartir(arguments, noms_connus)
+
+
+def refuser_options_sans_valeur(options):
+    """Refus NOMME quand une option a ete privee de valeur (EO-156).
+
+    Le parseur ne pose plus "" en silence : il inscrit le nom sous
+    CLE_SANS_VALEUR, et l appelant l apprend ICI (code 2 + message nomme).
+    """
+    noms = options.get(CLE_SANS_VALEUR, [])
+    if not noms:
+        return 0
+    print(
+        "REFUS : option --" + str(noms[0]) + " sans valeur -- une option videe"
+        " en silence se lit \"pas de contenu\", ce qui accuse a tort l appelant."
+        " Ecrire la valeur (un texte commencant par des tirets est accepte)."
+    )
+    return 2
+
+
+def decoder_contenu_base64(blob):
+    """Decode un contenu transmis en BASE64 -- le transport SANS echappement.
+
+    Mesure MO-173 : dans la chaine heredoc -> bash -> litteral Python -> argv ->
+    porte, chaque couche peut de-echapper UNE fois (un antislash-n litteral
+    devenu un VRAI saut de ligne, des triples guillemets imbriques qui
+    referment un litteral, une apostrophe qui casse un shell). L alphabet base64
+    ne contient NI guillemet, NI antislash, NI saut de ligne : un blob traverse
+    la chaine SANS qu aucune couche ne puisse le deformer. La porte decode,
+    VALIDE et publie exactement les octets demandes.
+
+    La lecture est STRICTE (`validate=True`) et le refus est NOMME : tolerer un
+    espace ou un caractere etranger, ce serait rouvrir la porte au silence qu on
+    vient de fermer (une donnee deformee passerait pour valide).
+
+    Retourne (code, contenu_ou_message) : 0 = contenu decode, 2 = REFUS nomme.
+    """
+    try:
+        octets = base64.b64decode(blob, validate=True)
+    except (binascii.Error, ValueError) as erreur:
+        return 2, ("REFUS : --contenu-base64 INVALIDE (base64 STRICT attendu :"
+                   " A-Z a-z 0-9 + / =, aucun espace ni saut de ligne) -- " + str(erreur))
+    try:
+        return 0, octets.decode(ENCODAGE)
+    except UnicodeDecodeError as erreur:
+        return 2, "REFUS : --contenu-base64 n est pas de l UTF-8 VALIDE -- " + str(erreur)
+
+
+def lire_contenu_source(valeur_directe, chemin_fichier):
+    """Retourne le contenu depuis --contenu ou --contenu-fichier (@file)."""
+    if chemin_fichier:
+        # chemin_fichier est relatif a RACINE (comme --fichier)
+        p = resoudre_chemin(chemin_fichier)
+        if not p.exists() or not p.is_file():
+            raise FileNotFoundError("Fichier source introuvable : " + chemin_fichier)
+        return p.read_text(encoding=ENCODAGE)
+    if valeur_directe and valeur_directe.startswith("@"):
+        # @file anti-heredoc : seulement si @ est suivi d'un chemin contenant / ou .
+        # Sinon c'est un contenu litteral commencant par @
+        ref = valeur_directe[1:].strip()
+        if not ref:
+            raise ValueError("--contenu @ vide")
+        # Si ref ne ressemble pas a un chemin (pas de / ni .), traiter comme litteral
+        if "/" not in ref and "\\" not in ref and "." not in ref:
+            return valeur_directe
+        p = resoudre_chemin(ref)
+        if not p.exists() or not p.is_file():
+            raise FileNotFoundError("Fichier @ introuvable : " + ref)
+        return p.read_text(encoding=ENCODAGE)
+    return valeur_directe

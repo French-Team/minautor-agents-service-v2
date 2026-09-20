@@ -33,6 +33,14 @@ Usage :
     python main.py file verser         (echelon 4 BIS : le BRIN ENTIER -> UN lot, une
                                        seule fois -- numerotation k/n et retour
                                        consolide ; [--lot <nom>] ; EO-148)
+    python main.py lot retirer --ids MO-001,MO-002 [--motif ...]
+                                       (RETIRE des missions d un lot ARME : le lot
+                                       garde ses autres ids et le k/n est recompose ;
+                                       les retirees restent dans la file HORS lot,
+                                       sous le statut retiree + date + motif ; refus
+                                       NOMMES si l id est hors lot, s il est la
+                                       mission en cours, s il est termine ou deja
+                                       retire ; EO-265)
     python main.py enregistrer --id MO-XXX --theme <nom> [--type <t>] --objectif "..."
                                        --bilan "..."   (le TYPE est ACCEPTE EN OPTION --
                                        jamais exige : une porte de reparation ne refuse pas

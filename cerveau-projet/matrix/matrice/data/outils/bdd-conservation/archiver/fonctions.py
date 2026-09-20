@@ -48,7 +48,7 @@ from constants import (
     CHEMIN_DOMICILE_FORME_BAK, ENCODAGE, NOM_MANIFESTE, NOM_TEMOIN,
     REPERTOIRE_ARCHIVES, TAILLE_BLOC_LECTURE, ZONES_CAMELEON,
 )
-from cible import racine_matrice, resoudre, resoudre_dans_matrice
+from cible import arbres_matrice, racine_matrice, resoudre, resoudre_dans_matrice
 
 # --- LES 5 REFUS DU CONTRAT DE ROTATION ------------------------------------
 REFUS_PLUS_RECENT = "REFUS 1 (point plus recent que sa source)"
@@ -589,12 +589,14 @@ def points_sans_decision(donnees, depart):
         source = str(entree.get("source", ""))
         if source:
             connus.add(source.replace("\\", "/").strip("/").lower())
-    racine = racine_matrice(depart)
     trouves = []
-    for dossier in ("matrice", "_operateur"):
-        base = racine / dossier
-        if not base.is_dir():
-            continue
+    # LE PERIMETRE DE BALAYAGE VIENT DE SON DOMICILE (M-076) : la valeur `les arbres
+    # de la Matrice` n est plus ecrite ICI. Elle y etait EN DUR sous la forme
+    # ("matrice", "_operateur"), ce qui laissait la RACINE de la Matrice HORS du
+    # balayage -- deux points y vivaient, jamais juges, et le balayage rendait EN
+    # ORDRE (EO-277, mesure du 2026-09-19). Un consommateur qui doit EXCLURE une
+    # zone l exclut EN LE DISANT : l archive est exclue nommement juste en dessous.
+    for base in arbres_matrice(depart):
         for chemin in base.rglob("*"):
             if not chemin.is_file() or "__pycache__" in chemin.parts:
                 continue

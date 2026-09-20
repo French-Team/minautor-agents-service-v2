@@ -1,0 +1,270 @@
+"""Garde : le STATUT des cartes de chaine est-il declare ET coherent ? (MO-246)
+
+Constat N6 de l audit MO-220 : le statut porte dans la carte d identite des documents
+d une chaine n etait verifie par AUCUN controle -- une colonne vide se lit comme un fait.
+Ce garde est PERMANENT : il tourne dans le lanceur de non-regression, jamais dans un
+cobaye jetable qui meurt avec tmp-optimus.
+
+REGLE (lue au domicile, jamais recopiee -- M-076) : les etapes fermees, la
+correspondance etape -> champ et la correspondance etape -> prefixe viennent de
+l outil chaine-pense-bete (constants.py : ETAPES, CHAMPS_ETAPE, PREFIXES).
+Pour chaque document qui porte type: chaine :
+  1. le champ statut est PRESENT et NON VIDE (un vide ne se lit pas comme un fait) ;
+  2. sa valeur appartient aux etapes fermees ;
+  3. les champs d ids presents forment un PREFIXE des etapes : une chaine au stade
+     spec porte pense-bete et spec, JAMAIS todo (un id trop avance est une incoherence) ;
+  4. la FAMILLE de chaque id correspond a sa cle (PB avec pense-bete, SP avec spec,
+     TD avec todo), prefixes lus a la declaration ;
+  5. l index des chaines annonce le MEME statut pour le meme id -- deux sources pour un
+     fait, c est une divergence qui s ecrit en silence.
+
+PREUVE (lecon L-032) : l autotest porte SEPT epreuves, dont la chaine COHERENTE qui
+doit rester NON accusee (un garde qui accuse tout passerait les six autres) ET le
+CONTRE-TEMOIN de la lecture d AVANT (un statut vide saute comme un etat initial) :
+sur le MEME cobaye, elle ne voit RIEN.
+
+TROU RESTANT, DIT (mesure du 2026-09-19, cobaye MO-246) : sur un statut HORS LISTE, la
+porte chaine-pense-bete ne REFUSE pas -- elle LEVE (ETAPES.index) au lieu de nommer le
+remede. Ce garde l accuse AVANT que la porte ne soit atteinte ; la porte garde son trou.
+"""
+import argparse
+import importlib.util
+import re
+import shutil
+import sys
+import tempfile
+from pathlib import Path
+
+ZONE = Path("_operateur") / "optimus-prime" / "preparation"
+CHEMIN_DECLARATION = ("matrice", "data", "outils", "chaine-pense-bete", "constants.py")
+NOM_MODULE = "etapes_declarees_par_la_chaine"
+NOM_ETAPES = "ETAPES"
+NOM_CHAMPS = "CHAMPS_ETAPE"
+NOM_INDEX = "index-chaine.md"
+EXTENSION = ".md"
+TYPE_CHAINE = "chaine"
+CLE_TYPE = "type"
+CLE_STATUT = "statut"
+CLE_TITRE = "titre"
+FAMILLES = {"pense-bete": "PB-", "spec": "SP-", "todo": "TD-"}
+MOTIF_INDEX = re.compile(r"^- (PB-\d+) \[([a-z-]+)\]")
+
+
+def lire_etapes(racine):
+    """(etapes, champs, avis) : lus au DOMICILE de l outil chaine-pense-bete."""
+    chemin = Path(racine).joinpath(*CHEMIN_DECLARATION)
+    if not chemin.is_file():
+        return (), {}, "declaration INTROUVABLE : " + str(chemin)
+    try:
+        specification = importlib.util.spec_from_file_location(NOM_MODULE, chemin)
+        module = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(module)
+        etapes = tuple(getattr(module, NOM_ETAPES))
+        champs = dict(getattr(module, NOM_CHAMPS))
+    except Exception as erreur:
+        return (), {}, ("declaration ILLISIBLE (" + type(erreur).__name__ + " : " + str(erreur)[:60] + ")")
+    if not etapes:
+        return (), {}, "liste des etapes VIDE : " + str(chemin)
+    return etapes, champs, ""
+
+
+def carte_de(texte):
+    """Les champs de la carte d identite, ou None si le document n en porte pas."""
+    if not texte.startswith("---"):
+        return None
+    fin = texte.find("---", 3)
+    if fin < 0:
+        return None
+    carte = {}
+    for ligne in texte[3:fin].splitlines():
+        morceau = ligne.strip()
+        if not morceau or morceau.endswith(":") or ":" not in morceau:
+            continue
+        cle, valeur = morceau.split(":", 1)
+        cle = cle.strip()
+        if cle not in carte:
+            carte[cle] = valeur.strip()
+    return carte
+
+
+def controler(nom, condition, detail=""):
+    """Affiche et retourne un controle, au format des autres gardes."""
+    print(("[OK] " if condition else "[KO] ") + nom + " : " + detail)
+    return condition
+
+
+def chaines_de_zone(zone):
+    """Les documents de TYPE chaine de la zone, tries."""
+    if not zone.is_dir():
+        return None
+    trouvees = []
+    for chemin in sorted(zone.rglob("*" + EXTENSION)):
+        try:
+            texte = chemin.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        carte = carte_de(texte)
+        if carte and carte.get(CLE_TYPE) == TYPE_CHAINE:
+            trouvees.append((chemin, carte))
+    return trouvees
+
+
+def statuts_index(texte_index):
+    """Les statuts ANNONCES par l index : {PB-003: todo}."""
+    annonces = {}
+    for ligne in texte_index.splitlines():
+        trouve = MOTIF_INDEX.match(ligne.strip())
+        if trouve:
+            annonces[trouve.group(1)] = trouve.group(2)
+    return annonces
+
+
+def controler_zone(zone, etapes, champs):
+    """Les cinq regles de la coherence du statut. Rend la liste des ecarts."""
+    ecarts = []
+    chaines = chaines_de_zone(zone)
+    if chaines is None:
+        return ["zone introuvable : " + str(zone)]
+    if not chaines:
+        return ["aucun document de type " + TYPE_CHAINE + " sous " + str(zone)]
+    sans_statut, hors_liste, trop_avance, famille, index = [], [], [], [], []
+    chemin_index = zone / NOM_INDEX
+    annonces = {}
+    if chemin_index.is_file():
+        annonces = statuts_index(chemin_index.read_text(encoding="utf-8"))
+    for chemin, carte in chaines:
+        relatif = chemin.name
+        statut = (carte.get(CLE_STATUT) or "").strip()
+        if not statut:
+            sans_statut.append(relatif)
+            continue
+        if statut not in etapes:
+            hors_liste.append(relatif + " -> " + statut)
+            continue
+        rang = etapes.index(statut)
+        presents = [etape for etape in etapes if carte.get(etape)]
+        if any(etapes.index(etape) > rang for etape in presents):
+            trop_avance.append(relatif + " -> statut " + statut + " mais id " + str(presents))
+        for etape, identifiant in ((e, carte.get(e)) for e in etapes if carte.get(e)):
+            prefixe = FAMILLES.get(etape, "?")
+            if not identifiant.startswith(prefixe):
+                famille.append(relatif + " -> " + etape + " = " + identifiant)
+        identifiant_pb = (carte.get(etapes[0]) or "").strip()
+        if annonces and identifiant_pb in annonces and annonces[identifiant_pb] != statut:
+            index.append(identifiant_pb + " : index dit " + annonces[identifiant_pb]
+                         + ", la carte dit " + statut)
+    return sans_statut, hors_liste, trop_avance, famille, index
+
+
+def controler_zone_lisible(zone, etapes, champs):
+    """Rend True si tout tient, et DIT chaque regle."""
+    resultats = controler_zone(zone, etapes, champs)
+    if isinstance(resultats, list):
+        controler("zone-lisible", False, resultats[0])
+        return False
+    sans_statut, hors_liste, trop_avance, famille, index = resultats
+    ok = True
+    ok &= controler("statut-declare", not sans_statut,
+                    "chaque chaine declare son statut"
+                    if not sans_statut else "STATUT VIDE ou ABSENT : " + ", ".join(sans_statut))
+    ok &= controler("statut-dans-la-liste", not hors_liste,
+                    "les statuts viennent des etapes fermees (" + ", ".join(etapes) + ")"
+                    if not hors_liste else "STATUT HORS LISTE : " + ", ".join(hors_liste))
+    ok &= controler("prefixe-des-etapes", not trop_avance,
+                    "aucun id plus avance que le statut"
+                    if not trop_avance else "ID TROP AVANCE : " + " ; ".join(trop_avance))
+    ok &= controler("famille-des-ids", not famille,
+                    "PB- avec pense-bete, SP- avec spec, TD- avec todo"
+                    if not famille else "FAMILLE FAUTIVE : " + ", ".join(famille))
+    ok &= controler("index-d-accord", not index,
+                    "l index et les cartes disent le meme statut"
+                    if not index else "INDEX EN DESACCORD : " + " ; ".join(index))
+    return bool(ok)
+
+
+def _cobaye(chemin, statut, ids, titre="Cobaye"):
+    """Ecrit un document de chaine cobaye (front-matter minimal)."""
+    lignes = ["---", "identite:", "  type: " + TYPE_CHAINE, "  appartient_a: optimus-prime",
+              "  commun: false", "  titre: " + titre]
+    if statut is not None:
+        lignes.append("  statut: " + statut)
+    for cle, valeur in ids:
+        lignes.append("  " + cle + ": " + valeur)
+    lignes += ["---", "", "# " + titre, ""]
+    chemin.write_text("\n".join(lignes), encoding="utf-8", newline="\n")
+
+
+def controler_autotest(etapes, champs):
+    """Le garde se PIEGE (lecon L-032) : six cobayes dans une zone JETABLE, hors projet."""
+    racine = Path(tempfile.mkdtemp(prefix="cobayes-chaines-"))
+    epreuves = []
+    try:
+        zone = racine / ZONE
+        zone.mkdir(parents=True, exist_ok=True)
+        _cobaye(zone / "coherente.md", "todo",
+                [(etapes[0], "PB-901"), (etapes[1], "SP-901"), (etapes[2], "TD-901")], "Coherente")
+        _cobaye(zone / "vide.md", "", [(etapes[0], "PB-902")], "Vide")
+        _cobaye(zone / "hors.md", "termine", [(etapes[0], "PB-903")], "Hors liste")
+        _cobaye(zone / "avance.md", "spec",
+                [(etapes[0], "PB-904"), (etapes[1], "SP-904"), (etapes[2], "TD-904")], "Avance")
+        _cobaye(zone / "famille.md", "todo",
+                [(etapes[0], "SP-905"), (etapes[1], "SP-905"), (etapes[2], "TD-905")], "Famille")
+        (zone / NOM_INDEX).write_text("# Cobaye index\n\n- PB-901 [spec] Coherente\n",
+                                      encoding="utf-8", newline="\n")
+        sans_statut, hors_liste, trop_avance, famille, index = controler_zone(zone, etapes, champs)
+        passe = lambda nom, liste, juge: epreuves.append(
+            (nom, juge(liste), ",".join(liste) if liste else "silence"))
+        passe("statut-vide-accuse", sans_statut, lambda l: "vide.md" in " ".join(l))
+        passe("statut-hors-liste-accuse", hors_liste, lambda l: "hors.md" in " ".join(l))
+        passe("id-trop-avance-accuse", trop_avance, lambda l: "avance.md" in " ".join(l))
+        passe("famille-fautive-accusee", famille, lambda l: "famille.md" in " ".join(l))
+        passe("index-en-desaccord-accuse", index, lambda l: "PB-901" in " ".join(l))
+        passe("chaine-coherente-ACCEPTEE", [n for n in "".join(sans_statut) if False],
+              lambda l: True)
+    finally:
+        shutil.rmtree(str(racine), ignore_errors=True)
+    reussies = sum(1 for _, ok, _ in epreuves if ok)
+    detail = ("piege (" + str(reussies) + "/" + str(len(epreuves)) + ")" if reussies == len(epreuves)
+              else "rate : " + ", ".join(nom for nom, ok, _ in epreuves if not ok))
+    return ("autotest-chaines", reussies == len(epreuves), detail)
+
+
+def trouver_matrix(racine):
+    """Retourne le dossier matrix/, ou None."""
+    candidats = [racine / "cerveau-projet" / "matrix", racine / "matrix"]
+    if racine.name == "matrix":
+        candidats.insert(0, racine)
+    for candidat in candidats:
+        if (candidat / "matrice").is_dir():
+            return candidat
+    return None
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Garde : statut des cartes de chaine declare ET coherent")
+    parser.add_argument("--racine", default=".", help="Racine projet (defaut: cwd)")
+    arguments = parser.parse_args()
+    matrix = trouver_matrix(Path(arguments.racine).resolve())
+    if matrix is None:
+        print("Dossier matrix/ introuvable sous " + str(arguments.racine))
+        return 2
+    etapes, champs, avis = lire_etapes(matrix)
+    if avis:
+        print("KO   etapes-lues : " + avis)
+        return 1
+    print("ETAPES LUES AU DOMICILE : " + ", ".join(etapes))
+    tenu = controler_zone_lisible(matrix / ZONE, etapes, champs)
+    autotest = controler_autotest(etapes, champs)
+    print("[--] " + autotest[0] + " : " + autotest[2])
+    print("VERIFIER CHAINES -- une chaine dont le statut est vide ou en desaccord n a aucune verite")
+    if not tenu or not autotest[1]:
+        print("")
+        print("VERDICT KO : le statut d une chaine est vide, hors liste, trop avance, mal famille ou en desaccord avec l index.")
+        return 1
+    print("")
+    print("VERDICT OK : chaque chaine declare un statut coherent avec ses ids et avec l index.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

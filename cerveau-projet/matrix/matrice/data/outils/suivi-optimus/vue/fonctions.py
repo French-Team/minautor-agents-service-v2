@@ -108,12 +108,17 @@ def heure_courte(date_complete):
 
 
 def composer_ligne(evenement):
-    """Compose UNE ligne d'un tableau d'action (heure en premier)."""
+    """Compose UNE ligne d'un tableau d'action (heure en premier).
+
+    Colonne DUREE retiree le 2026-09-19 (demande createur) : un EVENEMENT est un
+    INSTANT, il n a pas de duree -- seul le RECAP par mission en porte une, et
+    elle y est CALCULEE des deux bornes. Colonne FICHIERS retiree le meme jour :
+    dans un tableau d ACTION elle valait "-" pour tout le monde (les fichiers se
+    lisent au RECAP, par mission). A leur place, l HEURE DE DEBUT de la MISSION.
+    """
     detail = echapper_pipe(tronquer(evenement.get("detail", ""), LIMITE_DETAIL))
     mission = echapper_pipe(evenement.get("mission", "") or "-")
     portes = lister_cellule(evenement.get("portes"))
-    fichiers = lister_cellule(evenement.get("fichiers"))
-    duree = evenement.get("duree_s") or "-"
     # Separation date et heure pour affichage : heure en premier
     date_complete = evenement.get("date", "")
     heure = ""
@@ -126,8 +131,6 @@ def composer_ligne(evenement):
         mission,
         detail,
         portes,
-        fichiers,
-        str(duree),
     ]) + " |")
 
 
@@ -142,8 +145,8 @@ def composer_section(action, evenements):
         return lignes + ["(aucun evenement)", ""]
     evenements_tries = sorted(evenements, key=lambda e: e.get("date", ""), reverse=True)
     lignes += [
-        "| Heure | Date | Mission | Detail | Portes | Fichiers | Duree |",
-        "|---|---|---|---|---|---|---|",
+        "| Heure | Date | Mission | Detail | Portes |",
+        "|---|---|---|---|---|",
     ]
     for evenement in evenements_tries[:LIMITE_SECTION]:
         lignes.append(composer_ligne(evenement))
@@ -153,6 +156,25 @@ def composer_section(action, evenements):
         lignes.append("*" + str(reste) + " evenement(s) de plus dans cette action "
                       + "(journal complet : data/suivi-optimus.jsonl).")
     return lignes + [""]
+
+
+def calculer_duree(debut, fin):
+    """Duree en SECONDES entre deux bornes du journal (EO-267), ou None.
+
+    Le journal PORTE le fait (deux bornes datees) : la duree est une
+    SOUSTRACTION, pas une declaration. Avant, la vue ne lisait qu un argument
+    `--duree-s` optionnel que NUL appel ne posait -- la colonne ne pouvait donc
+    que valoir zero. Une borne illisible rend None : la duree reste VIDE (une
+    colonne vide se lit moins mal qu une duree inventee, L-055).
+    """
+    from datetime import datetime as horloge
+    try:
+        depart = horloge.strptime(debut, "%Y-%m-%d %H:%M:%S")
+        arrivee = horloge.strptime(fin, "%Y-%m-%d %H:%M:%S")
+    except (TypeError, ValueError):
+        return None
+    secondes = int((arrivee - depart).total_seconds())
+    return secondes if secondes >= 0 else None
 
 
 def agreger_par_mission(evenements):
@@ -185,8 +207,13 @@ def agreger_par_mission(evenements):
             agregat["debut"] = date
         if action == "fin" and date and (not agregat["fin"] or date > agregat["fin"]):
             agregat["fin"] = date
-        if evenement.get("duree_s"):
-            agregat["duree_s"] = evenement["duree_s"]
+        declare = str(evenement.get("duree_s", "") or "").strip()
+        # Un "0" DECLARE n est PAS une duree (EO-267) : c est le placeholder que
+        # le pilote pose a la cloture quand il ne la connait pas. Le prendre pour
+        # une mesure figeait la colonne a zero a VIE -- une valeur qui ment se lit
+        # comme un fait (L-055). Seule une valeur NON NULLE declare est retenue.
+        if declare and declare not in ("0", "0s"):
+            agregat["duree_s"] = declare
         for porte in evenement.get("portes", ()) or ():
             if porte not in agregat["portes"]:
                 agregat["portes"].append(porte)
@@ -194,6 +221,14 @@ def agreger_par_mission(evenements):
             if fichier not in agregat["fichiers"]:
                 agregat["fichiers"].append(fichier)
     for agregat in agregats.values():
+        # DUREE (EO-267) : le journal portait DEJA les deux bornes, mais la vue
+        # ne lisait qu un `duree_s` declare -- que personne ne posait. La duree
+        # est desormais CALCULEE des bornes quand elles existent ; un declare
+        # reste prioritaire ; sans fin, AUCUNE duree (rien d invente).
+        if not agregat["duree_s"] and agregat["debut"] and agregat["fin"]:
+            secondes = calculer_duree(agregat["debut"], agregat["fin"])
+            if secondes is not None:
+                agregat["duree_s"] = str(secondes)
         if agregat["fin"]:
             agregat["etat"] = "finie"
         elif agregat["debut"]:

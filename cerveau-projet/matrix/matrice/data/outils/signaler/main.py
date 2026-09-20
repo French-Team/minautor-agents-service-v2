@@ -7,6 +7,7 @@ import sys
 import os
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from constants import VERBE, VERBES_ACCEPTES  # noqa: E402
 
 
 def afficher_aide():
@@ -14,7 +15,8 @@ def afficher_aide():
     print("Outil SIGNALER -- Signaler un probleme outil a la Matrice")
     print("")
     print("Verbes :")
-    print("  signal  --outil <nom> --niveau <niveau> --description <texte>")
+    print("  " + VERBE + "  --outil <nom> --niveau <niveau> --description <texte>")
+    print("  (alias accepte : " + ", ".join(v for v in VERBES_ACCEPTES if v != VERBE) + ")")
     print("          [--mission <id>] [--erreur <texte>] [--json]")
     print("")
     print("Niveaux :")
@@ -26,7 +28,7 @@ def afficher_aide():
     print("Codes retour : 0=depot OK, 2=erreur")
     print("")
     print("Exemple :")
-    print('  signal --outil "lire" --niveau critique')
+    print('  ' + VERBE + ' --outil "lire" --niveau critique')
     print('         --description "Le fichier de 5000 lignes est tronque a 2000"')
     print('         --mission "M-042" --erreur "troncature silencieuse"')
 
@@ -40,11 +42,15 @@ def principal(arguments):
 
     premier = arguments[0]
 
-    if premier in ("--help", "-h", "help"):
+    # --aide est la CONVENTION du projet (mesure MO-244 : ce verbe n etait pas reconnu et
+    # le dispatch l avalait vers l entree, qui repondait Nom d outil requis -- l aide etait
+    # donc INATTEIGNABLE par le mot que tout le monde tape).
+    if premier in ("--help", "-h", "help", "--aide"):
         afficher_aide()
         return 0
 
-    if premier == "signaler":
+    # L ALIAS annonce par l aide est ACCEPTE (MO-244) : suivre l aide ne bloque plus.
+    if premier in VERBES_ACCEPTES:
         from signaler.entry import signaler
         return signaler(arguments[1:])
 
@@ -52,7 +58,8 @@ def principal(arguments):
         from signaler.entry import signaler
         return signaler(arguments)
 
-    print(f"ERREUR : verbe inconnu '{premier}'. Verbs : signal")
+    print("ERREUR : verbe inconnu '" + premier + "'. Verbes : "
+          + ", ".join(VERBES_ACCEPTES))
     return 2
 
 
