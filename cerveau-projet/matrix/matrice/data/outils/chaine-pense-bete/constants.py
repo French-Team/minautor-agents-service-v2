@@ -36,7 +36,9 @@ REPERTOIRE_DOMICILE = REPERTOIRE_MATRIX / DOMICILE_RELATIF
 
 # La PORTE unique d'ecriture : cette porte ne fabrique JAMAIS un fichier
 # elle-meme, elle CONSOMME le passage oblige (regle du cerveau).
-CHEMIN_PORTE_ECRIRE = REPERTOIRE_MATRICE / "data" / "outils" / "ecrire" / "main.py"
+# EO-287 : le NOM suffit -- la resolution (et son refus nomme) est PARTAGEE
+# (data/commun/resolution_outils.py), jamais recopiee ici.
+NOM_PORTE_ECRIRE = "ecrire"
 
 # LES TROIS ETAPES et les TROIS familles d'ids (arbitrage C).
 ETAPE_PENSE_BETE = "pense-bete"

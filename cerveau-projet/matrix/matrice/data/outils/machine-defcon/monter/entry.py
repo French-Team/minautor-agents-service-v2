@@ -6,7 +6,7 @@ from commun import (
     journaliser_transition,
     trouver_defcon,
 )
-from constants import NOMS_NIVEAUX
+from constants import NOM_OUTIL_PAUSE, NOMS_NIVEAUX
 from monter.fonctions import verifier_montee
 
 # M-080 : a defcon 5, la Matrice met la session-matrix EN PAUSE (protocole
@@ -17,14 +17,18 @@ def declencher_pause_auto():
     """Declenche la pause de session-matrix si defcon 5 vient d'etre pose."""
     import subprocess
     import sys
-    from pathlib import Path
 
-    chemin_outil = Path(__file__).resolve().parent.parent.parent / "pause-session"
-    if not (chemin_outil / "main.py").is_file():
-        print("ECART : outil pause-session introuvable pour la pause automatique.")
+    from resolution_outils import OutilIntrouvable, chemin_outil
+
+    # EO-287 : l outil se NOMME ; la resolution et son refus nomme vivent au
+    # domicile partage -- un chemin recopie ne se plaint jamais, il plante.
+    try:
+        principal = chemin_outil(NOM_OUTIL_PAUSE)
+    except OutilIntrouvable as refus:
+        print("ECART : " + str(refus))
         return
     resultat = subprocess.run(
-        [sys.executable, str(chemin_outil / "main.py"), "pause", "--raison", "defcon 5 automatique"],
+        [sys.executable, str(principal), "pause", "--raison", "defcon 5 automatique"],
         capture_output=True,
         text=True,
         check=False,
@@ -38,20 +42,20 @@ def declencher_pause_auto():
         for ligne in (resultat.stdout or "").strip().splitlines():
             print("  " + ligne)
 
-NOMS_OPTIONS = ("--niveau", "--raison")
+NOMS_OPTIONS = ("niveau", "raison")
 
 
 def executer(arguments):
     options = extraire_options(arguments, NOMS_OPTIONS)
-    if "--niveau" not in options or not options.get("--raison"):
+    if "niveau" not in options or not options.get("raison"):
         print("Usage : python main.py monter --niveau <3-5> --raison \"...\"")
         return 2
     try:
-        cible = int(options["--niveau"])
+        cible = int(options["niveau"])
     except ValueError:
         print("Usage : --niveau <1-5>")
         return 2
-    raison = options["--raison"]
+    raison = options["raison"]
 
     donnees = charger_classeur()
     courant, entree = trouver_defcon(donnees)

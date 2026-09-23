@@ -1,0 +1,138 @@
+"""Parseur d options PARTAGE de la Matrice -- DOMICILE (EO-158, MO-171).
+
+Le motif est PARTAGE, jamais recopie (M-076 ; meme famille que data/commun/
+cible.py de MO-166). Mesure MO-169 : 40 copies VIVANTES du meme parseur, en 22
+textes differents -- et la variante majoritaire AVALAIT l option suivante comme
+valeur (un --fichier sans valeur posait fichier = "--mode" et sautait --mode :
+une option disparaissait en silence, jamais dite). Les copies s alignent en
+CONSOMMANT ce domicile.
+
+CONTRAT (identiquement celui de la porte ecrire, EO-156) :
+  1. une VALEUR peut commencer par des tirets : un document a carte d identite
+     COMMENCE par ---, et un texte peut citer une option ;
+  2. seul un NOM D OPTION CONNU arrete la valeur : le morceau suivant n est pris
+     pour une option que s il en est une ;
+  3. une option PRIVEE de valeur n est jamais avalee en silence : elle est
+     INSCRITE sous CLE_SANS_VALEUR, a charge pour l appelant de la DIRE ;
+  4. les DRAPEAUX (options sans valeur par nature : json, recursif, prive,
+     verbose, integration, etat...) sont DECLARES par l appelant, valent "1" et
+     restent PRESENTS -- un drapeau reste une option presente, c est la valeur
+     qui manque ;
+  5. un morceau qui a la FORME d une option (--xxx) SANS en etre une n est
+     JAMAIS avale en silence : il est INSCRIT sous CLE_INCONNUES, a charge pour
+     l appelant de le DIRE (EO-179). Avant, il etait simplement SAUTE : l appel
+     obtenait le resultat du DEFAUT, indiscernable d un resultat correct -- et
+     une limite muette se lit comme un FAIT (L-055, friction 77).
+     LIMITE DITE : seuls les morceaux qui COMMENCENT par -- sont retenus -- un
+     argument nu peut etre du texte libre legitime, et le declarer inconnu
+     fabriquerait des faux positifs. Le parseur ne devine pas, il SIGNALE.
+
+MODE sans_tirets (mesure MO-171 : deux outils nomment leurs options sans tirets
+de tete, un autre les prefixe) : le nom est reconnu par lstrip("-"), et c est la
+MEME normalisation qui decide si le morceau suivant est une option. Limite DITE :
+dans ce mode, une valeur qui serait exactement un nom d option connu reste
+ambigue -- hors mode, une valeur a tirets inconnue reste une valeur, toujours.
+
+6. LE REFUS EST LE DEFAUT (T1 de la chaine PB-002, 2026-09-20). Mesure de la
+   sonde sc-004 : 32 des 35 outils rendaient un refus MUET -- l option fautive
+   n etait jamais NOMMEE. La cause : le parseur RETENAIT l inconnue depuis EO-179
+   (CLE_INCONNUES), mais c est l APPELANT qui devait la DIRE, et 107 appelants
+   sur 110 ne le faisaient pas. Le domicile refuse donc LUI-MEME : l inconnue est
+   NOMMEE, les options reconnues et le remede sont dits, et l appel s ARRETE en
+   code 2 (`raise SystemExit`). Un appel qui accepte des arguments LIBRES le
+   DECLARE (`refuser=False`) : l inconnue est alors DITE sans arreter l appel --
+   jamais taire. Le texte du refus vit ICI, en UN seul exemplaire (M-076), et
+   sert les DEUX chemins : une option inconnue dans les arguments
+   (`extraire_options`) et une option EN TETE, la ou un VERBE est attendu
+   (`refuser_option_en_tete`, appele par le point commun des outils).
+"""
+
+# Sentinelle des options privees de valeur : le parseur ne pose JAMAIS "" a la
+# place de l appelant -- une option videe en silence se lit "pas de contenu".
+CLE_SANS_VALEUR = "__sans_valeur__"
+# Sentinelle des morceaux qui ONT LA FORME d une option SANS en etre une
+# (EO-179, 2026-09-19) : le parseur ne les avale plus en silence -- c est
+# l APPELANT qui decide de les DIRE (les ignorer en le disant, ou REFUSER).
+CLE_INCONNUES = "__inconnues__"
+VALEUR_DRAPEAU = "1"
+
+
+def _nom_option(morceau, noms_connus, sans_tirets):
+    """Nom d option reconnu, ou None si le morceau n en est pas un."""
+    if sans_tirets:
+        nom = morceau.lstrip("-")
+        return nom if nom in noms_connus else None
+    if morceau.startswith("--") and morceau[2:] in noms_connus:
+        return morceau[2:]
+    return None
+
+
+def extraire_options(arguments, noms_connus, drapeaux=(), sans_tirets=False):
+    """Extrait les options d une liste d arguments (contrat ci-dessus).
+
+    Ne valide pas le CONTENU des valeurs, seulement leur FORME : ce que
+    l appelant fait d une valeur absente lui appartient, mais il l APPREND
+    (CLE_SANS_VALEUR) au lieu de la lire "pas de contenu".
+    """
+    options = {}
+    sans_valeur = []
+    inconnues = []
+    index = 0
+    while index < len(arguments):
+        nom = _nom_option(arguments[index], noms_connus, sans_tirets)
+        if nom is None:
+            # EO-179 : un morceau qui a la FORME d une option sans en etre une
+            # est RETENU, jamais avale en silence. Un argument NU ne l est pas :
+            # il peut etre du texte libre legitime -- le parseur ne devine pas,
+            # il signale, et l appelant decide (signaler_inconnues).
+            if arguments[index].startswith("--"):
+                inconnues.append(arguments[index])
+            index += 1
+            continue
+        if nom in drapeaux:
+            options[nom] = VALEUR_DRAPEAU
+            index += 1
+            continue
+        suivant = arguments[index + 1] if index + 1 < len(arguments) else None
+        suit_une_option = suivant is not None and _nom_option(suivant, noms_connus, sans_tirets) is not None
+        if suivant is not None and not suit_une_option:
+            options[nom] = suivant
+            index += 2
+        else:
+            sans_valeur.append(nom)
+            index += 1
+    if sans_valeur:
+        options[CLE_SANS_VALEUR] = sans_valeur
+    if inconnues:
+        options[CLE_INCONNUES] = inconnues
+    return options
+
+
+def signaler_inconnues(options, outil, noms_connus, usage="", refuser=True):
+    """DIT les morceaux qui ont la FORME d une option sans en etre une (EO-179).
+
+    Le parseur SIGNALE (CLE_INCONNUES), il ne juge pas :
+      - un outil dont TOUS les arguments sont des options REFUSE (defaut) :
+        c est la suite silencieuse qui mentait -- l appel obtenait le resultat
+        du DEFAUT, indiscernable d un resultat correct ;
+      - un appel qui accepte des arguments LIBRES les ignore, mais en le DISANT
+        (`refuser=False`) : taire une inconnue serait retomber dans le defaut.
+
+    Rend 2 quand il y a des inconnues ET que le refus est demande, 0 sinon :
+    l appelant retourne ce code tel quel.
+    """
+    inconnues = list(options.get(CLE_INCONNUES) or [])
+    if not inconnues:
+        return 0
+    print("OPTION INCONNUE : " + ", ".join(inconnues) + "  (outil : " + outil + ")")
+    print("  options reconnues : " + ", ".join(sorted(noms_connus)))
+    if usage:
+        print("  " + usage)
+    if refuser:
+        print("  REFUS : une option inconnue n est jamais ignoree en silence --"
+              " sans ce refus, l appel obtenait le resultat du DEFAUT,"
+              " indiscernable d un resultat correct (EO-179).")
+        return 2
+    print("  (l option est IGNOREE, et c est DIT : cet appel accepte des"
+          " arguments libres)")
+    return 0

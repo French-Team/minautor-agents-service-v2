@@ -9,11 +9,15 @@ from commun import (
     archiver_anciennes_missions,
     archiver_famille_conservation,
     bilan_consolide,
+    controler_archives_conservation,
     controler_borne_conservation,
-    crier_borne_rompue,
+    controler_plafond_conservation,
+    crier_controle_conservation,
     crier_mission_muette,
+    derniere_injection,
     deposer_message,
     declarer_borne_marbre,
+    declarer_disparitions_conservation,
     enregistrer_file,
     entretenir_suivi,
     fichiers_de_la_mission,
@@ -24,9 +28,13 @@ from commun import (
     mission_en_cours,
     portee_lot,
     nettoyer_intercom,
+    noter_prise_round,
     noter_session,
+    purger_archives_conservation,
+    purger_archives_journaux,
     purger_zone_temporaire,
     rattraper_fichiers_non_traces,
+    rotation_boites_intercom,
     resume_mission,
     session_en_pause,
     verification_post_fin,
@@ -34,10 +42,76 @@ from commun import (
 )
 from constants import (
     BOITE_MATRICE_IN,
+    BOITE_PILOTE_OUT,
     CHAMP_DEFAUTS_MISSION,
     STATUT_DEFAUT_REPARE,
     STATUT_TERMINEE,
 )
+
+
+def remettre_les_ordres(charger_file):
+    """IMPRIME les ordres du round servi (EO-370) : ils etaient dans un FICHIER.
+
+    OU CA MERDAIT (mesure du 2026-09-22, demande du createur : < tu dois comprendre ou
+    ca merde >). `injection.preparer_injection` DEPOSE l'injection complete (objectif,
+    checklist, role, lecons, rappel) dans la boite de sortie et n'imprime sur la
+    console que le CHEMIN du fichier. Entre deux rounds, l'agent recevait donc un
+    IDENTIFIANT, pas une CONSIGNE -- et le seul geste qui LISAIT une injection etait
+    l ORDRE 2, un ordre de DEMARRAGE. Pour savoir quoi faire, il fallait ouvrir la
+    boite a la main : c'est LA que le round s'arrete. Un agent sans ordres en main
+    raconte ou il demande, il ne continue pas.
+
+    Ici, ce qui a ete DEPOSE est AUSSI IMPRIME : un seul contenu, deux lecteurs.
+    """
+    mission = mission_en_cours(charger_file() or {})
+    if not mission:
+        return
+    identifiant = str(mission.get("id", ""))
+    injection = derniere_injection(identifiant)
+    if not injection:
+        print("TES ORDRES : injection INTROUVABLE pour " + identifiant + " -- la porte ne"
+              " l'a pas retrouvee dans " + str(BOITE_PILOTE_OUT) + " (le DIT, jamais le taire).")
+        return
+    print("=" * 60)
+    print("TES ORDRES POUR CE ROUND : " + identifiant
+          + " (" + str(injection.get("theme", "")) + ")")
+    print("=" * 60)
+    print("OBJECTIF")
+    print("  " + str(injection.get("objectif", "") or "").strip())
+    checklist = injection.get("checklist") or []
+    if checklist:
+        print("CHECKLIST (" + str(len(checklist)) + ")")
+        for point in checklist:
+            print("  - " + str(point))
+    rappel = injection.get("rappel")
+    if rappel:
+        print("RAPPEL")
+        print("  " + str(rappel))
+    print("=" * 60)
+
+
+def enchainer_et_prendre(charger_file):
+    """SERT la suite de la chaine, PUIS PREND le round servi (EO-367, 2026-09-22).
+
+    DEMANDE DU CREATEUR : < c est le PILOTE qui doit te faire continuer les rounds >.
+    POURQUOI ICI, ET PAS DANS LA DOCTRINE : la doctrine ECRIT la boucle, elle ne
+    l EXECUTE pas. Le seul endroit qui SAIT qu un round vient d etre servi est la
+    CLOTURE elle-meme : c est donc elle qui PREND. La prise cesse d etre un geste de
+    l agent -- un geste qu on n a pas a faire ne s oublie pas.
+
+    La prise n est notee QUE si un round a REELLEMENT ete servi : la chaine peut
+    S ARRETER (mission suivante non auto-validee, lot termine sans tete de brin,
+    session en pause) -- on ne prend pas un round qui n existe pas, et on ne prend
+    pas celui qu on vient de CLORE.
+    """
+    from injection.fonctions import preparer_injection
+
+    preparer_injection(charger_file, enchainer=True)
+    if not mission_en_cours(charger_file() or {}):
+        return
+    noter_prise_round(charger_file, par_la_cloture=True)
+    # EO-370 : le round arrive SERVI, PRIS, ET AVEC SES ORDRES IMPRIMES.
+    remettre_les_ordres(charger_file)
 
 
 def cloturer_mission(charger_file, bilan, defauts=None):
@@ -167,6 +241,26 @@ def cloturer_mission(charger_file, bilan, defauts=None):
     _code_rotation, message_rotation = archiver_famille_conservation(mission)
     if message_rotation:
         print(message_rotation)
+    # L ACTE de PURGE de la MEME famille (P3, MO-308) : la rotation vient de
+    # deposer les points ages dans l archive ; sans ce geste l archive regrossirait
+    # sans fin et le cycle repartirait -- le defaut que V2 de la revision nomme
+    # ("un mecanisme dont l acte est manuel n est pas une politique"). La porte TRI :
+    # elle ne supprime que ce qu elle peut PROUVER recouvrable, et refuse le reste.
+    _code_purge_archives, message_purge_archives = purger_archives_conservation(mission)
+    if message_purge_archives:
+        print(message_purge_archives)
+    # LES ARCHIVES DATEES DES JOURNAUX ET DES BOITES (regle createur, 2026-09-20) :
+    # la purge ci-dessus ne traite QUE la famille du registre -- les archives de la
+    # rotation des journaux n avaient AUCUNE porte, et 116 Mo vivaient sans duree de
+    # vie (dont 90,6 Mo pour la seule archive de l espion-integrite). Meme doctrine,
+    # meme porte de preuve : le balayage reconnait la CONVENTION de nom de la
+    # rotation et ne supprime QUE ce dont le contenu VIT dans un blob engage. Ce qui
+    # n est pas engage RESTE (et c est heureux : l archive que la rotation vient
+    # d ecrire porte la memoire de dedoublonnage de son propre lot).
+    _code_purge_journaux, message_purge_journaux = purger_archives_journaux(mission)
+    if message_purge_journaux:
+        print(crier_controle_conservation(mission, _code_purge_journaux,
+                                          message_purge_journaux))
     # CONTROLE de la MEME famille (EO-152, MO-165) : les deux gestes ci-dessus
     # MAINTIENNENT la borne N=1 ; ce controle la MESURE. Mesure MO-164 : la case 8
     # (`controler-archives`) reste verte TOUT LE TEMPS -- elle mesure la PERTE,
@@ -181,18 +275,59 @@ def cloturer_mission(charger_file, bilan, defauts=None):
     # MESURE de la porte, familles en exces comprises.
     _code_borne, message_borne = controler_borne_conservation(mission)
     if message_borne:
-        print(crier_borne_rompue(mission, _code_borne, message_borne))
+        print(crier_controle_conservation(mission, _code_borne, message_borne))
+    # LE PLAFOND des ACTES EN ATTENTE (P4, MO-309) : la masse se borne, elle ne se
+    # raconte pas. Meme doctrine que la borne -- le controle est lance a CHAQUE
+    # cloture, APRES l acte qui doit vider l attente, et son echec part au marbre
+    # par le meme canal (une alerte qui ne vit que sur la console se perd).
+    _code_plafond, message_plafond = controler_plafond_conservation(mission)
+    if message_plafond:
+        print(crier_controle_conservation(mission, _code_plafond, message_plafond))
     # Zone jetable (MO-136) : la mission est close, le PILOTE vide la zone et le
     # NOTE au marbre -- le point 4 de perimetre-tmp etait une discipline d'agent,
     # et une discipline qu'aucun instrument ne mesure depend de la memoire.
     _code_purge, message_purge = purger_zone_temporaire(mission)
     print("[PURGE] " + message_purge)
+    # LES DISPARITIONS QUE LA PURGE VIENT DE CAUSER (V5, MO-304) : la purge
+    # ci-dessus retire des fichiers dont certains portaient un point de
+    # restauration ENREGISTRE (tout ce qu'une mission a ecrit dans la zone
+    # jetable en a cree un). Le registre les gardait non-archives et
+    # `controler-archives` les comptait en ECART, sans que rien ne les solde :
+    # mesure du 2026-09-20, 7 points et 8 ecarts, alors que 17 du meme genre
+    # avaient deja ete declares A LA MAIN a EO-276 -- le stock se reconstituait
+    # tout seul a chaque round. Le pilote DECLARE donc ce qu'il vient de faire,
+    # par la PORTE qui existe pour cela, et APRES la purge : une declaration
+    # porte sur un FAIT (la porte refuse un point encore PRESENT sur le disque).
+    _code_disparition, message_disparition = declarer_disparitions_conservation(mission)
+    if message_disparition:
+        print(crier_controle_conservation(mission, _code_disparition, message_disparition))
+    # LE GARDE DE LA PERTE (case 8, MO-304) : la borne mesure l'EXCES et le plafond
+    # la MASSE ; celui-ci mesure la PERTE (`archive + actif + disparu + purge =
+    # origine`). PERSONNE ne le jouait -- la cloture lancait les deux autres,
+    # jamais lui -- donc 8 ecarts vivaient sans qu'aucun instrument ne les voie.
+    # Meme doctrine que la borne (MO-165) et le plafond (MO-309) : lance a CHAQUE
+    # cloture, APRES les gestes qui doivent le satisfaire, et son echec part AU
+    # MARBRE par le meme canal.
+    _code_perte, message_perte = controler_archives_conservation(mission)
+    if message_perte:
+        print(crier_controle_conservation(mission, _code_perte, message_perte))
     # Verification post-fin : py_compile + benchmark auto
     code_verif, msgs_verif = verification_post_fin(mission, bilan)
     for msg in msgs_verif:
         print(msg)
     # Nettoyage intercom : purge messages traites
     nettoyer_intercom()
+    # LES BOITES INTERCOM SE BORNENT (demande createur, 2026-09-20) : une boite est
+    # en AJOUT SEUL, donc elle ne grandit que par ABSENCE d acte -- mesure du jour :
+    # l outbox du pilote portait 17,5 Mo et 708 messages (24,7 Ko par message) pour
+    # un plafond de 5 Mo, et RIEN ne mesurait sa TAILLE (le cockpit n en comptait que
+    # les lignes). Le pilote la borne ici, par le MOTEUR PARTAGE des journaux, et il
+    # MESURE ce qu il fait (l acte est note au marbre). Place APRES l entretien de la
+    # boite (les messages traites sont partis) et AVANT le depot de la fin de mission :
+    # la ligne qu on vient d ecrire n est jamais la premiere candidate au depart.
+    _code_boites, message_boites = rotation_boites_intercom(mission)
+    if message_boites:
+        print(crier_controle_conservation(mission, _code_boites, message_boites))
     annoncer_fin(file_missions, mission, portee)
     deposer_message(
         BOITE_MATRICE_IN,
@@ -214,11 +349,10 @@ def cloturer_mission(charger_file, bilan, defauts=None):
         # suivante (file ou tresse) est relancee automatiquement.
         # M-080 : JAMAIS pendant une pause (gardes dans preparer_injection).
         if not session_en_pause():
-            from injection.fonctions import preparer_injection
-
             # MO-175 (3e jambe) : c est ICI que la CHAINE s enchaine -- et qu elle
             # S ARRETE si la mission suivante n est pas auto-validee.
-            preparer_injection(charger_file, enchainer=True)
+            # EO-367 : enchainer, c est aussi PRENDRE (le pilote fait la boucle).
+            enchainer_et_prendre(charger_file)
         else:
             print("SESSION EN PAUSE (M-080) : aucune relance automatique pendant la maintenance.")
         return 0
@@ -243,15 +377,11 @@ def cloturer_mission(charger_file, bilan, defauts=None):
         # REOUVRE sur l entonnoir. Si la tete n est PAS auto-validee, le STOP
         # reste et RIEN n est consomme -- on ne force pas la main, on la donne.
         if not session_en_pause():
-            from injection.fonctions import preparer_injection
-
             print("Fin de lot : la chaine reouvre sur la tete auto-validee du brin...")
-            preparer_injection(charger_file, enchainer=True)
+            enchainer_et_prendre(charger_file)
         else:
             print("SESSION EN PAUSE (M-080) : aucune relance automatique pendant la maintenance.")
     else:
-        from injection.fonctions import preparer_injection
-
         print("Enchainement automatique de la mission suivante du lot...")
-        preparer_injection(charger_file, enchainer=True)
+        enchainer_et_prendre(charger_file)
     return 0

@@ -41,6 +41,10 @@ BDDS = {
     "protocoles-matrice.json": True,
     "sessions.json": True,
     "conservation.json": True,
+    # LE REGISTRE DES OUTILS (EO-314, MO-316) : une BDD REGENEREE par
+    # `registre-outils rafraichir`, qui repose son empreinte etalon a chaque
+    # publication -- sans ce geste, l espion crierait a chaque rafraichissement.
+    "registre-outils.json": True,
 }
 # NOTA (M-080) : session-matrix-etat.json n'est PAS surveillee -- c'est un
 # fichier EPHEMERE qui n'existe QUE pendant une pause (pose par pause-session,

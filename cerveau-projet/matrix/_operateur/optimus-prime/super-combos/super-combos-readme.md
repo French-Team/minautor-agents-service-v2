@@ -35,7 +35,7 @@ cote sous des noms libres, sans moyen de les distinguer).
 | `sc-002` | `super-combos/sc-002-auto-evolution/` | Orchestration complete du cycle auto-evolution (detecter -> qualifier -> cibler -> modifier -> valider) | AUTO-EVOLUTION |
 | `sc-003` | `super-combos/sc-003-auto-suivi/` | Entretien de la trace d'Optimus (coherence -> verifier -> vue + rapport) -- lance par le pilote a chaque cloture | SUIVI |
 
-Lancement par numero : `python lancer-super-combos.py --numero sc-001` (le lanceur
+Lancement par numero : `python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/lancer-super-combos.py --numero sc-001` (le lanceur
 vit ICI, avec ses objets : il lit le `registry.json` pose a cote de lui)
 (la casse d'entree est libre : `SC-001`, `sc-001`, `#1` et `1` sont normalises
 vers `sc-001` -- la forme canonique est en minuscules, regle CV-009)
@@ -73,11 +73,11 @@ vers `sc-001` -- la forme canonique est en minuscules, regle CV-009)
 Lancement :
 
 ```
-python lancer-super-combos.py --numero sc-001 [--verbe status] [--fichier <f>] [--mission <id>]
-python lancer-super-combos.py --numero sc-001 --verbe auto-test
-python lancer-super-combos.py --numero sc-002 --verbe detecter "Quand X, Y, car Z" --type outil --gravite mineure --frequence ponctuelle
-python lancer-super-combos.py --numero sc-003                 (chaine d'entretien de la trace : coherence -> verifier -> vue)
-python lancer-super-combos.py --numero sc-003 --verbe rapide  (passe de fin de mission, lancee par le pilote)
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/lancer-super-combos.py --numero sc-001 [--verbe status] [--fichier <f>] [--mission <id>]
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/lancer-super-combos.py --numero sc-001 --verbe auto-test
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/lancer-super-combos.py --numero sc-002 --verbe detecter "Quand X, Y, car Z" --type outil --gravite mineure --frequence ponctuelle
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/lancer-super-combos.py --numero sc-003 (chaine d'entretien de la trace : coherence -> verifier -> vue)
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/lancer-super-combos.py --numero sc-003 --verbe rapide (passe de fin de mission, lancee par le pilote)
 ```
 
 ### sc-001 : ce qu'une phase TESTE vraiment (reparation 2026-09-14)
@@ -88,7 +88,7 @@ python lancer-super-combos.py --numero sc-003 --verbe rapide  (passe de fin de m
 > succes du testeur. Un `code 0` muet est ACCUSE, parce qu'un testeur muet ne
 > distingue pas "le theme est bon" de "je n'ai rien regarde".
 >
-> POURQUOI : l'ancienne version lancait le theme par `python theme-X.json`. Or
+> POURQUOI : l'ancienne version lancait le theme par `python3 theme-X.json`. Or
 > un theme n'est **pas un programme**, c'est l'ARBRE DE DECISION (JSON) que
 > l'agent lit -- donc un simple **litteral de dictionnaire** en Python : une
 > expression valide, sans effet, qui sort en `code 0`. Mesure : la commande

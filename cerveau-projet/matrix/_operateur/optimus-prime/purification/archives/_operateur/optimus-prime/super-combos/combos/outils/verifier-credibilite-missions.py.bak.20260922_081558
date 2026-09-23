@@ -1,0 +1,642 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""verifier-credibilite-missions.py -- PROCESS : une mission ANCIENNE est-elle encore CREDIBLE ?
+
+DEMANDE CREATEUR (2026-09-22) : < quand on reprend des missions anciennes, on doit
+mettre en place un process pour verifier & valider leur credibilite avant de les
+executer ; on doit definir QUI et QUAND, cela doit etre fait >.
+
+QUI : l OPERATEUR juge. Cet outil ne juge pas a sa place -- il MESURE les faits et
+PROPOSE un verdict ; le verdict est pose par l operateur, NOMME et TRACE. Une mesure
+n est pas un verdict, et un verdict sans trace n existe pas.
+QUAND : a la REPRISE, AVANT d executer une mission RESTAUREE -- c est-a-dire une
+mission dont la CHARGE (`chargee_le`) date d un jour ANTERIEUR au jour courant : le
+lot arme la veille et rejoue aujourd hui, ou une mission ramenee par un redemarrage.
+Voir conventions/convention-credibilite-mission-ancienne.md, invoquee par ORDRE 2
+du demarrage.
+
+POURQUOI (mesure du 2026-09-22) : le lot REPRISE DU RETARD fait 37 missions
+deposees la veille et jamais revalidees ; leur texte decrit un etat du projet qui a
+pu changer. Une mission ancienne peut etre DEJA FAITE par une plus recente, PERIMEE
+parce que le fichier qu elle nomme n existe plus, ou A REVOIR parce qu aucune mesure
+ne permet de trancher. Executer sans regarder, c est payer deux fois.
+
+MESURE DU DEFAUT DE LA PREMIERE VERSION (2026-09-22) : le critere etait l AGE SEUL
+(>= seuil). Or un lot rejoue est charge EN UNE FOIS : les 37 missions portaient le
+MEME `chargee_le`, donc un age de 0 a 1 jour -- le critere NE POUVAIT PAS mordre sur
+le cas meme pour lequel il etait ecrit, et l outil rendait < VERDICT OK : toute
+mission ANCIENNE porte un verdict > devant un journal VIDE. Un controle qui ne peut
+pas mordre rend un vert MUET (L-163). D ou l ancrage sur la REPRISE : charge un jour
+anterieur = mission RESTAUREE, donc a juger, quelle que soit la duree ecoulee.
+
+CE QU'IL MESURE, par mission (LECTURE SEULE) :
+  1. l AGE et la REPRISE : les jours depuis la charge (`chargee_le`), et si cette
+     charge date d un jour ANTERIEUR (mission RESTAUREE -- le cas d un lot rejoue,
+     ou toutes les missions partagent le meme horodatage) ;
+  2. les PREMISSES : les fichiers que l OBJECTIF NOMME existent-ils ENCORE sur le
+     disque ? Seul un jeton qui PORTE UNE EXTENSION est un nom de fichier, et lui
+     seul peut etre declare MORT ; un jeton a barres obliques sans extension est du
+     TEXTE (`AVANT/APRES`) : il est HORS MESURE, et ce compte se DIT ; un nom
+     GABARIT (`bilan-moXXX.txt`) l est aussi, et la recherche couvre le DEPOT ENTIER
+     (un nom vit aussi a la racine, pas seulement sous matrice/) ;
+  3. le DOUBLON : une mission PLUS RECENTE et TERMINEE porte-t-elle deja le meme
+     sujet -- la regle de ressemblance est CONSOMMEE de son domicile
+     (pilote/filtrer/cadrage.py : mots significatifs + seuil), jamais recopiee (M-076) ;
+  4. la SOURCE : l item d origine (EO-N) est-il encore TRACABLE dans les donnees de
+     l entonnoir (file ou tombe des items consommes) ;
+  5. le VERDICT : a-t-il DEJA ete rendu et TRACE (le journal des verdicts).
+
+CE QU'IL NE FAIT PAS : il ne modifie AUCUNE mission, aucun item, aucun fichier de la
+Matrice -- sauf `--juger`, qui ajoute UNE ligne au journal des verdicts, par la
+PORTE d ecriture (jamais a la main).
+
+Usage :
+  python verifier-credibilite-missions.py [--lot <nom>] [--racine <chemin>]
+  python verifier-credibilite-missions.py --mission MO-342
+  python verifier-credibilite-missions.py --juger --mission MO-342 --verdict credible --motif "..."
+  python verifier-credibilite-missions.py --auto-test
+  code 0 = rien a signaler, 1 = au moins une mission ANCIENNE a executer est SANS
+  verdict (le process n a pas ete joue), 2 = racine ou fichier illisible.
+"""
+
+import argparse
+import importlib.util
+import json
+import re
+import subprocess
+import sys
+from datetime import datetime, timedelta
+from pathlib import Path
+
+# --- DOMICILES (jamais recopies d ailleurs) ---------------------------------
+DOSSIER_PILOTE = ("_operateur", "optimus-prime", "pilote")
+NOM_FICHIER_MISSIONS = "file-missions-optimus.json"
+MOTIF_ENTONNOIR = "*entonnoir*json*"
+DOSSIER_CREDIBILITE = ("_operateur", "optimus-prime", "credibilite")
+NOM_JOURNAL = "credibilite-verdicts.jsonl"
+CHEMIN_REGLE_DOUBLON = ("filtrer", "cadrage.py")
+DOSSIER_COMMUN = ("matrice", "data", "commun")
+NOM_SERVICE_RESOLUTION = "resolution_outils.py"
+NOM_PORTE_ECRIRE = "ecrire"
+
+# --- LA REGLE DU PROCESS (declarations fermees) -----------------------------
+SEUIL_JOURS = 2
+VERDICTS = ("credible", "perimee", "deja-faite", "a-revoir")
+VERDICT_TRACE_INCONNU = "(aucun)"
+STATUTS_A_EXECUTER = ("en-attente", "en-cours", "reportee")
+# La mission a ete CHARGEE un jour ANTERIEUR : c est une mission RESTAUREE (lot
+# rejoue, ou mission ramenee par un redemarrage). Un lot se charge EN UNE FOIS :
+# toutes ses missions portent le meme horodatage, donc l AGE SEUL les confond avec
+# une mission du jour -- c est ce fait-la qui rend le process mordant.
+MOTIF_REPRISE = "RESTAUREE (chargee un jour anterieur)"
+# Une racine RELATIVE se lit du document qui l ecrit : le meme chemin "data/commun"
+# vit sous la racine du depot, sous matrice/, sous cerveau-projet/matrix/. Mesure du
+# 2026-09-22 : sans ces racines, `data/commun` etait declare MORT a tort.
+RACINES_RELATIVES = ("", "matrice", "cerveau-projet", "cerveau-projet/matrix",
+                     "cerveau-projet/matrix/matrice")
+LONGUEUR_MIN_CHEMIN = 8
+MOTIF_FICHIER = re.compile(r"[A-Za-z0-9_.-]+\.(?:py|json|jsonl|md|txt)")
+# Un nom qui se declare lui-meme GABARIT (XXX, NNN, moXXX) n est pas un fichier : le
+# declarer MORT ferait crier le controle a tort (mesure du 2026-09-22 : MO-364 et son
+# `tmp-optimus/bilan-moXXX.txt`, qui est un MODELE DE COMMANDE, pas un chemin).
+MOTIF_GABARIT = re.compile(r"XXX|NNN")
+# Plancher de COUVERTURE : un controle qui n indexe rien rend un vert muet.
+PLANCHER_FICHIERS = 100
+# AUCUN chemin ne se lit du dossier COURANT (contrat CV-007) : l ancrage est le fichier
+# de l outil, sinon la meme commande ne dit pas la meme chose selon l endroit d ou on
+# l appelle -- et la non-regression le refuse (verifier-contrat-fondamental : chemins).
+RACINE_DEFAUT = Path(__file__).resolve().parents[5]
+RACINE_COBAYE = Path(__file__).resolve().parent
+MOTIF_ITEM = re.compile(r"\bEO-\d+\b")
+PRESENT = "present"
+ABSENT = "absent"
+PRESENT_FICHIER_REGLE = "regle de ressemblance CONSOMMEE de son domicile"
+FICHIER_REGLE_ABSENT = "regle de ressemblance INTROUVABLE"
+
+RESULTATS = []
+
+
+def controler(nom, condition, detail=""):
+    RESULTATS.append((nom, bool(condition), detail))
+    print("[" + ("OK" if condition else "KO") + "] " + nom + " : " + detail)
+    return bool(condition)
+
+
+def accuser(detail):
+    """Imprime un ECART dans le FORMAT que l appelant extrait ([KO] ...) -- L-163."""
+    print("[KO] " + detail)
+
+
+def trouver_racine(depart):
+    """La racine du depot (qui porte cerveau-projet/matrix), ou None."""
+    for candidat in (depart, depart / "cerveau-projet" / "matrix", depart / "matrix"):
+        if (candidat / Path(*DOSSIER_PILOTE) / NOM_FICHIER_MISSIONS).is_file():
+            return candidat
+    return None
+
+
+def charger_missions(racine):
+    """{id: mission} lu du fichier du pilote -- la SOURCE, jamais une copie."""
+    chemin = racine.joinpath(*DOSSIER_PILOTE, NOM_FICHIER_MISSIONS)
+    try:
+        donnees = json.loads(chemin.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as erreur:
+        return None, "fichier des missions illisible (" + type(erreur).__name__ + ")"
+    missions = {}
+
+    def parcourir(noeud):
+        if isinstance(noeud, dict):
+            identifiant = str(noeud.get("id") or "")
+            if identifiant.startswith("MO-"):
+                missions.setdefault(identifiant, noeud)
+            for valeur in noeud.values():
+                parcourir(valeur)
+        elif isinstance(noeud, list):
+            for element in noeud:
+                parcourir(element)
+
+    parcourir(donnees)
+    if not missions:
+        return None, "aucune mission lue dans " + str(chemin)
+    return missions, ""
+
+
+def charger_regle_doublon(racine):
+    """(mots_significatifs, doublon_avec, avis) : la regle CONSOMMEE de son domicile.
+
+    Le domicile est un MODULE du pilote : il est charge par son CHEMIN (jamais
+    importe par un nom nu, convention B-1). Un domicile illisible rend un AVIS --
+    la mesure du doublon se DIT non mesurable au lieu de se deviner.
+    """
+    chemin = racine.joinpath(*DOSSIER_PILOTE, *CHEMIN_REGLE_DOUBLON)
+    if not chemin.is_file():
+        return None, "domicile de la regle introuvable : " + str(chemin)
+    pilote = chemin.parent.parent
+    if str(pilote) not in sys.path:
+        sys.path.insert(0, str(pilote))
+    try:
+        specification = importlib.util.spec_from_file_location("regle_du_cadrage", chemin)
+        module = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(module)
+        return (module.mots_significatifs, module.doublon_avec), PRESENT_FICHIER_REGLE
+    except Exception as erreur:  # noqa: BLE001 -- un domicile illisible se DIT
+        return None, ("regle illisible (" + type(erreur).__name__ + " : "
+                      + str(erreur)[:60] + ")")
+
+
+def racine_index(racine):
+    """Le PLUS LARGE perimetre ou chercher un NOM de fichier : le DEPOT.
+
+    Mesure du 2026-09-22 : indexe depuis le seul dossier interne, le fichier
+    `demarrer-optimus-prime.md` (ecrit a la racine du depot) etait declare MORT -- un
+    faux rouge. Un nom se cherche la ou il peut VIVRE, jamais la ou on a l habitude de
+    regarder.
+    """
+    candidat = racine
+    while candidat != candidat.parent:
+        if (candidat / ".git").exists() or (candidat / "cerveau-projet").is_dir():
+            return candidat
+        candidat = candidat.parent
+    return racine
+
+
+def indexer_fichiers(racine):
+    """Les noms de fichiers presents sur le disque (un seul parcours, indexe)."""
+    noms = set()
+    for chemin in racine.rglob("*"):
+        if chemin.is_file():
+            noms.add(chemin.name)
+    return noms
+
+
+def extraire_jetons(texte):
+    """Les fichiers et chemins que le texte NOMME (une mesure, pas une devinette)."""
+    jetons = []
+    for brut in str(texte or "").replace("\n", " ").split():
+        jeton = brut.strip("(),;:<>\"'[]`")
+        if not jeton:
+            continue
+        chemin = "/" in jeton and len(jeton) >= LONGUEUR_MIN_CHEMIN
+        fichier = bool(MOTIF_FICHIER.fullmatch(jeton))
+        if chemin or fichier:
+            if jeton not in jetons:
+                jetons.append(jeton)
+    return jetons
+
+
+def existe_sous_racine(racine, chemin):
+    """Le chemin existe-t-il a l UNE des racines plausibles ? (une racine relative se
+    lit du document : `data/commun` vit sous matrice/, pas a la racine du depot.)"""
+    for sous in RACINES_RELATIVES:
+        candidat = racine / sous / chemin if sous else racine / chemin
+        if candidat.exists():
+            return True
+    return False
+
+
+def mesurer_premisses(racine_jetons, jetons, noms_disque):
+    """(verifies, manquants, hors_mesure) : quels noms de l objectif tiennent ENCORE ?
+
+    UN NOM MORT NE SE DECLARE QUE SUR UN FICHIER. Un jeton qui porte une extension
+    (.py, .json, .md...) est un NOM : il est verifie s il en existe un QUELQUE PART
+    sur le disque (le meme fichier s ecrit tantot en nom nu, tantot en chemin, et le
+    chemin relatif change de racine selon le document). Un jeton a barres obliques
+    SANS extension est du TEXTE (`AVANT/APRES`, `oui/non`) : il n est JAMAIS declare
+    mort -- s il n existe pas, il est HORS MESURE, et ce compte se DIT (mesure du
+    2026-09-22 : deux missions du lot proposees PERIMEES a tort, sur `avant/apres`).
+    """
+    verifies, manquants, hors_mesure = [], [], []
+    for jeton in jetons:
+        nom = jeton.split("/")[-1]
+        if MOTIF_GABARIT.search(nom):
+            hors_mesure.append(jeton)
+        elif MOTIF_FICHIER.fullmatch(nom):
+            (verifies if nom in noms_disque else manquants).append(jeton)
+        elif existe_sous_racine(racine_jetons, jeton):
+            verifies.append(jeton)
+        else:
+            hors_mesure.append(jeton)
+    return verifies, manquants, hors_mesure
+
+
+def numero_de(identifiant):
+    chiffres = "".join(caractere for caractere in str(identifiant or "") if caractere.isdigit())
+    return int(chiffres) if chiffres else 0
+
+
+def date_de_charge(mission):
+    return str(mission.get("chargee_le") or mission.get("injectee_le") or "")
+
+
+def age_jours(date_texte, maintenant):
+    """Les jours ecoules depuis cet horodatage, ou None si illisible (et le None se DIT)."""
+    try:
+        moment = datetime.strptime(str(date_texte)[:19], "%Y-%m-%d %H:%M:%S")
+    except (ValueError, TypeError):
+        return None
+    return max(0, (maintenant - moment).days)
+
+
+def est_reprise(date_texte, maintenant):
+    """La charge date-t-elle d un jour ANTERIEUR ? (mission RESTAUREE)
+
+    Un lot rejoue porte le meme horodatage pour TOUTES ses missions : l age seul ne
+    peut donc pas distinguer une mission restauree d une mission nee du jour. Cette
+    mesure-la le peut, et c est elle qui fait mordre le process sur un lot.
+    """
+    try:
+        moment = datetime.strptime(str(date_texte)[:19], "%Y-%m-%d %H:%M:%S")
+    except (ValueError, TypeError):
+        return False
+    return moment.date() < maintenant.date()
+
+
+def doublon_pour(mission, missions, mots_significatifs, doublon_avec):
+    """La mission PLUS RECENTE et TERMINEE qui porte deja ce sujet, ou (None, []).
+
+    La comparaison porte sur le TITRE (le sujet), jamais sur le corps : la regle
+    (mots significatifs, seuil) vient du domicile, elle n est pas reecrite ici.
+    """
+    if mots_significatifs is None:
+        return None, []
+    titre = str(mission.get("titre") or mission.get("theme") or "")
+    reference = date_de_charge(mission)
+    candidats = [str(autre.get("titre") or autre.get("theme") or "")
+                 for autre in missions.values()
+                 if str(autre.get("statut")) == "terminee"
+                 and date_de_charge(autre) and date_de_charge(autre) > reference]
+    return doublon_avec(titre, candidats)
+
+
+def source_tracable(racine, identifiants):
+    """(tracables, perdus) : les items d origine retrouves dans les donnees de l entonnoir."""
+    dossier = racine.joinpath(*DOSSIER_PILOTE)
+    textes = []
+    for chemin in sorted(dossier.glob(MOTIF_ENTONNOIR)):
+        try:
+            textes.append(chemin.read_text(encoding="utf-8", errors="replace"))
+        except OSError:
+            continue
+    bloc = "\n".join(textes)
+    tracables, perdus = [], []
+    for identifiant in identifiants:
+        (tracables if re.search(re.escape(identifiant) + r"\b", bloc) else perdus).append(identifiant)
+    return tracables, perdus
+
+
+def charger_verdicts(racine):
+    """{mission: verdict} lu du JOURNAL des verdicts (le seul, a son domicile)."""
+    chemin = racine.joinpath(*DOSSIER_CREDIBILITE, NOM_JOURNAL)
+    verdicts = {}
+    if not chemin.is_file():
+        return verdicts, "journal des verdicts encore VIDE (aucun verdict rendu)"
+    try:
+        lignes = chemin.read_text(encoding="utf-8").split("\n")
+    except OSError as erreur:
+        return verdicts, "journal illisible (" + type(erreur).__name__ + ")"
+    for ligne in lignes:
+        if not ligne.strip():
+            continue
+        try:
+            entree = json.loads(ligne)
+        except ValueError:
+            continue
+        if isinstance(entree, dict) and entree.get("mission"):
+            verdicts[str(entree["mission"])] = entree
+    return verdicts, ""
+
+
+def proposer_verdict(age, manquants, doublon, source_perdue, seuil, reprise):
+    """Le verdict PROPOSE par les faits -- l operateur reste libre de le retourner.
+
+    ORDRE DES REGLES -- chacune MORD, aucune n est vacue :
+      1. une mission plus RECENTE et TERMINEE porte deja le sujet -> deja-faite ;
+      2. un nom de l objectif n existe plus sur le disque -> perimee ;
+      3. la date de charge est illisible -> a-revoir ;
+      4. sinon credible, et le motif DIT sur quoi l age est ancre.
+
+    `source_perdue` est un FAIT IMPRIME, JAMAIS UN VERDICT : la memoire des items
+    consommes est BORNEE (41 entrees au 2026-09-22), donc < item d origine plus
+    tracable > est le cas NORMAL d une mission ancienne. En faire un verdict ferait
+    crier le controle a tort (5 missions sur 35 mesurees le 2026-09-22, toutes pour
+    la meme raison benigne).
+    """
+    if doublon:
+        return "deja-faite", "une mission plus recente et TERMINEE porte deja ce sujet"
+    if manquants:
+        return "perimee", ("le(s) nom(s) suivant(s) n existe(nt) plus sur le disque : "
+                           + ", ".join(sorted(manquants)[:3]))
+    if age is None:
+        return "a-revoir", "la date de charge est illisible : l anciennete n est pas mesurable"
+    if reprise:
+        return "credible", ("premisses tenues, aucun doublon ; " + MOTIF_REPRISE
+                            + " : l age se lit sur la charge (" + str(age) + " jour(s)),"
+                            " la date de la DEMANDE n est plus tracable")
+    if age < seuil:
+        return "credible", ("chargee depuis " + str(age) + " jour(s) : sous le seuil de "
+                            + str(seuil) + " jour(s) declare(s)")
+    return "credible", ("premisses tenues, aucune reprise constatee, age " + str(age) + " jour(s)")
+
+
+def mesurer_mission(racine, mission, missions, regle, noms_disque, seuil, maintenant,
+                    racine_jetons=None):
+    """Les FAITS d une mission, dans l ordre ou ils se lisent."""
+    objectif = str(mission.get("objectif") or "")
+    age = age_jours(date_de_charge(mission), maintenant)
+    jetons = extraire_jetons(objectif)
+    verifies, manquants, hors_mesure = mesurer_premisses(racine_jetons or racine, jetons,
+                                                         noms_disque)
+    mots_significatifs, doublon_avec = regle if regle else (None, None)
+    doublon, communs = doublon_pour(mission, missions, mots_significatifs, doublon_avec)
+    identifiants = MOTIF_ITEM.findall(objectif) + MOTIF_ITEM.findall(str(mission.get("source") or ""))
+    identifiants = list(dict.fromkeys(identifiants))
+    _, perdues = source_tracable(racine, identifiants)
+    reprise = est_reprise(date_de_charge(mission), maintenant)
+    verdict, motif = proposer_verdict(age, manquants, doublon, perdues, seuil, reprise)
+    return {
+        "age": age, "reprise": reprise, "jetons": jetons, "verifies": verifies,
+        "manquants": manquants, "hors_mesure": hors_mesure, "doublon": doublon,
+        "communs": communs, "source_perdue": perdues, "source_attendue": identifiants,
+        "propose": verdict, "motif": motif,
+    }
+
+
+def mission_ancienne(faits, seuil):
+    """ANCIENNE = a juger AVANT d executer : age illisible, age au seuil, ou RESTAUREE.
+
+    La troisieme branche est celle qui MORD sur un lot rejoue (mesure du 2026-09-22 :
+    37 missions, meme horodatage, age 0-1 jour, critere muet, journal vide).
+    """
+    return faits["age"] is None or faits["age"] >= seuil or faits["reprise"]
+
+
+def juger(racine, mission_id, verdict, motif):
+    """Ajoute UNE ligne au journal des verdicts, par la PORTE (jamais a la main)."""
+    chemin_porte = resoudre_porte(racine)
+    if chemin_porte is None:
+        print("REFUS : la porte d ecriture est introuvable (nom '" + NOM_PORTE_ECRIRE + "').")
+        return 2
+    entree = {
+        "mission": mission_id, "verdict": verdict, "motif": motif,
+        "juge_le": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "par": "operateur",
+    }
+    journal = racine.joinpath(*DOSSIER_CREDIBILITE, NOM_JOURNAL)
+    mode = "ajouter" if journal.is_file() else "creer"
+    commande = [sys.executable, str(chemin_porte), "ecrire", "--fichier", str(journal),
+                "--contenu", json.dumps(entree, ensure_ascii=False, sort_keys=True) + "\n",
+                "--mode", mode]
+    resultat = subprocess.run(commande, capture_output=True, text=True, encoding="utf-8",
+                              errors="replace")
+    sortie = ((resultat.stdout or "") + (resultat.stderr or "")).strip()
+    if resultat.returncode != 0:
+        print("REFUS de la porte : " + sortie[-300:])
+        return 2
+    print("VERDICT TRACE : " + mission_id + " = " + verdict + " (" + mode + ")")
+    return 0
+
+
+def resoudre_porte(racine):
+    """Le chemin de la porte d ecriture, par la RESOLUTION PARTAGEE (M-076), ou None."""
+    commun = racine.joinpath(*DOSSIER_COMMUN)
+    if not (commun / NOM_SERVICE_RESOLUTION).is_file():
+        return None
+    if str(commun) not in sys.path:
+        sys.path.insert(0, str(commun))
+    try:
+        import resolution_outils
+        return Path(resolution_outils.chemin_outil(NOM_PORTE_ECRIRE))
+    except Exception:  # noqa: BLE001 -- une resolution muette ne doit pas lever ici
+        return None
+
+
+def auto_test():
+    """Le MEME detecteur doit MORDRE, et EPARGNER le juge (lecon L-032)."""
+    maintenant = datetime.now()
+    seuil = SEUIL_JOURS
+    hier = maintenant - timedelta(days=1)
+    recent = {"id": "MO-900", "statut": "en-attente", "titre": "sujet tout neuf",
+              "chargee_le": maintenant.strftime("%Y-%m-%d %H:%M:%S"), "objectif": "rien a nommer"}
+    # LE CAS QUI AVAIT ECHAPPE : une mission RESTAUREE (chargee hier, age 0 jour)
+    # DOIT etre ANCIENNE. C est la preuve que le critere mord sur un lot rejoue.
+    restauree = {"id": "MO-903", "statut": "en-attente", "titre": "sujet restauree hier",
+                 "chargee_le": hier.strftime("%Y-%m-%d %H:%M:%S"), "objectif": "rien a nommer"}
+    # LE FAUX POSITIF REPARE : `AVANT/APRES` est du TEXTE, jamais un nom de fichier mort.
+    en_texte = {"id": "MO-904", "statut": "en-attente", "titre": "sujet au texte barre",
+                "chargee_le": maintenant.strftime("%Y-%m-%d %H:%M:%S"),
+                "objectif": "mesurer AVANT/APRES et oui/non sur ce sujet"}
+    vieille = {"id": "MO-901", "statut": "en-attente", "titre": "sujet ancien precis",
+               "chargee_le": (maintenant.replace(year=maintenant.year - 1)).strftime("%Y-%m-%d %H:%M:%S"),
+               "objectif": "reparer cerveau-projet/chemin/qui/n/existe/plus.py"}
+    ancienne_propre = {"id": "MO-902", "statut": "en-attente", "titre": "sujet ancien sain",
+                       "chargee_le": (maintenant.replace(year=maintenant.year - 1)).strftime("%Y-%m-%d %H:%M:%S"),
+                       "objectif": "lire " + Path(__file__).name}
+    missions = {m["id"]: m for m in (recent, vieille, ancienne_propre, restauree, en_texte)}
+    regle = (lambda texte: ["mot"], lambda titre, autres: (None, []))
+    # L index des noms est CELUI DE L OUTIL : un nom qui existe vraiment sur le disque,
+    # sans quoi le cobaye < ancienne saine > ne prouverait rien (il passerait a vide).
+    noms_cobaye = {Path(__file__).name}
+    faits_vieille = mesurer_mission(RACINE_COBAYE, vieille, missions, regle, noms_cobaye, seuil, maintenant)
+    faits_recente = mesurer_mission(RACINE_COBAYE, recent, missions, regle, noms_cobaye, seuil, maintenant)
+    faits_propre = mesurer_mission(RACINE_COBAYE, ancienne_propre, missions, regle, noms_cobaye, seuil,
+                                   maintenant)
+    faits_restauree = mesurer_mission(RACINE_COBAYE, restauree, missions, regle, noms_cobaye, seuil,
+                                      maintenant)
+    faits_texte = mesurer_mission(RACINE_COBAYE, en_texte, missions, regle, noms_cobaye, seuil,
+                                  maintenant)
+    mord = (faits_vieille["propose"] == "perimee" and faits_vieille["manquants"]
+            and mission_ancienne(faits_vieille, seuil))
+    epargne_neuve = (faits_recente["propose"] == "credible"
+                     and not mission_ancienne(faits_recente, seuil))
+    epargne_saine = (faits_propre["propose"] == "credible"
+                     and mission_ancienne(faits_propre, seuil))
+    # LA PREUVE DU DEFAUT REPARE : age SOUS le seuil, et pourtant ANCIENNE (restauree).
+    mord_reprise = (faits_restauree["reprise"] and faits_restauree["age"] < seuil
+                    and mission_ancienne(faits_restauree, seuil))
+    # Le TEXTE a barres obliques est hors mesure, jamais un nom mort (faux positif).
+    epargne_texte = (not faits_texte["manquants"] and faits_texte["hors_mesure"]
+                     and faits_texte["propose"] == "credible")
+    # LA SOURCE NON RELISIBLE N EST PAS UN VERDICT (memoire bornee) : elle INFORME.
+    sans_source = {"id": "MO-905", "statut": "en-attente", "titre": "sujet sans source",
+                   "chargee_le": hier.strftime("%Y-%m-%d %H:%M:%S"),
+                   "source": "entonnoir:EO-1:dev/autre:haute", "objectif": "lire " + Path(__file__).name}
+    missions["MO-905"] = sans_source
+    faits_sans_source = mesurer_mission(RACINE_COBAYE, sans_source, missions, regle, noms_cobaye, seuil,
+                                        maintenant)
+    epargne_source = (bool(faits_sans_source["source_perdue"])
+                      and faits_sans_source["propose"] == "credible")
+    # CONTRE-TEMOIN : une mission du JOUR, meme age, n est PAS ancienne.
+    print("cobaye credibilite : vieille+sujet mort -> " + faits_vieille["propose"]
+          + " (attendu perimee) -- mord : " + str(mord))
+    print("cobaye credibilite : recente -> " + faits_recente["propose"]
+          + " (attendu credible, hors alarme) -- epargnee : " + str(epargne_neuve))
+    print("cobaye credibilite : ancienne saine -> " + faits_propre["propose"]
+          + " (attendu credible) -- epargnee : " + str(epargne_saine))
+    print("cobaye credibilite : RESTAUREE hier, age " + str(faits_restauree["age"])
+          + " j (< seuil " + str(seuil) + ") -> ANCIENNE : " + str(mord_reprise)
+          + " -- mord : " + str(mord_reprise))
+    print("cobaye credibilite : texte AVANT/APRES -> hors-mesure "
+          + str(len(faits_texte["hors_mesure"])) + ", morts "
+          + str(len(faits_texte["manquants"])) + " -- epargne : " + str(epargne_texte))
+    print("cobaye credibilite : source NON relisible -> " + str(faits_sans_source["source_perdue"])
+          + " mais propose " + faits_sans_source["propose"] + " -- epargne : "
+          + str(epargne_source))
+    return (mord and epargne_neuve and epargne_saine and mord_reprise and epargne_texte
+            and epargne_source)
+
+
+def main():
+    parseur = argparse.ArgumentParser(
+        description="Process : une mission ANCIENNE est-elle encore CREDIBLE ?")
+    parseur.add_argument("--racine", default=str(RACINE_DEFAUT), help="racine du depot")
+    parseur.add_argument("--lot", default="", help="ne mesurer que ce lot")
+    parseur.add_argument("--mission", default="", help="ne mesurer que cette mission")
+    parseur.add_argument("--seuil-jours", type=int, default=SEUIL_JOURS,
+                         help="age (jours) a partir duquel une mission est ANCIENNE")
+    parseur.add_argument("--juger", action="store_true", help="TRACER un verdict")
+    parseur.add_argument("--verdict", default="", help="verdict parmi " + ", ".join(VERDICTS))
+    parseur.add_argument("--motif", default="", help="le motif du verdict (obligatoire)")
+    parseur.add_argument("--auto-test", action="store_true", help="ne joue que le cobaye")
+    arguments = parseur.parse_args()
+
+    if arguments.auto_test:
+        ok = auto_test()
+        print("\nVERDICT : " + ("OK" if ok else "KO"))
+        return 0 if ok else 1
+
+    racine = trouver_racine(Path(arguments.racine).resolve())
+    if racine is None:
+        print("REFUS : racine introuvable (aucun fichier de missions du pilote).")
+        return 2
+    missions, message = charger_missions(racine)
+    if missions is None:
+        print("REFUS : " + message)
+        return 2
+
+    if arguments.juger:
+        if arguments.verdict not in VERDICTS:
+            print("REFUS : verdict '" + str(arguments.verdict) + "' hors de la liste fermee : "
+                  + ", ".join(VERDICTS))
+            return 2
+        if not arguments.mission or not arguments.motif.strip():
+            print("REFUS : --juger exige --mission <MO-XXX> et --motif \"...\""
+                  " (un verdict sans motif ne s explique pas).")
+            return 2
+        return juger(racine, arguments.mission, arguments.verdict, arguments.motif.strip())
+
+    regle, avis_regle = charger_regle_doublon(racine)
+    racine_jetons = racine_index(racine)
+    noms_disque = indexer_fichiers(racine_jetons)
+    verdicts, avis_journal = charger_verdicts(racine)
+    maintenant = datetime.now()
+
+    portee = [mission for mission in missions.values()
+              if str(mission.get("statut")) in STATUTS_A_EXECUTER]
+    if arguments.lot:
+        portee = [mission for mission in portee if str(mission.get("lot")) == arguments.lot]
+    if arguments.mission:
+        portee = [mission for mission in portee if str(mission.get("id")) == arguments.mission]
+    portee.sort(key=lambda mission: date_de_charge(mission))
+
+    print("PROCESS DE CREDIBILITE -- missions a executer : " + str(len(portee))
+          + " | ANCIENNE = age >= " + str(arguments.seuil_jours)
+          + " jour(s), age illisible, ou " + MOTIF_REPRISE)
+    print("  " + (PRESENT_FICHIER_REGLE if avis_regle == PRESENT_FICHIER_REGLE else avis_regle))
+    print("  noms indexes : " + str(len(noms_disque)) + " fichier(s) sous " + str(racine_jetons))
+    if avis_journal:
+        print("  " + avis_journal)
+
+    sans_verdict, comptes = [], {}
+    for mission in portee:
+        identifiant = str(mission.get("id"))
+        faits = mesurer_mission(racine, mission, missions, regle, noms_disque,
+                                arguments.seuil_jours, maintenant, racine_jetons)
+        trace = verdicts.get(identifiant, {})
+        verdict_trace = str(trace.get("verdict") or VERDICT_TRACE_INCONNU)
+        comptes[verdict_trace] = comptes.get(verdict_trace, 0) + 1
+        ancienne = mission_ancienne(faits, arguments.seuil_jours)
+        print("  " + identifiant + " [" + str(mission.get("type")) + "] age="
+              + str(faits["age"]) + " j | reprise=" + str(faits["reprise"])
+              + " | noms=" + str(len(faits["jetons"]))
+              + " (morts " + str(len(faits["manquants"]))+")"
+              + ((" " + ", ".join(sorted(faits["manquants"])[:2]))
+                 if faits["manquants"] else "")
+              + (" (texte hors-mesure " + str(len(faits["hors_mesure"])) + ")"
+                 if faits["hors_mesure"] else "")
+              + " | doublon=" + (faits["doublon"] or "aucun")[:40]
+              + " | source=" + ("perdue " + str(faits["source_perdue"][:1])
+                               if faits["source_perdue"] else "relisible")
+              + " | verdict TRACE=" + verdict_trace + " | propose=" + faits["propose"])
+        if ancienne and verdict_trace == VERDICT_TRACE_INCONNU:
+            sans_verdict.append((identifiant, faits))
+
+    for identifiant, faits in sans_verdict:
+        accuser("mission-ancienne-sans-verdict : " + identifiant + " (age " + str(faits["age"])
+                + " j, propose " + faits["propose"] + ") -- " + faits["motif"])
+
+    controler("perimetre-indexe-non-vide", len(noms_disque) > PLANCHER_FICHIERS,
+              str(len(noms_disque)) + " nom(s) de fichier(s) indexes sous " + str(racine_jetons)
+              + " (plancher declare : " + str(PLANCHER_FICHIERS) + ")")
+    controler("regle-de-ressemblance-consommee", regle is not None, avis_regle)
+    controler("missions-anciennes-jugees", not sans_verdict,
+              str(len(sans_verdict)) + " mission(s) ANCIENNE(S) sans verdict sur "
+              + str(len(portee)) + " a executer")
+    hors_liste = sorted(cle for cle in comptes
+                        if cle != VERDICT_TRACE_INCONNU and cle not in VERDICTS)
+    controler("verdicts-traces-dans-la-liste-fermee", not hors_liste,
+              str(len(verdicts)) + " verdict(s) trace(s) au journal"
+              + (" -- HORS LISTE : " + ", ".join(hors_liste) if hors_liste else ""))
+    print("  journal des verdicts : " + (str(len(verdicts)) + " entree(s)" if verdicts
+                                          else "encore AUCUN verdict rendu"))
+
+    if sans_verdict:
+        print("\nVERDICT : LE PROCESS N A PAS ETE JOUE -- " + str(len(sans_verdict))
+              + " mission(s) ANCIENNE(S) seraient executees sans verdict. Les juger AVANT :"
+              " python verifier-credibilite-missions.py --juger --mission <MO-XXX>"
+              " --verdict <" + "|".join(VERDICTS) + "> --motif \"...\"")
+        return 1
+    print("\nVERDICT OK : toute mission ANCIENNE a executer porte un verdict TRACE.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

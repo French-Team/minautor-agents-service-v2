@@ -51,16 +51,23 @@ jamais par un scan a la main.
 ## Verbes
 
 ```
-python main.py tour [--racine <matrix>] [--sans-signal]   une passe, affichee
-python main.py rotation [--racine <matrix>]                borne le journal en ARCHIVANT
-python main.py boucle [--interval <secondes>]              boucle de fond
-python main.py boucle arret                                arret cooperatif
+python3 cerveau-projet/matrix/lancer.py vigie-portes tour [--racine <matrix>] [--sans-signal] [--si-due] une passe, affichee
+python3 cerveau-projet/matrix/lancer.py vigie-portes rotation [--racine <matrix>] borne le journal en ARCHIVANT
+python3 cerveau-projet/matrix/lancer.py vigie-portes boucle [--interval <secondes>] boucle de fond
+python3 cerveau-projet/matrix/lancer.py vigie-portes boucle arret arret cooperatif
 ```
 
 - `--racine` : controler un autre arbre (cobaye). Un controle qu'on ne peut pas
   pieger ne prouve rien (L-032).
 - `--sans-signal` : passe a blanc -- rapport et journal, **aucun** depot dans
   l'inbox. Pour regarder la vigie avant qu'elle tire.
+- `--si-due` : la passe n'est jouee **que si sa cadence declaree est echue** --
+  une passe fraiche n'est pas rejouee, l'age de la derniere est DIT et la
+  derniere photo (portes, alertes, date) est rappelee. C'est le geste du ROUND de
+  l'operateur (demarrer-optimus-prime.md, ORDRE 4.6) : appeler la roue a chaque
+  mission la faisait battre plus vite que ses 900 s declarees, et le garde de
+  cadence accusait alors un battement REEL (mesure du 2026-09-20 : 5 passes en
+  29 min, median 261 s pour 900 s declarees -- EO-291, MO-363).
 
 ## Alertes et anti-spam
 

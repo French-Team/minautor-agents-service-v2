@@ -25,7 +25,9 @@ PERIMETRE = RACINE / "cerveau-projet"
 # La PORTE d'ecriture : la remorque n'ecrit JAMAIS elle-meme. Toute ecriture
 # passe par elle (garde, validation, .bak, SHA) -- mesure MO-171 : une passe
 # d'alignement qui ecrit en direct n'a AUCUNE de ces garanties.
-PORTE_ECRIRE = REPERTOIRE_DATA / "outils" / "ecrire" / "main.py"
+# EO-287 : on declare le NOM, jamais le chemin -- la resolution (et son
+# refus nomme) vit dans data/commun/resolution_outils.py, ou on LA LIT.
+NOM_PORTE_ECRIRE = "ecrire"
 # MO-236 : la RACINE MATRICE se derive du PERIMETRE deja declare -- `REPERTOIRE_DATA`
 # est `matrice/data`, donc son parent est `matrice/` et NON `matrix/`. L'ancienne
 # forme (`REPERTOIRE_DATA.parent / "tmp-optimus"`) visait `matrice/tmp-optimus`,

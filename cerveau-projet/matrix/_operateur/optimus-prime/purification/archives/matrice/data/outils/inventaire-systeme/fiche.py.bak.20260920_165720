@@ -1,0 +1,48 @@
+"""La FICHE machine : la COMPOSER depuis une mesure, l ECRIRE, la RELIRE.
+
+La fiche est la memoire DURABLE de ce que la Matrice sait de sa machine : elle
+survit au redemarrage, la ou une injection ne survit pas. L ecriture est
+ATOMIQUE (tmp + remplacement, LF forces) : un lecteur ne voit jamais une fiche a
+moitie ecrite (M-018).
+
+DEUX LECTURES, une seule mesure :
+  - la fiche ENTIERE (systeme, capacites, reseau, outils) pour le createur ;
+  - la section RESUME MACHINE, courte et bornee, que l injection du pilote sert
+    aux missions (inventaire-systeme lire --resume).
+"""
+import os
+from datetime import datetime
+
+from constants import (CARTE_IDENTITE, CHEMIN_FICHE, CHEMIN_TMP, ENCODAGE, NF,
+                       TITRE_FICHE, TITRE_RESUME)
+
+
+def horodater():
+    """La date-heure locale, au format des journaux de la Matrice."""
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+def texte_mo(valeur):
+    """Une mesure en Mo LISIBLE ; une mesure NON faite est DITE (-), jamais 0."""
+    try:
+        nombre = int(valeur)
+    except (TypeError, ValueError):
+        return "-"
+    return str(nombre) if nombre >= 0 else "-"
+
+
+def texte_go(valeur):
+    """Une mesure en Go LISIBLE ; une mesure NON faite est DITE (-), jamais 0.0."""
+    try:
+        nombre = float(valeur)
+    except (TypeError, ValueError):
+        return "-"
+    return ("%.1f" % nombre) if nombre >= 0 else "-"
+
+
+def version_courte(entree):
+    """La version NUE d un outil pour le resume (Python 3.14.4 -> 3.14.4)."""
+    from mesure import extraire_version
+    if not entree["disponible"]:
+        return "absent"
+    return extraire_version(entree["version"])

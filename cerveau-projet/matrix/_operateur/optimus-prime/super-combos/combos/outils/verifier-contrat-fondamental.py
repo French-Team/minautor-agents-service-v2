@@ -1346,6 +1346,11 @@ def controler_jumeaux(racine):
 # INFORMATIF (il dit combien de crochets ont ete compares), jamais muet.
 CROCHETS_RELATIF = ("pilote", "filtrer", "entry.py")
 CONVENTION_CROCHETS_RELATIVE = ("conventions", "convention-crochets.md")
+# SECOND MIROIR (MO-303) : la liste fermee est aussi DOCUMENTEE pour l'operateur
+# dans MOTS-CLES.md. Ce fichier avait DIVERGE sans que rien ne le dise (six
+# crochets officiels absents, un mot fantome [correction] documente) : le miroir
+# code<->convention ne le regardait pas. Il est desormais regarde.
+MOTS_CLES_RELATIVE = ("pilote", "MOTS-CLES.md")
 LISTES_ENTONNOIR_RELATIF = ("pilote", "entonnoir", "listes.py")
 NOM_TABLE_CROCHETS = "CROCHETS"
 NOM_LISTE_TYPES = "TYPES"
@@ -1353,7 +1358,11 @@ PORTE_DEPOT = ("entonnoir", "deposer")
 # Les lignes de la liste fermee s ecrivent `| [mot] | ... |` : le motif exige le
 # crochet carre en TETE de ligne de tableau (les autres tables du document -- defcon,
 # par exemple -- ne commencent pas par un crochet, elles ne sont donc pas lues).
-MOTIF_CROCHET_CONVENTION = re.compile(r"^\|\s*\[([a-z0-9_-]+)\]")
+# Le `?` est admis pour UN crochet declare : `[???]` (MO-317, demande createur), le
+# seul crochet qui n est PAS un mot francais -- il dit que la demande n est pas encore
+# formulee. L alternative reste STRICTE (un `?` seul ne forme pas un crochet) : la
+# classe n a pas ete ouverte par commodite, seulement ce token.
+MOTIF_CROCHET_CONVENTION = re.compile(r"^\|\s*\[([a-z0-9_?-]+)\]")
 
 
 def valeur_de_champ(noeud, champ):
@@ -1416,6 +1425,35 @@ def comparer_crochets(du_code, de_la_convention):
         ecarts.append("[" + mot + "] present dans la CONVENTION mais ABSENT du code"
                       " -- la convention declare un crochet que le pilote REFUSERA")
     return ecarts, sorted(set(du_code) & set(de_la_convention))
+
+
+def mots_cles_manquants(du_code, du_document):
+    """DECISION PURE : les crochets du CODE absents de la page du pilote.
+
+    Sens UNIQUE et DECLARE : les mots-cles de TRAVAIL ([bug], [tache]...) vivent
+    dans MOTS-CLES.md sans ouvrir de demande, donc l'egalite n'est pas exigee. Ce
+    qui est exige : aucun crochet RECONNU par le pilote ne peut manquer a la page
+    qui est censee le documenter -- sinon le createur croit des mots a lui qui ne
+    routent rien.
+    """
+    return sorted(set(du_code) - set(du_document))
+
+
+def eprouver_mots_cles():
+    """COBAYE du second miroir : un crochet officiel oublie doit etre ACCUSE."""
+    epreuves = (
+        ("tous documentes", ("audit", "outil"), ("outil", "audit", "bug"), 0),
+        ("un mot oublie", ("audit", "outil"), ("outil",), 1),
+        ("page vide", ("audit",), (), 1),
+    )
+    details = []
+    for nom, du_code, du_document, attendu in epreuves:
+        if len(mots_cles_manquants(du_code, du_document)) != attendu:
+            details.append(nom + " : compte errone")
+    print("  cobaye mots-cles : "
+          + ("OK -- " + str(len(epreuves)) + " cas rejoues (l'oublie est accuse)"
+             if not details else "ECHEC -- " + " | ".join(details)))
+    return details
 
 
 def eprouver_crochets():
@@ -1538,9 +1576,27 @@ def controler_crochets(racine):
         ecarts.append("cobaye appartenance (" + detail + ")")
     for detail in eprouver_crochets():
         ecarts.append("cobaye crochets (" + detail + ")")
+    # SECOND MIROIR (MO-303) : la liste fermee doit etre DOCUMENTEE dans la page du
+    # pilote. Un mot reconnu par le code mais absent de MOTS-CLES.md est une demande
+    # du createur qui se perd : le garde l'accuse en le nommant.
+    motscles_path = zone.joinpath(*MOTS_CLES_RELATIVE)
+    if not motscles_path.is_file():
+        ecarts.append("crochets : " + str(motscles_path) + " ABSENT : la liste des mots"
+                      " du pilote n'est pas tenue (le controle se DIT)")
+    else:
+        documentes = crochets_de_la_convention(motscles_path)
+        manquants = mots_cles_manquants(sorted(table), documentes)
+        if manquants:
+            ecarts.append("crochets ABSENTS de pilote/MOTS-CLES.md : "
+                          + ", ".join("[" + mot + "]" for mot in manquants)
+                          + " -- le pilote les RECONNAIT, la page qui les documente pas")
+    for detail in eprouver_mots_cles():
+        ecarts.append("cobaye mots-cles (" + detail + ")")
     if not ecarts:
         print("  " + str(len(communs)) + " crochet(s) au miroir code<->convention, tous EGAUX : "
               + ", ".join(communs))
+        print("  second miroir : les " + str(len(set(table)))
+              + " crochet(s) officiel(s) sont documente(s) dans MOTS-CLES.md")
     return ecarts, []
 
 

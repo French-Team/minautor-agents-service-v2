@@ -13,8 +13,8 @@
 
 | Verbe | Commande |
 |---|---|
-| `auditer` | `python main.py auditer [--plan <chemin>] [--perimetre <dossier>] [--json]` |
-| `aligner` | `python main.py aligner [--plan <chemin>] [--perimetre <dossier>] [--simuler\|--publier]` |
+| `auditer` | `python3 cerveau-projet/matrix/lancer.py domicilier auditer [--plan <chemin>] [--perimetre <dossier>] [--json]` |
+| `aligner` | `python3 cerveau-projet/matrix/lancer.py domicilier aligner [--plan <chemin>] [--perimetre <dossier>] [--simuler\|--publier]` |
 
 **`--simuler` est le DEFAUT** : sans `--publier`, la remorque DIT ce qu elle ferait
 et n ecrit rien (dry-run). Sans `--plan`, elle consomme le plan livre dans

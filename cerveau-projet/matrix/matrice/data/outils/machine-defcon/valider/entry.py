@@ -10,15 +10,15 @@ from commun import (
 from constants import NOMS_NIVEAUX
 from valider.fonctions import verifier_validation
 
-NOMS_OPTIONS = ("--raison",)
+NOMS_OPTIONS = ("raison",)
 
 
 def executer(arguments):
     options = extraire_options(arguments, NOMS_OPTIONS)
-    if not options.get("--raison"):
+    if not options.get("raison"):
         print("Usage : python main.py valider --raison \"...\"")
         return 2
-    raison = options["--raison"]
+    raison = options["raison"]
 
     niveau_avant, message = lire_niveau()
     if niveau_avant is None:

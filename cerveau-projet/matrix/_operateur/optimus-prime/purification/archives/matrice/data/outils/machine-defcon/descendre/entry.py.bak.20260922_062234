@@ -1,0 +1,44 @@
+"""Categorie descendre : descente stricte un echelon a la fois (5->4, 4->3)."""
+from commun import (
+    appliquer_transition,
+    charger_classeur,
+    extraire_options,
+    journaliser_transition,
+    trouver_defcon,
+)
+from constants import NOMS_NIVEAUX
+from descendre.fonctions import verifier_descente
+
+NOMS_OPTIONS = ("niveau", "raison")
+
+
+def executer(arguments):
+    options = extraire_options(arguments, NOMS_OPTIONS)
+    if "--niveau" not in options or not options.get("--raison"):
+        print("Usage : python main.py descendre --niveau <cible> --raison \"...\"")
+        return 2
+    try:
+        cible = int(options["--niveau"])
+    except ValueError:
+        print("Usage : --niveau <1-5>")
+        return 2
+    raison = options["--raison"]
+
+    donnees = charger_classeur()
+    courant, entree = trouver_defcon(donnees)
+    if entree is None:
+        print("Variable 'defcon' absente du classeur : la definir via bdd-variables.")
+        return 1
+    code, message = verifier_descente(courant, cible)
+    if code != 0:
+        print(message)
+        return code
+
+    source = "machine-defcon descendre"
+    appliquer_transition(donnees, entree, cible, source)
+    journaliser_transition(courant, cible, raison, source)
+    print(
+        "defcon " + str(courant) + " -> " + str(cible)
+        + " (" + NOMS_NIVEAUX[cible] + ") -- raison : " + raison
+    )
+    return 0

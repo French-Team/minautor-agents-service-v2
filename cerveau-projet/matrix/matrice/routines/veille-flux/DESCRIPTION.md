@@ -8,8 +8,8 @@
 
 | Etat | Commande | Ce qui tourne |
 |---|---|---|
-| RELAX (defaut) | `python main.py veille` | corriger-ascii (scan+correction) + py_compile global |
-| VIGILE (apres modifications) | `python main.py veille --vigile` | RELAX + les 3 verifier-marbre + verifications cibles |
+| RELAX (defaut) | `python3 cerveau-projet/matrix/lancer.py veille-flux veille` | corriger-ascii (scan+correction) + py_compile global + regeneration du journal visuel |
+| VIGILE (apres modifications) | `python3 cerveau-projet/matrix/lancer.py veille-flux veille --vigile` | RELAX + les 3 verifier-marbre + verifications cibles |
 
 ## Ce que fait chaque passe
 
@@ -25,7 +25,15 @@
 2. corriger-ascii : scan + correction auto (BDD empreintees intouchables,
    caracteres inconnus laisses et signales = probleme plus grave).
 3. py_compile global (syntaxe Python cassee = probleme plus grave).
-4. [VIGILE seulement] verifier-conventions / -regles / -protocoles +
+4. REGENERER le journal visuel de la Matrice (`matrice/journal-multi-encarts.md`,
+   MO-366) : ce document se declare GENERE depuis les BDD et donnait son remede
+   (`construire`) sans qu AUCUN appelant ne l applique -- mesure du 2026-09-23,
+   trois jours de retard sans un signe. Le cout est MESURE (370 ms pour neuf
+   encarts) et le geste est TRACE au journal (retard REPARE + duree). Un refus de
+   la porte devient une DETECTION `visuel-perime` : jamais un silence. Le passant
+   choisi est celui qui EXISTE deja -- une routine neuve aurait duplique toute la
+   machinerie PID/cadence/drapeau pour 370 ms.
+5. [VIGILE seulement] verifier-conventions / -regles / -protocoles +
    verification des cibles de la Matrice (DESCRIPTION.md, main.py, entry.py,
    fonctions.py des outils et routines ; DESCRIPTION + main du pilote).
 
@@ -42,6 +50,8 @@
 - Caractere non convertible laisse en place.
 - Fichier Python qui ne compile pas.
 - Ecart de marbre (conventions/regles/protocoles) en mode VIGILE.
+- Regeneration du journal visuel REFUSEE : le visuel resterait un etat passe lu
+  comme l etat courant (MO-366).
 
 Grave -> message dans `matrice/intercom/matrice/inbox.jsonl` (type
 `alerte-grave`, avec fichier et raison) -> la Matrice peut redonner une

@@ -3,7 +3,8 @@ identite:
   type: lexique-crochets
   appartient_a: matrice
   commun: false
-  version: 1.0
+  version: 1.2
+  maj: 2026-09-20
   cree: 2026-09-19
 ---
 
@@ -16,14 +17,19 @@ identite:
 > Un CROCHET est un mot entre crochets place EN DEBUT d'une demande
 > (`[mot] le reste de la demande`). Il declenche un traitement officiel :
 > la demande est traitee par SA porte, jamais a la main.
+> Attention : le routeur ne JOUE que les CINQ crochets a depot ; pour les autres,
+> la route est IMPRIMEE -- et depuis le 2026-09-20 (MO-303), l'impression DIT que
+> la porte reste a jouer ("ROUTE IMPRIMEE, PAS JOUEE"), au lieu du silence
+> (section 1 bis).
 
-## Les trois familles (ne pas les confondre)
+## Les quatre familles (ne pas les confondre)
 
 | Famille | Qui l'emploie | Effet |
 |---|---|---|
 | **Crochets de DEMANDE** | l'operateur, au debut d'une demande | ouvre un traitement officiel (liste FERMEE) |
 | **Crochets de TRAVAIL** | le pilote (mots-cles) | oriente la demande vers une action, une phase, une priorite |
 | **Crochets de CHAINE** | un theme / parcours | nomme les CASES d'une chaine, **PAS une demande** |
+| **Crochets d'INTERVENTION** | l'operateur, PENDANT une mission | agit sur la mission EN COURS seulement : mini-reflexion, **aucun depot, aucune file** |
 
 Deux mots vivent dans DEUX familles : `[audit]` et `[bilan]` sont a la fois
 des demandes officielles ET des cases de la chaine `[purification]`. Le
@@ -32,7 +38,7 @@ etape. C'est le seul piege de ce lexique.
 
 ---
 
-## 1. Crochets de DEMANDE (liste FERMEE -- 10 mots)
+## 1. Crochets de DEMANDE (liste FERMEE -- 14 mots)
 
 > Source : `_operateur/optimus-prime/conventions/convention-crochets.md`.
 > La liste est FERMEE : tout autre mot n'est pas reconnu et doit d'abord
@@ -40,7 +46,7 @@ etape. C'est le seul piege de ce lexique.
 
 | Mot | Definition | Porte officielle |
 |---|---|---|
-| `[mission]` | Verse une nouvelle mission au vrac (AMONT) ; le classement, la tresse et l'injection suivent le cycle normal. `historiques-missions` reste l'AVAL (le journal des missions finies). | entonnoir, verbe `deposer` |
+| `[mission]` | Verse une nouvelle mission au vrac (AMONT). Le TITRE du depot est EXIGE (`--theme "<titre>"`) : sans lui la porte refuse et RIEN n'est verse. Ce crochet ne DECLARE aucun type : l'item n'est pas classe a la naissance, donc il n'est PAS executable tant qu'un classement ne l'a pas nomme (faits 1 et 2 de la section 1 bis). `historiques-missions` reste l'AVAL (le journal des missions finies). | entonnoir, verbe `deposer` (`--theme` EXIGE) |
 | `[question]` | Suit le theme en 4 parts de LOT : analyse -> recherche approfondie (+ web si besoin) -> contre-analyse (Nemesis incarne en THEME, jamais un agent) -> rapport pour/contre. Le pilote charge optimus-prime pour CHAQUE part, avec SON theme du vivier. | pilote, verbe `lot` |
 | `[audit]` | Lance un audit sur le sujet donne (constat factuel, lecture seule). | entonnoir `deposer` (type audit) |
 | `[revision]` | Lance une revision sur le sujet donne (relire en entier et proposer les changements ; decision du createur obligatoire). | entonnoir `deposer` (type revision) |
@@ -50,6 +56,57 @@ etape. C'est le seul piege de ce lexique.
 | `[bilan]` | Bilan de la derniere heure, des dernieres heures (6 h), des dernieres 24 h, des 3 derniers jours, de la semaine ou du mois. | outil `bilan-periode` |
 | `[preparation]` | Ouvre l'espace de DISCUSSION et PREPARATION hors code : inventorier les natifs, dessiner leurs versions ameliorees non configurables, prioriser la serie, attendre le GO avant tout CREER-OUTIL. | theme `PREPARATION` |
 | `[purification]` | Ordonne la chaine demande -> cartographie -> classification -> audit -> nemesis -> decision -> execution-par-porte -> verification -> bilan : controle et purifie fichiers, BDD, journaux et registres SANS jamais supprimer (archivage ou signalement). La case `[decision]` est OBLIGATOIRE. | theme `PURIFICATION` |
+| `[corriger]` | Demande une CORRECTION explicite : la demande part en REPARATION, CLASSEE A LA NAISSANCE (file, categorie et role poses d'un coup), comme `[outil]`. Avant le 2026-09-20 (MO-303), le mot etait employe par l'operateur SANS etre reconnu : la demande ne declenchait RIEN. | entonnoir `deposer` (type DECLARE reparation) |
+| `[super-combos]` | Le mot NU liste les super-combos disponibles. La forme d'ACTION reste `[super-combos: #N]` (crochet de TRAVAIL, section 2). Avant MO-303, le mot nu n'etait reconnu nulle part. | brique `lancer-super-combos`, `--lister` |
+| `[???]` | Declenche le PARCOURS DEDIE qui CONSTITUE LA CHAINE de missions (manques -> memoire -> audit -> nemesis -> chaine -> depot) AVANT de resoudre : l'ensemble devient UNE mission contenant plusieurs missions a enchainer de bout en bout, mise en file NORMALE sauf urgence. Le SEUL crochet qui n'est PAS un mot francais : `???` DIT que \"la demande ne sera pas toujours precise et claire, donc on ne sait pas encore vraiment comment agir\" (raison du createur). Ajoute le 2026-09-20 (MO-317). | theme `CADRAGE` (`parcours/themes/theme-cadrage.json`) |
+| `[preparer]` | ALIAS officiel de `[???]` : deux mots, une seule porte, le MEME parcours. C'est le mot qu'a employe le createur ; mesure avant MO-317 : il n'etait PAS reconnu (refus nomme). Ajoute le 2026-09-20 (MO-317). | theme `CADRAGE` (le meme parcours) |
+
+## 1 bis. Ce que le routeur JOUE, ce qu'il IMPRIME (mesure du 2026-09-20)
+
+> Sources mesurees : `_operateur/optimus-prime/pilote/filtrer/entry.py` (table
+> `CROCHETS`, dont l'egalite avec la section 1 est tenue par le controle
+> `crochets` du contrat fondamental CV-007) et `entonnoir/vrac/entry.py`.
+> La section 1 donne l'INTENTION de chaque crochet ; celle-ci donne ce qui se
+> passe VRAIMENT, mesure le 2026-09-20.
+
+| Comportement du routeur | Crochets |
+|---|---|
+| **JOUE la porte** (le depot est reellement fait) | `[mission]`, `[audit]`, `[revision]`, `[outil]`, `[corriger]` |
+| **IMPRIME la route** (aucun depot : c'est l'agent qui joue la porte ensuite -- et depuis le 2026-09-20, le routeur l'ECRIT : "ROUTE IMPRIMEE, PAS JOUEE") | `[question]`, `[alerte]`, `[pause]`, `[bilan]`, `[preparation]`, `[purification]`, `[super-combos]`, `[???]`, `[preparer]` |
+
+**Fait 1 -- le TITRE est exige pour les quatre crochets a depot.** Mesure : la
+demande `[mission] <texte>` SEULE rend `REFUS : depot NON joue -- --theme
+requis` (code 2) et ne verse RIEN. Le texte apres le crochet devient
+l'OBJECTIF ; le titre se donne a part. Geste juste :
+`python3 cerveau-projet/matrix/lancer.py pilote filtrer --message "[mission] <texte>" --theme "<titre>"`.
+
+**Fait 2 -- un seul crochet ne declare aucun type : `[mission]`.** `[audit]`,
+`[revision]` et `[outil]` declarent leur type : leur item est CLASSE A LA
+NAISSANCE (file, categorie et role poses d'un coup, et DITS), donc injectable.
+Un `[mission]` retombe au vrac avec une simple PROPOSITION de type : il n'entre
+dans aucune file, donc jamais dans le brin, donc jamais a l'injection. Et rien
+ne le classe tout seul (mesure : le seul appelant automatique de
+`classer_mission` est le depot a type DECLARE ; aucune routine ne classe le
+vrac). Le remede est celui que la porte imprime :
+`python3 cerveau-projet/matrix/lancer.py entonnoir classer --id EO-XXX --type <dev|reparation|doc|audit|revision>`.
+
+**Fait 3 -- deux routes nomment un THEME, pas une porte.** `[preparation]` et
+`[purification]` sont routes vers `preparation/ouvrir` et
+`purification/ouvrir`, or le domicile de la Matrice ne connait AUCUNE brique de
+ces noms (mesure : `lancer.py --lister`). Ce sont les themes
+`parcours/themes/theme-preparation.json` et `theme-purification.json` : pour ces
+deux mots, la colonne "Porte officielle" de la section 1 se lit comme un
+THEME a ouvrir.
+
+**Fait 4 -- ce que coute un `[mission]` sans titre ni type : une mission non
+conforme.** Mesure du fichier des missions (89 missions) : une mission nee d'un
+item par le chemin MANUEL (`charger --item`, `enregistrer --item`) n'a pas de
+`titre` et porte une source COURTE, la ou le pont de l'entonnoir ecrit la forme
+complete (`titre` + `entonnoir:EO-XXX:type/categorie:urgence`). Compte du jour :
+**37 missions sans `titre`**, **27 a source courte**. Une mission sans `titre`
+ne dit pas son titre d'origine, et sa source ne dit plus ni type, ni categorie,
+ni urgence : c'est le visage "non conforme" que prend une demande nee d'un
+`[mission]` qui n'a jamais ete nomme.
 
 ### La variante `[alerte=defcon:N]`
 
@@ -69,6 +126,27 @@ Le meme crochet `[alerte]`, avec le niveau demande explicitement (N de 1 a 5,
 Transitions : MONTEE libre (sauts permis, raison obligatoire) ; DESCENTE stricte
 d'UN echelon a la fois (5 -> 4, 4 -> 3) ; la descente 3 -> 2 passe UNIQUEMENT
 par le verbe `valider`.
+
+---
+
+## 1 ter. Crochets d'INTERVENTION (mission en cours -- 1 mot)
+
+> Un crochet d'INTERVENTION n'ouvre PAS de traitement officiel : il n'entre dans
+> aucune file et ne cree aucune mission. Il n'a de sens que PENDANT une mission --
+> il est donc PERIME des que la mission est close. C'est le createur qui l'emploie,
+> en suivant le travail, quand il voit une incoherence (demande du 2026-09-21).
+
+| Mot | Porte | Ce qu'il declenche |
+|---|---|---|
+| [si] | AUCUNE porte : la mission EN COURS (`mission-en-cours`, verbe `remise-en-question`) | INTERVENTION sur la mission qui tourne : le createur a vu une incoherence, le mot declenche une MINI-REFLEXION -- ce qu'il vient de decouvrir contredit-il ce que je viens de faire dans CETTE mission ? Reprendre l'hypothese, la MESURER, puis optimiser les corrections EN COURS. Rien n'est depose (aucune file, aucune mission) : l'intervention vit et meurt avec la mission, et elle est TRACEE au journal de la mission courante (action `intervention`). Ajoute le 2026-09-21, demande createur. |
+
+**Ou il vit** : la liste fermee `CROCHETS` et la famille `CROCHETS_MISSION`
+(`_operateur/optimus-prime/pilote/filtrer/entry.py`), avec la mini-reflexion
+`MINI_REFLEXIONS` -- un UNIQUE exemplaire, imprime ET porte au journal. Le routeur
+ne l'imprime PAS comme une route a jouer : il joue l'intervention sur place.
+**Ce qu'il laisse** : une ligne au journal de la mission en cours (action
+`intervention`). Sans mission en cours, l'intervention est tenue quand meme et la
+trace DIT qu'il n'y avait ou la poser.
 
 ---
 
@@ -118,21 +196,15 @@ demandes officielles, pas de nouveaux mots.
 
 ---
 
-## 4. Crochets EMPLOYES SANS ETRE RECONNUS (2 mots)
+## 4. Crochets EMPLOYES SANS ETRE RECONNUS (0 mot)
 
-> Verifie par recherche sur TOUT `cerveau-projet` (md, py, json) : ces mots
-> n'existent dans AUCUNE des trois sources. Un crochet non reconnu ne
-> declenche RIEN -- il reste dans le dialogue normal.
+> Verifie par recherche sur TOUT `cerveau-projet` (md, py, json).
 
-| Mot | Constat mesure |
-|---|---|
-| `[corriger]` | Employe par le createur ; **introuvable** dans tout `cerveau-projet`. Le mot reconnu qui porte cette idee est `[bug]` (action `corriger`, priorite haute). |
-| `[super-combos]` (nu, sans numero) | Employe par le createur ; le format RECONNU est `[super-combos: #N]`. Le mot nu n'est reconnu nulle part. |
-
-Ces deux mots sont la seule divergence entre le vocabulaire reel de l'operateur
-et le vocabulaire reconnu. Les faire entrer dans la liste fermee est une
-decision createur (la convention est fermee : elle evolue sur decision, pas
-par usage).
+**AUCUN depuis le 2026-09-20 (MO-303, decision createur).** Les deux mots qui
+vivaient ici -- `[corriger]` et `[super-combos]` nu -- sont ENTRES dans la liste
+fermee (section 1), avec leur porte officielle. Le vocabulaire reel de
+l'operateur et le vocabulaire reconnu coincident de nouveau : toute demande a
+crochet declenche son traitement officiel ou un refus NOMME -- jamais un silence.
 
 ---
 
@@ -144,12 +216,20 @@ crochets de demande :
 
 | Faux crochet | Nature | Exemple |
 |---|---|---|
-| `[nom]`, `[champ]`, `[cle]`, `[fichier]`, `[valeur]`, `[chemin]` | placeholder : "mets ici le nom / le champ / le fichier" | `python main.py editer --fichier [chemin]` |
+| `[nom]`, `[champ]`, `[cle]`, `[fichier]`, `[valeur]`, `[chemin]` | placeholder : "mets ici le nom / le champ / le fichier" | `python3 cerveau-projet/matrix/matrice/pilote/main.py editer --fichier [chemin]` |
 | `[str]`, `[dict]`, `[rel]` | type de valeur dans un contrat | `def charger([str]) -> [dict]` |
 | `[a-z]`, `[a-z0-9]`, `[0-9]`, `[n]`, `[k]`, `[x]` | classe de caracteres d'une REGEX | `^[a-z0-9-]+$` |
 
 Regle simple pour trancher : un crochet de demande est un mot FRANCAIS en
 DEBUT de message. S'il est au milieu d'une phrase d'usage, c'est un placeholder.
+
+**UNE EXCEPTION DECLAREE** (ajoutee le 2026-09-20, MO-317, decision createur) :
+`[???]` est un crochet de DEMANDE bien qu'il ne soit PAS un mot francais -- c'est
+le seul. Son sens, donne mot pour mot par le createur : "la demande ne sera pas
+toujours precise et claire, donc on ne sait pas encore vraiment comment agir". Il
+n'est pas un PLACEHOLDER (section 5) : il est reconnu par le routeur, il a sa porte
+(le theme `CADRAGE`) et il est declare dans la liste fermee. Le `?` n'est admis que
+pour ce token : la classe de caracteres des crochets reste stricte partout ailleurs.
 
 ---
 
@@ -157,29 +237,34 @@ DEBUT de message. S'il est au milieu d'une phrase d'usage, c'est un placeholder.
 
 | Source | Nombre | Contenu |
 |---|---|---|
-| `conventions/convention-crochets.md` | 10 | la liste FERMEE officielle (les demandes) |
-| `pilote/MOTS-CLES.md` | 11 | mots-cles standard + detection + action |
+| `conventions/convention-crochets.md` | 14 | la liste FERMEE officielle (les demandes) |
+| `pilote/MOTS-CLES.md` | 21 | les 14 crochets officiels + 7 mots-cles de TRAVAIL |
 | `matrice/pilote/detecteur-mots-cles.py` | 8 | les mots-cles OUTILLES (action, phase, priorite) |
 
 Ce que la comparaison montre :
 
 - **Reconnus par les TROIS** : `[mission]`, `[revision]` (2 mots seulement).
-- **Officiels mais que le detecteur ignore** : `[audit]`, `[outil]`, `[alerte]`,
-  `[pause]`, `[bilan]`, `[preparation]`, `[purification]` (7 mots) -- normal :
-  ils sont traites par une PORTE (un outil ou un theme), pas par le detecteur
-  de mots-cles.
+- **Officiels mais que le detecteur ignore** : `[audit]`, `[outil]`, `[corriger]`,
+  `[alerte]`, `[pause]`, `[bilan]`, `[preparation]`, `[purification]`,
+  `[super-combos]`, `[???]`, `[preparer]` (11 mots) -- normal : ils sont traites par
+  une PORTE (un depot, un outil ou un theme), pas par le detecteur de mots-cles.
 - **Mots-cles du pilote absents de la liste officielle** : `[bug]`, `[probleme]`,
   `[incoherence]`, `[tache]`, `[correction]`, `[test-reel]`,
   `[super-combos: #N]` (7 mots) -- ils orientent le travail sans ouvrir de
   traitement officiel.
 - **MOTS-CLES.md et le detecteur divergent d'un mot** : `[correction]` figure
-  dans le document, pas dans le detecteur.
+  dans le document, pas dans le detecteur (dette DECLAREE, jamais reparee).
 
-Le total du lexique : **26 mots distincts** = 10 demandes + 7 mots-cles de
-travail + 7 cases de chaine nouvelles + 2 employes sans etre reconnus.
-Soit **28 lignes** dans les tableaux des sections 1 a 4, pour **26 mots
-distincts** : `[audit]` et `[bilan]` y figurent deux fois (demande ET case de
-chaine). Ne comptent PAS a part : la variante `[alerte=defcon:N]`, qui est le
+Le garde (`verifier-contrat-fondamental.py`, controle `crochets`) tient DEUX
+miroirs depuis le 2026-09-20 : code <-> convention (egalite stricte), et liste
+fermee <-> `pilote/MOTS-CLES.md` (tout crochet officiel y est documente, sinon
+le garde accuse en le nommant -- c'est le trou qui laissait la page diverger).
+
+Le total du lexique : **28 mots distincts** = 14 demandes + 7 mots-cles de
+travail + 9 cases de chaine, moins `[audit]` et `[bilan]` qui comptent dans
+deux familles (demande ET case). Soit **30 lignes** dans les tableaux des
+sections 1 a 4 (la section 4 est VIDE : ses deux mots sont entres dans la liste
+fermee). Ne comptent PAS a part : la variante `[alerte=defcon:N]`, qui est le
 MEME mot que `[alerte]`, ni l'exemple `[super-combos: #1]`, qui est une forme
 de `[super-combos: #N]`.
 

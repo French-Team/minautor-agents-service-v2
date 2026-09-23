@@ -25,9 +25,9 @@ Combo dedie a la BDD **Classeur des variables (classeur-variables.json)** (`vari
 ## Usage
 
 ```bash
-python main.py executer [--tag <tag>] [--mission <id>]
-python main.py lire [--tag <tag>]
-python main.py status
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-002-variables/main.py executer [--tag <tag>] [--mission <id>]
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-002-variables/main.py lire [--tag <tag>]
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-002-variables/main.py status
 ```
 
 ## Tags de la BDD

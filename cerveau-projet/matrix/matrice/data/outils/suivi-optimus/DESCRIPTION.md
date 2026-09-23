@@ -8,14 +8,18 @@
 ## Options
 
 ```
-python main.py noter --mission MO-XXX --theme SUIVI --action <action> --detail "..."  (Optimus : MO- ; M- = cameleon)
+python3 cerveau-projet/matrix/lancer.py suivi-optimus noter --mission MO-XXX --theme SUIVI --action <action> --detail "..." (Optimus : MO- ; M- = cameleon)
                      [--fichiers "a,b"] [--portes "a,b"] [--duree-s N]
-python main.py lire [--mission M] [--action <action>] [--n N]
-python main.py verifier
-python main.py coherence [--racine <matrix>]  (croise la file du pilote et le journal)
-python main.py archiver [--racine <matrix>] [--doublons]   (sort du journal les hors
+python3 cerveau-projet/matrix/lancer.py suivi-optimus lire [--mission M] [--action <action>] [--n N]
+python3 cerveau-projet/matrix/lancer.py suivi-optimus verifier
+python3 cerveau-projet/matrix/lancer.py suivi-optimus coherence [--racine <matrix>] (croise la file du pilote et le journal)
+python3 cerveau-projet/matrix/lancer.py suivi-optimus archiver [--racine <matrix>] [--doublons] (sort du journal les hors
                                                perimetre OPTIMUS, en les ARCHIVANT)
-python main.py vue   (genere la vue markdown dediee _operateur/optimus-prime/suivi-optimus.md)
+python3 cerveau-projet/matrix/lancer.py suivi-optimus corriger [--mission MO-XXX] --motif "..." [--simuler oui] [--racine <matrix>]
+                                               (corrige EN PLACE une duree_s DECLAREE qui CONTREDIT la mesure des
+                                               bornes ; la valeur honnete est VIDE, l'ancienne reste relisible
+                                               dans `corrections`)
+python3 cerveau-projet/matrix/lancer.py suivi-optimus vue (genere la vue markdown dediee _operateur/optimus-prime/suivi-optimus.md)
 ```
 
 - `--action` : action fermee (enum, voir constants.py) -- obligatoire.
@@ -23,12 +27,19 @@ python main.py vue   (genere la vue markdown dediee _operateur/optimus-prime/sui
 - `--mission` / `--theme` : contexte de la mission (facultatif).
 - `--fichiers` / `--portes` : listes separees par des virgules (facultatif).
 - `--duree-s` : duree en secondes (facultatif).
+- **DEUX BORNES IDENTIQUES = DUREE INCONNUE** (decision createur du 2026-09-21) : le
+  recap affiche `inconnue`, jamais `0`. Mesure : 59 missions portent un `debut` a la
+  seconde exacte de leur `fin` -- un debut POSE APRES COUP par le garde
+  anti-fin-orphelin, pas une mission de zero seconde. Un zero seconde n'est pas une
+  mesure : c'est un artefact, et il se lisait comme un fait (L-055).
 - `lire --n N` : les N derniers evenements (tous si absent).
 - `coherence` : croise les DEUX traces d'optimus -- la FILE DU PILOTE
   (`_operateur/optimus-prime/pilote/file-missions-optimus.json`, + son archive)
   et CE JOURNAL. Ecart = divergence a reparer (code 1) ; dette = etat transitoire
   legitime ou residu hors perimetre (signale, code 0). `--racine <matrix>` cible
   un autre arbre (sert aux cobayes).
+
+- `corriger` : corrige EN PLACE une **duree_s DECLAREE** qui CONTREDIT la mesure des bornes (EO-269, decision operateur du 2026-09-19). Le journal est en AJOUT SEUL : on ne supprime rien, on corrige, donc la date, l'action et le detail SURVIVENT. L'ancienne valeur est GARDEE DANS l'entree (`corrections` : date, motif, duree_s_avant, duree_s_apres, mesure). La VALEUR HONNETE EST VIDE, PAS LA DUREE MESUREE : le pilote n'a pas mesure, c'est la VUE qui calcule. `--simuler oui` montre sans ecrire ; `--racine <matrix>` cible un cobaye.
 
 ## Ce que `coherence` attrape (et pourquoi il existe)
 
@@ -62,6 +73,7 @@ flux (on ne bloque pas une chaine parce qu'un agent est en train de declarer).
 | `depot` | mission deposee au vrac de l'entonnoir (E-XXX) |
 | `decision` | GO / arbitrage du createur |
 | `decouverte` | constat d'audit interne (ex : angle mort detecte) |
+| `intervention` | INTERVENTION du createur sur la mission EN COURS (crochet `[si]`, 2026-09-21) : mini-reflexion de remise en question, tenue pendant le round et morte avec lui. Le mot vit dans la liste fermee `CROCHETS` du pilote (`filtrer/entry.py`) ; c'est le routeur qui pose cette ligne, sur la mission COURANTE -- et il DIT quand il n'y a aucune mission ou la poser. |
 | `bilan` | bilan-periode demande et rendu |
 
 PAS d'entree par fichier edite : bdd-modifications couvre ce niveau (doublon interdit).
@@ -86,6 +98,7 @@ Plus un etalon `suivi-optimus.jsonl.sha256` (empreinte recalculee a chaque ajout
 | verifier/ | integrite SHA-256 (etalon-or) |
 | coherence/ | croiser la file du pilote et le journal (verbe `coherence`) |
 | archiver/ | sortir du journal actif ce qui ne doit pas y etre : evenements HORS PERIMETRE, ou DOUBLONS debut/fin (verbe `archiver`, option `--doublons`) |
+| corriger/ | corriger EN PLACE une declaration qui CONTREDIT la mesure (verbe `corriger`, champ `duree_s`) |
 
 ## Ce que fait `archiver` (et pourquoi il existe)
 
@@ -114,6 +127,33 @@ les **ARCHIVE** dans `suivi-optimus-doublons.jsonl` (jamais de suppression).
 **Le premier evenement fait foi** : c'est le fait d'origine, le suivant est la
 copie accidentelle. Les autres actions (`porte`, `depot`, `decision`,
 `decouverte`, `bilan`) se repetent legitimement et ne sont jamais touchees.
+
+## Ce que fait `corriger` (et pourquoi il existe)
+
+Decision operateur du 2026-09-19 (suite d'EO-267/EO-268) : le pilote declarait
+`duree_s = 0` a chaque cloture -- un PLACEHOLDER, jamais une mesure. EO-267 a
+repare la SOURCE (la vue CALCULE la duree des deux bornes) ; il restait
+l'HISTOIRE : 146 ecarts mesures par `verifier-placeholders` dans le journal, et
+AUCUNE porte pour les corriger. Une duree fausse se lit comme un fait (L-055) :
+le mensonge etait dans la DONNEE, pas dans l'affichage.
+
+`corriger` ne fait qu'UNE chose, et il ne la devine jamais : un evenement qui
+DECLARE une duree NON VIDE differente de la mesure des bornes de SA mission est
+corrige EN PLACE (date, action et detail conserves ; ancienne valeur GARDEE dans
+`corrections`). Tout le reste est laisse INTACT :
+
+| Cas | Verdict |
+|---|---|
+| declaration egale a la mesure (zero legitime compris) | FAIT -- jamais touchee |
+| valeur vide (silence) | pas une declaration -- jamais accusee |
+| mission sans les deux bornes | aucune mesure possible -- laissee intacte |
+| ligne illisible au journal | REFUS, journal INTACT (aucune ligne perdue) |
+| mission inconnue, ou `--motif` absent | REFUS, aucune ecriture |
+
+Ordonnancement : mesurer, refuser si une ligne serait perdue, reecrire (atomique),
+resceller l'empreinte. Deuxieme passage = < rien a corriger > (idempotent). Mesure
+du 2026-09-20 : 377 declarations corrigees, 866 -> 866 lignes, et le garde
+`verifier-placeholders` repasse de 146 ecarts a 0.
 
 ## Protections
 

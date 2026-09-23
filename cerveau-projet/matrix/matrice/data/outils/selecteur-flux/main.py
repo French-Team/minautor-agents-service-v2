@@ -150,7 +150,22 @@ def historique(derniers: int = 10):
     return 0
 
 
+USAGE = ("Usage : python main.py actuel | basculer <flux1|flux2> --par <qui> [--raison <texte>]"
+         " | historique [--derniers <n>]")
+# Les options LONGUES que ce parseur connait : le DOMICILE refuse les autres et les
+# NOMME (T3 de PB-002, MO-302). MESURE du 2026-09-20 : `--option-bidon-mo202 1` rendait
+# code 2 en accusant la VALEUR ("argument commande: invalid choice: '1'") -- argparse
+# met de cote un optionnel inconnu, et la fautive n etait donc JAMAIS nommee : un refus
+# muet, comme les 32 de la chaine PB-002. La carte l annoncait "conforme par un autre
+# chemin" : la MESURE a dementi, et c est la mesure qui decide.
+OPTIONS = ("par", "raison", "derniers")
+
+
 def principal(arguments):
+    from options import extraire_options
+    # Le garde du DOMICILE passe AVANT argparse : lui seul NOMME l option fautive (et
+    # le texte du refus n existe qu une fois, au domicile -- M-076).
+    extraire_options(arguments, OPTIONS, outil="selecteur-flux", usage=USAGE)
     parser = argparse.ArgumentParser(description="Selecteur de flux Matrice")
     subparsers = parser.add_subparsers(dest="commande", help="Commande a executer")
     

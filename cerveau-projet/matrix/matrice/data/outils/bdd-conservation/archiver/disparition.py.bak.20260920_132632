@@ -1,0 +1,236 @@
+"""Le verbe qui DECLARE une disparition (EO-276, mission MO-310).
+
+Mesure du 2026-09-20 : 17 points de restauration de la famille avaient quitte le
+disque SANS passer par une porte (zones jetables tmp-optimus et tmp-cameleon
+purgees). Le registre les gardait non-archives, `controler-archives` les comptait
+en ECART -- et RIEN ne pouvait les solder :
+
+  - `archiver` exige un FICHIER A DEPLACER : il n y en avait plus ;
+  - `purger` exige une archive : il n y en avait pas ;
+  - reposer un temoin (le lot) REMPLACAIT le precedent, donc la PREUVE de la
+    disparition s effacait au lot suivant.
+
+Ce module est le VERBE MANQUANT. Il ne deplace rien et ne supprime rien : il
+DECLARE un fait, la ou il s est produit, en GARDANT tout ce qui reste.
+
+CE QU IL TIENT (et pourquoi chaque regle existe) :
+
+  1. DEJA DECLARE -> REFUS : deux declarations feraient deux traces pour un fait ;
+  2. LE POINT EST LA -> REFUS : une disparition ne se declare pas sur un fichier
+     present. S il est la, c est une ROTATION qui s applique, pas un fait ;
+  3. LE CONTENU VIT DANS L ARCHIVE -> REFUS : ce n est pas une disparition, c est
+     une rotation deja faite -- `restaurer` sait y revenir ;
+  4. AUCUN TEMOIN NE PORTE LE POINT -> REFUS : la preuve de la disparition EST le
+     temoin (il l a vu, ou il dit qu il l a deja perdu). Une declaration sans
+     temoin serait une parole -- et c est ce que cette Matrice refuse ;
+  5. RAISON ET MISSION OBLIGATOIRES : une trace sans motif ni auteur se lirait
+     comme une opinion.
+
+CE QU IL N EFFACE JAMAIS : l entree RESTE dans le registre, elle GARDE la derniere
+mesure connue (sha, octets, lignes) -- c est elle qui permet au temoin suivant de
+ne plus perdre l octet d un point qu il ne peut plus lire --, elle porte la date,
+la raison, la mission et la preuve de la declaration, et le manifeste append-only
+recoit une ligne `disparition`. Seule la DESTINATION est retiree : c etait une
+promesse pour un fichier qui n existe plus (un element ne porte jamais deux
+verites).
+
+CE QU IL SERT : `controler-archives` cesse d accuser (une disparition DECLAREE
+n est plus un ecart, c est un fait compte), `controler-borne` cesse de declarer
+une place vide, et le plafond des actes en attente (P4) retrouve un stock sain :
+un point qui ne reviendra JAMAIS n attend plus.
+
+ORDRE DES IMPORTS : `constants` d abord -- c est LUI qui met `data/commun` sur le
+chemin (le motif racine y vit), et `cible` n est importable qu apres lui.
+"""
+from constants import (
+    NOM_LIGNE_DISPARITION, OPERATION_DECLARER_DISPARITION, STATUT_DISPARU,
+    TAG_FAMILLE_RESTAURATION, VERDICT_DISPARU,
+)
+from cible import resoudre, resoudre_dans_matrice
+
+from archiver.fonctions import (
+    ajouter_manifeste, horodater, lire_temoin, relatif_matrice,
+)
+
+REFUS_DEJA_DISPARU = "REFUS (element deja declare disparu)"
+REFUS_POINT_PRESENT = "REFUS (le point est PRESENT sur le disque : une disparition ne se declare pas)"
+REFUS_CONTENU_VIVANT = "REFUS (le contenu vit dans l archive : c est une ROTATION, pas une disparition)"
+REFUS_SANS_TEMOIN = "REFUS (aucun temoin ne porte ce point : la disparition ne serait pas prouvable)"
+REFUS_SANS_SOURCE = "REFUS (l entree ne porte aucune source : il n y a rien a declarer)"
+REFUS_SANS_RAISON = "REFUS (raison obligatoire : une declaration sans motif se lirait comme une opinion)"
+REFUS_SANS_MISSION = "REFUS (mission obligatoire : une declaration sans auteur n est pas une trace)"
+# Les refus qui ne sont PAS des anomalies : relancer le lot doit rendre le meme
+# etat (idempotence). Le reste APPREND quelque chose et rend le lot KO.
+REFUS_IDEMPOTENTS = (REFUS_DEJA_DISPARU,)
+
+
+def temoin_du_point(chemin_temoin, identifiant):
+    """(element, date) du temoin qui porte cet identifiant, ou (None, "").
+
+    Le temoin est LA PREUVE : il dit qu il a VU le point (il en garde la mesure
+    exacte) ou qu il l avait DEJA PERDU (`origine` introuvable). Les deux cas
+    autorisent la declaration : dans le premier la mesure est connue, dans le
+    second le temoin DIT que personne ne l a plus -- un element sans mesure est
+    declare, jamais invente.
+    """
+    temoin = lire_temoin(chemin_temoin)
+    if not isinstance(temoin, dict):
+        return None, ""
+    for element in temoin.get("elements", []):
+        if element.get("id") == identifiant:
+            return element, str(temoin.get("date", ""))
+    return None, ""
+
+
+def _texte_mesure(octets, sha):
+    """La derniere mesure, ECRITE -- ou l aveu qu il n y en a aucune."""
+    if octets in (None, ""):
+        return "AUCUNE (le temoin l avait deja perdu : la disparition precede le temoin)"
+    return (str(octets) + " octet(s), sha " + (str(sha)[:16] + "..." if sha else "inconnu"))
+
+
+def declarer_un(entree, donnees, depart, chemin_manifeste, chemin_temoin, raison, mission,
+                simuler=False):
+    """Declare la disparition d UN element. Rend (code, message).
+
+    L ORDRE des refus est le contrat : ce qui est DEJA declare d abord (la trace
+    parle avant le disque), puis ce qui est encore LA, puis ce que l archive garde,
+    puis la preuve, puis la trace (raison et mission). Un refus ne laisse AUCUNE
+    ecriture derriere lui : la porte ne pose pas de point quand elle refuse.
+    """
+    identifiant = str(entree.get("id", ""))
+    if entree.get("statut") == STATUT_DISPARU:
+        return 1, REFUS_DEJA_DISPARU + " : " + identifiant
+    source = str(entree.get("source", ""))
+    if not source:
+        return 1, REFUS_SANS_SOURCE + " : " + identifiant
+    chemin_source, _ = resoudre(source, depart)
+    if chemin_source is not None and chemin_source.is_file():
+        return 1, REFUS_POINT_PRESENT + " : " + relatif_matrice(chemin_source, depart)
+    chemin_archive_element, _ = resoudre_dans_matrice(str(entree.get("archive", "")), depart)
+    if chemin_archive_element is not None and chemin_archive_element.is_file():
+        return 1, REFUS_CONTENU_VIVANT + " : " + relatif_matrice(chemin_archive_element, depart)
+    element_temoin, date_temoin = temoin_du_point(chemin_temoin, identifiant)
+    if element_temoin is None:
+        return 1, (REFUS_SANS_TEMOIN + " : " + identifiant + " (temoin : "
+                   + str(chemin_temoin) + ")")
+    if not raison:
+        return 1, REFUS_SANS_RAISON
+    if not mission:
+        return 1, REFUS_SANS_MISSION
+    if simuler:
+        return 0, ("SIMULATION : disparition declaree de " + identifiant + " (" + source
+                   + ") -- statut " + str(entree.get("statut")) + " -> " + STATUT_DISPARU
+                   + ", " + _texte_mesure(element_temoin.get("octets"), element_temoin.get("sha")))
+
+    statut_avant = str(entree.get("statut", ""))
+    verdict_avant = str(entree.get("verdict", ""))
+    destination_avant = str(entree.get("destination", ""))
+    archive_declaree = str(entree.get("archive", ""))
+    octets = element_temoin.get("octets")
+    sha = element_temoin.get("sha")
+    lignes = element_temoin.get("lignes")
+    origine_temoin = str(element_temoin.get("origine", ""))
+    date = horodater()
+
+    entree["statut"] = STATUT_DISPARU
+    entree["verdict"] = VERDICT_DISPARU
+    entree["operation"] = OPERATION_DECLARER_DISPARITION
+    entree["date"] = date
+    entree["mission"] = mission
+    entree["raison"] = raison
+    # LA DERNIERE MESURE CONNUE EST FIXEE ICI : c est elle qui permet au temoin
+    # SUIVANT de lire l octet d un point qu il ne peut plus mesurer. Sans ce
+    # report, le poids du point mourait avec le temoin qui l avait vu.
+    if octets not in (None, ""):
+        entree["octets_avant"] = int(octets)
+    if sha:
+        entree["sha_avant"] = sha
+    if lignes:
+        entree["lignes_avant"] = lignes
+    entree["restaurable"] = False
+    entree["destination"] = ""
+    preuve = ("DISPARITION DECLAREE le " + date + " par " + mission + " : " + raison
+              + " ; mesures : source absente du disque (" + source + "), rien dans l archive ("
+              + (archive_declaree or "aucune archive declaree") + "), "
+              + _texte_mesure(octets, sha) + " ; temoin du " + (date_temoin or "inconnu")
+              + " : " + (origine_temoin or "sans origine") + " ; statut avant "
+              + statut_avant + "/" + verdict_avant
+              + ", destination abandonnee : " + (destination_avant or "aucune"))
+    ancienne_preuve = str(entree.get("preuve", ""))
+    entree["preuve"] = (ancienne_preuve + " | " if ancienne_preuve else "") + preuve
+
+    ajouter_manifeste(chemin_manifeste, {
+        "type": NOM_LIGNE_DISPARITION,
+        "id": identifiant,
+        "date": date,
+        "mission": mission,
+        "source": source,
+        "categorie": entree.get("categorie", ""),
+        "statut_avant": statut_avant,
+        "verdict_avant": verdict_avant,
+        "octets_derniere_mesure": (int(octets) if octets not in (None, "") else None),
+        "sha_derniere_mesure": str(sha or ""),
+        "temoin": {"date": date_temoin, "origine": origine_temoin,
+                   "octets": element_temoin.get("octets")},
+        "raison": raison,
+        "preuve": preuve,
+    })
+    return 0, ("disparition declaree : " + identifiant + " (" + source + ") -- "
+               + _texte_mesure(octets, sha)
+               + " ; la trace reste dans le registre et au manifeste")
+
+
+def declarer_lot(donnees, depart, chemin_manifeste, chemin_temoin, raison, mission,
+                 simuler=False):
+    """Declare TOUTES les disparitions PROUVEES de la famille des points.
+
+    La population est MESUREE avant d etre traitee : les entrees de la famille qui
+    portent une DECISION et dont le point n est plus sur le disque. Un element dont
+    le point est EN PLACE n entre PAS dans la population -- sinon le lot rendrait un
+    refus par point en place (315 le 2026-09-20) et noierait les vrais refus.
+
+    Les refus qui restent sont ceux qui APPRENNENT quelque chose : contenu vivant
+    dans l archive, aucune preuve. `deja declare` en est exclu : relancer le lot
+    doit rendre le meme etat (idempotence), et un lot non idempotent ne peut pas
+    etre joue par une cloture sans mentir sur son verdict.
+    """
+    candidats = []
+    en_place = 0
+    for entree in donnees.get("elements", []):
+        if "bak" not in entree.get("tags", []):
+            continue
+        if entree.get("statut") in (STATUT_DISPARU, "supprime", "archive", "restaure"):
+            continue
+        if not entree.get("verdict"):
+            continue
+        chemin, _ = resoudre(str(entree.get("source", "")), depart)
+        if chemin is not None and chemin.is_file():
+            en_place += 1
+            continue
+        candidats.append(entree)
+
+    declares = []
+    refuses = []
+    for entree in candidats:
+        code, message = declarer_un(entree, donnees, depart, chemin_manifeste, chemin_temoin,
+                                    raison, mission, simuler)
+        if code == 0:
+            declares.append(str(entree.get("id", "")))
+        else:
+            refuses.append((str(entree.get("id", "")), message))
+
+    print("POPULATION (une decision portee, le point ABSENT du disque) : " + str(len(candidats))
+          + " -- points EN PLACE, hors population : " + str(en_place))
+    print("ARRIVEE : " + str(len(declares)) + " / " + str(len(candidats))
+          + " disparition(s) declaree(s)" + (" (SIMULATION)" if simuler else ""))
+    for identifiant, message in refuses:
+        print("  [" + identifiant + "] " + message)
+    anomalies = [(identifiant, message) for identifiant, message in refuses
+                 if not message.startswith(REFUS_IDEMPOTENTS)]
+    if anomalies:
+        print("REFUS QUI APPRENNENT QUELQUE CHOSE : " + str(len(anomalies)))
+    else:
+        print("REFUS QUI APPRENNENT QUELQUE CHOSE : 0 (les refus restants ne sont que des"
+              " declarations deja faites -- le lot est idempotent)")
+    return 1 if anomalies else 0

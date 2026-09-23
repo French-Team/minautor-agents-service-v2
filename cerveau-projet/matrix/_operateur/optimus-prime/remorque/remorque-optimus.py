@@ -41,21 +41,47 @@ NOMS_ETAT = ("__pycache__",)
 # angle mort.
 
 
+CHEMIN_DOMICILE_MOTIF = RACINE_MATRIX / "matrice" / "data" / "outils" / "ecrire" / "constants.py"
+
+
 def charger_motif_point_restauration():
-    """Le motif du point de restauration, LU depuis son DOMICILE (porte ecrire)."""
-    chemin = RACINE_MATRIX / "matrice" / "data" / "outils" / "ecrire" / "constants.py"
-    if not chemin.is_file():
-        return None
+    """Le motif du point de restauration, LU depuis son DOMICILE (porte ecrire).
+
+    Rend (motif, raison) : motif compile (raison None), ou None AVEC la raison
+    NOMMEE qui empeche de juger -- domicile absent, import casse, nom disparu,
+    motif invalide. Une remorque qui ne peut pas lire ce motif ne fait pas
+    semblant : un .bak non reconnu serait compte comme equipement et enverrait
+    reparer un fichier innocent (L-121 : n a pas pu lire son domicile, le DIRE).
+    """
+    if not CHEMIN_DOMICILE_MOTIF.is_file():
+        return None, ("domicile du motif absent : " + str(CHEMIN_DOMICILE_MOTIF))
     try:
-        spec = importlib.util.spec_from_file_location("domicile_forme_bak", str(chemin))
+        spec = importlib.util.spec_from_file_location("domicile_forme_bak", str(CHEMIN_DOMICILE_MOTIF))
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        return re.compile(module.MOTIF_BAK_HORODATE)
-    except (ImportError, OSError, SyntaxError, AttributeError, re.error):
-        return None
+        return re.compile(module.MOTIF_BAK_HORODATE), None
+    except AttributeError:
+        return None, ("MOTIF_BAK_HORODATE introuvable dans " + str(CHEMIN_DOMICILE_MOTIF))
+    except (ImportError, OSError, SyntaxError) as erreur:
+        return None, ("import du domicile du motif impossible : " + type(erreur).__name__ + " : " + str(erreur))
+    except re.error as erreur:
+        return None, ("MOTIF_BAK_HORODATE invalide : " + str(erreur))
 
 
-MOTIF_POINT_RESTAURATION = charger_motif_point_restauration()
+MOTIF_POINT_RESTAURATION, RAISON_MOTIF_INDISPONIBLE = charger_motif_point_restauration()
+
+
+def refuser_motif_indisponible():
+    """Une remorque qui ne peut pas juger les .bak le DIT et ne rend AUCUN verdict."""
+    if RAISON_MOTIF_INDISPONIBLE is None:
+        return False
+    print("REFUS : motif des points de restauration ILLISIBLE -- la remorque ne peut pas")
+    print("distinguer un .bak (exempte) d un equipement, et ne rend donc AUCUN verdict,")
+    print("pour ne pas accuser un fichier innocent (L-121).")
+    print("- cause  : " + RAISON_MOTIF_INDISPONIBLE)
+    print("- remede : reparer le domicile du motif (porte ecrire : constants.py,")
+    print("           MOTIF_BAK_HORODATE) PUIS relancer la remorque")
+    return True
 
 
 def est_point_restauration(nom):
@@ -110,6 +136,8 @@ def collecter():
 def main():
     if len(sys.argv) != 2 or sys.argv[1] not in ("inventorier", "etat"):
         print(__doc__)
+        return 2
+    if refuser_motif_indisponible():
         return 2
     if sys.argv[1] == "inventorier":
         equipements, restaurations = collecter()

@@ -25,9 +25,9 @@ Combo dedie a la BDD **Modifications par fichier (modifications-par-fichier.json
 ## Usage
 
 ```bash
-python main.py executer [--tag <tag>] [--mission <id>]
-python main.py lire [--tag <tag>]
-python main.py status
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-004-modifications/main.py executer [--tag <tag>] [--mission <id>]
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-004-modifications/main.py lire [--tag <tag>]
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-004-modifications/main.py status
 ```
 
 ## Tags de la BDD

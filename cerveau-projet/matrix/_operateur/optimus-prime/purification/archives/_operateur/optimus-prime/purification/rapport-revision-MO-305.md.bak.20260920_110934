@@ -1,0 +1,68 @@
+---
+identite:
+  type: dossier-revision
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# REVISION : LA DUREE DE VIE DES TRACES (rotations, .bak, archives, audits, constats)
+
+> Demande createur ([revision], item EO-300, mission MO-304) : "pourquoi doivent-ils vivre
+> si longtemps, si les informations importantes sont dans les BDD ?" Reponse en MESURES,
+> pas en opinions. La revue est LECTURE SEULE : aucun fichier de trace n'a ete touche.
+
+## 1. Ce qui existe deja (les mecanismes, mesures le 2026-09-20)
+
+| Mecanisme | Ce qu'il fait | Mesure du jour |
+|---|---|---|
+| La porte `ecrire` | pose un .bak horodate AVANT chaque publication : c'est la SECURITE 1 du createur | 1191 fichiers `.bak.*`, 17,1 Mo |
+| `bdd-conservation` | propose -> classe -> DECIDE -> ARCHIVE, par FAMILLE de fichier | 309 familles connues |
+| BORNE N=1 | UN SEUL point de restauration EN PLACE par famille | TENU : 308 pour 309 |
+| l'acte de rotation | `bdd-conservation archiver --lot oui` : sort les points decides `archiver` | 214 actes EN ATTENTE, jamais joues |
+| la `fin` du pilote | DECLARE l'acte ("python main.py archiver --lot oui") et s'arrete la | dit, mais ne joue pas |
+| les ARCHIVES | `purification/archives/` : l'etat d'une Matrice passee | 684 fichiers, 15 Mo, SANS duree de vie |
+| les BDD | `bdd-modifications` porte empreinte + detail par fichier ; les journaux portent les faits | c'est la que l'information vit |
+| git | le contenu de tout fichier ENGAGE est recouvrable | depot suivi, derniere activation 2026-09-19 |
+
+## 2. Les quatre verdicts mesures
+
+**V1 -- la masse des .bak n'est pas gouvernee par la BORNE N=1.** La borne tient sur les
+points DECIDES (308/309), mais chaque ECRITURE cree un NOUVEAU .bak horodate
+(`CROCHETS.md.bak.20260920_094427`, `...-3`, `...-4`) : 1191 fichiers sur disque, dont un
+seul par famille est enregistre. Les copies en trop vivent SANS duree de vie : c'est la
+reponse directe a la question du createur -- elles ne vivent longtemps par AUCUNE decision,
+elles vivent longtemps par ABSENCE d'acte.
+
+**V2 -- l'acte existe, rien ne le joue.** 214 decisions `archiver` attendent. La `fin`
+DECLARE la commande et s'arrete : le tour est repousse a chaque round, la masse grandit
+seule. Un mecanisme dont l'acte est manuel n'est pas une politique, c'est une intention.
+
+**V3 -- les archives n'ont pas de duree de vie, et rien ne les lie a git.** 684 fichiers,
+15 Mo, conserves indefiniment. `controler-archives` existe, mais aucun critere ne dit
+"cette archive est recouvrable ailleurs, elle peut sortir".
+
+**V4 -- l'intuition du createur est juste, avec UNE exception qu'il faut nommer.**
+L'information VIT dans les BDD (empreinte + detail) et le CONTENU des fichiers engages vit
+dans git. Exception : le .bak d'un fichier NON ENGAGE est la seule copie de l'avant-dernier
+etat -- le supprimer avant le commit detruirait la seule sequence de secours. Donc : la
+suppression AVANT commit est la bonne discipline SI ET SEULEMENT SI ce qui sort est soit
+engage, soit remplace par un point de restauration enregistre dans la BDD de conservation.
+
+## 3. La politique proposee (decision du createur requise)
+
+| # | Proposition | Securite |
+|---|---|---|
+| P1 | La `fin` du pilote JOUE les actes de rotation en attente (`bdd-conservation archiver --lot oui`) au lieu de les declarer : le stock repart de zero a chaque round | SECURITE 1 |
+| P2 | Hors la DERNIERE copie par famille (N=1), les .bak ages sortent du disque vers l'archive ; ils ne reviennent que par `restaurer` | SECURITE 1 |
+| P3 | Une archive est SUPPRIMEE quand son contenu est prouve recouvrable (engage dans git, OU empreinte + copie dans la conservation BDD) ; sinon elle reste | SECURITE 2 |
+| P4 | UN GARDE accuse quand le nombre d'actes en attente depasse un plafond declare : une masse qui grandit en silence n'est pas une politique | le garde |
+
+## 4. Les objets deposes par cette revision
+
+| Item | Contenu |
+|---|---|
+| (depot 1) | V2 : la fin declare l'acte mais ne le joue pas (214 actes, 1191 .bak mesures) |
+| (depot 2) | V3 : les archives sans duree de vie, non liees a git (684 fichiers, 15 Mo) |
+
+Le chiffre du createur ("supprimer avant chaque commit") devient P3 avec la preuve exigee :
+la preuve de recouvrabilite AVANT la suppression, jamais apres.

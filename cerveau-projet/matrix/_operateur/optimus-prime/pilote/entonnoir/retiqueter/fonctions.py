@@ -25,29 +25,12 @@ role declare reste, et sa divergence avec la table est DITE.
 """
 from listes import CHAMP_CATEGORIE, CATEGORIES
 from roles import CHAMP_ROLE, proposer_role, valider_role
-from stockage import horodater, verifier_famille
+from stockage import horodater, trouver_item, verifier_famille
 
 # Trace de la reparation : la valeur d AVANT est conservee. Meme regle que
 # role_avant/role_le -- on ne reecrit jamais une identite en silence.
 CHAMP_CATEGORIE_AVANT = "categorie_avant"
 CHAMP_CATEGORIE_LE = "categorie_le"
-
-
-def trouver_item(etat, identifiant):
-    """Retourne (mission, type_file) pour un item, a TOUS les echelons.
-
-    Le type_file (cle de la file, vide si l item est encore au vrac) est ce qui
-    permet de valider la CATEGORIE : elle est FERMEE PAR TYPE, donc la liste ou
-    se ranger depend de la file ou l item vit.
-    """
-    for mission in etat.get("vrac", []):
-        if mission.get("id") == identifiant:
-            return mission, ""
-    for type_file, missions in (etat.get("files") or {}).items():
-        for mission in missions:
-            if mission.get("id") == identifiant:
-                return mission, type_file
-    return None, ""
 
 
 def reparer_categorie(mission, type_file, identifiant, categorie):

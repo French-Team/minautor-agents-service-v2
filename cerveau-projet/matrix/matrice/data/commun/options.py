@@ -32,11 +32,31 @@ de tete, un autre les prefixe) : le nom est reconnu par lstrip("-"), et c est la
 MEME normalisation qui decide si le morceau suivant est une option. Limite DITE :
 dans ce mode, une valeur qui serait exactement un nom d option connu reste
 ambigue -- hors mode, une valeur a tirets inconnue reste une valeur, toujours.
+
+6. LE REFUS EST LE DEFAUT (T1 de la chaine PB-002, 2026-09-20). Mesure de la
+   sonde sc-004 : 32 des 35 outils rendaient un refus MUET -- l option fautive
+   n etait jamais NOMMEE. La cause : le parseur RETENAIT l inconnue depuis EO-179
+   (CLE_INCONNUES), mais c est l APPELANT qui devait la DIRE, et 107 appelants
+   sur 110 ne le faisaient pas. Le domicile refuse donc LUI-MEME : l inconnue est
+   NOMMEE, les options reconnues et le remede sont dits, et l appel s ARRETE en
+   code 2 (`raise SystemExit`). Un appel qui accepte des arguments LIBRES le
+   DECLARE (`refuser=False`) : l inconnue est alors DITE sans arreter l appel --
+   jamais taire. Le texte du refus vit ICI, en UN seul exemplaire (M-076), et
+   sert les DEUX chemins : une option inconnue dans les arguments
+   (`extraire_options`) et une option EN TETE, la ou un VERBE est attendu
+   (`refuser_option_en_tete`, appele par le point commun des outils).
 """
+
+import sys
+from pathlib import Path
 
 # Sentinelle des options privees de valeur : le parseur ne pose JAMAIS "" a la
 # place de l appelant -- une option videe en silence se lit "pas de contenu".
 CLE_SANS_VALEUR = "__sans_valeur__"
+# LE MARQUEUR du refus directionnel : c est lui que cherchent les lecteurs (la
+# sonde sc-004, les cobayes) pour savoir que le refus NOMME l option fautive.
+# Un seul exemplaire du texte (M-076) : le message vit dans dire_option_inconnue.
+MARQUEUR_OPTION_INCONNUE = "OPTION INCONNUE"
 # Sentinelle des morceaux qui ONT LA FORME d une option SANS en etre une
 # (EO-179, 2026-09-19) : le parseur ne les avale plus en silence -- c est
 # l APPELANT qui decide de les DIRE (les ignorer en le disant, ou REFUSER).
@@ -54,12 +74,17 @@ def _nom_option(morceau, noms_connus, sans_tirets):
     return None
 
 
-def extraire_options(arguments, noms_connus, drapeaux=(), sans_tirets=False):
+def extraire_options(arguments, noms_connus, drapeaux=(), sans_tirets=False,
+                     outil="", usage="", refuser=True):
     """Extrait les options d une liste d arguments (contrat ci-dessus).
 
     Ne valide pas le CONTENU des valeurs, seulement leur FORME : ce que
     l appelant fait d une valeur absente lui appartient, mais il l APPREND
     (CLE_SANS_VALEUR) au lieu de la lire "pas de contenu".
+
+    REFUS PAR DEFAUT (point 6 du contrat) : une option qui a la FORME d une
+    option sans en etre une est NOMMEE et l appel s ARRETE en code 2. Un appel
+    qui accepte des arguments libres passe `refuser=False`.
     """
     options = {}
     sans_valeur = []
@@ -92,34 +117,88 @@ def extraire_options(arguments, noms_connus, drapeaux=(), sans_tirets=False):
         options[CLE_SANS_VALEUR] = sans_valeur
     if inconnues:
         options[CLE_INCONNUES] = inconnues
+        code = dire_option_inconnue(inconnues, outil or nom_de_l_outil(),
+                                    noms_connus, usage, refus=refuser)
+        if code:
+            # ARRET FORCE : le refus doit rester VISIBLE meme chez un appelant qui
+            # capture la sortie -- sac_a_dos.envelopper la re-emet (T1).
+            raise SystemExit(code)
     return options
+
+
+def dire_option_inconnue(inconnues, outil, noms_connus=(), usage="", refus=True):
+    """LE message du domicile : il NOMME l option, dit ce qui est connu, et le remede.
+
+    Un seul exemplaire de ce texte (M-076) : les DEUX chemins du refus passent
+    par ici -- une option inconnue DANS les arguments (`extraire_options`) et une
+    option EN TETE, la ou un verbe est attendu (`refuser_option_en_tete`).
+    Rend 2 quand il refuse, 0 quand l appel DECLARE accepter des arguments libres.
+    """
+    print(MARQUEUR_OPTION_INCONNUE + " : " + ", ".join(inconnues)
+          + "  (outil : " + (outil or "?") + ")")
+    if noms_connus:
+        print("  options reconnues : " + ", ".join(sorted(noms_connus)))
+    else:
+        print("  cet outil ne declare AUCUNE option a cette place"
+              " (le VERBE vient en tete).")
+    if usage:
+        print("  " + usage)
+    if refus:
+        print("  REFUS : une option inconnue n est jamais ignoree en silence --"
+              " sans ce refus, l appel obtenait le resultat du DEFAUT,"
+              " indiscernable d un resultat correct (EO-179, friction 77).")
+        return 2
+    print("  (l option est IGNOREE, et c est DIT : cet appel accepte des"
+          " arguments libres)")
+    return 0
 
 
 def signaler_inconnues(options, outil, noms_connus, usage="", refuser=True):
     """DIT les morceaux qui ont la FORME d une option sans en etre une (EO-179).
 
-    Le parseur SIGNALE (CLE_INCONNUES), il ne juge pas :
-      - un outil dont TOUS les arguments sont des options REFUSE (defaut) :
-        c est la suite silencieuse qui mentait -- l appel obtenait le resultat
-        du DEFAUT, indiscernable d un resultat correct ;
-      - un appel qui accepte des arguments LIBRES les ignore, mais en le DISANT
-        (`refuser=False`) : taire une inconnue serait retomber dans le defaut.
-
-    Rend 2 quand il y a des inconnues ET que le refus est demande, 0 sinon :
-    l appelant retourne ce code tel quel.
+    Conserve pour les appelants qui nommaient deja l inconnue AVANT le refus par
+    defaut (rechercher, benchmark, maintenir) : c est le MEME message, jamais un
+    second (M-076). Rend 2 quand il y a des inconnues et que le refus est
+    demande, 0 sinon : l appelant retourne ce code tel quel.
     """
     inconnues = list(options.get(CLE_INCONNUES) or [])
     if not inconnues:
         return 0
-    print("OPTION INCONNUE : " + ", ".join(inconnues) + "  (outil : " + outil + ")")
-    print("  options reconnues : " + ", ".join(sorted(noms_connus)))
-    if usage:
-        print("  " + usage)
-    if refuser:
-        print("  REFUS : une option inconnue n est jamais ignoree en silence --"
-              " sans ce refus, l appel obtenait le resultat du DEFAUT,"
-              " indiscernable d un resultat correct (EO-179).")
-        return 2
-    print("  (l option est IGNOREE, et c est DIT : cet appel accepte des"
-          " arguments libres)")
-    return 0
+    return dire_option_inconnue(inconnues, outil, noms_connus, usage, refus=refuser)
+
+
+# Options de SERVICE : demander l aide n est pas une faute (le doc s affiche).
+OPTIONS_DE_SERVICE = ("--help", "--aide")
+
+
+def refuser_option_en_tete(arguments, outil="", usage="", commandes=None):
+    """Un premier morceau qui a la FORME d une option, la ou un VERBE est attendu.
+
+    Mesure T1 (2026-09-20) : la sonde pose l option inconnue EN PREMIER ; 28
+    outils imprimaient alors leur doc et rendaient code 2 SANS la NOMMER -- le
+    domicile n etait meme pas atteint (le routeur de verbe s arretait avant).
+
+    GARDE-FOU DE PORTEE (faux positif MESURE, 2026-09-20) : 6 outils
+    (benchmark, rechercher, dialoguer, signaler, executer, maintenir) acceptent
+    une option EN TETE, sans verbe -- un refus aveugle les CASSERAIT. Le refus ne
+    frappe donc QUE les outils qui DECLARENT leurs verbes (`commandes`) et dont
+    le premier morceau n en est pas un : la declaration de l outil decide, jamais
+    une liste tenue ici (et un outil qui ne declare rien n est jamais accuse a
+    tort). Rend 0 ou 2 apres avoir NOMME l option, par le MEME message.
+    """
+    if not arguments or not str(arguments[0]).startswith("--"):
+        return 0
+    if commandes is None:
+        return 0
+    if str(arguments[0]) in OPTIONS_DE_SERVICE or str(arguments[0]) in commandes:
+        return 0
+    return dire_option_inconnue([str(arguments[0])], outil or nom_de_l_outil(),
+                                commandes, usage)
+
+
+def nom_de_l_outil():
+    """Le nom de l outil qui parle : deduit de sys.argv, jamais une constante."""
+    try:
+        return Path(sys.argv[0]).resolve().parent.name or "?"
+    except (IndexError, OSError):
+        return "?"

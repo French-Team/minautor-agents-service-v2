@@ -1,0 +1,139 @@
+"""Fonctions simples de la categorie retiqueter : une seule tache chacune.
+
+POURQUOI CETTE PORTE (L-061, MO-076) : le ROLE d'un item est un champ FERME
+(le vivier). Un item depose ou classe AVANT que ce champ existe n'en a pas --
+et sans porte, la seule facon de le lui poser serait d'editer le JSON a la main
+(geste interdit). Cette porte est le pendant de `urgencer` pour le role, et
+c'est ELLE que nomme le refus de l'injection : une erreur doit designer le
+geste qui la repare.
+
+MO-213 (EO-198) : la CATEGORIE manquait SON geste. Le classement la pose par
+TABLE (type + mots-cles), et cette table peut se tromper -- mesure du
+2026-09-19 : un objectif qui cite le mot "pilote" UNE fois fait classer l'item
+en categorie `pilote` alors qu'il ne parle pas du pilote. Aucun verbe ne
+reprenait ce champ : `corriger` rectifie le theme et l'objectif, `urgencer`
+l'urgence, `retiqueter` le role -- la categorie restait fausse A VIE, et elle se
+propage (elle entre dans le `source` de la mission et nourrit la personnalite).
+Ce module repare donc les DEUX etiquettes de l'item, chacune validee contre SA
+liste fermee : le role contre le vivier, la categorie contre les categories de
+son TYPE.
+
+REGLE DE SOUVERAINETE : une categorie se repare sur un item CLASSE (le vrac n'a
+pas encore de type, donc pas de liste ou se ranger -- le refus NOMME le geste
+`classer`). Et reparer la categorie ne reecrit JAMAIS le role en silence : le
+role declare reste, et sa divergence avec la table est DITE.
+"""
+from listes import CHAMP_CATEGORIE, CATEGORIES
+from roles import CHAMP_ROLE, proposer_role, valider_role
+from stockage import horodater, trouver_item, verifier_famille
+
+# Trace de la reparation : la valeur d AVANT est conservee. Meme regle que
+# role_avant/role_le -- on ne reecrit jamais une identite en silence.
+CHAMP_CATEGORIE_AVANT = "categorie_avant"
+CHAMP_CATEGORIE_LE = "categorie_le"
+
+
+def trouver_item(etat, identifiant):
+    """Retourne (mission, type_file) pour un item, a TOUS les echelons.
+
+    Le type_file (cle de la file, vide si l item est encore au vrac) est ce qui
+    permet de valider la CATEGORIE : elle est FERMEE PAR TYPE, donc la liste ou
+    se ranger depend de la file ou l item vit.
+    """
+    for mission in etat.get("vrac", []):
+        if mission.get("id") == identifiant:
+            return mission, ""
+    for type_file, missions in (etat.get("files") or {}).items():
+        for mission in missions:
+            if mission.get("id") == identifiant:
+                return mission, type_file
+    return None, ""
+
+
+def reparer_categorie(mission, type_file, identifiant, categorie):
+    """Pose la CATEGORIE d un item CLASSE, contre la liste fermee de son TYPE.
+
+    Retourne (code, message). Hors liste = code 2, refus qui NOMME les
+    categories du type ; item encore au vrac = code 2, refus qui NOMME le geste
+    (classer d'abord) ; meme valeur = code 1, rien a faire.
+    """
+    if not type_file:
+        return 2, (
+            "REFUS : " + identifiant + " est encore AU VRAC -- sa categorie sera posee par le "
+            "classement, qui la valide contre la liste de son type.\n"
+            "  Classe-le d'abord :  python main.py classer --id " + identifiant
+            + " --type <dev|reparation|doc|audit|revision>"
+            "\n  (la categorie se REPARE ensuite, une fois l'item classe.)")
+    categories = CATEGORIES.get(type_file, ())
+    if categorie not in categories:
+        return 2, (
+            "REFUS : categorie inconnue pour le type " + type_file + " : " + repr(categorie)
+            + "\n  Categories fermees de " + type_file + " : " + ", ".join(categories)
+            + "\n  (aucune ecriture : l'item garde " + repr(mission.get(CHAMP_CATEGORIE, "")) + ").")
+    avant = mission.get(CHAMP_CATEGORIE, "")
+    if avant == categorie:
+        return 1, ("Mission " + identifiant + " : categorie " + categorie
+                   + " deja en place -- rien a faire.")
+    mission[CHAMP_CATEGORIE] = categorie
+    mission[CHAMP_CATEGORIE_LE] = horodater()
+    if avant:
+        mission[CHAMP_CATEGORIE_AVANT] = avant
+    return 0, ("Mission " + identifiant + " : categorie " + categorie
+               + (" (avant : " + avant + ")" if avant else " (etait sans categorie)") + ".")
+
+
+def retiqueter_mission(etat, identifiant, role="", categorie=""):
+    """Repose les ETIQUETTES d'un item : ROLE et/ou CATEGORIE, en un seul geste.
+
+    Au moins une etiquette est exigee (sinon le refus NOMME ce qui se rectifie
+    avec les verbes voisins). Champs FERMES : une valeur hors liste est refusee
+    (code 2, la porte a deja dit pourquoi + la liste). Toute valeur d'avant est
+    TRACEE (role_avant, categorie_avant) : on ne reecrit jamais une identite en
+    silence. Retourne (code, message).
+    """
+    if not role and not categorie:
+        return 2, (
+            "REFUS : rien a reposer -- nomme au moins une etiquette :\n"
+            "  python main.py retiqueter --id " + (identifiant or "EO-XXX")
+            + " [--categorie <nom>] [--role <THEME du vivier>]\n"
+            "  (le theme et l'objectif se rectifient avec corriger, l'urgence avec urgencer.)")
+    code, message = verifier_famille(identifiant)
+    if code != 0:
+        return code, message
+    mission, type_file = trouver_item(etat, identifiant)
+    if mission is None:
+        return 1, "Mission inconnue dans l'entonnoir : " + identifiant
+    phrases = []
+    if role:
+        code_role, canonique, ecart = valider_role(role)
+        if ecart:
+            print(ecart)
+        if code_role != 0:
+            return code_role, ""
+        avant_role = mission.get(CHAMP_ROLE, "")
+        mission[CHAMP_ROLE] = canonique
+        mission["role_source"] = "declaration"
+        mission["role_le"] = horodater()
+        if avant_role:
+            mission["role_avant"] = avant_role
+        phrases.append("role " + canonique
+                       + (" (avant : " + avant_role + ")" if avant_role else " (etait sans role)"))
+    if categorie:
+        code_cat, message_cat = reparer_categorie(mission, type_file, identifiant, categorie)
+        if code_cat != 0:
+            if message_cat:
+                print(message_cat)
+            return code_cat, ""
+        phrases.append("categorie " + mission[CHAMP_CATEGORIE])
+    if categorie and not role:
+        # LA TABLE PROPOSE, L'ITEM DECLARE : reparer une categorie ne reecrit pas
+        # le role en silence. Si la table offrirait un autre role pour le nouveau
+        # couple (type, categorie), la divergence est DITE -- le role reste celui
+        # de la declaration (souveraine).
+        propose = proposer_role(type_file, mission.get(CHAMP_CATEGORIE, ""))
+        actuel = mission.get(CHAMP_ROLE, "")
+        if propose and actuel and propose != actuel:
+            print("[ATTENTION] le role " + actuel + " reste en place ; la table propose "
+                  + propose + " pour " + type_file + "/" + mission[CHAMP_CATEGORIE]
+                  + " -- repose-le si tu veux suivre la table : --role " + propose)
+    return 0, "Mission " + identifiant + " : " + " ; ".join(phrases) + "."

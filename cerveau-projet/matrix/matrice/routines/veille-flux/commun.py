@@ -26,6 +26,7 @@ from constants import (
     NOM_ARCHIVE_BOITE_PREFIXE,
     OUTIL_SIGNAL,
     PREFIXE_ZONE,
+    RAPPEL_ROUTE_REPARATION,
     REPERTOIRE_MATRIX,
     TIMEOUT_COMBO_SECONDES,
     THEME_REPARATION,
@@ -422,10 +423,17 @@ def deposer_mission_vrac(etat, cible, detail):
     L'anti-spam des alertes garantit UN depot par signature (une alerte nouvelle,
     une mission nouvelle). Theme commence par 'reparer' : le classement propose
     de l'entonnoir le rangera en reparation.
+
+    L'OBJECTIF PORTE LA ROUTE (protocole 8, mesure MO-332) : le theme libre du
+    depot ne survit PAS au classement (0 mission sur 331 porte 'reparer <cible>')
+    et le champ `source` des missions recentes ne porte plus l'urgence -- seuls
+    l'objectif et sa route survivent MOT POUR MOT dans le briefing de l'agent.
+    C'est donc ICI, chez celui qui SAIT que le declencheur a tire, que le nom de
+    la route est ecrit.
     """
     arguments = (
         ["deposer", "--theme", THEME_REPARATION + " " + cible,
-         "--objectif", etat + " : " + detail,
+         "--objectif", etat + " : " + detail + " | " + RAPPEL_ROUTE_REPARATION,
          "--urgence", URGENCE_VEILLE, "--source", "veille"]
     )
     try:

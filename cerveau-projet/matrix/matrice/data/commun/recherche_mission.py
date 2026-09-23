@@ -59,6 +59,31 @@ AVERTISSEMENT_VIDE = ("question vide : aucun mot utile trouve dans le sujet -- "
                       "pose-la a la main, le sujet est ta source")
 
 
+def mots_utiles(texte, nombre=None):
+    """Les mots UTILES d'un texte, dans l'ordre, sans doublon.
+
+    LE DOMICILE DE LA DERIVATION (M-076) : la QUESTION de recherche (EO-131) et la
+    PROPOSITION d'outils du registre (EO-314) decoupent le meme francais. Deux
+    decoupages divergeraient -- et la liste des mots vides ne suffit pas a les
+    accorder : la BORNE, le rejet des nombres et l'ordre sont aussi des regles.
+
+    `nombre` : borne FACULTATIVE. None (defaut) = le texte ENTIER, parce qu'une
+    CIBLE (le nom ou le but d'une brique) se lit SANS borne : la tronquer ferait
+    manquer en silence les mots qui vivent apres la coupe. Une DEMANDE, elle, se
+    borne : au-dela, elle perd son sujet au profit du bavardage.
+    """
+    mots = []
+    for brut in re.split(r"[^a-z0-9]+", (texte or "").lower()):
+        if len(brut) < LONGUEUR_MINIMALE_MOT or brut in MOTS_VIDES or brut.isdigit():
+            continue
+        if brut in mots:
+            continue
+        mots.append(brut)
+        if nombre is not None and len(mots) >= nombre:
+            break
+    return mots
+
+
 def deriver_question(mission, nombre=NOMBRE_MOTS_QUESTION):
     """Les mots UTILES du sujet, dans l'ordre, sans doublon.
 
@@ -66,19 +91,13 @@ def deriver_question(mission, nombre=NOMBRE_MOTS_QUESTION):
     l'OBJECTIF (le sujet, qui la precise). Deterministe : memes donnees, meme
     question. Rend une chaine VIDE si rien d'utile -- l'appelant le DIT, il
     n'invente pas une question a la place de l'agent.
+
+    La derivation appartient a `mots_utiles` : cette fonction ne fait que NOMMER
+    la source (theme + objectif) et borner -- elle ne recopie aucune regle.
     """
     texte = (str(mission.get("theme", "")) + " "
-             + str(mission.get("objectif", ""))).lower()
-    mots = []
-    for brut in re.split(r"[^a-z0-9]+", texte):
-        if len(brut) < LONGUEUR_MINIMALE_MOT or brut in MOTS_VIDES or brut.isdigit():
-            continue
-        if brut in mots:
-            continue
-        mots.append(brut)
-        if len(mots) >= nombre:
-            break
-    return " ".join(mots)
+             + str(mission.get("objectif", "")))
+    return " ".join(mots_utiles(texte, nombre))
 
 
 def preparer_recherche(mission, gabarit_commande=""):

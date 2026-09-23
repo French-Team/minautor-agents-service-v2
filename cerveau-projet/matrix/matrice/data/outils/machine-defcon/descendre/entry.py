@@ -9,20 +9,20 @@ from commun import (
 from constants import NOMS_NIVEAUX
 from descendre.fonctions import verifier_descente
 
-NOMS_OPTIONS = ("--niveau", "--raison")
+NOMS_OPTIONS = ("niveau", "raison")
 
 
 def executer(arguments):
     options = extraire_options(arguments, NOMS_OPTIONS)
-    if "--niveau" not in options or not options.get("--raison"):
+    if "niveau" not in options or not options.get("raison"):
         print("Usage : python main.py descendre --niveau <cible> --raison \"...\"")
         return 2
     try:
-        cible = int(options["--niveau"])
+        cible = int(options["niveau"])
     except ValueError:
         print("Usage : --niveau <1-5>")
         return 2
-    raison = options["--raison"]
+    raison = options["raison"]
 
     donnees = charger_classeur()
     courant, entree = trouver_defcon(donnees)

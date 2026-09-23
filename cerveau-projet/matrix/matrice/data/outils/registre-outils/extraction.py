@@ -1,0 +1,164 @@
+"""Le PARC : l inventorier, et le VERIFIER contre la BDD.
+
+Le registre ne recopie AUCUNE regle de brique : qu est-ce qu une brique, ou elle vit,
+et comment on lit son usage appartiennent a l EXTRACTEUR (injection/modes_emploi.py),
+charge par CHEMIN -- le registre est un outil de la Matrice, l extracteur vit chez
+l operateur : pas d import croise (les deux zones ont des modules homonymes).
+
+LES RACINES SERVIES SONT LUES, PAS RECOPIEES (module.RACINES) : c est ce qui garantit
+que la colonne `servi_a_l_injection` decrit ce que le pilote sert VRAIMENT.
+"""
+import importlib.util
+
+from constants import (CHEMIN_EXTRACTEUR, CLES, DOMICILES_SUPPLEMENTAIRES,
+                       NOM_CONSTANTE_PLAFOND, CHEMIN_PLAFOND, PROPRIETAIRES_RACINES,
+                       RACINE_MATRIX, STATUT_MUET, STATUT_VIVANT)
+from etat import empreinte_texte
+
+
+class ExtracteurIntrouvable(RuntimeError):
+    """L extracteur est absent ou illisible : ce refus EST le message."""
+
+
+def charger_extracteur():
+    """L extracteur de briques de SON domicile, charge par chemin."""
+    if not CHEMIN_EXTRACTEUR.is_file():
+        raise ExtracteurIntrouvable("extracteur de briques ABSENT : " + str(CHEMIN_EXTRACTEUR))
+    specification = importlib.util.spec_from_file_location(
+        "modes_emploi_registre", str(CHEMIN_EXTRACTEUR))
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    return module
+
+
+def charger_plafond():
+    """Le PLAFOND de l injection, LU a son domicile. Rend 0 s il est illisible.
+
+    0 n est pas un plafond : c est l aveu qu on ne l a pas lu, et l appelant REFUSE
+    de proposer une liste non bornee (une proposition sans borne se lit comme un
+    conseil ferme).
+    """
+    if not CHEMIN_PLAFOND.is_file():
+        return 0
+    specification = importlib.util.spec_from_file_location(
+        "constants_pilote_registre", str(CHEMIN_PLAFOND))
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    return int(getattr(module, NOM_CONSTANTE_PLAFOND, 0) or 0)
+
+
+def domiciles(module):
+    """(proprietaire, dossier, servi) pour CHAQUE domicile du perimetre declare."""
+    trouves = []
+    for cle in sorted(module.RACINES):
+        dossier = (module.PILOTE / module.RACINES[cle]).resolve()
+        trouves.append((PROPRIETAIRES_RACINES.get(cle, "?"), dossier, True))
+    for proprietaire, relatif in DOMICILES_SUPPLEMENTAIRES:
+        trouves.append((proprietaire, (RACINE_MATRIX / relatif).resolve(), False))
+    return trouves
+
+
+def _relatif(chemin):
+    """Le chemin RELATIF a la racine, en barres obliques (une BDD portable)."""
+    return str(chemin.relative_to(RACINE_MATRIX)).replace(chr(92), "/")
+
+
+def lire_brique(module, brique, proprietaire, dossier, servi):
+    """UNE entree du registre pour UNE brique : tout est LU dans la brique.
+
+    Le BUT et le SNIPPET sont ranges SEPARES (le mode d emploi les recolle a
+    l injection) ; l EMPREINTE porte sur CE QUI EST RANGE -- but + snippet --, pas
+    sur le fichier entier. Mesure du 2026-09-20 : empreindrer le document ENTIER
+    rendait `perime` a chaque correction de code, meme quand le texte servi n avait
+    pas bouge d un caractere -- un faux ecart par construction (L-055), et un
+    registre qui crie a tort apprend a ne plus le croire.
+    """
+    but, snippet, origine = module.extrait(brique)
+    return {
+        CLES["nom"]: brique.name,
+        CLES["proprietaire"]: proprietaire,
+        CLES["domicile"]: _relatif(dossier),
+        CLES["chemin"]: _relatif(brique),
+        CLES["servi"]: servi,
+        CLES["origine"]: origine,
+        CLES["but"]: but,
+        CLES["snippet"]: snippet,
+        CLES["empreinte"]: empreinte_texte(but + "\n" + snippet),
+        CLES["statut"]: STATUT_VIVANT if (but or snippet) else STATUT_MUET,
+    }
+
+
+def inventorier(module):
+    """Le parc ENTIER : (entrees, homonymes, perimetre).
+
+    Les HOMONYMES sont DITS : un nom present dans deux domiciles est une ambiguite
+    reelle pour l injection (elle resout par ordre de racine), donc le registre dit
+    lequel GAGNE -- c est `module.trouver_brique`, la fonction qui sert vraiment.
+    """
+    entrees = []
+    perimetre = {}
+    for proprietaire, dossier, servi in domiciles(module):
+        briques = module.lister_briques(dossier)
+        perimetre[_relatif(dossier)] = {"proprietaire": proprietaire,
+                                       "servi_a_l_injection": servi,
+                                       "briques": len(briques)}
+        for brique in briques:
+            entrees.append(lire_brique(module, brique, proprietaire, dossier, servi))
+    entrees.sort(key=lambda entree: (entree[CLES["nom"]], entree[CLES["chemin"]]))
+    par_nom = {}
+    for entree in entrees:
+        par_nom.setdefault(entree[CLES["nom"]], []).append(entree)
+    homonymes = []
+    for nom in sorted(par_nom):
+        entrees_du_nom = par_nom[nom]
+        if len(entrees_du_nom) < 2:
+            continue
+        gagnant = module.trouver_brique(nom)
+        homonymes.append({
+            "nom": nom,
+            "chemins": [entree[CLES["chemin"]] for entree in entrees_du_nom],
+            "servi_par_la_resolution": _relatif(gagnant) if gagnant is not None else "",
+        })
+    return entrees, homonymes, perimetre
+
+
+def verifier(donnees):
+    """Les ECARTS entre la BDD et le parc REEL. Rend un dictionnaire, jamais un vide muet.
+
+    QUATRE ECARTS, chacun mesure :
+      - `perimes` : le texte source a change depuis l enregistrement (l empreinte a
+        bouge) -- avec, pour chacun, si le but ou le snippet A ETE MODIFIE (sinon
+        c est un simple rafraichissement a refaire) ;
+      - `disparus` : la BDD declare une brique que le parc n a plus ;
+      - `non_enregistres` : le parc porte une brique que la BDD ignore ;
+      - `muets` : la brique ne dit rien d elle-meme (enregistree, et ACCUSEE).
+    """
+    module = charger_extracteur()
+    frais, _homonymes, _perimetre = inventorier(module)
+    par_chemin = {entree[CLES["chemin"]]: entree for entree in frais}
+    ecarts = {"perimes": [], "disparus": [], "non_enregistres": [], "muets": []}
+    presentes = set()
+    for entree_bdd in donnees.get("outils", []):
+        chemin = entree_bdd.get(CLES["chemin"], "")
+        fraiche = par_chemin.get(chemin)
+        if fraiche is None:
+            ecarts["disparus"].append({"nom": entree_bdd.get(CLES["nom"], ""),
+                                       "chemin": chemin})
+            continue
+        presentes.add(chemin)
+        if entree_bdd.get(CLES["empreinte"], "") == fraiche[CLES["empreinte"]]:
+            continue
+        change = []
+        if entree_bdd.get(CLES["but"], "") != fraiche[CLES["but"]]:
+            change.append("but")
+        if entree_bdd.get(CLES["snippet"], "") != fraiche[CLES["snippet"]]:
+            change.append("snippet")
+        ecarts["perimes"].append({"nom": fraiche[CLES["nom"]], "chemin": chemin,
+                                  "modifie": change or ["rien (texte relu identique)"]})
+    for chemin, fraiche in sorted(par_chemin.items()):
+        if chemin not in presentes:
+            ecarts["non_enregistres"].append({"nom": fraiche[CLES["nom"]], "chemin": chemin})
+    for fraiche in frais:
+        if fraiche[CLES["statut"]] == STATUT_MUET:
+            ecarts["muets"].append(fraiche[CLES["chemin"]])
+    return ecarts, frais

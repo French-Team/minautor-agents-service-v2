@@ -1,0 +1,3 @@
+{"date": "2026-09-22 09:22:13", "id": "mission-chargee-sans-conduite", "gravite": "haute", "constat": "MO-348 chargee sans aucun debut declare", "silence": "2026-09-21 09:49:15", "signature": "brin-perime|mission-chargee-sans-conduite|pause-oubliee"}
+{"date": "2026-09-22 09:22:13", "id": "brin-perime", "gravite": "haute", "constat": "brin (2) et files (3) divergent", "silence": "mesure immediate", "signature": "brin-perime|mission-chargee-sans-conduite|pause-oubliee"}
+{"date": "2026-09-22 09:22:13", "id": "pause-oubliee", "gravite": "haute", "constat": "journal en PAUSE sans reprise, etat de pause ABSENT", "silence": "2026-09-12 11:07:23", "signature": "brin-perime|mission-chargee-sans-conduite|pause-oubliee"}

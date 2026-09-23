@@ -10,8 +10,8 @@ Flux : classeur-variables.json + fichiers PID des boucles -> VUE lecture seule
 | Entree | Heure | Date |
 |---|---|---|
 | defcon : 2 | 07:33:10 | 09/09/2026 |
-| veille-flux : ACTIVE (PID 14032) | 19:26:57 | 15/09/2026 |
-| espion-integrite : ACTIVE (PID 11600) | 19:26:57 | 15/09/2026 |
+| veille-flux : ACTIVE (PID 316) | 07:20:33 | 23/09/2026 |
+| espion-integrite : ACTIVE (PID 5560) | 07:20:33 | 23/09/2026 |
 
 ## Encart : missions
 
@@ -27,11 +27,11 @@ Flux : routines/veille-flux/journal-veille.txt -> VUE lecture seule
 
 | Entree | Heure | Date |
 |---|---|---|
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 08:35:41 | 16/09/2026 |
-| passe relax demarree | 08:40:42 | 16/09/2026 |
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 08:40:43 | 16/09/2026 |
-| passe relax demarree | 08:45:43 | 16/09/2026 |
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 08:45:44 | 16/09/2026 |
+| passe relax demarree | 07:40:41 | 23/09/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 07:40:43 | 23/09/2026 |
+| passe relax demarree | 07:45:43 | 23/09/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 07:45:45 | 23/09/2026 |
+| passe relax demarree | 07:47:21 | 23/09/2026 |
 
 ## Encart : alertes
 
@@ -39,11 +39,11 @@ Flux : veille-flux/alertes-emises.json + intercom/matrice/inbox.jsonl -> VUE lec
 
 | Entree | Heure | Date |
 |---|---|---|
-| intercom : signaler | 14:37:20 | 13/09/2026 |
-| intercom : signaler | 17:55:02 | 13/09/2026 |
-| intercom : signaler | 18:25:57 | 13/09/2026 |
-| intercom : signaler | 07:06:47 | 16/09/2026 |
-| intercom : signaler | 07:21:58 | 16/09/2026 |
+| intercom : signaler | 20:58:56 | 20/09/2026 |
+| intercom : signaler | 07:44:31 | 21/09/2026 |
+| intercom : signaler | 09:01:00 | 22/09/2026 |
+| intercom : signaler | 09:31:02 | 22/09/2026 |
+| intercom : signaler | 10:01:04 | 22/09/2026 |
 
 ## Encart : cameleon
 
@@ -63,14 +63,14 @@ Flux : sac-a-dos (chaque outil) -> bdd-usages -> usages-outils-combos.jsonl -> V
 
 | Entree | Heure | Date |
 |---|---|---|
-| ecrire/editer code 0 10ms | 08:47:30 | 16/09/2026 |
-| ecrire/editer code 0 11ms | 08:47:30 | 16/09/2026 |
-| ecrire/editer code 0 4ms | 08:47:31 | 16/09/2026 |
-| ecrire/editer code 0 6ms | 08:47:31 | 16/09/2026 |
-| ecrire/editer code 2 0ms | 08:47:31 | 16/09/2026 |
-| ecrire/editer code 0 6ms | 08:47:31 | 16/09/2026 |
-| ecrire/editer code 1 6ms | 08:47:41 | 16/09/2026 |
-| ecrire/editer code 0 6ms | 08:48:05 | 16/09/2026 |
+| ecrire/editer code 0 4ms | 07:46:37 | 23/09/2026 |
+| ecrire/ecrire code 0 2ms | 07:46:37 | 23/09/2026 |
+| ecrire/ecrire code 0 2ms | 07:46:37 | 23/09/2026 |
+| ecrire/editer code 0 3ms | 07:46:38 | 23/09/2026 |
+| ecrire/ecrire code 0 5ms | 07:47:01 | 23/09/2026 |
+| journal-multi-encarts/construire code 0 126ms | 07:47:01 | 23/09/2026 |
+| suivi-optimus/construire code 2 0ms | 07:47:01 | 23/09/2026 |
+| corriger-ascii/corriger code 0 573ms | 07:47:21 | 23/09/2026 |
 
 ## Encart : modifications
 
@@ -78,11 +78,11 @@ Flux : notes de mission -> bdd-modifications -> modifications-par-fichier.json -
 
 | Entree | Heure | Date |
 |---|---|---|
-| _operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/entry.py | 07:44:03 | 16/09/2026 |
-| _operateur/optimus-prime/super-combos/combos/outils/bdd-frictions/fonctions/bdd_frictions.py | 07:49:26 | 16/09/2026 |
-| _operateur/optimus-prime/super-combos/sc-002-auto-evolution/main.py | 07:49:27 | 16/09/2026 |
-| matrice/data/frictions.db | 07:49:27 | 16/09/2026 |
-| _operateur/optimus-prime/espions/registre/registre.json | 07:49:28 | 16/09/2026 |
+| _operateur/optimus-prime/tmp-optimus/cobaye-mo363-cadence.py | 07:24:28 | 23/09/2026 |
+| _operateur/optimus-prime/tmp-optimus/bilan-mo363.txt | 07:27:04 | 23/09/2026 |
+| _operateur/optimus-prime/pilote/commun.py | 07:33:23 | 23/09/2026 |
+| demarrer-optimus-prime.md | 07:33:23 | 23/09/2026 |
+| _operateur/optimus-prime/audits/audit-voie-injection.md | 07:39:49 | 23/09/2026 |
 
 ## Encart : lecons
 
@@ -90,11 +90,11 @@ Flux : lecons gravees -> bdd-lecons -> lecons.json -> VUE (relues a chaque injec
 
 | Entree | Heure | Date |
 |---|---|---|
-| L-104 Un balayage ne doit JAMAIS porter le filtre qui cache son perimetre : en MO-126 j'avais exclu 'bdd-f | 07:41:58 | 16/09/2026 |
-| L-105 Un test qui peut ECRIRE finira par ecrire : dans mes cobayes MO-124/126/127/130 j'avais remplace le  | 07:47:45 | 16/09/2026 |
-| L-106 Une forme produite par une porte se declare a la porte qui la PRODUIT, et tout consommateur la CONSO | 08:31:07 | 16/09/2026 |
-| L-107 Une CLASSE de defaut se ferme par un OUTIL qui la MESURE, jamais par le cas qu'on vient de reparer : | 08:37:56 | 16/09/2026 |
-| L-108 Une BDD SCELLEE par une empreinte a UN SEUL ECRIVAIN : la porte qui la possede. Un consommateur qui  | 08:38:41 | 16/09/2026 |
+| L-162 Le cockpit N AFFICHE RIEN lui-meme : il appelle le verbe du DOMICILE (ici lot etat, chez le pilote). | 10:06:34 | 21/09/2026 |
+| L-163 UN ROUGE MUET : QUAND LA CAUSE EST ECRITE PAR LE GARDE MAIS PAS EXTRAITE PAR LE LANCEUR, LE VERDICT  | 07:33:32 | 22/09/2026 |
+| L-164 UN AGENT QUI EDITE AU NATIF NE PEUT PAS PRETENDRE AVOIR PROUVE SA PUBLICATION -- ET SON < PRISTINE > | 07:40:19 | 22/09/2026 |
+| L-165 Un process qui depend de la memoire d'un agent n'est pas un process : c'est une discipline. DEMANDE  | 08:48:06 | 22/09/2026 |
+| L-166 UNE PROSE QUI CITE DES NOMS VOYAGE PAR FICHIER, JAMAIS DANS UN ARGUMENT SHELL : LES ACCENTS GRAVES S | 09:48:45 | 22/09/2026 |
 
 ## Encart : variables
 
@@ -104,4 +104,5 @@ Flux : machine-defcon / pause-session / bdd-variables -> classeur-variables.json
 |---|---|---|
 | veille-intervalle = 600 | 16:19:00 | 06/09/2026 |
 | defcon = 2 | 07:33:10 | 09/09/2026 |
-| perimetre-cameleon = maintenance,_operateur,pilote/file-missions.json,data/historiques-missions.jsonl,data/modifications-par-fichier.json,data/usages-outils-combos.jsonl,data/activites-recentes.json,data/defcon-historique.jsonl,data/classeur-variables.json,data/manuel-outils.md,journal-multi-encarts.md,matrice-readme.md,routines/routines-readme.md,routines/vie/DESCRIPTION.md,routines/espion-integrite,intercom/pilote/outbox.jsonl,intercom/matrice/inbox.jsonl,docs/IMPERATIF.md,templates/theme-bdd/README.md,data/outils/pause-session,data/outils/machine-defcon,data/outils/verifier-regles,data/outils/verifier-protocoles,data/outils/verifier-conventions | 07:43:10 | 15/09/2026 |
+| perimetre-cameleon = maintenance,_operateur,pilote/file-missions.json,data/historiques-missions.jsonl,data/modifications-par-fichier.json,data/usages-outils-combos.jsonl,data/activites-recentes.json,data/defcon-historique.jsonl,data/classeur-variables.json,data/manuel-outils.md,journal-multi-encarts.md,matrice-readme.md,routines/routines-readme.md,routines/vie/DESCRIPTION.md,routines/espion-integrite,intercom/pilote/outbox.jsonl,intercom/matrice/inbox.jsonl,docs/IMPERATIF.md,templates/theme-bdd/README.md,data/outils/pause-session,data/outils/machine-defcon,data/outils/verifier-regles,data/outils/verifier-protocoles,data/outils/verifier-conventions,data/lecons.json,data/sessions.json | 07:39:10 | 17/09/2026 |
+| interpreteur-python = auto | 08:48:36 | 19/09/2026 |

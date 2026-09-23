@@ -19,7 +19,7 @@ Genere par `creer-combo.py creer-super-combo` le 2026-09-19 18:00:30.
 ## Usage
 
 ```bash
-python main.py diagnostic
-python main.py status
-python main.py auto-test
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-004-auto-diagnostic/main.py diagnostic
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-004-auto-diagnostic/main.py status
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-004-auto-diagnostic/main.py auto-test
 ```

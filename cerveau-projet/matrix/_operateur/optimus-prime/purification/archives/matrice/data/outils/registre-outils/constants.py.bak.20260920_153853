@@ -1,0 +1,93 @@
+"""Constantes du REGISTRE DES OUTILS (EO-314) -- perimetre, cible, empreinte.
+
+ZERO VALEUR EN DUR : la logique CONSOMME ces valeurs, elle ne les contient pas.
+Trois choses sont declarees ici, et une seule fois :
+  1. LE PERIMETRE -- quels domiciles de briques sont inventories, et a qui ils
+     appartiennent. Le PROPRIETAIRE n est jamais devine : il se DEDUIT du domicile,
+     et cette table est la SEULE source de la correspondance.
+  2. LA CIBLE -- ou vit la BDD (matrice/data/, le domicile des BDD de la Matrice).
+  3. LA FORME DE L EMPREINTE -- sha256 du TEXTE SOURCE lu, jamais du fichier entier :
+     c est le texte qui est RANGE dans la BDD, donc c est lui qui perime.
+
+POURQUOI UNE BDD UNIQUE ET PAS TROIS (decision createur 2026-09-20) : l injection
+croise DEJA les flux pour une seule mission (une mission dev recoit des outils
+d Optimus ET de la Matrice). Trois domiciles = trois lectures a chaque proposition,
+et deux endroits ou le meme outil peut etre declare. Une BDD, une colonne
+`proprietaire`, trois VUES.
+
+LES RACINES SERVIES NE SONT PAS RECOPIEES : elles sont LUES dans l extracteur
+(injection/modes_emploi.py RACINES), qui est le domicile de ce que l INJECTION
+sait servir. Cette table n ajoute que les domiciles SUPPLEMENTAIRES (inventories,
+non servis) -- deux verites pour un meme perimetre divergeraient.
+"""
+import sys
+from pathlib import Path
+
+# Le MOTIF de racine est un domicile partage (L-013 / MO-088) : jamais parents[N] nus.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "commun"))
+from cible import racine_matrice  # noqa: E402
+
+RACINE_MATRIX = racine_matrice(__file__)          # matrix/
+RACINE_MATRICE = RACINE_MATRIX / "matrice"        # matrix/matrice/
+CHEMIN_BDD = RACINE_MATRICE / "data" / "registre-outils.json"
+
+# L EXTRACTEUR : ce que l injection SAIT SERVIR (racines + lecture de brique).
+PILOTE = RACINE_MATRIX / "_operateur" / "optimus-prime" / "pilote"
+CHEMIN_EXTRACTEUR = PILOTE / "injection" / "modes_emploi.py"
+# Le PLAFOND de la proposition est celui de l INJECTION : lu a SON domicile, jamais recopie.
+CHEMIN_PLAFOND = PILOTE / "constants.py"
+NOM_CONSTANTE_PLAFOND = "PLAFOND_OUTILS_MODE_EMPLOI"
+
+# LE PROPRIETAIRE de chaque racine SERVIE (l ordre suit celui de l extracteur).
+PROPRIETAIRES_RACINES = {
+    "outils": "optimus",          # les outils de l operateur
+    "combos": "optimus",          # les combos de l operateur
+    "super-combos": "optimus",    # les super-combos de l operateur
+    "outils-matrice": "matrice",  # les outils de la Matrice
+}
+# LES DOMICILES SUPPLEMENTAIRES : inventories, NON servis a l injection (l extracteur
+# ne les connait pas). Le troisieme proprietaire est le CAMELEON -- mesure du
+# 2026-09-20 : il n a PAS de domicile de briques distinct des outils de la Matrice ;
+# ses propres briques sont son pilote (matrice/pilote/). C est cette mesure, et pas
+# un choix, qui separe `matrice` (les outils servis) de `cameleon` (son pilote).
+DOMICILES_SUPPLEMENTAIRES = (
+    ("optimus", "_operateur/optimus-prime/pilote"),
+    ("matrice", "matrice/routines"),
+    ("cameleon", "matrice/pilote"),
+)
+
+# LES CHAMPS de la BDD : un nom, une declaration (la logique les consomme).
+CLES = {
+    "nom": "nom",
+    "proprietaire": "proprietaire",
+    "domicile": "domicile",
+    "chemin": "chemin",
+    "servi": "servi_a_l_injection",
+    "origine": "origine",
+    "but": "but",
+    "snippet": "snippet",
+    "empreinte": "empreinte_texte",
+    "statut": "statut",
+}
+# LA BORNE des mots de la DEMANDE dans une proposition : plus large que celle d une
+# question (NOMBRE_MOTS_QUESTION, EO-131) -- un objectif de mission est long -- mais
+# bornee quand meme : chaque mot partage suffit a faire entrer une brique, donc une
+# demande SANS borne ratisserait tout le parc et ne proposerait plus rien.
+NOMBRE_MOTS_PROPOSITION = 24
+CLE_OUTILS = "outils"
+CLE_PERIMETRE = "perimetre"
+CLE_HOMONYMES = "homonymes"
+CLE_GENERE = "genere_le"
+IDENTITE = {"type": "registre-outils", "version": 1}
+
+# LE STATUT d une brique : VIVANTE (elle dit son usage) ou MUETTE (elle ne dit rien --
+# enregistree QUAND MEME, et ACCUSEE : un silence enregistre se repare, un silence
+# absent ne se voit pas). Jamais de troisieme statut devine.
+STATUT_VIVANT = "vivant"
+STATUT_MUET = "muet"
+STATUTS = (STATUT_VIVANT, STATUT_MUET)
+
+ENCODAGE = "utf-8"
+INDENTATION = 1
+SUFFIXE_BRIQUE = ".py"
+NOM_ENTREE = "main.py"

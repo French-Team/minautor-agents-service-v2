@@ -1,0 +1,37 @@
+---
+identite:
+  type: analyse
+  appartient_a: __APPARTIENT_A__
+  commun: false
+---
+
+# SUIVI __NOM_SUIVI__ -- la vue derivee
+
+> MOULE a jetons (gabarits invisibles du pilote, T3 de PB-003/SP-003/TD-003).
+> Un moule ne s execute JAMAIS seul : il est consomme par son unique porte.
+> Cette vue est DERIVEE et regenerable ; elle n est JAMAIS editee a la main.
+> Les faits vivent dans leurs sources ; ici, seulement ce que l instrument a JUGE.
+
+| Champ | Valeur |
+|---|---|
+| Qui ECRIT | la porte `__PORTE__`, jamais a la main |
+| Qui LIT | __QUI_LIT__ |
+| Ou ca vit | `__DOMICILE__` -- zone INVISIBLE (L-016) |
+| Nature | vue DERIVEE + journal des verdicts append-only (aucune recopie d un fait, L-055) |
+
+## Table 0 -- PANNES (la seule qui crie)
+
+| Gravite | Panne | Constat | Silence | Porte qui repare |
+|---|---|---|---|---|
+| __GRAVITE__ | __ID_PANNE__ | __CONSTAT__ | __SILENCE__ | __PORTE_QUI_REPARE__ |
+
+## Table 1 -- __PARTIE__
+
+| __COLONNE_1__ | __COLONNE_2__ | __COLONNE_3__ |
+|---|---|---|
+| __VALEUR_1__ | __VALEUR_2__ | __VALEUR_3__ |
+
+> LA LOI DES COLONNES : une colonne se garde si elle VARIE ou si elle PORTE UN
+> VERDICT. Une colonne constante ET sans verdict est OMISE, et la vue DIT lesquelles
+> elle a omises. Sur un evenement, jamais de duree ; un vide se dit (inconnu), il ne
+> s affiche JAMAIS 0.

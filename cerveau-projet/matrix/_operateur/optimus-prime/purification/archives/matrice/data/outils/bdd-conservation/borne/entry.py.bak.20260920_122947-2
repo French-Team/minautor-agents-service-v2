@@ -1,0 +1,71 @@
+"""Porte du CONTROLE DE LA BORNE : un seul point de restauration EN PLACE par famille.
+
+    python main.py controler-borne
+
+EO-152 (mission MO-165). La case 8 de la suite de purification
+(`controler-archives`) verifie que RIEN NE SE PERD : `archive + actif = origine`.
+Ce controle-la reste VERT tout le temps -- y compris quand l'actif grandit sans
+borne. Mesure MO-164 : 16 points `STRUCTUREL` en trop dans 10 familles sur 88, et
+aucun instrument ne le disait, parce que la PERTE et la BORNE sont deux questions
+differentes. Verifier une chaine demande de mesurer les DEUX.
+
+La doctrine N=1 (contre-analyse MO-156) dit qu'une famille ne garde EN PLACE que
+son PLUS RECENT. Ce controle mesure exactement cela, et rien d'autre : ce qui
+compte comme EN PLACE est MESURE (decide + conserver), jamais suppose -- compter
+les points `archiver` en attente ferait crier le controle pendant une operation
+saine, et un controle qui crie a tort ne garde plus rien.
+
+CODE DE SORTIE : 0 quand la borne tient, 1 quand au moins une famille est en exces
+(chaque famille EN EXCES est NOMMEE avec ses identifiants), 2 quand la forme du
+point de restauration est introuvable chez son proprietaire.
+"""
+from pathlib import Path
+
+from archiver.fonctions import motif_forme
+from borne.fonctions import (
+    compter_en_place, familles, familles_en_exces, familles_en_exces_disque,
+    points_en_attente, points_en_place_absents,
+)
+from commun import charger_bdd
+
+NOM_OPTIONS = ()
+DEPART = Path(__file__).resolve().parent
+
+
+def executer(arguments):
+    donnees = charger_bdd()
+    motif = motif_forme()
+    if motif is None:
+        print("Refus : la forme du point de restauration est introuvable chez son "
+              "proprietaire -- le controle ne DEVINE aucune forme (L-100).")
+        return 2
+
+    entrees = donnees.get("elements", [])
+    connues = familles(entrees, motif)
+    en_place = compter_en_place(entrees, motif)
+    exces = familles_en_exces(entrees, motif)
+    attente = points_en_attente(entrees, motif)
+    trop = sum(len(ids) - 1 for ids in exces.values())
+
+    print("BORNE N=1 PAR FAMILLE -- un seul point de restauration EN PLACE par famille")
+    print("  familles connues        : " + str(len(connues)))
+    print("  points EN PLACE         : " + str(en_place)
+          + " (decide + conserver ; une archive a quitte sa place)")
+    print("  familles EN EXCES       : " + str(len(exces)))
+    print("  points en trop          : " + str(trop))
+    print("  points en attente d acte: " + str(len(attente))
+          + " (decide + archiver -- information, pas un ecart)")
+    if exces:
+        print("")
+        print("FAMILLES EN EXCES (plus d'un point EN PLACE -- l'actif grandit) :")
+        for famille, ids in exces.items():
+            print("  " + famille)
+            print("      -> " + ", ".join(ids))
+    print("")
+    if exces:
+        print("VERDICT : BORNE N=1 ROMPUE (" + str(trop)
+              + " point(s) de trop dans " + str(len(exces)) + " famille(s)).")
+        return 1
+    print("VERDICT : BORNE N=1 TIENUE (" + str(en_place) + " point(s) EN PLACE pour "
+          + str(len(connues)) + " famille(s)).")
+    return 0

@@ -1,6 +1,6 @@
 {
-  "date": "2026-09-19 19:38:06",
-  "total": 96,
+  "date": "2026-09-22 22:39:04",
+  "total": 112,
   "equipements": [
     {
       "nom": "theme-auto-audit-nemesis",
@@ -31,6 +31,11 @@
       "nom": "theme-auto-testing",
       "type": "theme",
       "chemin": "parcours\\themes\\theme-auto-testing.json"
+    },
+    {
+      "nom": "theme-cadrage",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-cadrage.json"
     },
     {
       "nom": "theme-contre-analyse",
@@ -133,6 +138,11 @@
       "chemin": "conventions\\convention-chemins-liens-noms-flags.md"
     },
     {
+      "nom": "convention-credibilite-mission-ancienne",
+      "type": "convention",
+      "chemin": "conventions\\convention-credibilite-mission-ancienne.md"
+    },
+    {
       "nom": "convention-crochets",
       "type": "convention",
       "chemin": "conventions\\convention-crochets.md"
@@ -188,6 +198,11 @@
       "chemin": "super-combos\\combos\\outils\\ajouter-redirect-theme.py"
     },
     {
+      "nom": "attribution-registre.json",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\attribution-registre.json"
+    },
+    {
       "nom": "audit-invisibilite.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\audit-invisibilite.py"
@@ -226,6 +241,11 @@
       "nom": "cartographe-matrice.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\cartographe-matrice.py"
+    },
+    {
+      "nom": "controle-attribution.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\controle-attribution.py"
     },
     {
       "nom": "creer-combo.py",
@@ -273,6 +293,16 @@
       "chemin": "super-combos\\combos\\outils\\garde-tmp.py"
     },
     {
+      "nom": "garde-versions-registre.json",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\garde-versions-registre.json"
+    },
+    {
+      "nom": "garde-versions.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\garde-versions.py"
+    },
+    {
       "nom": "lanceur-non-regression-flux.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\lanceur-non-regression-flux.py"
@@ -293,6 +323,11 @@
       "chemin": "super-combos\\combos\\outils\\outils-readme.md"
     },
     {
+      "nom": "poser-template-pilote.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\poser-template-pilote.py"
+    },
+    {
       "nom": "revert-fichier.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\revert-fichier.py"
@@ -306,6 +341,11 @@
       "nom": "scan-valeurs-en-dur.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\scan-valeurs-en-dur.py"
+    },
+    {
+      "nom": "suivi-pilote.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\suivi-pilote.py"
     },
     {
       "nom": "test-reel.py",
@@ -343,6 +383,11 @@
       "chemin": "super-combos\\combos\\outils\\verifier-chapitres-espion.py"
     },
     {
+      "nom": "verifier-commandes.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-commandes.py"
+    },
+    {
       "nom": "verifier-contrat-fondamental.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\verifier-contrat-fondamental.py"
@@ -353,9 +398,24 @@
       "chemin": "super-combos\\combos\\outils\\verifier-contrats-outils.py"
     },
     {
+      "nom": "verifier-credibilite-missions.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-credibilite-missions.py"
+    },
+    {
+      "nom": "verifier-enchainement.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-enchainement.py"
+    },
+    {
       "nom": "verifier-exemptions-visibles.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\verifier-exemptions-visibles.py"
+    },
+    {
+      "nom": "verifier-extraction-ecarts.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-extraction-ecarts.py"
     },
     {
       "nom": "verifier-fiche.py",
@@ -366,6 +426,11 @@
       "nom": "verifier-historique-non-redondant.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\verifier-historique-non-redondant.py"
+    },
+    {
+      "nom": "verifier-marbre.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-marbre.py"
     },
     {
       "nom": "verifier-observations-non-redondantes.py",
@@ -388,6 +453,11 @@
       "chemin": "super-combos\\combos\\outils\\verifier-placeholders.py"
     },
     {
+      "nom": "verifier-profil-injection.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-profil-injection.py"
+    },
+    {
       "nom": "verifier-rattrapage.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\verifier-rattrapage.py"
@@ -396,6 +466,11 @@
       "nom": "verifier-recherche.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\verifier-recherche.py"
+    },
+    {
+      "nom": "verifier-resolution.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-resolution.py"
     },
     {
       "nom": "verifier-roles.py",
@@ -411,6 +486,11 @@
       "nom": "verifier-sans-attendre.py",
       "type": "outil",
       "chemin": "super-combos\\combos\\outils\\verifier-sans-attendre.py"
+    },
+    {
+      "nom": "verifier-source-item.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-source-item.py"
     },
     {
       "nom": "verifier-vocabulaire-etat.py",

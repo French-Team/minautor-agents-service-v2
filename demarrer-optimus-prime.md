@@ -9,11 +9,11 @@
 
 ## ORDRE 0 -- ALIGNE LE FLUX SUR FLUX 2
 
-    python3 cerveau-projet/matrix/matrice/data/outils/selecteur-flux/main.py actuel
+    python3 cerveau-projet/matrix/lancer.py selecteur-flux actuel
 
 Si la reponse n est pas FLUX2, aligne :
 
-    python3 cerveau-projet/matrix/matrice/data/outils/selecteur-flux/main.py basculer flux2 --par optimus-prime --raison "Demarrage via demarrer-optimus-prime.md"
+    python3 cerveau-projet/matrix/lancer.py selecteur-flux basculer flux2 --par optimus-prime --raison "Demarrage via demarrer-optimus-prime.md"
 
 ## ORDRE 1 -- DECLARE TON IDENTITE (3 faits, aucun choix)
 
@@ -21,29 +21,37 @@ Si la reponse n est pas FLUX2, aligne :
     ids  = MO-xxx          -- JAMAIS M- : c est le cameleon (autre entonnoir, autre file)
     flux = 2 MAINTENANCE   -- tu n es pas DIRIGE par un pilote : tu CONDUIS le tien
 
+TOUTE PORTE S INVOQUE PAR SON NOM -- un seul lanceur, jamais un chemin de brique
+recopie (un chemin recopie ne se plaint pas quand la cible disparait, le lanceur
+REFUSE en nommant le nom fautif, les noms proches et le remede) :
+
+    python3 cerveau-projet/matrix/lancer.py <porte> [arguments]
+
 TES PORTES (racine = le workspace ; chaque geste a UNE seule maison) :
 
-    PILOTE     cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py
-    ENTONNOIR  cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/main.py
-    ECRIRE     cerveau-projet/matrix/matrice/data/outils/ecrire/main.py
-    SUIVI      cerveau-projet/matrix/matrice/data/outils/suivi-optimus/main.py
-    TRACES     cerveau-projet/matrix/matrice/data/outils/bdd-modifications/main.py
-    EPREUVES   cerveau-projet/matrix/matrice/data/outils/benchmark/main.py
-    DEFCON     cerveau-projet/matrix/matrice/data/outils/machine-defcon/main.py
-    ROUE       cerveau-projet/matrix/matrice/routines/vigie-portes/main.py
-    COCKPIT    cerveau-projet/matrix/_operateur/optimus-prime/cockpit/cockpit-matrice.py
-    GARDES     cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/
+    PILOTE     pilote
+    ENTONNOIR  entonnoir
+    ECRIRE     ecrire
+    SUIVI      suivi-optimus
+    TRACES     bdd-modifications
+    EPREUVES   benchmark
+    DEFCON     machine-defcon
+    ROUE       vigie-portes
+    COCKPIT    cockpit-matrice
+    GARDES     garde-flux2, lanceur-non-regression, verifier-commandes, verifier-resolution
+
+`python3 cerveau-projet/matrix/lancer.py --lister` rend la liste complete des noms.
 
 Un crochet recu (`[tache]`, `[revision]`, `[mission]`, `[question]`...) ne se
 DEVINE pas : sa definition est dans `cerveau-projet/matrix/CROCHETS.md`.
 
 ## ORDRE 2 -- RECOIS TES INJECTIONS ET REPRENDS
 
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py injecter
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py statut
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py file
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/main.py file
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/main.py tresse brin
+    python3 cerveau-projet/matrix/lancer.py pilote injecter
+    python3 cerveau-projet/matrix/lancer.py pilote statut
+    python3 cerveau-projet/matrix/lancer.py pilote file
+    python3 cerveau-projet/matrix/lancer.py entonnoir file
+    python3 cerveau-projet/matrix/lancer.py entonnoir tresse brin
 
 Tu y lis : ta fiche, ton theme de reprise, ton protocole de reprise, le RESUME DE
 LA SESSION PRECEDENTE, l etat du defcon, et ce qui t attend.
@@ -53,6 +61,11 @@ REGLES DE REPRISE (apres CHAQUE redemarrage) :
 - une mission EN COURS -> tu la REPRENDS (elle est a finir, pas a refaire) ;
 - une mission REPORTEE -> tu la reprends ;
 - un LOT arme -> tu prends la mission SUIVANTE (k/n) ;
+- une mission RESTAUREE (chargee un jour ANTERIEUR : lot rejoue la veille, ou mission
+  ramenee par un redemarrage) -> le DEMARRAGE l a DEJA jouee pour toi : le process de
+  credibilite l a jugee, TRACEE, et a RETIRE du lot ce qui etait devenu OBSOLETE --
+  aucun createur, aucune question, rien a te rappeler (verifier-credibilite-missions.py
+  --auto ; regle : conventions/convention-credibilite-mission-ancienne.md) ;
 - le BRIN ou les files portent des items -> tu en nais la prochaine mission (4.1).
 - Tu ne repars JAMAIS de zero et tu ne demandes JAMAIS la permission de continuer.
 
@@ -79,41 +92,41 @@ Une demande recue est DEPOSEE au moment ou tu l entends : ce qui arrive pendant
 une mission est un ITEM, pas une interruption. Le TYPE DECLARE classe l item A
 LA NAISSANCE (file, categorie et role posees par les tables, et DITES) :
 
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/main.py deposer --theme "TITRE" --objectif "..." --type <dev|reparation|doc|audit|revision>
+    python3 cerveau-projet/matrix/lancer.py entonnoir deposer --theme "TITRE" --objectif "..." --type <dev|reparation|doc|audit|revision>
 
 Sans `--type`, la table PROPOSE par mot-cle : l item reste au VRAC et rien ne le
 classera a ta place. Un item mal etiquete se repare, UN GESTE PAR CHAMP :
 
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/main.py classer --id EO-XXX --type <type> [--categorie c] [--role THEME]
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/main.py retiqueter --id EO-XXX [--categorie c] [--role THEME]
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/main.py corriger --id EO-XXX ( --theme "..." | --objectif "..." ) [--motif "..."]
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/main.py urgencer --id EO-XXX --urgence <bloquante|haute|normale|basse>
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/main.py retirer --id EO-XXX
+    python3 cerveau-projet/matrix/lancer.py entonnoir classer --id EO-XXX --type <type> [--categorie c] [--role THEME]
+    python3 cerveau-projet/matrix/lancer.py entonnoir retiqueter --id EO-XXX [--categorie c] [--role THEME]
+    python3 cerveau-projet/matrix/lancer.py entonnoir corriger --id EO-XXX ( --theme "..." | --objectif "..." ) [--motif "..."]
+    python3 cerveau-projet/matrix/lancer.py entonnoir urgencer --id EO-XXX --urgence <bloquante|haute|normale|basse>
+    python3 cerveau-projet/matrix/lancer.py entonnoir retirer --id EO-XXX
 
 Des qu un item est CONSOMME (naissance d une mission), le brin doit etre retisse :
 
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/main.py tresse tisser
+    python3 cerveau-projet/matrix/lancer.py entonnoir tresse tisser
 
 ### 4.2 CONDUIRE LA MISSION
 
 Hors lot (le cas courant) : la naissance LIE et CONSOMME l item cite.
 
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py charger --theme <THEME du vivier> --type <type> --objectif "..." [--item EO-XXX]
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py conduire --id MO-XXX
+    python3 cerveau-projet/matrix/lancer.py pilote charger --theme <THEME du vivier> --type <type> --objectif "..." [--item EO-XXX]
+    python3 cerveau-projet/matrix/lancer.py pilote conduire --id MO-XXX
 
 Par la chaine (lot numerote k/n : l enchainement est automatique) :
 
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py file consommer                (la tete du brin -> file du pilote)
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py file verser [--lot <nom>]     (le BRIN ENTIER -> UN lot, une seule fois)
+    python3 cerveau-projet/matrix/lancer.py pilote file consommer                (la tete du brin -> file du pilote)
+    python3 cerveau-projet/matrix/lancer.py pilote file verser [--lot <nom>]     (le BRIN ENTIER -> UN lot, une seule fois)
 
 Parquer une mission (une demande urgente arrive) :
 
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py reporter --raison "..."
+    python3 cerveau-projet/matrix/lancer.py pilote reporter --raison "..."
 
 ### 4.3 ECRIRE PAR LA PORTE (et jamais autrement)
 
-    python3 cerveau-projet/matrix/matrice/data/outils/ecrire/main.py ecrire --fichier <chemin> --contenu-fichier <fichier> [--mode creer|remplacer|ajouter]
-    python3 cerveau-projet/matrix/matrice/data/outils/ecrire/main.py editer --fichier <chemin> --ancien-fichier <fichier> --nouveau-fichier <fichier>
+    python3 cerveau-projet/matrix/lancer.py ecrire ecrire --fichier <chemin> --contenu-fichier <fichier> [--mode creer|remplacer|ajouter]
+    python3 cerveau-projet/matrix/lancer.py ecrire editer --fichier <chemin> --ancien-fichier <fichier> --nouveau-fichier <fichier>
 
 Les chemins d ECRITURE partent de la racine du workspace (`cerveau-projet/matrix/...`).
 La porte CORRIGE l ASCII et le DIT ; un caractere hors carte est REFUSE (code 2) et
@@ -121,12 +134,16 @@ la cible reste INTACTE, comme un contenu invalide (refus AVANT publication).
 
 ### 4.4 PROUVER (un cobaye ET un contre-temoin, toujours les deux)
 
-    python3 cerveau-projet/matrix/matrice/data/outils/benchmark/main.py benchmark --fichier <chemin>
+    python3 cerveau-projet/matrix/lancer.py benchmark benchmark --fichier <chemin>
     (un fichier de TA zone invisible laisse `invisibilite` ROUGE PAR CONSTRUCTION :
      1 ROUGE attendu, les 8 autres epreuves doivent etre VERTES)
-    python3 cerveau-projet/matrix/matrice/data/outils/benchmark/main.py benchmark --dossier <chemin> [--recursif]
+    python3 cerveau-projet/matrix/lancer.py benchmark benchmark --dossier <chemin> [--recursif]
     python3 -m py_compile <fichiers touches>
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py
+    python3 cerveau-projet/matrix/lancer.py lanceur-non-regression
+
+SEULE commande que le lanceur ne peut PAS nommer : `python3 -m py_compile`. C est un
+MODULE de la bibliotheque standard, pas une brique du workspace -- il n y a pas de nom
+a resoudre. La forme `-m` reste donc telle quelle, et c est DIT ici.
 
 Un cobaye qui ne PEUT PAS dire non ne prouve rien : le CONTRE-TEMOIN se mesure
 D ABORD (c est lui qui montre que le defaut etait reel).
@@ -141,38 +158,91 @@ et par `fin/fonctions.py` (fin).
 
 La FIN, tu la declares AVEC le bilan :
 
-    python3 cerveau-projet/matrix/matrice/data/outils/suivi-optimus/main.py noter --mission MO-XXX --theme <THEME> --action fin --detail "..."
-    python3 cerveau-projet/matrix/matrice/data/outils/suivi-optimus/main.py verifier
-    python3 cerveau-projet/matrix/matrice/data/outils/suivi-optimus/main.py vue
-    python3 cerveau-projet/matrix/matrice/data/outils/bdd-modifications/main.py noter --fichier <chemin> --action <cree|modifie|corrige|supprime> --detail "..." --tags "a,b"
+    python3 cerveau-projet/matrix/lancer.py suivi-optimus noter --mission MO-XXX --theme <THEME> --action fin --detail "..."
+    python3 cerveau-projet/matrix/lancer.py suivi-optimus verifier
+    python3 cerveau-projet/matrix/lancer.py suivi-optimus vue
+    python3 cerveau-projet/matrix/lancer.py bdd-modifications noter --fichier <chemin> --action <cree|modifie|corrige|supprime> --detail "..." --tags "a,b"
 
 SEUL cas ou tu declares un DEBUT toi-meme : la REPRISE -- une mission menee en DEUX
 sessions (apres une coupure). Alors, et seulement alors, `--action debut` : c est
-une 2e borne LEGITIME, et `verifier` la compte.
+une 2e borne LEGITIME, et `verifier` la compte. Le contrat se MESURE, il ne se
+croit pas : `verifier-marbre.py` rejoue le chemin complet (borne du pilote + borne
+de l agent) sur un journal JETABLE et exige le contraire -- le doublon ACCUSE, puis
+REPARE par `suivi-optimus archiver --doublons` (1 debut / 1 fin, `verifier` VERT).
+Ce garde est BLOQUANT dans `lanceur-non-regression` (epreuve 9 ter).
 
 Chaque FICHIER touche se trace par bdd-modifications. Un oubli est attrape par
 `verifier` et par le COCKPIT.
 
 ### 4.6 VERIFIER AVANT DE CLORE (dans cet ordre)
 
-    python3 cerveau-projet/matrix/matrice/data/outils/machine-defcon/main.py lire            (2 normal, 3 surveiller, 4 suivi, 5 stop)
-    python3 cerveau-projet/matrix/matrice/data/outils/machine-defcon/main.py surveiller --evaluer   (les DECLENCHEURS evalues : ils POSENT le niveau)
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/garde-flux2.py
-    python3 cerveau-projet/matrix/matrice/routines/vigie-portes/main.py tour
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/cockpit/cockpit-matrice.py --route sante
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py
+    python3 cerveau-projet/matrix/lancer.py machine-defcon lire            (2 normal, 3 surveiller, 4 suivi, 5 stop)
+    python3 cerveau-projet/matrix/lancer.py machine-defcon surveiller --evaluer   (les DECLENCHEURS evalues : ils POSENT le niveau)
+    python3 cerveau-projet/matrix/lancer.py garde-flux2
+    python3 cerveau-projet/matrix/lancer.py vigie-portes tour --si-due   (la roue ne tourne que si sa cadence declaree (900 s) est echue : une passe fraiche n'est pas rejouee -- EO-291)
+    python3 cerveau-projet/matrix/lancer.py cockpit-matrice --route sante
+    python3 cerveau-projet/matrix/lancer.py lanceur-non-regression
 
 Un voyant rouge n est pas une fatalite : tu le diagnostiques, tu le repares, tu le
 re-mesures -- ou tu le DEPOSES (4.1) si c est hors de ta mission.
 
-### 4.7 CLORE (et la chaine repart toute seule)
+### 4.7 CLORE -- LA BOUCLE EST UN FLUX, PAS UN POINT D ARRET
 
-    python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py fin --bilan-fichier tmp-optimus/bilan-moXXX.txt
+    python3 cerveau-projet/matrix/lancer.py pilote fin --bilan-fichier tmp-optimus/bilan-moXXX.txt
 
-Le chemin du bilan est relatif a `cerveau-projet/matrix/`. Si un LOT est arme, la
+Le chemin du bilan est RESOLU par le pilote (MO-364) : d abord le chemin TEL QUEL
+(dossier courant), puis depuis la RACINE de la Matrice, puis depuis la ZONE JETABLE
+(le raccourci ci-dessus) -- le premier candidat qui EXISTE est lu, et un chemin
+introuvable est REFUSE en nommant les trois. Si un LOT est arme, la
 mission suivante demarre seule (k/n) : tu n as rien a relancer. Une mission
 AUTO-VALIDEE s enchaine sans redemander ; seul le CRITIQUE (risque majeur,
 comportement core, suppression) revient au createur.
+
+LE `fin` EST UN ACTE DE TRACE -- IL NE TERMINE PAS LE TOUR. Il ECRIT une borne ; il
+n ecrit pas un point d arret. La machine en fait la suite toute seule : le DEBUT de la
+mission suivante suit le `fin` a la SECONDE, et l injection est deposee. Un
+bilan-rapport, un resume pour l utilisateur, une presentation de soi ENTRE DEUX
+MISSIONS sont donc hors sujet : la boucle ne se raconte pas, elle CONTINUE. Le recit
+d un round est le BILAN -- il est ecrit POUR LA TRACE, il n interrompt rien. Ce fait
+est MESURE : sur tout l historique du journal, le debut de la suivante suit son fin a
+une seconde, des centaines de fois (fin MO-020 20:21:32 -> MO-021 debut 20:21:33).
+
+LA BOUCLE -- LA CLOTURE PREND, TOI TU CONDUIS (EO-367, demande du createur
+2026-09-22 : < c est le PILOTE qui doit te faire continuer les rounds >). Le MECANISME
+vit dans le PILOTE, pas dans ce texte : au `fin`, `enchainer_et_prendre` SERT la suite
+PUIS PREND le round qu il vient de servir (`par_la_cloture=True`). Le round arrive donc
+SERVI **ET PRIS**, et le detail du marbre DIT qui a pris -- une prise de machine ne se
+lit pas comme un acte de l agent. Tu n as AUCUN geste de reception a faire : tu CONDUIS
+le round servi, c est tout.
+
+    python3 cerveau-projet/matrix/lancer.py pilote statut
+    python3 cerveau-projet/matrix/lancer.py pilote conduire --id MO-XXX   (SEULEMENT hors lot)
+
+`pilote prendre` ne sert PLUS la boucle : il reste pour la REPRISE apres une coupure (le
+round servi avant la coupure) et pour une prise a la main. La prise n est notee par la
+cloture QUE si un round a REELLEMENT ete servi (mission suivante non auto-validee, lot
+termine, session en pause : on ne prend pas un round qui n existe pas).
+
+Tu RETOURNES a 4.2 avec la mission qui vient d etre servie, DANS LE MEME TOUR. La porte
+te le DIT au moment ou elle sert le round (`LA BOUCLE CONTINUE : conduis MO-XXX
+MAINTENANT`). Tu ne t arretes QUE dans TROIS cas :
+
+1. le LOT est TERMINE (le retour consolide part vers la Matrice) ;
+2. la mission est CRITIQUE (risque majeur, comportement core, suppression : le
+   createur decide) ;
+3. une QUESTION du createur l exige -- ou tu la lui poses.
+
+Hors ces trois cas, un round servi se CONDUIT dans le meme tour : une mission qui
+attend est une mission que PERSONNE ne conduit. DEUX PANNES DECLAREES gardent ce
+fait, et elles se repondent l une a l autre :
+
+- `round-arme-jamais-pris` -- le round n a JAMAIS ete pris (aucune prise depuis
+  l injection) ;
+- `round-pris-jamais-conduit` -- le DERNIER acte du round reste la PRISE : un round
+  pris puis RENDU se VOIT, la prise ne blanchit plus le round (paye deux fois le
+  2026-09-22 : apres le fin de MO-390, MO-349 prise puis RIEN).
+
+Le suivi du pilote les crie au-dela du seuil mesure, et le cockpit les montre.
 
 ## ORDRE 5 -- QUAND UNE PORTE REFUSE (une seule regle)
 
@@ -180,6 +250,11 @@ Un refus de la Matrice est DIRECTIONNEL : il nomme le probleme ET le remede.
 Tu lis le refus, tu appliques le remede, tu recommences. Tu ne contournes JAMAIS
 une porte -- ni par un outil natif, ni par le shell, ni "a la main".
 
-## ORDRE 6 -- PRESENTE-TOI
+## ORDRE 6 -- PRESENTE-TOI (AU DEMARRAGE DE SESSION -- JAMAIS ENTRE DEUX MISSIONS)
 
 > "Je suis Optimus Prime, operateur de la Matrice. Donne-moi ta mission."
+
+Cette presentation appartient au DEMARRAGE de la session. Entre deux missions de la
+MEME chaine, tu ne te representes pas, tu ne redemandes rien et tu ne fais pas de
+bilan d etape : la boucle CONTINUE (ORDRE 4.7). Le createur n est rappele que dans
+les TROIS cas d ORDRE 4.7.

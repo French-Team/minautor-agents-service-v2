@@ -46,6 +46,11 @@ VERDICT_NON = "non"
 # presente dans deux listes = deux verites, et le brin se BLOQUE dessus (mesure
 # MO-175 : tresser ne rend jamais la main quand un id vit dans deux files).
 CLE_AUTO_VALIDEES = "auto_validees"
+# MEMOIRE DE NAISSANCE (MO-334) : l identite de chaque item CONSOMME, gardee dans
+# l ETAT de l entonnoir -- l item emporte ses trois champs en partant, et sa tombe
+# les dit. Elle se lit quand l item n est plus la, jamais a sa place. Meme litteral
+# que pilote/constants.py -- les deux doivent rester EGAUX.
+CLE_MEMOIRE_NAISSANCE = "memoire_naissance"
 # Nom de la file LEGACY (avant la conversion en index) : garde pour l auto-soin.
 CLE_LEGACY_AUTO_VALIDEE = "auto-validee"
 # Le TYPE PROPOSE au depot (R5, audit MO-174) : le crochet du createur peut le
@@ -82,6 +87,24 @@ SOURCES = ("createur", "veille", "redeport", "audit-nemesis")
 # La TRACE libre (date, motif, contexte) de la provenance : son PROPRE champ,
 # jamais le champ ferme `source` -- un champ, un sens.
 CHAMP_SOURCE_TRACE = "source_trace"
+
+# --- LA LISTE DES OUTILS PREPAREE SUR L ITEM (EO-313, demande createur 2026-09-20) --
+# Un item peut DECLARER les outils que SA mission va appeler. Pourquoi sur l ITEM et
+# non sur la mission : l item est la MEMOIRE DURABLE (il survit au redemarrage, la
+# mission n existe qu au chargement), et c est l item que la porte `preparer` atteint
+# AVANT que la mission existe. Le pont item -> mission la RECOPIE.
+# Sans elle, les outils d une mission etaient une FONCTION DE SON TYPE
+# (checklist/listes.py OUTILS_PAR_TYPE) : deux missions du meme type recevaient les
+# MEMES outils, et un outil qu UNE mission precise appelle ne pouvait pas lui etre livre.
+CHAMP_OUTILS = "outils"
+# Trace de la preparation : la liste d AVANT est conservee, comme role_avant et
+# categorie_avant -- on ne reecrit jamais une identite en silence.
+CHAMP_OUTILS_LE = "outils_le"
+CHAMP_OUTILS_AVANT = "outils_avant"
+# Le PLAFOND n est PAS recopie ici : il vit au domicile de l INJECTION
+# (pilote/constants.py PLAFOND_OUTILS_MODE_EMPLOI), que la porte `preparer` importe.
+# Un plafond recopie est un plafond qui derive, et la porte refuserait alors une
+# liste que l injection servirait volontiers (ou l inverse).
 
 URGENCES = ("bloquante", "haute", "normale", "basse")
 

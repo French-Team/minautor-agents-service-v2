@@ -211,7 +211,12 @@ def synchroniser():
                     "--theme", theme or "SUIVI-OPTIMUS",
                     "--action", "fin",
                     "--detail", detail,
-                    "--duree-s", "0",
+                    # EO-267 / decision du 2026-09-21 : AUCUNE duree declaree -- la
+                    # routine ne MESURE pas le temps, et un "0" est le placeholder
+                    # qui a fige la colonne Duree de la vue a zero pendant des mois
+                    # (une valeur qui ment se lit comme un fait, L-055). La vue
+                    # CALCULE la duree des bornes quand elles existent, et affiche
+                    # `inconnue` quand elles ne mesurent rien.
                 ],
                 cwd=str(REPERTOIRE_OUTIL_SUIVI),
                 capture_output=True,
@@ -253,7 +258,8 @@ def noter_boot_check(messages_boot):
                 "--theme", "SUIVI-OPTIMUS",
                 "--action", "decision",
                 "--detail", detail,
-                "--duree-s", "0",
+                # Meme regle : un boot-check n a AUCUNE duree. Le champ est OMIS
+                # (une absence honnete vaut mieux qu un zero qui se lit mesure).
             ],
             cwd=str(REPERTOIRE_OUTIL_SUIVI),
             capture_output=True,

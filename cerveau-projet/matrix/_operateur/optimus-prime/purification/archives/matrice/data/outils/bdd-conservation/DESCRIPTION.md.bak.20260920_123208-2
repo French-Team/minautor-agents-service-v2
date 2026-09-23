@@ -1,0 +1,246 @@
+# OUTIL -- bdd-conservation
+
+> Registre de conservation de toute la Matrice v3. Genere depuis le moule
+> outil-bdd puis renforce par MO-095 avec des portes de classement et de
+> decision. Cette BDD prepare l archivage reversible ; elle ne supprime rien.
+
+## Portes
+
+```
+python3 cerveau-projet/matrix/lancer.py bdd-conservation proposer --source <chemin> --categorie <categorie> --raison <raison> --tags <a,b> [--mission MO-XXX]
+python3 cerveau-projet/matrix/lancer.py bdd-conservation classer --id K-XXX --categorie <categorie> --raison <raison>
+python3 cerveau-projet/matrix/lancer.py bdd-conservation decider --id K-XXX --verdict <conserver|archiver|reparer|dette|signaler> --preuve <preuve> [--destination <chemin>]
+python3 cerveau-projet/matrix/lancer.py bdd-conservation preciser --id K-XXX --preuve <nouvelle preuve> [--raison <nouvelle raison>]
+python3 cerveau-projet/matrix/lancer.py bdd-conservation balayer [--simuler oui] [--mission MO-XXX]
+python3 cerveau-projet/matrix/lancer.py bdd-conservation archiver --id K-XXX [--simuler oui]
+python3 cerveau-projet/matrix/lancer.py bdd-conservation archiver --lot oui [--simuler oui]
+python3 cerveau-projet/matrix/lancer.py bdd-conservation restaurer --id K-XXX [--simuler oui]
+python3 cerveau-projet/matrix/lancer.py bdd-conservation purger --id K-XXX [--simuler oui]
+python3 cerveau-projet/matrix/lancer.py bdd-conservation purger --lot oui [--simuler oui]
+python3 cerveau-projet/matrix/lancer.py bdd-conservation controler-archives
+python3 cerveau-projet/matrix/lancer.py bdd-conservation controler-borne
+python3 cerveau-projet/matrix/lancer.py bdd-conservation controler-plafond
+python3 cerveau-projet/matrix/lancer.py bdd-conservation lire [--id K-XXX] [--categorie X] [--statut X] [--verdict X] [--tag X]
+python3 cerveau-projet/matrix/lancer.py bdd-conservation manifeste
+python3 cerveau-projet/matrix/lancer.py bdd-conservation verifier
+```
+```
+
+## Categories fermees
+
+`VIVANT`, `STRUCTUREL`, `GENERE`, `HISTORIQUE`, `OBSOLETE`, `COBAYE`,
+`ORPHELIN`, `HORS-PERIMETRE`.
+
+## Statuts fermes
+
+`propose`, `classe`, `decide`, `archive`, `conserve`, `repare`, `dette`,
+`signale`, `restaure`, `supprime`.
+
+## Schema d une entree
+
+Chaque entree porte :
+
+`id`, `date`, `mission`, `source`, `destination`, `categorie`, `statut`,
+`verdict`, `raison`, `lecteurs`, `ecrivains`, `index`, `sha_avant`,
+`sha_apres`, `octets_avant`, `octets_apres`, `lignes_avant`, `lignes_apres`,
+`restaurable`, `operation`, `archive`, `preuve`, `tags`.
+
+## Protections
+
+- Prefixe d identifiant `K-` et numerotation max+1.
+- Categories, statuts et verdicts en listes fermees.
+- Transition obligatoire `propose -> classe -> decide`.
+- `archiver` exige une destination et une preuve.
+- La preuve d une decision reste CORRIGEABLE par `preciser` : la correction ne
+  touche NI la categorie, NI le statut, NI le verdict (aucune re-decision).
+- Source, raison et tags obligatoires.
+- Ecriture atomique LF et empreinte SHA-256.
+- Verification structurelle et cryptographique.
+- La SUPPRESSION est une porte NOMMEE (`purger`, P3 / MO-308) : elle n agit que
+  sur une archive dont la RECOUVRABILITE est PROUVEE (le contenu est retrouvable
+  dans git, ou une copie du meme contenu vit hors de l archive), et elle CITE sa
+  preuve. Sans preuve, elle REFUSE en nommant ses deux essais -- et rien ne bouge
+  (ni BDD, ni disque, ni manifeste).
+- L execution d une archive passe par la PORTE DE ROTATION (case 7) : un
+  element sans decision ne bouge JAMAIS.
+
+## Porte de ROTATION (MO-160, cases 7 et 8)
+
+```text
+demande -> cartographie -> classification -> audit -> contre-analyse
+        -> decision -> EXECUTION PAR PORTE -> VERIFICATION
+```
+
+`archiver` EXECUTE une decision deja tracee (statut `decide`, verdict
+`archiver`). Sa surete vient du moteur PARTAGE `data/commun/rotation_journal.py`
+(MO-101) : ARCHIVER D ABORD (copier, verifier la copie, puis retirer la source),
+l archive dans le DEJA CONNU (idempotence), une COURSE SE REFUSE (jamais ecraser).
+
+### Les 5 refus du contrat de rotation
+
+1. jamais un point PLUS RECENT que sa source ;
+2. jamais le DERNIER point d une source ABSENTE ;
+3. jamais une FORME NON CONFORME (SIGNALER, ne pas absorber) ;
+4. jamais une ZONE HORS PERIMETRE (hors Matrice, ou zone du voisin Flux 1) ;
+5. jamais DEUX FOIS le meme element (idempotence).
+
+Protections du plan (section 5) : aucun element sans decision, aucune
+destination occupee par un contenu DIFFERENT, aucun point introuvable.
+
+### Manifeste, origine et verification
+
+- `archiver --lot oui` mesure d abord l ORIGINE (temoin : `temoin-avant.json`,
+  les points de restauration de la BDD avec leur sha et leurs octets), PUIS
+  deplace. Chaque element archive ajoute UNE ligne au manifeste append-only
+  `manifeste-archives.jsonl` (source, destination, sha avant/apres, octets,
+  lignes, restaurable, preuve).
+- Les points presents sur le disque SANS decision sont SIGNALES, jamais
+  deplaces.
+- `controler-archives` verifie `archive + actif = origine` (aucun octet perdu,
+  aucune duplication) et que chaque archive vit dans une ZONE INVISIBLE
+  declaree.
+- `restaurer` PROUVE la reversibilite : la source est recopiee depuis l archive
+  (l archive reste en place, comme preuve).
+
+### Domicile de l archive
+
+`_operateur/optimus-prime/purification/archives/<chemin source en miroir>` --
+dans la Matrice, sous `_operateur` (PLANCHER du domicile d invisibilite), donc
+une zone que le cameleon ne lit JAMAIS : l archive contient du CONTENU INTERNE
+(contre-analyse MO-156).
+
+### Porte de PURGE de l archive (P3, MO-308)
+
+```text
+python main.py purger --id K-XXX [--simuler oui]
+python main.py purger --lot oui [--simuler oui]
+```
+
+Le createur a valide P3 le 2026-09-20 (rapport-revision-MO-305, section 3) :
+"une archive est SUPPRIMEE quand son contenu est prouve recouvrable (engage dans
+git, OU empreinte + copie dans la conservation BDD) ; sinon elle reste".
+
+Avant cette porte, le registre DISAIT "aucune porte de suppression" : c etait vrai,
+et c est ce qui faisait vivre 898 archives (18 Mo) SANS duree de vie, jamais
+relues. La porte n a pas le droit de supprimer sur une PROMESSE -- elle supprime
+sur une PREUVE, et elle la CITE, dans son acte comme dans son refus.
+
+DEUX PREUVES, essayees dans cet ordre ; un refus les DIT TOUTES LES DEUX :
+
+| Mode | Ce qui est exige | Ce que l acte cite |
+|---|---|---|
+| `git` | le CONTENU vit dans les objets du depot | le blob exact (`git cat-file blob <oid>`) |
+| `copie` | le meme contenu vit AILLEURS, hors de l archive (source revenue, jumeau en place) | le chemin de la copie |
+
+Ce qui n est JAMAIS purge : une archive dont la seule copie est elle-meme (l
+exception nommee par V4 : le `.bak` d un fichier NON ENGAGE). Un refus n ecrit
+RIEN : ni BDD, ni disque, ni manifeste.
+
+L acte : retirer la copie DE L ARCHIVE, ecrire la ligne `type: purge` au manifeste
+(sha, octets, `recouvrable_par`, preuve citee), et passer le registre a
+`supprime`. `controler-archives` compte alors TROIS populations :
+`archive + actif + purge = origine` -- un element purge ENCORE present sur le
+disque est un ecart : sa disparition ne se croit pas, elle se verifie.
+
+MESURE du 2026-09-20 (premiere application) : 782 / 891 archives purgees, 109
+restees (preuve manquante), 0 anomalie ; l archive passe de 897 fichiers / 18 Mo a
+115 fichiers / 3,2 Mo. Reversibilite prouvee de bout en bout : le blob cite rend
+le contenu, et son SHA-256 egale celui enregistre.
+
+## Porte de BALAYAGE de la famille (EO-147, MO-163)
+
+```text
+python main.py balayer [--simuler oui] [--mission MO-XXX]
+```
+
+La porte `ecrire` cree un point de restauration a CHAQUE passage : le classement
+etait donc un travail PERPETUEL -- mesure MO-162, 29 points sans decision en une
+seule journee, dont 2 nes de la reparation de la verification elle-meme. Une
+classification qui ne se termine pas empeche la suite de purification de se
+fermer.
+
+`balayer` applique la REGLE de la famille, MESUREE sur les points deja juges
+(MO-162) et jamais inventee : le PLUS RECENT de son origine est `STRUCTUREL` (il
+sert au revert d une modification en cours), tout point REMPLACE est `OBSOLETE`
+(l archive garde la reversibilite). Il franchit les trois marches
+(`propose -> classe -> decide`) par les FONCTIONS de la porte qui les possede :
+il ORCHESTRE, il ne redecide ni les transitions ni les listes fermees.
+
+Ce que la regle ne couvre pas est DOUTEUX : NOMME, laisse EN PLACE, compte dans
+le rapport. Les doutes verifies AVANT de juger sont ceux du contrat de rotation
+qui concernent le classement -- point introuvable, zone hors perimetre, source
+absente, point plus recent que sa source. Une automation qui devine serait pire
+qu un travail manuel.
+
+`--simuler oui` n ecrit RIEN (ni BDD, ni disque), et `balayer` ne DEPLACE aucun
+fichier : l acte reste a la porte de rotation, qui exige une decision tracee.
+
+### Les TROIS populations du balayage (le perpetuel se ferme vraiment)
+
+Un point echappe au classement de TROIS facons ; les deux premieres ont ferme
+EO-147, la troisieme ferme EO-152.
+
+| Population | Etat | Marches a franchir |
+|---|---|---|
+| le point est NEUF | sur le disque, absent de la BDD | les TROIS (`propose -> classe -> decide`) |
+| le classement est INACHEVE | dans la BDD, statut `propose` ou `classe`, aucun verdict | les DEUX dernieres (`classe -> decide`), marquees `REPRIS` |
+| le point est un `STRUCTUREL` DEPASSE | dans la BDD, statut `decide`, verdict `conserver`, et un point plus recent existe | les DEUX dernieres, precedees de la transition `rejuger`, marquees `REJUGE` |
+
+La seconde population etait INVISIBLE : `points_sans_decision` ne rend que les
+points ABSENTS de la BDD, et la porte de rotation ne reprend que les entrees
+DECIDEES. Un classement interrompu restait donc entre les deux POUR TOUJOURS.
+Mesure de la fermeture d EO-147 : `K-156`, pose par MO-162, est reste a `propose`
+pendant que toute sa famille etait jugee. Une porte qui ne traite que le NEUF
+laisse derriere elle tout ce qui a echoue en route.
+
+La troisieme est celle qui a fallu mesurer DEUX FOIS (mesure MO-164, mission
+MO-165). Un point DEJA DECIDE n'est, lui aussi, ni neuf ni inacheve : il gardait
+donc `conserver` POUR TOUJOURS quand un point plus recent le remplacait, et
+l'actif grandissait d'un point a chaque ecriture -- 16 points `STRUCTUREL` en trop
+dans 10 familles sur 88, alors que le balayage rendait "EN ORDRE". La regle du
+domicile le couvrait deja ("tout point REMPLACE est OBSOLETE") : c'est la MACHINE
+qui ne l'appliquait pas. Le re-jugement passe par la TRANSITION DECLAREE `rejuger`
+(`ajouter/fonctions.py`), qui ramene l'element a `classe` ET VIDE son verdict : un
+re-jugement interrompu retombe donc dans la population INACHEVE et le balayage
+suivant le reprend -- un travail ne se perd pas en chemin.
+
+Un element repris ou re-juge est RE-JUGE par la regle d AUJOURD HUI, jamais
+recopie : sa famille a pu changer depuis (un point plus recent a pu naitre
+entre-temps), et on ne juge pas le present avec les yeux du passe. Le drapeau
+`rejuge` ajoute UN fait a la preuve ("ce point ETAIT le plus recent, un plus recent
+l'a remplace") : il ne change aucun verdict, il dit POURQUOI la decision a change.
+
+### Le CONTROLE DE LA BORNE (EO-152)
+
+```text
+python main.py controler-borne
+```
+
+La case 8 (`controler-archives`) prouve que RIEN NE SE PERD :
+`archive + actif = origine`. Elle reste VERTE tout le temps -- y compris quand
+l'actif grandit sans borne. Ce sont DEUX questions differentes, et une chaine se
+verifie en mesurant les deux.
+
+`controler-borne` mesure la seconde : la doctrine N=1 de la contre-analyse MO-156,
+"une famille ne garde EN PLACE que son PLUS RECENT". Ce qui compte comme EN PLACE
+est MESURE, jamais suppose : un point est EN PLACE quand il est DECIDE et CONSERVE
+(une archive a quitte sa place ; un point DECIDE `archiver` est sur le depart,
+l'attente entre le balayage et la rotation etant NORMALE -- la compter ferait
+crier le controle pendant une operation saine, et un controle qui crie a tort ne
+garde plus rien).
+
+Il rend 0 quand la borne tient, 1 quand une famille est en exces -- et il NOMME
+chaque famille en exces AVEC ses identifiants : un controle qui dit "il y a un
+exces" sans dire OU oblige a refaire la mesure a la main.
+
+### Qui declenche le balayage, et son acte
+
+Le PILOTE, a CHAQUE cloture de mission (`pilote/commun.py` + `pilote/fin/`) : il
+BALAIE, puis il execute la ROTATION (`archiver --lot oui`). Une famille classee
+mais jamais archivee resterait un travail EN ATTENTE, a refaire a chaque mission
+-- et un travail en attente qu aucun instrument ne mesure est un travail oublie
+(lecon MO-136, deja appliquee a la zone jetable : c est le PILOTE qui la vide).
+
+L ORDRE est sacre : le verdict est trace AVANT que quoi que ce soit bouge
+(`plan-conservation`, section 5 : aucun element sans verdict ne bouge). Les deux
+gestes sont NON BLOQUANTS : leur echec alerte, il ne tue jamais une mission.

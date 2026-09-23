@@ -24,6 +24,12 @@ Usage :
     python main.py conduire --id MO-00X   (CONDUIT une mission chargee HORS lot :
                                        elle devient COURANTE et injectee, sans
                                        consommer un creneau de la chaine ; EO-185)
+    python main.py prendre             (PREND le round ARME : note la PRISE de la
+                                       mission EN COURS au marbre -- c est le GESTE
+                                       DE RECEPTION de la BOUCLE (ORDRE 4.7) :
+                                       apres un fin la chaine a deja servi, donc
+                                       injecter REFUSE ; prendre ne prepare rien,
+                                       il DECLARE ; EO-360)
     python main.py fin --bilan "..."   (la mission suivante reste en attente)
                                        --bilan-fichier <chemin> lit le MEME recit
                                        dans un fichier (EO-132) : un argument
@@ -33,6 +39,11 @@ Usage :
     python main.py file verser         (echelon 4 BIS : le BRIN ENTIER -> UN lot, une
                                        seule fois -- numerotation k/n et retour
                                        consolide ; [--lot <nom>] ; EO-148)
+    python main.py lot etat              (AFFICHE le lot ARME : rang k/n, item
+                                       d'origine, type, urgence et statut de chaque
+                                       maillon, lus dans sa source ; code 1 si un
+                                       maillon n'a plus sa memoire de naissance ;
+                                       MO-380)
     python main.py lot retirer --ids MO-001,MO-002 [--motif ...]
                                        (RETIRE des missions d un lot ARME : le lot
                                        garde ses autres ids et le k/n est recompose ;
@@ -75,6 +86,7 @@ COMMANDES = {
     "injecter": injection_executer,
     "enchainer": injection_executer,
     "conduire": injection_executer,
+    "prendre": injection_executer,
     "mission": injection_executer,
     "fin": fin_executer,
     "checklist": checklist_executer,

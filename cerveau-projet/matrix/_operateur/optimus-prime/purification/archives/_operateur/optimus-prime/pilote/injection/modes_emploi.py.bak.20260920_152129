@@ -1,0 +1,410 @@
+#!/usr/bin/env python3
+"""modes_emploi.py -- LE MODE D EMPLOI D UNE BRIQUE, extrait de SON domicile.
+
+POURQUOI (revision createur du 2026-09-20, EO-311 / mission MO-313) : l injection
+"outils-disponibles" du catalogue servait un os.listdir -- des NOMS, __pycache__ et
+les points de restauration .bak compris, et AUCUN usage. Le createur : "fournir des
+outils, combos, super-combos sans explication n est pas productif et genere des
+actions inutiles". Or proto-6 etape 2 PROMET DEJA "les interfaces FERMEES des outils
+que la mission va appeler (usage main.py, codes 0/1/2)" : le protocole disait vrai,
+le CATALOGUE ne le faisait pas.
+
+LA REGLE N EST PAS RECOPIEE (M-076 / L-032) : le mode d emploi d une brique est ce
+que la BRIQUE dit d ELLE-MEME -- le docstring de son main.py, ou la premiere ligne
+de son README quand il n y a pas de docstring. Une fiche ecrite a cote (une copie)
+divergerait en silence : c est exactement ce que ce module refuse.
+
+UNE BRIQUE, C EST QUOI : un .py, ou un dossier qui porte un main.py. Les points de
+restauration (*.bak*), __pycache__, les documents (*.md) et les donnees (*.json) ne
+sont PAS des briques -- ils polluaient la liste servie a l agent.
+
+L API DES CONSOMMATEURS -- trois fonctions, un seul sens :
+  - `trouver_brique(nom)`   : le CHEMIN de la brique nommee, ou None -- LA resolution ;
+  - `noms_servables()`      : les noms servables (sert au refus ET a la preuve) ;
+  - `refus_nom(nom)`        : le refus NOMME (nom fautif, proches, remede).
+`mode_emploi_brique(nom)` les consomme. La porte `preparer` de l entonnoir (EO-313)
+les consomme AUSSI, par le meme domicile : un nom que la porte accepte est un nom
+que l injection sait servir -- jamais l inverse.
+
+UN MODE D EMPLOI MANQUANT EST ACCUSE, JAMAIS TU : une brique sans usage lisible rend
+un texte qui le DIT (le remede est de l ecrire dans la brique, son domicile).
+
+Usage:
+  python modes_emploi.py carte [--racine <racine>]
+  python modes_emploi.py mode-emploi <nom>
+  python modes_emploi.py --auto-test
+"""
+import sys
+from pathlib import Path
+
+# --- DOMICILES DE LA DECOUVERTE, declares une fois ---------------------------
+# Ou une brique dit son usage, dans l ORDRE ou on le cherche : le docstring du
+# module d entree d abord (le contrat de la porte elle-meme), puis son document.
+NOMS_DOCUMENTS = ("DESCRIPTION.md", "README.md", "README-*.md")
+# Un mode d emploi est MINI par construction : on borne, et la coupe est DITE.
+PLAFOND_LIGNES_USAGE = 8
+# PLAFOND DES BRIQUES SERVIES PAR UNE CARTE (demande createur du 2026-09-20, MO-314) :
+# mesure avant de le poser -- avant-mission pesait 8004 tokens, dont 2452 pour les
+# QUATRE cartes (31 pour cent de l injection). La carte est une MEMOIRE, pas le
+# manuel : au-dela, le detail se demande pour la brique voulue (mode-emploi <nom>).
+# La coupe est TOUJOURS DITE, et la carte complete reste accessible (--complet) :
+# un plafond qui cache sans le dire serait un bandeau sur les yeux (L-055).
+PLAFOND_BRIQUES_CARTE = 30
+PLAFOND_LIGNES_BUT = 100
+MARQUE_COUPE = " [...]"
+# Non-briques : jamais servies (mesure du defaut : __pycache__ et .bak etaient dans
+# la liste remise a l agent).
+EXCLUSIONS = ("__pycache__",)
+SUFFIXES_EXCLUS = (".bak", ".pyc", ".md", ".json", ".txt")
+SUFFIXE_BRIQUE = ".py"
+NOM_ENTREE = "main.py"
+
+# Les RACINES des briques, declarees ici (un seul domicile). MEME FORME que les
+# `source` du catalogue d injection : RELATIVES AU PILOTE (jamais au dossier du
+# module) -- deux formes pour un meme chemin, c est deux verites.
+PILOTE = Path(__file__).resolve().parent.parent
+RACINES = {
+    "outils": "../super-combos/combos/outils",
+    "combos": "../super-combos/combos",
+    "super-combos": "../super-combos",
+    "outils-matrice": "../../../matrice/data/outils",
+}
+
+
+def _est_brique(chemin):
+    """Un .py, ou un dossier qui porte un main.py. Sinon : jamais une brique."""
+    nom = chemin.name
+    if nom in EXCLUSIONS or any(motif in nom for motif in SUFFIXES_EXCLUS):
+        return False
+    if chemin.is_file():
+        return chemin.suffix == SUFFIXE_BRIQUE
+    if chemin.is_dir():
+        return (chemin / NOM_ENTREE).is_file()
+    return False
+
+
+def lister_briques(racine):
+    """Les briques d une racine, par ordre de nom. Racine absente : liste vide."""
+    racine = Path(racine)
+    if not racine.is_dir():
+        return []
+    return sorted((p for p in racine.iterdir() if _est_brique(p)),
+                  key=lambda p: p.name.lower())
+
+
+def chemin_brique(racine, nom):
+    """Le chemin de la brique nom sous racine, ou None (jamais une devinette)."""
+    candidat = Path(racine) / nom
+    return candidat if _est_brique(candidat) else None
+
+
+def premier_document(brique):
+    """Le texte ou la brique dit ce qu elle est : son docstring, ou son document.
+
+    Rend (texte, origine) : l ORIGINE est dite, parce qu un mode d emploi sans
+    temoin se lit comme une affirmation en l air.
+    """
+    brique = Path(brique)
+    fichiers = [brique] if brique.is_file() else [brique / NOM_ENTREE]
+    for nom in NOMS_DOCUMENTS:
+        fichiers.extend(sorted(brique.glob(nom)) if brique.is_dir() else [])
+    for fichier in fichiers:
+        if not fichier.is_file():
+            continue
+        try:
+            texte = fichier.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            continue
+        if texte.strip():
+            return texte, fichier.name
+    return "", ""
+
+
+def docstring(texte):
+    """Le docstring d un module Python : entre le premier et le second triple guillemet."""
+    marque = texte.find("\"\"\"")
+    if marque < 0:
+        return ""
+    fin = texte.find("\"\"\"", marque + 3)
+    return texte[marque + 3:fin] if fin > 0 else ""
+
+
+def but(texte):
+    """La PREMIERE ligne qui dit a quoi sert la brique (le but, en une ligne)."""
+    for ligne in texte.splitlines():
+        ligne = ligne.strip()
+        if ligne and not ligne.startswith("#") and not ligne.startswith("-"):
+            return ligne[:PLAFOND_LIGNES_BUT]
+    return ""
+
+
+def bloc_usage(texte):
+    """Les lignes du bloc Usage (bornees), ou "" : une brique peut ne pas en avoir.
+
+    Le bloc commence a une ligne Usage et s arrete a la premiere ligne qui ne
+    ressemble plus a une commande : un mode d emploi ne deverse pas la brique.
+    """
+    lignes = texte.splitlines()
+    depart = None
+    retenues = []
+    for index, ligne in enumerate(lignes):
+        if ligne.strip().lower().startswith("usage"):
+            # DEUX FORMES MESUREES dans les briques : la commande EN LIGNE
+            # (Usage: python x.py --y, forme des super-combos) et le bloc INDENTE
+            # sous le label (Usage : puis 4 espaces, forme des outils de la Matrice).
+            # N en lire qu une seule rendait un mode d emploi VIDE sur la moitie du
+            # parc -- et c est l AUTOTEST qui l a crie, pas une relecture.
+            reste = ligne.split(":", 1)[1].strip() if ":" in ligne else ""
+            if reste:
+                retenues.append(reste)
+            depart = index + 1
+            break
+    if depart is None:
+        return ""
+    for ligne in lignes[depart:]:
+        if not ligne.strip():
+            if retenues:
+                break
+            continue
+        if not (ligne.startswith((" ", "\t")) or ligne.lstrip().startswith(("python", "-", "$"))):
+            break
+        retenues.append(ligne.rstrip())
+        if len(retenues) >= PLAFOND_LIGNES_USAGE:
+            retenues.append(MARQUE_COUPE.strip())
+            break
+    return "\n".join(retenues)
+
+def mode_emploi(brique):
+    """Le MINI mode d emploi d une brique : son but, puis son usage.
+
+    Rend (texte, origine) ; texte VIDE quand la brique ne dit rien d elle-meme --
+    l appelant en fait une ACCUSATION, jamais un silence.
+    """
+    texte, origine = premier_document(brique)
+    if not texte:
+        return "", ""
+    corps = docstring(texte) if origine.endswith(".py") else texte
+    if not [ligne for ligne in corps.splitlines() if ligne.strip()]:
+        return "", origine
+    usage = bloc_usage(corps)
+    return "\n".join([but(corps)] + ([usage] if usage else [])), origine
+
+
+def trouver_brique(nom):
+    """Le CHEMIN de la brique nommee dans les racines declarees, ou None.
+
+    LA RESOLUTION VIT ICI, UNE SEULE FOIS (M-076) : elle est consommee par
+    `mode_emploi_brique` (l injection) ET par la porte `preparer` de l entonnoir
+    (EO-313). Pourquoi la MEME : une porte qui accepterait un nom que l injection
+    ne sait pas servir ferait ACCUSER par le garde une mission qu elle a prise
+    elle-meme -- la porte doit valider contre ce que le consommateur sert vraiment.
+    """
+    for cle in sorted(RACINES):
+        brique = chemin_brique((PILOTE / RACINES[cle]).resolve(), nom)
+        if brique is not None:
+            return brique
+    return None
+
+
+def noms_servables():
+    """Les NOMS des briques servables (toutes racines), tries -- sert au refus.
+
+    Une carte dit le BUT de chaque brique ; cette liste dit les NOMS que la porte
+    `preparer` peut accepter, et rien de plus.
+    """
+    noms = []
+    for cle in sorted(RACINES):
+        for brique in lister_briques((PILOTE / RACINES[cle]).resolve()):
+            if brique.name not in noms:
+                noms.append(brique.name)
+    return sorted(noms)
+
+
+def refus_nom(nom):
+    """Le refus NOMME d un nom non servable : le nom fautif, les proches, le remede.
+
+    Meme discipline que le refuseur de la facade (`data/commun/resolution_outils.py`) :
+    un refus qui ne dit QUE non oblige a deviner le geste juste.
+    """
+    proches = [servable for servable in noms_servables() if nom and (nom in servable or servable in nom)]
+    message = "nom non servable : " + repr(nom)
+    if proches:
+        message += " -- proches : " + ", ".join(proches[:8])
+    return message + " -- une brique est un .py ou un dossier a main.py des racines : " + ", ".join(sorted(RACINES))
+
+
+def mode_emploi_brique(nom):
+    """Le mode d emploi d une brique NOMMEE, cherchee dans les racines declarees.
+
+    C est l API que le PILOTE consomme a l injection. Rend (texte, origine) ;
+    ("", "") quand le nom ne designe AUCUNE brique -- le consommateur le DIT : une
+    brique demandee et introuvable est un ECART, jamais un silence (et c est ce que
+    le garde des contrats accuse).
+    """
+    brique = trouver_brique(nom)
+    return mode_emploi(brique) if brique is not None else ("", "")
+
+
+def ligne_carte(brique):
+    """UNE ligne par brique pour la CARTE : le nom, son but, et le defaut s il y en a."""
+    texte, origine = mode_emploi(brique)
+    if not texte:
+        return "  " + brique.name + " : AUCUN MODE D EMPLOI (a poser dans la brique)"
+    return "  " + brique.name + " : " + texte.splitlines()[0]
+
+
+def carte(racine, plafond=PLAFOND_BRIQUES_CARTE):
+    """La CARTE d une racine : une ligne par brique, les manques NOMMES, la coupe DITE.
+
+    Rend (texte, manquantes). Deux choses sont toujours DITES, parce qu une carte
+    qui se tait se lit comme une carte complete :
+      - les briques SANS mode d emploi (leur nom), pour qu elles se reparent ;
+      - les briques NON AFFICHEES quand la carte depasse le plafond, avec le geste
+        qui les rend (la carte complete, ou le detail d UNE brique).
+
+    `plafond` par defaut : PLAFOND_BRIQUES_CARTE -- et c est LE MEME defaut pour le
+    catalogue et pour le garde qui la juge : deux defauts differents, c est un garde
+    qui juge autre chose que ce qui est servi (defaut attrape par l autotest du
+    plafond, 2026-09-20). Un plafond a 0 rend TOUT (la carte complete : la voie de
+    secours, jamais un blocage).
+    """
+    briques = lister_briques(racine)
+    if not briques:
+        return "", []
+    retenues = briques if not plafond else briques[:plafond]
+    lignes = ["CARTE DES BRIQUES -- " + str(racine) + " (" + str(len(briques)) + " brique(s))"]
+    manquantes = []
+    for brique in retenues:
+        lignes.append(ligne_carte(brique))
+        if "AUCUN MODE D EMPLOI" in lignes[-1]:
+            manquantes.append(brique.name)
+    lignes.append("  " + str(len(manquantes)) + " sans mode d emploi sur " + str(len(retenues))
+                  + " affichee(s) : " + (", ".join(manquantes) if manquantes else "aucune"))
+    restantes = len(briques) - len(retenues)
+    if restantes > 0:
+        lignes.append("  " + str(restantes) + " brique(s) NON AFFICHEE(S) sur "
+                      + str(len(briques)) + " (plafond " + str(plafond) + ") -- detail d une"
+                      " brique : python modes_emploi.py mode-emploi <nom> ; carte complete :"
+                      " python modes_emploi.py carte <racine> --complet")
+    return "\n".join(lignes), manquantes
+
+
+def servir(racine, plafond=PLAFOND_BRIQUES_CARTE):
+    """Le texte servi par le CATALOGUE pour une racine : une CARTE bornee, jamais une liste nue."""
+    texte, manquantes = carte(racine, plafond)
+    if not texte:
+        return "REFUS : aucune brique sous " + str(racine) + " (racine absente ou vide)."
+    return texte
+
+
+def autotest():
+    """Le piege du module (L-032) : 4 epreuves sur un arbre jetable, et il nettoie.
+
+    Un extracteur jamais vu crier ne prouve rien : on exige (1) une brique AVEC
+    usage servie ; (2) une brique SANS usage ACCUSEE ; (3) un .bak et un __pycache__
+    JAMAIS des briques ; (4) un nom inconnu : aucun chemin rendu.
+    """
+    import shutil
+    import tempfile
+    racine = Path(tempfile.mkdtemp(prefix="modes-emploi-"))
+    try:
+        (racine / "avec-usage.py").write_text(
+            "\"\"\"avec-usage -- but lisible." + chr(10) + chr(10)
+            + "Usage: python avec-usage.py --x" + chr(10) + "\"\"\"" + chr(10),
+            encoding="utf-8")
+        (racine / "sans-usage.py").write_text("", encoding="utf-8")
+        (racine / "vieux.py.bak.20260101_000000").write_text("x", encoding="utf-8")
+        (racine / "__pycache__").mkdir()
+        # COBAYE DU PLAFOND (MO-314) : au-dela du plafond declare, la carte doit etre
+        # COUPEE ET LE DIRE ; en deca, elle ne coupe RIEN. Deux arbres, deux verdicts.
+        grande = racine / "grande"
+        grande.mkdir()
+        for numero in range(PLAFOND_BRIQUES_CARTE + 2):
+            (grande / ("brique-" + str(numero).zfill(2) + ".py")).write_text(
+                "\"\"\"" + "brique numero " + str(numero) + " -- but de cobaye." + chr(10)
+                + "Usage: python brique.py --x" + chr(10) + "\"\"\"" + chr(10), encoding="utf-8")
+        servables = noms_servables()
+        texte_grand, _absentes = carte(grande)
+        texte_petit, _absentes_petit = carte(racine)
+        briques = [b.name for b in lister_briques(racine)]
+        texte, manquantes = carte(racine)
+        # La CARTE dit UNE ligne par brique ; le mode d emploi COMPLET (but + usage)
+        # se demande pour la brique -- deux lectures, et l epreuve exige LES DEUX.
+        complet, origine = mode_emploi(racine / "avec-usage.py")
+        return [
+            ("brique AVEC usage SERVIE (but + usage)",
+             "avec-usage.py : avec-usage -- but lisible." in texte
+             and "avec-usage -- but lisible." in complet
+             and "python avec-usage.py --x" in complet),
+            ("brique SANS usage ACCUSEE (jamais tue)",
+             "sans-usage.py" in manquantes),
+            ("point de restauration et __pycache__ JAMAIS des briques",
+             "vieux.py.bak.20260101_000000" not in briques and "__pycache__" not in briques),
+            ("nom inconnu : aucun chemin rendu (l appelant refuse)",
+             chemin_brique(racine, "inexistant.py") is None),
+            ("carte AU-DELA du plafond : coupee ET la coupe DITE",
+             "2 brique(s) NON AFFICHEE(S) sur " + str(PLAFOND_BRIQUES_CARTE + 2) in texte_grand
+             and "brique-" + str(PLAFOND_BRIQUES_CARTE).zfill(2) + ".py" not in texte_grand),
+            ("CONTRE-TEMOIN : carte SOUS le plafond, RIEN de coupe",
+             "NON AFFICHEE" not in texte_petit),
+            # LA RESOLUTION (EO-313) : elle est consommee par une PORTE, donc elle
+            # se prouve comme une porte -- un nom servable RESOUT, un nom inconnu
+            # est REFUSE en le nommant (avec ses proches), jamais rendu None en
+            # silence. L epreuve lit le VRAI parc (lecture seule) : c est la seule
+            # facon de prouver que la porte et l injection regardent les memes noms.
+            ("un nom servable RESOUT, un nom inconnu est REFUSE en le nommant",
+             bool(servables) and trouver_brique(servables[0]) is not None
+             and trouver_brique("zzz-inexistant.py") is None
+             and "nom non servable" in refus_nom("zzz-inexistant.py")),
+        ]
+    finally:
+        shutil.rmtree(str(racine), ignore_errors=True)
+
+
+def _racine_option(arguments, defaut):
+    if "--racine" in arguments:
+        position = arguments.index("--racine")
+        if position + 1 < len(arguments):
+            return Path(arguments[position + 1])
+    return Path(defaut)
+
+
+def main():
+    arguments = sys.argv[1:]
+    if "--auto-test" in arguments:
+        epreuves = autotest()
+        for nom, tenu in epreuves:
+            print(("  [OK] " if tenu else "  [KO] ") + nom)
+        ratees = [nom for nom, tenu in epreuves if not tenu]
+        print("  AUTOTEST : " + str(len(epreuves) - len(ratees)) + "/" + str(len(epreuves))
+              + " epreuve(s) tenue(s)")
+        return 1 if ratees else 0
+    if not arguments:
+        print(__doc__)
+        return 2
+    base = PILOTE
+    nom_racine = arguments[0]
+    if nom_racine in RACINES:
+        racine = (base / RACINES[nom_racine]).resolve()
+        # --complet : la carte ENTIERE (voie de secours, jamais un blocage).
+        print(servir(racine, 0 if "--complet" in arguments else PLAFOND_BRIQUES_CARTE))
+        return 0
+    if nom_racine == "mode-emploi" and len(arguments) > 1:
+        cible = arguments[1]
+        for racine_nommee in sorted(RACINES):
+            racine = (base / RACINES[racine_nommee]).resolve()
+            brique = chemin_brique(racine, cible)
+            if brique is not None:
+                texte, origine = mode_emploi(brique)
+                print("=== " + cible + " (" + (origine or "aucune source") + ") ===")
+                print(texte if texte else "AUCUN MODE D EMPLOI : a poser dans la brique elle-meme.")
+                return 0
+        print("REFUS : brique inconnue : " + cible + " (racines : " + ", ".join(sorted(RACINES)) + ")")
+        return 2
+    print(__doc__)
+    print("Racines connues : " + ", ".join(sorted(RACINES)))
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())

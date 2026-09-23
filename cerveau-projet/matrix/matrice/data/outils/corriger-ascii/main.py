@@ -23,7 +23,10 @@ def principal(arguments):
     if not arguments or arguments[0] not in COMMANDES:
         print(__doc__)
         return 2
-    return COMMANDES[arguments[0]](arguments)
+    # Le VERBE ne fait pas partie des options : chaque categorie recoit SA liste
+    # d arguments, comme les autres outils (T2 de PB-002) -- l entree passe alors
+    # ses options au domicile sans y glisser un mot qui n en est pas une.
+    return COMMANDES[arguments[0]](arguments[1:])
 
 
 if __name__ == "__main__":

@@ -55,19 +55,30 @@ from pathlib import Path
 
 from archiver.fonctions import (
     hors_perimetre, motif_forme, origine_complete, points_sans_decision,
+    suffixe_point,
 )
 from balayer.fonctions import (
     ordonner_familles, structurels_depasses, verdicts_de_famille,
 )
 from cible import resoudre
 from commun import charger_bdd, enregistrer_bdd, extraire_options
-from constants import CHEMIN_DOMICILE_FORME_BAK, REPERTOIRE_ARCHIVES
+from constants import (
+    CHEMIN_DOMICILE_FORME_BAK, ECRIVAINS_FAMILLE_RESTAURATION,
+    INDEX_FAMILLE_RESTAURATION, LECTEURS_FAMILLE_RESTAURATION,
+    MOTIF_RECENSEMENT_FAMILLE, REPERTOIRE_ARCHIVES, TAG_FAMILLE_RESTAURATION,
+)
 from ajouter.fonctions import (
-    classer_entree, creer_entree, decider_entree, rejuger_entree,
+    classer_entree, creer_entree, decider_entree, recenser_entrees,
+    rejuger_entree,
 )
 
 NOMS_OPTIONS = ("simuler", "mission")
-TAGS = "balayer,purification,bak,rotation,regle"
+# LE CRITERE DE LA FAMILLE EST CONSOMME, JAMAIS RECOPIE (MO-311, M-076) : ce tag
+# DEFINIT la population que la porte de rotation traite, et le TEMOIN filtre
+# DESSUS. Ecrit en dur des deux cotes, il pouvait deriver d'un cote sans que
+# personne ne le voie -- et c'est exactement ce qui est arrive : le temoin
+# ecartait en silence ce qu'il ne reconnaissait pas.
+TAGS = "balayer,purification," + TAG_FAMILLE_RESTAURATION + ",rotation,regle"
 # Les statuts ou un classement est EN ROUTE (le contrat de `classer_entree` les
 # accepte justement parce qu'une transition peut etre interrompue) : ce sont eux
 # que la porte de l'acte ne reprend jamais, donc eux que le balayage doit fermer.
@@ -266,11 +277,6 @@ def executer(arguments):
     verdicts = verdicts_de_famille(ordonner_familles(sur_disque))
     depasses = structurels_depasses(donnees.get("elements", []), motif, verdicts)
 
-    if not cibles and not inacheves and not depasses:
-        print("BALAYAGE : la famille de rotation est EN ORDRE -- aucun point sans "
-              "decision, aucun classement inacheve, aucun STRUCTUREL depasse.")
-        return 0
-
     juges = []
     doutes = []
     for relatif, identifiant in cibles + [(source, identifiant)
@@ -316,12 +322,35 @@ def executer(arguments):
             continue
         juges.append((relatif, categorie, verdict, identifiant, "REJUGE "))
 
+    # RECENSEMENT DE LA FAMILLE (MO-306) : le balayage COMPLETE ce qu'il cree.
+    # Le plan (plan-conservation, section 5) impose a la rotation de REFUSER un
+    # element sans lecteur recense ; or le balayage ecrivait ses entrees SANS les
+    # trois champs de recensement -- leurs colonnes restaient VIDES et l'acte etait
+    # refuse POUR TOUJOURS (mesure du 2026-09-20 : 430 elements bloques pour ce seul
+    # motif, la famille jugee ne pouvait jamais quitter sa place). La mesure vit au
+    # DOMICILE (constants) et n'est jamais recopiee ici (M-076) ; le verbe du
+    # proprietaire de la BDD l'ecrit (ajouter.recenser_entrees) et il est IDEMPOTENT
+    # (il n'ecrit que ce qui change, aucun statut ni verdict touche).
+    recenses = 0
+    if not simuler:
+        recenses, _message_recensement = recenser_entrees(
+            donnees, suffixe_point() or "",
+            LECTEURS_FAMILLE_RESTAURATION, ECRIVAINS_FAMILLE_RESTAURATION,
+            INDEX_FAMILLE_RESTAURATION, MOTIF_RECENSEMENT_FAMILLE)
+
+    if not cibles and not inacheves and not depasses and not recenses:
+        print("BALAYAGE : la famille de rotation est EN ORDRE -- aucun point sans "
+              "decision, aucun classement inacheve, aucun STRUCTUREL depasse, "
+              "aucune entree a recenser.")
+        return 0
+
     print("BALAYAGE de la famille de rotation" + (" (SIMULATION)" if simuler else ""))
     print("  points sans decision      : " + str(len(cibles)))
     print("  classements inacheves     : " + str(len(inacheves)))
     print("  STRUCTUREL depasses       : " + str(len(depasses)))
     print("  juges par la regle        : " + str(len(juges)))
     print("  laisses en place          : " + str(len(doutes)) + " (douteux)")
+    print("  entree(s) recensee(s)     : " + str(recenses))
     print("")
     for relatif, categorie, verdict, identifiant, marque in juges:
         numero = (identifiant + " ") if identifiant else ""
@@ -337,11 +366,11 @@ def executer(arguments):
         print("")
         print("SIMULATION : aucune ecriture (ni BDD, ni disque).")
         return 0
-    if juges:
+    if juges or recenses:
         empreinte = enregistrer_bdd(donnees)
         print("")
-        print("BDD de conservation enregistree : " + str(len(juges)) + " element(s) "
-              "-- empreinte : " + empreinte[:16] + "...")
+        print("BDD de conservation enregistree : " + str(len(juges)) + " element(s) juge(s), "
+              + str(recenses) + " recense(s) -- empreinte : " + empreinte[:16] + "...")
         a_archiver = sum(1 for _, _, verdict, _, _ in juges if verdict == "archiver")
         if a_archiver:
             print("L'acte reste a la porte de rotation : " + str(a_archiver)

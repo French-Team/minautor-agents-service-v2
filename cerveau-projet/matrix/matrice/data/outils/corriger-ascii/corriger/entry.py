@@ -4,6 +4,11 @@ Interface entre main.py et les fonctions simples (corriger/fonctions.py).
 """
 from corriger.fonctions import collecter_ecarts, corriger_fichier, resumer_exemptions
 
+USAGE = "Usage : python main.py corriger [--appliquer]"
+# Options DECLAREES par ce verbe : --appliquer est un DRAPEAU (sans valeur). Le
+# domicile refuse tout le reste et NOMME le fautif (T2 de PB-002).
+OPTIONS = ("appliquer",)
+
 
 def afficher_caractere(caractere):
     """Representation sure du caractere (point de code) : jamais brut en console."""
@@ -11,7 +16,13 @@ def afficher_caractere(caractere):
 
 
 def executer(arguments):
-    appliquer = "--appliquer" in arguments[1:]
+    # Parsing d options par le DOMICILE (options.py) : avant, --appliquerx etait
+    # simplement ABSENT de la liste, et l outil partait en mode RAPPORT -- le
+    # resultat du DEFAUT, pris pour le resultat demande (EO-179, L-055).
+    from options import extraire_options
+    options = extraire_options(arguments, OPTIONS, drapeaux=OPTIONS,
+                               outil="corriger-ascii", usage=USAGE)
+    appliquer = "appliquer" in options
     resultats = collecter_ecarts()
 
     total_corriges = 0

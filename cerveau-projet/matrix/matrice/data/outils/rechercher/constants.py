@@ -133,7 +133,18 @@ NOMS_OPTIONS_DRAPEAU = (NOM_OPTION_JSON, NOM_OPTION_PRIVE, "indexer", "forcer")
 # deux et son lecteur croit a une ligne -- numereo 0 comprise.
 SUR_NOM = "nom"
 SUR_CONTENU = "contenu"
+# Une COMBINAISON de champs de carte d'identite n'est ni un nom ni une ligne :
+# c'est le DOCUMENT qui repond. Le hit porte donc sa carte, et son `sur` le dit
+# (un lecteur qui prendrait ce hit pour une ligne chercherait une `ligne 0`).
+SUR_CARTE = "carte"
+
+# `--champ` : recherche par COMBINAISON de champs de la carte d'identite. La
+# demande est UNE valeur (`cle=valeur[;cle=valeur]`) -- et pas une option
+# repetee, parce que le parseur PARTAGE garde UNE valeur par nom d'option : une
+# option repetee serait ECRASEE en silence (mesure 2026-09-21). La repetition
+# est donc REFUSEE et la bonne syntaxe est dite, jamais perdue (L-055).
+NOM_OPTION_CHAMP = "champ"
 
 NOMS_OPTIONS_RECHERCHER = ("requete", "dans", "tag", "mot-cle", "source", "periode",
-                           NOM_OPTION_JSON, NOM_OPTION_PRIVE, "limite")
+                           NOM_OPTION_CHAMP, NOM_OPTION_JSON, NOM_OPTION_PRIVE, "limite")
 NOMS_OPTIONS_INDEXER = ("forcer",)

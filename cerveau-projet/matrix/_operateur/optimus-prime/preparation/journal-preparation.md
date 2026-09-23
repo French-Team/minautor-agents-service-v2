@@ -1163,7 +1163,7 @@ ecrivent) ; `execution` apres `chemin` (le chemin absolu du programme est la pan
 ### C.4.1 Le probleme, MESURE (2026-09-13)
 
 ```
-remorque-optimus.py   ZONE = ancetre NOMME "optimus-prime"        (ligne 19)
+cerveau-projet/matrix/_operateur/optimus-prime/remorque/remorque-optimus.py ZONE = ancetre NOMME "optimus-prime" (ligne 19)
                       collecter() : 5 emplacements sous ZONE      (lignes 31-54)
                       chemin = str(p.relative_to(ZONE))           (lignes 36-52)
                       etat : difference d'ensembles sur `chemin`  (lignes 73-84)
@@ -1517,3 +1517,95 @@ differents : un pas par defaut.
 **seule** occurrence du mot "BDD" dans l'objectif (une enumeration). Le role a suivi (BDD), et il a
 ete REPARE par la porte (`retiqueter --role OUTIL`, trace `role_avant = BDD`). La CATEGORIE, elle,
 est restee `bdd` : **aucun verbe ne la repare**. C'est le constat `EO-198`, depose le meme jour.
+
+
+## Entree -- [preparation] AUDIT CONTINU DU WATCHDOG (2026-09-22, MO-362)
+
+DEMANDE CREATEUR (2026-09-19) : un super-combo dedie au WATCHDOG d Optimus a ete cree mais
+"il ne sert pas a grand chose pour l instant" -- on doit obtenir un AUDIT COMPLET ET CONTINU
+pour suivre les ameliorations, corrections, modifications et optimisations qu on va lui faire.
+
+PORTE : [preparation] = discussion seule. AUCUN code avant le GO createur.
+
+### Phase 2 -- INVENTAIRE (mesure, 4 questions)
+
+**1. OU IL VIT** -- _operateur/optimus-prime/super-combos/combos/outils/, trois pieces :
+
+| piece | role |
+|---|---|
+| watchdog-flux2.py | le VEILLEUR (la boucle : snapshot mtime -> diff -> violation) |
+| watchdog-flux2-bg.py | le meme en ARRIERE-PLAN |
+| demarrer-watchdog.py | la PORTE : demarrer / arreter / status / violations |
+
+Domiciles declares par la porte et JAMAIS NES : watchdog-flux2.pid, watchdog-flux2-bg.jsonl.
+
+**2. CE QU IL SURVEILLE** -- le mtime de TOUS les fichiers sous la racine, compare a :
+8 ZONES_AUTORISEES, 6 ZONES_INTERDITES, 5 suffixes ignores (.tmp, .bak, .pid, __pycache__, .pyc).
+Intervalle 5 s par defaut. Il ne juge qu une chose : une violation de FLUX 2.
+
+**3. CE QU IL PUBLIE** -- ses violations, sur la console, plus un --log jsonl optionnel ;
+et toutes les 5 s une ligne "Surveillance active - N fichiers surveilles".
+AUCUNE empreinte, AUCUN etat de sante, AUCUNE trace de sa propre histoire.
+Sa production continue est donc VOLATILE : elle meurt avec le terminal qui la porte.
+
+**4. QUI LE LIT** -- mesure du 2026-09-22 :
+
+| lecteur | constat |
+|---|---|
+| demarrer-watchdog.py status | ARRETE |
+| watchdog-flux2.pid | ABSENT |
+| watchdog-flux2-bg.jsonl | ABSENT |
+| registre espion-integrite-optimus | ne le connait pas (0 occurrence) |
+| bdd-modifications lire --fichier .../watchdog-flux2.py | Aucune modification trouvee |
+| attribution-registre.json (pose 2026-09-22 22:55:35) | les 3 fichiers y portent leur SHA-256 (735 fichiers au total) |
+
+Conclusion MESUREE -- et c est le sens exact de "il ne sert pas a grand chose pour l instant" :
+il n a ni lecteur, ni memoire, ni histoire -- et il n a JAMAIS tourne.
+
+### Les trois pannes MESUREES (nommees, pas supposees)
+
+| id | panne | preuve |
+|---|---|---|
+| P1 | veilleur-jamais-en-veille | il existe et se declare ; status = ARRETE, pid et journal ABSENTS : un veilleur qu aucun processus ne porte n est pas un veilleur |
+| P2 | veilleur-sans-memoire | 0 note BDD sur ses 3 sources, 0 entree au registre espion : la demande du createur n a AUCUN domicile |
+| P3 | veilleur-a-la-seconde | son statut continu est IMPRIME toutes les 5 s et jamais ECRIT ; le seul ecrit possible est une violation, dans un fichier qui n existe pas |
+
+Le defaut structurel, en une phrase : LE WATCHDOG SURVEILLE LES AUTRES, ET RIEN NE LE SURVEILLE.
+
+### Phase 3 -- DESSINER : l audit continu en une phrase
+
+Le watchdog est suivi COMME N IMPORTE QUELLE PIECE DE LA MATRICE : QUI l a touche,
+QUOI a change, POURQUOI, et COMMENT il se comporte -- EN UNE COMMANDE QUI REND UN VERDICT.
+
+La mesure montre que les QUATRE sources existent DEJA ; il n y a donc pas de machinerie a inventer :
+
+| question | source qui existe DEJA | etat mesure |
+|---|---|---|
+| QUI l a touche | suivi-optimus (mission -> fichiers) | existe |
+| QUOI a change | attribution-registre.json + garde-versions.py (SHA-256) | existe (les 3 fichiers y sont) |
+| POURQUOI | bdd-modifications (une histoire par fichier) | domicile existant, 0 entree |
+| COMMENT il se comporte | watchdog-flux2-bg.jsonl | declare, jamais ne |
+
+L audit n est donc PAS un outil neuf : c est la chaine ATTRIBUTION + INTEGRITE + MEMOIRE
+pointee sur le watchdog, plus l ECRITURE de sa propre production.
+
+### Phase 4 -- PRIORISER (serie stricte, un pas a la fois)
+
+| pas | ce qu il livre | preuve exigee (cobaye) |
+|---|---|---|
+| 1 | La memoire : le watchdog inscrit dans la memoire du projet (sa 1ere note BDD, son entree de registre) | lire --fichier rend 1 entree ; le registre le nomme |
+| 2 | Sa production ecrite : le statut continu ECRIT dans son journal, borne par rotation | status voit le journal ; apres N s il porte N lignes ; rotation prouvee |
+| 3 | La vue d audit : une commande qui rend les 4 reponses + un VERDICT | cobaye positif ET negatif : empreinte changee sans note -> ACCUSE, et le verdict NOMME |
+| 4 | GO de sortie de serie | une modification REELLE du watchdog se VOIT dans la vue sans qu on la lui declare |
+
+### Ce qui reste a TRANCHER (pour le GO createur)
+
+1. Domicile : etendre l existant (garde-versions.py / controle-attribution.py) ou piece neuve ?
+   Avis : ETENDRE -- un seul domicile de l empreinte, jamais deux.
+2. Perimetre : le watchdog SEUL, ou tout l outillage d Optimus ?
+   Avis : GENERIQUE (le watchdog n est que le premier client).
+3. Le veilleur doit-il TOURNER ? Les pas 1-3 ne l exigent pas. Faire tourner un veilleur est une
+   decision d EXPLOITATION : a trancher par le createur, pas par l agent.
+4. Forme du verdict : code seul, ou code + phrase qui NOMME le fautif ? Avis : code + phrase.
+
+ETAT : en attente du GO createur. AUCUN code n a ete ecrit pour ce sujet.

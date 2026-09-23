@@ -54,6 +54,20 @@ LIMITE_JOURS = 15
 LIMITE_LISTE = 300
 # Marqueur de coupe : sans lui, une valeur bornee se lit comme une valeur entiere.
 MARQUE_COUPE = " ... (+"
+# DEUX BORNES IDENTIQUES = duree INCONNUE (decision createur du 2026-09-21).
+# Mesure du jour : 59 missions portent un `debut` a la SECONDE EXACTE de leur
+# `fin`. Ce n'est pas une mission de zero seconde : c'est un debut POSE APRES
+# COUP, cree par le garde anti-fin-orphelin de la porte `noter` au moment ou la
+# fin arrive. Rendre 0 faisait passer cet ARTEFACT pour une mesure (L-055) --
+# c'est le defaut que MO-321 avait cru legitime ("zero LEGITIME"), renverse ici
+# sur la mesure du createur. La duree reste INCONNUE, et elle est DITE.
+DUREE_INCONNUE_BORNES_IDENTIQUES = "bornes identiques (debut pose apres coup)"
+DUREE_INCONNUE_BORNES_ILLISIBLES = "bornes illisibles"
+# Ce que la cellule Duree affiche quand aucune duree n'est mesurable : ni un
+# zero (qui se lirait mesure), ni un tiret muet.
+TEXTE_DUREE_INCONNUE = "inconnue"
+# Nombre de missions nommees dans la note qui DIT les durees inconnues.
+LIMITE_DUREE_INCONNUE_NOMMEES = 8
 
 
 def vers_ascii(texte):
@@ -166,6 +180,11 @@ def calculer_duree(debut, fin):
     `--duree-s` optionnel que NUL appel ne posait -- la colonne ne pouvait donc
     que valoir zero. Une borne illisible rend None : la duree reste VIDE (une
     colonne vide se lit moins mal qu une duree inventee, L-055).
+
+    DEUX BORNES IDENTIQUES RENDENT None, jamais 0 (decision createur du
+    2026-09-21) : voir DUREE_INCONNUE_BORNES_IDENTIQUES. Un zero seconde n'est
+    pas une duree, c'est un debut pose apres coup -- le rendre 0 le faisait
+    passer pour une mesure.
     """
     from datetime import datetime as horloge
     try:
@@ -174,7 +193,8 @@ def calculer_duree(debut, fin):
     except (TypeError, ValueError):
         return None
     secondes = int((arrivee - depart).total_seconds())
-    return secondes if secondes >= 0 else None
+    # <= 0 : deux bornes identiques (ou une fin AVANT le debut) ne mesurent RIEN.
+    return secondes if secondes > 0 else None
 
 
 def agreger_par_mission(evenements):
@@ -194,6 +214,10 @@ def agreger_par_mission(evenements):
             "debut": "",
             "fin": "",
             "duree_s": "",
+            # Pourquoi la duree n'est pas mesurable (vide = elle l'est, ou elle
+            # est declaree). Sans ce champ, un "0" et une "duree inconnue"
+            # s'afficheraient pareil -- ce qui etait exactement le defaut.
+            "duree_inconnue": "",
             "evenements": 0,
             "portes": [],
             "fichiers": [],
@@ -226,9 +250,17 @@ def agreger_par_mission(evenements):
         # est desormais CALCULEE des bornes quand elles existent ; un declare
         # reste prioritaire ; sans fin, AUCUNE duree (rien d invente).
         if not agregat["duree_s"] and agregat["debut"] and agregat["fin"]:
-            secondes = calculer_duree(agregat["debut"], agregat["fin"])
-            if secondes is not None:
-                agregat["duree_s"] = str(secondes)
+            if agregat["debut"] == agregat["fin"]:
+                # Un debut et une fin au MEME instant ne mesurent pas 0 s : ils
+                # disent que la borne de debut a ete posee APRES COUP (garde
+                # anti-fin-orphelin). La duree est INCONNUE -- et elle le DIT.
+                agregat["duree_inconnue"] = DUREE_INCONNUE_BORNES_IDENTIQUES
+            else:
+                secondes = calculer_duree(agregat["debut"], agregat["fin"])
+                if secondes is not None:
+                    agregat["duree_s"] = str(secondes)
+                else:
+                    agregat["duree_inconnue"] = DUREE_INCONNUE_BORNES_ILLISIBLES
         if agregat["fin"]:
             agregat["etat"] = "finie"
         elif agregat["debut"]:
@@ -265,12 +297,28 @@ def composer_recap_missions(evenements):
             echapper_pipe(agregat["theme"] or "-"),
             echapper_pipe(heure_courte(agregat["debut"])),
             echapper_pipe(heure_courte(agregat["fin"])),
-            echapper_pipe(agregat["duree_s"] or "-"),
+            echapper_pipe(agregat["duree_s"] or (TEXTE_DUREE_INCONNUE
+                                                if agregat["duree_inconnue"] else "-")),
             str(agregat["evenements"]),
             agregat["etat"],
             lister_cellule(agregat["portes"]),
             lister_cellule(agregat["fichiers"]),
         ]) + " |"))
+    # La colonne ne peut plus mentir : elle affiche `inconnue` au lieu d'un 0 qui
+    # se lirait comme une mesure. Une colonne qui dit `inconnue` sans dire POURQUOI
+    # laisserait le lecteur croire a une donnee perdue -- la note nomme les
+    # missions et la cause (mesure du 2026-09-21 : 59 missions concernees).
+    inconnues = [a["mission"] for a in ordonnees
+                 if not a["duree_s"] and a["duree_inconnue"]]
+    if inconnues:
+        lignes.append("")
+        lignes.append(vers_ascii(
+            "*Duree INCONNUE pour " + str(len(inconnues)) + " mission(s) : "
+            + ", ".join(inconnues[:LIMITE_DUREE_INCONNUE_NOMMEES])
+            + (" ..." if len(inconnues) > LIMITE_DUREE_INCONNUE_NOMMEES else "")
+            + " -- " + DUREE_INCONNUE_BORNES_IDENTIQUES
+            + " : un debut et une fin au meme instant ne mesurent pas zero seconde."))
+
     reste = len(ordonnees) - LIMITE_MISSIONS
     if reste > 0:
         lignes.append("")

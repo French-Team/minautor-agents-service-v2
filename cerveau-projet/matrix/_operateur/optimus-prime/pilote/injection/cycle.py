@@ -222,6 +222,26 @@ class CycleOptimus:
         except Exception as erreur:  # noqa: BLE001 -- jamais bloquant au demarrage
             print("[reprise] trace de session non lue (" + str(erreur)[:120] + ")")
 
+        # CREDIBILITE DES MISSIONS RESTAUREES (process automatique, MO-387) : une
+        # mission ancienne (chargee un jour anterieur) est JUGEe avant d etre executee.
+        # Le process est JOUE ICI parce que le pilote ne doit pas dependre de la MEMOIRE
+        # de l agent : ce qui se joue a chaque reprise se joue au demarrage. Il REND le
+        # verdict, le TRACE, et APPLIQUE l obsolescence -- retirer du lot ce qui est
+        # deja fait ou perime -- sans createur et sans question. NON bloquant (doctrine
+        # du sac-a-dos) : un echec se DIT, il ne tue jamais un demarrage.
+        try:
+            from commun import annoncer_credibilite
+
+            code_credibilite, sortie_credibilite = annoncer_credibilite()
+            if sortie_credibilite:
+                print()
+                print(sortie_credibilite)
+            if code_credibilite != 0:
+                print("[credibilite] une action n a pas abouti : elle sera rejouee au"
+                      " prochain demarrage.")
+        except Exception as erreur:  # noqa: BLE001 -- jamais bloquant au demarrage
+            print("[credibilite] process non joue (" + str(erreur)[:120] + ")")
+
         # Contrat ECRIT/LU (MO-121) : le pilote OUVRE la session dans la BDD
         # sessions -- la trace automatique doit porter le TAG que la reprise
         # LIT (session-ouverte), jamais un tag qu'elle ignore (friction 41).

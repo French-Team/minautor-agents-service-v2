@@ -1,0 +1,977 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""suivi-pilote.py -- LA PORTE DU SUIVI DU PILOTE (T2 de la chaine PB-003/SP-003/TD-003).
+
+POURQUOI (demande createur, EO-273) : < creer le SUIVI DU PILOTE d Optimus : le fichier
+qui permet de reperer les problemes DU PILOTE, comme suivi-optimus le fait pour les
+missions >. Suivi-optimus regarde les missions ; ce suivi regarde le PILOTE : une file
+qui ne repart pas, un lot perdu, une injection refusee, un enchainement casse, une pause
+armee et oubliee.
+
+CE QU'IL EST : une VUE DERIVEE. Les faits du pilote vivent deja ailleurs (suivi-optimus,
+file-missions, entonnoir, cycle-historique, outbox, journal des pauses). Cette porte ne
+les recopie PAS : elle les LIT, les RASSEMBLE sous l angle PILOTE, et n ECRIT que ce
+qu'elle a JUGE -- un verdict de panne. Aucun fait n'est ecrit deux fois (L-055).
+
+CE QU'IL ECRIT (deux fichiers, deux natures) :
+  - suivi-pilote.md    : la VUE, regenerable, recalculee a chaque passage. C'est le
+    fichier a lire pour voir l etat du pilote. Elle porte une carte d'identite.
+  - suivi-pilote.jsonl : les VERDICTS DE PANNE seulement, append-only. Une panne deja
+    tracee (meme id, meme signature) n'est pas reecrite : un journal n'est pas un
+    compte a rebours qui se repete.
+  Les DEUX sont poses par la PORTE ECRIRE (`--mode creer|remplacer|ajouter`), jamais par
+  une ecriture directe : la Matrice possede et verifie ce qui est publie (L-007).
+
+LA LOI DES COLONNES (exigence createur) : une colonne se garde si elle VARIE ou si elle
+PORTE UN VERDICT. Une colonne qui vaut < - > pour tout le monde est un placeholder qui
+ment (lecon du 2026-09-19) : elle est OMISE, et la vue DIT lesquelles elle a omises --
+une omission muette serait l angle mort meme que ce suivi surveille (MO-075). Sur un
+EVENEMENT, jamais de duree ; un VIDE se dit (inconnu), il ne s'affiche JAMAIS 0.
+
+LES SEUILS NE SONT PAS ICI : ils vivent dans `suivi-pilote/pannes-declarees.json` (la
+liste FERMEE des pannes). La porte la LIT ; un seuil absent se DIT et la panne n'est
+jamais accusee a l aveugle. Une panne DECLAREE sans detecteur est NOMMEE < sans
+detecteur > -- une couverture muette serait muette (mesure du 2026-09-22 : 2 sur 13).
+
+Usage:
+  python suivi-pilote.py [--racine <chemin>]   recalcule la vue, trace les verdicts, rend le verdict
+  python suivi-pilote.py --json                la vue en JSON (pour un appelant)
+  python suivi-pilote.py --auto-test           eprouve les detecteurs (cobaye + temoin)
+  code 0 = AUCUNE PANNE, 1 = au moins une panne (Table 0 non vide), 2 = racine ou
+  declaration illisible.
+"""
+
+import argparse
+import copy
+import json
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+
+# --- DOMICILES (declares une fois, jamais recopies dans la logique) ----------
+DOSSIER_PILOTE = Path("_operateur") / "optimus-prime" / "pilote"
+DOSSIER_SUIVI = Path("_operateur") / "optimus-prime" / "suivi-pilote"
+NOM_VUE = "suivi-pilote.md"
+NOM_JOURNAL = "suivi-pilote.jsonl"
+NOM_DECLARATION = "pannes-declarees.json"
+FICHIER_FILE_MISSIONS = Path("file-missions-optimus.json")
+FICHIER_ENTONNOIR = Path("entonnoir-files-optimus.json")
+FICHIER_HISTORIQUE = Path("data") / "cycle-historique-archive.json"
+CHEMIN_SUIVI_OPTIMUS = Path("matrice") / "data" / "suivi-optimus.jsonl"
+CHEMIN_PAUSES = Path("matrice") / "data" / "pauses-session-matrix.jsonl"
+CHEMIN_ETAT_PAUSE = Path("matrice") / "data" / "session-matrix-etat.json"
+CHEMIN_DEFCON = Path("matrice") / "data" / "defcon-historique.jsonl"
+# L outbox d'Optimus vit dans `_operateur/maintenance/` : c'est la constante DOMICILE
+# du pilote (`pilote/constants.py` : REPERTOIRE_INTERCOM = matrix/_operateur/maintenance).
+# Mesure du 2026-09-22 : la boite `_operateur/optimus-prime/intercom/pilote/` est une
+# ANCIENNE boite (derniere injection le 2026-09-12, aucun `poids_tokens`) ; la boite
+# vivante est celle-ci (288 lignes, 111 injections, les missions du jour).
+MOTIF_OUTBOX = ("_operateur", "maintenance", "pilote", "outbox.jsonl")
+DOSSIER_COMMUN = Path("matrice") / "data" / "commun"
+NOM_SERVICE_RESOLUTION = "resolution_outils.py"
+NOM_PORTE_ECRIRE = "ecrire"
+
+# --- LE VERDICT D ENCHAINEMENT (consomme du DOMICILE, jamais recopie) ----------
+# L index des auto-validees porte des ids d ITEM (EO-N), jamais des ids de MISSION
+# (MO-N) : comparer les deux ne peut pas marcher (mesure MO-175/EO-264). Le verdict se
+# resout donc par la PROVENANCE, avec la FONCTION DU PILOTE -- la recopier serait une
+# copie de plus (L-029).
+FICHIER_COMMUN_PILOTE = Path("commun.py")
+FICHIER_FONCTIONS_INJECTION = Path("injection") / "fonctions.py"
+
+
+def charger_est_auto(pilote):
+    """La fonction de verdict du pilote, ou (None, motif) si son import est muet."""
+    if not (pilote / FICHIER_COMMUN_PILOTE).is_file():
+        return None, "module du pilote absent"
+    if str(pilote) not in sys.path:
+        sys.path.insert(0, str(pilote))
+    try:
+        from injection.fonctions import est_auto_validee  # noqa: E402
+        return est_auto_validee, ""
+    except Exception as erreur:  # noqa: BLE001 -- un import muet se DIT, il ne leve pas
+        return None, type(erreur).__name__
+
+
+# --- LA LOI DES COLONNES -----------------------------------------------------
+# Les colonnes qui PORTENT UN VERDICT ne sont jamais omises, meme constantes : elles
+# disent un jugement, pas une mesure. Les autres ne se gardent que si elles VARIENT.
+COLONNES_VERDICT = ("Gravite", "Silence", "Constat", "Motif", "Refus", "Bilan",
+                    "Enchainement", "Action posee")
+MENTION_INCONNU = "inconnu"
+ENCART_VIDE = "AUCUNE PANNE CONSTATEE"
+CARTE_VUE = ("---", "identite:", "  type: analyse", "  appartient_a: optimus-prime",
+             "  commun: false", "---")
+CLES_JOURNAL = ("date", "id", "gravite", "constat", "silence", "signature")
+
+
+def ascii_propre(texte):
+    """Le texte d'une vue est TOUJOURS ASCII (une valeur lue peut porter un accent)."""
+    return "".join(c if ord(c) < 128 else "?" for c in str(texte))
+
+
+def trouver_racine(depart):
+    """Le dossier qui porte `_operateur/optimus-prime/pilote/commun.py`, ou None."""
+    for candidat in [depart, depart / "cerveau-projet" / "matrix", depart / "matrix"]:
+        if (candidat / DOSSIER_PILOTE / "commun.py").is_file():
+            return candidat
+    return None
+
+
+# --- LECTURES (lecture seule, jamais d'exception non dite) -------------------
+
+def lire_json(chemin):
+    """(donnees, None) ou (None, motif). Un fichier absent n'est pas une erreur."""
+    if not chemin.is_file():
+        return None, "absent"
+    try:
+        return json.loads(chemin.read_text(encoding="utf-8")), None
+    except (OSError, json.JSONDecodeError) as erreur:
+        return None, type(erreur).__name__
+
+
+def lire_jsonl(chemin):
+    """Les evenements lisibles d'un journal, dans l ordre du fichier."""
+    if not chemin.is_file():
+        return []
+    evenements = []
+    for ligne in chemin.read_text(encoding="utf-8", errors="replace").splitlines():
+        ligne = ligne.strip()
+        if not ligne:
+            continue
+        try:
+            evenements.append(json.loads(ligne))
+        except json.JSONDecodeError:
+            continue
+    return evenements
+
+
+def horodate(texte):
+    for forme in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M"):
+        try:
+            return datetime.strptime(str(texte)[:19], forme)
+        except (ValueError, TypeError):
+            continue
+    return None
+
+
+def minutes_ecoulees(depuis, maintenant):
+    moment = horodate(depuis)
+    if moment is None:
+        return None
+    return (maintenant - moment).total_seconds() / 60.0
+
+
+def duree_dite(minutes):
+    if minutes is None:
+        return MENTION_INCONNU
+    if minutes >= 1440:
+        return "%.1f j" % (minutes / 1440.0)
+    if minutes >= 60:
+        return "%.1f h" % (minutes / 60.0)
+    return "%.0f min" % minutes
+
+
+# --- LA PORTE D ECRITURE (resolution partagee, M-076) -----------------------
+
+def resoudre_porte(racine):
+    """Le chemin de la porte d ecriture, par la RESOLUTION PARTAGEE, ou None."""
+    commun = racine / DOSSIER_COMMUN
+    if not (commun / NOM_SERVICE_RESOLUTION).is_file():
+        return None
+    if str(commun) not in sys.path:
+        sys.path.insert(0, str(commun))
+    try:
+        import resolution_outils
+        return Path(resolution_outils.chemin_outil(NOM_PORTE_ECRIRE))
+    except Exception:  # noqa: BLE001 -- une resolution muette ne doit pas lever ici
+        return None
+
+
+def publier(racine, chemin, contenu, mode):
+    """Pose un artefact par la PORTE (jamais a la main). Rend (code, sortie)."""
+    porte = resoudre_porte(racine)
+    if porte is None:
+        return 2, "porte '" + NOM_PORTE_ECRIRE + "' introuvable (resolution partagee muette)"
+    commande = [sys.executable, str(porte), "ecrire", "--fichier", str(chemin),
+                "--contenu", contenu, "--mode", mode]
+    resultat = subprocess.run(commande, capture_output=True, text=True,
+                              encoding="utf-8", errors="replace")
+    return resultat.returncode, ((resultat.stdout or "") + (resultat.stderr or "")).strip()
+
+
+# --- LA VUE : ce que la porte a lu, une fois --------------------------------
+
+class Vue:
+    def __init__(self, racine, declaration):
+        self.racine = racine
+        self.declaration = declaration
+        self.maintenant = datetime.now()
+        self.pilote = racine / DOSSIER_PILOTE
+        self.file_missions, self.erreur_file = lire_json(self.pilote / FICHIER_FILE_MISSIONS)
+        self.entonnoir, self.erreur_entonnoir = lire_json(self.pilote / FICHIER_ENTONNOIR)
+        self.historique, _ = lire_json(self.pilote / FICHIER_HISTORIQUE)
+        self.evenements = lire_jsonl(racine / CHEMIN_SUIVI_OPTIMUS)
+        self.dates_par_mission = {}
+        self.dernier_fait = {}
+        for evenement in self.evenements:
+            mission, action, date = (evenement.get("mission"), evenement.get("action"),
+                                     evenement.get("date"))
+            if mission and action and date:
+                self.dates_par_mission.setdefault(mission, {}).setdefault(action, []).append(date)
+            moment = horodate(date)
+            if mission and moment and (mission not in self.dernier_fait
+                                       or moment > self.dernier_fait[mission][0]):
+                self.dernier_fait[mission] = (moment, date, action)
+
+    def missions(self):
+        return list((self.file_missions or {}).get("missions") or [])
+
+    def en_cours(self):
+        return [m for m in self.missions() if m.get("statut") == "en-cours"]
+
+    def lot(self):
+        return list(((self.file_missions or {}).get("lot") or {}).get("ids") or [])
+
+    def brin(self):
+        return list((self.entonnoir or {}).get("brin") or [])
+
+    def dernier_evenement(self):
+        datables = [(horodate(e.get("date")), e) for e in self.evenements if horodate(e.get("date"))]
+        return max(datables, key=lambda paire: paire[0]) if datables else (None, None)
+
+
+# --- LA LOI DES COLONNES, appliquee et DITE --------------------------------
+
+def garder_colonnes(entetes, lignes):
+    """(entetes gardees, omises) -- une colonne constante ET sans verdict est omise."""
+    gardees, omises = [], []
+    for rang, entete in enumerate(entetes):
+        valeurs = {str(ligne[rang]) for ligne in lignes}
+        if entete in COLONNES_VERDICT or len(valeurs) > 1 or len(lignes) <= 1:
+            gardees.append(entete)
+        else:
+            omises.append((entete, len(lignes)))
+    return gardees, omises
+
+
+def rendre_table(numero, titre, entetes, lignes, resume=None):
+    sortie = ["", "## Table " + str(numero) + " -- " + ascii_propre(titre)]
+    if resume:
+        sortie += ["", "> " + ascii_propre(resume)]
+    if not lignes:
+        sortie += ["", "(rien a lire sur cette partie)"]
+        return sortie
+    gardees, omises = garder_colonnes(entetes, lignes)
+    rangs = [i for i, entete in enumerate(entetes) if entete in gardees]
+    sortie += ["", "| " + " | ".join(entetes[i] for i in rangs) + " |",
+               "|" + "---|" * len(rangs)]
+    for ligne in lignes:
+        sortie.append("| " + " | ".join(ascii_propre(ligne[i]) for i in rangs) + " |")
+    if omises:
+        sortie += ["", "Colonnes OMISES (constantes, sans verdict) : "
+                   + " ; ".join(nom + " (" + str(n) + " lignes)" for nom, n in omises) + "."]
+    return sortie
+
+
+# --- LES DETECTEURS (un par panne DECLAREE ; aucun seuil en dur) -------------
+
+def seuil_de(declaration, identifiant, cle="seuil_minutes"):
+    for panne in declaration.get("pannes") or []:
+        if panne.get("id") == identifiant:
+            regle = panne.get("regle") or {}
+            return regle.get(cle, regle.get("seuil"))
+    return None
+
+
+def detecter_serie_stricte(vue, declaration, sortie_pilote):
+    """MAILLON 4 du flux : le pilote repond, et jamais plus d'une mission en cours."""
+    code, texte = sortie_pilote
+    if code != 0:
+        dernier = (texte.strip().splitlines() or ["aucune sortie"])
+        return ("haute", "pilote muet (code " + str(code) + ")",
+                str(dernier[-1])[:90], "code non nul : la porte ne repond pas",
+                "relancer le pilote, lire le dernier refus")
+    en_cours = vue.en_cours()
+    if len(en_cours) > 1:
+        return ("haute", str(len(en_cours)) + " missions EN COURS ("
+                + ", ".join(str(m.get("id", "?")) for m in en_cours) + ")",
+                "la serie stricte est violee", "deux missions ouvertes",
+                "reporter ou finir l une des deux")
+    return None
+
+
+def detecter_age_mission(vue, declaration, _sortie):
+    """Une mission EN COURS se termine dans la fenetre (p95 mesure = 92 min)."""
+    seuil = seuil_de(declaration, "mission-qui-n-avance-pas")
+    if not seuil:
+        return None
+    for mission in vue.en_cours():
+        age = minutes_ecoulees(mission.get("chargee_le"), vue.maintenant)
+        if age is None or age <= seuil:
+            continue
+        fait = vue.dernier_fait.get(mission.get("id"))
+        return ("haute", str(mission.get("id")) + " en cours depuis " + duree_dite(age),
+                "seuil declare : " + duree_dite(seuil), fait[1] if fait else MENTION_INCONNU,
+                "conduire, finir ou reporter la mission")
+    return None
+
+
+def charges_tracees(vue):
+    """Les CHARGES tracees par le pilote : (moment, date, mission), dans l ordre du journal.
+
+    Depuis le 2026-09-22 (demande du createur) `charger` NOTE l acte par la porte :
+    c est la trace qui MANQUAIT -- `chargee_le` seul etait ambigu, un LOT entier
+    partageant le meme horodatage (mesure : les 30 missions en attente du lot
+    REPRISE DU RETARD, toutes au meme instant, aucune avec un debut).
+    """
+    traces = []
+    for evenement in vue.evenements:
+        if evenement.get("action") != "charge":
+            continue
+        moment = horodate(evenement.get("date"))
+        if moment and evenement.get("mission"):
+            traces.append((moment, evenement.get("date"), evenement.get("mission")))
+    return traces
+
+
+def missions_en_lot(vue):
+    """Les missions chargees AVEC un lot : elles ATTENDENT leur tour (etat legitime)."""
+    return {m.get("id") for m in vue.missions() if m.get("lot")}
+
+
+def detecter_chargee_sans_debut(vue, declaration, _sortie):
+    """La panne PAYEE en MO-387 : chargee, et JAMAIS conduite.
+
+    DEUX faits, mesures separement :
+    1. la CONTRADICTION INTERNE du pilote -- une mission donnee EN COURS dont
+       l ouverture n est tracee nulle part (`debut` absent) ;
+    2. la CHARGE INDIVIDUELLE jamais conduite -- une charge TRACEE (donc l acte est
+       date), la mission n appartient a AUCUN lot (elle n attend pas son tour : son
+       tour ETAIT venu), et aucun `debut` ne suit dans la fenetre.
+
+    LE LOT EST L EXEMPTION NOMMEE, ET ELLE VIENT DE LA FILE : une mission portant un
+    `lot` est chargee AVEC d autres et attend son tour -- l accuser serait le faux
+    positif qui a REFUTE la premiere regle (mesure du 2026-09-22 : 31 missions, meme
+    `chargee_le`, aucune avec un debut).
+    """
+    seuil = seuil_de(declaration, "mission-chargee-sans-conduite")
+    if not seuil:
+        return None
+    for mission in vue.en_cours():
+        age = minutes_ecoulees(mission.get("chargee_le"), vue.maintenant)
+        if age is None or age <= seuil:
+            continue
+        debuts = (vue.dates_par_mission.get(mission.get("id")) or {}).get("debut") or []
+        if not debuts:
+            return ("haute", str(mission.get("id")) + " EN COURS sans aucun debut declare",
+                    "le pilote la donne en cours depuis " + duree_dite(age)
+                    + " mais son ouverture n est tracee nulle part",
+                    str(mission.get("chargee_le")), "pilote conduire (jouer la mission chargee)")
+    par_id = {m.get("id"): m for m in vue.missions()}
+    en_lot = missions_en_lot(vue)
+    for moment, date, mission_id in charges_tracees(vue):
+        if mission_id in en_lot:
+            continue
+        if (vue.dates_par_mission.get(mission_id) or {}).get("debut"):
+            continue
+        statut = (par_id.get(mission_id) or {}).get("statut")
+        if statut in ("terminee", None):
+            continue  # close : c est la CLOTURE FAUSSE, une autre panne la juge
+        age = (vue.maintenant - moment).total_seconds() / 60.0
+        if age > seuil:
+            return ("haute", str(mission_id) + " chargee INDIVIDUELLEMENT et jamais conduite",
+                    "charge tracee le " + str(date) + " (il y a " + duree_dite(age)
+                    + ", seuil " + duree_dite(seuil) + ") et aucun debut ne l a suivie",
+                    str(date), "pilote conduire --id " + str(mission_id))
+    return None
+
+
+def detecter_cloture_fausse(vue, _declaration, _sortie):
+    """EO-356 : la CLOTURE FAUSSE -- une charge individuelle close sous un AUTRE nom.
+
+    C est la panne payee en MO-387 : le pilote charge une mission, et la premiere
+    cloture qui suit nomme une AUTRE mission (la tete du lot). Les deux traces
+    etaient alors d ACCORD -- la file disait MO-345 terminee, le journal aussi --
+    donc AUCUN garde ne pouvait le voir. La CHARGE TRACEE rend le fait mesurable :
+    elle dit QUELLE mission le round avait ouverte, et la cloture doit NOMMER
+    celle-la.
+
+    CONTRE-TEMOIN : une mission chargee AVEC un lot est epargnee (son tour vient
+    plus tard, la premiere cloture ne parle pas d elle) ; une cloture qui nomme la
+    mission chargee est epargnee. Sans trace de charge, RIEN n est accuse : la
+    porte ne devine pas (les charges anterieures au 2026-09-22 sont muettes).
+    """
+    journal = [(e.get("action"), e.get("mission")) for e in vue.evenements]
+    en_lot = missions_en_lot(vue)
+    for rang, (action, mission_id) in enumerate(journal):
+        if action != "charge" or not mission_id or mission_id in en_lot:
+            continue
+        suivante = next(((a, m) for a, m in journal[rang + 1:] if a == "fin"), None)
+        if suivante is None:
+            continue  # jamais close : c est < chargee sans conduite > qui la juge
+        _, cloturee = suivante
+        if cloturee != mission_id:
+            return ("haute", "CLOTURE FAUSSE : la charge de " + str(mission_id)
+                    + " est suivie de la cloture de " + str(cloturee),
+                    "le round a ouvert " + str(mission_id) + " et a clos " + str(cloturee)
+                    + " a sa place", "a l instant de la charge",
+                    "pilote fin (clore la mission REELLEMENT menee) + pilote reporter")
+    return None
+
+
+def detecter_lot_sans_tete(vue, _declaration, _sortie):
+    """Un lot arme et NON ecoule a toujours une tete servie."""
+    ids = vue.lot()
+    if not ids:
+        return None
+    par_id = {m.get("id"): m for m in vue.missions()}
+    restantes = [i for i in ids if par_id.get(i, {}).get("statut") not in ("terminee", "retiree")]
+    if not restantes or vue.en_cours() or vue.brin():
+        return None
+    return ("haute", "lot arme sans AUCUNE tete servie",
+            str(len(restantes)) + " mission(s) du lot non ecoulee(s), aucune en cours, brin vide",
+            str(restantes[0]), "pilote charger (servir la tete) ou lot retirer")
+
+
+def detecter_stop_sans_suite(vue, declaration, _sortie):
+    """Une cloture sans suite servie : le STOP laisse la chaine arretee."""
+    seuil = seuil_de(declaration, "enchainement-stop")
+    moment, evenement = vue.dernier_evenement()
+    if moment is None or evenement.get("action") != "fin" or vue.en_cours():
+        return None
+    age = (vue.maintenant - moment).total_seconds() / 60.0
+    if seuil and age <= seuil:
+        return None
+    return ("haute", "dernier fait = une CLOTURE, aucune suite servie",
+            "derniere fin : " + str(evenement.get("mission")) + " (" + str(evenement.get("date")) + ")",
+            str(evenement.get("date")), "pilote conduire (servir la suite)")
+
+
+def detecter_brin_perime(vue, _declaration, _sortie):
+    """MAILLON 5 : brin == somme des files."""
+    files = (vue.entonnoir or {}).get("files") or {}
+    nombre = sum(len(v or []) for v in files.values())
+    brin = len(vue.brin())
+    if brin != nombre:
+        return ("haute", "brin (" + str(brin) + ") et files (" + str(nombre) + ") divergent",
+                "tissage non refait depuis le dernier classement", "mesure immediate",
+                "tresse tisser")
+    return None
+
+
+def detecter_item_dort(vue, declaration, _sortie):
+    """La tete du brin est prise dans la fenetre."""
+    seuil = seuil_de(declaration, "item-qui-dort")
+    brin = vue.brin()
+    if not brin or not seuil:
+        return None
+    age = minutes_ecoulees(brin[0].get("deposee_le"), vue.maintenant)
+    if age is not None and age > seuil:
+        return ("normale", "la tete du brin dort (" + str(brin[0].get("id")) + ")",
+                "deposee depuis " + duree_dite(age) + " (seuil " + duree_dite(seuil) + ")",
+                str(brin[0].get("deposee_le")), "charger la tete du brin")
+    return None
+
+
+def detecter_pause_contradictoire(vue, _declaration, _sortie):
+    """La panne VIVANTE du 2026-09-22 : le journal et l etat ne disent pas la meme chose."""
+    journal = lire_jsonl(vue.racine / CHEMIN_PAUSES)
+    if not journal:
+        return None
+    dernier = journal[-1]
+    etat_present = (vue.racine / CHEMIN_ETAT_PAUSE).is_file()
+    if dernier.get("type") == "pause" and not etat_present:
+        age = minutes_ecoulees(dernier.get("date"), vue.maintenant)
+        return ("haute", "journal en PAUSE sans reprise, etat de pause ABSENT",
+                "derniere ligne : pause du " + str(dernier.get("date")) + " (il y a "
+                + duree_dite(age) + "), etat absent", str(dernier.get("date")),
+                "pause-session reprendre (leve l etat ET journalise la reprise)")
+    if dernier.get("type") == "reprise" and etat_present:
+        return ("haute", "journal en REPRISE, etat de pause PRESENT",
+                "etat pose alors que la reprise est journalisee", str(dernier.get("date")),
+                "pause-session reprendre")
+    return None
+
+
+def detecter_bilan_absent(vue, _declaration, _sortie):
+    """Une mission close sans fin declaree (trace muette)."""
+    manquantes = [m.get("id") for m in vue.missions()
+                  if m.get("statut") == "terminee"
+                  and not (vue.dates_par_mission.get(m.get("id")) or {}).get("fin")]
+    if manquantes:
+        return ("haute", str(len(manquantes)) + " mission(s) close(s) sans fin declaree",
+                ", ".join(str(x) for x in manquantes[:6]), "mesure immediate",
+                "pilote fin (rejouer) ou suivi-optimus (rattrapage)")
+    return None
+
+
+def detecter_round_arme_jamais_pris(vue, declaration, _sortie):
+    """EO-360 : le round ARME et JAMAIS PRIS -- la machine a servi, l agent n a pas pris.
+
+    CE QUI SE MESURE : une mission EN COURS porte son injection (`injectee_le`,
+    posee par le `fin` precedent ou par un chargement) ; si AUCUNE PRISE (action
+    `prise`, notee par le GESTE DE RECEPTION) n a ete tracee DEPUIS cette
+    injection, le round n a JAMAIS ete pris. Le seuil est celui de la DECLARATION.
+
+    POURQUOI CE N EST PAS mission-chargee-sans-conduite : la-bas, le fait est la
+    CONTRADICTION INTERNE du pilote (en cours SANS aucun debut). Ici le fait est
+    plus etroit, et c est celui qui a ETE PAYE : le debut EXISTE (la machine l a
+    pose), l injection EXISTE, la file dit en-cours -- les trois traces disent
+    d ACCORD que le round a commence, et PERSONNE ne l a pris. C est la famille de
+    la cloture fausse de MO-387.
+
+    CONTRE-TEMOIN : un round PRIS (une prise posterieure a l injection) est
+    EPARGNE, meme s il dure trente heures -- une mission longue n est pas une
+    mission abandonnee. Et la porte ne DEVINE pas : sans aucune prise tracee dans
+    le journal, le mecanisme est NEUF et RIEN n est accuse (meme doctrine que la
+    charge tracee de MO-388).
+    """
+    seuil = seuil_de(declaration, "round-arme-jamais-pris")
+    if not seuil:
+        return None
+    if not any(e.get("action") == "prise" for e in vue.evenements):
+        return None
+    for mission in vue.en_cours():
+        injectee = horodate(mission.get("injectee_le"))
+        if injectee is None:
+            continue
+        age = (vue.maintenant - injectee).total_seconds() / 60.0
+        if age <= seuil:
+            continue
+        prises = (vue.dates_par_mission.get(mission.get("id")) or {}).get("prise") or []
+        if any(moment and moment >= injectee
+               for moment in (horodate(d) for d in prises)):
+            continue
+        return ("haute", str(mission.get("id")) + " ARME et JAMAIS PRIS depuis "
+                + duree_dite(age),
+                "le pilote l a servie le " + str(mission.get("injectee_le"))
+                + " (seuil declare " + duree_dite(seuil)
+                + ") et AUCUNE prise n a ete tracee depuis",
+                str(mission.get("injectee_le")),
+                "pilote injecter (PRENDRE le round) ou pilote reporter (le parquer)")
+    return None
+
+
+def detecter_poids_derive(vue, declaration, _sortie):
+    """Le sac-a-dos reste borne (plafond de tokens du createur)."""
+    seuil = seuil_de(declaration, "poids-qui-derive")
+    chemin = vue.racine.joinpath(*MOTIF_OUTBOX)
+    if not seuil or not chemin.is_file():
+        return None
+    plus_lourd = None
+    for evenement in lire_jsonl(chemin):
+        poids = evenement.get("poids_tokens")
+        if isinstance(poids, int) and (plus_lourd is None or poids > plus_lourd[0]):
+            plus_lourd = (poids, evenement.get("mission"))
+    if plus_lourd and plus_lourd[0] > seuil:
+        return ("normale", "une injection depasse le plafond (" + str(plus_lourd[0]) + " > "
+                + str(seuil) + ")", "mission " + str(plus_lourd[1]), "mesure immediate",
+                "verifier le plafond des lecons et les themes_utiles")
+    return None
+
+
+# Le REGISTRE des detecteurs. Une panne DECLAREE absente d'ici n'est pas accusee --
+# elle est NOMMEE < sans detecteur > dans la vue (une couverture muette serait muette).
+DETECTEURS = {
+    "serie-stricte-violee": detecter_serie_stricte,
+    "mission-qui-n-avance-pas": detecter_age_mission,
+    "mission-chargee-sans-conduite": detecter_chargee_sans_debut,
+    "cloture-fausse": detecter_cloture_fausse,
+    "lot-perdu": detecter_lot_sans_tete,
+    "enchainement-stop": detecter_stop_sans_suite,
+    "brin-perime": detecter_brin_perime,
+    "item-qui-dort": detecter_item_dort,
+    "pause-oubliee": detecter_pause_contradictoire,
+    "bilan-absent": detecter_bilan_absent,
+    "round-arme-jamais-pris": detecter_round_arme_jamais_pris,
+    "poids-qui-derive": detecter_poids_derive,
+}
+# DECLAREES ET NON DETECTABLES, avec la RAISON (mesuree, jamais une excuse) :
+SANS_DETECTEUR = {
+    "pilote-muet": "couvert par le detecteur serie-stricte-violee (meme lecture : le code de la porte)",
+    "injection-refusee": "le refus d injection N EST PAS JOURNALISE (mesure du 2026-09-22 : "
+                         "aucun evenement de refus dans l outbox) -- aucune source ne porte le fait",
+}
+
+
+def jouer_detecteurs(vue):
+    """(pannes, couverture) -- chaque panne rendue porte son verdict, sa gravite, son silence."""
+    sortie_pilote = (None, "")
+    try:
+        processus = subprocess.run(
+            [sys.executable, str(vue.pilote / "main.py"), "file"],
+            cwd=str(vue.pilote), capture_output=True, text=True, timeout=60)
+        sortie_pilote = (processus.returncode, (processus.stdout or "") + (processus.stderr or ""))
+    except (OSError, subprocess.SubprocessError) as erreur:
+        sortie_pilote = (99, type(erreur).__name__ + " : " + str(erreur)[:80])
+    declarees = [p.get("id") for p in (vue.declaration.get("pannes") or [])]
+    pannes = []
+    for identifiant in declarees:
+        detecteur = DETECTEURS.get(identifiant)
+        if detecteur is None:
+            continue
+        trouvee = detecteur(vue, vue.declaration, sortie_pilote)
+        if trouvee:
+            gravite, constat, motif, silence, repare = trouvee
+            pannes.append({"id": identifiant, "gravite": gravite, "constat": constat,
+                           "motif": motif, "silence": silence, "repare": repare})
+    couverture = {"detectees": len(DETECTEURS), "declarees": len(declarees),
+                  "sans_detecteur": {identifiant: SANS_DETECTEUR.get(
+                      identifiant, "aucun detecteur ecrit pour cette panne declaree")
+                      for identifiant in declarees if identifiant not in DETECTEURS}}
+    # EXCEPTIONS OUVERTES : une panne CONSTATEE et DEPOSEE (item) reste VISIBLE mais
+    # n arrete plus la suite. C est la doctrine des exemptions : NOMMEE et MOTIVEE,
+    # jamais muette (MO-075) -- et la declaration seule peut en ouvrir une.
+    ouvertes = {p.get("id"): p.get("ouverte") for p in (vue.declaration.get("pannes") or [])
+                if isinstance(p.get("ouverte"), dict)}
+    for panne in pannes:
+        ouverte = ouvertes.get(panne["id"])
+        if ouverte:
+            panne["ouverte"] = ouverte
+    couverture["ouvertes"] = {i: o for i, o in ouvertes.items() if i in {p["id"] for p in pannes}}
+    return pannes, couverture
+
+
+# --- LA VUE ------------------------------------------------------------------
+
+def rendre_vue(vue, pannes, couverture):
+    lignes = list(CARTE_VUE) + ["",
+                                "# SUIVI DU PILOTE -- la vue derivee",
+                                "",
+                                "> Regeneree par la porte `suivi-pilote` (T2 de PB-003/SP-003/TD-003).",
+                                "> Jamais editee a la main : elle se RECALCULE. Les faits du pilote vivent",
+                                "> dans suivi-optimus, file-missions, entonnoir, cycle-historique, outbox et",
+                                "> le journal des pauses -- ici, seulement ce que l instrument a JUGE.",
+                                "",
+                                "Mesure du " + vue.maintenant.strftime("%Y-%m-%d %H:%M:%S")
+                                + " | pannes declarees : " + str(couverture["declarees"])
+                                + " | detecteurs joues : " + str(couverture["detectees"]) + "."]
+    if couverture["sans_detecteur"]:
+        lignes += ["", "Pannes DECLAREES sans detecteur (couverture dite, jamais muette) :"]
+        for identifiant, raison in sorted(couverture["sans_detecteur"].items()):
+            lignes.append("- " + ascii_propre(identifiant) + " : " + ascii_propre(raison))
+    lignes += ["", "## Table 0 -- PANNES (la seule qui crie)"]
+    if not pannes:
+        lignes += ["", "**" + ENCART_VIDE + "** -- les parties lues ci-dessous sont coherentes."]
+    else:
+        lignes += ["", "| Gravite | Panne | Constat | Silence | Porte qui repare |",
+                   "|---|---|---|---|---|"]
+        for panne in pannes:
+            lignes.append("| " + " | ".join(ascii_propre(panne[cle]) for cle in
+                                             ("gravite", "id", "constat", "silence", "repare")) + " |")
+        lignes += ["", "Motifs : " + ascii_propre(
+            " ; ".join(p["id"] + " -- " + p["motif"] for p in pannes)) + "."]
+        if couverture.get("ouvertes"):
+            lignes += ["", "OUVERTES (constatees, deposees, suivies -- jamais tues) :"]
+            for identifiant, ouverte in sorted(couverture["ouvertes"].items()):
+                lignes.append("- " + ascii_propre(identifiant) + " : item "
+                              + ascii_propre(ouverte.get("item", "?")) + " -- "
+                              + ascii_propre(ouverte.get("motif", "")))
+
+    chemin_outbox = vue.racine.joinpath(*MOTIF_OUTBOX)
+    injections = [e for e in lire_jsonl(chemin_outbox) if e.get("type") == "injection"]
+    lignes_1 = [(e.get("mission", "?"), e.get("date", MENTION_INCONNU),
+                 e.get("poids_tokens", MENTION_INCONNU),
+                 len(e.get("lecons_utiles") or []) or MENTION_INCONNU)
+                for e in injections[-12:]]
+    lignes += rendre_table(1, "INJECTION (partie injection/)",
+                           ("Mission", "Injectee le", "Poids (tok)", "Lecons utiles"),
+                           lignes_1,
+                           "Une injection est un INSTANT : aucune duree. La colonne Refus n EXISTE "
+                           "PAS : le refus d injection n est pas journalise (mesure du 2026-09-22) -- "
+                           "une colonne toujours < inconnu > serait un placeholder qui ment.")
+
+    lignes_2 = []
+    for mission in vue.missions():
+        if mission.get("statut") not in ("en-cours", "en-attente"):
+            continue
+        fait = vue.dernier_fait.get(mission.get("id"))
+        age = minutes_ecoulees(mission.get("chargee_le"), vue.maintenant)
+        lignes_2.append((mission.get("id", "?"), mission.get("statut", "?"),
+                         "oui" if mission.get("id") in vue.lot() else "non",
+                         duree_dite(age) if age is not None else MENTION_INCONNU,
+                         fait[2] if fait else MENTION_INCONNU,
+                         duree_dite((vue.maintenant - fait[0]).total_seconds() / 60.0)
+                         if fait else MENTION_INCONNU))
+    lignes += rendre_table(2, "FILE (partie file/)",
+                           ("Mission", "Statut", "Dans le lot", "En attente depuis",
+                            "Dernier fait", "Silence"), lignes_2,
+                           "Silence = l ecart entre l ouverture et le dernier fait : la colonne "
+                           "qui voit une mission ouverte qui n avance plus.")
+
+    ids = vue.lot()
+    par_id = {m.get("id"): m for m in vue.missions()}
+    ecoulees = [i for i in ids if par_id.get(i, {}).get("statut") in ("terminee", "retiree")]
+    retirees = [i for i in ids if par_id.get(i, {}).get("retiree_le")]
+    tete = (vue.en_cours() or [{}])[0].get("id") or (vue.brin()[0].get("id") if vue.brin() else None)
+    vertueuses = (vue.entonnoir or {}).get("auto_validees") or []
+    suite = MENTION_INCONNU if not tete else str(tete)
+    lignes_3 = [("lot-" + str(len(ids)), len(ids), len(ecoulees), len(retirees),
+                 tete or MENTION_INCONNU, suite)]
+    lignes += rendre_table(3, "LOT (partie file/, a part)",
+                           ("Lot", "Portee", "Ecoulees", "Retirees", "Tete", "Enchainement"),
+                           lignes_3,
+                           "Panne lue : portee sans tete, ou STOP sans motif. Les colonnes Arme le et "
+                           "Retour consolide n existent PAS : aucune source ne les porte "
+                           "aujourd hui -- une colonne toujours < inconnu > serait un placeholder.")
+
+    entonnoir = vue.entonnoir or {}
+    files = entonnoir.get("files") or {}
+    lignes_4 = []
+    for nom, items in sorted(files.items()):
+        items = items or []
+        tete_item = items[0] if items else {}
+        age = minutes_ecoulees(tete_item.get("deposee_le"), vue.maintenant)
+        lignes_4.append((nom, len(items), tete_item.get("id", MENTION_INCONNU),
+                         tete_item.get("urgence", MENTION_INCONNU),
+                         duree_dite(age) if age is not None else MENTION_INCONNU))
+    lignes += rendre_table(4, "ENTONNOIR (files)",
+                           ("File", "Items", "Tete", "Urgence de la tete", "Age de la tete"),
+                           lignes_4, "Age : un item qui vieillit est un travail qui dort.")
+
+    lignes_5 = []
+    for rang, item in enumerate(vue.brin(), 1):
+        age = minutes_ecoulees(item.get("deposee_le"), vue.maintenant)
+        lignes_5.append((rang, item.get("id", "?"), item.get("urgence", MENTION_INCONNU),
+                         item.get("categorie", MENTION_INCONNU),
+                         item.get("deposee_le", MENTION_INCONNU),
+                         duree_dite(age) if age is not None else MENTION_INCONNU))
+    lignes += rendre_table(5, "BRIN", ("Rang", "Item", "Urgence", "Categorie", "Depose le", "Age"),
+                           lignes_5, "Coherence : brin = " + str(len(vue.brin())) + " ; files = "
+                           + str(sum(len(v or []) for v in files.values())) + ".")
+
+    est_auto, erreur_auto = charger_est_auto(vue.pilote)
+    if est_auto is None:
+        raison_auto = "verdict non resolu (import du pilote muet : " + erreur_auto + ")"
+    else:
+        raison_auto = ""
+    lignes_6 = []
+    fins = sorted([e for e in vue.evenements if e.get("action") == "fin"],
+                  key=lambda e: str(e.get("date") or ""))[-12:]
+    for evenement in fins:
+        mission_id = evenement.get("mission")
+        mission = par_id.get(mission_id) or {"id": mission_id}
+        if est_auto is None:
+            verdict = MENTION_INCONNU
+        else:
+            verdict = "auto" if est_auto(mission, vertueuses) else "STOP"
+        lignes_6.append((mission_id, evenement.get("date", MENTION_INCONNU),
+                         "ABSENT" if "TRACE MUETTE" in str(evenement.get("detail") or "") else "pose",
+                         verdict))
+    lignes += rendre_table(6, "CLOTURES ET ENCHAINEMENT (partie fin/)",
+                           ("Mission close", "Fin a", "Bilan", "Enchainement"), lignes_6,
+                           "La DUREE d une mission vit dans suivi-optimus : elle n est PAS recopiee ici. "
+                           "Le verdict d enchainement vient de la FONCTION du pilote (provenance de "
+                           "l item), jamais d une comparaison d ids."
+                           + ((" " + raison_auto) if raison_auto else ""))
+
+    lignes_7 = [(item.get("id", "?"), item.get("deposee_le", MENTION_INCONNU),
+                 item.get("type", MENTION_INCONNU), "au vrac (non classee)",
+                 item.get("urgence", MENTION_INCONNU)) for item in (entonnoir.get("vrac") or [])]
+    lignes += rendre_table(7, "DEMANDES FILTREES (vrac)",
+                           ("Demande", "Recue le", "Porte visee", "Action posee", "Urgence"),
+                           lignes_7,
+                           "Panne lue : une demande recue et jamais classee (le vrac ne se vide pas).")
+
+    journal_pauses = lire_jsonl(vue.racine / CHEMIN_PAUSES)
+    etat_present = (vue.racine / CHEMIN_ETAT_PAUSE).is_file()
+    lignes_8 = [("pause de session", "en pause" if etat_present else "active",
+                 journal_pauses[-1].get("date") if journal_pauses else MENTION_INCONNU,
+                 (str(journal_pauses[-1].get("type")) + " : "
+                  + str(journal_pauses[-1].get("raison") or ""))[:70] if journal_pauses
+                 else MENTION_INCONNU)]
+    for evenement in lire_jsonl(vue.racine / CHEMIN_DEFCON)[-6:]:
+        if evenement.get("niveau") is not None:
+            lignes_8.append(("defcon", str(evenement.get("niveau")),
+                             evenement.get("date", MENTION_INCONNU),
+                             str(evenement.get("motif", MENTION_INCONNU))[:70]))
+    lignes += rendre_table(8, "GARDES (pause de session, defcon)",
+                           ("Garde", "Etat", "Depuis", "Motif"), lignes_8,
+                           "Panne lue : une pause armee et oubliee -- ou le JOURNAL et l ETAT qui "
+                           "se contredisent (l agent s arrete et personne ne le voit).")
+    return lignes
+
+
+def tracer(racine, chemin_journal, pannes, signature):
+    """N ajoute QUE ce qui n a pas deja ete dit (meme id, meme signature), PAR LA PORTE."""
+    deja = {(e.get("id"), e.get("signature")) for e in lire_jsonl(chemin_journal)}
+    neuves = [p for p in pannes if (p["id"], signature) not in deja]
+    if not neuves:
+        return 0, "rien de neuf (les verdicts sont deja traces)"
+    contenu = "".join(json.dumps({"date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                                  "id": p["id"], "gravite": p["gravite"], "constat": p["constat"],
+                                  "silence": p["silence"], "signature": signature}) + "\n" for p in neuves)
+    mode = "ajouter" if chemin_journal.is_file() else "creer"
+    code, sortie = publier(racine, chemin_journal, contenu, mode)
+    if code != 0:
+        return 0, "REFUS de la porte : " + sortie[-200:]
+    return len(neuves), str(len(neuves)) + " verdict(s) trace(s) (" + mode + ")"
+
+
+# --- L AUTO-TEST (L-032) : le cobaye MORD, le contre-temoin EPARGNE ----------
+
+def auto_test(racine):
+    """Eprouve les detecteurs sur des faits FABRIQUES, en memoire : aucun disque touche."""
+    resultats = []
+
+    def controler(nom, condition, detail=""):
+        resultats.append(bool(condition))
+        print("[" + ("OK" if condition else "KO") + "] " + nom + " : " + detail)
+
+    declaration, erreur = lire_json(racine / DOSSIER_SUIVI / NOM_DECLARATION)
+    if declaration is None:
+        print("REFUS : declaration illisible (" + str(erreur) + ")")
+        return 2
+    vue = Vue(racine, declaration)
+    if not vue.missions():
+        print("REFUS : la file du pilote est vide -- aucun cobaye possible.")
+        return 2
+    cobaye = copy.deepcopy(vue.missions()[0])
+    cobaye["id"] = "MO-900"
+    cobaye["statut"] = "en-cours"
+    cobaye["chargee_le"] = vue.maintenant.replace(year=vue.maintenant.year - 1).strftime("%Y-%m-%d %H:%M:%S")
+    # ISOLEMENT : le cobaye est juge SEUL -- la file REELLE (une mission longue
+    # legitimement ouverte) ne doit pas colorer le verdict de l epreuve.
+    vue.file_missions = {"missions": [cobaye], "compteur": 0, "lot": {"ids": []}}
+    trouvee = detecter_age_mission(vue, declaration, (0, ""))
+    controler("le detecteur MORD sur une mission en cours hors seuil", trouvee is not None,
+              "MO-900 accuse (chargee il y a un an)")
+    cobaye["chargee_le"] = vue.maintenant.strftime("%Y-%m-%d %H:%M:%S")
+    controler("le detecteur EPARGNE une mission chargee a l instant",
+              detecter_age_mission(vue, declaration, (0, "")) is None, "aucune accusation")
+    cobaye["statut"] = "terminee"
+    cobaye["chargee_le"] = vue.maintenant.strftime("%Y-%m-%d %H:%M:%S")
+    controler("le detecteur EPARGNE une mission close (le statut compte)",
+              detecter_age_mission(vue, declaration, (0, "")) is None, "aucune accusation")
+    # LA REGLE CORRIGEE PAR LA MESURE : une mission < en-attente > du lot n a pas de
+    # `debut` (mesure : 31 sur 31) et le lot partage UN SEUL `chargee_le` -- elle est
+    # donc EPARGNEE ; seule une mission donned EN COURS sans debut est accusee.
+    vue.file_missions = {"missions": [cobaye], "compteur": 0, "lot": {"ids": ["MO-900"]}}
+    cobaye["statut"] = "en-attente"
+    controler("le detecteur EPARGNE une mission du lot en attente (31 cas reels eprouves)",
+              detecter_chargee_sans_debut(vue, declaration, (0, "")) is None,
+              "en-attente sans debut : aucune accusation")
+    cobaye["statut"] = "en-cours"
+    cobaye["chargee_le"] = vue.maintenant.replace(
+        year=vue.maintenant.year - 1).strftime("%Y-%m-%d %H:%M:%S")
+    controler("le detecteur MORD sur une mission EN COURS sans debut declare",
+              detecter_chargee_sans_debut(vue, declaration, (0, "")) is not None,
+              "en-cours sans debut : MO-900 accuse")
+    # LA CHARGE TRACEE (demande du createur, 2026-09-22) : l acte de charger est
+    # desormais une trace, et c est elle qui rend la classe EO-356 MESURABLE.
+    vieux = vue.maintenant.replace(year=vue.maintenant.year - 1).strftime("%Y-%m-%d %H:%M:%S")
+    vue.file_missions = {"missions": [
+        {"id": "MO-901", "statut": "en-attente", "theme": "PILOTE", "chargee_le": vieux},
+        {"id": "MO-902", "statut": "en-attente", "theme": "PILOTE", "chargee_le": vieux,
+         "lot": "LOT-COBAYE"}],
+        "compteur": 0, "lot": {"ids": ["MO-902"]}}
+    vue.dates_par_mission = {}
+    vue.evenements = [{"action": "charge", "mission": "MO-901", "date": vieux},
+                      {"action": "charge", "mission": "MO-902", "date": vieux}]
+    controler("le detecteur MORD sur une charge INDIVIDUELLE jamais conduite",
+              detecter_chargee_sans_debut(vue, declaration, (0, "")) is not None,
+              "MO-901 chargee il y a un an, aucun debut")
+    vue.evenements = [{"action": "charge", "mission": "MO-902", "date": vieux}]
+    controler("le detecteur EPARGNE une charge de LOT (elle ATTEND son tour)",
+              detecter_chargee_sans_debut(vue, declaration, (0, "")) is None,
+              "MO-902 appartient a un lot : etat legitime, aucune accusation")
+    vue.evenements = [{"action": "charge", "mission": "MO-901", "date": vieux},
+                      {"action": "fin", "mission": "MO-902", "date": vieux}]
+    controler("le detecteur MORD sur une CLOTURE FAUSSE (la charge close sous un autre nom)",
+              detecter_cloture_fausse(vue, declaration, (0, "")) is not None,
+              "MO-901 chargee, MO-902 close : la mission ouverte n a jamais ete menee")
+    vue.evenements = [{"action": "charge", "mission": "MO-901", "date": vieux},
+                      {"action": "fin", "mission": "MO-901", "date": vieux}]
+    controler("le detecteur EPARGNE une cloture qui NOMME la mission chargee",
+              detecter_cloture_fausse(vue, declaration, (0, "")) is None,
+              "charge MO-901 puis cloture MO-901 : la cloture est JUSTE")
+    vrai_etat = (racine / CHEMIN_ETAT_PAUSE).is_file()
+    attendu = None if vrai_etat else "MORD"
+    trouvee_pause = detecter_pause_contradictoire(vue, declaration, (0, ""))
+    controler("la pause CONTRADICTOIRE est jugee juste (etat " + ("present" if vrai_etat else "absent") + ")",
+              (trouvee_pause is None) == vrai_etat,
+              "MORD (journal en pause, etat absent)" if attendu else "EPARGNE (etat present = legitime)")
+    _, omises = garder_colonnes(("Verdict", "Toujours pareil"), [("a", "-"), ("b", "-")])
+    controler("une colonne CONSTANTE est omise, une colonne de VERDICT est gardee",
+              [nom for nom, _ in omises] == ["Toujours pareil"], "omise : Toujours pareil")
+    controler("le seuil se lit dans la DECLARATION (aucun seuil en dur)",
+              seuil_de(declaration, "mission-qui-n-avance-pas") is not None,
+              "mission-qui-n-avance-pas = " + str(seuil_de(declaration, "mission-qui-n-avance-pas")))
+    colonnes = set()
+    for ligne in lire_jsonl(racine / DOSSIER_SUIVI / NOM_JOURNAL):
+        colonnes |= set(ligne.keys())
+    controler("le journal des verdicts ne porte QUE des verdicts",
+              colonnes <= set(CLES_JOURNAL),
+              "cles : " + ", ".join(sorted(colonnes)) if colonnes else "journal vide (aucun verdict)")
+    _, couverture = jouer_detecteurs(vue)
+    controler("la couverture des pannes est DITE (aucune panne declaree muette)",
+              couverture["declarees"] == couverture["detectees"] + len(couverture["sans_detecteur"]),
+              str(couverture["declarees"]) + " declarees = " + str(couverture["detectees"])
+              + " detecteurs + " + str(len(couverture["sans_detecteur"])) + " nommees")
+    return 0 if all(resultats) else 1
+
+
+def principal(arguments):
+    parseur = argparse.ArgumentParser(description="Porte du suivi du pilote d Optimus (vue derivee).")
+    parseur.add_argument("--racine", default=".", help="racine du depot")
+    parseur.add_argument("--json", action="store_true", help="la vue en JSON")
+    parseur.add_argument("--auto-test", action="store_true", help="eprouve les detecteurs")
+    options = parseur.parse_args(arguments)
+    racine = trouver_racine(Path(options.racine).resolve())
+    if racine is None:
+        print("REFUS : racine introuvable (aucun _operateur/optimus-prime/pilote/commun.py).")
+        return 2
+    if options.auto_test:
+        return auto_test(racine)
+    declaration, erreur = lire_json(racine / DOSSIER_SUIVI / NOM_DECLARATION)
+    if declaration is None:
+        print("REFUS : declaration des pannes illisible (" + str(erreur) + ") : "
+              + str(racine / DOSSIER_SUIVI / NOM_DECLARATION)
+              + " -- sans elle, une porte qui crie crierait au hasard.")
+        return 2
+    vue = Vue(racine, declaration)
+    pannes, couverture = jouer_detecteurs(vue)
+    lignes = rendre_vue(vue, pannes, couverture)
+    dossier = racine / DOSSIER_SUIVI
+    vue_absente = not (dossier / NOM_VUE).is_file()
+    code, sortie = publier(racine, dossier / NOM_VUE, "\n".join(lignes) + "\n",
+                           "creer" if vue_absente else "remplacer")
+    if code != 0:
+        print("REFUS de la porte (vue) : " + sortie[-300:])
+        return 2
+    signature = "|".join(sorted(p["id"] for p in pannes)) or "sain"
+    traces, dit = tracer(racine, dossier / NOM_JOURNAL, pannes, signature)
+    # Seules les pannes NON ouvertes font rougir : une exception NOMMEE ne gele pas la suite.
+    rouges = [p for p in pannes if not p.get("ouverte")]
+    if options.json:
+        print(json.dumps({"vue": str(dossier / NOM_VUE), "pannes": pannes,
+                          "couverture": couverture, "verdicts_traces": traces},
+                         ensure_ascii=False, indent=2))
+    else:
+        print("SUIVI DU PILOTE -- vue recalculee : " + str(dossier / NOM_VUE))
+        for panne in pannes:
+            print("[KO] " + panne["id"] + " (" + panne["gravite"] + ") : " + panne["constat"]
+                  + " | silence : " + str(panne["silence"]) + " | repare par : " + panne["repare"])
+        for panne in pannes:
+            if panne.get("ouverte"):
+                print("[--] " + panne["id"] + " : OUVERTE (item " + str(panne["ouverte"].get("item"))
+                      + ") -- " + str(panne["ouverte"].get("motif")))
+        for identifiant, raison in sorted(couverture["sans_detecteur"].items()):
+            print("[--] " + identifiant + " : declaree SANS detecteur -- " + raison)
+        print("couverture : " + str(couverture["detectees"]) + "/" + str(couverture["declarees"])
+              + " pannes declarees ont un detecteur | " + dit)
+    if rouges:
+        print("VERDICT : " + str(len(rouges)) + " PANNE(S) DU PILOTE -- " + ENCART_VIDE + " est FAUX.")
+        return 1
+    if pannes:
+        print("VERDICT : " + str(len(pannes)) + " panne(s) constatee(s), TOUTES OUVERTES (suivies) -- "
+              + "aucune panne NOUVELLE.")
+        return 0
+    print("VERDICT : " + ENCART_VIDE + ".")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(principal(sys.argv[1:]))

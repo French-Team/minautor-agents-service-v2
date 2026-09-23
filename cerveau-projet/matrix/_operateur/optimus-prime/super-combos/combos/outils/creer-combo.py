@@ -28,6 +28,12 @@ Les outils (`outils/`) ne sont PAS des combos : ils ne sont pas numerotes.
     lister                      -- etat numerote des combos et super-combos
 
 Usage: python creer-combo.py <verbe> [args...]
+       APRES CREATION : un combo ou super-combo NEUF se DECLARE (mesure du
+       2026-09-21) -- ajouter l'objet a la table de sa famille dans
+       outils-readme.md, puis regenerer l'inventaire
+       (python remorque/remorque-optimus.py inventorier). Le PRE-VOL du lanceur
+       de non-regression REFUSE un equipement non declare.
+
 """
 
 import re

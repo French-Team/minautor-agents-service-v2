@@ -45,8 +45,10 @@ from datetime import datetime
 from pathlib import Path
 
 from constants import (
-    CHEMIN_DOMICILE_FORME_BAK, ENCODAGE, NOM_MANIFESTE, NOM_TEMOIN,
-    REPERTOIRE_ARCHIVES, TAILLE_BLOC_LECTURE, ZONES_CAMELEON,
+    CHEMIN_DOMICILE_FORME_BAK, ENCODAGE, NOM_LIGNE_ABANDON, NOM_MANIFESTE, NOM_TEMOIN,
+    NON_MESURE, ORIGINE_LECTURE_DISQUE, ORIGINE_LECTURE_REGISTRE, REPERTOIRE_ARCHIVES,
+    STATUT_DISPARU, STATUT_SUPPRIME, TAG_FAMILLE_RESTAURATION, TAILLE_BLOC_LECTURE,
+    ZONES_CAMELEON,
 )
 from cible import arbres_matrice, racine_matrice, resoudre, resoudre_dans_matrice
 
@@ -403,6 +405,31 @@ def archiver_un(entree, donnees, depart, chemin_manifeste, simuler=False):
 
 # --- L'ORIGINE (temoin) et la CASE 8 ----------------------------------------
 
+def _mesure_du_registre(entree, statut):
+    """La derniere mesure CONNUE d'un element que le disque n'a plus. Rend 4 valeurs.
+
+    Ce qui est parti par la porte P3 (`supprime`) a laisse ses octets APRES le
+    deplacement ; ce qui a DISPARU sans porte (`disparu`, EO-276) a laisse la
+    mesure de la declaration -- la derniere que le temoin qui l'a vu a pu
+    prendre. Quand le registre est muet, la lecture vaut NON_MESURE : un `None`
+    mesure et un `None` jamais mesure ne disent PAS la meme chose, et le total
+    des octets ne peut se boucler que si le temoin les distingue (L-100).
+    """
+    if statut == STATUT_SUPPRIME:
+        sha, octets, lignes = (entree.get("sha_apres"), entree.get("octets_apres"),
+                               entree.get("lignes_apres"))
+    else:
+        sha, octets, lignes = (entree.get("sha_avant"), entree.get("octets_avant"),
+                               entree.get("lignes_avant"))
+    if octets in ("", None):
+        return None, None, None, NON_MESURE
+    try:
+        octets = int(octets)
+    except (TypeError, ValueError):
+        return None, None, None, NON_MESURE
+    return (str(sha) if sha else None), octets, (lignes or None), ORIGINE_LECTURE_REGISTRE
+
+
 def inventaire(donnees, depart):
     """L'ORIGINE : l'etat MESURE des points de restauration de la BDD.
 
@@ -413,11 +440,39 @@ def inventaire(donnees, depart):
     est encore actif, l'ARCHIVE s'il est deja archive. Le temoin DIT d'ou il a
     lu (`origine`) -- un temoin qui ne dit pas ce qu'il a mesure ne peut pas etre
     contredit, et il accuse a la place du disque.
+
+    DEUX POPULATIONS N'ONT PLUS DE FICHIER, ET LE TEMOIN LES LIT AU REGISTRE
+    (EO-276, MO-310) -- il ne les compte plus pour zero :
+
+      - `supprime` (purge P3) : le contenu est parti sur PREUVE de recouvrabilite ;
+      - `disparu` (declaration EO-276) : le contenu a quitte la Matrice sans porte.
+
+    Mesure du 2026-09-20 : le temoin precedent lisait les 799 purges
+    `introuvable`, donc pour 0 octet, alors que le registre en declarait 14,2 Mo --
+    et l'invariant des octets ne pouvait PLUS se boucler. Un temoin qui n'a pas su
+    lire ne doit pas mesurer zero : il lit au bon domicile, ou il le DIT
+    (`non_mesures` au total, `lecture` par element).
     """
     elements = []
+    non_mesures = []
+    # CE QUE LE TEMOIN ECARTE, IL LE DECLARE (MO-311, EO-309) -- il ne l'efface pas.
+    # Un filtre SILENCIEUX laisse des entrees du registre hors de toute mesure : ce
+    # controle ne boucle QUE sur le temoin, donc ce qu'il ne retient pas, personne
+    # ne le regarde (mesure du 2026-09-20 : 7 entrees vivaient ainsi sans juge).
+    # Ecarter est legitime -- ecarter SANS LE DIRE ne l'est pas.
+    exclus = []
     for entree in donnees.get("elements", []):
         source = str(entree.get("source", ""))
-        if not source or "bak" not in entree.get("tags", []):
+        if not source or TAG_FAMILLE_RESTAURATION not in entree.get("tags", []):
+            exclus.append({
+                "id": entree.get("id", ""),
+                "source": source,
+                "categorie": entree.get("categorie", ""),
+                "statut": entree.get("statut", ""),
+                "motif": ("source absente du registre" if not source
+                          else "hors famille (le critere " + TAG_FAMILLE_RESTAURATION
+                          + " est absent des tags)"),
+            })
             continue
         # D'OU VIENT L'OCTET au moment du temoin ? (MO-162)
         # Un point DEJA archive n'a plus sa source : ses octets vivent dans
@@ -429,18 +484,34 @@ def inventaire(donnees, depart):
         # `sha_avant` de la BDD : les octets n'avaient pas bouge, c'est la MESURE
         # qui regardait au mauvais domicile. Un temoin qui n'a pas su lire ne
         # doit pas ACCUSER : il mesure le bon endroit, ou il le DIT.
-        deja_archive = entree.get("statut") == "archive"
-        if deja_archive:
-            chemin, _ = resoudre_dans_matrice(str(entree.get("archive", "")), depart)
+        statut = entree.get("statut")
+        lecture = ORIGINE_LECTURE_DISQUE
+        if statut in (STATUT_SUPPRIME, STATUT_DISPARU):
+            # PLUS DE FICHIER : la seule trace qui reste est le REGISTRE, et le
+            # temoin DIT qu'il y a lu (`lecture`). Ce qui est parti par la porte
+            # P3 a laisse ses octets APRES le deplacement ; ce qui a DISPARU a
+            # laisse la mesure de la declaration. Un registre muet n'est pas un
+            # zero : l'element rejoint `non_mesures`, et il est NOMME.
+            sha, octets, nb_lignes, lecture = _mesure_du_registre(entree, statut)
+            origine = (("purge" if statut == STATUT_SUPPRIME else "declaration")
+                       if lecture == ORIGINE_LECTURE_REGISTRE else "introuvable")
         else:
-            chemin, _ = resoudre(source, depart)
-        sha, octets, nb_lignes = mesurer(chemin) if chemin else (None, None, None)
-        origine = ("archive" if deja_archive else "source") if sha is not None else "introuvable"
+            deja_archive = statut == "archive"
+            if deja_archive:
+                chemin, _ = resoudre_dans_matrice(str(entree.get("archive", "")), depart)
+            else:
+                chemin, _ = resoudre(source, depart)
+            sha, octets, nb_lignes = mesurer(chemin) if chemin else (None, None, None)
+            origine = (("archive" if deja_archive else "source")
+                       if sha is not None else "introuvable")
+        if origine == "introuvable":
+            non_mesures.append(entree.get("id", ""))
         elements.append({
             "id": entree.get("id", ""),
             "source": source,
             "verdict": entree.get("verdict", ""),
             "origine": origine,
+            "lecture": lecture,
             "sha": sha,
             "octets": octets,
             "lignes": nb_lignes,
@@ -450,19 +521,71 @@ def inventaire(donnees, depart):
         "date": horodater(),
         "nb": len(elements),
         "octets": sum(element["octets"] or 0 for element in elements),
+        "non_mesures": {"nb": len(non_mesures), "ids": non_mesures},
+        # LE PERIMETRE EST DECLARE, PAS SEULEMENT APPLIQUE (MO-311) : le temoin dit
+        # le CRITERE qui definit la famille qu'il mesure, et il NOMME chaque entree
+        # du registre qu'il laisse dehors. Sans cette declaration, la population
+        # hors perimetre n'existe pour personne -- ni mesuree, ni listee, ni accusee.
+        "perimetre": {
+            "critere": "tag:" + TAG_FAMILLE_RESTAURATION,
+            "exclus_nb": len(exclus),
+            "exclus": exclus,
+        },
         "elements": elements,
     }
 
 
 def ecrire_temoin(chemin_temoin, temoin):
-    """Ecrit le temoin (JSON, LF, ASCII, atomique)."""
+    """Ecrit le temoin (JSON, LF, ASCII, atomique) et REND ce qu'il ABANDONNE.
+
+    Reposer un temoin REMPLACE le precedent : ce que le nouveau ne peut plus
+    mesurer n'a plus AUCUNE trace si personne ne le dit. C'est exactement ce qui
+    faisait disparaitre la PREUVE d'une disparition au lot suivant (EO-276, mesure
+    du 2026-09-20) : chaque `archiver --lot` reposait l'origine, et l'element qui
+    avait perdu sa source sortait du temoin sans un mot.
+
+    Est ABANDONNE ce qui PORTAIT une mesure dans le precedent et que le nouveau ne
+    mesure plus (ni disque, ni registre). L'appelant les NOMME et les TRACE au
+    manifeste, qui est append-only : la trace SURVIT au temoin qu'elle remplace.
+    """
     chemin_temoin = Path(chemin_temoin)
+    precedent = lire_temoin(chemin_temoin)
+    abandonnes = []
+    if isinstance(precedent, dict):
+        mesures = {element.get("id") for element in temoin.get("elements", [])
+                   if element.get("origine") != "introuvable"}
+        abandonnes = [element for element in precedent.get("elements", [])
+                      if element.get("id") not in mesures
+                      and (element.get("sha") or element.get("octets"))]
     chemin_temoin.parent.mkdir(parents=True, exist_ok=True)
     temporaire = chemin_temoin.with_name(chemin_temoin.name + ".tmp")
     with open(str(temporaire), "w", encoding=ENCODAGE, newline="\n") as flux:
         json.dump(temoin, flux, ensure_ascii=True, indent=2, sort_keys=True)
         flux.write("\n")
     os.replace(str(temporaire), str(chemin_temoin))
+    return abandonnes
+
+
+def ligne_abandon(abandonnes):
+    """La ligne du manifeste qui TRACE ce qu'un temoin abandonne (EO-276).
+
+    Elle porte la MESURE PERDUE (sha, octets) : c'est elle, et elle seule, qui
+    permet de retrouver le poids d'un point dont ni le disque ni le registre ne
+    gardent trace. Sans elle, la substitution du temoin serait une perte muette.
+    """
+    return {
+        "type": NOM_LIGNE_ABANDON,
+        "date": horodater(),
+        "nb": len(abandonnes),
+        "elements": [{"id": element.get("id"),
+                      "source": element.get("source"),
+                      "origine": element.get("origine"),
+                      "sha": element.get("sha"),
+                      "octets": element.get("octets")} for element in abandonnes],
+        "preuve": ("le temoin precedent portait la mesure de ces elements ; le nouveau ne la "
+                   "reproduit plus (ni sur le disque, ni au registre) -- la substitution est "
+                   "tracee ici parce que le temoin, lui, est REMPLACE"),
+    }
 
 
 def lire_temoin(chemin_temoin):
@@ -480,16 +603,50 @@ def trouver(donnees, identifiant):
     return None
 
 
+def ne_apres_temoin(entree, date_temoin):
+    """Vrai si l entree est MESURABLEMENT nee APRES le temoin. Rend un booleen.
+
+    LA NAISSANCE SE MESURE, ELLE NE SE SUPPOSE PAS (MO-311 ; L-055 : une valeur
+    qui ment se lit comme un fait). La `date` d une entree est le moment de sa
+    DERNIERE ECRITURE au registre (proposition, classement, decision) ; celle du
+    temoin est le moment de sa POSE. Une entree nee APRES lui ne pouvait donc PAS
+    y figurer : c est une TRANSITION, et le prochain acte la mesurera. Une entree
+    ANTERIEURE y figurait FORCEMENT -- le temoin retient TOUTE la famille lisible
+    et DECLARE celle qu il ecarte : son ABSENCE n est donc pas une naissance, c est
+    un ACCUSE MANQUE. Une date absente n autorise AUCUNE supposition : l entree est
+    alors traitee comme ANTERIEURE -- le doute accuse, il ne disculpe pas, et le
+    remede est le meme dans les deux cas (reposer le temoin).
+    """
+    date_entree = str(entree.get("date", "") or "")
+    if not date_entree or not date_temoin:
+        return False
+    return date_entree > date_temoin
+
+
 def verifier_archives(donnees, depart, chemin_temoin):
     """CASE 8 : `archive + actif = origine` (aucun octet perdu). Rend (ecarts, mesure).
 
     Trois invariants, chacun mesure :
       1. chaque element archive est dans l'archive (sha identique au temoin) ET
          sa source a disparu : l'octet a DEMENAGE, il n'a pas disparu ;
-      2. le total `archive + actif` EGALE l'origine (nombre ET octets) : rien
-         n'est perdu, rien n'est duplique ;
+      2. le total `archive + actif + purge + disparu` EGALE l'origine (nombre ET
+         octets) : rien n'est perdu, rien n'est duplique -- ce qui est PURGE
+         (P3, MO-308) et ce qui est DECLARE DISPARU (EO-276, MO-310) est compte
+         SEPAREMENT, chacun avec sa preuve citee dans le registre ;
       3. chaque archive est dans une ZONE INVISIBLE declaree (aucune fuite
-         nouvelle vers le cameleon).
+         nouvelle vers le cameleon) ;
+      4. chaque entree du registre est SOIT mesuree (elle est dans le temoin),
+         SOIT declaree hors perimetre PAR LE TEMOIN (`perimetre.exclus`), SOIT
+         une NAISSANCE MESUREE posterieure au temoin (sa `date` est posterieure a
+         celle du temoin : le prochain acte la mesurera). Une entree qui n'est
+         AUCUNE des trois ne sera jamais controlee par personne : c'est un ANGLE
+         MORT, et il est accuse avec son remede (MO-311, EO-309). DEUX formes d
+         angle mort, et elles ne disent pas la meme chose : HORS FAMILLE et non
+         declaree (aucun temoin futur ne la retiendra jamais), et DE LA FAMILLE
+         mais absente du temoin alors qu'elle EXISTAIT quand il a ete pose (le
+         temoin retient TOUTE la famille lisible : son absence n'est PAS une
+         naissance, c'est un ACCUSE MANQUE -- la retirer du temoin effacait un
+         element de TOUTE mesure).
     """
     ecarts = []
     temoin = lire_temoin(chemin_temoin)
@@ -500,8 +657,13 @@ def verifier_archives(donnees, depart, chemin_temoin):
 
     octets_archive = 0
     octets_actif = 0
+    octets_purge = 0
+    octets_disparu = 0
     nb_archive = 0
     nb_actif = 0
+    nb_purge = 0
+    nb_disparu = 0
+    non_mesures = []
     for element in temoin["elements"]:
         entree = trouver(donnees, element["id"])
         if entree is None:
@@ -527,9 +689,69 @@ def verifier_archives(donnees, depart, chemin_temoin):
                 continue
             octets_archive += octets_archive_element or 0
             nb_archive += 1
+        elif entree.get("statut") == STATUT_SUPPRIME:
+            # PURGEE (P3, MO-308) : l octet a quitte la Matrice SUR PREUVE de
+            # recouvrabilite. Le controle ne peut donc plus le MESURER -- mais il
+            # ne croit pas le registre pour autant : il exige que l archive ne
+            # soit PLUS la, et il confronte les octets enregistres a l origine du
+            # temoin. Un element purge ENCORE present sur le disque est un ecart :
+            # la preuve de sa disparition serait un mensonge.
+            chemin_purge, _ = resoudre_dans_matrice(str(entree.get("archive", "")), depart)
+            if chemin_purge is not None and chemin_purge.is_file():
+                ecarts.append("element PURGE encore present a son archive : "
+                              + str(element["id"]))
+                continue
+            octets_purge_element = int(entree.get("octets_apres") or 0)
+            if element.get("octets") is not None and octets_purge_element \
+                    and octets_purge_element != element["octets"]:
+                ecarts.append("element PURGE : octets enregistres differents de l origine : "
+                              + str(element["id"]))
+                continue
+            octets_purge += octets_purge_element
+            nb_purge += 1
+        elif entree.get("statut") == STATUT_DISPARU:
+            # DECLARE DISPARU (EO-276, MO-310) : le point a quitte le disque sans
+            # passer par une porte. Une disparition DECLAREE n'est plus un ecart --
+            # c'est un FAIT date, motive et mesure. Le controle ne la croit pas sur
+            # parole pour autant : il exige que le point ne soit NI revenu a sa
+            # source, NI vivant dans l'archive, et que les octets enregistres a la
+            # declaration ne contredisent pas le temoin qui l'a vu.
+            chemin_revenu, _ = resoudre(element["source"], depart)
+            if chemin_revenu is not None and chemin_revenu.is_file():
+                ecarts.append("element DECLARE DISPARU REVENU a sa source : " + str(element["id"]))
+                continue
+            chemin_vivant, _ = resoudre_dans_matrice(str(entree.get("archive", "")), depart)
+            if chemin_vivant is not None and chemin_vivant.is_file():
+                ecarts.append("element DECLARE DISPARU vivant dans l'archive : " + str(element["id"]))
+                continue
+            octets_disparu_element = entree.get("octets_avant")
+            if octets_disparu_element in ("", None):
+                # AUCUNE MESURE AU REGISTRE : le temoin qui l'a vu est le seul a en
+                # porter une -- et s'il n'en a pas non plus, le temoin le DIT
+                # (`non_mesures`). Un element jamais mesure ne compte pas pour zero
+                # par hasard : il compte pour zero parce que PERSONNE ne l'a mesure.
+                octets_disparu_element = element.get("octets")
+                if octets_disparu_element in ("", None):
+                    non_mesures.append(str(element["id"]))
+                    octets_disparu_element = 0
+            else:
+                try:
+                    octets_disparu_element = int(octets_disparu_element)
+                except (TypeError, ValueError):
+                    octets_disparu_element = 0
+                if element.get("octets") is not None and octets_disparu_element != element["octets"]:
+                    ecarts.append("element DECLARE DISPARU : octets differents du temoin : "
+                                  + str(element["id"]))
+                    continue
+            octets_disparu += octets_disparu_element
+            nb_disparu += 1
         else:
             if not present:
-                ecarts.append("element non archive DISPARU de sa source : " + str(element["id"]))
+                # LE REMEDE EST NOMME (EO-276) : un point dont la source a disparu
+                # se DECLARE -- aucune autre porte ne peut le solder, car
+                # `archiver` exige un fichier a deplacer et `purger` une archive.
+                ecarts.append("element non archive DISPARU de sa source : " + str(element["id"])
+                              + " -- remede : declarer-disparition --id " + str(element["id"]))
                 continue
             sha_source, octets_source, _ = mesurer(chemin_source)
             if element["sha"] and sha_source != element["sha"]:
@@ -538,12 +760,14 @@ def verifier_archives(donnees, depart, chemin_temoin):
             octets_actif += octets_source or 0
             nb_actif += 1
 
-    if nb_archive + nb_actif != temoin["nb"]:
+    if nb_archive + nb_actif + nb_purge + nb_disparu != temoin["nb"]:
         ecarts.append("comptage : " + str(nb_archive) + " archive(s) + " + str(nb_actif)
-                      + " actif(s) != origine " + str(temoin["nb"]))
-    if octets_archive + octets_actif != temoin["octets"]:
+                      + " actif(s) + " + str(nb_purge) + " purge(s) + " + str(nb_disparu)
+                      + " declare(s) disparu(s) != origine " + str(temoin["nb"]))
+    if octets_archive + octets_actif + octets_purge + octets_disparu != temoin["octets"]:
         ecarts.append("octets : " + str(octets_archive) + " + " + str(octets_actif)
-                      + " != origine " + str(temoin["octets"]))
+                      + " + " + str(octets_purge) + " + " + str(octets_disparu)
+                      + " (declares disparus) != origine " + str(temoin["octets"]))
 
     # 3. L'archive doit etre INVISIBLE (zone declaree exclue : plan-conservation).
     try:
@@ -556,6 +780,77 @@ def verifier_archives(donnees, depart, chemin_temoin):
     except ImportError:
         ecarts.append("domicile d'invisibilite introuvable : la zone d'archive n'est pas prouvee")
 
+    # 4. CE QUI N'EST NI MESURE NI DECLARE EST ACCUSE (MO-311, EO-309) ----------
+    # Le controle ne bouclait QUE sur le temoin : une entree du registre absente du
+    # temoin n'etait donc regardee par PERSONNE (7 le 2026-09-20, mesure EO-309).
+    # Toute entree a desormais CINQ etats possibles, et chacun est nomme :
+    #   - MESUREE : elle est dans le temoin, les passes 1 a 3 la suivent ;
+    #   - EN ATTENTE : de la famille et ABSENTE du temoin alors qu elle est MESUREE
+    #     nee APRES lui (sa date est posterieure a celle du temoin). Le prochain
+    #     acte la mesurera : c est une TRANSITION, comme la borne transitoire de
+    #     P2, pas un ecart. Un controle qui accuse la vie normale du registre
+    #     accuse a chaque cloture, et son accusation ne veut plus rien dire ;
+    #   - DECLAREE HORS PERIMETRE : le temoin la NOMME (`perimetre.exclus`) ;
+    #   - RETIREE DU TEMOIN : de la famille, ABSENTE du temoin alors qu elle
+    #     EXISTAIT quand il a ete pose (sa date n est PAS posterieure). Le temoin
+    #     retient TOUTE la famille lisible : son absence n est donc PAS une
+    #     naissance, c est un ACCUSE MANQUE -- la retirer du temoin effacait un
+    #     element de TOUTE mesure, et le silence se lisait comme "tout va bien" ;
+    #   - LE TROU : hors famille ET non declaree. AUCUN temoin futur ne la mesurera
+    #     (tous l ecarteront, par construction), et aucune redecouverte ne la
+    #     ramenera : elle ne sera JAMAIS controlee.
+    # MESURER, NE PAS SUPPOSER : la naissance se LIT a la date, elle ne se suppose
+    # pas. Sans cette mesure, la seule population accusee restait le hors-famille,
+    # et RETIRER un element de la famille du temoin ne declenchait RIEN -- l accuse
+    # manque que le contre-temoin de la mission exige (MO-311, EO-309).
+    ids_temoin = {element.get("id") for element in temoin["elements"]}
+    hors_temoin = [entree for entree in donnees.get("elements", [])
+                   if entree.get("id") not in ids_temoin]
+    declares_hors_perimetre = temoin.get("perimetre", {}).get("exclus", [])
+    ids_declares = {element.get("id") for element in declares_hors_perimetre}
+    date_temoin = str(temoin.get("date", ""))
+    # Les populations sont DISJOINTES : une entree declaree hors perimetre qui
+    # reprend le critere de la famille est une RECLASSEE (declaration perimee), pas
+    # une naissance -- la compter dans les deux gonflerait la mesure.
+    de_la_famille = [entree for entree in hors_temoin
+                     if TAG_FAMILLE_RESTAURATION in entree.get("tags", [])
+                     and entree.get("id") not in ids_declares]
+    en_attente = [entree for entree in de_la_famille
+                  if ne_apres_temoin(entree, date_temoin)]
+    retirees = [entree for entree in de_la_famille
+                if not ne_apres_temoin(entree, date_temoin)]
+    reclassees = [entree for entree in hors_temoin
+                  if entree.get("id") in ids_declares
+                  and TAG_FAMILLE_RESTAURATION in entree.get("tags", [])]
+    trous = [entree for entree in hors_temoin
+             if entree.get("id") not in ids_declares
+             and TAG_FAMILLE_RESTAURATION not in entree.get("tags", [])]
+    if "perimetre" not in temoin:
+        # TEMOIN MUET SUR SON PERIMETRE (pose avant MO-311) : il ne DIT pas ce qu'il
+        # ecarte, donc le controle ne peut pas distinguer une naissance d'un angle
+        # mort. Il le dit, et il nomme ce qu'il ne peut pas juger.
+        if hors_temoin:
+            ecarts.append("temoin SANS PERIMETRE DECLARE : " + str(len(hors_temoin))
+                          + " entree(s) du registre ni mesuree(s) ni declaree(s) : "
+                          + ", ".join(str(entree.get("id")) for entree in hors_temoin)
+                          + " -- remede : reposer le temoin (`archiver --lot oui`), qui DECLARE"
+                          " les entrees qu'il ecarte")
+    else:
+        for entree in trous:
+            ecarts.append("entree du registre HORS TEMOIN et NON DECLAREE -- aucun temoin futur"
+                          " ne la mesurera : " + str(entree.get("id", ""))
+                          + " (" + str(entree.get("categorie", "")) + ", statut "
+                          + str(entree.get("statut", "")) + ") -- remede : reposer le temoin"
+                          " (`archiver --lot oui`)")
+        for entree in retirees:
+            ecarts.append("entree de la FAMILLE absente du temoin alors qu elle EXISTAIT quand il"
+                          " a ete pose (date " + str(entree.get("date", "")) + " <= temoin "
+                          + date_temoin + ") : le temoin retient TOUTE la famille, donc ce n est"
+                          " pas une naissance mais un ACCUSE MANQUE -- "
+                          + str(entree.get("id", "")) + " (" + str(entree.get("categorie", ""))
+                          + ", statut " + str(entree.get("statut", "")) + ") -- remede : reposer"
+                          " le temoin (`archiver --lot oui`)")
+
     mesure = {
         "origine_nb": temoin["nb"],
         "origine_octets": temoin["octets"],
@@ -563,6 +858,27 @@ def verifier_archives(donnees, depart, chemin_temoin):
         "archive_octets": octets_archive,
         "actif_nb": nb_actif,
         "actif_octets": octets_actif,
+        "purge_nb": nb_purge,
+        "purge_octets": octets_purge,
+        "disparu_nb": nb_disparu,
+        "disparu_octets": octets_disparu,
+        "non_mesures_nb": len(non_mesures),
+        "non_mesures": non_mesures,
+        "perimetre_declare": "perimetre" in temoin,
+        "critere_famille": TAG_FAMILLE_RESTAURATION,
+        "hors_temoin_nb": len(hors_temoin),
+        "hors_temoin": [str(entree.get("id")) for entree in hors_temoin],
+        "hors_temoin_declares_nb": len([entree for entree in hors_temoin
+                                        if entree.get("id") in ids_declares]),
+        "hors_temoin_en_attente_nb": len(en_attente),
+        "hors_temoin_en_attente": [str(entree.get("id")) for entree in en_attente],
+        "hors_temoin_reclassees_nb": len(reclassees),
+        "hors_temoin_reclassees": [str(entree.get("id")) for entree in reclassees],
+        "hors_temoin_retirees_nb": len(retirees),
+        "hors_temoin_retirees": [str(entree.get("id")) for entree in retirees],
+        "hors_temoin_trous_nb": len(trous),
+        "hors_temoin_trous": [str(entree.get("id")) for entree in trous],
+        "date_temoin": date_temoin,
     }
     return ecarts, mesure
 

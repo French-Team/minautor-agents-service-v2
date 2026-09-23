@@ -1,0 +1,105 @@
+---
+identite:
+  type: analyse
+  appartient_a: optimus-prime
+  commun: false
+  mission: MO-117
+  statut: applique
+---
+
+# Inventaire des missions sans type -- TABLEAU APPLIQUE
+
+Cree par MO-113, fige par MO-114, **APPLIQUE par MO-117** le 2026-09-15 apres
+validation du createur. Les 41 missions portaient un type `None` ; elles portent
+desormais leur nature, **par la porte `retiqueter --type`** (jamais une ecriture
+directe du JSON), chacune avec sa trace `type_avant` + motif.
+
+## La regle qui a servi (unique, et sans le theme)
+
+Le type decrit la **nature du LIVRABLE**, jamais le theme : un theme mere decrit un
+CHANTIER (lecon EO-118).
+
+| Type | Ce qu'il dit du livrable |
+|---|---|
+| `audit` | un CONSTAT sans modification (livrable = un document) |
+| `dev` | un ARTEFACT NEUF (outil, garde, moteur, mecanisme, table) |
+| `doc` | un TEXTE NORMATIF livre tel quel (regle immuable, plan, doctrine) |
+| `reparation` | un DEFAUT de l'existant (ecart, derive, doublon, valeur morte, trou, faux vert) |
+| `revision` | une OPTIMISATION sans defaut (mesurer, diagnostiquer, optimiser) |
+
+## Repartition APPLIQUEE
+
+| Type | Nombre | Missions |
+|---|---|---|
+| **audit** | 1 | MO-098 |
+| **dev** | 8 | MO-062, MO-064, MO-074, MO-078, MO-079, MO-090, MO-092, MO-095 |
+| **doc** | 2 | MO-094, MO-104 |
+| **reparation** | 29 | MO-060, MO-061, MO-063, MO-065, MO-066, MO-067, MO-068, MO-069, MO-073, MO-076, MO-080, MO-081, MO-082, MO-083, MO-084, MO-085, MO-086, MO-087, MO-088, MO-089, MO-091, MO-093, MO-096, MO-099, MO-100, MO-101, MO-102, MO-103, MO-112 |
+| **revision** | 1 | MO-097 |
+| **total** | 41 | |
+
+## Le tableau applique
+
+| Mission | Statut | Theme | Type | Motif trace |
+|---|---|---|---|---|
+| MO-098 | terminee | PERFORMANCE | **audit** | revue : constat seul, AUCUNE valeur modifiee, livrable = un document |
+| MO-062 | terminee | ROUTINE | **dev** | artefact neuf : attente cooperative partagee + cadence publiee |
+| MO-064 | terminee | ROUTINE | **dev** | artefact neuf : verifier-sans-attendre.py + 8e maillon bloquant |
+| MO-074 | terminee | REPARATION | **dev** | artefact neuf : garde verifier-anti-spam-missions.py (perenne) |
+| MO-078 | terminee | REPARATION | **dev** | artefact neuf : moteur partage rotation_journal.py + bornes |
+| MO-079 | terminee | ROUTINE | **dev** | etendre la rotation au dernier journal + publier sa cadence |
+| MO-090 | terminee | PILOTE | **dev** | artefact neuf : table fermee type -> personnalite, injectee |
+| MO-092 | terminee | OUTIL | **dev** | artefact neuf : bdd-sessions (moule outil-bdd) + resume borne |
+| MO-095 | terminee | CREER-OUTIL | **dev** | artefact neuf : bdd-conservation (moule outil-bdd) |
+| MO-094 | terminee | PREPARATION | **doc** | livrable = plan-conservation.md (plan de conservation) |
+| MO-104 | terminee | MATRICE | **doc** | livrable = regle immuable de perimetre des fichiers temporaires |
+| MO-060 | terminee | ENTONNOIR | **reparation** | aligner la porte retirer : une derive mesuree, resorbee |
+| MO-061 | terminee | auto-correction | **reparation** | la cadence 60 s ecrasait les temps declares des 5 routines |
+| MO-063 | terminee | PILOTE | **reparation** | retirer un residu mort (file legacy + 2 constantes sans lecteur) |
+| MO-065 | terminee | PILOTE | **reparation** | retirer la greffe sys.path + cycle.py dans sa porte (L-057) |
+| MO-066 | terminee | REPARATION | **reparation** | reparer l'ecart de trace (2 debuts, 2 fins) de MO-061 |
+| MO-067 | terminee | REPARATION | **reparation** | ranger les super-combos : corriger une incoherence de nom |
+| MO-068 | terminee | REPARATION | **reparation** | 3 reparations de reprise (lecons, carte, cobaye) |
+| MO-069 | terminee | REPARATION | **reparation** | corriger les 8 constats de l'audit MO-057 |
+| MO-073 | terminee | REPARATION | **reparation** | anti-spam de vigie-portes : cause racine mesuree et corrigee |
+| MO-076 | terminee | REPARATION | **reparation** | trou structurel L-061 : l'item d'entonnoir porte un ROLE |
+| MO-080 | terminee | ROUTINE | **reparation** | 510 lignes identiques sur 512 : ecriture reparee (ETAT/HISTOIRE) |
+| MO-081 | terminee | ROUTINE | **reparation** | meme defaut etendu a espion-integrite |
+| MO-082 | terminee | ROUTINE | **reparation** | defaut etat/histoire trouve 4 fois, repare, moteur partage |
+| MO-083 | terminee | REPARATION | **reparation** | reparer le FAUX VERT de sc-001 (il ne pouvait pas echouer) |
+| MO-084 | terminee | ROUTINE | **reparation** | le temoin de cadence lisait une moyenne : il MENTAIT |
+| MO-085 | terminee | REPARATION | **reparation** | corriger la pratique NUL : la non-regression echouait a la fin |
+| MO-086 | terminee | REPARATION | **reparation** | une doctrine jamais lue par l'agent : trou ferme + accusation |
+| MO-087 | terminee | REPARATION | **reparation** | mise a niveau d'Optimus + lacune structurelle close |
+| MO-088 | terminee | REPARATION | **reparation** | corriger les 9 dettes de chemins (ancrage sur marqueur) |
+| MO-089 | terminee | REPARATION | **reparation** | 26 cartes manquantes ajoutees + types normalises |
+| MO-091 | terminee | REPARATION | **reparation** | purger les files mortes-vivantes + reparer la porte archiver |
+| MO-093 | terminee | PURIFICATION | **reparation** | purification : 8 ecarts verdictes et repares |
+| MO-096 | terminee | REPARATION | **reparation** | trace absente reparee + racine du faux vert fermee |
+| MO-099 | terminee | PERFORMANCE | **reparation** | appliquer la revue : valeur morte supprimee, budget declare |
+| MO-100 | terminee | PERFORMANCE | **reparation** | P1+P2 de la revue : valeur morte retiree, budget publie et lu |
+| MO-101 | terminee | PERFORMANCE | **reparation** | P3 : capacite du journal domiciliee chez son proprietaire |
+| MO-102 | terminee | PERFORMANCE | **reparation** | P5 : 120 s recopie dans 6 fichiers -> un seul domicile |
+| MO-103 | terminee | PERFORMANCE | **reparation** | P6 : les seuils de politique ne passent plus pour des mesures |
+| MO-112 | terminee | REPARATEUR | **reparation** | la charge simple exige un type ferme (fin des postures absentes) |
+| MO-097 | terminee | PERFORMANCE-ROUTINES | **revision** | mesurer, diagnostiquer, OPTIMISER un element, remesurer |
+
+## Comment verifier que c'est vrai (et pas une declaration)
+
+```
+python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py file # aucun sans type
+python3 -c "import json;d=json.load(open('_operateur/optimus-prime/pilote/
+  file-missions-optimus.json'));print([m['id'] for m in d['missions']
+  if not m.get('type')])"                                     # -> []
+```
+
+## Provenance de la lecture
+
+- **MO-113** : inventaire (methode par la TRACE : objectif + bilan + marbre +
+  fichiers touches) et premiere proposition.
+- **MO-114** : les 41 missions lues UNE PAR UNE ; la proposition automatique par
+  mots-cles s'etait trompee 8 fois sur 9 -- elle a ete retiree du tableau.
+- **MO-117** : application par la porte, apres validation du createur.
+
+Les 32 missions que la premiere version donnait 'a confirmer' ont ete lues :
+le tableau n'a plus d'inconnue. Aucun type n'a ete deduit du theme.

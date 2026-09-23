@@ -1,6 +1,6 @@
 {
-  "signature": "676dcdb7f5cbbb0abe3de37694a86b89e577f5a846f6c31d5d83e89d7691087a",
-  "alerte_le": "2026-09-19 19:12:28",
+  "signature": "b13d2a33ef7661d59532a9f3eeeac003df859a53d49c255a48698dec6d81c500",
+  "alerte_le": "2026-09-23 08:05:38",
   "alertes": [
     {
       "cle": "verbe:domicilier:plans",
@@ -43,64 +43,139 @@
       "detail": "recette incomplete : DESCRIPTION.md absent (CV-010)"
     },
     {
+      "cle": "refus:bdd-conventions-matrice",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 277 refus (code 2) sur 501 appel(s) en 30 jours"
+    },
+    {
       "cle": "refus:bdd-historique",
       "niveau": "moyenne",
-      "detail": "mal utilisee : 16 refus (code 2) sur 18 appel(s) en 30 jours"
+      "detail": "mal utilisee : 274 refus (code 2) sur 277 appel(s) en 30 jours"
+    },
+    {
+      "cle": "refus:bdd-lecons",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 294 refus (code 2) sur 399 appel(s) en 30 jours"
+    },
+    {
+      "cle": "refus:bdd-protocoles-matrice",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 272 refus (code 2) sur 484 appel(s) en 30 jours"
+    },
+    {
+      "cle": "refus:bdd-regles-matrice",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 275 refus (code 2) sur 495 appel(s) en 30 jours"
+    },
+    {
+      "cle": "refus:bdd-variables",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 275 refus (code 2) sur 362 appel(s) en 30 jours"
     },
     {
       "cle": "refus:benchmark",
       "niveau": "moyenne",
-      "detail": "mal utilisee : 13 refus (code 2) sur 17 appel(s) en 30 jours"
+      "detail": "mal utilisee : 154 refus (code 2) sur 165 appel(s) en 30 jours"
+    },
+    {
+      "cle": "refus:bilan-periode",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 279 refus (code 2) sur 334 appel(s) en 30 jours"
+    },
+    {
+      "cle": "refus:chaine-pense-bete",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 277 refus (code 2) sur 300 appel(s) en 30 jours"
     },
     {
       "cle": "refus:dialoguer",
       "niveau": "moyenne",
-      "detail": "mal utilisee : 12 refus (code 2) sur 12 appel(s) en 30 jours"
+      "detail": "mal utilisee : 149 refus (code 2) sur 149 appel(s) en 30 jours"
     },
     {
       "cle": "refus:domicilier",
       "niveau": "moyenne",
-      "detail": "mal utilisee : 31 refus (code 2) sur 61 appel(s) en 30 jours"
+      "detail": "mal utilisee : 288 refus (code 2) sur 318 appel(s) en 30 jours"
     },
     {
       "cle": "refus:dupliquer-template",
       "niveau": "moyenne",
-      "detail": "mal utilisee : 16 refus (code 2) sur 17 appel(s) en 30 jours"
+      "detail": "mal utilisee : 274 refus (code 2) sur 275 appel(s) en 30 jours"
     },
     {
       "cle": "refus:editer-agents-md",
       "niveau": "moyenne",
-      "detail": "mal utilisee : 17 refus (code 2) sur 27 appel(s) en 30 jours"
+      "detail": "mal utilisee : 274 refus (code 2) sur 286 appel(s) en 30 jours"
     },
     {
       "cle": "refus:executer",
       "niveau": "moyenne",
-      "detail": "mal utilisee : 12 refus (code 2) sur 12 appel(s) en 30 jours"
+      "detail": "mal utilisee : 147 refus (code 2) sur 155 appel(s) en 30 jours"
+    },
+    {
+      "cle": "refus:inventaire-systeme",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 247 refus (code 2) sur 266 appel(s) en 30 jours"
     },
     {
       "cle": "refus:journal-multi-encarts",
       "niveau": "moyenne",
-      "detail": "mal utilisee : 15 refus (code 2) sur 17 appel(s) en 30 jours"
+      "detail": "mal utilisee : 279 refus (code 2) sur 292 appel(s) en 30 jours"
     },
     {
       "cle": "refus:lire",
       "niveau": "moyenne",
-      "detail": "mal utilisee : 33 refus (code 2) sur 45 appel(s) en 30 jours"
+      "detail": "mal utilisee : 302 refus (code 2) sur 315 appel(s) en 30 jours"
     },
     {
       "cle": "refus:lister",
       "niveau": "moyenne",
-      "detail": "mal utilisee : 14 refus (code 2) sur 21 appel(s) en 30 jours"
+      "detail": "mal utilisee : 271 refus (code 2) sur 278 appel(s) en 30 jours"
+    },
+    {
+      "cle": "refus:machine-defcon",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 288 refus (code 2) sur 438 appel(s) en 30 jours"
+    },
+    {
+      "cle": "refus:maintenir",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 137 refus (code 2) sur 157 appel(s) en 30 jours"
+    },
+    {
+      "cle": "refus:pause-session",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 278 refus (code 2) sur 361 appel(s) en 30 jours"
+    },
+    {
+      "cle": "refus:registre-outils",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 242 refus (code 2) sur 248 appel(s) en 30 jours"
     },
     {
       "cle": "refus:signaler",
       "niveau": "moyenne",
-      "detail": "mal utilisee : 23 refus (code 2) sur 27 appel(s) en 30 jours"
+      "detail": "mal utilisee : 161 refus (code 2) sur 184 appel(s) en 30 jours"
     },
     {
       "cle": "refus:theme-vivier",
       "niveau": "moyenne",
-      "detail": "mal utilisee : 16 refus (code 2) sur 17 appel(s) en 30 jours"
+      "detail": "mal utilisee : 276 refus (code 2) sur 280 appel(s) en 30 jours"
+    },
+    {
+      "cle": "refus:verifier-conventions",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 276 refus (code 2) sur 494 appel(s) en 30 jours"
+    },
+    {
+      "cle": "refus:verifier-protocoles",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 278 refus (code 2) sur 501 appel(s) en 30 jours"
+    },
+    {
+      "cle": "refus:verifier-regles",
+      "niveau": "moyenne",
+      "detail": "mal utilisee : 280 refus (code 2) sur 555 appel(s) en 30 jours"
     }
   ]
 }

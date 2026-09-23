@@ -1,0 +1,276 @@
+"""Garde : la RESOLUTION des briques tient-elle son contrat ? (EO-287 / MO-293)
+
+Le lanceur (matrix/lancer.py) et les appelants INTERNES resolvent une brique par son
+NOM, au domicile PARTAGE `matrice/data/commun/resolution_outils.py`. Ce contrat n etait
+prouve que par un cobaye JETABLE, purge avec la zone : rien ne le rejouait a chaque
+suite. Ce garde est PERMANENT (il tourne dans le lanceur de non-regression) et il
+porte son AUTOTEST.
+
+CONTRAT -- deux polarites, toujours les deux :
+  CONTRE-TEMOIN : un nom RESOLU rend un main.py qui EXISTE. En plus de toutes les
+    briques du domicile, sont verifies les NOMS que les appelants DECLARENT pour
+    appeler une autre brique -- lus DANS LEUR constants.py, jamais recopies (M-076) :
+    une constante renommee sans que sa cible suive serait vue ICI.
+  COBAYE : un nom INCONNU rend un REFUS NOMME -- le nom fautif, les noms PROCHES et
+    le REMEDE -- et `chemin_outil` LEVE ce refus. Un refus SILENCIEUX est exactement
+    l ecart que ce garde existe pour empecher.
+
+FACADE : la CLI (matrix/lancer.py) est le DEUXIEME consommateur du MEME domicile.
+  `--lister` doit rendre EXACTEMENT les noms du domicile, et un nom inconnu doit
+  sortir en code 2. Une facade qui ne lit plus la source est un lanceur qui a diverge.
+
+PREUVE (lecon L-032) : l autotest injecte une resolution MUETTE (None, None) et une
+resolution FANTOME (un chemin qui n existe pas), et exige les DEUX accusations. Un
+garde qu on ne peut pas faire rougir ne prouve rien.
+
+Verdict : 0 = contrat tenu ; 1 = ecart accuse ; 2 = refus (rien a juger).
+"""
+import argparse
+import importlib.util
+import subprocess
+import sys
+from pathlib import Path
+
+# Les appelants migres (EO-287) : (dossier de l outil, nom de la CONSTANTE declaree).
+# Ce que ce garde NE recopie PAS : la CIBLE. Elle est lue a l execution -- une liste de
+# chemins figee dirait la meme chose que le code qu elle pretend juger.
+APPELANTS = (
+    ("domicilier", "NOM_PORTE_ECRIRE"),
+    ("chaine-pense-bete", "NOM_PORTE_ECRIRE"),
+    ("dialoguer", "NOM_OUTIL_SUIVI"),
+    ("machine-defcon", "NOM_OUTIL_PAUSE"),
+    ("machine-defcon", "NOM_OUTIL_MACHINE_DEFCON"),
+    ("pause-session", "NOM_OUTIL_BDD_VARIABLES"),
+)
+
+# Des noms qui ne peuvent PAS exister (le suffixe porte la mission : aucun doute).
+NOMS_INCONNUS = ("outil-fantome-eo293", "brique-inconnue-eo293", "bdd")
+# Un nom qui A des sosies : le refus doit les NOMMER (c est le remede utile).
+NOM_AVEC_PROCHES = "bdd"
+# Le refus doit NOMMER la faute et le remede. `proches` est exige EN PLUS pour un
+# nom qui a des sosies -- l exiger partout accuserait a tort un nom qui n en a aucun
+# (mesure : un garde qui crie a tort n est jamais branche).
+MOTS_DU_REMEDE = ("nom inconnu", "remede")
+
+
+def trouver_matrix(racine):
+    """Retourne le dossier matrix/ (celui qui porte matrice/data/outils), ou None."""
+    candidats = [racine / "cerveau-projet" / "matrix", racine / "matrix"]
+    if racine.name == "matrix":
+        candidats.insert(0, racine)
+    candidats.append(racine)
+    for candidat in candidats:
+        if (candidat / "matrice" / "data" / "outils").is_dir():
+            return candidat
+    return None
+
+
+def charger_domicile(matrix):
+    """Le domicile partage, charge COMME le lanceur le charge (un seul sens)."""
+    commun = matrix / "matrice" / "data" / "commun"
+    chemin = commun / "resolution_outils.py"
+    if not chemin.is_file():
+        return None, "domicile ABSENT : " + str(chemin)
+    if str(commun) not in sys.path:
+        sys.path.insert(0, str(commun))
+    spec = importlib.util.spec_from_file_location("resolution_outils_juge", chemin)
+    module = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+    except Exception as erreur:
+        return None, "domicile ILLISIBLE : " + type(erreur).__name__ + " -- " + str(erreur)
+    return module, None
+
+
+def noms_du_domicile(resolution):
+    return sorted({nom for _, nom, _ in resolution.entrer_outils()})
+
+
+def lire_noms_declares(matrix):
+    """(declares, avis) : les NOMS declares par les appelants, LUS chez eux (M-076)."""
+    declares = []
+    avis = []
+    for dossier, constante in APPELANTS:
+        chemin = matrix / "matrice" / "data" / "outils" / dossier / "constants.py"
+        if not chemin.is_file():
+            avis.append("[KO] appelant ABSENT : " + dossier + " (constants.py introuvable)")
+            continue
+        nom_module = "constants_juge_" + dossier.replace("-", "_") + "_" + constante.lower()
+        spec = importlib.util.spec_from_file_location(nom_module, chemin)
+        module = importlib.util.module_from_spec(spec)
+        try:
+            spec.loader.exec_module(module)
+        except Exception as erreur:
+            avis.append("[KO] appelant ILLISIBLE : " + dossier + " (" + type(erreur).__name__ + ")")
+            continue
+        valeur = getattr(module, constante, None)
+        if not isinstance(valeur, str) or not valeur.strip():
+            avis.append("[KO] constante MANQUANTE ou vide : " + dossier + "." + constante)
+            continue
+        declares.append((dossier, constante, valeur.strip()))
+    return declares, avis
+
+
+def controler(resolution, declares, avis):
+    """Les ecarts du contrat, en deux polarites. Jamais vide par construction."""
+    ecarts = list(avis)
+    try:
+        briques = resolution.entrer_outils()
+    except Exception as erreur:
+        return ecarts + ["[KO] entrer_outils a LEVE : " + type(erreur).__name__]
+    if not briques:
+        ecarts.append("[KO] aucune brique resolvable : le domicile ne rend RIEN")
+    familles = {}
+    for famille, nom, principal in briques:
+        if not Path(principal).is_file():
+            ecarts.append("[KO] brique nommee mais ABSENTE : " + nom + " -> " + str(principal))
+        if nom in familles:
+            ecarts.append("[KO] nom en DOUBLE (outil ET routine) : " + nom)
+        familles[nom] = famille
+    # CONTRE-TEMOIN : les noms DECLARES par les appelants resolvent une brique reelle.
+    for dossier, constante, nom in declares:
+        chemin, refus = resolution.resoudre(nom)
+        if refus is not None or chemin is None or not Path(chemin).is_file():
+            ecarts.append("[KO] nom DECLARE qui ne resout RIEN : " + dossier + "." + constante
+                          + " = " + repr(nom) + " (" + str(refus) + ")")
+        else:
+            print("  ok  " + dossier + "." + constante + " = " + nom + " -> "
+                  + str(Path(chemin).parent.parent.name) + "/" + str(Path(chemin).parent.name))
+    # COBAYE : un nom INCONNU refuse en le NOMMANT (jamais un refus silencieux).
+    for nom in NOMS_INCONNUS:
+        chemin, refus = resolution.resoudre(nom)
+        if chemin is not None:
+            ecarts.append("[KO] nom pourtant INCONNU qui a resolu : " + repr(nom))
+            continue
+        if not refus:
+            ecarts.append("[KO] refus SILENCIEUX (aucun message) pour : " + repr(nom))
+            continue
+        manquants = [mot for mot in MOTS_DU_REMEDE if mot not in refus]
+        if nom == NOM_AVEC_PROCHES and "proches" not in refus:
+            manquants.append("proches")
+        if manquants:
+            ecarts.append("[KO] refus INCOMPLET pour " + repr(nom) + " : il manque "
+                          + ", ".join(sorted(set(manquants))) + " -- " + str(refus))
+        try:
+            resolution.chemin_outil(nom)
+            ecarts.append("[KO] chemin_outil n a PAS refuse un nom inconnu : " + repr(nom))
+        except Exception as erreur:
+            if str(refus) not in str(erreur):
+                ecarts.append("[KO] chemin_outil refuse AUTRE CHOSE que le refus nomme : "
+                              + repr(nom) + " (" + type(erreur).__name__ + ")")
+    return ecarts
+
+
+def controler_facade(lancer, noms_attendus):
+    """La CLI est le DEUXIEME consommateur du MEME domicile (EO-287)."""
+    if not lancer.is_file():
+        return ["[KO] facade ABSENTE : " + str(lancer)]
+    ecarts = []
+    rendu = subprocess.run([sys.executable, str(lancer), "--lister"],
+                           capture_output=True, text=True)
+    if rendu.returncode != 0:
+        ecarts.append("[KO] la facade --lister sort en code " + str(rendu.returncode))
+    noms_cli = sorted({ligne.split()[1] for ligne in rendu.stdout.splitlines()
+                       if len(ligne.split()) == 2})
+    if noms_cli != noms_attendus:
+        manquants = [n for n in noms_attendus if n not in noms_cli]
+        en_trop = [n for n in noms_cli if n not in noms_attendus]
+        ecarts.append("[KO] facade et domicile NE DISENT PAS LA MEME CHOSE : "
+                      + str(len(noms_attendus)) + " attendu(s), " + str(len(noms_cli)) + " rendu(s)"
+                      + (" ; manquants : " + ", ".join(manquants[:5]) if manquants else "")
+                      + (" ; en trop : " + ", ".join(en_trop[:5]) if en_trop else ""))
+    refus = subprocess.run([sys.executable, str(lancer), "outil-fantome-eo293"],
+                           capture_output=True, text=True)
+    if refus.returncode != 2:
+        ecarts.append("[KO] la facade n a PAS refuse un nom inconnu (code "
+                      + str(refus.returncode) + ")")
+    elif "REFUS" not in (refus.stdout or ""):
+        ecarts.append("[KO] la facade refuse SANS le dire (aucun message de refus)")
+    return ecarts
+
+
+class ResolutionMuette:
+    """LE refus silencieux -- l ecart meme que ce garde existe pour empecher."""
+
+    def entrer_outils(self):
+        return [("outil", "fantome-eo293", Path("fantome-eo293") / "main.py")]
+
+    def resoudre(self, nom):
+        return None, None
+
+    def chemin_outil(self, nom):
+        return Path("fantome-eo293") / "main.py"
+
+
+class ResolutionFantome:
+    """Tous les noms resolvent vers un main.py qui N EXISTE PAS."""
+
+    def entrer_outils(self):
+        return [("outil", "fantome-eo293", Path("fantome-eo293") / "main.py")]
+
+    def resoudre(self, nom):
+        return Path("fantome-eo293") / "main.py", None
+
+    def chemin_outil(self, nom):
+        return Path("fantome-eo293") / "main.py"
+
+
+def autotest():
+    """Le garde PEUT-IL dire non ? Deux resolutions truquees, deux accusations exigees."""
+    declares = [("cobaye", "NOM_COBAYE", "fantome-eo293")]
+    epreuves = (
+        ("resolution MUETTE", ResolutionMuette()),
+        ("resolution FANTOME", ResolutionFantome()),
+    )
+    reussies = []
+    manquees = []
+    for etiquette, resolution in epreuves:
+        if controler(resolution, declares, []):
+            reussies.append(etiquette)
+        else:
+            manquees.append(etiquette)
+    return reussies, manquees
+
+
+def main():
+    analyseur = argparse.ArgumentParser(description="Garde : la resolution des briques tient son contrat")
+    analyseur.add_argument("--racine", default=".", help="Racine projet (defaut: cwd)")
+    arguments = analyseur.parse_args()
+    matrix = trouver_matrix(Path(arguments.racine).resolve())
+    if matrix is None:
+        print("Dossier matrix/ introuvable sous " + str(arguments.racine))
+        return 2
+    resolution, motif = charger_domicile(matrix)
+    if resolution is None:
+        print("[KO] " + str(motif))
+        print("VERDICT KO : un garde qui ne lit pas son contrat ne peut pas dire qu il est tenu.")
+        return 1
+    for nom_attendu in ("entrer_outils", "resoudre", "chemin_outil"):
+        if not callable(getattr(resolution, nom_attendu, None)):
+            print("[KO] le domicile n expose plus " + nom_attendu + "() -- contrat rompu")
+            return 1
+    noms = noms_du_domicile(resolution)
+    declares, avis = lire_noms_declares(matrix)
+    print("DOMICILE LU : " + str(len(noms)) + " brique(s) resolvable(s) ; "
+          + str(len(declares)) + " nom(s) DECLARE(s) par un appelant")
+    ecarts = controler(resolution, declares, avis)
+    ecarts += controler_facade(matrix / "lancer.py", noms)
+    reussies, manquees = autotest()
+    print("[--] autotest : " + str(len(reussies)) + " accusation(s) obtenue(s) sur "
+          + str(len(reussies) + len(manquees)) + " epreuve(s)"
+          + ("" if not manquees else " -- MANQUEES : " + ", ".join(manquees)))
+    for manquee in manquees:
+        ecarts.append("[KO] autotest : le garde n a PAS su accuser une " + manquee)
+    if ecarts:
+        print("")
+        print("VERDICT KO : un nom ne rend pas la brique, ou un nom inconnu ne refuse pas en le nommant.")
+        for ecart in ecarts:
+            print(ecart if ecart.startswith("[KO]") else "[KO] " + ecart)
+        return 1
+    print("")
+    print("VERDICT OK : chaque nom rend une brique reelle, et un nom inconnu est REFUSE en le nommant.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

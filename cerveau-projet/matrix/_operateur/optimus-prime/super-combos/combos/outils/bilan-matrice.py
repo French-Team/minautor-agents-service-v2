@@ -6,6 +6,10 @@ bilan-matrice.py -- Tableau de bord zone Optimus + Matrice (M-105)
 Agrege : file missions (journal), stats auto-evolution (bdd-frictions),
 suivi-optimus, lecons, verdict non-regression. Lecture seule.
 Usage: python bilan-matrice.py [--racine <path>]
+       section [remorque] : joue `remorque etat` -- un equipement de la zone cree
+       pendant la mission et NON declare se DIT ici, et le PRE-VOL de la
+       non-regression refuse alors la suite.
+
 """
 
 import sys
@@ -76,7 +80,26 @@ def main():
         n_lecons = -1
     print(f"\n[traces] suivi-optimus={n_suivi} evenements, lecons={n_lecons}")
 
-    # 4. Verdict non-regression (sauf --rapide)
+    # 4. Remorque (attelage) : un equipement NEUF s'est-il declare ?
+    # La promesse du README de la remorque ("bilan-matrice le rappelle") etait
+    # FAUSSE : mesure du 2026-09-21 -- ce fichier ne prononcait pas le mot.
+    # Le bilan JOUE la remorque et DIT son verdict ; il ne decide rien, la suite
+    # le fait. Un equipement cree pendant la mission et non declare est l'ecart
+    # que le PRE-VOL refuse.
+    print("\n[remorque]")
+    remorque = matrix / "_operateur" / "optimus-prime" / "remorque" / "remorque-optimus.py"
+    if remorque.is_file():
+        resultat = subprocess.run([sys.executable, str(remorque), "etat"],
+                                  capture_output=True, text=True)
+        verdicts = [l.strip() for l in resultat.stdout.splitlines()
+                    if l.strip().startswith(("Remorque", "REFUS", "ECART"))]
+        print("  " + (verdicts[-1] if verdicts else
+                      "verdict INTROUVABLE (la remorque n'a rendu aucune ligne de verdict)"))
+    else:
+        print("  remorque INTROUVABLE : " + str(remorque))
+
+    # 5. Verdict non-regression (sauf --rapide)
+
     if args.rapide:
         print("\n[non-regression] sautee (--rapide)")
     else:

@@ -410,6 +410,37 @@ def secondes_depuis(horodatage, maintenant):
     return (maintenant - moment).total_seconds()
 
 
+def derniere_passe(etat_passes):
+    """Horodatage de la DERNIERE passe publiee (l'anneau d'abord, la date ensuite).
+
+    L'anneau (`dernieres_passes`) est le temoin que le garde de cadence MESURE :
+    c'est donc lui qui dit la derniere passe. La `date` est le repli d'un etat
+    ecrit avant l'anneau -- elle dit le meme fait, avec un cran de moins.
+    """
+    anneau = etat_passes.get(CLE_ANNEAU_PASSES) or []
+    if anneau:
+        return str(anneau[-1])
+    return str(etat_passes.get("date") or "")
+
+
+def passe_due(horodatage_derniere, cadence_secondes, maintenant):
+    """(due, age) : DECISION PURE -- la passe est-elle DUE ?
+
+    Regle unique : la passe est due des que l'age de la derniere atteint la
+    cadence DECLAREE. Un horodatage absent ou illisible rend DUE (rien ne fait
+    foi : une premiere passe ne se refuse pas), et un age se LIT, jamais ne
+    s'attend (regle immuable `attente-ne-prouve-rien.md`).
+    """
+    if not horodatage_derniere:
+        return True, None
+    try:
+        moment = datetime.strptime(str(horodatage_derniere), FORMAT_DATE)
+    except (TypeError, ValueError):
+        return True, None
+    age = (maintenant - moment).total_seconds()
+    return age >= cadence_secondes, age
+
+
 def journaliser_passe(portes, alertes, notables, signature_notable, motif):
     """ETAT et HISTOIRE d'une passe : le journal ne recoit la passe que si elle CHANGE.
 

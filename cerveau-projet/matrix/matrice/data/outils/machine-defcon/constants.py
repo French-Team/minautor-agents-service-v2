@@ -45,6 +45,11 @@ NOMS_NIVEAUX = {
 # A defcon 5, seul ce theme reste injectable (garde posee dans le pilote).
 THEME_DEFCON = "DEFCON"
 
+# EO-287 : les briques que cet outil APPELLE se nomment -- jamais un chemin
+# recopie (la resolution et son refus nomme vivent au domicile partage).
+NOM_OUTIL_PAUSE = "pause-session"
+NOM_OUTIL_MACHINE_DEFCON = "machine-defcon"
+
 # data/commun (motif unique M-076) : installe le dossier partage dans sys.path.
 _courant = REPERTOIRE_OUTIL
 for _ in range(30):

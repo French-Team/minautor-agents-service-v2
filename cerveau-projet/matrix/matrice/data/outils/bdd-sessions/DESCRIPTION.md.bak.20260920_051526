@@ -1,0 +1,48 @@
+# OUTIL -- bdd-sessions
+
+> Outil Python dedie a la BDD `sessions.json` (genere depuis le moule
+> templates/outil-bdd par dupliquer-template, modele-mere : bdd-lecons).
+
+## Options
+
+```python3 cerveau-projet/matrix/lancer.py bdd-sessions ajouter --session "..." --tags "tag1,tag2" [--source "..."] python3 cerveau-projet/matrix/lancer.py bdd-sessions lire [--tag <tag>] python3 cerveau-projet/matrix/lancer.py bdd-sessions resume --derniere python3 cerveau-projet/matrix/lancer.py bdd-sessions verifier```
+
+- `--session` : le contenu de l'sessions (obligatoire).
+- `--tags` : liste separee par des virgules -- obligatoire : pas d'sessions orpheline.
+- `--source` : mission, outil ou fichier d'origine (facultatif).
+- `lire --tag X` : filtre les entrees portant le tag X.
+- `resume --derniere` : la DERNIERE session (fermee, sinon ouverte -- session
+  interrompue), lecture BORNEE via le moteur partage
+  `data/commun/derniere_session.py` (L-068). C'est la porte que le pilote
+  lit a la reprise d'une session.
+
+## Evenements (tags fermes de la trace session)
+
+| Tag | Evenement |
+|---|---|
+| `session-ouverte` | une session demarre (contexte : theme courant, file, reprise) |
+| `travail` | un fait travaille : mission, preuve, fichiers |
+| `session-fermee` | cloture : resume, reste-a-faire, prochain pas |
+| `reprise` | l'agent a relu la derniere session et repart de la
+
+## Format de la BDD
+
+`{"identite": {...}, "sessions": [{"id", "date", "session", "tags", "source"}, ...]}`
+
+## Architecture (convention-architecture-outils)
+
+| Piece | Role |
+|---|---|
+| DESCRIPTION.md | la facade (ce fichier) |
+| main.py | point d'entree global : DIRIGE |
+| constants.py | chemins, valeurs |
+| commun.py | fonctions communes : charger, enregistrer (atomique, LF), empreinte, options |
+| ajouter/ | ajouter une sessions taguee |
+| lire/ | lister (tout ou par tag) |
+| verifier/ | integrite SHA-256 (etalon-or) |
+
+## Protections
+
+- Ecriture atomique (tmp + remplacement), fins de ligne LF forcees (determinisme).
+- Empreinte SHA-256 recalculee et enregistree A CHAQUE ecriture.
+- Contenu et tags obligatoires : pas d'entree orpheline sans tag.

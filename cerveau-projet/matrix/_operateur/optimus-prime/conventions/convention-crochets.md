@@ -9,7 +9,10 @@ identite:
 
 > Source : decision createur du 2026-09-07 (mission M-062), amendee M-080
 > (crochets v3 : [alerte] remplace [alerte=defcon:N], [pause] ajoute),
-> puis M-131 ([preparation] ajoute). Les
+> puis M-131 ([preparation] ajoute), puis amendee le 2026-09-20
+> (MO-303, demande createur : [corriger] et [super-combos] nu entrent dans la
+> liste -- ils etaient employes par l'operateur SANS etre reconnus, donc chaque
+> demande ainsi posee ne declenchait RIEN). Les
 > demandes de
 > l'operateur qui commencent par un MOT ENTRE CROCHETS declenchent un
 > traitement officiel. La liste des mots est FERMEE : tout autre mot-crochet
@@ -38,6 +41,26 @@ identite:
 | [bilan] | outil `bilan-periode` | bilan de la derniere heure, des dernieres heures (6 h), des dernieres 24 h, des 3 derniers jours, de la semaine ou du mois |
 | [preparation] | theme `PREPARATION` (`preparation/journal-preparation.md` + `theme-preparation.json`) | ouvre l'espace de DISCUSSION & PREPARATION hors code : inventorier les natifs, dessiner leurs versions ameliorees non configurables, prioriser la serie, attendre GO avant tout CREER-OUTIL |
 | [purification] | theme `PURIFICATION` (`theme-purification.json` + analyse prealable `purification/analyse-nemesis.md`) | ordonne la chaine demande -> audit -> nemesis -> decision -> ajouter : controle et purifie fichiers, BDD, journaux et registres SANS jamais supprimer (archivage ou signalement) ; la case [decision] est obligatoire (purger / reparer / declarer dette) |
+| [corriger] | entonnoir `deposer` (type DECLARE `reparation`) | demande une CORRECTION explicite : la demande part en reparation, CLASSEE A LA NAISSANCE (file, categorie et role poses d'un coup), comme [outil] |
+| [super-combos] | brique `lancer-super-combos`, `--lister` | le mot NU liste les super-combos disponibles ; la forme d'ACTION reste `[super-combos: #N]` (crochet de TRAVAIL, MOTS-CLES.md) |
+| [???] | theme `CADRAGE` (`parcours/themes/theme-cadrage.json`) | declenche le PARCOURS DEDIE ou optimus CONSTITUE LA CHAINE de missions (inventaire -> audit -> nemesis -> depot) AVANT de resoudre quoi que ce soit : l'ensemble devient UNE mission contenant plusieurs missions a enchainer de bout en bout. Mis en file NORMALE, sauf si classe urgent. Le SEUL crochet qui n'est PAS un mot francais : `???` DIT que la demande ne sera pas toujours precise ni claire, donc qu'on ne sait pas encore COMMENT AGIR (raison du createur, 2026-09-20) |
+| [preparer] | theme `CADRAGE` (le MEME parcours) | ALIAS officiel de `[???]` : deux mots, une seule porte. `[preparer]` est le mot que le createur a employe (mesure avant MO-317 : il n'etait PAS reconnu -- refus nomme) ; les deux declenchent le meme parcours |
+| [si] | AUCUNE porte : la mission EN COURS (`mission-en-cours`, verbe `remise-en-question`) | INTERVENTION sur la mission qui tourne : le createur a vu une incoherence, le mot declenche une MINI-REFLEXION -- ce qu'il vient de decouvrir contredit-il ce que je viens de faire dans CETTE mission ? Reprendre l'hypothese, la MESURER, puis optimiser les corrections EN COURS. Rien n'est depose (aucune file, aucune mission) : l'intervention vit et meurt avec la mission, et elle est TRACEE au journal de la mission courante (action `intervention`). Ajoute le 2026-09-21, demande createur. |
+
+> DEUX CROCHETS, UNE ROUTE (MO-317, demande createur) : `[???]` et `[preparer]` sont
+> declares SEPAREMENT dans la liste fermee (le routeur les reconnait tous les deux) et
+> pointent le MEME theme `CADRAGE`. Les separer dans la liste -- plutot qu'une table
+> d'alias a cote -- garde le controle `crochets` du contrat fondamental capable de
+> comparer la liste fermee a cette page et a `pilote/MOTS-CLES.md` : un alias declare
+> hors des trois miroirs serait un mot reconnu par personne.
+>
+> LIMITE DITE : `[???]` est le SEUL crochet hors mot francais (le lexique
+> `CROCHETS.md`, section 5, ecarte les crochets qui ne sont pas des mots). Il n'est pas
+> un PLACEHOLDER : c'est un mot de DEMANDE reconnu, dont le sens est, mot pour mot,
+> \"la demande ne sera pas toujours precise et claire, donc on ne sait pas encore
+> vraiment comment agir\" (raison du createur) -- d'ou l'analyse qui CONSTITUE la chaine
+> avant toute action. Le `?` n'est admis que pour ce token : la classe de caracteres des
+> crochets reste stricte partout ailleurs.
 
 ## L'echelle defcon (liste fermee, N de 1 a 5, 5 = le plus grave)
 

@@ -9,10 +9,19 @@ est faite par `injection/fonctions.py` -- les deux vivent dans la MEME porte.
 
 Usage:
   python injecter.py <categorie> [--format texte|json|markdown]
+  python injecter.py <categorie> --peser
   python injecter.py --categories
 
 Les CATEGORIES viennent du CATALOGUE (aucune liste en dur ici) ; `mission` sert
 les trois phases de mission d'un coup.
+
+MESURE (MO-314, demande createur du 2026-09-20) : `--peser` rend le POIDS EN TOKENS
+de chaque source servie, puis le TOTAL -- avec le peseur du DOMICILE PARTAGE
+(matrice/data/commun/tokens.py), jamais une formule recopiee ici (M-076). C est la
+mesure REJOUABLE qui a chiffre l injection avant-mission a 7435 tokens, dont 1792
+pour les quatre cartes de modes d emploi (2373 si elles etaient completes : le
+plafond de la carte en economise 581). Un peseur ABSENT = REFUS NOMME, jamais un 0
+muet (une mesure qui se tait se lit comme une mesure a zero).
 
 Doctrine "jamais de degradation silencieuse" (2026-09-13) :
   source absente + obligatoire: true   -> REFUS nomme   (code 2)
@@ -23,6 +32,7 @@ Doctrine "jamais de degradation silencieuse" (2026-09-13) :
 Aucune cle du catalogue n'est ignoree : elle est SERVIE, ou SIGNALEE.
 """
 
+import importlib.util
 import sys
 import json
 from pathlib import Path
@@ -38,6 +48,17 @@ TYPES_FICHIER = ("fichier",)
 TYPES_JSON = ("json", "bdd")
 TYPES_DOSSIER = ("dossier",)
 TYPES_OUTIL = ("outil",)                # fichier -> lu, dossier -> liste
+# MODES D EMPLOI (revision createur du 2026-09-20, MO-313) : le catalogue servait un
+# `os.listdir` -- des NOMS, `__pycache__` et `.bak` compris, et AUCUN usage. Un outil
+# se livre AVEC son mode d emploi. La source est un DOSSIER DE BRIQUES, servi par
+# l extracteur de SON domicile (`injection/modes_emploi.py`), jamais une fiche
+# recopiee ici : une fiche a cote deriverait en silence (M-076 / L-032).
+TYPES_MODES_EMPLOI = ("modes-emploi",)
+CHEMIN_MODES_EMPLOI = BASE / "modes_emploi.py"
+# Le PESEUR de tokens vit au DOMICILE partage (matrice/data/commun/tokens.py) : la
+# mesure du catalogue le CONSOMME, elle ne recopie aucune formule (M-076). Forme du
+# chemin : RELATIVE AU PILOTE, comme les `source` du catalogue.
+CHEMIN_TOKENS = RACINE / "../../../matrice/data/commun/tokens.py"
 FORMATS = ("texte", "json", "markdown")
 CODE_OK = 0
 CODE_REFUS = 2
@@ -69,6 +90,34 @@ def lire_dossier(chemin):
 
 def lire_json(chemin):
     return json.loads(chemin.read_text(encoding="utf-8"))
+
+
+def charger_extracteur():
+    """Charge l extracteur de modes d emploi depuis SON domicile. Rend (module, refus).
+
+    Absent ou casse = REFUS NOMME (doctrine : aucune degradation silencieuse) : un
+    catalogue qui ne sert plus les modes d emploi doit le CRIER, pas servir une
+    carte vide que l agent lirait comme un parc sans outils.
+    """
+    if not CHEMIN_MODES_EMPLOI.is_file():
+        return None, "extracteur de modes d emploi absent : " + str(CHEMIN_MODES_EMPLOI)
+    try:
+        specification = importlib.util.spec_from_file_location(
+            "modes_emploi_catalogue", str(CHEMIN_MODES_EMPLOI))
+        module = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(module)
+    except (ImportError, OSError, SyntaxError, AttributeError) as erreur:
+        return None, ("extracteur de modes d emploi ILLISIBLE : " + str(CHEMIN_MODES_EMPLOI)
+                      + " (" + type(erreur).__name__ + " : " + str(erreur) + ")")
+    return module, ""
+
+
+def servir_modes_emploi(source):
+    """Le texte d une source de type `modes-emploi` : la carte des briques du dossier."""
+    module, refus = charger_extracteur()
+    if module is None:
+        raise ValueError(refus)
+    return module.servir(source)
 
 
 def filtrer_par_categorie(donnee, categorie):
@@ -141,13 +190,13 @@ def servir(entree, format_sortie):
         obligatoire = bool(entree["obligatoire"])
 
     type_ = entree["type"]
-    if type_ not in TYPES_FICHIER + TYPES_JSON + TYPES_DOSSIER + TYPES_OUTIL:
+    if type_ not in TYPES_FICHIER + TYPES_JSON + TYPES_DOSSIER + TYPES_OUTIL + TYPES_MODES_EMPLOI:
         return "", alertes, [identifiant + " : type inconnu du moteur -> `" + str(type_) + "`"]
 
     source = (RACINE / entree["source"]).resolve()
     if type_ in TYPES_DOSSIER:
         present = source.is_dir()
-    elif type_ in TYPES_OUTIL:
+    elif type_ in TYPES_OUTIL or type_ in TYPES_MODES_EMPLOI:
         present = source.is_file() or source.is_dir()
     else:
         present = source.is_file()
@@ -174,6 +223,8 @@ def servir(entree, format_sortie):
                                    + "` -> 0 item servi (contenu VIDE)")
         elif type_ in TYPES_DOSSIER:
             contenu = lire_dossier(source)
+        elif type_ in TYPES_MODES_EMPLOI:
+            contenu = servir_modes_emploi(source)
         else:                                   # outil : fichier -> lu, dossier -> liste
             contenu = lire_fichier(source) if source.is_file() else lire_dossier(source)
     except (OSError, ValueError) as erreur:
@@ -189,6 +240,52 @@ def servir(entree, format_sortie):
         contenu = extrait
 
     return formater(entree, contenu, format_sortie), alertes, refus
+
+
+def charger_peseur():
+    """Le peseur de tokens du DOMICILE partage, ou None (le refus est alors NOMME)."""
+    if not CHEMIN_TOKENS.is_file():
+        return None
+    specification = importlib.util.spec_from_file_location("tokens_catalogue", str(CHEMIN_TOKENS))
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    return module.estimer_tokens
+
+
+def peser(categorie, format_sortie):
+    """MESURE REJOUABLE (demande createur 2026-09-20, MO-314) : le poids de chaque source.
+
+    "Mesurer ce que l injection avant-mission coute en tokens MAINTENANT, et borner la
+    carte." La mesure est donc un VERBE du catalogue, pas un script jetable : elle se
+    rejoue apres chaque changement de contenu, et c est elle qui a montre que les QUATRE
+    cartes pesaient 2452 tokens sur un total de 8004 avant la pose du plafond.
+    """
+    catalogue, refus_catalogue = charger_catalogue()
+    if catalogue is None:
+        print("REFUS : " + str(refus_catalogue))
+        return CODE_REFUS
+    estimer = charger_peseur()
+    if estimer is None:
+        print("REFUS : peseur de tokens ABSENT : " + str(CHEMIN_TOKENS)
+              + " -- la mesure ne peut pas etre faite (jamais un 0 muet).")
+        return CODE_REFUS
+    if categorie == CATEGORIE_MISSION:
+        entrees = [(phase, entree) for phase in PHASES_MISSION
+                   for entree in catalogue.get(phase, [])]
+    else:
+        entrees = [(categorie, entree) for entree in catalogue.get(categorie, [])]
+    if not entrees:
+        print("REFUS : categorie `" + categorie + "` absente du catalogue.")
+        return CODE_REFUS
+    print("=== POIDS TOKENS -- " + categorie.upper() + " (estimation du domicile tokens.py) ===")
+    total = 0
+    for phase, entree in entrees:
+        texte, _alertes, _refus = servir(entree, format_sortie)
+        poids = estimer(texte)
+        total += poids
+        print("  " + str(poids).rjust(6) + "  " + str(entree.get("id", "?")))
+    print("  " + str(total).rjust(6) + "  TOTAL " + categorie.upper())
+    return CODE_OK
 
 
 def injecter(categorie, format_sortie):
@@ -275,6 +372,8 @@ def main():
         print("REFUS : categorie inconnue `" + categorie + "`")
         print("(categories du catalogue : " + ", ".join(categories) + ", " + CATEGORIE_MISSION + ")")
         return CODE_REFUS
+    if "--peser" in arguments:
+        return peser(categorie, format_sortie)
     return injecter(categorie, format_sortie)
 
 

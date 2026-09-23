@@ -1,0 +1,397 @@
+"""Porte de PURGE de l archive : une archive ne meurt que RECOUVRABLE, PROUVEE.
+
+P3, validee par le createur le 2026-09-20 (rapport-revision-MO-305, section 3) :
+"une archive est SUPPRIMEE quand son contenu est prouve recouvrable (engage dans
+git, OU empreinte + copie dans la conservation BDD) ; sinon elle reste".
+
+Le registre DISAIT "aucune porte de suppression" -- c etait vrai, et c est ce qui
+faisait survivre les archives SANS duree de vie (V3 mesure : 898 fichiers, 18 Mo,
+jamais relus). Cette porte n a pas le droit de supprimer sur une PROMESSE : elle
+supprime sur une PREUVE, et elle la CITE, dans son acte comme dans son refus.
+
+DEUX PREUVES, essayees dans cet ordre, et un refus les DIT TOUTES LES DEUX :
+
+  1. GIT -- le CONTENU de l archive vit dans les objets du depot : l octet n est
+     pas perdu, il est AILLEURS, et l acte donne le blob exact pour le rappeler
+     (git cat-file blob <oid>).
+  2. COPIE -- le meme contenu vit AILLEURS sur le disque, HORS de l archive (une
+     source revenue a sa place, ou un autre point EN PLACE de la meme famille) :
+     l archive est alors un DOUBLON.
+
+CE QUI N EST JAMAIS PURGE : une archive dont la seule copie est elle-meme --
+l exception nommee par V4 ("le .bak d un fichier NON ENGAGE est la seule copie de
+l avant-dernier etat"). Un refus n ecrit RIEN : ni BDD, ni disque, ni manifeste.
+
+LA MEME REGLE, ETENDUE AUX ARCHIVES DE JOURNAUX ET DE BOITES (regle createur du
+2026-09-20) : la purge P3 ne traitait QUE la famille du registre, donc les
+archives produites par la rotation des journaux n avaient AUCUNE porte -- mesure
+du jour : 116 Mo, dont 90,6 Mo pour l unique archive de l espion-integrite. La
+porte ajoutee ici (`purger-archive`) applique la MEME politique, sans registre :
+
+  - le CRITERE de reconnaissance est la CONVENTION DE NOM de la rotation
+    (`<prefixe>-archive-<AAAAMMJJ>.jsonl`) : une DATE a huit chiffres. Ce qui n en
+    porte pas n est pas reconnu -- et c est ce qui protege les registres ;
+  - la PREUVE est celle de P3 (git) : le contenu doit VIVRE dans un blob engage ;
+  - une preuve qui MANQUE n est pas un echec, c est la regle qui travaille : une
+    archive non engagee (celle que la rotation vient d ecrire) RESTE ;
+  - l acte CITE la preuve au manifeste, une ligne par archive, comme P3.
+
+ORDRE DES IMPORTS : `constants` d abord -- c est LUI qui met `data/commun` sur le
+chemin (`lancement`, `cible` ne sont importables qu apres lui, L-013).
+"""
+import subprocess
+from fnmatch import fnmatch
+from pathlib import Path
+
+from constants import (
+    ID_HORS_REGISTRE, MOTIF_ARCHIVE_DATEE, MOTIF_PREUVE_COPIE, MOTIF_PREUVE_GIT,
+    MOTIF_RESTE_SANS_PREUVE, NOM_DOSSIER_CACHE, NOM_DOSSIER_DEPOT, NOM_LIGNE_PURGE,
+    NOM_SANS_FILTRES,
+    NOM_PROGRAMME_GIT, NOM_TYPE_OBJET_BLOB, NOMS_LEDGERS, OPERATION_PURGER,
+    REPERTOIRE_ARCHIVES, STATUT_SUPPRIME,
+)
+from archiver.fonctions import (
+    ajouter_manifeste, chemin_archive, famille, horodater, mesurer,
+    relatif_matrice,
+)
+from cible import racine_matrice, resoudre_dans_matrice
+from lancement import delai_sous_processus
+
+REFUS_PURGE_STATUT = "REFUS (purge : statut attendu archive)"
+REFUS_PURGE_INTROUVABLE = "REFUS (purge : archive introuvable)"
+REFUS_PURGE_SHA = "REFUS (purge : contenu de l archive different de celui enregistre)"
+REFUS_PURGE_SANS_PREUVE = "REFUS (purge : recouvrabilite NON PROUVEE)"
+REFUS_PURGE_RETRAIT = "REFUS (purge : retrait impossible)"
+REFUS_PURGE_LEDGER = "REFUS (purge-archive : un REGISTRE ne meurt jamais)"
+REFUS_PURGE_HORS_MATRICE = "REFUS (purge-archive : chemin HORS de la Matrice)"
+REFUS_PURGE_HORS_CONVENTION = "REFUS (purge-archive : nom HORS convention d archive datee)"
+
+
+def _jouer_git(arguments, racine):
+    """Joue git et rend (True, sortie) ou (False, motif du refus).
+
+    Le PLAFOND du sous-processus vient de son domicile partage
+    (`data/commun/lancement.py`) : la valeur n est jamais recopiee ici (M-076).
+    Un git injouable n est pas un echec de la porte : c est une PREUVE QUI MANQUE,
+    et elle est dite comme telle.
+    """
+    commande = [NOM_PROGRAMME_GIT] + list(arguments)
+    try:
+        resultat = subprocess.run(
+            commande, cwd=str(racine), capture_output=True, text=True,
+            timeout=delai_sous_processus(),
+        )
+    except (OSError, subprocess.SubprocessError) as erreur:
+        return False, ("git injouable depuis " + str(racine) + " : "
+                       + type(erreur).__name__)
+    if resultat.returncode != 0:
+        brut = ((resultat.stderr or "") + (resultat.stdout or "")).strip()
+        return False, ("git a refuse (code " + str(resultat.returncode) + ") : "
+                       + (brut or "sans message"))
+    return True, (resultat.stdout or "").strip()
+
+
+def preuve_git(chemin, racine):
+    """(oid, message) si le CONTENU du fichier vit dans les objets du depot."""
+    joue, sortie = _jouer_git(["hash-object", str(chemin)], racine)
+    if not joue:
+        return None, sortie
+    if not sortie:
+        return None, ("git n a rendu aucune empreinte pour " + str(chemin))
+    oid = sortie
+    joue, type_objet = _jouer_git(["cat-file", "-t", oid], racine)
+    if not joue or type_objet != NOM_TYPE_OBJET_BLOB:
+        return None, ("le depot ne porte AUCUN objet de ce contenu (blob "
+                      + oid + " absent)")
+    return oid, ("le contenu VIT dans le depot (blob " + oid + " : git cat-file "
+                 + NOM_TYPE_OBJET_BLOB + " " + oid + ")")
+
+
+def preuve_git_exacte(chemin, racine):
+    """(oid, message) si les OCTETS du fichier vivent dans le depot, A L IDENTIQUE.
+
+    Mesure du 2026-09-20 (premier balayage des archives datees) : `hash-object`
+    applique les FILTRES de git. L archive `inbox-archive-20260919.jsonl` pesait
+    3993 octets sur le disque (CRLF) et 3982 au depot (LF) -- la porte a pourtant
+    conclu "le contenu VIT dans le depot", et la ligne du manifeste declarait un
+    sha que NULLE PART le depot ne portait (la restauration rendait donc un autre
+    contenu). Un filtre n est pas une copie : la preuve de cette porte est le blob
+    SANS filtre (`hash-object --no-filters`), donc BIT A BIT.
+
+    Ce que la porte fait du cas normalise : elle le DIT et REFUSE (l archive
+    RESTE). Une forme normalisee est un contenu JUMEAU, pas le meme contenu -- et
+    c est a l appelant de decider s il engage la forme brute.
+    """
+    joue, sortie = _jouer_git(["hash-object", NOM_SANS_FILTRES, str(chemin)], racine)
+    if not joue:
+        return None, sortie
+    if not sortie:
+        return None, ("git n a rendu aucune empreinte pour " + str(chemin))
+    oid = sortie
+    joue, type_objet = _jouer_git(["cat-file", "-t", oid], racine)
+    if not joue or type_objet != NOM_TYPE_OBJET_BLOB:
+        return None, ("le depot ne porte AUCUN objet de ces octets (blob "
+                      + oid + " absent)")
+    return oid, ("les OCTETS du fichier VIVENT dans le depot (blob " + oid
+                 + " : git cat-file " + NOM_TYPE_OBJET_BLOB + " " + oid + ")")
+
+
+def preuve_copie(chemin_archive_element, entree, donnees, depart):
+    """(chemin, message) si le MEME contenu vit AILLEURS, HORS de l archive.
+
+    Le vivier est la FAMILLE du point (ses jumeaux de la meme origine complete) :
+    c est la ou une source revenue a sa place se trouve. L ARCHIVE ELLE-MEME EST
+    EXCLUE -- une archive ne se certifie pas elle-meme.
+    """
+    sha_archive, _, _ = mesurer(chemin_archive_element)
+    if sha_archive is None:
+        return None, "contenu de l archive illisible"
+    base_archive, _, _ = chemin_archive(depart)
+    mesures = 0
+    deja_vus = set()
+    for autre in famille(donnees, str(entree.get("source", ""))):
+        chemin, _ = resoudre_dans_matrice(str(autre.get("source", "")), depart)
+        if chemin is None or not chemin.is_file():
+            continue
+        if base_archive == chemin or base_archive in chemin.parents:
+            continue
+        cle = str(chemin)
+        if cle in deja_vus:
+            continue
+        deja_vus.add(cle)
+        mesures += 1
+        sha_copie, _, _ = mesurer(chemin)
+        if sha_copie == sha_archive:
+            return cle, ("le meme contenu vit HORS de l archive : "
+                         + relatif_matrice(chemin, depart))
+    return None, ("aucune copie du contenu hors de l archive (" + str(mesures)
+                  + " candidat(s) mesure(s) dans la famille)")
+
+
+def preuve_recouvrabilite(chemin_archive_element, entree, donnees, depart):
+    """(mode, message) de la PREUVE, ou (None, refus qui DIT les deux essais)."""
+    oid, message_git = preuve_git(chemin_archive_element, racine_matrice(depart))
+    if oid:
+        return MOTIF_PREUVE_GIT, message_git
+    chemin_copie, message_copie = preuve_copie(
+        chemin_archive_element, entree, donnees, depart)
+    if chemin_copie:
+        return MOTIF_PREUVE_COPIE, message_copie
+    return None, ("git : " + message_git + " | copie : " + message_copie)
+
+
+def controler(entree, donnees, depart):
+    """Rend (refus, message, preuve) ; la preuve est (mode, message) si elle tient.
+
+    L ORDRE est le contrat : la PLACE (seule une archive se purge), puis la
+    PRESENCE de l archive, puis son INTEGRITE (le contenu juge est bien celui qui a
+    ete enregistre), et seulement alors la RECOUVRABILITE.
+    """
+    if entree.get("statut") != "archive":
+        return REFUS_PURGE_STATUT, ("vu " + str(entree.get("statut"))), None
+    chemin, motif = resoudre_dans_matrice(
+        str(entree.get("archive", "") or entree.get("destination", "")), depart
+    )
+    if chemin is None or not chemin.is_file():
+        return REFUS_PURGE_INTROUVABLE, str(motif), None
+    sha_archive, _, _ = mesurer(chemin)
+    enregistre = str(entree.get("sha_apres") or "")
+    if enregistre and sha_archive != enregistre:
+        return REFUS_PURGE_SHA, ("l archive porte " + str(sha_archive)[:16]
+                                 + "... et la BDD " + enregistre[:16] + "..."), None
+    mode, message = preuve_recouvrabilite(chemin, entree, donnees, depart)
+    if mode is None:
+        return REFUS_PURGE_SANS_PREUVE, message, None
+    return None, "", (mode, message)
+
+
+def ligne_manifeste(entree, sha, octets, lignes, mode, message):
+    """La ligne de purge du manifeste (append-only, jamais reecrite)."""
+    return {
+        "type": NOM_LIGNE_PURGE,
+        "id": entree.get("id", ""),
+        "date": horodater(),
+        "mission": entree.get("mission", ""),
+        "archive": entree.get("archive", ""),
+        "sha": sha,
+        "octets": octets,
+        "lignes": lignes,
+        "recouvrable_par": mode,
+        "preuve": message,
+        "restaurable": True,
+    }
+
+
+def purger_un(entree, donnees, depart, chemin_manifeste, simuler=False):
+    """Purge UN element archive, SUR PREUVE. Rend (code, message).
+
+    L acte, quand la preuve tient : retirer la copie DE L ARCHIVE (le depot ou la
+    copie hors archive portent deja le contenu), tracer la ligne au manifeste, et
+    DIRE au registre que l element est `supprime` -- avec la preuve citee. Un refus
+    ne touche NI la BDD, NI le disque, NI le manifeste.
+    """
+    refus, message, preuve = controler(entree, donnees, depart)
+    if refus:
+        return 1, refus + " : " + message
+    mode, message_preuve = preuve
+    chemin, _ = resoudre_dans_matrice(str(entree.get("archive", "")), depart)
+    sha_archive, octets, lignes = mesurer(chemin)
+    if simuler:
+        return 0, ("SIMULATION : purge de " + str(entree.get("archive")) + " (preuve "
+                   + mode + " : " + message_preuve + ")")
+    try:
+        Path(str(chemin)).unlink()
+    except OSError as erreur:
+        return 1, REFUS_PURGE_RETRAIT + " : " + type(erreur).__name__
+    entree["statut"] = STATUT_SUPPRIME
+    entree["operation"] = OPERATION_PURGER
+    entree["date"] = horodater()
+    entree["restaurable"] = True
+    entree["preuve"] = ("PURGE le " + horodater() + " : contenu PROUVE RECOUVRABLE par "
+                        + mode + " -- " + message_preuve + " ; sha = " + str(sha_archive)
+                        + ", " + str(octets) + " octet(s)")
+    ajouter_manifeste(
+        chemin_manifeste,
+        ligne_manifeste(entree, sha_archive, octets, lignes, mode, message_preuve),
+    )
+    return 0, ("purge : " + str(entree.get("archive")) + " (" + str(octets)
+               + " octet(s), preuve " + mode + " : " + message_preuve + ")")
+
+
+def est_ledger(chemin):
+    """True si ce fichier est un REGISTRE : il PORTE la preuve des autres.
+
+    Quatre noms, et ils ne sont pas une liste d exceptions : le registre, son
+    empreinte, le manifeste des actes et le temoin de l origine. Les purger
+    reviendrait a detruire le seul temoin de ce qui a ete purge -- l inverse exact
+    de la conservation.
+    """
+    return Path(str(chemin)).name in NOMS_LEDGERS
+
+
+def archives_datees(depart):
+    """Les archives DATEES de la Matrice (chemins absolus), triees.
+
+    Deux populations sont ECARTEES, chacune pour une raison DITE :
+      - la ZONE DU REGISTRE (points de restauration) : ses archives se purgent par
+        `purger --id`, contre leur empreinte ENREGISTREE -- un balayage ne
+        certifie rien contre un registre ;
+      - le depot (.git) et les caches (__pycache__) : ce ne sont pas des archives.
+    """
+    racine = racine_matrice(depart)
+    zone_registre = (racine / REPERTOIRE_ARCHIVES).resolve()
+    trouvees = []
+    for chemin in sorted(racine.rglob(MOTIF_ARCHIVE_DATEE)):
+        if not chemin.is_file():
+            continue
+        morceaux = chemin.parts
+        if NOM_DOSSIER_DEPOT in morceaux or NOM_DOSSIER_CACHE in morceaux:
+            continue
+        resolu = chemin.resolve()
+        if resolu == zone_registre or zone_registre in resolu.parents:
+            continue
+        trouvees.append(chemin)
+    return trouvees
+
+
+def purger_archive_datree(chemin, depart, chemin_manifeste, mission, simuler=False):
+    """Purge UNE archive datee SUR PREUVE. Rend (code, message, octets).
+
+    L ORDRE est le contrat, le meme que `purger_un` : la PLACE (jamais un
+    registre), la PRESENCE, la MESURE, puis la PREUVE. Un refus ne touche RIEN :
+    ni disque, ni manifeste. Une preuve qui manque ne rend PAS le geste KO --
+    elle CONSTATE que l archive n est pas encore engagee, donc qu elle RESTE.
+    """
+    chemin = Path(str(chemin))
+    try:
+        resolu = chemin.resolve()
+        racine = racine_matrice(depart)
+        dans_matrice = resolu == racine or racine in resolu.parents
+    except OSError:
+        dans_matrice = False
+    relatif = relatif_matrice(chemin, depart)
+    if not dans_matrice:
+        return 1, (REFUS_PURGE_HORS_MATRICE + " : " + relatif), 0
+    if est_ledger(chemin):
+        return 1, (REFUS_PURGE_LEDGER + " : " + relatif
+                   + " porte la preuve des autres"), 0
+    # LA CONVENTION VAUT AUSSI POUR UN CHEMIN NOMME (M-076) : sans elle, un appel
+    # explicite pourrait purger une MEMOIRE d etat qui porte le mot "archive" dans
+    # son nom (`file-missions-optimus-archive-doublons.json`) -- et une porte qui
+    # supprime autre chose que son perimetre ne garde plus rien.
+    if not fnmatch(chemin.name, MOTIF_ARCHIVE_DATEE):
+        return 1, (REFUS_PURGE_HORS_CONVENTION + " : " + relatif + " (attendu "
+                   + MOTIF_ARCHIVE_DATEE + ")"), 0
+    if not chemin.is_file():
+        return 1, (REFUS_PURGE_INTROUVABLE + " : " + relatif), 0
+    oid, message_preuve = preuve_git_exacte(chemin, racine)
+    if not oid:
+        oid_normalise, message_normalise = preuve_git(chemin, racine)
+        if oid_normalise:
+            return 0, (MOTIF_RESTE_SANS_PREUVE + " : " + relatif
+                       + " -- le depot ne porte que la FORME NORMALISEE par ses filtres"
+                       " (" + message_normalise + ") ; les octets du disque, eux, ne sont"
+                       " nulle part : un filtre n est pas une copie"), 0
+        return 0, (MOTIF_RESTE_SANS_PREUVE + " : " + relatif + " -- "
+                   + message_preuve), 0
+    sha_avant, octets, lignes = mesurer(chemin)
+    if simuler:
+        return 0, ("SIMULATION : purge de " + relatif + " (" + str(octets)
+                   + " octet(s), preuve " + MOTIF_PREUVE_GIT + " : "
+                   + message_preuve + ")"), octets
+    try:
+        chemin.unlink()
+    except OSError as erreur:
+        return 1, (REFUS_PURGE_RETRAIT + " : " + relatif + " ("
+                   + type(erreur).__name__ + ")"), 0
+    ajouter_manifeste(chemin_manifeste, ligne_manifeste(
+        {"id": ID_HORS_REGISTRE, "mission": str(mission or ""),
+         "archive": relatif},
+        sha_avant, octets, lignes, MOTIF_PREUVE_GIT, message_preuve))
+    return 0, ("purge : " + relatif + " (" + str(octets) + " octet(s), preuve "
+               + MOTIF_PREUVE_GIT + " : " + message_preuve + ")"), octets
+
+
+def purger_archives_datees(depart, chemin_manifeste, mission, cibles=None,
+                           simuler=False):
+    """Purge le TRI des archives datees. Rend (code, lignes, mesure).
+
+    Les cibles sont NOMMEES par l appelant, ou BALAYEES par la convention de nom
+    (`archives_datees`). Une preuve qui manque ne rend pas le geste KO : les
+    archives non engagees RESTENT, et la porte le DIT (c est la politique qui
+    travaille). Une ANOMALIE (registre, chemin absent, retrait impossible) rend le
+    geste KO : elle signale un defaut a corriger, pas une politique.
+    """
+    if cibles is None:
+        cibles = archives_datees(depart)
+    lignes = []
+    purgees = 0
+    octets_purges = 0
+    restees = []
+    anomalies = []
+    for cible in cibles:
+        code, message, octets = purger_archive_datree(
+            cible, depart, chemin_manifeste, mission, simuler)
+        lignes.append(message)
+        if code:
+            anomalies.append(message)
+            continue
+        if octets:
+            purgees += 1
+            octets_purges += octets
+        else:
+            restees.append(relatif_matrice(cible, depart))
+    lignes.append("ARRIVEE : " + str(purgees) + " / " + str(len(cibles))
+                  + " archive(s) purgee(s), " + str(octets_purges) + " octet(s)"
+                  + (" (SIMULATION)" if simuler else ""))
+    if restees:
+        lignes.append("RESTEES (" + MOTIF_RESTE_SANS_PREUVE + " -- elles RESTENT, "
+                      "/sante les mesure) : " + str(len(restees)))
+        for relatif in restees:
+            lignes.append("  " + relatif)
+    if anomalies:
+        lignes.append("ANOMALIES (a corriger -- elles ne sont pas une politique) : "
+                      + str(len(anomalies)))
+    mesure = {"purgees": purgees, "octets": octets_purges,
+              "restees": restees, "anomalies": anomalies}
+    return (1 if anomalies else 0), lignes, mesure

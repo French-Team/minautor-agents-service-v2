@@ -42,7 +42,8 @@
 Faits : `vigie-portes` (2026-09-13, MO-056 : surveille les PORTES et ceux qui
 les utilisent -- recette, sante, verbes, MOTEUR DE RECHERCHE temoin, usage,
 citations ; alerte par la porte `signaler`, anti-spam par signature), `espion-integrite` (surveillance BDD matrice), `veille-flux`
-(veille en arriere-plan : corriger-ascii + py_compile, marbre en VIGILE,
+(veille en arriere-plan : corriger-ascii + py_compile + regeneration du journal
+visuel (MO-366), marbre en VIGILE,
 alertes graves -> intercom, correction sans interrompre le LLM --
 doctrine auto-correction). Chaque passe `veille-flux` se note elle-meme
 dans `usages-outils-combos` et dans `activites-recentes` (section passes)
@@ -67,7 +68,7 @@ lancement). Lancement DETACHE (survit a la session), etat
 porte SON PID et refuse le second), arret cooperatif par drapeau (zero
 processus tue). La `veille-flux`, l'`espion-integrite`, la `vigie-profil`, `suivi-sync` et la
 `vigie-portes` sont ACTIVEES EN
-PERMANENT : `python vie/main.py activer` au demarrage de la Matrice
+PERMANENT : `python3 cerveau-projet/matrix/lancer.py vie activer` au demarrage de la Matrice
 (raccord `demarrer-optimus-prime.md` a poser par le createur). Bug de
 routage `veille arret` (routait vers passe, le drapeau n'etait jamais
 pose) attrape et repare au passage (M-046).

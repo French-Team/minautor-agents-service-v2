@@ -1,22 +1,61 @@
 """Fonctions simples de la categorie file : une seule tache chacune."""
+from constants import CHAMPS_SOURCE
 from commun import (
     armer_lot,
     consommer_item,
+    crier_controle_conservation,
     crier_mission_muette,
+    declarer_disparitions_conservation,
     defcon_bloque_theme,
     enregistrer_file,
     fichiers_de_la_mission,
     horodater,
+    ids_en_lot,
+    item_id_de_la_source,
     lire_bilan,
+    memoire_de_la_source,
+    mission_en_cours,
+    refus_serie_stricte,
+    prochaine_du_lot,
+    resume_mission,
     noter_journal,
     noter_session,
     numero_id,
     prochain_id,
     purger_zone_temporaire,
     rafraichir_vue_suivi,
+    source_de_l_item,
     extraire_options,
+    outils_de_l_item,
     valider_theme,
 )
+
+
+def _source_de_l_item(item_id):
+    """La SOURCE d'une mission nee d'un item : la RENDRE, et DIRE d'ou elle vient.
+
+    MO-333/MO-334 : la composition ET la resolution vivent dans UN SEUL domicile
+    (`commun.source_de_l_item`), qui distingue TROIS provenances et ne devine
+    jamais. Ici aucun calcul : on appelle, on DIT, on rend.
+      - l'item est VIVANT -- il fait foi ;
+      - il est CONSOMME -- sa TOMBE (memoire de naissance) rend la forme longue, et
+        on DIT que c'est la memoire qui parle (elle est datee, pas inventee) ;
+      - sa tombe est INCOMPLETE, ou il n'a jamais ete vu -- forme COURTE, et ce qui
+        manque est NOMME (on n'INVENTE ni type, ni categorie, ni urgence).
+    """
+    source, provenance, manquants = source_de_l_item(item_id)
+    if provenance == SOURCE_MEMOIRE:
+        print("Memoire de naissance (MO-334) : item " + str(item_id) + " consomme --"
+              " source rendue par sa TOMBE : " + source)
+    elif provenance == SOURCE_MEMOIRE_INCOMPLETE:
+        print("ALERTE source (MO-334) : la tombe de l'item " + str(item_id) + " est"
+              " INCOMPLETE (" + ", ".join(manquants) + " manquant(s)) -- source laissee"
+              " COURTE (" + source + ") : jamais devine.")
+    elif provenance != SOURCE_VIVANTE:
+        print("ALERTE source (MO-333) : item " + str(item_id) + " INTROUVABLE dans"
+              " l'entonnoir et SANS tombe -- source laissee COURTE (" + source + ") :"
+              " type, categorie et urgence INDISPONIBLES (jamais devines).")
+    return source
 
 
 def _consommer_item_lie(item_id):
@@ -31,7 +70,8 @@ def _consommer_item_lie(item_id):
     code, message = consommer_item(item_id)
     print(("Consommation (EO-153) : " if code == 0 else "ALERTE consommation (EO-153) : ")
           + message)
-from constants import PREFIXE_ID, STATUT_EN_ATTENTE, STATUT_TERMINEE
+from constants import (PREFIXE_ID, SOURCE_MEMOIRE, SOURCE_MEMOIRE_INCOMPLETE,
+                       SOURCE_VIVANTE, STATUT_EN_ATTENTE, STATUT_TERMINEE)
 
 # CONTRAT DE TRANSPORT des listes (frictions 72 et 73) : les listes du LOT (--theme
 # "t1,t2" et --type "dev,reparation") sont coupees par le MEME domicile que la
@@ -41,7 +81,7 @@ from transport_listes import decouper_liste  # noqa: E402
 # Les TYPES de mission sont une liste FERMEE de l'entonnoir (EO-118) : le lot les
 # EXIGE au lieu de faire naitre des missions sans type, donc sans posture. Une
 # seule source : le module des listes fermees, jamais une copie (L-029/L-035).
-from entonnoir.listes import TYPES as TYPES_MISSION
+from entonnoir.listes import CHAMP_OUTILS, TYPES as TYPES_MISSION
 
 # LONGUEUR_MIN_NUMERO et numero_id ont UN SEUL domicile : commun.py (L-029),
 # aux cotes de PREFIXE_ID et de prochain_id qui parlent du meme identifiant.
@@ -92,6 +132,14 @@ def charger_mission(arguments, charger_file, afficher_file):
         print(message)
         return code
     file_missions = charger_file()
+    # SERIE STRICTE (MO-341) : ouvrir un travail NEUF pendant qu une mission attend
+    # etait le SEUL chemin sans garde -- la chaine mourait donc en silence, alors que
+    # le refus existait deja pour l injection et pour un lot. Le refus est le MEME
+    # (une seule forme, son domicile) et il tombe AVANT toute creation.
+    refus = refus_serie_stricte(file_missions)
+    if refus:
+        print(refus)
+        return 1
     mission = {
         "id": prochain_id(file_missions),
         "theme": theme,
@@ -105,11 +153,30 @@ def charger_mission(arguments, charger_file, afficher_file):
     # declarer MO-160 sans quitter le brin, puis le pont l'a re-servi).
     item = (options.get("item") or "").strip()
     if item:
-        mission["source"] = "entonnoir:" + item
+        mission["source"] = _source_de_l_item(item)
     file_missions.setdefault("missions", []).append(mission)
     enregistrer_file(file_missions)
     if item:
+        # EO-313 : la LISTE DES OUTILS PREPAREE sur l item est recopiee dans la
+        # mission AVANT la consommation -- apres, l item n est plus la pour la dire.
+        outils = outils_de_l_item(item)
+        if outils:
+            mission[CHAMP_OUTILS] = outils
+            enregistrer_file(file_missions)
         _consommer_item_lie(item)
+    # L ACTE DE CHARGER LAISSE UNE TRACE (demande du createur, 2026-09-22). La file
+    # portait deja `chargee_le`, mais un LOT ENTIER partage cet horodatage : < chargee
+    # seule > et < chargee avec d autres > etaient donc INDISCERNABLES, et la CLOTURE
+    # FAUSSE payee en MO-387 (deux missions closes qui n avaient pas eu lieu, avec une
+    # coherence file <-> journal PARFAITE) n etait detectable par AUCUN garde. Le
+    # detail ne nomme AUCUN lot : c est ce qui distingue une charge INDIVIDUELLE (que
+    # le suivi du pilote exige de voir CONDUITE) d une mission qui attend son tour.
+    code, sortie = noter_journal(mission["id"], theme, "charge",
+                                 "mission forgee par charger (charge INDIVIDUELLE) : "
+                                 + resume_mission(mission))
+    if code != 0:
+        # Une trace muette se DIT : la charge reussit, l absence de trace aussi.
+        print("AVERTISSEMENT : la trace de CHARGE n a pas ete posee -- " + sortie[:120])
     print("Mission " + mission["id"] + " chargee (theme : " + theme
           + ", type : " + type_cible + ").")
     return 0
@@ -307,7 +374,7 @@ def enregistrer_mission(arguments, charger_file):
     # et le CONSOMME, pour qu'il ne reparte pas (friction 83).
     item = (options.get("item") or "").strip()
     if item:
-        mission["source"] = "entonnoir:" + item
+        mission["source"] = _source_de_l_item(item)
     # Le type n'est ecrit QUE s'il est declare : une cle absente dit "nature
     # inconnue", une cle vide dirait "nature vide" -- ce n'est pas la meme chose.
     if type_cible:
@@ -370,6 +437,16 @@ def enregistrer_mission(arguments, charger_file):
     # laisser une zone pleine quand la mission est menee hors file).
     _code_purge, message_purge = purger_zone_temporaire({"id": identifiant, "theme": theme})
     print("[PURGE] " + message_purge)
+    # LES DISPARITIONS QUE LA PURGE VIENT DE CAUSER (V5, MO-304) : ce chemin
+    # purge la zone jetable comme `fin`, donc il cree les MEMES disparitions de
+    # points de restauration. Les declarer ICI aussi evite qu'un enregistrement
+    # hors file laisse un ecart que seul `controler-archives` verrait -- les DEUX
+    # clotures repondent du meme geste (meme doctrine que la purge de la zone).
+    _code_disparition, message_disparition = declarer_disparitions_conservation(
+        {"id": identifiant, "theme": theme})
+    if message_disparition:
+        print(crier_controle_conservation(
+            {"id": identifiant, "theme": theme}, _code_disparition, message_disparition))
     print("Mission " + identifiant + " enregistree (terminee, hors file) -- compteur : "
           + str(file_missions["compteur"]) + ".")
     if not type_cible:
@@ -436,6 +513,20 @@ def charger_lot(arguments, charger_file):
             return code
         themes_canoniques.append(theme)
     file_missions = charger_file()
+    # EO-150 / MO-205 : LA SERIE STRICTE NE TENAIT PAS SUR CE CHEMIN. Mesure MO-160 :
+    # armer un deuxieme lot REMPLACAIT les ids du lot courant (MO-160/MO-161 -> MO-162)
+    # et la mission en cours perdait sa PORTEE (0/0) ; lu dans fin/fonctions.py, le
+    # RETOUR CONSOLIDE du lot precedent se perdait EN SILENCE. Les DEUX gardes qui
+    # suivent sont celles de verser_tresse, le refus est NOMME, et il tombe AVANT
+    # toute creation : une seule forme de refus pour les deux chemins d injection.
+    refus = refus_serie_stricte(file_missions)
+    if refus:
+        print(refus)
+        return 1
+    if ids_en_lot(file_missions) and prochaine_du_lot(file_missions) is not None:
+        print("REFUS : un lot est deja arme et en attente -- termine-le avant d en charger"
+              " un autre (le remplacer perdrait sa portee et son retour consolide).")
+        return 1
     ids = []
     for theme, type_cible, objectif in zip(themes_canoniques, types, objectifs):
         mission = {
@@ -451,6 +542,21 @@ def charger_lot(arguments, charger_file):
         ids.append(mission["id"])
     armer_lot(file_missions, ids)
     enregistrer_file(file_missions)
+    # L ACTE DE CHARGER LAISSE UNE TRACE, POUR CHAQUE MISSION FORGEE (demande du
+    # createur, 2026-09-22) : le detail NOMME LE LOT, et c est ce nom qui dit a la
+    # porte du suivi que la mission ATTEND SON TOUR -- une mission de lot n est donc
+    # JAMAIS accuse de < chargee sans conduite >, alors qu une charge INDIVIDUELLE
+    # (aucun lot nomme) l est si elle ne recoit aucun debut dans la fenetre.
+    # Cout mesure : une porte noter vaut ~0,28 s ; armer un lot de 36 missions coute
+    # donc ~10 s, une fois, pour une trace que RIEN d autre ne portait.
+    for mission_id in ids:
+        mission = next((m for m in file_missions["missions"] if m.get("id") == mission_id), {})
+        code, sortie = noter_journal(mission_id, mission.get("theme", ""), "charge",
+                                     "mission forgee par charger (LOT " + nom_lot + ") : "
+                                     + resume_mission(mission))
+        if code != 0:
+            print("AVERTISSEMENT : la trace de CHARGE de " + mission_id
+                  + " n a pas ete posee -- " + sortie[:120])
     print("Lot " + nom_lot + " arme : " + str(len(ids)) + " missions (" + ", ".join(ids) + ").")
     return 0
 
@@ -468,4 +574,60 @@ def afficher_file(file_missions):
             + "theme : " + mission["theme"]
             + " -- " + mission["objectif"]
         )
+    return 0
+
+
+def afficher_lot(file_missions):
+    """Affiche le LOT ARME : rang k/n, item d'origine, type, urgence, statut (MO-380).
+
+    POURQUOI (demande du createur, 2026-09-21) : la REPRISE DU RETARD -- 37 missions
+    versees d'un seul geste -- n'etait lisible qu'en ouvrant le JSON a la main. Un lot
+    qu'on ne voit pas est un lot qu'on ne suit pas ; et le rang k/n est ce que le lot
+    sert (une reprise se lit DANS L ORDRE).
+
+    La memoire de naissance de chaque maillon est LUE chez son domicile
+    (`commun.memoire_de_la_source`), jamais redecoupee ici.
+
+    Rend 0 quand chaque maillon porte sa memoire, 1 quand au moins un ne la porte pas :
+    sans elle le verdict d'origine du maillon n'est plus atteignable (panne MO-339,
+    mesuree) -- les fautifs sont NOMMES, jamais fondus dans un total.
+    """
+    ids = ids_en_lot(file_missions)
+    if not ids:
+        print("Aucun lot arme : la file sert mission par mission (rien a afficher).")
+        return 0
+    par_id = {m.get("id"): m for m in file_missions.get("missions", [])}
+    nom = next((str(par_id[i].get("lot") or "") for i in ids
+                if par_id.get(i, {}).get("lot")), "?")
+    tete = prochaine_du_lot(file_missions)
+    print("LOT " + nom + " : " + str(len(ids)) + " maillon(s), servis dans cet ordre"
+          + " | tete = " + (str(tete.get("id")) if tete else "aucune")
+          + " | en attente = " + str(sum(
+              1 for i in ids if par_id.get(i, {}).get("statut") == "en-attente")))
+    print("  rang  mission  item     type         categorie   urgence   statut       titre")
+    sans_memoire = []
+    for rang, mission_id in enumerate(ids, start=1):
+        mission = par_id.get(mission_id)
+        if mission is None:
+            sans_memoire.append(mission_id + " (hors file)")
+            print("  " + str(rang) + "/" + str(len(ids)) + "  " + mission_id
+                  + "  INTROUVABLE dans la file : le lot et la file ne disent pas la meme chose")
+            continue
+        source = mission.get("source")
+        memoire = memoire_de_la_source(source)
+        item = item_id_de_la_source(source) or "?"
+        if not memoire:
+            sans_memoire.append(mission_id)
+        print("  %-5s %-8s %-8s %-12s %-11s %-9s %-12s %s" % (
+            str(rang) + "/" + str(len(ids)), mission_id, item,
+            memoire.get(CHAMPS_SOURCE[0], "?"), memoire.get(CHAMPS_SOURCE[1], "?"),
+            memoire.get(CHAMPS_SOURCE[2], "?"), mission.get("statut", "?"),
+            str(mission.get("titre") or mission.get("objectif") or "")[:44].replace("\n", " ")))
+    if sans_memoire:
+        print("  ACCUSE : " + str(len(sans_memoire)) + " maillon(s) SANS memoire de naissance"
+              + " (source courte ou illisible) : " + ", ".join(sans_memoire)
+              + " -- leur verdict d'origine n'est plus atteignable.")
+        return 1
+    print("  memoire : les " + str(len(ids)) + " maillons portent leur item, leur type,"
+          " leur categorie et leur urgence")
     return 0

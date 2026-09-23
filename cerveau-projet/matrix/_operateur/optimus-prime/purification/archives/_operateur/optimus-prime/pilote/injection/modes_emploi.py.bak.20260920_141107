@@ -1,0 +1,149 @@
+#!/usr/bin/env python3
+"""modes_emploi.py -- LE MODE D EMPLOI D UNE BRIQUE, extrait de SON domicile.
+
+POURQUOI (revision createur du 2026-09-20, EO-311 / mission MO-313) : l injection
+"outils-disponibles" du catalogue servait un os.listdir -- des NOMS, __pycache__ et
+les points de restauration .bak compris, et AUCUN usage. Le createur : "fournir des
+outils, combos, super-combos sans explication n est pas productif et genere des
+actions inutiles". Or proto-6 etape 2 PROMET DEJA "les interfaces FERMEES des outils
+que la mission va appeler (usage main.py, codes 0/1/2)" : le protocole disait vrai,
+le CATALOGUE ne le faisait pas.
+
+LA REGLE N EST PAS RECOPIEE (M-076 / L-032) : le mode d emploi d une brique est ce
+que la BRIQUE dit d ELLE-MEME -- le docstring de son main.py, ou la premiere ligne
+de son README quand il n y a pas de docstring. Une fiche ecrite a cote (une copie)
+divergerait en silence : c est exactement ce que ce module refuse.
+
+UNE BRIQUE, C EST QUOI : un .py, ou un dossier qui porte un main.py. Les points de
+restauration (*.bak*), __pycache__, les documents (*.md) et les donnees (*.json) ne
+sont PAS des briques -- ils polluaient la liste servie a l agent.
+
+UN MODE D EMPLOI MANQUANT EST ACCUSE, JAMAIS TU : une brique sans usage lisible rend
+un texte qui le DIT (le remede est de l ecrire dans la brique, son domicile).
+
+Usage:
+  python modes_emploi.py carte [--racine <racine>]
+  python modes_emploi.py mode-emploi <nom>
+  python modes_emploi.py --auto-test
+"""
+import sys
+from pathlib import Path
+
+# --- DOMICILES DE LA DECOUVERTE, declares une fois ---------------------------
+# Ou une brique dit son usage, dans l ORDRE ou on le cherche : le docstring du
+# module d entree d abord (le contrat de la porte elle-meme), puis son document.
+NOMS_DOCUMENTS = ("DESCRIPTION.md", "README.md", "README-*.md")
+# Un mode d emploi est MINI par construction : on borne, et la coupe est DITE.
+PLAFOND_LIGNES_USAGE = 8
+PLAFOND_LIGNES_BUT = 100
+MARQUE_COUPE = " [...]"
+# Non-briques : jamais servies (mesure du defaut : __pycache__ et .bak etaient dans
+# la liste remise a l agent).
+EXCLUSIONS = ("__pycache__",)
+SUFFIXES_EXCLUS = (".bak", ".pyc", ".md", ".json", ".txt")
+SUFFIXE_BRIQUE = ".py"
+NOM_ENTREE = "main.py"
+
+# Les RACINES des briques, declarees ici (un seul domicile).
+RACINES = {
+    "outils": "super-combos/combos/outils",
+    "combos": "super-combos/combos",
+    "super-combos": "super-combos",
+    "outils-matrice": "../../matrice/data/outils",
+}
+
+
+def _est_brique(chemin):
+    """Un .py, ou un dossier qui porte un main.py. Sinon : jamais une brique."""
+    nom = chemin.name
+    if nom in EXCLUSIONS or any(motif in nom for motif in SUFFIXES_EXCLUS):
+        return False
+    if chemin.is_file():
+        return chemin.suffix == SUFFIXE_BRIQUE
+    if chemin.is_dir():
+        return (chemin / NOM_ENTREE).is_file()
+    return False
+
+
+def lister_briques(racine):
+    """Les briques d une racine, par ordre de nom. Racine absente : liste vide."""
+    racine = Path(racine)
+    if not racine.is_dir():
+        return []
+    return sorted((p for p in racine.iterdir() if _est_brique(p)),
+                  key=lambda p: p.name.lower())
+
+
+def chemin_brique(racine, nom):
+    """Le chemin de la brique nom sous racine, ou None (jamais une devinette)."""
+    candidat = Path(racine) / nom
+    return candidat if _est_brique(candidat) else None
+
+
+def premier_document(brique):
+    """Le texte ou la brique dit ce qu elle est : son docstring, ou son document.
+
+    Rend (texte, origine) : l ORIGINE est dite, parce qu un mode d emploi sans
+    temoin se lit comme une affirmation en l air.
+    """
+    brique = Path(brique)
+    fichiers = [brique] if brique.is_file() else [brique / NOM_ENTREE]
+    for nom in NOMS_DOCUMENTS:
+        fichiers.extend(sorted(brique.glob(nom)) if brique.is_dir() else [])
+    for fichier in fichiers:
+        if not fichier.is_file():
+            continue
+        try:
+            texte = fichier.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            continue
+        if texte.strip():
+            return texte, fichier.name
+    return "", ""
+
+
+def docstring(texte):
+    """Le docstring d un module Python : entre le premier et le second triple guillemet."""
+    marque = texte.find("\"\"\"")
+    if marque < 0:
+        return ""
+    fin = texte.find("\"\"\"", marque + 3)
+    return texte[marque + 3:fin] if fin > 0 else ""
+
+
+def but(texte):
+    """La PREMIERE ligne qui dit a quoi sert la brique (le but, en une ligne)."""
+    for ligne in texte.splitlines():
+        ligne = ligne.strip()
+        if ligne and not ligne.startswith("#") and not ligne.startswith("-"):
+            return ligne[:PLAFOND_LIGNES_BUT]
+    return ""
+
+
+def bloc_usage(texte):
+    """Les lignes du bloc Usage (bornees), ou "" : une brique peut ne pas en avoir.
+
+    Le bloc commence a une ligne Usage et s arrete a la premiere ligne qui ne
+    ressemble plus a une commande : un mode d emploi ne deverse pas la brique.
+    """
+    lignes = texte.splitlines()
+    depart = None
+    for index, ligne in enumerate(lignes):
+        if ligne.strip().lower().startswith("usage"):
+            depart = index + 1
+            break
+    if depart is None:
+        return ""
+    retenues = []
+    for ligne in lignes[depart:]:
+        if not ligne.strip():
+            if retenues:
+                break
+            continue
+        if not (ligne.startswith((" ", "\t")) or ligne.lstrip().startswith(("python", "-", "$"))):
+            break
+        retenues.append(ligne.rstrip())
+        if len(retenues) >= PLAFOND_LIGNES_USAGE:
+            retenues.append(MARQUE_COUPE.strip())
+            break
+    return "\n".join(retenues)

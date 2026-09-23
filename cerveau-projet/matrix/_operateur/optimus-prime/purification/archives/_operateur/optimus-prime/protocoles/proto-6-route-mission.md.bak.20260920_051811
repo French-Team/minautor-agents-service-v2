@@ -1,0 +1,49 @@
+---
+identite:
+  type: protocole
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# PROTOCOLE 6 -- ROUTE MISSION (le cycle du pilote, de bout en bout)
+
+> Source : preuves reelles M-047 a M-069 (la route la plus parcourue de la
+> Matrice). Cette route est le COEUR du mode direct : un agent (cameleon
+> inclus) la suit sans re-derivaison -- tout le pourquoi est grave ici.
+> Convention a crochets : la demande [mission] verse au vrac, la suite est
+> automatique. Ce protocole couvre ce que l'agent EXECUTE.
+
+## La route (7 etapes, dans l'ordre)
+
+1. **Recevoir l'injection** : objectif + theme + lecons_utiles + themes_utiles
+   + checklist (deposee dans intercom/pilote/outbox.jsonl par le pilote).
+   Serie stricte : UNE seule mission a la fois, jamais deux.
+2. **Reconnaitre avant de toucher** : lire les indices.md de la zone (AVANT
+   les fichiers -- convention-indices), puis les interfaces FERMEES des
+   outils que la mission va appeler (usage main.py, codes 0/1/2).
+   JAMAIS d'interface inventee.
+3. **Executer** : par les portes officielles uniquement (outils dedies,
+   jamais a la main). Tests reels a chaque etape : un controle non prouve
+   n'est pas un controle. Incident de chemin/interface : rejouer par la
+   vraie porte (lecon L-013 : jamais de chemins comptes a la main --
+   racine detectee par AGENTS.md ou chemin absolu depuis la racine).
+4. **Erreur hors perimetre** : ne PAS interrompre, ne PAS activer un autre
+   agent : signaler (mission au vrac source veille/incident, ou message
+   boite Matrice), poursuivre le round principal, documenter a la fin.
+5. **Controles obligatoires avant cloture** : py_compile (fichiers touches
+   ou global), ASCII (corriger-ascii ou passe), verifiers du marbre si le
+   marbre est touche, passe espion verte.
+6. **Noter** : BDD modifications pour CHAQUE fichier modifie (action fermee
+   cree|modifie|corrige|supprime, detail, tags). La note passe par l'outil
+   bdd-modifications, jamais en commentaire dans le fichier.
+7. **Finir** : `python3 main.py fin --bilan "..."` avec un bilan SUBSTANTIEL
+   (realisations + preuves + incidents assumes). La relance automatique
+   enchaine la mission suivante (lot -> file -> tresse) toute seule.
+
+## Interdits (gardes qui ont fait leurs preuves)
+
+- Inventer une interface (le verbe `charger` n'est pas le verbe `lot`).
+- Ecrire une BDD hors porte unique (proto-7).
+- Deux missions en parallele (serie stricte, preuve : garde du pilote).
+- Soldre sans preuve ("ca devrait marcher" n'existe pas sur cette route).
+- Oublier un incident : chaque incident est documente au bilan, sans honte.

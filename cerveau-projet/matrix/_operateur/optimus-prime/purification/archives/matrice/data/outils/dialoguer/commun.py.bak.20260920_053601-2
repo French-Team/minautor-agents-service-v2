@@ -1,0 +1,124 @@
+"""Fonctions communes de l'outil dialoguer : validation, trace, BDD.
+
+Chaque fonction fait UNE chose (convention-architecture-outils).
+Flux 2 seul : jamais utilise par le cameleon.
+"""
+import json
+import sys
+from pathlib import Path
+
+from constants import (
+    ENCODAGE,
+    NOM_OUTIL_SUIVI,
+    RACINE,
+    REPERTOIRE_MATRIX,
+)
+
+
+def valider_question(question):
+    """Valide qu'une question est posable.
+    
+    Retourne (est_valide, msg_erreur).
+    """
+    if not question or not question.strip():
+        return False, "Question vide"
+    if len(question.strip()) > 500:
+        return False, "Question trop longue (max 500 caracteres)"
+    return True, ""
+
+
+def valider_choix(choix_str):
+    """Valide et parse les choix (separated by comma).
+    
+    Retourne (liste_choix, msg_erreur).
+    """
+    if not choix_str:
+        return [], ""
+    choix = [c.strip() for c in choix_str.split(",") if c.strip()]
+    if len(choix) < 2:
+        return [], "Au moins 2 choix requis (separes par virgule)"
+    if len(choix) > 10:
+        return [], "Max 10 choix"
+    return choix, ""
+
+
+def poser_question(question, choix=None, timeout=None):
+    """Pose une question au createur.
+    
+    Retourne (reponse, code).
+    Code : 0=reponse, 1=timeout, 2=erreur.
+    """
+    # Affiche la question
+    print("")
+    print("=== QUESTION CREATEUR (Flux 2) ===")
+    print(question)
+    print("")
+    
+    if choix:
+        print("Choix :")
+        for i, c in enumerate(choix, 1):
+            print(f"  {i}. {c}")
+        print("")
+    
+    # Lecture stdin
+    try:
+        if timeout and timeout > 0:
+            import select
+            import sys
+            # Sur Unix, select fonctionne ; sur Windows, fallback
+            if sys.platform != "win32":
+                ready, _, _ = select.select([sys.stdin], [], [], timeout)
+                if not ready:
+                    print("\nTIMEOUT apres " + str(timeout) + "s")
+                    return "", 1
+        reponse = input("Votre reponse : ").strip()
+        return reponse, 0
+    except EOFError:
+        return "", 1
+    except KeyboardInterrupt:
+        return "", 2
+
+
+def tracer_decision(mission, question, reponse):
+    """Trace la decision dans suivi-optimus (Flux 2)."""
+    try:
+        import subprocess
+        cmd = [
+            sys.executable,
+            str(REPERTOIRE_DATA / "outils" / "suivi-optimus" / "main.py"),
+            "noter",
+            "--mission", mission,
+            "--theme", "DIALOGUER",
+            "--action", "decision",
+            "--detail", f"Q: {question[:100]} | R: {reponse[:100]}",
+        ]
+        subprocess.run(
+            cmd, capture_output=True, timeout=10,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+    except (subprocess.TimeoutExpired, OSError) as e:
+        print("[TRACE] trace decision echouee (best effort) : " + str(e), file=sys.stderr)
+
+
+def formater_reponse(reponse, code, mode_json=False):
+    """Formate la reponse."""
+    if mode_json:
+        resultat = {
+            "reponse": reponse,
+            "code": code,
+            "succes": code == 0,
+        }
+        return json.dumps(resultat, ensure_ascii=False, indent=2)
+    else:
+        if code == 0:
+            return "Reponse : " + reponse
+        elif code == 1:
+            return "TIMEOUT : pas de reponse"
+        else:
+            return "ERREUR : lecture reponse impossible"
+
+
+def extraire_options(arguments, noms_connus):
+    """Voir le CONTRAT du domicile partage (EO-158) : options CONSOMMEES ici."""
+    from options import extraire_options as repartir  # domicile partage (EO-158)
+    return repartir(arguments, noms_connus, drapeaux=("json",))

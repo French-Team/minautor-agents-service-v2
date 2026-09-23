@@ -2,7 +2,7 @@
 
 Interface entre main.py et les fonctions simples (corriger/fonctions.py).
 """
-from commun import charger_bdd, enregistrer_bdd, extraire_options
+from commun import canoniser_cle, charger_bdd, enregistrer_bdd, extraire_options
 from corriger.fonctions import (choisir_position, corriger_entree,
                                 positions_correspondantes, reattribuer_tags_fiche,
                                 trouver_fiche)
@@ -27,6 +27,9 @@ def executer(arguments):
         print(USAGE)
         return 2
 
+    # EO-363 : la MEME cle canonique qu a l ecriture -- sinon on chercherait la
+    # fiche sous une forme que la porte n ecrit plus (un seul domicile de cle).
+    chemin_fichier = canoniser_cle(chemin_fichier)
     donnees = charger_bdd()
     fiche = trouver_fiche(donnees, chemin_fichier)
     if fiche is None:

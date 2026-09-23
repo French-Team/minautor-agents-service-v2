@@ -36,6 +36,57 @@ from racine import detecter_racine
 NOMS_MATRICE = ("cerveau-projet/matrix", "matrix")
 
 
+def _racine_matrice_de(depart):
+    """Le dossier de la MATRICE, deduit du motif partage (jamais d'un parents[N])."""
+    racine = detecter_racine(depart)
+    for nom in NOMS_MATRICE:
+        candidat = racine / nom
+        if candidat.is_dir():
+            return candidat
+    return racine
+
+
+def forme_canonique(chemin, depart=None):
+    """La FORME CANONIQUE d'un chemin de la Matrice : RELATIVE A SA RACINE.
+
+    UN SEUL DOMICILE DE FORME (M-076) : les CLES de la BDD des modifications
+    (EO-363) et les LIENS d'une carte d'identite (EO-347) sont la MEME question --
+    < sous quelle forme un fichier de la Matrice se NOMME-t-il ? > -- et la
+    reponse est ici, une fois.
+
+    Mesure du 2026-09-22 (EO-363) : la BDD portait 935 cles = 232 prefixees
+    < cerveau-projet/matrix/ > + 703 relatives, et 158 fichiers sous les DEUX
+    formes -- donc DEUX histoires pour un seul fichier. La cause : la porte
+    enregistrait la cle TELLE QU'ON LA LUI DONNAIT, et la forme dependait donc du
+    repertoire courant de l'appelant. Un lien de carte a exactement le meme
+    risque : une forme qui depend de qui l'ecrit ne se mesure ni ne se compare.
+
+    Formes acceptees : un chemin ABSOLU dans la Matrice, une forme prefixee
+    (un des NOMS_MATRICE), ou une forme deja relative. Idempotente : une forme
+    canonique se rend ELLE-MEME. Un chemin HORS Matrice est rendu TEL QUEL -- on
+    ne devine pas, l'appelant le DIT.
+    """
+    texte = str(chemin or "").strip().replace("\\", "/")
+    while texte.startswith("./"):
+        texte = texte[2:]
+    if not texte:
+        return ""
+    brut = Path(texte)
+    if brut.is_absolute():
+        base = Path(os.path.normpath(str(_racine_matrice_de(depart or __file__))))
+        try:
+            return Path(os.path.normpath(str(brut))).relative_to(base).as_posix()
+        except ValueError:
+            return texte
+    for nom in NOMS_MATRICE:
+        if texte == nom:
+            return ""
+        if texte.startswith(nom + "/"):
+            texte = texte[len(nom) + 1:]
+            break
+    return os.path.normpath(texte).replace("\\", "/")
+
+
 def bases(depart):
     """Les bases d ancrage, dans l ordre : la racine du workspace, puis matrix/."""
     racine = detecter_racine(depart)

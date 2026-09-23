@@ -42,8 +42,8 @@ Ces sept combos sont generes par `outils/creer-combo.py` a partir de la banque
 ## Verifier le nommage
 
 ```bash
-python outils/creer-combo.py lister            # etat numerote (disque vs registre)
-python outils/creer-combo.py verifier c-001-lecons
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/creer-combo.py lister # etat numerote (disque vs registre)
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/creer-combo.py verifier c-001-lecons
 ```
 
 > `outils/` n'est PAS un combo : c'est la boite a outils (generateurs, BDD,

@@ -5,7 +5,7 @@
 ## Verbes
 
 ```
-python main.py lister --dossier <chemin> [--filtre <glob>] [--recursif] [--json]
+python3 cerveau-projet/matrix/lancer.py lister lister --dossier <chemin> [--filtre <glob>] [--recursif] [--json]
 ```
 
 - `--dossier` : dossier a lister (relatif a la racine, detectee par `data/commun/racine.py`).

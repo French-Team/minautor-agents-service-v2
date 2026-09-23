@@ -1,0 +1,279 @@
+"""Mesure de la machine : SYSTEME, CAPACITES, RESEAU, OUTILS.
+
+Portage du modele v1 (verifier-systeme 0.2.3-py), sans rien reinventer : meme
+detection d OS, memes sondes d outils. Ce qui est ajoute repond a la demande du
+createur (RAM, disque, charge, GPU et sa VRAM, reseau), avec une dependance
+DOUCE : psutil si present, sinon le champ reste NON MESURE (-1) -- jamais une
+valeur inventee, un -1 dit la verite (L-055).
+
+Aucune commande systeme n est passee par un shell : subprocess recoit une LISTE
+d arguments. Un mesureur muet rend "-" : une mesure qu on ne peut pas faire ne
+doit jamais passer pour une absence de materiel.
+"""
+import getpass
+import os
+import platform
+import re
+import shutil
+import socket
+import subprocess
+
+from constants import (CLASSE_CARTES_GRAPHIQUES, DELAI_VERSION, OUTILS_SONDES,
+                       RACINE_MATRIX, REPERTOIRE_DATA, SEPARATEUR, VALEUR_DESC,
+                       VALEUR_VRAM)
+
+try:
+    import psutil
+    PSUTIL = True
+except ImportError:
+    psutil = None
+    PSUTIL = False
+
+try:
+    import winreg
+    WINDOWS = True
+except ImportError:
+    winreg = None
+    WINDOWS = False
+
+
+def detecter_os():
+    """Windows, Linux, Mac -- ou le nom brut dit en clair."""
+    systeme = platform.system()
+    if systeme == "Windows":
+        return "Windows"
+    if systeme == "Linux":
+        return "Linux"
+    if systeme == "Darwin":
+        return "Mac"
+    return "Inconnu (" + str(systeme) + ")"
+
+
+def version_os(os_nom):
+    if os_nom == "Windows":
+        return platform.version() or "Inconnu"
+    return platform.release() or "Inconnu"
+
+
+def extraire_version(texte):
+    """Le premier numero de version (Python 3.14.4 -> 3.14.4) ; sinon le texte."""
+    trouve = re.search(r"(\d+(?:\.\d+)+)", texte or "")
+    if trouve:
+        return trouve.group(1)
+    return (texte or "").strip() or "-"
+
+
+def detecter_systeme():
+    """Les faits d identite de la machine : systeme, hote, utilisateur, session."""
+    os_nom = detecter_os()
+    try:
+        hote = socket.gethostname()
+    except Exception:
+        hote = "-"
+    try:
+        utilisateur = getpass.getuser()
+    except Exception:
+        utilisateur = "-"
+    session = os.environ.get("SESSIONNAME") or os.environ.get("SESSION") or "-"
+    return {
+        "os": os_nom,
+        "version": version_os(os_nom),
+        "arch": platform.machine() or "Inconnu",
+        "hote": hote,
+        "utilisateur": utilisateur,
+        "session": session,
+        "python": platform.python_version(),
+        "racine-matrix": str(RACINE_MATRIX),
+    }
+
+
+def _valeur_registre(cle_ouverte, nom):
+    """La valeur d une cle de registre DEJA ouverte, ou None -- jamais une exception nue."""
+    if winreg is None:
+        return None
+    try:
+        valeur, _ = winreg.QueryValueEx(cle_ouverte, nom)
+    except OSError:
+        return None
+    return valeur
+
+
+def adaptateurs_registre():
+    """Les controleurs graphiques LUS AU REGISTRE Windows : nom ET VRAM, APPARIES.
+
+    POURQUOI LE REGISTRE, ET PAS AdapterRAM (mesure du 2026-09-20, MO-319) : wmic et
+    powershell exposent AdapterRAM, un DWORD SIGNE plafonne a 4 Go -- une carte de
+    12 Go y rendrait 4095 Mo. Un faux fait est plus trompeur qu une absence (L-055).
+    La cle de CLASSE des cartes graphiques porte HardwareInformation.qwMemorySize,
+    une valeur 64 BITS posee par le pilote : c est la vraie memoire annoncee.
+
+    Rend une liste de dicts nom + vram-mo ; vram-mo vaut -1 quand la valeur est
+    illisible : un adaptateur qui ne declare pas sa memoire la DIT, il ne la cache
+    pas. Le separateur de chemin vient de constants (chr 92), jamais d un antislash
+    litteral : un antislash traverse le shell et se fait doubler ou perdre (MO-286).
+    """
+    if not WINDOWS:
+        return []
+    chemin_classe = ("SYSTEM" + SEPARATEUR + "CurrentControlSet" + SEPARATEUR
+                     + "Control" + SEPARATEUR + "Class" + SEPARATEUR
+                     + "{" + CLASSE_CARTES_GRAPHIQUES + "}")
+    adaptateurs = []
+    try:
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, chemin_classe) as racine:
+            index = 0
+            while True:
+                try:
+                    sous_cle = winreg.EnumKey(racine, index)
+                except OSError:
+                    break
+                index += 1
+                if not sous_cle[:1].isdigit():
+                    continue
+                chemin_adaptateur = chemin_classe + SEPARATEUR + sous_cle
+                try:
+                    with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
+                                        chemin_adaptateur) as adaptateur:
+                        nom = _valeur_registre(adaptateur, VALEUR_DESC)
+                        if not nom:
+                            continue
+                        octets = _valeur_registre(adaptateur, VALEUR_VRAM)
+                        vram_mo = int(int(octets) // (1024 * 1024)) if octets else -1
+                        adaptateurs.append({"nom": str(nom), "vram-mo": vram_mo})
+                except OSError:
+                    continue
+    except OSError:
+        return []
+    return adaptateurs
+
+
+def detecter_gpu():
+    """Les controleurs graphiques : le REGISTRE d abord (nom + VRAM), la commande ensuite.
+
+    Le registre donne les DEUX en une lecture, et APPARIEES (le meme adaptateur
+    fournit son nom et sa memoire). wmic, powershell et lspci ne savent dire que le
+    NOM : ils servent de repli, avec une VRAM NON MESUREE (-1) plutot qu un nombre
+    emprunte a un autre adaptateur. Si aucun mesureur ne repond, la liste est VIDE
+    et la fiche DIT "-" -- jamais une machine presentee comme sans carte graphique.
+    """
+    adaptateurs = adaptateurs_registre()
+    if adaptateurs:
+        return adaptateurs
+    commandes = (
+        ("wmic", ("path", "win32_VideoController", "get", "name")),
+        ("powershell", ("-NoProfile", "-Command",
+                        "(Get-CimInstance Win32_VideoController).Name")),
+        ("lspci", ("-mm",)),
+    )
+    for nom, arguments in commandes:
+        if shutil.which(nom) is None:
+            continue
+        try:
+            resultat = subprocess.run((nom,) + arguments, capture_output=True,
+                                      text=True, timeout=DELAI_VERSION,
+                                      errors="replace")
+        except Exception:
+            continue
+        lignes = [ligne.strip() for ligne in (resultat.stdout or "").splitlines()]
+        if nom == "lspci":
+            lignes = [ligne for ligne in lignes if "VGA" in ligne or "3D" in ligne]
+        noms = [ligne for ligne in lignes
+                if ligne and ligne.lower() not in ("name", "nom")]
+        if noms:
+            return [{"nom": nom_gpu, "vram-mo": -1} for nom_gpu in noms[:3]]
+    return []
+
+
+def mesurer_ressources():
+    """CPU, RAM, disque, charge et GPU (avec sa VRAM) -- les capacites disponibles."""
+    mesure = {
+        "cpu-coeurs": os.cpu_count() or -1,
+        "cpu-modele": platform.processor() or platform.machine() or "Inconnu",
+        "ram-totale-mo": -1,
+        "ram-disponible-mo": -1,
+        "disque-libre-go": -1.0,
+        "charge-cpu": -1.0,
+        "gpu": [],
+    }
+    if PSUTIL:
+        try:
+            memoire = psutil.virtual_memory()
+            mesure["ram-totale-mo"] = int(memoire.total // (1024 * 1024))
+            mesure["ram-disponible-mo"] = int(memoire.available // (1024 * 1024))
+            mesure["charge-cpu"] = round(float(psutil.cpu_percent(interval=None)), 1)
+        except Exception:
+            pass
+    try:
+        usage = shutil.disk_usage(str(REPERTOIRE_DATA))
+        mesure["disque-libre-go"] = round(usage.free / (1024 ** 3), 1)
+    except Exception:
+        pass
+    mesure["gpu"] = detecter_gpu()
+    return mesure
+
+
+def mesurer_reseau():
+    """L hote et ses adresses IPv4 locales (hors boucle locale)."""
+    try:
+        hote = socket.gethostname()
+    except Exception:
+        hote = "-"
+    adresses = []
+    try:
+        _, _, trouvees = socket.gethostbyname_ex(hote)
+        adresses = sorted(adresse for adresse in trouvees
+                          if not adresse.startswith("127."))
+    except Exception:
+        pass
+    return {"hote": hote, "adresses-ipv4": adresses}
+
+
+def argv_execution(nom, chemin, arguments):
+    """La commande REELLE a lancer pour un outil du PATH.
+
+    Mesure du 2026-09-20 (MO-251) : shutil.which resout un script Windows par son
+    EXTENSION (npm.CMD), et CreateProcess n execute pas un .cmd -- l appel
+    echouait et npm rendait Version inconnue. Le lanceur est donc DIT par la
+    famille du fichier : cmd.exe pour .cmd/.bat, powershell pour .ps1, execution
+    directe sinon. La liste d arguments reste une LISTE : aucun shell, donc rien
+    a interpreter et rien a injecter.
+    """
+    suffixe = str(chemin).lower().rsplit(".", 1)[-1]
+    if suffixe in ("cmd", "bat"):
+        return ("cmd", "/c", chemin) + tuple(arguments)
+    if suffixe == "ps1":
+        return ("powershell", "-NoProfile", "-File", chemin) + tuple(arguments)
+    return (nom,) + tuple(arguments)
+
+
+def verifier_outil(nom, arguments_version):
+    """Un outil du PATH : present, sa version, son chemin."""
+    chemin = shutil.which(nom)
+    if chemin is None:
+        return {"nom": nom, "disponible": False, "version": "-", "chemin": "-"}
+    version = "Version inconnue"
+    try:
+        resultat = subprocess.run(argv_execution(nom, chemin, arguments_version),
+                                  capture_output=True, text=True,
+                                  timeout=DELAI_VERSION, errors="replace")
+        lignes = (resultat.stdout or resultat.stderr or "").splitlines()
+        if lignes and lignes[0].strip():
+            version = lignes[0].strip()
+    except Exception:
+        pass
+    return {"nom": nom, "disponible": True, "version": version, "chemin": chemin}
+
+
+def mesurer_outils():
+    """Les outils de la table des sondes, dans l ORDRE declare."""
+    return [verifier_outil(entree["nom"], entree["version"])
+            for entree in OUTILS_SONDES]
+
+
+def mesurer_tout():
+    """La mesure complete : une seule structure, lue par la fiche ET par verifier."""
+    return {
+        "systeme": detecter_systeme(),
+        "ressources": mesurer_ressources(),
+        "reseau": mesurer_reseau(),
+        "outils": mesurer_outils(),
+    }

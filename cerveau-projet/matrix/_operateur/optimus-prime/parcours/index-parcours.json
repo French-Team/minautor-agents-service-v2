@@ -82,6 +82,12 @@
       "theme": "PURIFICATION",
       "fichier": "themes/theme-purification.json",
       "statut": "pret"
+    },
+    {
+      "ordre": 14,
+      "theme": "CADRAGE",
+      "fichier": "themes/theme-cadrage.json",
+      "statut": "pret"
     }
   ]
 }

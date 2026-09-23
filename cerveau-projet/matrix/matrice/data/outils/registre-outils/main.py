@@ -1,0 +1,233 @@
+"""Point d entree global du REGISTRE DES OUTILS (EO-314).
+
+Role : DIRIGER (parser la commande, router vers la categorie). Aucune logique metier
+ici (convention-architecture-outils).
+
+LA BDD (`matrice/data/registre-outils.json`) est un ETAT, pas un JOURNAL : elle dit ce
+que le parc EST maintenant (nom, proprietaire, domicile, chemins, but, snippet,
+empreinte) -- la ou `usages-outils-combos.jsonl` (16 140 lignes) raconte ce qui a ete
+APPELE. Deux natures, deux domiciles, aucun recouvrement : le registre ne duplique
+pas le journal des usages.
+
+L USAGE RESTE EXTRAIT DE LA BRIQUE (M-076 / L-032) : le but et le snippet ranges ici
+sont une COPIE, et l EMPREINTE est le PRIX de ce confort -- quand la brique bouge,
+`verifier` l ACCUSE, au lieu de laisser une description morte servir de base a une
+proposition. La BDD se REGENERE par `rafraichir` : elle ne s edite pas a la main.
+
+Usage :
+    python main.py rafraichir
+        (inventorie le parc et ECRIT la BDD ; la BDD se regenere, jamais a la main)
+    python main.py verifier
+        (perimes, disparus, non enregistres, muets -- et le remede est `rafraichir`)
+    python main.py lire [--proprietaire <optimus|matrice|cameleon>] [--servis]
+        (la BDD ; `--servis` ne montre que ce que l injection sait servir)
+    python main.py proposer --theme "..." --objectif "..." [--plafond N]
+        (la PROPOSITION d une liste d outils, chacun avec SON MOTIF, bornee par le
+         plafond de l injection : elle N ECRIT RIEN et imprime le geste qui la pose)
+
+Codes : 0 = OK, 1 = ecart constate ou rien a proposer, 2 = refus (jamais un silence).
+"""
+import sys
+
+from constants import CLES, STATUT_MUET
+
+import etat
+import extraction
+import proposition as module_proposition
+
+COMMANDES = ("rafraichir", "verifier", "lire", "proposer")
+# UN DRAPEAU EST AUSSI UNE OPTION CONNUE (contrat du domicile options.py, point 4) :
+# `drapeaux` dit seulement qu il n attend pas de VALEUR. Oublier `servis` dans les
+# noms connus le ferait refuser comme inconnue -- mesure du 2026-09-20, corrigee ici.
+OPTIONS_LIRE = ("proprietaire", "servis")
+DRAPEAUX_LIRE = ("servis",)
+OPTIONS_PROPOSER = ("theme", "objectif", "plafond")
+
+
+def _options(arguments, noms_connus, drapeaux=()):
+    """Les options par le DOMICILE partage (EO-158) : le contrat est consomme, jamais recopie."""
+    from options import extraire_options
+    return extraire_options(arguments, noms_connus, drapeaux=drapeaux,
+                            outil="registre-outils -- " + " ".join(COMMANDES),
+                            usage=__doc__)
+
+
+def rafraichir(arguments=()):
+    """Inventorie le parc et ECRIT la BDD. Rend 0, ou 2 si l extracteur manque.
+
+    AUCUNE OPTION n est declaree (T2/T4 de PB-002) : tout --xxx est donc REFUSE et
+    NOMME par le domicile, AVANT toute ecriture -- un verbe qui ne declare rien ne
+    doit pas AVALER une option inconnue en silence (defaut mesure le 2026-09-20 :
+    `registre-outils rafraichir --option-bidon` rendait code 0, la BDD regeneree).
+    """
+    _options(arguments, ())
+    try:
+        module = extraction.charger_extracteur()
+    except extraction.ExtracteurIntrouvable as refus:
+        print("REFUS : " + str(refus))
+        return 2
+    entrees, homonymes, perimetre = extraction.inventorier(module)
+    nombre = etat.enregistrer(entrees, perimetre, homonymes)
+    muettes = [entree[CLES["nom"]] for entree in entrees
+               if entree[CLES["statut"]] == STATUT_MUET]
+    print("Registre rafraichi : " + str(nombre) + " brique(s) inventoriee(s) sur "
+          + str(len(perimetre)) + " domicile(s).")
+    for dossier in sorted(perimetre):
+        detail = perimetre[dossier]
+        print("  " + detail["proprietaire"].ljust(9)
+              + ("servi       " if detail["servi_a_l_injection"] else "inventorie  ")
+              + str(detail["briques"]).rjust(3) + " brique(s)  " + dossier)
+    print("  (`servi` DIT ce que l injection sait servir : les autres domiciles sont"
+          " inventories, pas servis.)")
+    if homonymes:
+        print("  HOMONYMES (un nom dans deux domiciles -- l injection resout par ordre de"
+              " racine) :")
+        for homonyme in homonymes:
+            print("    " + homonyme["nom"] + " : " + ", ".join(homonyme["chemins"])
+                  + " -> sert " + (homonyme["servi_par_la_resolution"] or "(aucun)"))
+    if muettes:
+        print("  MUETTES (aucun usage lisible, enregistrees ET accusees) : "
+              + ", ".join(muettes))
+    return 0
+
+
+def verifier(arguments=()):
+    """Les quatre ecarts entre la BDD et le parc REEL. Rend 0 si rien, 1 sinon.
+
+    AUCUNE OPTION n est declaree (T2/T4 de PB-002) : tout --xxx est REFUSE et NOMME.
+    """
+    _options(arguments, ())
+    donnees = etat.charger()
+    if donnees is None:
+        print("REFUS : aucune BDD de registre : lance d abord `python main.py rafraichir`"
+              " (le registre n invente pas un parc).")
+        return 1
+    try:
+        ecarts, frais = extraction.verifier(donnees)
+    except extraction.ExtracteurIntrouvable as refus:
+        print("REFUS : " + str(refus))
+        return 2
+    print("== REGISTRE DES OUTILS : verifier ==")
+    print("  BDD : " + str(len(donnees.get("outils", []))) + " entree(s), generee le "
+          + str(donnees.get("genere_le", "?")))
+    print("  parc : " + str(len(frais)) + " brique(s) lue(s) maintenant")
+    total = sum(len(ecarts[cle]) for cle in ecarts)
+    for cle, libelle in (("perimes", "PERIMES (le texte source a change)"),
+                         ("disparus", "DISPARUS (declares, plus dans le parc)"),
+                         ("non_enregistres", "NON ENREGISTRES (dans le parc, absents de la BDD)"),
+                         ("muets", "MUETS (aucun usage lisible)")):
+        for ecart in ecarts[cle]:
+            if cle == "muets":
+                print("  " + libelle + " : " + str(ecart))
+            elif cle == "perimes":
+                print("  " + libelle + " : " + ecart["nom"] + " (" + ecart["chemin"]
+                      + ") -- modifie : " + ", ".join(ecart["modifie"]))
+            else:
+                print("  " + libelle + " : " + ecart["nom"] + " (" + ecart["chemin"] + ")")
+    if total:
+        print("VERDICT : " + str(total) + " ecart(s) -- le remede est `rafraichir`"
+              " (une description perimee servirait la proposition).")
+        return 1
+    print("VERDICT OK : la BDD dit le parc, et le parc dit la BDD.")
+    return 0
+
+
+def lire(arguments):
+    """Affiche la BDD, filtrable par proprietaire. Rend 0, ou 1 si la BDD manque."""
+    options = _options(arguments, OPTIONS_LIRE, DRAPEAUX_LIRE)
+    proprietaire = (options.get("proprietaire") or "").strip()
+    servis_seulement = "servis" in options
+    donnees = etat.charger()
+    if donnees is None:
+        print("REFUS : aucune BDD de registre : lance d abord `python main.py rafraichir`.")
+        return 1
+    entrees = donnees.get("outils", [])
+    if proprietaire:
+        entrees = [entree for entree in entrees
+                   if entree.get(CLES["proprietaire"]) == proprietaire]
+    if servis_seulement:
+        entrees = [entree for entree in entrees if entree.get(CLES["servi"])]
+    print("== REGISTRE DES OUTILS -- " + str(len(entrees)) + " entree(s)"
+          + (" (proprietaire " + proprietaire + ")" if proprietaire else "")
+          + (" (servis seulement)" if servis_seulement else "") + " ==")
+    for entree in entrees:
+        print("  " + entree[CLES["nom"]].ljust(30)
+              + entree[CLES["proprietaire"]].ljust(9)
+              + ("servi " if entree[CLES["servi"]] else "inv.  ")
+              + entree[CLES["statut"]].ljust(7)
+              + entree[CLES["but"]][:90])
+    return 0
+
+
+def proposer(arguments):
+    """La PROPOSITION d une liste d outils pour un item. N ECRIT RIEN."""
+    options = _options(arguments, OPTIONS_PROPOSER)
+    theme = (options.get("theme") or "").strip()
+    objectif = (options.get("objectif") or "").strip()
+    if not theme and not objectif:
+        print("Usage : python main.py proposer --theme \"...\" --objectif \"...\""
+              " [--plafond N]")
+        return 2
+    plafond = extraction.charger_plafond()
+    if options.get("plafond"):
+        try:
+            plafond = int(options["plafond"])
+        except ValueError:
+            print("REFUS : --plafond attend un nombre, pas "
+                  + repr(options["plafond"]) + ".")
+            return 2
+    if not plafond:
+        print("REFUS : le PLAFOND de l injection est illisible ("
+              + str(extraction.CHEMIN_PLAFOND) + ") -- une proposition SANS borne se lit"
+              " comme un conseil ferme.")
+        return 2
+    donnees = etat.charger()
+    if donnees is None:
+        print("REFUS : aucune BDD de registre : lance d abord `python main.py rafraichir`.")
+        return 1
+    mots = module_proposition.mots_de_la_demande(theme, objectif)
+    if not mots:
+        print("Aucun mot UTILE dans le theme et l objectif : la proposition serait du"
+              " bruit -- pose la liste a la main (preparer --outils).")
+        return 1
+    proposees, ecartees, _candidates = module_proposition.proposer(
+        donnees.get("outils", []), mots, plafond)
+    print("== PROPOSITION D OUTILS (mots utiles : " + ", ".join(mots) + ") ==")
+    if not proposees:
+        print("  Aucune brique servie ne partage un mot avec cette demande : rien a"
+              " proposer -- pose la liste a la main (preparer --outils).")
+        return 1
+    for proposition in proposees:
+        print("  " + proposition["nom"].ljust(30) + proposition["proprietaire"].ljust(9)
+              + "motif : " + ", ".join(proposition["motif"]))
+    if ecartees:
+        print("  ECARTEES par le plafond (" + str(plafond) + ", le plafond de"
+              " l injection) : "
+              + ", ".join(item["nom"] + " (" + ", ".join(item["motif"]) + ")"
+                          for item in ecartees))
+    print("  PROPOSITION, pas decision : RIEN n a ete pose. Le geste (la porte de"
+          " preparation de l entonnoir d Optimus) :")
+    print("    python3 lancer.py entonnoir preparer --id EO-XXX --outils "
+          + ",".join(proposition["nom"] for proposition in proposees))
+    return 0
+
+
+def principal(arguments):
+    if not arguments or arguments[0] not in COMMANDES:
+        print(__doc__)
+        return 2
+    if arguments[0] == "rafraichir":
+        return rafraichir(arguments[1:])
+    if arguments[0] == "verifier":
+        return verifier(arguments[1:])
+    if arguments[0] == "lire":
+        return lire(arguments[1:])
+    return proposer(arguments[1:])
+
+
+if __name__ == "__main__":
+    # Le SAC A DOS est la porte commune des outils (usage journalise dans
+    # usages-outils-combos.jsonl, refus de l option en tete, enveloppe) : une porte
+    # qui l oublie est MUETTE au journal -- sa mesure serait aveugle (contrat 6b).
+    from sac_a_dos import envelopper
+    sys.exit(envelopper(principal, sys.argv[1:]))

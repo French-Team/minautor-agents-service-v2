@@ -12,6 +12,7 @@ from commun import (
 )
 from file.fonctions import (
     afficher_file,
+    afficher_lot,
     charger_lot,
     charger_mission,
     enregistrer_mission,
@@ -51,6 +52,11 @@ def executer(arguments):
         code, message = retirer_du_lot(charger_file(), ids, options.get("motif", ""))
         print(message)
         return code
+    if len(arguments) >= 2 and arguments[0] == "lot" and arguments[1] == "etat":
+        # lot etat : AFFICHE le lot ARME -- rang k/n, item d'origine, type, urgence,
+        # statut (MO-380). Le lot ne se lisait qu'en ouvrant le JSON a la main ; le
+        # cockpit appelle ce verbe au lieu de redecouper la source lui-meme.
+        return afficher_lot(charger_file())
     if arguments and arguments[0] == "lot":
         return charger_lot(arguments[1:], charger_file)
     if arguments and arguments[0] == "transformer":

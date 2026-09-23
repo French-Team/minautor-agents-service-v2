@@ -12,6 +12,7 @@ import sys
 
 from constants import (
     CHEMIN_OUTIL_BDD_VARIABLES,
+    NOM_OUTIL_BDD_VARIABLES,
     CLE_PERIMETRE,
     ENCODAGE,
     RAISON_PERIMETRE,
@@ -27,6 +28,8 @@ from transport_listes import (  # noqa: E402
     decouper_liste,
     joindre_liste,
 )
+# EO-287 : la resolution d un outil par son NOM est PARTAGEE (un seul domicile).
+from resolution_outils import chemin_outil  # noqa: E402
 
 
 def normaliser_zones(brut):
@@ -47,7 +50,7 @@ def deleguer_definir(cle, valeur, source, tags):
     d'ecriture ne reste jamais muet.
     """
     commande = [
-        sys.executable, "main.py", "definir",
+        sys.executable, str(chemin_outil(NOM_OUTIL_BDD_VARIABLES)), "definir",
         "--cle", cle,
         "--valeur", valeur,
         "--source", source,

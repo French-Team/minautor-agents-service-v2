@@ -20,13 +20,13 @@ Le systeme de profil utilisateur permet de personnaliser les interactions entre 
 
 ### Verifier l'etat du profil
 ```bash
-python main.py profil            # etat + champs restants
-python3 verifier-profil.py       # meme etat, lecture directe
+python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py profil # etat + champs restants
+python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/verifier-profil.py # meme etat, lecture directe
 ```
 
 ### Guidage sur le parcours (voie officielle)
 ```bash
-python main.py profil --guider
+python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py profil --guider
 ```
 Affiche le parcours **USER-PROFIL** (but + questions, une seule a la fois,
 regle du theme) puis **charge la mission** de remplissage dans la file
@@ -35,14 +35,14 @@ le guidage ne cree jamais de doublon. Fiche complete = silence.
 
 ### Remplir le profil (questionnaire direct)
 ```bash
-python main.py profil --remplir
-python3 questionnaire.py
+python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py profil --remplir
+python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/profil/questionnaire.py
 ```
 
 ### Verification automatique au demarrage
 Le gestionnaire de cycle verifie automatiquement le profil au demarrage :
 ```bash
-python3 injection/cycle.py demarrer
+python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/injection/cycle.py demarrer
 ```
 
 ### Alerte automatique (routine vigie-profil, Flux 1)
@@ -71,6 +71,24 @@ L'etat de la fiche n'est calcule qu'a UN endroit : le motif partage
 Le gestionnaire de cycle verifie le profil :
 - Si le profil n'est pas rempli, le questionnaire se lance automatiquement
 - Si le profil est rempli, le cycle continue normalement
+
+## Injection dans le sac-a-dos (2026-09-21)
+
+Mesure du jour : la fiche etait **remplie** mais **aucun agent ne la lisait** --
+le pilote ne l ouvrait qu au DEMARRAGE (`injection/cycle.py`), pour tester si la
+ligne `**Pseudo**` etait remplie, puis jetait le contenu.
+
+Le profil voyage desormais avec **chaque mission** d Optimus, sous le champ
+`profil` de l injection (`injection/fonctions.py`, `charger_profil_utile`) :
+
+- les **champs ATTENDUS remplis**, dans l ordre du motif partage ;
+- **bornes** par `PLAFOND_PROFIL_TOKENS` (300 tokens, `pilote/constants.py`) et
+  **peses** avec le reste du sac-a-dos (`CHAMPS_PESES`) ;
+- les champs **vides** sont DITS (`a_remplir`), les champs **coupes** aussi
+  (`ecartes_par_plafond`), et une fiche **absente ou illisible** rend un
+  avertissement NOMME (le bloc ne se vide jamais en silence).
+
+Garde : `verifier-profil-injection.py` (maillon 33 de la non-regression).
 
 ## Avantages
 

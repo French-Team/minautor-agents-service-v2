@@ -1,0 +1,38 @@
+---
+identite:
+  type: analyse
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# REVISION MO-304 -- LA REVISION VERIFIEE, ET SON CINQUIEME VERDICT
+
+> Item EO-300 (demande createur, [revision]) : "verifier le fonctionnement des
+> rotations, des .bak, des archives, des audits et des constats. Pourquoi
+> vivent-ils si longtemps, si les informations importantes sont dans les BDD ?"
+> Livrable attendu : la mesure de ce qui existe (qui cree quoi, qui survit
+> combien de temps, ou c est lu), puis la politique proposee, avec preuve et garde.
+>
+> MO-305 a livre la MESURE (rapport-revision-MO-305.md) et la politique P1-P4 ;
+> MO-306 a MO-311 les ont implementees. Ce round RE-MESURE chaque piece au lieu
+> de la croire -- et nomme ce que la revision avait laisse dehors.
+
+## 1. Les cinq objets, re-mesures le 2026-09-20
+
+| Objet | Qui cree | Combien de temps il vit | Ou c est lu | Mesure du jour |
+|---|---|---|---|---|
+| `.bak` (points de restauration) | la porte `ecrire`, AVANT chaque publication | jusqu a la rotation : le plus recent reste EN PLACE, tout point remplace part a l archive | `revert-fichier.py`, le balayage, la rotation | 669 fichiers, 8,4 Mo (MO-305 : 1191 / 17,1 Mo le meme jour) |
+| la ROTATION | `balayer` (decisions) puis `archiver --lot oui` (acte) | une famille ne garde qu UN point en place | `controler-borne`, `controler-plafond`, le revert | BORNE N=1 TENUE : 334 EN PLACE pour 351 familles ; 0 acte en attente (plafond 8) |
+| les ARCHIVES | la rotation, au domicile `purification/archives` (zone invisible) | jusqu a la PREUVE de recouvrabilite (P3) -- sinon elle reste | `restaurer`, `controler-archives` | 343 fichiers, 7,3 Mo (897 / 18 Mo avant la purge MO-308 ; 115 / 3,2 Mo juste apres : l archive REGROSSIT, et c est mesure) |
+| les AUDITS | les missions d audit, par la porte | tant qu ils sont CITES | les missions suivantes, les conventions | 4 documents, 2 jours, cites par 3, 5, 8 et 5 documents : ils vivent parce qu on les lit, pas par inertie |
+| les CONSTATS | personne : il n y a PAS de famille `constat` | la duree de vie de leur document PORTEUR | la ou leur document est lu | aucun fichier ni dossier `*constat*` : le constat est une SECTION (audits, conventions, rapports) |
+
+## 2. La politique, verifiee piece par piece (pas recopiee)
+
+| Piece | La promesse | Comment elle est verifiee | Verdict |
+|---|---|---|---|
+| P1 (MO-306) | la fin du pilote JOUE la rotation au lieu de la declarer | `fin/fonctions.py` appelle `archiver_famille_conservation` ; mesure : 0 acte en attente | TENUE |
+| P2 (MO-309) | hors le dernier point par famille, les `.bak` ages sortent du disque | `controler-borne` mesure la MEME borne des DEUX cotes (registre + disque) | TENUE (334 / 351, aucun exces) |
+| P3 (MO-308) | une archive n est supprimee que RECOUVRABLE, preuve citee | `purger --lot oui` joue a chaque cloture ; 828 archives purgees, 0 anomalie | TENUE |
+| P4 (MO-309) | un garde accuse au-dela d un plafond declare | `controler-plafond` : plafond 8, en attente 0 | TENUE |
+| perimetre (MO-311) | chaque entree du registre est MESUREE ou DECLAREE avec son motif | `controler-archives` nomme 9 entrees hors perimetre declare | TENUE |

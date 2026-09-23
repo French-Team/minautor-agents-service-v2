@@ -1,0 +1,44 @@
+# OUTIL -- pilote (squelette v0)
+
+> Le pilote multi-missions de la Matrice : charge PLUSIEURS missions, les lance
+> EN SERIE STRICTE (une seule a la fois, jamais de parallele), ecrit dans les BDD
+> et communique par intercom. Ce squelette pose le socle : file de missions,
+> injection ordonnee, fin de mission.
+
+## Options
+
+```python3 cerveau-projet/matrix/matrice/pilote/main.py file -> affiche la file (missions en attente + en cours) python3 cerveau-projet/matrix/matrice/pilote/main.py charger --theme <nom> --objectif "..." -> ajoute une mission a la file python3 cerveau-projet/matrix/matrice/pilote/main.py transformer --id M-00X --theme <nom> --objectif "..." -> re-etiquette une mission EN ATTENTE (jamais en cours ni terminee) python3 cerveau-projet/matrix/matrice/pilote/main.py statut -> etat de la mission en cours python3 cerveau-projet/matrix/matrice/pilote/main.py injecter -> prepare l'injection ordonnee de la mission suivante (priorite : lot, puis file, puis TRESSE -- puisage auto : tisser, puis tete du brin) python3 cerveau-projet/matrix/matrice/pilote/main.py fin --bilan "..." -> cloture la mission en cours ; avec un lot : enchainement k/n + RETOUR consolide ; SANS lot : la suivante (file ou TRESSE) DEMARRE automatiquement (E-008)```
+
+## Regles respectees
+
+- SERIE STRICTE : une seule mission "en cours" a la fois. `injecter` refuse
+  si une mission est deja en cours (regles-immuables/serie-stricte.md).
+- INJECTION ORDONNEE : theme + objectif + lecons utiles (tagues) de la BDD
+  `lecons.json` (si elle existe) + normalisation (regles-immuables/injections-ordonnees.md).
+- CHAMP THEME FERME : `charger`, `lot` et `transformer` refusent un theme hors
+  vivier (code 2 + liste des themes disponibles) -- validation contre
+  `data/vivier-themes.json`, canonisation a la porte (casse ignoree :
+  'pilote' est enregistre 'PILOTE'). Vivier absent/vide -> degradation
+  signalee (theme accepte sans verification, jamais bloquant). EXCEPTION
+  VOLONTAIRE : la tresse reste ouverte (le vrac de l'entonnoir accepte le
+  brut, bloquer le brin tuerait le cycle de l'entonnoir).
+- PUISAGE AUTO : sans lot ni mission chargee, `injecter` puise la TETE DU BRIN
+  de la tresse (echelon 4) -- toujours `tisser` avant (brin frais et deterministe),
+  via la porte officielle de l'entonnoir (sous-processus, jamais d'import croise).
+  La priorite createur est conservee : lot et file passe AVANT la tresse.
+- BDD : chaque fin de mission est JOURNALISEE en ajout seul dans
+  `data/historiques-missions.jsonl`.
+- INTERCOM : l'injection est deposee dans `intercom/pilote/outbox.jsonl`,
+  la fin de mission dans `intercom/matrice/inbox.jsonl`.
+
+## Architecture (convention-architecture-outils)
+
+| Piece | Role |
+|---|---|
+| DESCRIPTION.md | la facade (ce fichier) |
+| main.py | point d'entree global : DIRIGE |
+| constants.py | chemins file/injection, valeurs |
+| commun.py | fonctions communes : file, entetes, intercom, historique |
+| file/ | charger + transformer + afficher la file |
+| injection/ | statut + injecter (ordre, filtre, normalise) |
+| fin/ | cloturer une mission, journaliser, relancer la suivante |

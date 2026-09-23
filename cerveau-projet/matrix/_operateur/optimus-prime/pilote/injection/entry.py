@@ -3,7 +3,7 @@
 Interface entre main.py et les fonctions simples (injection/fonctions.py).
 Integre le gestionnaire de cycle pour les injections automatiques.
 """
-from commun import charger_file, extraire_options, lire_bilan
+from commun import charger_file, extraire_options, lire_bilan, noter_prise_round
 from injection.fonctions import afficher_statut, conduire, enchainer, preparer_injection
 
 # Le gestionnaire de cycle vit DANS la porte qu'il sert : import qualifie, et
@@ -21,7 +21,23 @@ def executer(arguments):
         # Demarrer le cycle et preparer l'injection
         cycle = CycleOptimus()
         cycle.demarrer()
-        return preparer_injection(charger_file)
+        # LA PRISE DE ROUND (EO-360, demande du createur 2026-09-22) : le GESTE DE
+        # RECEPTION note l acte de PRENDRE le round. Sans lui, trois traces (file
+        # en-cours, debut pose par la machine, injection deposee) disent que le round
+        # a commence alors que PERSONNE ne l a pris -- et AUCUN garde ne les separe.
+        # Il est note APRES la preparation : l injection vient peut-etre d etre
+        # servie, et le refus de la serie stricte (round DEJA arme) est exactement le
+        # cas de la reprise apres une cloture. JAMAIS bloquant.
+        code = preparer_injection(charger_file)
+        noter_prise_round(charger_file)
+        return code
+    if arguments and arguments[0] == "prendre":
+        # EO-360 : PRENDRE LE ROUND ARME. C est le geste de la BOUCLE (ORDRE 4.7) :
+        # apres un `fin`, la chaine a DEJA servi et arme la mission suivante, donc
+        # `injecter` REFUSE (serie stricte -- il n y a plus rien a injecter pour lui).
+        # Un refus n est pas une prise : ce verbe ne prepare RIEN, il DECLARE la prise
+        # de la mission courante, par le meme chemin que la reception.
+        return noter_prise_round(charger_file)
     if arguments and arguments[0] == "enchainer":
         return enchainer(charger_file)
     if arguments and arguments[0] == "conduire":
@@ -31,7 +47,13 @@ def executer(arguments):
         if not identifiant:
             print('Usage : python main.py conduire --id MO-00X')
             return 2
-        return conduire(charger_file, identifiant)
+        code = conduire(charger_file, identifiant)
+        # EO-360 : `conduire` EST un geste de reception (la mission chargee devient
+        # COURANTE et son injection part). La PRISE est donc tracee ici comme pour
+        # `injecter` -- sans cela, la seule voie HORS lot serait accusee a tort par la
+        # panne round-arme-jamais-pris (un round pris sans prise tracee).
+        noter_prise_round(charger_file)
+        return code
     if arguments and arguments[0] == "mission":
         # Gestion des phases de mission via le cycle
         if len(arguments) < 2:

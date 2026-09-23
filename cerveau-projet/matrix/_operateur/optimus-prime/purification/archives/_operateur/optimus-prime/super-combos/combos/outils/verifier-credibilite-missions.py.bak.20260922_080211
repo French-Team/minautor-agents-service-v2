@@ -1,0 +1,478 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""verifier-credibilite-missions.py -- PROCESS : une mission ANCIENNE est-elle encore CREDIBLE ?
+
+DEMANDE CREATEUR (2026-09-22) : < quand on reprend des missions anciennes, on doit
+mettre en place un process pour verifier & valider leur credibilite avant de les
+executer ; on doit definir QUI et QUAND, cela doit etre fait >.
+
+QUI : l OPERATEUR juge. Cet outil ne juge pas a sa place -- il MESURE les faits et
+PROPOSE un verdict ; le verdict est pose par l operateur, NOMME et TRACE. Une mesure
+n est pas un verdict, et un verdict sans trace n existe pas.
+QUAND : a la REPRISE d un lot, AVANT d executer une mission RESTAUREE (voir
+conventions/convention-credibilite-mission-ancienne.md, invoquee par ORDRE 2 du
+demarrage et rappelee par la checklist commune).
+
+POURQUOI (mesure du 2026-09-22) : le lot REPRISE DU RETARD fait 37 missions
+deposees la veille et jamais revalidees ; leur texte decrit un etat du projet qui a
+pu changer. Une mission ancienne peut etre DEJA FAITE par une plus recente, PERIMEE
+parce que le fichier qu elle nomme n existe plus, ou A REVOIR parce qu aucune mesure
+ne permet de trancher. Executer sans regarder, c est payer deux fois.
+
+CE QU'IL MESURE, par mission (LECTURE SEULE) :
+  1. l AGE : les jours depuis la charge (`chargee_le`) -- l anciennete est un fait,
+     pas un soupcon ;
+  2. les PREMISSES : les fichiers et chemins que l OBJECTIF NOMME existent-ils
+     ENCORE sur le disque (un nom mort rend la mission perimee) ;
+  3. le DOUBLON : une mission PLUS RECENTE et TERMINEE porte-t-elle deja le meme
+     sujet -- la regle de ressemblance est CONSOMMEE de son domicile
+     (pilote/filtrer/cadrage.py : mots significatifs + seuil), jamais recopiee (M-076) ;
+  4. la SOURCE : l item d origine (EO-N) est-il encore TRACABLE dans les donnees de
+     l entonnoir (file ou tombe des items consommes) ;
+  5. le VERDICT : a-t-il DEJA ete rendu et TRACE (le journal des verdicts).
+
+CE QU'IL NE FAIT PAS : il ne modifie AUCUNE mission, aucun item, aucun fichier de la
+Matrice -- sauf `--juger`, qui ajoute UNE ligne au journal des verdicts, par la
+PORTE d ecriture (jamais a la main).
+
+Usage :
+  python verifier-credibilite-missions.py [--lot <nom>] [--racine <chemin>]
+  python verifier-credibilite-missions.py --mission MO-342
+  python verifier-credibilite-missions.py --juger --mission MO-342 --verdict credible --motif "..."
+  python verifier-credibilite-missions.py --auto-test
+  code 0 = rien a signaler, 1 = au moins une mission ANCIENNE a executer est SANS
+  verdict (le process n a pas ete joue), 2 = racine ou fichier illisible.
+"""
+
+import argparse
+import importlib.util
+import json
+import re
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+
+# --- DOMICILES (jamais recopies d ailleurs) ---------------------------------
+DOSSIER_PILOTE = ("_operateur", "optimus-prime", "pilote")
+NOM_FICHIER_MISSIONS = "file-missions-optimus.json"
+MOTIF_ENTONNOIR = "*entonnoir*json*"
+DOSSIER_CREDIBILITE = ("_operateur", "optimus-prime", "credibilite")
+NOM_JOURNAL = "credibilite-verdicts.jsonl"
+CHEMIN_REGLE_DOUBLON = ("filtrer", "cadrage.py")
+DOSSIER_COMMUN = ("matrice", "data", "commun")
+NOM_SERVICE_RESOLUTION = "resolution_outils.py"
+NOM_PORTE_ECRIRE = "ecrire"
+
+# --- LA REGLE DU PROCESS (declarations fermees) -----------------------------
+SEUIL_JOURS = 2
+VERDICTS = ("credible", "perimee", "deja-faite", "a-revoir")
+VERDICT_TRACE_INCONNU = "(aucun)"
+STATUTS_A_EXECUTER = ("en-attente", "en-cours", "reportee")
+LONGUEUR_MIN_CHEMIN = 8
+MOTIF_FICHIER = re.compile(r"[A-Za-z0-9_.-]+\.(?:py|json|jsonl|md|txt)")
+MOTIF_ITEM = re.compile(r"\bEO-\d+\b")
+PRESENT = "present"
+ABSENT = "absent"
+PRESENT_FICHIER_REGLE = "regle de ressemblance CONSOMMEE de son domicile"
+FICHIER_REGLE_ABSENT = "regle de ressemblance INTROUVABLE"
+
+RESULTATS = []
+
+
+def controler(nom, condition, detail=""):
+    RESULTATS.append((nom, bool(condition), detail))
+    print("[" + ("OK" if condition else "KO") + "] " + nom + " : " + detail)
+    return bool(condition)
+
+
+def accuser(detail):
+    """Imprime un ECART dans le FORMAT que l appelant extrait ([KO] ...) -- L-163."""
+    print("[KO] " + detail)
+
+
+def trouver_racine(depart):
+    """La racine du depot (qui porte cerveau-projet/matrix), ou None."""
+    for candidat in (depart, depart / "cerveau-projet" / "matrix", depart / "matrix"):
+        if (candidat / Path(*DOSSIER_PILOTE) / NOM_FICHIER_MISSIONS).is_file():
+            return candidat
+    return None
+
+
+def charger_missions(racine):
+    """{id: mission} lu du fichier du pilote -- la SOURCE, jamais une copie."""
+    chemin = racine.joinpath(*DOSSIER_PILOTE, NOM_FICHIER_MISSIONS)
+    try:
+        donnees = json.loads(chemin.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as erreur:
+        return None, "fichier des missions illisible (" + type(erreur).__name__ + ")"
+    missions = {}
+
+    def parcourir(noeud):
+        if isinstance(noeud, dict):
+            identifiant = str(noeud.get("id") or "")
+            if identifiant.startswith("MO-"):
+                missions.setdefault(identifiant, noeud)
+            for valeur in noeud.values():
+                parcourir(valeur)
+        elif isinstance(noeud, list):
+            for element in noeud:
+                parcourir(element)
+
+    parcourir(donnees)
+    if not missions:
+        return None, "aucune mission lue dans " + str(chemin)
+    return missions, ""
+
+
+def charger_regle_doublon(racine):
+    """(mots_significatifs, doublon_avec, avis) : la regle CONSOMMEE de son domicile.
+
+    Le domicile est un MODULE du pilote : il est charge par son CHEMIN (jamais
+    importe par un nom nu, convention B-1). Un domicile illisible rend un AVIS --
+    la mesure du doublon se DIT non mesurable au lieu de se deviner.
+    """
+    chemin = racine.joinpath(*DOSSIER_PILOTE, *CHEMIN_REGLE_DOUBLON)
+    if not chemin.is_file():
+        return None, "domicile de la regle introuvable : " + str(chemin)
+    pilote = chemin.parent.parent
+    if str(pilote) not in sys.path:
+        sys.path.insert(0, str(pilote))
+    try:
+        specification = importlib.util.spec_from_file_location("regle_du_cadrage", chemin)
+        module = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(module)
+        return (module.mots_significatifs, module.doublon_avec), PRESENT_FICHIER_REGLE
+    except Exception as erreur:  # noqa: BLE001 -- un domicile illisible se DIT
+        return None, ("regle illisible (" + type(erreur).__name__ + " : "
+                      + str(erreur)[:60] + ")")
+
+
+def indexer_fichiers(racine):
+    """Les noms de fichiers presents sur le disque (un seul parcours, indexe)."""
+    noms = set()
+    for chemin in racine.rglob("*"):
+        if chemin.is_file():
+            noms.add(chemin.name)
+    return noms
+
+
+def extraire_jetons(texte):
+    """Les fichiers et chemins que le texte NOMME (une mesure, pas une devinette)."""
+    jetons = []
+    for brut in str(texte or "").replace("\n", " ").split():
+        jeton = brut.strip("(),;:<>\"'[]`")
+        if not jeton:
+            continue
+        chemin = "/" in jeton and len(jeton) >= LONGUEUR_MIN_CHEMIN
+        fichier = bool(MOTIF_FICHIER.fullmatch(jeton))
+        if chemin or fichier:
+            if jeton not in jetons:
+                jetons.append(jeton)
+    return jetons
+
+
+def mesurer_premisses(racine, jetons, noms_disque):
+    """(verifies, manquants) : chaque jeton nomme-t-il ENCORE quelque chose sur le disque ?"""
+    verifies, manquants = [], []
+    for jeton in jetons:
+        if "/" in jeton:
+            existe = (racine / jeton).exists()
+        elif (Path(*DOSSIER_PILOTE) / jeton).exists():
+            existe = True
+        else:
+            existe = jeton in noms_disque
+        (verifies if existe else manquants).append(jeton)
+    return verifies, manquants
+
+
+def numero_de(identifiant):
+    chiffres = "".join(caractere for caractere in str(identifiant or "") if caractere.isdigit())
+    return int(chiffres) if chiffres else 0
+
+
+def date_de_charge(mission):
+    return str(mission.get("chargee_le") or mission.get("injectee_le") or "")
+
+
+def age_jours(date_texte, maintenant):
+    """Les jours ecoules depuis cet horodatage, ou None si illisible (et le None se DIT)."""
+    try:
+        moment = datetime.strptime(str(date_texte)[:19], "%Y-%m-%d %H:%M:%S")
+    except (ValueError, TypeError):
+        return None
+    return max(0, (maintenant - moment).days)
+
+
+def doublon_pour(mission, missions, mots_significatifs, doublon_avec):
+    """La mission PLUS RECENTE et TERMINEE qui porte deja ce sujet, ou (None, []).
+
+    La comparaison porte sur le TITRE (le sujet), jamais sur le corps : la regle
+    (mots significatifs, seuil) vient du domicile, elle n est pas reecrite ici.
+    """
+    if mots_significatifs is None:
+        return None, []
+    titre = str(mission.get("titre") or mission.get("theme") or "")
+    reference = date_de_charge(mission)
+    candidats = [str(autre.get("titre") or autre.get("theme") or "")
+                 for autre in missions.values()
+                 if str(autre.get("statut")) == "terminee"
+                 and date_de_charge(autre) and date_de_charge(autre) > reference]
+    return doublon_avec(titre, candidats)
+
+
+def source_tracable(racine, identifiants):
+    """(tracables, perdus) : les items d origine retrouves dans les donnees de l entonnoir."""
+    dossier = racine.joinpath(*DOSSIER_PILOTE)
+    textes = []
+    for chemin in sorted(dossier.glob(MOTIF_ENTONNOIR)):
+        try:
+            textes.append(chemin.read_text(encoding="utf-8", errors="replace"))
+        except OSError:
+            continue
+    bloc = "\n".join(textes)
+    tracables, perdus = [], []
+    for identifiant in identifiants:
+        (tracables if re.search(re.escape(identifiant) + r"\b", bloc) else perdus).append(identifiant)
+    return tracables, perdus
+
+
+def charger_verdicts(racine):
+    """{mission: verdict} lu du JOURNAL des verdicts (le seul, a son domicile)."""
+    chemin = racine.joinpath(*DOSSIER_CREDIBILITE, NOM_JOURNAL)
+    verdicts = {}
+    if not chemin.is_file():
+        return verdicts, "journal des verdicts encore VIDE (aucun verdict rendu)"
+    try:
+        lignes = chemin.read_text(encoding="utf-8").split("\n")
+    except OSError as erreur:
+        return verdicts, "journal illisible (" + type(erreur).__name__ + ")"
+    for ligne in lignes:
+        if not ligne.strip():
+            continue
+        try:
+            entree = json.loads(ligne)
+        except ValueError:
+            continue
+        if isinstance(entree, dict) and entree.get("mission"):
+            verdicts[str(entree["mission"])] = entree
+    return verdicts, ""
+
+
+def proposer_verdict(age, manquants, doublon, source_perdue, seuil):
+    """Le verdict PROPOSE par les faits -- l operateur reste libre de le retourner."""
+    if doublon:
+        return "deja-faite", "une mission plus recente et TERMINEE porte deja ce sujet"
+    if manquants:
+        return "perimee", ("le(s) nom(s) suivant(s) n existe(nt) plus sur le disque : "
+                           + ", ".join(sorted(manquants)[:3]))
+    if age is None:
+        return "a-revoir", "la date de charge est illisible : l anciennete n est pas mesurable"
+    if age < seuil:
+        return "credible", ("chargee depuis " + str(age) + " jour(s) : sous le seuil de "
+                            + str(seuil) + " jour(s) declare(s)")
+    if source_perdue:
+        return "a-revoir", ("l item d origine n est plus tracable : "
+                            + ", ".join(source_perdue[:2]))
+    return "credible", ("premisses tenues, aucune reprise constatee, age " + str(age) + " jour(s)")
+
+
+def mesurer_mission(racine, mission, missions, regle, noms_disque, seuil, maintenant):
+    """Les FAITS d une mission, dans l ordre ou ils se lisent."""
+    objectif = str(mission.get("objectif") or "")
+    age = age_jours(date_de_charge(mission), maintenant)
+    jetons = extraire_jetons(objectif)
+    verifies, manquants = mesurer_premisses(racine, jetons, noms_disque)
+    mots_significatifs, doublon_avec = regle if regle else (None, None)
+    doublon, communs = doublon_pour(mission, missions, mots_significatifs, doublon_avec)
+    identifiants = MOTIF_ITEM.findall(objectif) + MOTIF_ITEM.findall(str(mission.get("source") or ""))
+    identifiants = list(dict.fromkeys(identifiants))
+    _, perdues = source_tracable(racine, identifiants)
+    verdict, motif = proposer_verdict(age, manquants, doublon, perdues, seuil)
+    return {
+        "age": age, "jetons": jetons, "verifies": verifies, "manquants": manquants,
+        "doublon": doublon, "communs": communs, "source_perdue": perdues,
+        "source_attendue": identifiants, "propose": verdict, "motif": motif,
+    }
+
+
+def mission_ancienne(faits, seuil):
+    return faits["age"] is None or faits["age"] >= seuil
+
+
+def juger(racine, mission_id, verdict, motif):
+    """Ajoute UNE ligne au journal des verdicts, par la PORTE (jamais a la main)."""
+    chemin_porte = resoudre_porte(racine)
+    if chemin_porte is None:
+        print("REFUS : la porte d ecriture est introuvable (nom '" + NOM_PORTE_ECRIRE + "').")
+        return 2
+    entree = {
+        "mission": mission_id, "verdict": verdict, "motif": motif,
+        "juge_le": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "par": "operateur",
+    }
+    journal = racine.joinpath(*DOSSIER_CREDIBILITE, NOM_JOURNAL)
+    mode = "ajouter" if journal.is_file() else "creer"
+    commande = [sys.executable, str(chemin_porte), "ecrire", "--fichier", str(journal),
+                "--contenu", json.dumps(entree, ensure_ascii=False, sort_keys=True) + "\n",
+                "--mode", mode]
+    resultat = subprocess.run(commande, capture_output=True, text=True, encoding="utf-8",
+                              errors="replace")
+    sortie = ((resultat.stdout or "") + (resultat.stderr or "")).strip()
+    if resultat.returncode != 0:
+        print("REFUS de la porte : " + sortie[-300:])
+        return 2
+    print("VERDICT TRACE : " + mission_id + " = " + verdict + " (" + mode + ")")
+    return 0
+
+
+def resoudre_porte(racine):
+    """Le chemin de la porte d ecriture, par la RESOLUTION PARTAGEE (M-076), ou None."""
+    commun = racine.joinpath(*DOSSIER_COMMUN)
+    if not (commun / NOM_SERVICE_RESOLUTION).is_file():
+        return None
+    if str(commun) not in sys.path:
+        sys.path.insert(0, str(commun))
+    try:
+        import resolution_outils
+        return Path(resolution_outils.chemin_outil(NOM_PORTE_ECRIRE))
+    except Exception:  # noqa: BLE001 -- une resolution muette ne doit pas lever ici
+        return None
+
+
+def auto_test():
+    """Le MEME detecteur doit MORDRE, et EPARGNER le juge (lecon L-032)."""
+    maintenant = datetime.now()
+    seuil = SEUIL_JOURS
+    recent = {"id": "MO-900", "statut": "en-attente", "titre": "sujet tout neuf",
+              "chargee_le": maintenant.strftime("%Y-%m-%d %H:%M:%S"), "objectif": "rien a nommer"}
+    vieille = {"id": "MO-901", "statut": "en-attente", "titre": "sujet ancien precis",
+               "chargee_le": (maintenant.replace(year=maintenant.year - 1)).strftime("%Y-%m-%d %H:%M:%S"),
+               "objectif": "reparer cerveau-projet/chemin/qui/n/existe/plus.py"}
+    ancienne_propre = {"id": "MO-902", "statut": "en-attente", "titre": "sujet ancien sain",
+                       "chargee_le": (maintenant.replace(year=maintenant.year - 1)).strftime("%Y-%m-%d %H:%M:%S"),
+                       "objectif": "lire " + __file__}
+    missions = {m["id"]: m for m in (recent, vieille, ancienne_propre)}
+    regle = (lambda texte: ["mot"], lambda titre, autres: (None, []))
+    vide_noms = set()
+    faits_vieille = mesurer_mission(Path("."), vieille, missions, regle, vide_noms, seuil, maintenant)
+    faits_recente = mesurer_mission(Path("."), recent, missions, regle, vide_noms, seuil, maintenant)
+    faits_propre = mesurer_mission(Path("."), ancienne_propre, missions, regle, vide_noms, seuil,
+                                   maintenant)
+    mord = (faits_vieille["propose"] == "perimee" and faits_vieille["manquants"]
+            and mission_ancienne(faits_vieille, seuil))
+    epargne_neuve = (faits_recente["propose"] == "credible"
+                     and not mission_ancienne(faits_recente, seuil))
+    epargne_saine = (faits_propre["propose"] == "credible"
+                     and mission_ancienne(faits_propre, seuil))
+    print("cobaye credibilite : vieille+sujet mort -> " + faits_vieille["propose"]
+          + " (attendu perimee) -- mord : " + str(mord))
+    print("cobaye credibilite : recente -> " + faits_recente["propose"]
+          + " (attendu credible, hors alarme) -- epargnee : " + str(epargne_neuve))
+    print("cobaye credibilite : ancienne saine -> " + faits_propre["propose"]
+          + " (attendu credible) -- epargnee : " + str(epargne_saine))
+    return mord and epargne_neuve and epargne_saine
+
+
+def main():
+    parseur = argparse.ArgumentParser(
+        description="Process : une mission ANCIENNE est-elle encore CREDIBLE ?")
+    parseur.add_argument("--racine", default=".", help="racine du depot")
+    parseur.add_argument("--lot", default="", help="ne mesurer que ce lot")
+    parseur.add_argument("--mission", default="", help="ne mesurer que cette mission")
+    parseur.add_argument("--seuil-jours", type=int, default=SEUIL_JOURS,
+                         help="age (jours) a partir duquel une mission est ANCIENNE")
+    parseur.add_argument("--juger", action="store_true", help="TRACER un verdict")
+    parseur.add_argument("--verdict", default="", help="verdict parmi " + ", ".join(VERDICTS))
+    parseur.add_argument("--motif", default="", help="le motif du verdict (obligatoire)")
+    parseur.add_argument("--auto-test", action="store_true", help="ne joue que le cobaye")
+    arguments = parseur.parse_args()
+
+    if arguments.auto_test:
+        ok = auto_test()
+        print("\nVERDICT : " + ("OK" if ok else "KO"))
+        return 0 if ok else 1
+
+    racine = trouver_racine(Path(arguments.racine).resolve())
+    if racine is None:
+        print("REFUS : racine introuvable (aucun fichier de missions du pilote).")
+        return 2
+    missions, message = charger_missions(racine)
+    if missions is None:
+        print("REFUS : " + message)
+        return 2
+
+    if arguments.juger:
+        if arguments.verdict not in VERDICTS:
+            print("REFUS : verdict '" + str(arguments.verdict) + "' hors de la liste fermee : "
+                  + ", ".join(VERDICTS))
+            return 2
+        if not arguments.mission or not arguments.motif.strip():
+            print("REFUS : --juger exige --mission <MO-XXX> et --motif \"...\""
+                  " (un verdict sans motif ne s explique pas).")
+            return 2
+        return juger(racine, arguments.mission, arguments.verdict, arguments.motif.strip())
+
+    regle, avis_regle = charger_regle_doublon(racine)
+    noms_disque = indexer_fichiers(racine)
+    verdicts, avis_journal = charger_verdicts(racine)
+    maintenant = datetime.now()
+
+    portee = [mission for mission in missions.values()
+              if str(mission.get("statut")) in STATUTS_A_EXECUTER]
+    if arguments.lot:
+        portee = [mission for mission in portee if str(mission.get("lot")) == arguments.lot]
+    if arguments.mission:
+        portee = [mission for mission in portee if str(mission.get("id")) == arguments.mission]
+    portee.sort(key=lambda mission: date_de_charge(mission))
+
+    print("PROCESS DE CREDIBILITE -- missions a executer : " + str(len(portee))
+          + " | seuil d anciennete : " + str(arguments.seuil_jours) + " jour(s)")
+    print("  " + (PRESENT_FICHIER_REGLE if avis_regle == PRESENT_FICHIER_REGLE else avis_regle))
+    if avis_journal:
+        print("  " + avis_journal)
+
+    sans_verdict, comptes = [], {}
+    for mission in portee:
+        identifiant = str(mission.get("id"))
+        faits = mesurer_mission(racine, mission, missions, regle, noms_disque,
+                                arguments.seuil_jours, maintenant)
+        trace = verdicts.get(identifiant, {})
+        verdict_trace = str(trace.get("verdict") or VERDICT_TRACE_INCONNU)
+        comptes[verdict_trace] = comptes.get(verdict_trace, 0) + 1
+        ancienne = mission_ancienne(faits, arguments.seuil_jours)
+        print("  " + identifiant + " [" + str(mission.get("type")) + "] age="
+              + str(faits["age"]) + " j | noms=" + str(len(faits["jetons"]))
+              + " (morts " + str(len(faits["manquants"])) + ") | doublon="
+              + (faits["doublon"] or "aucun")[:40] + " | verdict TRACE=" + verdict_trace
+              + " | propose=" + faits["propose"])
+        if ancienne and verdict_trace == VERDICT_TRACE_INCONNU:
+            sans_verdict.append((identifiant, faits))
+
+    for identifiant, faits in sans_verdict:
+        accuser("mission-ancienne-sans-verdict : " + identifiant + " (age " + str(faits["age"])
+                + " j, propose " + faits["propose"] + ") -- " + faits["motif"])
+
+    controler("regle-de-ressemblance-consommee", regle is not None, avis_regle)
+    controler("missions-anciennes-jugees", not sans_verdict,
+              str(len(sans_verdict)) + " mission(s) ANCIENNE(S) sans verdict sur "
+              + str(len(portee)) + " a executer")
+    hors_liste = sorted(cle for cle in comptes
+                        if cle != VERDICT_TRACE_INCONNU and cle not in VERDICTS)
+    controler("verdicts-traces-dans-la-liste-fermee", not hors_liste,
+              str(len(verdicts)) + " verdict(s) trace(s) au journal"
+              + (" -- HORS LISTE : " + ", ".join(hors_liste) if hors_liste else ""))
+    print("  journal des verdicts : " + (str(len(verdicts)) + " entree(s)" if verdicts
+                                          else "encore AUCUN verdict rendu"))
+
+    if sans_verdict:
+        print("\nVERDICT : LE PROCESS N A PAS ETE JOUE -- " + str(len(sans_verdict))
+              + " mission(s) ANCIENNE(S) seraient executees sans verdict. Les juger AVANT :"
+              " python verifier-credibilite-missions.py --juger --mission <MO-XXX>"
+              " --verdict <" + "|".join(VERDICTS) + "> --motif \"...\"")
+        return 1
+    print("\nVERDICT OK : toute mission ANCIENNE a executer porte un verdict TRACE.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

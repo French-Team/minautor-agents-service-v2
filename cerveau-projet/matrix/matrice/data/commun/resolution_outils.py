@@ -1,0 +1,191 @@
+"""Resolution d'une BRIQUE du workspace par son NOM (source UNIQUE, EO-287 / MO-295).
+
+Pourquoi ce module existe : les appelants INTERNES recopiaient chacun le chemin de la
+brique qu'ils appelaient (`data/outils/<nom>/main.py`). Le jour ou l'outil est renomme ou
+deplace, l'appel echouait SANS DIRE POURQUOI -- un traceback opaque au lieu d'un refus
+nomme. Ici la resolution ET le refus vivent UNE fois (M-076, zero duplication) ; la facade
+CLI `matrix/lancer.py` les reutilise, et les documents (le demarrage) n'ecrivent plus de
+chemin de brique a la main.
+
+QUATRE FAMILLES, dans l'ORDRE de priorite :
+  1. `outil`     : `matrice/data/outils/<nom>/main.py`      (enfant DIRECT) ;
+  2. `routine`   : `matrice/routines/<nom>/main.py`         (enfant DIRECT) ;
+  3. `operateur` : `_operateur/optimus-prime/**/main.py`,   profondeur BORNEE (<= 2) ;
+  4. `script`    : les .py des domiciles DECLARES de l'operateur (`<nom>.py`).
+  5. derniere regle : un chemin `.py` EXISTANT (un script qui n'est pas une brique).
+
+Pourquoi l'operateur (MO-295) : le pilote et l'entonnoir d'Optimus n'ont pas de main.py
+sous `data/outils` -- ils n'etaient donc PAS nommables, et le demarrage les ecrivait en
+chemin ancre recopie. La profondeur est BORNEE parce qu'une fouille large ramasserait les
+entrailles des combos et de la zone jetable, qui ne sont pas des briques de commande.
+
+Contrat :
+    chemin_outil(nom) -> Path du main.py, ou leve OutilIntrouvable (refus nomme).
+    resoudre(nom)     -> (chemin, None) ou (None, message) : la facade CLI.
+
+Le refus NOMME dit le nom fautif, les noms proches et le remede -- il ne devine jamais,
+et il ne rend JAMAIS None en silence.
+"""
+import difflib
+from pathlib import Path
+
+# La racine se DETECTE par le motif partage (L-013 / MO-088) : jamais `parents[N]`
+# nus, qui cassent a la premiere profondeur qui change. `cible` porte le motif.
+from cible import racine_matrice
+
+RACINE_MATRIX = racine_matrice(__file__)
+RACINE_MATRICE = RACINE_MATRIX / "matrice"
+DOSSIER_OUTILS = RACINE_MATRICE / "data" / "outils"
+DOSSIER_ROUTINES = RACINE_MATRICE / "routines"
+
+# L'ordre fait la PRIORITE : un outil avant une routine homonyme (meme regle
+# que la facade matrix/lancer.py, qui lit ce module).
+FAMILLES = (("outil", DOSSIER_OUTILS), ("routine", DOSSIER_ROUTINES))
+
+# --- L'OPERATEUR : ses briques vivent HORS de la Matrice --------------------
+# Le domicile est DECLARE (meme motif que `zone_tmp.DOMICILE_ZONE_OPTIMUS`), jamais
+# un chemin invente au fil de l'eau.
+DOMICILE_OPERATEUR = ("_operateur", "optimus-prime")
+DOSSIER_OPERATEUR = RACINE_MATRIX.joinpath(*DOMICILE_OPERATEUR)
+FAMILLE_OPERATEUR = "operateur"
+FAMILLE_SCRIPT = "script"
+# BORNEE : l'entonnoir range un cran sous le pilote, les combos un cran sous
+# `super-combos`. Aller plus bas ramasserait un cobaye, pas une brique.
+PROFONDEUR_OPERATEUR = 2
+# La ZONE JETABLE n'est pas un domicile : un cobaye ne doit pas devenir une brique.
+ZONES_EXCLUES = ("tmp-optimus",)
+# Les domiciles ou un `.py` EST une commande (brique) de l'operateur.
+DOMICILES_SCRIPTS = ("super-combos/combos/outils", "super-combos", "cockpit",
+                     "espions", "remorque")
+MOTIF_BRIQUE = "*/main.py"
+
+_CACHE = None
+
+
+class OutilIntrouvable(RuntimeError):
+    """Le nom ne resout aucune brique : le message EST le refus nomme."""
+
+
+def briques_operateur(profondeur=PROFONDEUR_OPERATEUR):
+    """Les briques de l'operateur (`main.py`) a une profondeur BORNEE.
+
+    Le cran 1 porte le pilote, le cran 2 l'entonnoir et les entrees des super-combos.
+    La zone jetable est ECARTEE : un cobaye n'est pas une brique.
+    """
+    if not DOSSIER_OPERATEUR.is_dir():
+        return []
+    trouves = []
+    for cran in range(1, profondeur + 1):
+        motif = "/".join(["*"] * cran) + "/main.py"
+        trouves.extend(p for p in DOSSIER_OPERATEUR.glob(motif)
+                       if not any(zone in p.parts for zone in ZONES_EXCLUES))
+    return sorted(trouves)
+
+
+def scripts_operateur():
+    """Les `.py` des domiciles DECLARES -- un script nomme y est une commande."""
+    trouves = []
+    for chemin in DOMICILES_SCRIPTS:
+        dossier = DOSSIER_OPERATEUR / chemin
+        if not dossier.is_dir():
+            continue
+        trouves.extend(p for p in dossier.glob("*.py") if ".bak" not in p.name)
+    return sorted(trouves)
+
+
+def entrer_outils():
+    """(famille, nom, main.py) pour chaque brique resolvable par son NOM."""
+    briques = []
+    for famille, dossier in FAMILLES:
+        if not dossier.is_dir():
+            continue
+        for principal in sorted(dossier.glob(MOTIF_BRIQUE)):
+            briques.append((famille, principal.parent.name, principal))
+    for principal in briques_operateur():
+        briques.append((FAMILLE_OPERATEUR, principal.parent.name, principal))
+    for principal in scripts_operateur():
+        briques.append((FAMILLE_SCRIPT, principal.stem, principal))
+    return briques
+
+
+def par_nom():
+    """Le nom -> sa brique, dans l'ORDRE de priorite des familles (jamais devine)."""
+    global _CACHE
+    if _CACHE is None:
+        _CACHE = {}
+        for _, nom, principal in entrer_outils():
+            _CACHE.setdefault(nom, principal)
+    return _CACHE
+
+
+def noms_connus():
+    """Les noms resolvables, tries -- sert au refus (noms proches) et au --lister."""
+    return sorted(par_nom())
+
+
+# Le seuil de PROXIMITE du refus, declare ici (zero valeur en dur a l usage) : le
+# seuil usuel de difflib -- assez haut pour ne pas ramasser n importe quoi, assez bas
+# pour attraper une lettre oubliee, transposee ou remplacee.
+SEUIL_PROXIMITE = 0.6
+
+
+def noms_proches(nom, noms=None):
+    """Les noms PROCHES d un nom fautif : par INCLUSION, puis par PROXIMITE (MO-367).
+
+    LE DEFAUT MESURE (2026-09-20) : la relation etait une SOUS-CHAINE, donc une
+    LETTRE INSEREE ne rendait AUCUN proche -- < entonoir > ne proposait rien, quand
+    < garde-flux > trouvait < garde-flux2 > qui le CONTIENT. Or la faute de frappe
+    est le cas ORDINAIRE d un nom inconnu : l aide se taisait exactement quand on en
+    avait besoin.
+
+    La regle est donc la PROXIMITE (difflib, stdlib), COMPLETEE par l inclusion :
+    une inclusion est une proximite certaine (le nom fautif est un prefixe, un
+    suffixe ou un fragment d un nom reel), la distance couvre le reste -- la lettre
+    inseree, transposee ou remplacee. La regle vit ICI, en UN seul endroit (M-076),
+    et elle est PURE : elle propose, elle ne devine jamais.
+    """
+    noms = noms_connus() if noms is None else list(noms)
+    if not nom:
+        return []
+    proches = [n for n in noms if nom in n or n in nom]
+    for candidat in difflib.get_close_matches(nom, noms, n=8, cutoff=SEUIL_PROXIMITE):
+        if candidat not in proches:
+            proches.append(candidat)
+    return proches
+
+
+def refus_nom(nom):
+    """Le refus NOMME : le nom fautif, les noms proches, le remede."""
+    proches = noms_proches(nom)
+    message = "nom inconnu : " + nom
+    if proches:
+        message += " -- proches : " + ", ".join(proches[:8])
+    message += " -- remede : --lister, ou un .py existant (chemin ancre)"
+    return message
+
+
+def resoudre(nom):
+    """Rend (main.py, None) ou (None, refus nomme).
+
+    Un chemin .py EXISTANT reste accepte (derniere regle) : la facade CLI sert
+    aussi a lancer un script qui n'est pas une brique nommee.
+    """
+    connu = par_nom().get(nom)
+    if connu is not None:
+        return connu, None
+    direct = Path(nom)
+    if nom.endswith(".py") and direct.is_file():
+        return direct.resolve(), None
+    return None, refus_nom(nom)
+
+
+def chemin_outil(nom):
+    """Rend le main.py de la brique <nom> -- ou REFUSE en la nommant.
+
+    Aucun appelant ne fabrique ce chemin lui-meme : un chemin recopie ne se
+    plaint jamais quand l'outil disparait, il rend un traceback opaque.
+    """
+    chemin, refus = resoudre(nom)
+    if refus is not None:
+        raise OutilIntrouvable(refus)
+    return chemin

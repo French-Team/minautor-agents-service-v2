@@ -1723,7 +1723,443 @@
         "porte"
       ],
       "source": "MO-246 / reprise du garde verifier-chaines (constat N6 de MO-220)"
+    },
+    {
+      "id": "L-133",
+      "date": "2026-09-20 20:36:02",
+      "lecon": "UNE TRACE DE MISSION S ECRIT APRES LA FILE, JAMAIS AVANT : la premiere trace de MO-326 a ete notee sous l id MO-325 (le COMPTEUR portait 325 sans mission) parce que la file n avait pas ete consultee -- le garde coherence a accuse l ecart (\"MO-325 : declaree au journal, INCONNUE de la file\"), et il a fallu la porte enregistrer pour retablir. Ordre sur : charger/conduire la mission, PUIS tracer.",
+      "tags": [
+        "trace",
+        "coherence",
+        "pilote",
+        "lecon"
+      ],
+      "source": "MO-326 (regle des archives datees)"
+    },
+    {
+      "id": "L-134",
+      "date": "2026-09-20 20:36:02",
+      "lecon": "PROUVER, C EST MESURER LES OCTETS : git hash-object applique les FILTRES de git (le depot porte la forme normalisee, LF). Une archive CRLF de 3993 octets \"prouvait\" un blob de 3982 : la restauration rendait un autre contenu que celui purge. La preuve d une purge se prend SANS filtre (hash-object --no-filters) -- un filtre n est pas une copie.",
+      "tags": [
+        "conservation",
+        "git",
+        "preuve",
+        "lecon"
+      ],
+      "source": "MO-326 (preuve_git_exacte)"
+    },
+    {
+      "id": "L-135",
+      "date": "2026-09-20 20:46:07",
+      "lecon": "RENOMMER UNE FONCTION, C EST PAYER TOUS SES APPELANTS : preuve_git est devenue preuve_git_normalisee, et la porte des archives datees l appelait encore -- NameError, donc code 1 dans la cloture. Le defaut n a pas ete silencieux (l ALERTE du pilote l a crie et l a note au marbre) : c est le controle qui a fait son travail, pas le hasard. Avant de renommer, mesurer TOUS les appels (grep sur le nom, pas sur le fichier).",
+      "tags": [
+        "reparation",
+        "preuve",
+        "lecon"
+      ],
+      "source": "MO-328 (reparation du renommage)"
+    },
+    {
+      "id": "L-136",
+      "date": "2026-09-21 06:27:02",
+      "lecon": "UN NOM LU QUE RIEN NE LIE (un nom LU, pas un APPEL) ECHAPPE AU COMPILATEUR ET AU GARDE DES IMPORTS : seul un cobaye qui EXECUTE le chemin le voit. Mesure du 2026-09-21 (MO-329) : charger_profil_utile() lisait REPERTOIRE_PILOTE sans l avoir importe dans injection/fonctions.py -- py_compile dit OK (le nom vit dans une fonction jamais jouee par la suite), le garde d ordre de la porte ecrire dit OK (il ne juge que les IMPORTS) et le garde des appels non lies regarde les APPELS, pas les noms LUS. Un NameError serait donc parti a la PREMIERE injection reelle, sur le chemin de travail. La regle : sur un chemin NEUF, le cobaye doit EXECUTER la fonction (importer le module ne suffit pas), et une constante se LIT a son domicile (REPERTOIRE_PILOTE vient de constants.py), jamais recalculee sur place.",
+      "tags": [
+        "cobaye",
+        "py-compile",
+        "import",
+        "garde",
+        "pilote"
+      ],
+      "source": "MO-329"
+    },
+    {
+      "id": "L-137",
+      "date": "2026-09-21 06:55:55",
+      "lecon": "UNE PROMESSE SANS CHEMIN EST UNE PROMESSE CASSEE, ET L ACTE SE COLLE A L ACTEUR : le README de la remorque affirmait depuis toujours que bilan-matrice rappelle son etat, et bilan-matrice.py ne prononcait pas le mot (mesure du 2026-09-21 : 0 occurrence). Le meme jour, le meme trou de l autre cote : l agent CREE de l equipement (creer-outil.py est dans sa liste servie de type dev) et AUCUN des trois actes qui le creent -- creer-outil.py, creer-combo.py, le registre outils-readme.md -- ne disait de le DECLARER ; seul le PRE-VOL du pilote connaissait le remede, l acteur jamais. Le remede n est PAS de pousser l inventaire dans le sac-a-dos : 101 noms sans usage est exactement ce que le createur a rejete le 2026-09-20, et 86 de ces 101 sont deja servis AVEC leur usage. Le remede est d ecrire la clause dans le DOMICILE de la brique qui cree (M-076) : le mode d emploi etant EXTRAIT de ce domicile, la clause atteint l agent sur la mission qui appelle l outil, a COUT ZERO (mesure : la carte des 30 briques reste a 829 tokens, et charger_modes_emploi sur une mission de type dev rend la clause). Et une promesse se repare en nommant ses joueurs REELS (PRE-VOL, bilan, /flux2), pas en la reecrivant plus fort.",
+      "tags": [
+        "promesse",
+        "declaration",
+        "equipement",
+        "remorque",
+        "injection",
+        "M-076"
+      ],
+      "source": "MO-330"
+    },
+    {
+      "id": "L-138",
+      "date": "2026-09-21 07:08:24",
+      "lecon": "L UTILITE SE CALCULE AVANT DE PLACER UN CONTENU, JAMAIS PAR SYMETRIE DES FAMILLES : devant 8 documents equilibres (4 protocoles + 4 conventions), le reflexe symetrique etait de les servir ensemble au meme endroit. Le calcul a tranche autrement, sur DEUX axes mesurables. (1) DECLENCHEUR : qui invoque le document ? proto-4 est appele par le theme auto-evolution, proto-3 et proto-5 par indices.md -- donc des situations de PLEINE MISSION ; proto-8 n a AUCUN declencheur (0 citation dans le code, 0 dans les routes, 0 dans les gardes) : le rendre visible ne le rendra pas utilise, et il faut le DIRE. (2) DEJA-GARDE : le document est-il deja police ailleurs ? convention-zero-valeurs-en-dur l est par l etape 20 de la non-regression, convention-integrite-sha256 par l espion et le PRE-VOL, convention-architecture-outils par verifier-contrat-fondamental -- un garde qui REFUSE en NOMMANT le remede vaut mieux qu un rappel repete a chaque mission. Resultat : les PROTOCOLES en avant-mission (+640 tokens/mission), les CONVENTIONS au demarrage (+589 une fois par session) -- et ce n est PAS la meme place pour deux familles de meme taille. Corollaire paye : mon ESTIMATION du poids (870 tokens) etait fausse de 40 pour cent contre la MESURE (1229) : on ne place pas un contenu sur une estimation quand le peseur officiel existe.",
+      "tags": [
+        "injection",
+        "utilite",
+        "placement",
+        "mesure",
+        "protocoles",
+        "conventions"
+      ],
+      "source": "MO-331"
+    },
+    {
+      "id": "L-139",
+      "date": "2026-09-21 07:34:39",
+      "lecon": "UN POINTEUR DOIT VOYAGER SUR UN PORTEUR QUI SURVIT : avant d ecrire un renvoi vers un equipement (<< la route complete : protocoles/proto-N... >>), il faut MESURER lequel des champs de la mission arrive vraiment a l agent. Cas paye (MO-332, proto-8) : trois porteurs candidats, un seul survit. (1) le THEME -- la veille depose avec theme 'reparer <cible>' ; le CLASSEMENT le remplace ensuite : 0 mission sur 331 porte encore 'reparer <cible>'. Une route appuyee sur le theme serait donc MORTE, et rien ne le dirait. (2) le champ SOURCE -- il portait l urgence dans l ancien format ('entonnoir:E-084:audit/marbre:bloquante', 8 missions) ; le format recent est court ('entonnoir:EO-XXX') et il ne la porte PLUS : un rappel du pilote qui detecterait la route par ce champ ne verrait plus rien. (3) l OBJECTIF -- il survit MOT POUR MOT dans le briefing. C est donc la veille elle-meme, chez celui qui SAIT que le declencheur a tire, qui ecrit le nom de la route dans l objectif. Lecon generale : un equipement invisible ne se repare pas en le citant quelque part, mais en le nommant SUR LE PORTEUR QUI SURVIT -- et le porteur se MESURE (compter combien d objets portent encore la signature), il ne se suppose pas.",
+      "tags": [
+        "injection",
+        "route",
+        "equipement",
+        "veille",
+        "proto-8",
+        "porteur",
+        "mesure"
+      ],
+      "source": "MO-332"
+    },
+    {
+      "id": "L-140",
+      "date": "2026-09-21 07:45:09",
+      "lecon": "Un GARDE qui valide une FORME doit etre CALIBRE sur les donnees reelles, sinon il accuse des enregistrements SAINS -- et le script de MESURE peut porter le meme defaut que le code teste. Mesure du 2026-09-21 : le garde de la source exigeait l'ere d'identifiant recente (EO-N) et accusait donc 18 missions COMPLETES de l'ere ancienne (E-N) ; et mon propre script de mesure, qui supposait la meme ere, avait classe ces 18 longues en courtes (150/46 annonces la ou la verite etait 96/46). Le remede est le meme des deux cotes : confronter le motif a un ECHANTILLON REEL, et faire compter le detecteur sur des TEMOINS des deux cotes (une borne qui epargne doit etre prouvee par un cas qu'elle epargne, pas seulement par un cas qu'elle accuse).",
+      "tags": [
+        "mesure",
+        "garde",
+        "borne",
+        "entonnoir",
+        "mo-333"
+      ],
+      "source": "MO-333 (2026-09-21)"
+    },
+    {
+      "id": "L-141",
+      "date": "2026-09-21 07:46:05",
+      "lecon": "Un DETAIL de porte passe en guillemets DOUBLES subit la substitution de commande : tout extrait cite entre apostrophes inversees est EXECUTE puis AVALE, et la porte enregistre un texte AMPUTE sans un mot (mesure du 2026-09-21 : 2 notes sur 4 -- les extraits nommant source_depuis_item(item), mission_depuis_item et entonnoir:<id>:<type>/<categorie>:<urgence> ont disparu, il ne restait que les TROUS). Le remede est double et il tient au geste plus qu a l outil : (1) apostrophes SIMPLES pour tout texte cite (le backtick y est inerte) ; (2) RELIRE l entree posee -- une porte qui valide la FORME d un enregistrement ne peut pas valider son SENS, donc c est l auteur qui verifie, et il repare en AJOUTANT (action corrige) plutot qu en reecrivant l histoire.",
+      "tags": [
+        "porte",
+        "shell",
+        "citation",
+        "relecture",
+        "mo-333"
+      ],
+      "source": "MO-333 (2026-09-21)"
+    },
+    {
+      "id": "L-142",
+      "date": "2026-09-21 07:54:16",
+      "lecon": "Un EDIT ancre sur une LIGNE DE DEFINITION la fait disparaitre si on ne la reecrit pas : le corps de la fonction se retrouve alors APRES un return (meme indentation = aucun refus) ou sous un autre nom, et py_compile ne voit RIEN -- seule l EXECUTION voit le NameError. Mesure du 2026-09-21 (MO-334) : mon insertion du cobaye de la memoire a avale la ligne def auto_test(...) et le corps du cobaye naissances s est glisse apres le return du nouveau cobaye ; le garde a plante au LANCEMENT, pas au py_compile. Regle : quand l ancre d un edit est une ligne de def (ou tout porteur de sens -- une ligne de table, un bout d import), l ancre doit etre REECRITE telle quelle dans le nouveau texte ; et tout fichier de code neuf ou modifie se lance, jamais seulement compile (famille L-136 : un nom lu que rien ne lie passe py_compile).",
+      "tags": [
+        "edit",
+        "porte",
+        "py_compile",
+        "execution",
+        "mo-334"
+      ],
+      "source": "MO-334 (2026-09-21)"
+    },
+    {
+      "id": "L-143",
+      "date": "2026-09-21 07:54:17",
+      "lecon": "Un producteur qui CONSOMME une donnee doit laisser une TOMBE -- l identite MINIMALE de ce qui part, dans son propre domicile -- sinon la donnee devient impossible a rendre ET a verifier apres coup. Mesure du 2026-09-21 : 46 missions d Optimus portaient une source amputee (type, categorie, urgence perdus) parce que l item consommateur de la mission emportait ses trois champs ; aucune tombe n existait, et RIEN ne pouvait les reconstituer (categorie 3/46, urgence 0/46). Trois regles pour une tombe qui tient : (1) elle se remplit AU MOMENT DE LA CONSOMMATION, au seul endroit qui retire (trois chemins de consommation = trois ecritures, un seul oubli rouvre la perte) ; (2) elle n est PAS une copie -- elle ne porte jamais un champ que l auto-soin reecrit ailleurs (ici source, que reparer_sources ecrase sur tout noeud) ; (3) elle ne PRIME JAMAIS sur le vivant : la donnee encore la fait foi, la tombe parle apres. Sa borne est STRUCTURELLE (une par element, jamais une par evenement), pas un plafond -- une tombe qui expirerait rouvrirait la perte qu elle ferme.",
+      "tags": [
+        "memoire",
+        "tombe",
+        "consommation",
+        "conception",
+        "mo-334"
+      ],
+      "source": "MO-334 (2026-09-21)"
+    },
+    {
+      "id": "L-144",
+      "date": "2026-09-21 08:10:10",
+      "lecon": "Un consommateur de plus exige un DOMICILE, pas une copie. La grammaire de la carte d identite vivait en UN SEUL exemplaire (le garde des cartes) : le moteur de recherche, second consommateur, ne pouvait la consommer qu en la dupliquant. M-076 ne s applique pas au moment ou la copie nait -- il s applique au moment ou le SECOND consommateur APPARAIT, et c est alors le PREMIER qui doit aussi se recabler (le garde a ete ramene au domicile), sinon la copie reste en place et diverge en silence (L-100).",
+      "tags": [
+        "domicile",
+        "architecture",
+        "consommation"
+      ],
+      "source": "MO-335"
+    },
+    {
+      "id": "L-145",
+      "date": "2026-09-21 08:10:10",
+      "lecon": "Le parseur partage d options garde UNE valeur par nom : une option repetee est ECRASEE en silence, et l appelant croit avoir restreint sa recherche alors que son premier filtre a disparu (L-055). Une option qui doit porter plusieurs valeurs prend donc UNE valeur groupee (separateur DECLARE) ET refuse la repetition en nommant la syntaxe -- mesurer le parseur AVANT de choisir la forme de l option, pas apres.",
+      "tags": [
+        "options",
+        "partage",
+        "silence"
+      ],
+      "source": "MO-335"
+    },
+    {
+      "id": "L-146",
+      "date": "2026-09-21 08:10:10",
+      "lecon": "Un champ LIBRE ne se controle pas par une liste tenue a la main : il se controle par le CORPUS. Mesure : les cartes reelles portent 3 cles obligatoires puis des cles libres (version, statut, date, tags...) -- une liste fermee refuserait des cartes conformes. C est donc le corpus LU qui detecte la faute : cle qu aucune carte ne porte = refus en nommant les cles vues, et 0 resultat qui DIT les valeurs existantes pour la cle demandee.",
+      "tags": [
+        "corpus",
+        "vocabulaire",
+        "refus"
+      ],
+      "source": "MO-335"
+    },
+    {
+      "id": "L-147",
+      "date": "2026-09-21 08:37:53",
+      "lecon": "Une duree ne se mesure pas sur deux bornes dont l une a ete creee APRES COUP. Mesure du 2026-09-21 : 59 missions portent un debut a la seconde exacte de leur fin, parce que le garde anti-fin-orphelin fabrique la borne manquante au moment de la cloture. Rendre 0 seconde fait passer un ARTEFACT pour une mesure (L-055) : la valeur honnete est `inconnue`, DITE avec sa cause, et le garde doit COMPTER la population -- une colonne qui se remplit d inconnue sans explication se lit comme une donnee perdue. Corollaire : quand on renverse une doctrine (ici le zero dit LEGITIME de MO-321), on inverse aussi le COBAYE qui la tenait, sinon le garde continue de prouver l ancienne regle.",
+      "tags": [
+        "duree",
+        "bornes",
+        "mesure"
+      ],
+      "source": "MO-336"
+    },
+    {
+      "id": "L-148",
+      "date": "2026-09-21 08:37:53",
+      "lecon": "Un outil qu on veut voir utilise se SERT, il ne se souhaite pas. Deux causes invisibles ont fait que l agent utilisait son outil de recherche NATIF : (1) le moteur etait declare dans 3 types de mission sur 5, absent des deux plus frequents (dev, reparation) -- la liste des outils se relit par TYPE, donc une absence se voit a la mesure, pas a la lecture ; (2) son mode d emploi servi faisait 47 caracteres, car l injection lit le DOCSTRING de la brique et l usage ne vivait que dans des print d aide. Un contrat qui n est pas la ou le consommateur le lit n existe pas.",
+      "tags": [
+        "outils",
+        "mode-emploi",
+        "injection"
+      ],
+      "source": "MO-336"
+    },
+    {
+      "id": "L-149",
+      "date": "2026-09-21 09:19:23",
+      "lecon": "Une porte appelee a un chemin RECALCULE ne dit pas qu elle n est pas la porte : elle dit n importe quoi. Mesure du 2026-09-21 : le moteur de cadrage recalculait le chemin du depot (pilote/main.py au lieu de pilote/entonnoir/main.py) et les 7 maillons ont ete refuses avec le DOCSTRING du pilote comme motif -- un refus qui ne nomme pas sa cause se lit comme un refus metier et envoie chercher au mauvais endroit. Un chemin de porte se RECOIT de son domicile (ici CHEMIN_DEPOT, detecte par marqueur) : le recalculer est une seconde copie qui compile.",
+      "tags": [
+        "porte",
+        "chemin",
+        "refus"
+      ],
+      "source": "MO-338"
+    },
+    {
+      "id": "L-150",
+      "date": "2026-09-21 09:19:23",
+      "lecon": "Le verdict d auto-validation est TEXTUEL et rendu A LA NAISSANCE : un enonce qui EXIGE une preuve sans NOMMER son moyen (verifier, rejouer, sha, empreinte, cobaye, test, contre-temoin) vote CONTRE, donc le verdict tombe NON, donc la chaine s ARRETE et rend la main au createur. Mesure du 2026-09-21 : les 7 maillons d un cadrage refuses pour ce seul motif ; en nommant l artefact reel (outil, garde, porte, fichiers, BDD) ET le moyen, 7/7 passent AUTO. Un moteur qui doit enchainer sans intervention ecrit donc ses preuves en nommant QUI verifie, pas seulement CE QU on exige.",
+      "tags": [
+        "auto-validation",
+        "preuve",
+        "chaine"
+      ],
+      "source": "MO-338"
+    },
+    {
+      "id": "L-151",
+      "date": "2026-09-21 09:19:23",
+      "lecon": "Le BRIN n est pas un ordre de chaine : il est tisse par urgence puis round-robin entre les files-types, donc une suite de missions deposee d un bloc y est EPARPILLEE et peut etre servie dans le desordre (mesure du 2026-09-21 : les 7 maillons d un cadrage aux positions [20, 22, 24, 26, 6, 27, 15], la MISSION avant ses audits). L ordre d une chaine doit etre PORTE par la chaine (un champ declare), jamais suppose du contenant ; et un moteur qui verse une suite doit MESURER cet ordre apres versement, ou dire qu il ne le porte pas.",
+      "tags": [
+        "brin",
+        "ordre",
+        "chaine"
+      ],
+      "source": "MO-338"
+    },
+    {
+      "id": "L-152",
+      "date": "2026-09-21 09:28:27",
+      "lecon": "Un verdict ne se perd pas : il devient INTROUVABLE quand on le cherche par la MAUVAISE IDENTITE. Mesure du 2026-09-21 : la decision d enchainement comparait l id de la MISSION (MO-N) a un index qui ne porte que des ids d ITEM (EO-N) -- aucune rencontre possible, donc une mission chargee perdait son verdict et la chaine s arretait APRES CHAQUE mission, ce qui accusait la REGLE alors que la faute etait dans l identite employee pour chercher (45 missions sur 83 sans trace, dont une dont l item EST dans l index). La provenance est le SEUL lien qui survit a la consommation de l item : elle doit donc etre RELISIBLE, chez un domicile unique.",
+      "tags": [
+        "enchainement",
+        "identite",
+        "verdict"
+      ],
+      "source": "MO-339"
+    },
+    {
+      "id": "L-153",
+      "date": "2026-09-21 09:28:27",
+      "lecon": "Un meme symptome a DEUX visages, et reparer sans les distinguer abaisse une garde au lieu de corriger une faute. Mesure : le STOP apres chaque mission etait (a) LEGITIME sur la tete du brin non auto-validee (regle du createur : le critique reste au createur) et (b) DEFECTUEUX sur une mission auto-validee jugee non faute d identite relisible. Corollaire : un arret qui NOMME la mission fautive se lit comme une decision ; le meme arret muet se lit comme une panne -- et un correctif qui ne NOMME pas ce qu il epargne ne prouve pas qu il ne l a pas abaisse.",
+      "tags": [
+        "stop",
+        "diagnostic",
+        "mesure"
+      ],
+      "source": "MO-339"
+    },
+    {
+      "id": "L-154",
+      "date": "2026-09-21 09:29:33",
+      "lecon": "Un texte passe en GUILLEMETS DOUBLES subit la substitution de commande : les extraits entoures d apostrophes inversees sont EXECUTES par le shell puis avales, et le detail arrive AMPUTE. Le piege a ete paye DEUX fois (MO-333 puis MO-339) parce qu il etait consigne en NOTE -- donc invisible pour celui qui ecrit -- et non en LECON : doctrine a partir d aujourd hui -- tout --detail contenant un nom de code se passe en APOSTROPHES SIMPLES, et on RELIT la note posee, car la porte ne detecte pas un texte ampute (elle le range tel quel).",
+      "tags": [
+        "shell",
+        "note",
+        "detail",
+        "evitement"
+      ],
+      "source": "MO-339"
+    },
+    {
+      "id": "L-155",
+      "date": "2026-09-21 09:37:20",
+      "lecon": "Un contrat qui EXISTE mais n ATTEINT personne n existe pas : ce qui se mesure n est pas la presence de la regle, c est le point ou elle est SERVIE. Mesure du 2026-09-21 : la consigne de continuite vivait depuis EO-274 et n etait servie que sous la condition < la mission est dans un LOT > -- or aucun lot n etait arme (0 sur 340 missions, 56 seulement en historique). L instruction etait donc invisible dans le cas le plus frequent, et elle accusait l agent de ne pas s en souvenir. Corollaire : un declencheur se mesure sur l ETAT REEL (combien d objets portent la condition ?), jamais sur l existence du texte.",
+      "tags": [
+        "contrat",
+        "injection",
+        "mesure"
+      ],
+      "source": "MO-318"
+    },
+    {
+      "id": "L-156",
+      "date": "2026-09-21 09:37:20",
+      "lecon": "Une dette de coherence ne se purge pas en l effacant : c est un ETAT TRANSITOIRE declare (EO-190 -- le report neutralise le debut sans terminer la mission, et l outil le MONTRE au lieu de le taire). Portes mesurees : la coherence ne corrige qu une duree, l archivage ne prend que le hors-perimetre et les doublons, et le pilote n a AUCUN verbe pour retirer une mission en attente seule. La seule purge honnete etait donc de CONDUIRE la mission jusqu a sa fin -- masquer la ligne ou abaisser la regle aurait transforme un signal vrai en mensonge, et le remede a un etat transitoire est de le TERMINER, pas de le cacher.",
+      "tags": [
+        "dette",
+        "coherence",
+        "purge"
+      ],
+      "source": "MO-340"
+    },
+    {
+      "id": "L-157",
+      "date": "2026-09-21 09:44:45",
+      "lecon": "Pour FORCER, un outil ne peut pas elever la voix : il FERME une porte. Mesure du 2026-09-21 : la regle de serie stricte vivait en SEPT endroits, ecrite de QUATRE facons, et elle MANQUAIT a la porte la plus utilisee (charger une mission) -- on pouvait donc ouvrir un travail neuf pendant qu une mission attendait, et la chaine mourait en silence, sans que rien ne l accuse. Un rappel DECRIT, un refus APPLIQUE : le forcage se prouve par une porte qui refuse pour de vrai (code 1, aucune creation, la mission NOMMEE avec ses DEUX remedes -- finir ou parquer), jamais par le ton du message.",
+      "tags": [
+        "forcer",
+        "refus",
+        "porte"
+      ],
+      "source": "MO-341"
+    },
+    {
+      "id": "L-158",
+      "date": "2026-09-21 09:44:45",
+      "lecon": "Aucun process ne demarre un LLM : le forcage maximal disponible est (1) un REFUS aux portes que l agent doit franchir, (2) le RE-ARMEMENT de l injection a chaque fin, et (3) la VISIBILITE de l etat. Dire cette limite fait partie du livrable -- sans elle, on croit avoir force une session qui, en realite, n a jamais ete demarree. Un outil peut rendre une continuite INDEPASSABLE ; il ne peut pas rendre une session IMMORTELLE.",
+      "tags": [
+        "limite",
+        "llm",
+        "forcage"
+      ],
+      "source": "MO-341"
+    },
+    {
+      "id": "L-159",
+      "date": "2026-09-21 09:55:38",
+      "lecon": "Un garde qui exige une SOURCE de la verite (ici : une tete de brin) accuse a tort l etat LEGITIME qui la remplace. Mesure du 2026-09-21 : le brin venait d etre verse en LOT (file verser) et le controle 6 du garde d enchainement rendait KO -- sur un etat parfaitement sain. Une mesure doit nommer la grandeur SERVIE (la tete servie : celle du brin, ou celle du lot), jamais une seule de ses sources.",
+      "tags": [
+        "garde",
+        "mesure",
+        "lot",
+        "enchainement"
+      ],
+      "source": "verifier-enchainement.py, controle 6 (round MO-342)"
+    },
+    {
+      "id": "L-160",
+      "date": "2026-09-21 09:55:52",
+      "lecon": "Un LOT arme passe AVANT la file dans l ordre d injection : une mission chargee HORS lot qui attend derriere un lot arme n est JAMAIS servie -- elle devient elle-meme en retard. Remede mesure : la CONDUIRE (verbe conduire, EO-185) des qu elle est chargee, sinon la reprise la laisse sur le bord de la route.",
+      "tags": [
+        "pilote",
+        "lot",
+        "ordre",
+        "injection"
+      ],
+      "source": "MO-342, round du 2026-09-21"
+    },
+    {
+      "id": "L-161",
+      "date": "2026-09-21 10:06:34",
+      "lecon": "Une VUE qui ne JUGE pas n est qu une decoration. Mesure du 2026-09-21 : la reprise du retard (37 missions) etait invisible, et une liste affichee sans code n aurait rien protege -- la porte du lot rend donc un CODE (1 des qu un maillon a perdu sa memoire de naissance, sans laquelle son verdict d origine n est plus atteignable) et elle NOMME les fautifs. Rendre une chose visible, c est la rendre JUGEABLE dans le meme geste.",
+      "tags": [
+        "cockpit",
+        "sante",
+        "porte",
+        "visibilite"
+      ],
+      "source": "MO-380, porte lot arme"
+    },
+    {
+      "id": "L-162",
+      "date": "2026-09-21 10:06:34",
+      "lecon": "Le cockpit N AFFICHE RIEN lui-meme : il appelle le verbe du DOMICILE (ici lot etat, chez le pilote). Un affichage recopie redecoupe un format a un second endroit -- et le jour ou le format bouge, la vue ment sans prevenir. La vue mesure, cite et affiche ; elle ne recalcule pas.",
+      "tags": [
+        "cockpit",
+        "domicile",
+        "M-076",
+        "affichage"
+      ],
+      "source": "MO-380, porte_lot_arme"
+    },
+    {
+      "id": "L-163",
+      "date": "2026-09-22 07:33:32",
+      "lecon": "UN ROUGE MUET : QUAND LA CAUSE EST ECRITE PAR LE GARDE MAIS PAS EXTRAITE PAR LE LANCEUR, LE VERDICT N ACCUSE RIEN. Mesure MO-382 (2026-09-22) : le lanceur de non-regression extrait les ecarts d un garde par les lignes commencant par [KO ou ECART ; le maillon 34 cherchait KO] (crochet ouvrant manquant) -- sur 31 extractions, 30 correctes et UNE fautive. Un rouge du maillon 34 rendait donc VERDICT KO suivi de '- source: voir verifier-source-item.py' : le lanceur savait QU quelque chose echouait, jamais QUOI, alors que la cause ([KO] domicile-unique : COPIES : ...) etait IMPRIMEE par le garde et perdue a la lecture. Ce rouge muet a masque, pendant une mission entiere, la cause du faux positif corrige en MO-381. Recette : (1) un GARDE et son EXTRACTEUR forment un COUPLE -- la forme que le garde IMPRIME doit etre celle que l extracteur CHERCHE, et ce contrat se MESURE sur une ligne REELLE, jamais sur une convention supposee ; (2) quand plusieurs appelants lisent un meme format, COMPARER leurs motifs : une divergence d UN caractere est une faute de frappe, pas une exception (30 contre 1) ; (3) la preuve d extraction se prend par un KO FORCE -- le rouge doit NOMMER son controle -- avec le contre-temoin du KO retire (vert), car une correction chirurgicale ne doit rien changer quand rien ne rougit. Corollaire : un rapport qui renvoie 'voir <fichier>' n a pas echoue a dire la cause, il a echoue a la LIRE. Corollaire 2 -- LA RECIPROQUE, mesuree sur MO-385 (2026-09-22, garde verifier-extraction-ecarts.py) : un GARDE doit imprimer sa CAUSE dans le FORMAT que son APPELANT EXTRAIT, sinon il reproduit le rouge muet qu il est cense EMPECHER. Constat par la MESURE, jamais par la relecture : la premiere version du garde anti-rouge-muet imprimait la cause dans une liste finale ('- filtre SANS producteur : <fichier>:<ligne> filtre ...') quand le maillon appelant, lui, n extrait que les lignes [KO/ECART -- la suite ROUGISSAIT donc en nommant le CONTROLE et jamais le COUPABLE : le defaut exact de MO-382, chez le garde ecrit pour l interdire. Repare en imprimant chaque cause sur une ligne [KO] AVANT les controles resumants, et c est le KO FORCE de la preuve qui l a montre (pas une relecture du code). RECETTE QUI EN DECOULE : avant de declarer un garde fini, exiger de son KO force la question < le rouge NOMME-t-il le COUPABLE, ou seulement le CONTROLE ? >, et retenir que le couple garde/extracteur se juge dans les DEUX SENS -- l extracteur doit chercher ce que le garde imprime, ET le garde doit imprimer ce que l extracteur cherche.",
+      "tags": [
+        "MO-382",
+        "MO-381",
+        "rouge-muet",
+        "extraction",
+        "ecart",
+        "non-regression",
+        "garde",
+        "preuve",
+        "maillon34"
+      ],
+      "source": "MO-382 / MO-385 / demande createur 2026-09-22 (correction de l extraction des ecarts du maillon 34 ; corollaire 2 du garde verifier-extraction-ecarts, maillon 36)"
+    },
+    {
+      "id": "L-164",
+      "date": "2026-09-22 07:40:19",
+      "lecon": "UN AGENT QUI EDITE AU NATIF NE PEUT PAS PRETENDRE AVOIR PROUVE SA PUBLICATION -- ET SON < PRISTINE > N EST QU UN OCTET, PAS UN ETAT. Mesure MO-344 (2026-09-22), faute de process declaree au bilan de MO-306 : deux fichiers (bdd-conservation/constants.py et balayer/entry.py) ont ete edites avec l OUTIL NATIF de l agent. Ce qui manquait n etait pas la JUSTESSE du contenu -- le corrige etait bon -- mais la CHAINE DE PREUVE : aucun point de restauration AVANT l ecriture, aucune trace dans bdd-modifications, aucune validation (py_compile, ASCII, imports) jouee AVANT publication. Rien ne distinguait donc une publication PROUVEE d une publication SUPPOSEE. Mesure decisive : les .bak presents NE PORTAIENT PAS le pristine -- constants : le .bak ETAIT le contenu repare, octet pour octet ; entry : un etat intermediaire -- et un point de restauration qui restaure la PANNE ne restaure rien. Recette : (1) une ecriture de code passe par la PORTE : c est elle qui pose le point, valide et trace, et c est la seule chose qui rende la publication PROUVABLE ; (2) < pristine recouvrable > se mesure DEUX FOIS : au BIT PRES (git tient le blob) ET comme ETAT COHERENT (le pristine remis en place doit encore FAIRE TOURNER l outil) -- ici le pristine est recouvrable au bit pres mais PAS coherent : remis en place il CASSE l outil (ImportError : NOM_LIGNE_DISPARITION, reclame par archiver/disparition.py), parce que git HEAD est en retard de DEUX JOURS sur l arbre de travail (1492 chemins non engages, aucun commit depuis le 2026-09-20 04:40) ; le .bak que la porte a pose porte donc un contenu de deux jours plus vieux -- un point de restauration a valeur de REGRESSION, et ce fait se DIT au bilan ; (3) la preuve d une reapplication fidele est un DIFF IDENTIQUE, jamais une relecture : empreinte du diff avant/apres egale (5b5aa44b...), octet pour octet a l arrivee, et le .bak de la porte compare au pristine par sha256 ; (4) < plus rien a faire > n est PAS une preuve de vie : la non-regression sur le corpus reel ne pouvait dire que 0 element a recenser ; le mecanisme a donc ete eprouve sur un corpus COBAYE EN MEMOIRE (9/9) qui montre qu il RECENSE la famille privee de ses champs, REALIGNE la divergente, epargne la conforme comme la hors-famille, et n ecrit rien au second passage. Corollaire : un controle qui constate ZERO travail a faire mesure l ABSENCE de travail, jamais la PRESENCE du mecanisme.",
+      "tags": [
+        "MO-344",
+        "MO-306",
+        "porte-ecrire",
+        "natif",
+        "pristine",
+        "git",
+        "preuve",
+        "publication",
+        "point-de-restauration",
+        "cobaye",
+        "non-regression"
+      ],
+      "source": "MO-344 / faute de process declaree au bilan de MO-306 (2026-09-22)"
+    },
+    {
+      "id": "L-165",
+      "date": "2026-09-22 08:48:06",
+      "lecon": "Un process qui depend de la memoire d'un agent n'est pas un process : c'est une discipline. DEMANDE CREATEUR (2026-09-22) : le process de credibilite des missions anciennes (MO-386) laissait l'agent juger A LA MAIN et renvoyait au createur la decision de RETIRER une mission devenue obsolete. Corrige (MO-387) : le process est JOUE par le DEMARRAGE du pilote (injection/cycle.py, a cote de la reprise de session) ; il REND le verdict par la REGLE, le TRACE et APPLIQUE l'obsolescence (retrait du lot, reversible : la mission garde son id, son objectif et son motif). DEUX REGLES : (1) ce qui doit se jouer a CHAQUE REPRISE se joue au DEMARRAGE -- une consigne que l'agent pourrait oublier est une discipline, pas un process ; (2) on ne REDEMANDE jamais au createur ce qu'il a DEJA demande -- une mission qui existe a deja ete demandee et discutee avec lui : la question n'est pas < veut-on encore ceci ? > mais < ceci est-il devenu OBSOLETE ? >, et cela se MESURE (une premisse morte, ou une mission plus recente qui porte deja le sujet). Preuve : MO-359 retiree du lot AUTOMATIQUEMENT (37 -> 36 ids), sans une question ; et le bloc du process apparait dans l'injection du demarrage.",
+      "tags": [
+        "process",
+        "automatisation",
+        "memoire",
+        "createur",
+        "credibilite",
+        "mo-386",
+        "mo-387"
+      ],
+      "source": "MO-386 / MO-387 (2026-09-22)"
+    },
+    {
+      "id": "L-166",
+      "date": "2026-09-22 09:48:45",
+      "lecon": "UNE PROSE QUI CITE DES NOMS VOYAGE PAR FICHIER, JAMAIS DANS UN ARGUMENT SHELL : LES ACCENTS GRAVES S EXECUTENT. MO-388 : cinq notes de modification deposees dans un argument entre guillemets doubles citaient des noms entre accents graves -- le shell les a EXECUTES (cinq fois command not found) et les a REMPLACES PAR DU VIDE, donc les notes sont entrees en BDD MUTILEES et PARFAITEMENT PLAUSIBLES (une phrase sans le nom qu elle cite se lit comme un abrege). La meme faute avait deja ete payee le meme jour en MO-387 (quatre fois command not found) : la reparation d alors (relire mes notes apres coup) etait une DISCIPLINE, pas un TRANSPORT -- et une discipline se reperd. Recette : le texte qui cite des noms, des labels ou des verbatims passe par un FICHIER (ou par un appel sans shell, arguments en liste), jamais inline dans une commande ; et une note mutilee ne se reecrit pas, elle se REPARE par une note de complement qui DIT la mutilation. Corollaire : quand j ecris du texte dans un argument, je lis la SORTIE de ma commande -- le shell ecrit command not found, et ces lignes-la ne se lisent jamais toutes seules.",
+      "tags": [
+        "MO-388",
+        "R5",
+        "shell",
+        "prose",
+        "transport",
+        "note-mutilee",
+        "accent-grave"
+      ],
+      "source": "MO-388 (2026-09-22) : notes de modification mutilees par le shell (repetition de MO-387)"
+    },
+    {
+      "id": "L-167",
+      "date": "2026-09-23 07:58:39",
+      "lecon": "UNE RELATION DE SOUS-CHAINE N EST PAS UNE RELATION DE PROXIMITE (MO-367) : une aide qui ne reconnait que l inclusion se TAIT exactement quand on en a besoin -- le nom fautif d une lettre INSEREE n est contenu dans aucun nom reel, et le refus parfaitement nomme ne propose alors RIEN. Quand une regle sert a RECONNAITRE (un nom, une option, une cle), elle se mesure en DISTANCE (difflib, stdlib) ; l inclusion reste un cas CERTAIN a completer, jamais le critere unique. Mesure : entonoir ne proposait rien, garde-flux trouvait garde-flux2.",
+      "tags": [
+        "refus",
+        "noms",
+        "proximite",
+        "diagnostic",
+        "MO-367"
+      ],
+      "source": "MO-367 (EO-292)"
     }
   ],
-  "compteur": 132
+  "compteur": 167
 }

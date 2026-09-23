@@ -1,0 +1,585 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+cockpit-matrice.py -- Cockpit prive d'Optimus (M-129)
+
+La Matrice comme serveur distant. Routes privees verrouillees, lecture
+seule, jamais d'ecriture. Domicile : _operateur/optimus-prime/cockpit/
+(Flux 2, zone maintenance,_operateur => invisible cameleon, L-016).
+
+Usage: python cockpit-matrice.py --route <etat|sante|flux1|flux2|chercher|metriques|complet> [--json] [--racine .] [--requete <texte>]
+  --route   : une ou plusieurs separees par virgule, defaut: complet
+  --json    : sortie machine (JSON)
+  --racine  : racine projet (defaut: cwd, detectee via data/commun/racine.py)
+  --requete : route /chercher seulement -- texte a chercher dans toute la Matrice
+              (sans lui, un temoin prouve que la porte unique repond)
+"""
+import argparse
+import json
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+COCKPIT_DIR = Path(__file__).resolve().parent
+# _operateur/optimus-prime/cockpit -> matrix -> cerveau-projet
+REPERTOIRE_MATRIX = COCKPIT_DIR.parent.parent.parent  # matrix
+if REPERTOIRE_MATRIX.name != "matrix":
+    raise RuntimeError("Structure inattendue : cockpit n'est pas dans matrix/_operateur/optimus-prime/cockpit")
+REPERTOIRE_MATRICE = REPERTOIRE_MATRIX / "matrice"
+REPERTOIRE_DATA = REPERTOIRE_MATRICE / "data"
+REPERTOIRE_OP = REPERTOIRE_MATRIX / "_operateur" / "optimus-prime"
+# data/commun = motif unique racine (M-076) : detecter_racine
+sys.path.insert(0, str(REPERTOIRE_DATA / "commun"))
+from racine import detecter_racine  # noqa: E402
+# CONTRAT DE TRANSPORT des listes (frictions 72 et 73) : --route est une LISTE
+# ("sante,flux2") ; son caractere appartient a son domicile, jamais au cockpit.
+from transport_listes import decouper_liste  # noqa: E402
+# Le PLAFOND des boites intercom se LIT chez son domicile (lecteur PARTAGE, M-076) :
+# le cockpit ne recopie aucune valeur, il mesure et il cite sa source.
+from rotation_journal import lire_constante_declaree  # noqa: E402
+
+ENCODAGE = "utf-8"
+ROUTES = ("etat", "sante", "flux1", "flux2", "chercher", "metriques", "complet")
+ROUTES_EXPANDED = ("etat", "sante", "flux1", "flux2", "chercher", "metriques")
+
+# /chercher (EO-112) : la PORTE UNIQUE de recherche n'etait branchee que sur son
+# temoin de veille. Le cockpit est l'endroit ou Optimus cherche a la main : il
+# l'appelle donc pour de vrai. Sans --requete, un temoin prouve que la porte est
+# VIVANTE (un moteur aveugle repond "0 resultat" : lecon MO-055).
+REQUETE_TEMOIN = "moteur de recherche"
+REQUETE_ROUTE = ""
+
+# --- BOITES INTERCOM : MESUREES, ET JUGEES QUAND ELLES ONT UN CONTRAT (MO-322) --
+# Demande createur (2026-09-20) : l outbox du flux pesait 17,5 Mo pour un plafond de
+# 5 Mo et RIEN n en mesurait la TAILLE -- le cockpit n en comptait que les LIGNES,
+# donc une boite qui quadruple restait invisible sous un /sante VERT. Ces listes
+# disent QUI est JUGE (les boites que le pilote borne : il en repond) et QUI est
+# seulement DECLARE (le heritage v2 et les boites d optimus-prime/intercom : la
+# regle immuable perimetre-write interdit d y ecrire, donc on les mesure sans les
+# juger -- un controle qui crie sur ce que personne ne repare ne garde plus rien).
+# Le PLAFOND, lui, ne vit PAS ici : il est LU chez son domicile (les constantes du
+# pilote) -- une seule source pour toute la Matrice.
+CHEMIN_CONSTANTES_PILOTE = ("_operateur", "optimus-prime", "pilote", "constants.py")
+NOM_CONSTANTE_SEUIL_BOITES = "SEUIL_OCTETS_BOITES_INTERCOM"
+BOITES_INTERCOM_JUGEES = (
+    ("pilote/outbox (flux)", ("_operateur", "maintenance", "pilote", "outbox.jsonl")),
+    ("matrice/inbox (flux)", ("_operateur", "maintenance", "matrice", "inbox.jsonl")),
+)
+BOITES_INTERCOM_DECLAREES = (
+    ("v2 pilote/outbox", ("matrice", "intercom", "pilote", "outbox.jsonl")),
+    ("v2 matrice/inbox", ("matrice", "intercom", "matrice", "inbox.jsonl")),
+    ("v2 cameleon/inbox", ("matrice", "intercom", "cameleon", "inbox.jsonl")),
+    ("optimus-prime pilote/outbox", ("_operateur", "optimus-prime", "intercom", "pilote", "outbox.jsonl")),
+    ("optimus-prime matrice/inbox", ("_operateur", "optimus-prime", "intercom", "matrice", "inbox.jsonl")),
+)
+
+# --- POLITIQUE D'AFFICHAGE DU COCKPIT (jamais des mesures) -------------------
+# P6 de la revue MO-098 : ces nombres ne MESURENT rien -- ils decident COMBIEN
+# de texte l'operateur voit et combien de lignes une sortie garde. Ils sont
+# NOMMES pour ne jamais etre pris pour un seuil de surveillance : aucun d'eux
+# n'entre dans SEUILS_PERFS ; changer l'un d'eux change le confort de lecture,
+# jamais la surveillance de la Matrice.
+LIMITE_AFFICHAGE_CHERCHER = 10   # resultats montres par la porte de recherche
+TAILLE_EXTRAIT_COURT = 300       # extrait d'une ligne ou d'un dictionnaire
+TAILLE_SORTIE_STANDARD = 2000    # sortie d'un outil, format standard
+TAILLE_SORTIE_LARGE = 3000       # sortie d'un outil, format large
+TAILLE_SORTIE_TRES_LARGE = 4000  # sortie tres large (lecture d'une BDD)
+TAILLE_SORTIE_MAXIMALE = 6000    # sortie maximale (bloc long)
+LIGNES_SORTIE_COURTE = 20        # lignes gardees d'une sortie courte
+LIGNES_VERDICT = 30              # lignes gardees autour d'un VERDICT
+LIGNES_QUEUE_JOURNAL = 20        # queue lue dans un journal (lire tail 20)
+LIGNES_ENTETE_JOURNAL = 1        # l'entete d'un journal est toujours gardee
+HITS_MONTRES = 5                 # resultats detailles d'une recherche affiches
+
+
+def _run(cmd, cwd=None):
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=20, cwd=cwd)
+        return r.returncode, (r.stdout or "") + (r.stderr or "")
+    except subprocess.TimeoutExpired:
+        return 124, "TIMEOUT (20s) : " + " ".join(cmd)
+    except OSError as e:
+        return 2, str(e)
+
+
+def _read_text(path, limit=800):
+    try:
+        t = Path(path).read_text(encoding=ENCODAGE)
+        lines = t.strip().splitlines()
+        if len(lines) > limit:
+            return "\n".join(lines[-limit:]) + f"\n[... {len(lines)} lignes, {limit} affichees]"
+        return t.strip()
+    except OSError as e:
+        return f"(illisible : {e})"
+
+
+def _tail_jsonl(path, n=5):
+    try:
+        lines = Path(path).read_text(encoding=ENCODAGE).strip().splitlines()
+        tail = [l for l in lines if l.strip()][-n:]
+        out = []
+        for l in tail:
+            try:
+                j = json.loads(l)
+                out.append(j)
+            except ValueError:
+                out.append({"brut": l[:TAILLE_EXTRAIT_COURT]})
+        return out
+    except OSError:
+        return []
+
+
+def _section(title):
+    return f"\n=== /{title} ===\n"
+
+
+def route_etat(racine):
+    out = []
+    out.append(_section("etat") + "Matrice comme serveur distant -- sante + session (lecture seule)")
+    for cmd, label in [
+        ([sys.executable, str(REPERTOIRE_MATRICE / "routines" / "vie" / "main.py"), "etat"], "vie etat (3 boucles)"),
+        ([sys.executable, str(REPERTOIRE_MATRICE / "routines" / "vie" / "main.py"), "server", "etat"], "server etat"),
+        ([sys.executable, str(REPERTOIRE_DATA / "outils" / "pause-session" / "main.py"), "etat"], "pause-session etat"),
+        ([sys.executable, str(REPERTOIRE_DATA / "outils" / "pause-session" / "main.py"), "journal"], "pause-session journal (10 derniers)"),
+        ([sys.executable, str(REPERTOIRE_DATA / "outils" / "machine-defcon" / "main.py"), "lire"], "machine-defcon lire"),
+    ]:
+        code, txt = _run(cmd)
+        out.append(f"\n[{label}] code={code}\n" + txt.strip())
+    for cle in ("defcon", "perimetre-cameleon"):
+        code, txt = _run([sys.executable, str(REPERTOIRE_DATA / "outils" / "bdd-variables" / "main.py"), "lire", "--cle", cle])
+        out.append(f"\n[classeur {cle}] code={code}\n" + txt.strip()[:TAILLE_SORTIE_STANDARD])
+    for rel in ("matrice/inbox.jsonl", "pilote/outbox.jsonl", "cameleon/inbox.jsonl"):
+        p = REPERTOIRE_MATRICE / "intercom" / rel
+        try:
+            n = sum(1 for _ in p.open(encoding=ENCODAGE)) if p.exists() else -1
+            out.append(f"[intercom {rel}] lignes={n}")
+        except OSError as e:
+            out.append(f"[intercom {rel}] {e}")
+    return "\n".join(out)
+
+
+def route_sante(racine):
+    out = []
+    # Bilan des portes (label, code) : sert au VERDICT global en fin de route.
+    bilan = []
+    out.append(_section("sante") + "Integrite marbre + BDD (preuves SHA-256, lecture seule)")
+    for cmd, label in [
+        # `verifier` (et non `tour`) : cette route est en LECTURE SEULE (`ecriture: false`)
+        # et un appel a la demande qui journalise 15 lignes fait grossir un journal en
+        # ajout seul sans rien apporter a la surveillance (MO-077 : le journal de
+        # l'espion pesait 87,7 Mo, en partie a cause des appels du cockpit).
+        ([sys.executable, str(REPERTOIRE_MATRICE / "routines" / "espion-integrite" / "main.py"), "verifier"], "espion-integrite verifier"),
+        ([sys.executable, str(REPERTOIRE_DATA / "outils" / "verifier-conventions" / "main.py"), "verifier"], "verifier-conventions"),
+        ([sys.executable, str(REPERTOIRE_DATA / "outils" / "verifier-regles" / "main.py"), "verifier"], "verifier-regles"),
+        ([sys.executable, str(REPERTOIRE_DATA / "outils" / "verifier-protocoles" / "main.py"), "verifier"], "verifier-protocoles"),
+        ([sys.executable, str(REPERTOIRE_DATA / "outils" / "bdd-regles-matrice" / "main.py"), "verifier"], "bdd-regles-matrice verifier"),
+        ([sys.executable, str(REPERTOIRE_DATA / "outils" / "bdd-conventions-matrice" / "main.py"), "verifier"], "bdd-conventions-matrice verifier"),
+        ([sys.executable, str(REPERTOIRE_DATA / "outils" / "bdd-protocoles-matrice" / "main.py"), "verifier"], "bdd-protocoles-matrice verifier"),
+        ([sys.executable, str(REPERTOIRE_DATA / "outils" / "bdd-modifications" / "main.py"), "verifier"], "bdd-modifications verifier"),
+        ([sys.executable, str(REPERTOIRE_DATA / "outils" / "suivi-optimus" / "main.py"), "verifier"], "suivi-optimus verifier"),
+        # MO-096 : le croisement FILE du pilote <-> JOURNAL (categorie `coherence`,
+        # construite en MO-048) existait mais n'etait branche NULLE PART -- une
+        # porte que personne ne franchit ne protege rien. C'est par ce trou que
+        # MO-095 (2026-09-15) a ete menee de bout en bout SANS jamais entrer dans
+        # le marbre, sous un `verifier` vert : lui ne juge que la coherence
+        # INTERNE du journal (une mission jamais declaree y est invisible).
+        ([sys.executable, str(REPERTOIRE_DATA / "outils" / "suivi-optimus" / "main.py"), "coherence"], "suivi-optimus coherence (file <-> journal)"),
+    ]:
+        code, txt = _run(cmd)
+        bilan.append((label, code))
+        short = txt.strip().splitlines()
+        # keep first 20 lines max per check
+        body = "\n".join(short[:LIGNES_SORTIE_COURTE])
+        if len(short) > 20:
+            body += f"\n[... {len(short)-20} lignes masquees]"
+        out.append(f"\n[{label}] code={code}\n" + body)
+    for cmd, label in [
+        ([sys.executable, str(REPERTOIRE_OP / "super-combos" / "combos" / "outils" / "garde-ascii.py"), str(REPERTOIRE_MATRIX)], "garde-ascii matrix/ (matrice + _operateur + docs)"),
+        ([sys.executable, str(REPERTOIRE_OP / "super-combos" / "combos" / "outils" / "garde-perimetre-write.py"), "--jours", "1", "--racine", str(racine)], "garde-perimetre WRITE (1j)"),
+        ([sys.executable, str(REPERTOIRE_OP / "super-combos" / "combos" / "outils" / "garde-tmp.py"), "--racine", str(racine)], "garde-tmp"),
+    ]:
+        code, txt = _run(cmd)
+        bilan.append((label, code))
+        out.append(f"\n[{label}] code={code}\n" + txt.strip()[:TAILLE_SORTIE_STANDARD])
+    out.append(_verdict_sante(bilan))
+    return "\n".join(out)
+
+
+def _verdict_sante(bilan):
+    """Rend le VERDICT de la route /sante a partir des codes des portes.
+
+    Une porte rouge doit CRIER en fin de route : un `code=1` noye au milieu de
+    vingt blocs ne se lit pas a la reprise -- c'est ainsi que le faux vert
+    MO-095 (mission menee sans entrer dans le marbre) a survecu une session.
+    """
+    echecs = [(label, code) for label, code in bilan if code != 0]
+    if echecs:
+        return (
+            "\nVERDICT /sante : " + str(len(echecs)) + " PORTE(S) EN ECHEC sur "
+            + str(len(bilan)) + " -- "
+            + ", ".join(label + " (code " + str(code) + ")" for label, code in echecs)
+        )
+    return "\nVERDICT /sante : OK (" + str(len(bilan)) + " porte(s) verte(s))"
+
+
+def route_flux1(racine):
+    out = []
+    out.append(_section("flux1") + "Flux 1 CAMELEON : Matrice GUIDE (pilote/file, vrac/tresse, veille)")
+    for cmd, label in [
+        ([sys.executable, str(REPERTOIRE_MATRICE / "pilote" / "main.py"), "file"], "pilote file (89 missions)"),
+        ([sys.executable, str(REPERTOIRE_MATRICE / "pilote" / "entonnoir" / "main.py"), "file"], "entonnoir file+vrac"),
+        ([sys.executable, str(REPERTOIRE_MATRICE / "pilote" / "entonnoir" / "main.py"), "tresse", "brin"], "tresse brin"),
+    ]:
+        code, txt = _run(cmd)
+        out.append(f"\n[{label}] code={code}\n" + txt.strip()[:TAILLE_SORTIE_LARGE])
+    for rel in ("pilote/outbox.jsonl", "cameleon/inbox.jsonl"):
+        p = REPERTOIRE_MATRICE / "intercom" / rel
+        tail = _tail_jsonl(str(p), n=3)
+        out.append(f"\n[intercom {rel} tail 3]")
+        for j in tail:
+            out.append("  " + json.dumps(j, ensure_ascii=False)[:TAILLE_EXTRAIT_COURT])
+        if not tail:
+            out.append("  (vide ou absent)")
+    code, txt = _run([sys.executable, str(REPERTOIRE_OP / "super-combos" / "combos" / "outils" / "lanceur-non-regression.py"), "--racine", str(racine)])
+    # keep verdict only
+    short = [l for l in txt.splitlines() if "VERDICT" in l or l.startswith("  ")][:LIGNES_VERDICT]
+    out.append(f"\n[lanceur-non-regression] code={code}\n" + ("\n".join(short) if short else txt.strip()[:TAILLE_SORTIE_LARGE]))
+    return "\n".join(out)
+
+
+def route_flux2(racine):
+    out = []
+    out.append(_section("flux2") + "Flux 2 MAINTENANCE : Matrice SURVEILLE Optimus (espions, remorque, suivi-optimus)")
+    for cmd, label in [
+        ([sys.executable, str(REPERTOIRE_OP / "espions" / "espion-integrite-optimus.py"), "verifier"], "espion-integrite-optimus verifier (71)"),
+        ([sys.executable, str(REPERTOIRE_OP / "espions" / "espion-activite-optimus.py")], "espion-activite-optimus (file/frictions/verrous)"),
+        ([sys.executable, str(REPERTOIRE_OP / "remorque" / "remorque-optimus.py"), "etat"], "remorque etat (45)"),
+        ([sys.executable, str(REPERTOIRE_DATA / "outils" / "suivi-optimus" / "main.py"), "verifier"], "suivi-optimus verifier"),
+    ]:
+        code, txt = _run(cmd)
+        out.append(f"\n[{label}] code={code}\n" + txt.strip()[:TAILLE_SORTIE_LARGE])
+    code, txt = _run([sys.executable, str(REPERTOIRE_DATA / "outils" / "suivi-optimus" / "main.py"), "lire", "--n", "5"])
+    out.append(f"\n[suivi-optimus lire --n 5] code={code}\n" + txt.strip()[:TAILLE_SORTIE_TRES_LARGE])
+    return "\n".join(out)
+
+
+# SEUILS DE POLITIQUE restants (MO-100) : ce qui reste ici est un CHOIX du
+# cockpit, pas une mesure d'objet. Tout ce qui mesure un objet est parti chez
+# l'objet : le budget de la veille (MO-097) et le budget du bilan-periode
+# (MO-100) sont DECLARES par l'outil et PUBLIES, le cockpit se contente de LIRE.
+# - `py_compile_ms` (400) : SUPPRIMEE en MO-100. Aucun code ne la lisait (grep :
+#   sa seule declaration) ; elle donnait l'illusion que la compilation etait
+#   surveillee a 400 ms alors que la compilation reelle mesuree etait de 1406 ms
+#   puis 794 ms (MO-097). La brancher telle quelle aurait fait crier a tort.
+# - `bilan_periode_ms` (500) : MIGREE en MO-100 vers
+#   `bilan-periode/constants.py:BUDGET_PASSE_MS`, publiee dans la sortie de
+#   l'outil puis lue ici.
+# - `usages_lignes` (50000) : MIGREE en MO-101/P3 vers le PROPRIETAIRE du
+#   journal (`bdd-usages/constants.py:SEUIL_OCTETS_JOURNAL`), qui le borne et le
+#   PUBLIE dans sa porte `lire` ; le cockpit le LIT. Le dict reste VIDE : le
+#   cockpit ne possede plus AUCUN seuil -- tout seuil de mesure est declare et
+#   publie par l'objet mesure.
+SEUILS_PERFS = {}
+
+# Budget PUBLIE par un OUTIL dans sa propre sortie (MO-100), sur le motif de
+# MO-097 applique aux outils : l'objet DECLARE, l'objet PUBLIE, le cockpit LIT.
+# Sans publication, le cockpit le DIT ("BUDGET NON PUBLIE") au lieu de se
+# rabattre sur un nombre ecrit ici -- que l'outil n'a jamais promis.
+MOTIF_BUDGET_OUTIL = re.compile(r"Budget declare de l'outil : (\d+) ms")
+
+# Capacite du journal des usages PUBLIEE par son proprietaire (MO-101/P3), lue
+# par la porte `bdd-usages lire` : le cockpit compare la TAILLE REELLE du
+# journal a cette capacite declaree. Depassee => la rotation n'a pas tourne
+# (fait reel, pas un gout) ; absente => le cockpit le DIT, jamais de repli muet.
+MOTIF_CAPACITE_JOURNAL = re.compile(r"Capacite declaree du journal usages : (\d+) octets")
+
+# Budgets DECLARES par les routines (MO-097) : le seuil de la veille n'est plus
+# une valeur en dur du cockpit. La routine DECLARE son budget (constants.py) et
+# le PUBLIE dans son etat court ; le cockpit LIT la publication et, si elle
+# manque, il le DIT -- au lieu de crier contre un seuil qu'aucune routine n'a
+# jamais promis (ce seuil en dur faisait crier le cockpit chaque jour sur une
+# passe stable a 1,7 s pour une cadence de 300 s, soit 0,6 % du temps).
+ETATS_BUDGETS = {
+    "veille-flux": ("routines", "veille-flux", "veille-cadence.json", "budget_passe_ms"),
+}
+
+
+def _budget_declare(nom_routine):
+    """Budget de passe publie par la routine (ms), ou None si non publie."""
+    rel = ETATS_BUDGETS.get(nom_routine)
+    if not rel:
+        return None
+    try:
+        with open(str(REPERTOIRE_MATRICE.joinpath(*rel[:-1])), "r", encoding=ENCODAGE) as flux:
+            donnees = json.load(flux)
+    except (OSError, ValueError):
+        return None
+    valeur = donnees.get(rel[-1])
+    return valeur if isinstance(valeur, int) else None
+
+def _budget_publie_par_outil(txt_metriques):
+    """Budget declare publie par l'outil dans sa sortie (ms), ou None."""
+    resultat = MOTIF_BUDGET_OUTIL.search(txt_metriques or "")
+    return int(resultat.group(1)) if resultat else None
+
+
+def _capacite_publiee(txt_metriques):
+    """Capacite du journal usages publiee par son proprietaire (octets), ou None."""
+    resultat = MOTIF_CAPACITE_JOURNAL.search(txt_metriques or "")
+    return int(resultat.group(1)) if resultat else None
+
+
+def _taille_journal_usages():
+    """Taille reelle du journal des usages (octets), ou None s'il est illisible."""
+    try:
+        return (REPERTOIRE_DATA / "usages-outils-combos.jsonl").stat().st_size
+    except OSError:
+        return None
+
+
+def _suggere_perfs(txt_metriques):
+    """Analyse le texte des metriques et suggere 1 PERFORMANCE-* si seuil depasse."""
+    suggestions = []
+    # Parse duree moy depuis bilan-periode
+    for outil in ("veille-flux", "bilan-periode"):
+        m = re.search(re.escape(outil) + r".*duree moy (\d+) ms", txt_metriques)
+        if m:
+            moy = int(m.group(1))
+            if "veille" in outil:
+                seuil = _budget_declare(outil)
+                if seuil is None:
+                    suggestions.append(
+                        outil + " moy " + str(moy) + "ms : BUDGET NON PUBLIE par la routine"
+                        + " (a reparer -- aucune comparaison possible sans valeur declaree)"
+                    )
+                    continue
+            else:
+                seuil = _budget_publie_par_outil(txt_metriques)
+                if seuil is None:
+                    suggestions.append(
+                        outil + " moy " + str(moy) + "ms : BUDGET NON PUBLIE par l'outil"
+                        + " (a reparer -- aucune comparaison possible sans valeur declaree)"
+                    )
+                    continue
+            if moy > seuil:
+                cible = "PERFORMANCE-ROUTINES" if "veille" in outil else "PERFORMANCE-OUTILS"
+                suggestions.append(f"{outil} moy {moy}ms > budget declare {seuil}ms -> suggere d'enchainer {cible}")
+    # Capacite du journal usages (MO-101/P3) : la valeur est LUE chez son
+    # proprietaire (publiee par `bdd-usages lire`), et comparee a la taille
+    # REELLE du journal. Un depassement ne veut plus dire "le journal a grossi"
+    # mais "la rotation liee a la capacite n'a pas tourne" -- un vrai signal.
+    capacite = _capacite_publiee(txt_metriques)
+    taille = _taille_journal_usages()
+    if capacite is None:
+        suggestions.append(
+            "journal usages : CAPACITE NON PUBLIEE par son proprietaire (bdd-usages"
+            " lire) -- a reparer, aucune comparaison possible sans capacite declaree"
+        )
+    elif taille is not None and taille > capacite:
+        suggestions.append(
+            f"journal usages {taille} octets > capacite declaree {capacite} octets"
+            " -> la ROTATION n'a pas tourne (PERFORMANCE-OUTILS)"
+        )
+    if suggestions:
+        return "\n[SUGGESTION AUTO (seuils proto-2 de SUGGESTION -- rien ne se pose ici, ce ne sont PAS des declencheurs)]\n" + "\n".join("  - " + s for s in suggestions)
+    return "\n[SUGGESTION AUTO] aucun seuil depasse (proto-2 B : aucune suggestion d'enchainement)"
+
+
+def _resumer_moteur(texte):
+    """Resume lisible de la sortie --json du moteur (jamais un dump brut)."""
+    try:
+        donnees = json.loads(texte)
+    except ValueError:
+        return "  sortie illisible : " + texte.strip()[:TAILLE_EXTRAIT_COURT]
+    lignes = [
+        "  trouves : " + str(donnees.get("trouve", 0))
+        + " | retournes : " + str(donnees.get("retourne", 0))
+    ]
+    if donnees.get("tronque"):
+        lignes.append("  TRONQUE (limite de lecture) : " + ", ".join(donnees["tronque"]))
+    if donnees.get("ecartes_sans_date"):
+        lignes.append("  ecartes faute de date : " + str(donnees["ecartes_sans_date"]))
+    for hit in donnees.get("hits", [])[:HITS_MONTRES]:
+        # Un hit FICHIER ne porte pas de champ "source" (defaut : fichier).
+        if hit.get("source", "fichier") == "fichier":
+            lignes.append("  - " + str(hit.get("fichier")) + ":" + str(hit.get("ligne")))
+        else:
+            lignes.append("  - [" + str(hit.get("source")) + "] " + str(hit.get("cle")))
+    if not donnees.get("hits"):
+        lignes.append("  (aucun resultat)")
+    return "\n".join(lignes)
+
+
+def route_chercher(racine):
+    """Branche la PORTE UNIQUE de recherche dans le cockpit (lecture seule).
+
+    EO-112 : le moteur n'avait qu'un appelant (la vigie) ; ici il sert vraiment,
+    au meme endroit ou Optimus cherchait a la main (une mission, une lecon, un
+    fichier). Avec --requete la recherche est reelle, sans elle un temoin prouve
+    que la porte repond et n'est pas aveugle.
+
+    EO-126 : la porte est appelee avec --prive, parce que cette route annonce un
+    perimetre (maintenance,_operateur) que le moteur exclut par defaut -- la
+    promesse de routes-privees.json n'etait vraie que sur le papier.
+    """
+    out = []
+    out.append(_section("chercher")
+               + "Moteur de recherche (porte unique) -- branchee dans le cockpit (lecture seule)")
+    moteur = REPERTOIRE_DATA / "outils" / "rechercher" / "main.py"
+    requete = REQUETE_ROUTE or REQUETE_TEMOIN
+    mode = "requete reelle" if REQUETE_ROUTE else "temoin (porte vivante ?)"
+    # `--prive` (EO-126) : la route annonce `zone_perimetre = maintenance,_operateur`
+    # dans routes-privees.json, mais le moteur EXCLUT ces zones par defaut -- la
+    # promesse etait donc FAUSSE (mesure : POSTURE_PAR_TYPE = 0, meme par ici). Le
+    # cockpit est la fenetre privee d'Optimus : il demande explicitement ce que le
+    # perimetre annonce deja.
+    code, texte = _run([
+        sys.executable, str(moteur), "rechercher",
+        "--requete", requete, "--dans", "tous", "--prive",
+        "--json", "--limite", str(LIMITE_AFFICHAGE_CHERCHER),
+    ])
+    out.append("[" + mode + "] requete=" + repr(requete) + " code=" + str(code))
+    out.append(_resumer_moteur(texte))
+    return "\n".join(out)
+
+
+def route_metriques(racine):
+    out = []
+    out.append(_section("metriques") + "Performances + activite (lecture seule) -- seuils proto-2 de SUGGESTION (rien ne se pose ici ; les VRAIS declencheurs sont LUS en bas)")
+    out.append(
+        "Seuils de MESURE du cockpit : "
+        + (", ".join(f"{k}={v}" for k, v in SEUILS_PERFS.items()) or "aucun (tout seuil de mesure est declare par l'objet mesure)")
+    )
+    out.append(
+        "Politique d'AFFICHAGE du cockpit (confort de lecture, JAMAIS une mesure) : "
+        + "limite=" + str(LIMITE_AFFICHAGE_CHERCHER)
+        + " extraits=" + str(TAILLE_EXTRAIT_COURT)
+        + " sorties=" + "/".join(str(v) for v in (TAILLE_SORTIE_STANDARD, TAILLE_SORTIE_LARGE, TAILLE_SORTIE_TRES_LARGE, TAILLE_SORTIE_MAXIMALE))
+        + " lignes=" + "/".join(str(v) for v in (LIGNES_SORTIE_COURTE, LIGNES_VERDICT, LIGNES_QUEUE_JOURNAL))
+        + " hits=" + str(HITS_MONTRES)
+    )
+    metriques_txt = ""
+    for cmd, label in [
+        ([sys.executable, str(REPERTOIRE_DATA / "outils" / "bilan-periode" / "main.py"), "bilan", "--periode", "heures"], "bilan-periode heures (6h)"),
+        ([sys.executable, str(REPERTOIRE_OP / "super-combos" / "combos" / "outils" / "bilan-matrice.py"), "--rapide", "--racine", str(racine)], "bilan-matrice --rapide"),
+    ]:
+        code, txt = _run(cmd)
+        block = f"\n[{label}] code={code}\n" + txt.strip()[:TAILLE_SORTIE_MAXIMALE]
+        out.append(block)
+        metriques_txt += block + "\n"
+    # Porte `bdd-usages lire` AVANT l'analyse : c'est son en-tete qui PUBLIE la
+    # capacite du journal (MO-101/P3). Lue APRES l'analyse, la publication
+    # n'arrivait jamais au controle -- le cockpit criait CAPACITE NON PUBLIEE
+    # alors qu'elle etait publiee deux blocs plus bas (lecon L-028 : un controle
+    # qui ne voit pas ce qu'il doit lire est un faux verdict).
+    code_usages, txt_usages = _run(
+        [sys.executable, str(REPERTOIRE_DATA / "outils" / "bdd-usages" / "main.py"), "lire"]
+    )
+    lignes_usages = txt_usages.strip().splitlines()
+    # Le controle lit l'EN-TETE (capacite publiee + dernieres lignes), pas les
+    # 1265 lignes du journal : la sortie complete noierait le rapport.
+    entete_usages = "\n".join(lignes_usages[:LIGNES_ENTETE_JOURNAL] + lignes_usages[-LIGNES_QUEUE_JOURNAL:]) if lignes_usages else txt_usages.strip()
+    out.append(f"\n[bdd-usages lire tail 20] code={code_usages}\n" + entete_usages[:TAILLE_SORTIE_TRES_LARGE])
+    metriques_txt += entete_usages + "\n"
+    # Budgets lus chez les objets, une fois leurs sorties disponibles : les
+    # routines publient dans leur etat court, les outils dans leur sortie.
+    budget_outil = _budget_publie_par_outil(metriques_txt)
+    out.insert(
+        2,
+        "Budgets declares par les objets mesures : "
+        + ", ".join(
+            nom + "=" + (str(_budget_declare(nom)) if _budget_declare(nom) is not None else "NON PUBLIE")
+            for nom in ETATS_BUDGETS
+        )
+        + " | bilan-periode="
+        + (str(budget_outil) + " ms" if budget_outil is not None else "NON PUBLIE par l'outil"),
+    )
+    out.append(_suggere_perfs(metriques_txt))
+    # --- LES VRAIS DECLENCHEURS (voie A, EO-181/MO-198) ----------------------
+    # Le mot "declencheur" avait DEUX sens dans ce cockpit : ici, le FAUX (des
+    # seuils de performance qui ne declenchent rien). Les VRAIS vivent ailleurs :
+    # AUTOMATIQUES, POSES par la porte machine-defcon, branches sur la passe
+    # VIGILE de la veille. Le cockpit les LIT en direct (`surveiller --evaluer`)
+    # au lieu de les citer de memoire -- motif du projet : l'objet DECLARE,
+    # l'objet PUBLIE, le cockpit LIT. `--evaluer` est LECTURE SEULE : il rapporte
+    # et NE POSE RIEN (aucun niveau n'est monte par une lecture).
+    code_decl, txt_decl = _run(
+        [sys.executable,
+         str(REPERTOIRE_DATA / "outils" / "machine-defcon" / "main.py"),
+         "surveiller", "--evaluer"]
+    )
+    out.append(
+        "DECLENCHEURS REELS (AUTOMATIQUES -- poses par machine-defcon/surveiller,"
+        " branches sur la passe VIGILE de la veille) : code=" + str(code_decl)
+    )
+    out.append("  " + (txt_decl.strip() or "aucun rapport de la porte"))
+    out.append(
+        "  -> les seuils proto-2 ci-dessus NE SONT PAS ces declencheurs : ce sont des"
+        " SUGGESTIONS faites a l'operateur (rien ne se pose tout seul)."
+    )
+    return "\n".join(out)
+
+
+ROUTERS = {
+    "etat": route_etat,
+    "sante": route_sante,
+    "flux1": route_flux1,
+    "flux2": route_flux2,
+    "chercher": route_chercher,
+    "metriques": route_metriques,
+}
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Cockpit prive Optimus -- Matrice comme serveur distant (lecture seule)")
+    parser.add_argument("--route", default="complet", help="Route(s) : etat|sante|flux1|flux2|chercher|metriques|complet (virgule separee)")
+    parser.add_argument("--json", action="store_true", help="Sortie JSON machine")
+    parser.add_argument("--racine", default=".", help="Racine projet (defaut: cwd)")
+    parser.add_argument("--requete", default="", help="Route /chercher : texte a rechercher (defaut : temoin)")
+    args = parser.parse_args()
+
+    # Option de la SEULE route /chercher : les routes ont une signature (racine),
+    # cette option traverse donc par ce module (lecture seule, aucune ecriture).
+    global REQUETE_ROUTE
+    REQUETE_ROUTE = args.requete.strip()
+
+    try:
+        racine = detecter_racine(COCKPIT_DIR)
+    except RuntimeError:
+        racine = Path(args.racine).resolve()
+    else:
+        # l'utilisateur peut forcer une autre racine
+        if args.racine != ".":
+            racine = Path(args.racine).resolve()
+
+    routes_demandees = [r.lower() for r in decouper_liste(args.route)]
+    if not routes_demandees:
+        routes_demandees = ["complet"]
+    # complet = tout
+    if "complet" in routes_demandees:
+        routes_demandees = list(ROUTES_EXPANDED)
+    else:
+        for r in routes_demandees:
+            if r not in ROUTERS:
+                print(f"Route inconnue : {r} (choix : {', '.join(ROUTES)})")
+                return 2
+
+    result = {}
+    textes = []
+    for nom in routes_demandees:
+        fn = ROUTERS[nom]
+        txt = fn(racine)
+        result[nom] = txt
+        textes.append(txt)
+
+    if args.json:
+        print(json.dumps({"routes": routes_demandees, "racine": str(racine), "result": result}, ensure_ascii=False, indent=2))
+    else:
+        print("\n".join(textes))
+        print("\n--- cockpit lecture seule (aucune ecriture, aucun drapeau pose) ---")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

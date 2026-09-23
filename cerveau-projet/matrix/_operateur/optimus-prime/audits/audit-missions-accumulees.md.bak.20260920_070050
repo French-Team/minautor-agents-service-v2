@@ -1,0 +1,163 @@
+---
+identite:
+  type: analyse
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# AUDIT -- LES MISSIONS ACCUMULEES SONT-ELLES ENCORE CONFORMES A L ETAT D AUJOURD HUI ?
+
+MO-296, source EO-293 (demande createur `[audit]`), LECTURE SEULE.
+Toutes les mesures de ce rapport ont ete faites le 2026-09-20 entre 06:33 et 06:50.
+
+## Le sujet, et la methode
+
+La demande : les missions accumulees, non effectuees, risquent d etre NON CONFORMES aux
+changements faits depuis leur creation. Mesure avant de juger : on ne juge pas un item sur
+son texte, on CONFRONTE sa premisse a l etat mesure.
+
+Trois sources lues, jamais de memoire :
+  - l ENTONNOIR : `pilote/entonnoir-files-optimus.json` (items avec leur `deposee_le`) ;
+  - la FILE DU PILOTE : `pilote/file-missions-optimus.json` (missions chargees, avec statut) ;
+  - le DOMICILE DES TRACES : `matrice/data/modifications-par-fichier.json` (qui a touche QUOI,
+    a QUELLE date, sous QUEL item/mission) + `matrice/data/suivi-optimus.jsonl`.
+Puis, pour chaque objet, la mesure qui tranche : la cible existe-t-elle encore, la premisse
+est-elle encore vraie, une mission posterieure l a-t-elle deja faite.
+
+## 1. Ce qui attend, et depuis quand (mesure)
+
+| Source | Volume | Dates |
+|---|---|---|
+| ENTONNOIR (items a classer/naitre) | **18 items** | du 2026-09-19 18:08 au 2026-09-20 06:30 |
+| FILE DU PILOTE (missions chargees) | 91 missions, dont **41 EN ATTENTE** | 50 terminees, 41 en-attente |
+| dont la famille AUTO-DIAGNOSTIC | **32 missions (MO-252 a MO-283)**, une par outil | nees de la sonde sc-004 (MO-202) |
+| BRIN | 18 items, **tete = EO-270** | tete NON auto-validee |
+
+L accumulation est concentree sur 13 heures (19/09 18:08 -> 20/09 06:30), mais le code a
+ENORMEMMENT bouge dans ces 13 heures : MO-239 a MO-296, soit ~58 missions. C est exactement
+la fenetre ou un item peut devenir faux sans que personne ne le remarque.
+
+## 2. DEJA FAIT, et pourtant toujours en file (4 objets)
+
+Ce sont les plus dangereux : ils vont consommer un round pour rien, et l un d eux arrete la chaine.
+
+| Objet | Depose/charge | Fait par | Preuve mesuree le 2026-09-20 |
+|---|---|---|---|
+| **EO-270** (poids de l injection) | 19/09 18:52:56 | trace du 19/09 18:56:26, tags `EO-270` | plafond pose (`PLAFOND_LEGONS_TOKENS = 6000`, `PLAFOND_LEGONS_NOMBRE = 30`, `selectionner_lecons` rend retenues+ecartees) ; poids d une injection REELLE : 26 306 tokens (MO-241) -> **9 069** (MO-250) ; la sortie du fin DIT "23 injectees / 85 ecartees (plafond 6000 tokens, EO-270)" |
+| **EO-274** (l agent s arrete au lieu d enchainer) | 19/09 19:05:59 | traces du 19/09 19:06:37 et 19:06:38, tags `EO-274` | le rappel d une mission DE LOT porte "CHAINE ARMEE (lot) : cette mission fait partie d une CHAINE armee -- chaque fin lance la mission suivante du lot" (MO-250, mesure) ; le rappel d une mission HORS LOT est VIDE (MO-295) -- les deux polarites sont la |
+| **EO-267** (duree du suivi a 0) | 19/09 18:36:57 | traces du 19/09 18:37:41 et 18:38:05, tags `EO-267` | la vue rend des durees MESUREES : MO-295 = **532 s**, MO-294 = **145 s** (bornes debut/fin) ; la colonne ne peut plus valoir zero par construction |
+| **MO-287** (controle permanent des placeholders) | charge le 19/09 (origine EO-267) | garde pose le 19/09 18:41:22, tags `EO-268` | `verifier-placeholders.py` EXISTE et tourne en PERMANENT (maillon 21 bis de la non-regression) ; il ACCUSE aujourd hui (dettes legacy EO-269) |
+
+TROIS de ces quatre objets sont des ITEMS de l entonnoir (EO-267, EO-270, EO-274) : ils attendent
+dans la file alors que leur livrable est en place. Et **EO-270 est la TETE DU BRIN**.
+
+## 3. Non conforme a une decision POSTERIEURE : les 32 AUTO-DIAGNOSTIC
+
+C est le plus gros bloc (32 missions sur 41 en attente) ET le plus couteux a executer tel quel.
+
+- MESURE (source `preparation/chaine-reparation-de-masse-des-32-refus-muets.md`, chaine **PB-002**,
+  statut `todo`) : "PISTE A EXAMINER : ... **generaliser par FAMILLE d outils au lieu de 32 rounds
+  separes**" et "**INTERDIT : recopier le motif outil par outil (M-076, un seul domicile)**".
+  La contre-analyse (nemesis du 2026-09-19) a deja mesure les deux verdicts : portee = risque NUL
+  (0 appelant a arguments libres), la voie de masse est AUTORISEE.
+- La file du pilote, elle, porte 32 missions UNITAIREs, une par outil (MO-252 a MO-283 :
+  bdd-activites, bdd-conservation, ..., verifier-regles) : c est EXACTEMENT la forme que PB-002
+  interdit.
+- PREMISSE RE-MESUREE AUJOURD HUI (sonde `sc-004-auto-diagnostic inspection`, lecture seule) :
+  **35 sondes, 3 conformes, 32 ecarts** -- chiffre identique a celui qui a produit les 32 missions.
+  La PREMISSE tient donc toujours ; c est la ROUTE qui est perimee (32 rounds au lieu d une chaine
+  + des gestes par famille).
+
+VERDICT : **A REECRIRE** (les 32 missions unitaires doivent etre remplacees par l execution de la
+chaine PB-002, ou la chaine doit etre abandonnee EN LE DISANT). Les executer telles quelles
+violerait une decision posterieure et couterait ~128 editions au lieu d une dizaine.
+
+## 4. Premisse tombee, ou exemple deja corrige (2 objets)
+
+**EO-264 -- "le pilote s arrete apres CHAQUE mission" : EN VIGUEUR, cause EXACTE mesuree.**
+La question (2) de l item demandait "la raison exacte du STOP sur l etat reel -- quelle tete,
+quel verdict d auto-validation, et pourquoi". Reponse mesuree :
+  - tete du brin = **EO-270**, `auto_validation = non` (axe `perimetre` : "zone CRITIQUE nommee : theme") ;
+  - regle (MO-175, `decision_enchainement`) : "une mission NON auto-validee ARRETE tout : le pilote
+    rend la main, le createur reprend la main" ;
+  - donc, a la cloture de la mission en cours, le message sera `STOP ENCHAINEMENT : EO-270 n est
+    PAS auto-validee -- la chaine s arrete ici`, et RIEN ne sera consomme.
+  Le mecanisme d enchainement, lui, FONCTIONNE (mesure : MO-248 -> MO-249, MO-295 -> MO-250,
+  "Enchainement automatique de la mission suivante du lot"). Le pilote n est donc pas casse : c est
+  la TETE DU BRIN qui arrete la chaine -- et cette tete est un item DEJA FAIT (section 2).
+  A ajouter a l item : le STOP ne doit pas etre compris comme une panne ; mais faire porter la tete
+  du brin par un item deja fait est une panne de file, et c est ELLE qui se voit.
+
+**EO-277 -- "la racine de la Matrice est hors du balayage" : A REECRIRE (exemple corrige, trou neuf).**
+Le domicile `arbres_matrice()` a ete pose dans `cible.py` (trace du 19/09 19:37:49, tags `EO-277`) et
+la mesure le confirme : `CROCHETS.md.bak...` (15 occurrences au domicile de conservation),
+`lancer.py.bak...` (1), `cameleon.md.bak...` (6) sont desormais VUS -- les exemples nommes par l item
+sont donc couverts. MAIS un cas NEUF du meme defaut existe, et il est ne de ce mois : la porte ECRIRE
+ecrit dans l allowlist RACINE (`AGENTS.md`, `demarrer-*.md`), hors de la Matrice. Mesure :
+`demarrer-optimus-prime.md.bak.20260920_062714` (cree le 2026-09-20 06:27:14 par la porte, pendant
+MO-295) : **0 occurrence** dans le domicile de conservation. Un point de restauration que la Matrice
+cree elle-meme et que son propre balayage ne voit pas.
+
+## 5. Cibles et premisses verifiees objet par objet
+
+### 5.1 Les 18 items de l entonnoir
+
+| Item | Depose le | Verdict | Mesure du 2026-09-20 |
+|---|---|---|---|
+| EO-263 audit continu du watchdog | 19/09 18:08 | EN VIGUEUR | le watchdog existe (`watchdog-flux2`, `watchdog-flux2-bg`, `demarrer-watchdog`) ; aucun audit continu ; `sc-001` est le combo AUTO-XXX, pas le watchdog |
+| EO-264 le pilote s arrete | 19/09 18:08 | EN VIGUEUR | voir section 4 : tete du brin EO-270 non auto-validee |
+| EO-267 duree a 0 | 19/09 18:36 | **DEJA FAIT** | section 2 : durees mesurees 532 s / 145 s |
+| EO-269 nettoyage des durees legacy | 19/09 18:42 | EN VIGUEUR | `suivi-optimus` n a AUCUN verbe `corriger` (usage : noter, lire, verifier, coherence, archiver, vue...) ; `placeholders` toujours KO ; `archiver --doublons` traite un AUTRE defaut (les 2e bornes, sujet de MO-250) |
+| EO-270 poids de l injection | 19/09 18:52 | **DEJA FAIT** | section 2 : 26 306 -> 9 069 tokens |
+| EO-271 reveil apres une fin | 19/09 18:52 | EN VIGUEUR | lecteurs de `outbox.jsonl` : cockpit (affichage) et `lanceur-non-regression-flux` (declaration) ; AUCUNE boucle ne consomme une injection |
+| EO-272 defcon allumage positif | 19/09 19:01 | EN VIGUEUR | dernieres transitions du defcon : 2026-09-09 (test M-080) ; AUCUNE transition depuis ; niveau courant 2, "aucun declencheur a poser" |
+| EO-273 suivi du pilote | 19/09 19:02 | EN VIGUEUR (en cours) | chaine PB-003/SP-003/TD-003 OUVERTE ; T1 fait (`suivi-pilote/pannes-declarees.json` + README) ; T2 (vue + journal) et T4 (controle permanent) a venir ; `index-chaine.md` : PB-003 `[todo]` |
+| EO-274 l agent s arrete au lieu d enchainer | 19/09 19:05 | **DEJA FAIT** | section 2 : rappel LOT = chaine armee, rappel HORS LOT = vide |
+| EO-275 sc-001 pour le pilote | 19/09 19:13 | EN VIGUEUR | `sc-001-auto-xxx` enchaine PREPARATION / AUTO-CORRECTION / AUTO-TESTING ; rien dans son README ne sert le pilote |
+| EO-276 un point disparu n a aucun verbe | 19/09 19:22 | EN VIGUEUR | `bdd-conservation controler-archives` rend **14** "element non archive DISPARU de sa source" (K-812 a K-1150) ; aucun verbe ne peut les solder |
+| EO-277 racine hors balayage | 19/09 19:23 | **A REECRIRE** | section 4 : exemples corriges, trou NEUF (allowlist racine) |
+| EO-278 la porte qui juge ne recense pas | 19/09 19:37 | EN VIGUEUR | aucune trace posterieure ne cite EO-278 ; `recenser` existe et sa porte ecrit au domicile (MO-192), mais rien ne dit que les points NEUFS naissent recenses |
+| EO-279 chemin du bilan de cloture | 19/09 20:42 | EN VIGUEUR (reproduit) | `pilote fin --bilan-fichier tmp-optimus/bilan-mo295.txt` -> `REFUS : --bilan-fichier illisible` ; le vrai chemin est `_operateur/optimus-prime/tmp-optimus/...` (utilise pour clore MO-295) |
+| EO-282 controle d attribution des ecritures | 19/09 21:00 | EN VIGUEUR (prealable QUANTIFIE) | le prealable est mesure : **5 formes de cle pour UN SEUL fichier** (`_operateur/...`, `cerveau-projet/matrix/_operateur/...`, `cerveau-projet/matrix/matrice/pilote/...`, `matrice/pilote/...`, `pilote/...`) ; `garde-perimetre-write` garde le PERIMETRE, pas l ATTRIBUTION. Observation du jour : le garde des placeholders a ete ecrit le 19/09 a 18:41:22 alors qu AUCUNE mission n est ouverte au journal (entre 18:36:46 et 18:50:35) -- une ecriture dont la mission ne se lit pas |
+| EO-283 garde de versions | 19/09 21:00 | EN VIGUEUR | aucun garde de versions dans l inventaire des briques |
+| EO-291 cadence de la roue | 20/09 06:29 | EN VIGUEUR | depose pendant l audit-precedent, 4 minutes avant |
+| EO-292 noms proches par sous-chaine | 20/09 06:30 | EN VIGUEUR | idem |
+
+BILAN ENTONNOIR : 3 deja faits (EO-267, EO-270, EO-274), 1 a reecrire (EO-277), 14 en vigueur.
+
+### 5.2 Les 41 missions en attente de la file du pilote
+
+| Bloc | Missions | Verdict | Mesure |
+|---|---|---|---|
+| AUTO-DIAGNOSTIC refus-muet | **MO-252 a MO-283** (32) | **A REECRIRE** | section 3 : route interdite par PB-002 ; premisse re-mesuree IDENTIQUE (32 ecarts) |
+| lot : garde de serie stricte | MO-205 | EN VIGUEUR (jamais commencee) | `charger_lot` (`pilote/file/fonctions.py:400`) ne refuse PAS un 2e lot : il appelle `armer_lot(file_missions, ids)` sans garde -- le lot courant est REMPLACE en silence, exactement ce que l item decrit ; aucun evenement au journal pour MO-205 |
+| crochets : 2 trous | MO-208 | EN VIGUEUR | la liste FERMEE compte 10 mots aujourd hui et ne contient NI `[corriger]` NI `[super-combos]` nu |
+| module natif `fragment.py` | MO-209 | EN VIGUEUR | `matrice/data/outils/fragment/` ABSENT |
+| refus nomme : generaliser | MO-215 | **A REECRIRE (doublon)** | meme objet que la chaine PB-002 ("83 a 110 appelants, 3 lieux disent l inconnue") : l item est absorbe par la chaine |
+| famille des super-combos : `entry.py` | MO-228 | EN VIGUEUR | mesure : `outils-readme.md` ligne 113 enseigne encore `entry.py` a la racine et `bdd-frictions/` porte REELLEMENT les deux formes (`entry.py` + `main.py`) |
+| informations systeme de la machine | MO-251 | EN VIGUEUR | aucun fichier de ce genre dans `matrice/data/` |
+| controle permanent des placeholders | MO-287 | **DEJA FAIT** | section 2 : `verifier-placeholders.py` pose le 19/09 18:41:22 (EO-268) et tourne en maillon permanent |
+| audit des missions accumulees | MO-296 | EN COURS | c est ce rapport |
+| reparation du suivre (MO-202) | MO-250 | EN COURS | mission reprise apres cet audit |
+
+## 6. Ce que cet audit demande de TRANCHER (aucune action n a ete prise)
+
+1. **FERMER les 4 objets deja faits** : EO-267, EO-270, EO-274 (entonnoir) et MO-287 (file), en
+   nommant la trace qui les a faits -- sinon ils consomment 4 rounds et l un d eux arrete la chaine.
+2. **DETASSER la tete du brin** : EO-270 est la tete ET elle est faite : la laisser en place garantit
+   le `STOP ENCHAINEMENT` a la prochaine cloture, ce qui se lit comme la panne denoncee par EO-264.
+3. **REECRIRE les 32 unitaires en UNE chaine** (PB-002) ou ABANDONNER la chaine : les deux ne peuvent
+   pas vivre ensemble. Mesure a l appui : premisse identique (32 ecarts), portee deja mesuree nulle.
+4. **REECRIRE EO-277** : son exemple est corrige, son defaut a survecu ailleurs (allowlist racine).
+5. **DECIDER le sort des items a premisse intacte mais REDONDANTS** : MO-215 (absorbee par PB-002).
+
+## 7. Limites de cet audit (ce qu il ne prouve pas)
+
+- Les 41 missions n ont pas toutes ete mesurees une par une : les 32 AUTO-DIAGNOSTIC l ont ete par
+  BLOC (une seule sonde rejouee les couvre toutes, elles portent le meme motif), les 9 autres
+  individuellement.
+- Les items de la file n ont pas d horodatage de charge pour 6 d entre eux (`charge le ?`) : la date
+  lue vient du journal des debuts, qui n en porte aucun. Le domicile de la file ne DATE pas ses
+  missions -- c est une lacune en soi.
+- Aucune ECRITURE n a ete faite sur les objets audites : cet audit CONSTATE, il ne repare pas. Les
+  verdicts ci-dessus sont des propositions de decision, pas des actes.

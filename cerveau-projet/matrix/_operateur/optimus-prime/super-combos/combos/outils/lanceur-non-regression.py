@@ -28,6 +28,8 @@ Rejoue : PRE-VOL (integrite + activite/frictions + remorque)
 + PARCOURS (tout theme `pret` est ROUTE, et toute route mene quelque part, MO-087)
 + CHEMINS (aucun `parents[N]` nu, la racine se DETECTE par marqueur, MO-088)
 + CARTES D'IDENTITE (tout document dit QUOI il est, MO-089)
++ SUIVI DU PILOTE (la VUE du pilote est recalculee et la Table 0 doit etre vide --
+ le silence, l'age, la forme du lot et une trace absente sont surveilles, EO-273)
 + ROLES (chaque type a une POSTURE reelle du vivier, et le pilote l'INJECTE,
  MAILLON 2/5 de la revision)
 + RECHERCHE (le pilote INJECTE la question au moteur, une seule derivation
@@ -45,6 +47,9 @@ Rejoue : PRE-VOL (integrite + activite/frictions + remorque)
 + CROCHETS (la liste fermee et sa convention disent la MEME chose, dans les
  deux sens, et le type transmis appartient a la liste fermee, R5)
 + APPELS NON LIES (un appel orphelin est un NameError en puissance, R5)
++ REFUS NOMME DES OPTIONS INCONNUES (la sonde sc-004 : tout outil qui avale ou
+ refuse muettement une option fautive est ACCUSE, et la suite PROUVE qu'elle sait
+ rougir sur un cobaye muet en zone jetable, T4 de PB-002, MO-215)
 Verdict OK/KO. code 0 = OK, code 1 = KO.
 
 Bloquants : le controle des PREFIXES du contrat fondamental (CV-009/CV-011) et,
@@ -57,6 +62,7 @@ import sys
 import argparse
 import py_compile
 import subprocess
+import tempfile
 from pathlib import Path
 
 
@@ -311,6 +317,36 @@ def main():
                             if l.strip().startswith("ECART")]
                 ko.append("croisement: " + ("; ".join(ecarts_c) if ecarts_c
                                            else "voir suivi-optimus coherence"))
+
+        # 9 ter. LA BORNE DU MARBRE REJOUEE SUR UN JOURNAL JETABLE (MO-250) : la
+        #       borne `debut` avait DEUX ecrivains -- le pilote a l injection et
+        #       l agent sur l ORDRE 4.5 -- donc un agent obeissant fabriquait le
+        #       doublon que `verifier` accusait (MO-202, MO-240). Le 9 ci-dessus
+        #       juge le VRAI journal (propre aujourd'hui) ; il ne dit donc RIEN du
+        #       chemin qui l a produit. Ce maillon REJOUE le chemin complet dans un
+        #       workspace JETABLE : le doublon est fabrique, ACCUSE, puis REPARE par
+        #       la porte nommee (`archiver --doublons`), et `verifier` doit rendre
+        #       VERT avec 1 debut / 1 fin. Un controle que rien ne rejoue ne
+        #       protege rien -- la lecon du 9, apprise une troisieme fois.
+        garde_marbre = outils / "verifier-marbre.py"
+        if not garde_marbre.is_file():
+            print("  marbre: ABSENT")
+            ko.append("manquant: verifier-marbre.py")
+        else:
+            r = subprocess.run([sys.executable, str(garde_marbre),
+                                "--racine", str(zone.parent.parent)],
+                               capture_output=True, text=True)
+            etat = "OK" if r.returncode == 0 else "KO"
+            cobaye_marbre = [l.strip() for l in r.stdout.splitlines()
+                             if l.strip().startswith("cobaye ")]
+            print(f"  marbre: {etat}"
+                  + (f" (cobaye : {len(cobaye_marbre)} epreuve(s) rejouee(s))"
+                     if cobaye_marbre else ""))
+            if r.returncode != 0:
+                ecarts = [l.strip() for l in r.stdout.splitlines()
+                          if l.strip().startswith(("[KO", "ECART", "DETTE"))]
+                ko.append("marbre: " + ("; ".join(ecarts) if ecarts
+                                        else "voir verifier-marbre.py"))
 
     # 10. ANTI-SPAM MISSIONS (MO-070 / MO-073) : le depot d'une vigie est borne
     #     par MISSION, pas par etat changeant. Les DEUX vigies ont eu le MEME
@@ -669,6 +705,53 @@ def main():
             ko.append("valeurs-en-dur: "
                       + ("; ".join(ecarts) if ecarts else "voir scan-valeurs-en-dur.py"))
 
+    # 21 quinquies. COMMANDES (MO-249 / P3) : les autres gardes surveillent les
+    #     FICHIERS ; celui-ci surveille les COMMANDES que les agents COPIENT --
+    #     les lignes de commande des blocs de code des documents. Un appel sans
+    #     interpreteur, un chemin d argument non ancre, un heredoc ou un python -c
+    #     se paient en erreurs de syntaxe (question du createur). Le lanceur unique
+    #     (matrix/lancer.py) est la reponse ; ce garde empeche le retour des
+    #     mauvaises habitudes.
+    print("== 21 quinquies. commandes (garde des commandes documentees) ==")
+    garde_commandes = outils / "verifier-commandes.py"
+    if not garde_commandes.is_file():
+        print("  commandes: ABSENT")
+        ko.append("manquant: verifier-commandes.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_commandes), "--racine", str(zone.parent.parent)],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        print("  commandes: " + etat)
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith("[KO]")]
+            ko.append("commandes: " + ("; ".join(ecarts) if ecarts else "voir verifier-commandes.py"))
+
+    # 21 SEXIES. BRIQUES (EO-287 / MO-293) : le lanceur ET les appelants internes
+    #     resolvent une brique par son NOM. Ce contrat n etait prouve que par un
+    #     cobaye JETABLE, purge avec la zone -- rien ne le rejouait. Il l est
+    #     maintenant a chaque suite : CONTRE-TEMOIN (chaque nom RENDU rend un main.py
+    #     qui existe, et les noms des appelants -- DECOUVERTS par leur import du
+    #     domicile, donc AUCUNE table a tenir -- resolvent bien leur cible) et COBAYE
+    #     (un nom INCONNU rend un
+    #     REFUS NOMME : nom fautif, proches, remede -- jamais un refus silencieux),
+    #     plus la FACADE (--lister == domicile, nom inconnu = code 2). Le garde porte
+    #     son AUTOTEST (SIX epreuves) : deux resolutions truquees doivent crier, un FAUX
+    #     appelant doit rester INVISIBLE et un appelant SAIN non accuse -- un garde qu on
+    #     ne peut pas faire rougir ne prouve rien, un garde qui accuse tout non plus.
+    print("== 21 sexies. briques (le nom rend la brique, ou refuse en la nommant) ==")
+    garde_briques = outils / "verifier-resolution.py"
+    if not garde_briques.is_file():
+        print("  briques: ABSENT")
+        ko.append("manquant: verifier-resolution.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_briques), "--racine", str(zone.parent.parent)],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        print("  briques: " + etat)
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith("[KO]")]
+            ko.append("briques: " + ("; ".join(ecarts) if ecarts else "voir verifier-resolution.py"))
+
     # 22. ROLES (MAILLON 2/5 de la revision, 2026-09-14) : le cameleon recoit UNE
     #     personnalite par mission ; Optimus n'en recevait AUCUNE -- ses missions
     #     ne portaient qu'un theme de CHANTIER (le QUOI toucher) et le catalogue
@@ -926,6 +1009,282 @@ def main():
             ko.append("miroirs: " + ("; ".join(ecarts[:6]) if ecarts
                                      else "voir verifier-contrat-fondamental.py"))
 
+    # 32. REFUS NOMME DES OPTIONS INCONNUES (T4 de PB-002, MO-215). Mesure
+    #     d'origine (MO-195) : une option inconnue rendait le resultat du DEFAUT,
+    #     indiscernable d'un appel correct (L-055). La chaine PB-002 a repare le
+    #     DOMICILE (T1), les outils hors domicile (T2) et le CRITERE de la sonde
+    #     (T3). Le CONTROLE PERMANENT manquait : la sonde sc-004 existait mais ne
+    #     tournait que si quelqu'un la tapait a la main -- un controle qui ne
+    #     tourne JAMAIS est un constat de round, pas une surveillance (meme piege
+    #     que MO-214). Ce maillon l'entre dans la suite ET prouve qu'elle sait
+    #     rougir : un cobaye MUET, ecrit dans une zone JETABLE SYSTEME (jamais un
+    #     outil reel abime), doit etre ACCUSE et NOMME. Sans lui, un refus muet
+    #     peut revenir sans que rien ne rougisse.
+    print("== 32. refus nomme des options inconnues (une option fautive se DIT) ==")
+    sonde_options = zone / "super-combos" / "sc-004-auto-diagnostic" / "main.py"
+    if not sonde_options.is_file():
+        print("  sonde options: ABSENT")
+        ko.append("manquant: sc-004-auto-diagnostic/main.py")
+    else:
+        r = subprocess.run([sys.executable, str(sonde_options), "inspection"],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        print(f"  sonde options: {etat}")
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith("[")]
+            ko.append("options: " + ("; ".join(ecarts) if ecarts else "voir sc-004 inspection"))
+        # L'AUTO-TEST : la sonde SAIT ACCUSER (3 cobayes en zone jetable) -- un
+        # controle qui ne peut pas echouer ne prouve rien.
+        r = subprocess.run([sys.executable, str(sonde_options), "auto-test"],
+                           capture_output=True, text=True)
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith("- ")]
+            ko.append("sonde auto-test: " + ("; ".join(ecarts) if ecarts
+                      else "voir sc-004 auto-test"))
+        # LA PREUVE DE ROUGE : un cobaye MUET, en zone jetable, doit faire ROUGIR
+        # l'inspection -- la suite ne peut donc pas etre verte par construction.
+        with tempfile.TemporaryDirectory(prefix="cobaye-refus-muet-") as jetable:
+            dossier_cobaye = Path(jetable) / "cobaye-muet"
+            dossier_cobaye.mkdir()
+            (dossier_cobaye / "main.py").write_text(
+                "import sys\n"
+                "def main():\n"
+                "    print(\"usage : cobaye-muet\")\n"
+                "    return 2\n"
+                "if __name__ == \"__main__\":\n"
+                "    sys.exit(main())\n",
+                encoding="utf-8", newline="\n")
+            r = subprocess.run([sys.executable, str(sonde_options), "inspection",
+                                "--outils", jetable], capture_output=True, text=True)
+            if r.returncode != 0 and "cobaye-muet" in r.stdout and "refus-muet" in r.stdout:
+                print("  sonde options: cobaye muet ACCUSE (la suite sait rougir)")
+            else:
+                ko.append("options: un cobaye MUET n a PAS ete accuse -- la suite"
+                          " serait verte par construction")
+
+    # 33. PROFIL DE L'UTILISATEUR (demande createur, 2026-09-21) : la fiche
+    #     USER-PROFIL.md etait remplie avec le createur mais AUCUN agent ne la
+    #     lisait. Mesure du jour : le pilote ne l'ouvrait qu'au DEMARRAGE, pour
+    #     tester un champ, puis jetait le contenu -- les 8 champs n'atteignaient
+    #     aucune mission. Le profil voyage desormais AVEC la mission (comme la
+    #     posture et la question de recherche), BORNE par un plafond declare, et
+    #     les champs ecartes sont DITS. Le garde tient les quatre bouts : un seul
+    #     domicile (le motif partage), le champ PESE (sinon la mesure se tairait
+    #     sur ce qu'elle livre -- defaut exact de MO-314), les DEUX chemins
+    #     d'injection, et un cobaye OBESE qui doit mordre puis DISPARAITRE (la
+    #     zone jetable reste vide : la suite ne laisse rien derriere elle).
+    print("== 33. profil utilisateur (injecte, borne) ==")
+    garde_profil = outils / "verifier-profil-injection.py"
+    if not garde_profil.is_file():
+        print("  profil: ABSENT")
+        ko.append("manquant: verifier-profil-injection.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_profil), "--racine", str(zone.parent.parent)],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        cobaye = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith("cobaye ")]
+        print(f"  profil: {etat}" + (f" ({cobaye[0]})" if cobaye else ""))
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines()
+                      if l.strip().startswith(("[KO", "ECART"))]
+            ko.append("profil: " + ("; ".join(ecarts) if ecarts
+                                    else "voir verifier-profil-injection.py"))
+
+    # 34. SOURCE D'UN ITEM (demande createur, 2026-09-21) : < reparer le champ source
+    #     des missions recentes : il a perdu le type, la cible et l urgence que
+    #     portaient les anciennes >. Mesure : la fabrique AUTOMATIQUE composait la
+    #     forme LONGUE (96 missions) quand les DEUX chemins MANUELS ecrivaient
+    #     `entonnoir:<id>` : 46 missions ont perdu a la naissance le type, la
+    #     categorie et l urgence de leur item -- trois domiciles pour une idee, deux
+    #     en desaccord. La composition vit desormais dans UN SEUL domicile, les deux
+    #     chemins manuels l appellent, et un item INTROUVABLE est DIT au lieu de se
+    #     taire. Le garde tient les trois champs (listes FERMEES : type, categorie de
+    #     SON type, urgence), la borne REELLE du correctif (les 46 anciennes ne sont
+    #     pas accusees : on ne reecrit pas l histoire avec des valeurs inventees),
+    #     les DEUX LECTEURS, et un cobaye qui doit MORDRE puis DISPARAITRE.
+    print("== 34. source d'un item (trois champs, un seul domicile) ==")
+    garde_source = outils / "verifier-source-item.py"
+    if not garde_source.is_file():
+        print("  source: ABSENT")
+        ko.append("manquant: verifier-source-item.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_source), "--racine", str(zone.parent.parent)],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        cobaye = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith("cobaye ")]
+        print(f"  source: {etat}" + (f" ({cobaye[0]})" if cobaye else ""))
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines()
+                      if l.strip().startswith(("[KO", "ECART"))]
+            ko.append("source: " + ("; ".join(ecarts) if ecarts
+                                    else "voir verifier-source-item.py"))
+
+    # 35. ENCHAINEMENT (une mission CHARGEe garde son verdict d auto-validation) :
+    #     mesure du 2026-09-21, `est_auto_validee` comparait l id de la MISSION
+    #     (MO-N) a un index qui ne porte que des ids d ITEM (EO-N) -- le verdict se
+    #     perdait au pont, 45 missions sur 83 n en portaient aucune trace, et la
+    #     chaine s arretait APRES CHAQUE mission (EO-264). Ce maillon exige le
+    #     domicile UNIQUE du format de provenance, les consommateurs qui le lisent,
+    #     le cobaye qui MORD (index vide, item non auto), et la mesure REELLE que
+    #     l item exige : la tete du brin, son verdict, l etat du lot.
+    print("== 35. enchainement (le verdict d'une mission chargee se resout) ==")
+    garde_enchainement = outils / "verifier-enchainement.py"
+    if not garde_enchainement.is_file():
+        print("  enchainement: ABSENT")
+        ko.append("manquant: verifier-enchainement.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_enchainement), "--racine", str(zone.parent.parent)],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        mesure = [l.strip() for l in r.stdout.splitlines() if "MESURE REELLE" in l]
+        print(f"  enchainement: {etat}" + (f" ({mesure[0][:110]})" if mesure else ""))
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines()
+                      if l.strip().startswith("[KO")]
+            ko.append("enchainement: " + ("; ".join(ecarts) if ecarts
+                                          else "voir verifier-enchainement.py"))
+
+    # 36. EXTRACTION DES ECARTS (lecon L-163, MO-382/383/384) : les maillons 34 et
+    #     35 filtraient la sortie de leur garde par un prefixe que ce garde n imprime
+    #     JAMAIS (`KO]` quand `controler()` imprime `[KO`) : un ecart non extrait est
+    #     un ROUGE MUET -- le verdict sait QU une chose a echoue et jamais LAQUELLE,
+    #     alors que la cause ETAIT ecrite par le garde et perdue au dernier metre de
+    #     la lecture. Ce maillon mesure sur TOUTE la Matrice les sites d extraction et
+    #     exige que chaque filtre soit le DEBUT d une ligne qu un fichier IMPRIME, ou
+    #     une exemption NOMMEE (document, aide, indentation). Il DIT aussi sa
+    #     COUVERTURE : un controle qui ne lit rien passerait pour vert. Sa mesure est
+    #     lue par un CONTENU et non par un prefixe -- un filtre neuf ecrit ici serait
+    #     precisement le defaut que ce maillon surveille.
+    print("== 36. extraction des ecarts (tout filtre a un producteur) ==")
+    garde_extraction = outils / "verifier-extraction-ecarts.py"
+    if not garde_extraction.is_file():
+        print("  extraction: ABSENT")
+        ko.append("manquant: verifier-extraction-ecarts.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_extraction), "--racine", str(zone.parent.parent)],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        produit = [l.strip() for l in r.stdout.splitlines()
+                   if "filtre(s) sans producteur" in l]
+        print(f"  extraction: {etat}" + (f" ({produit[0][:110]})" if produit else ""))
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines()
+                      if l.strip().startswith("[KO")]
+            ko.append("extraction: " + ("; ".join(ecarts) if ecarts
+                                        else "voir verifier-extraction-ecarts.py"))
+
+    # 37. SUIVI DU PILOTE (T4 de PB-003/SP-003/TD-003, EO-273) : la VUE du pilote
+    #     (suivi-pilote, T2) est recalculee et le maillon tombe si la Table 0 n est
+    #     PAS vide. C est le CONTROLE PERMANENT : les gardes de la zone surveillent
+    #     ce qui est ECRIT et ce qui REPOND ; cette vue surveille le SILENCE, l AGE,
+    #     la FORME DU LOT et une CONTRADICTION dont l une des traces est absente.
+    #     Mesure du 2026-09-22 (pose du maillon) : la vue a ACCUSE une panne
+    #     VIVANTE le jour meme (journal en pause sans reprise du 2026-09-12, etat
+    #     absent -- dix jours sans que personne ne le voie). Une panne CONSTATEE et
+    #     DEPOSEE (exception OUVERTE, nommee et motivee dans la declaration) ne
+    #     gele pas la suite : elle reste VISIBLE dans la vue et dans la sortie.
+    print("== 37. suivi du pilote (la Table 0 doit etre vide) ==")
+    porte_suivi = outils / "suivi-pilote.py"
+    if not porte_suivi.is_file():
+        print("  suivi-pilote: ABSENT")
+        ko.append("manquant: suivi-pilote.py")
+    else:
+        r = subprocess.run([sys.executable, str(porte_suivi), "--racine", str(zone.parent.parent)],
+                           capture_output=True, text=True)
+        vert = r.returncode == 0
+        print("  suivi-pilote: " + ("OK" if vert else "KO"))
+        for ligne in r.stdout.splitlines():
+            if ligne.startswith("[KO]"):
+                print("    " + ligne.strip()[:150])
+            if ligne.startswith("[--]") and "OUVERTE" in ligne:
+                print("    " + ligne.strip()[:150])
+            if ligne.startswith("VERDICT"):
+                print("    " + ligne.strip()[:150])
+        if not vert:
+            ecarts = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith("[KO]")]
+            ko.append("suivi-pilote: " + ("; ".join(ecarts) if ecarts
+                                          else "voir suivi-pilote.py -- la Table 0 n est pas vide"))
+
+    # 38. CONTROLE D'ATTRIBUTION (ORDRE 3.2, M-153, MO-357) : une source a
+    #     CHANGE -- par quelle PORTE ? Aucun controle ne repondait : l'empreinte
+    #     d'integrite dit QU'il y a eu ecriture, jamais QUI l'a faite, et un outil
+    #     natif ou une commande du shell laissent la MEME trace qu'une porte. Ce
+    #     maillon exige que chaque changement posterieur a la pose porte une NOTE
+    #     TRACEE posterieure, au domicile des modifications : sans note, ECRITURE
+    #     HORS DE SA PORTE, accusee nommement. Les exclusions (formes d'etat,
+    #     etats de routines, points de restauration, zones jetables, archives) sont
+    #     DECLAREES ET COMPTEES -- une exclusion muette serait un angle mort
+    #     (L-104). La portee est MESUREE a la pose (L-286) : le controle ne doit
+    #     pas accuser une ecriture legitime.
+    print("== 38. attribution (toute ecriture passe par sa porte) ==")
+    garde_attribution = outils / "controle-attribution.py"
+    if not garde_attribution.is_file():
+        print("  attribution: ABSENT")
+        ko.append("manquant: controle-attribution.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_attribution), "verifier"],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        print("  attribution: " + etat)
+        for ligne in r.stdout.splitlines():
+            depouille = ligne.strip()
+            if (depouille.startswith("- ") or depouille.startswith("changees depuis")
+                    or depouille.startswith("sources NEUVES")):
+                print("    " + depouille[:150])
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith("- ")]
+            ko.append("attribution: " + ("; ".join(ecarts[:6]) if ecarts
+                      else "voir controle-attribution.py"))
+    # 39. GARDE DES VERSIONS (R-003 / R-004 / ORDRE 3.4, M-154, MO-358) : les
+    #     fichiers v1/v2 ne sont JAMAIS touches par la v3 et la v3 ne les
+    #     ADRESSE pas. Deux populations : les sources GELEES dont l'empreinte a
+    #     change (ou apparu, ou disparu) depuis la pose, et les litteraux du CODE
+    #     de la v3 qui ATTEIGNENT une zone gelee. Une MENTION (commentaire,
+    #     message, liste d'interdiction) n'est pas une adresse : la difference est
+    #     mesuree, sinon le garde accuserait des fichiers sains des la pose.
+    print("== 39. versions (v1/v2 gelees, aucune adresse de la v3) ==")
+    garde_versions = outils / "garde-versions.py"
+    if not garde_versions.is_file():
+        print("  versions: ABSENT")
+        ko.append("manquant: garde-versions.py")
+    else:
+        r = subprocess.run([sys.executable, str(garde_versions), "verifier"],
+                           capture_output=True, text=True)
+        etat = "OK" if r.returncode == 0 else "KO"
+        print("  versions: " + etat)
+        for ligne in r.stdout.splitlines():
+            depouille = ligne.strip()
+            if depouille.startswith("- ") or depouille.startswith("code de la v3"):
+                print("    " + depouille[:150])
+        if r.returncode != 0:
+            ecarts = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith("- ")]
+            ko.append("versions: " + ("; ".join(ecarts[:6]) if ecarts
+                      else "voir garde-versions.py"))
+    # 40. PLAFOND DES ACTES EN ATTENTE (P4 du createur, 2026-09-20 ; M-155,
+    #     MO-361) : < UN GARDE ACCUSE quand le nombre d ACTES EN ATTENTE depasse
+    #     un PLAFOND DECLARE -- une masse qui grandit en silence n est pas une
+    #     politique >. La PORTE existe deja (bdd-conservation controler-plafond)
+    #     et la cloture du pilote l appelle -- mais AUCUN controle PERMANENT ne la
+    #     lisait : mesure du 2026-09-22, les 15 pannes declarees du suivi du pilote
+    #     n en portaient aucune. Un stock qui grossit ne se voit donc qu a la
+    #     cloture, et jamais dans la suite : c est exactement le piege MO-246 (un
+    #     controle qui vit dans un cobaye meurt avec lui). Ce maillon la lit.
+    print("== 40. plafond des actes en attente (P4) ==")
+    porte_plafond = ["bdd-conservation", "controler-plafond"]
+    lanceur = zone.parent.parent / "lancer.py"
+    r = subprocess.run([sys.executable, str(lanceur)] + porte_plafond,
+                       capture_output=True, text=True, cwd=str(lanceur.parent))
+    etat = "OK" if r.returncode == 0 else "KO"
+    print("  plafond: " + etat)
+    for ligne in r.stdout.splitlines():
+        depouille = ligne.strip()
+        if (depouille.startswith("VERDICT") or depouille.startswith("plafond declare")
+                or depouille.startswith("actes en attente") or depouille.startswith("ECART")):
+            print("    " + depouille[:150])
+    if r.returncode != 0:
+        ecarts = [l.strip() for l in r.stdout.splitlines() if l.strip().startswith("ECART")]
+        ko.append("plafond: " + ("; ".join(ecarts[:4]) if ecarts
+                  else "voir bdd-conservation controler-plafond"))
     if ko:
         print(f"\nVERDICT KO : {len(ko)} echec(s) :")
         for x in ko:

@@ -95,6 +95,14 @@
       "statut": "pret",
       "description": "Suite [purification] : demande -> cartographie -> classification -> audit -> nemesis -> decision -> execution-par-porte -> verification -> bilan. Controle et purifie toute la Matrice v3 sans suppression ; les anciens correctifs sont classes avant decision. Plan : purification/plan-conservation.md ; analyse : purification/analyse-nemesis.md",
       "analyse": "../../purification/analyse-nemesis.md"
+    },
+    {
+      "nom": "CADRAGE",
+      "fichier": "theme-cadrage.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Parcours dedie des crochets [???] et [preparer] (MO-317) : CONSTITUER LA CHAINE de missions avant de resoudre -- manques -> memoire -> audit -> nemesis -> chaine -> depot. L'ensemble devient UNE mission contenant plusieurs missions a enchainer ; file NORMALE sauf urgence",
+      "analyse": ""
     }
   ]
 }

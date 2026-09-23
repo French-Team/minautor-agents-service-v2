@@ -1,0 +1,130 @@
+"""Porte de PURGE de l archive : une archive ne meurt que RECOUVRABLE, PROUVEE.
+
+P3, validee par le createur le 2026-09-20 (rapport-revision-MO-305, section 3) :
+"une archive est SUPPRIMEE quand son contenu est prouve recouvrable (engage dans
+git, OU empreinte + copie dans la conservation BDD) ; sinon elle reste".
+
+Le registre DISAIT "aucune porte de suppression" -- c etait vrai, et c est ce qui
+faisait survivre les archives SANS duree de vie (V3 mesure : 898 fichiers, 18 Mo,
+jamais relus). Cette porte n a pas le droit de supprimer sur une PROMESSE : elle
+supprime sur une PREUVE, et elle la CITE, dans son acte comme dans son refus.
+
+DEUX PREUVES, essayees dans cet ordre, et un refus les DIT TOUTES LES DEUX :
+
+  1. GIT -- le CONTENU de l archive vit dans les objets du depot : l octet n est
+     pas perdu, il est AILLEURS, et l acte donne le blob exact pour le rappeler
+     (git cat-file blob <oid>).
+  2. COPIE -- le meme contenu vit AILLEURS sur le disque, HORS de l archive (une
+     source revenue a sa place, ou un autre point EN PLACE de la meme famille) :
+     l archive est alors un DOUBLON.
+
+CE QUI N EST JAMAIS PURGE : une archive dont la seule copie est elle-meme --
+l exception nommee par V4 ("le .bak d un fichier NON ENGAGE est la seule copie de
+l avant-dernier etat"). Un refus n ecrit RIEN : ni BDD, ni disque, ni manifeste.
+
+ORDRE DES IMPORTS : `constants` d abord -- c est LUI qui met `data/commun` sur le
+chemin (`lancement`, `cible` ne sont importables qu apres lui, L-013).
+"""
+import subprocess
+from pathlib import Path
+
+from constants import (
+    MOTIF_PREUVE_COPIE, MOTIF_PREUVE_GIT, NOM_LIGNE_PURGE, NOM_PROGRAMME_GIT,
+    NOM_TYPE_OBJET_BLOB, OPERATION_PURGER, STATUT_SUPPRIME,
+)
+from archiver.fonctions import (
+    ajouter_manifeste, chemin_archive, famille, horodater, mesurer,
+    relatif_matrice,
+)
+from cible import racine_matrice, resoudre_dans_matrice
+from lancement import delai_sous_processus
+
+REFUS_PURGE_STATUT = "REFUS (purge : statut attendu archive)"
+REFUS_PURGE_INTROUVABLE = "REFUS (purge : archive introuvable)"
+REFUS_PURGE_SHA = "REFUS (purge : contenu de l archive different de celui enregistre)"
+REFUS_PURGE_SANS_PREUVE = "REFUS (purge : recouvrabilite NON PROUVEE)"
+REFUS_PURGE_RETRAIT = "REFUS (purge : retrait impossible)"
+
+
+def _jouer_git(arguments, racine):
+    """Joue git et rend (True, sortie) ou (False, motif du refus).
+
+    Le PLAFOND du sous-processus vient de son domicile partage
+    (`data/commun/lancement.py`) : la valeur n est jamais recopiee ici (M-076).
+    Un git injouable n est pas un echec de la porte : c est une PREUVE QUI MANQUE,
+    et elle est dite comme telle.
+    """
+    commande = [NOM_PROGRAMME_GIT] + list(arguments)
+    try:
+        resultat = subprocess.run(
+            commande, cwd=str(racine), capture_output=True, text=True,
+            timeout=delai_sous_processus(),
+        )
+    except (OSError, subprocess.SubprocessError) as erreur:
+        return False, ("git injouable depuis " + str(racine) + " : "
+                       + type(erreur).__name__)
+    if resultat.returncode != 0:
+        brut = ((resultat.stderr or "") + (resultat.stdout or "")).strip()
+        return False, ("git a refuse (code " + str(resultat.returncode) + ") : "
+                       + (brut or "sans message"))
+    return True, (resultat.stdout or "").strip()
+
+
+def preuve_git(chemin, racine):
+    """(oid, message) si le CONTENU du fichier vit dans les objets du depot."""
+    joue, sortie = _jouer_git(["hash-object", str(chemin)], racine)
+    if not joue:
+        return None, sortie
+    if not sortie:
+        return None, ("git n a rendu aucune empreinte pour " + str(chemin))
+    oid = sortie
+    joue, type_objet = _jouer_git(["cat-file", "-t", oid], racine)
+    if not joue or type_objet != NOM_TYPE_OBJET_BLOB:
+        return None, ("le depot ne porte AUCUN objet de ce contenu (blob "
+                      + oid + " absent)")
+    return oid, ("le contenu VIT dans le depot (blob " + oid + " : git cat-file "
+                 + NOM_TYPE_OBJET_BLOB + " " + oid + ")")
+
+
+def preuve_copie(chemin_archive_element, entree, donnees, depart):
+    """(chemin, message) si le MEME contenu vit AILLEURS, HORS de l archive.
+
+    Le vivier est la FAMILLE du point (ses jumeaux de la meme origine complete) :
+    c est la ou une source revenue a sa place se trouve. L ARCHIVE ELLE-MEME EST
+    EXCLUE -- une archive ne se certifie pas elle-meme.
+    """
+    sha_archive, _, _ = mesurer(chemin_archive_element)
+    if sha_archive is None:
+        return None, "contenu de l archive illisible"
+    base_archive, _, _ = chemin_archive(depart)
+    mesures = 0
+    deja_vus = set()
+    for autre in famille(donnees, str(entree.get("source", ""))):
+        chemin, _ = resoudre_dans_matrice(str(autre.get("source", "")), depart)
+        if chemin is None or not chemin.is_file():
+            continue
+        if base_archive == chemin or base_archive in chemin.parents:
+            continue
+        cle = str(chemin)
+        if cle in deja_vus:
+            continue
+        deja_vus.add(cle)
+        mesures += 1
+        sha_copie, _, _ = mesurer(chemin)
+        if sha_copie == sha_archive:
+            return cle, ("le meme contenu vit HORS de l archive : "
+                         + relatif_matrice(chemin, depart))
+    return None, ("aucune copie du contenu hors de l archive (" + str(mesures)
+                  + " candidat(s) mesure(s) dans la famille)")
+
+
+def preuve_recouvrabilite(chemin_archive_element, entree, donnees, depart):
+    """(mode, message) de la PREUVE, ou (None, refus qui DIT les deux essais)."""
+    oid, message_git = preuve_git(chemin_archive_element, racine_matrice(depart))
+    if oid:
+        return MOTIF_PREUVE_GIT, message_git
+    chemin_copie, message_copie = preuve_copie(
+        chemin_archive_element, entree, donnees, depart)
+    if chemin_copie:
+        return MOTIF_PREUVE_COPIE, message_copie
+    return None, ("git : " + message_git + " | copie : " + message_copie)

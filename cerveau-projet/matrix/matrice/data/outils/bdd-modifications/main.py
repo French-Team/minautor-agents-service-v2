@@ -10,10 +10,18 @@ Usage :
                                    (reattribue UNE entree EN PLACE : date, action et detail
                                    conserves, anciens tags traces dans l entree, puis la porte
                                    RECALCULE l empreinte -- EO-155)
-    python main.py verifier
+    python main.py canoniser [--simuler oui]
+                                   (REUNIT les cles non canoniques sur leur cle canonique :
+                                   les deux histoires d un meme fichier sont fusionnees,
+                                   sans perdre une entree -- le compte est le GARDE, et une
+                                   migration qui perdrait une entree est REFUSEE ; EO-363)
+    python main.py verifier [--auto-test]
+                                   (l integrite ET la cle canonique ; --auto-test rejoue le
+                                   cobaye et les contre-temoins sur des faits FABRIQUES)
 """
 import sys
 
+from canoniser.entry import executer as canoniser_executer
 from corriger.entry import executer as corriger_executer
 from lire.entry import executer as lire_executer
 from noter.entry import executer as noter_executer
@@ -23,6 +31,7 @@ COMMANDES = {
     "noter": noter_executer,
     "corriger": corriger_executer,
     "lire": lire_executer,
+    "canoniser": canoniser_executer,
     "verifier": verifier_executer,
 }
 

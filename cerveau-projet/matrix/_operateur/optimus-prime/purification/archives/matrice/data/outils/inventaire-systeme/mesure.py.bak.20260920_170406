@@ -1,0 +1,205 @@
+"""Mesure de la machine : SYSTEME, CAPACITES, RESEAU, OUTILS.
+
+Portage du modele v1 (verifier-systeme 0.2.3-py), sans rien reinventer : meme
+detection d OS, memes sondes d outils. Ce qui est ajoute le sera pour la demande
+du createur (RAM, disque, charge, GPU, reseau) et avec une dependance DOUCE :
+psutil si present, sinon le champ reste NON MESURE (-1) -- jamais une valeur
+inventee, un -1 dit la verite (L-055).
+
+Aucune commande systeme n est passee par un shell : subprocess recoit une LISTE
+d arguments. Un mesureur muet rend "-" : une mesure qu on ne peut pas faire ne
+doit jamais passer pour une absence de materiel.
+"""
+import getpass
+import os
+import platform
+import re
+import shutil
+import socket
+import subprocess
+
+from constants import (DELAI_VERSION, OUTILS_SONDES, RACINE_MATRIX, REPERTOIRE_DATA)
+
+try:
+    import psutil
+    PSUTIL = True
+except ImportError:
+    psutil = None
+    PSUTIL = False
+
+
+def detecter_os():
+    """Windows, Linux, Mac -- ou le nom brut dit en clair."""
+    systeme = platform.system()
+    if systeme == "Windows":
+        return "Windows"
+    if systeme == "Linux":
+        return "Linux"
+    if systeme == "Darwin":
+        return "Mac"
+    return "Inconnu (" + str(systeme) + ")"
+
+
+def version_os(os_nom):
+    if os_nom == "Windows":
+        return platform.version() or "Inconnu"
+    return platform.release() or "Inconnu"
+
+
+def extraire_version(texte):
+    """Le premier numero de version (Python 3.14.4 -> 3.14.4) ; sinon le texte."""
+    trouve = re.search(r"(\d+(?:\.\d+)+)", texte or "")
+    if trouve:
+        return trouve.group(1)
+    return (texte or "").strip() or "-"
+
+
+def detecter_systeme():
+    """Les faits d identite de la machine : systeme, hote, utilisateur, session."""
+    os_nom = detecter_os()
+    try:
+        hote = socket.gethostname()
+    except Exception:
+        hote = "-"
+    try:
+        utilisateur = getpass.getuser()
+    except Exception:
+        utilisateur = "-"
+    session = os.environ.get("SESSIONNAME") or os.environ.get("SESSION") or "-"
+    return {
+        "os": os_nom,
+        "version": version_os(os_nom),
+        "arch": platform.machine() or "Inconnu",
+        "hote": hote,
+        "utilisateur": utilisateur,
+        "session": session,
+        "python": platform.python_version(),
+        "racine-matrix": str(RACINE_MATRIX),
+    }
+
+
+def detecter_gpu():
+    """Le ou les controleurs graphiques : wmic, puis powershell, puis lspci.
+
+    Le PREMIER outil present qui repond GAGNE ; si aucun ne repond, la mesure est
+    DITE non faite ("-") au lieu d etre presentee comme une machine sans GPU.
+    """
+    commandes = (
+        ("wmic", ("path", "win32_VideoController", "get", "name")),
+        ("powershell", ("-NoProfile", "-Command",
+                        "(Get-CimInstance Win32_VideoController).Name")),
+        ("lspci", ("-mm",)),
+    )
+    for nom, arguments in commandes:
+        if shutil.which(nom) is None:
+            continue
+        try:
+            resultat = subprocess.run((nom,) + arguments, capture_output=True,
+                                      text=True, timeout=DELAI_VERSION,
+                                      errors="replace")
+        except Exception:
+            continue
+        lignes = [ligne.strip() for ligne in (resultat.stdout or "").splitlines()]
+        if nom == "lspci":
+            lignes = [ligne for ligne in lignes if "VGA" in ligne or "3D" in ligne]
+        noms = [ligne for ligne in lignes
+                if ligne and ligne.lower() not in ("name", "nom")]
+        if noms:
+            return " / ".join(noms[:3])
+    return "-"
+
+
+def mesurer_ressources():
+    """CPU, RAM, disque, charge et GPU -- les capacites disponibles."""
+    mesure = {
+        "cpu-coeurs": os.cpu_count() or -1,
+        "cpu-modele": platform.processor() or platform.machine() or "Inconnu",
+        "ram-totale-mo": -1,
+        "ram-disponible-mo": -1,
+        "disque-libre-go": -1.0,
+        "charge-cpu": -1.0,
+        "gpu": "-",
+    }
+    if PSUTIL:
+        try:
+            memoire = psutil.virtual_memory()
+            mesure["ram-totale-mo"] = int(memoire.total // (1024 * 1024))
+            mesure["ram-disponible-mo"] = int(memoire.available // (1024 * 1024))
+            mesure["charge-cpu"] = round(float(psutil.cpu_percent(interval=None)), 1)
+        except Exception:
+            pass
+    try:
+        usage = shutil.disk_usage(str(REPERTOIRE_DATA))
+        mesure["disque-libre-go"] = round(usage.free / (1024 ** 3), 1)
+    except Exception:
+        pass
+    mesure["gpu"] = detecter_gpu()
+    return mesure
+
+
+def mesurer_reseau():
+    """L hote et ses adresses IPv4 locales (hors boucle locale)."""
+    try:
+        hote = socket.gethostname()
+    except Exception:
+        hote = "-"
+    adresses = []
+    try:
+        _, _, trouvees = socket.gethostbyname_ex(hote)
+        adresses = sorted(adresse for adresse in trouvees
+                          if not adresse.startswith("127."))
+    except Exception:
+        pass
+    return {"hote": hote, "adresses-ipv4": adresses}
+
+
+def argv_execution(nom, chemin, arguments):
+    """La commande REELLE a lancer pour un outil du PATH.
+
+    Mesure du 2026-09-20 (MO-251) : shutil.which resout un script Windows par son
+    EXTENSION (npm.CMD), et CreateProcess n execute pas un .cmd -- l appel
+    echouait et npm rendait Version inconnue. Le lanceur est donc DIT par la
+    famille du fichier : cmd.exe pour .cmd/.bat, powershell pour .ps1, execution
+    directe sinon. La liste d arguments reste une LISTE : aucun shell, donc rien
+    a interpreter et rien a injecter.
+    """
+    suffixe = str(chemin).lower().rsplit(".", 1)[-1]
+    if suffixe in ("cmd", "bat"):
+        return ("cmd", "/c", chemin) + tuple(arguments)
+    if suffixe == "ps1":
+        return ("powershell", "-NoProfile", "-File", chemin) + tuple(arguments)
+    return (nom,) + tuple(arguments)
+
+
+def verifier_outil(nom, arguments_version):
+    """Un outil du PATH : present, sa version, son chemin."""
+    chemin = shutil.which(nom)
+    if chemin is None:
+        return {"nom": nom, "disponible": False, "version": "-", "chemin": "-"}
+    version = "Version inconnue"
+    try:
+        resultat = subprocess.run(argv_execution(nom, chemin, arguments_version),
+                                  capture_output=True, text=True,
+                                  timeout=DELAI_VERSION, errors="replace")
+        lignes = (resultat.stdout or resultat.stderr or "").splitlines()
+        if lignes and lignes[0].strip():
+            version = lignes[0].strip()
+    except Exception:
+        pass
+    return {"nom": nom, "disponible": True, "version": version, "chemin": chemin}
+
+
+def mesurer_outils():
+    """Les outils de la table des sondes, dans l ORDRE declare."""
+    return [verifier_outil(entree["nom"], entree["version"])
+            for entree in OUTILS_SONDES]
+
+
+def mesurer_tout():
+    """La mesure complete : une seule structure, lue par la fiche ET par verifier."""
+    return {
+        "systeme": detecter_systeme(),
+        "ressources": mesurer_ressources(),
+        "reseau": mesurer_reseau(),
+        "outils": mesurer_outils(),
+    }

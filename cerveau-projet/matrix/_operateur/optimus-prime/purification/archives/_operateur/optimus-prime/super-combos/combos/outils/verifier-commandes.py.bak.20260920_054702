@@ -1,0 +1,157 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""verifier-commandes.py -- garde des COMMANDES documentees (MO-249 / P3).
+
+Les gardes actuels surveillent les FICHIERS ; celui-ci surveille les COMMANDES
+que les agents COPIENT -- les lignes de commande ecrites dans les blocs de code
+des documents de la Matrice. Quatre formes sont ACCUSEES :
+
+  - python -c         : du code en ARGUMENT (le shell le transporte mal) ;
+  - heredoc <<        : du contenu en ARGUMENT (idem, EO-132) ;
+  - sans interpreteur : un .py invoque SANS python/python3 ;
+  - chemin non ancre  : un script ou un chemin d argument RELATIF, la ou la
+                        commande doit etre ancree (cerveau-projet/matrix/...).
+
+On ne juge JAMAIS le texte courant : seules les lignes DANS un bloc de code et
+qui commencent par un interpreteur (ou un .py en tete de ligne) sont lues. Un
+listing architecture (fichiers INDENTES) n est donc pas une commande.
+
+Verdict : code 0 = aucune commande fautive ; code 1 = au moins une ; code 2 = refus.
+Exemptions DECLAREES et VISIBLES : une exemption muette est un angle mort.
+"""
+
+import argparse
+import re
+import sys
+from pathlib import Path
+
+RACINE_MATRICE = "cerveau-projet/matrix"
+# Ancre = RACINE DU WORKSPACE : tout chemin y ancre (cerveau-projet/... ou /...).
+ANCRAGES = ("cerveau-projet/", "/")
+OPTIONS_CHEMIN = ("--fichier", "--dossier", "--racine", "--chemin",
+                  "--contenu-fichier", "--ancien-fichier", "--nouveau-fichier",
+                  "--bilan-fichier", "--source")
+
+# (fragment de chemin, raison) -- jamais une exemption muette.
+EXEMPTIONS = (
+    ("audits/audit-pilote-erreurs-travail.md",
+     "audit HISTORIQUE : cite la commande telle qu elle fut PASSEE -- la reecrire falsifierait la trace"),
+)
+
+# Une commande vit DANS un bloc de code OU inline (entre backticks). Le span ne
+# traverse JAMAIS une ligne : sinon un bloc entier est pris pour un span et
+# APLATI (bug mesure le 2026-09-20, MO-249).
+SPAN = re.compile(r"`([^`" + chr(10) + r"]+)`")
+
+
+def commande(noyau, indente):
+    """La commande d une ligne, ou None. On ne juge que ce qui est ARTICLE."""
+    if noyau.startswith("$ "):
+        noyau = noyau[2:].strip()
+    if not noyau:
+        return None
+    premier = noyau.split()[0]
+    if premier in ("python", "python3", "py"):
+        return noyau
+    # un .py en tete n est une invocation que NON indente : sinon c est un listing.
+    if premier.endswith(".py") and not indente:
+        return noyau
+    return None
+
+
+def ancre(jeton):
+    return jeton.startswith(ANCRAGES) or jeton.startswith("<") or jeton == "."
+
+
+def fautes(texte):
+    """La liste des fautes d une commande (jamais vide de sens)."""
+    jetons = texte.split()
+    trouvees = []
+    if jetons and jetons[0] in ("python", "python3", "py") and "-c" in jetons:
+        trouvees.append("python -c interdit")
+    if "<<" in texte:
+        trouvees.append("heredoc interdit")
+    # Un .py EN TETE de ligne SANS interpreteur n est une invocation que s il est
+    # NOM NU : un chemin ancre en tete est une ligne de TABLEAU (journal, inventaire).
+    if jetons and jetons[0].endswith(".py") and "/" not in jetons[0]:
+        trouvees.append("appel sans interpreteur : " + jetons[0])
+    for i, jeton in enumerate(jetons):
+        if jeton.endswith(".py") and not ancre(jeton):
+            trouvees.append("chemin non ancre : " + jeton)
+        if jeton in OPTIONS_CHEMIN and i + 1 < len(jetons):
+            valeur = jetons[i + 1]
+            if "/" in valeur and not ancre(valeur):
+                trouvees.append("chemin d argument non ancre : " + valeur)
+    return trouvees
+
+
+def examiner(fichier):
+    """(numero, commande, faute) pour chaque faute d un document .md."""
+    try:
+        texte = fichier.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return []
+    resultats = []
+    dans_bloc = False
+    for numero, ligne in enumerate(texte.splitlines(), 1):
+        noyau = ligne.strip()
+        if noyau.startswith("```"):
+            dans_bloc = not dans_bloc
+            continue
+        if dans_bloc:
+            # Un heredoc se paie quel que soit l interpreteur : on le lit partout.
+            if "<<" in noyau:
+                resultats.append((numero, noyau, "heredoc interdit"))
+            cmd = commande(noyau, indente=ligne[:1].isspace())
+            if cmd is not None:
+                for faute in fautes(cmd):
+                    resultats.append((numero, cmd, faute))
+            continue
+        # Hors bloc : les commandes INLINE (entre backticks) sont lues aussi.
+        for m in SPAN.finditer(ligne):
+            contenu = m.group(1).strip()
+            if contenu.split() and contenu.split()[0] in ("python", "python3", "py"):
+                for faute in fautes(contenu):
+                    resultats.append((numero, contenu, faute))
+    return resultats
+
+
+def exempte(chemin_relatif):
+    for fragment, _ in EXEMPTIONS:
+        if fragment in chemin_relatif:
+            return True
+    return False
+
+
+def main():
+    analyseur = argparse.ArgumentParser(description="Garde des commandes documentees")
+    analyseur.add_argument("--racine", default=".", help="Racine du workspace")
+    options = analyseur.parse_args()
+    racine = Path(options.racine).resolve()
+    matrice = racine / RACINE_MATRICE
+    if not matrice.is_dir() and (racine / "matrice" / "data" / "outils").is_dir():
+        matrice = racine
+    if not matrice.is_dir():
+        print("REFUS : Matrice introuvable sous " + str(racine))
+        return 2
+    racine_ws = matrice.parent.parent
+    documents = sorted(p for p in matrice.rglob("*.md") if ".bak" not in p.name)
+    documents += sorted(racine_ws.glob("demarrer-*.md"))
+    total = 0
+    for document in documents:
+        relatif = document.relative_to(racine_ws).as_posix()
+        if exempte(relatif):
+            print("~ EXEMPTE : " + relatif)
+            continue
+        for numero, cmd, faute in examiner(document):
+            print("[KO] " + relatif + ":" + str(numero) + " : " + faute)
+            print("      " + cmd)
+            total += 1
+    for fragment, raison in EXEMPTIONS:
+        print("~ exemption declaree : " + fragment + " -- " + raison)
+    print("Commandes fautives : " + str(total) + " sur " + str(len(documents)) + " document(s).")
+    return 1 if total else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

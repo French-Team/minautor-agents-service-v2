@@ -24,3 +24,4 @@ identite:
 | Separation cameleon/Optimus (roles, interdits, surveillance Matrice) | convention-separation-cameleon-optimus.md |
 | Fondamentaux chemin/lien/nom/flag (contrat fondamental) | convention-chemins-liens-noms-flags.md |
 | Nommage numerote des combos et super-combos (sc-NNN- / c-NNN-, numero jamais reutilise) | convention-nommage-numerote.md |
+| Credibilite d'une mission ancienne (QUI juge, QUAND, les verdicts, la trace) | convention-credibilite-mission-ancienne.md |

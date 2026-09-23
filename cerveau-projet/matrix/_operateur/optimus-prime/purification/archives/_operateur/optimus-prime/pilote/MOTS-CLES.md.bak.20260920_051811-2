@@ -1,0 +1,60 @@
+---
+identite:
+  type: mots-cles
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# Mots-Cles de Demande
+
+## Mots-Cles Standard
+
+| Mot-cle | Usage | Exemple |
+|---|---|---|
+| [question] | Question ouverte | [question] Comment faire X ? |
+| [preparation] | Demande de preparation | [preparation] Explique-moi Y |
+| [revision] | Demande de revision | [revision] Verifie Z |
+| [mission] | Demande de mission | [mission] Creer W |
+
+## Mots-Cles de Detection
+
+| Mot-cle | Usage | Exemple |
+|---|---|---|
+| [bug] | Bug detecte | [bug] Le script ne fonctionne pas |
+| [probleme] | Probleme dans les flux | [probleme] Le pilote ne demarre pas |
+| [incoherence] | Incoherence percue | [incoherence] Les fichiers sont contradictoires |
+
+## Mots-Cles d'Action
+
+| Mot-cle | Usage | Exemple |
+|---|---|---|
+| [super-combos: #N] | Lancer un super-combos par numero | [super-combos: #1] Executer sur les dernieres missions |
+| [tache] | Tache specifique | [tache] Modifier le fichier X |
+| [correction] | Correction necessaire | [correction] Corriger l'erreur Y |
+| [test-reel] | Lancer un processus de validation reel | [test-reel] Valider les changements |
+
+## Super-Combos Disponibles
+
+| Numero | Nom | Description |
+|---|---|---|
+| #1 | AUTO-XXX | Enchainement intelligent des themes AUTO-XXX |
+
+## Commandes Utiles
+
+| Commande | Description |
+|---|---|
+| `python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/lancer-super-combos.py --lister` | Lister les super-combos |
+| `python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/lancer-super-combos.py --numero #N` | Lancer un super-combos |
+| `python3 <test-reel.py> --fichier <fichier>` | Tester un fichier |
+| `python3 test-reel.py --tout` | Tester tous les fichiers |
+
+## Regles
+
+1. **Toujours utiliser les mots-cles** quand ils s'appliquent
+2. **Un seul mot-cle par demande** (sauf super-combos avec parametres)
+3. **Les mots-cles de detection** ont la priorite sur les autres
+4. **Les super-combos** utilisent le format `#N` pour le numero
+5. **Pour lancer un super-combos** : `python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/lancer-super-combos.py --numero <#N>`
+   (chemins relatifs a `_operateur/optimus-prime/` ; le lanceur vit avec SES objets,
+   dans `super-combos/`, depuis le rangement corrige par MO-067 (2026-09-13))
+6. **Pour un test reel** : executer le processus de validation complete

@@ -1,0 +1,99 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+bilan-matrice.py -- Tableau de bord zone Optimus + Matrice (M-105)
+
+Agrege : file missions (journal), stats auto-evolution (bdd-frictions),
+suivi-optimus, lecons, verdict non-regression. Lecture seule.
+Usage: python bilan-matrice.py [--racine <path>]
+       section [remorque] : joue `remorque etat` -- un equipement de la zone cree
+       pendant la mission et NON declare se DIT ici, et le PRE-VOL de la
+       non-regression refuse alors la suite.
+
+"""
+
+import sys
+import json
+import argparse
+import subprocess
+import sqlite3
+from pathlib import Path
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Tableau de bord Matrice/Optimus")
+    parser.add_argument("--racine", default=".", help="Racine projet (defaut: cwd)")
+    parser.add_argument("--rapide", action="store_true", help="Saute la non-regression (bilan rapide)")
+    args = parser.parse_args()
+
+    racine = Path(args.racine).resolve()
+    matrix = None
+    for cand in (racine, racine / "matrix", racine / "cerveau-projet" / "matrix"):
+        if (cand / "matrice" / "data").is_dir():
+            matrix = cand if cand.name == "matrix" else cand / ("matrix" if (cand / "matrix").is_dir() else "cerveau-projet/matrix")
+            break
+    if matrix is None or not (matrix / "matrice" / "data").is_dir():
+        print(f"Dossier matrix/ introuvable depuis {args.racine}")
+        return 2
+    data = matrix / "matrice" / "data"
+    outils = matrix / "_operateur" / "optimus-prime" / "super-combos" / "combos" / "outils"
+
+    print("=== BILAN MATRICE / OPTIMUS ===")
+
+    # 1. File missions (journal)
+    crees, terminees = [], set()
+    try:
+        for ligne in (data / "historiques-missions.jsonl").read_text(encoding="utf-8").splitlines():
+            ligne = ligne.strip()
+            if not ligne:
+                continue
+            try:
+                e = json.loads(ligne)
+            except ValueError:
+                continue
+            if e.get("type") == "mission-creee" and e.get("id"):
+                crees.append(e["id"])
+            elif e.get("type") == "mission-terminee" and e.get("id"):
+                terminees.add(e["id"])
+    except OSError:
+        pass
+    attente = [i for i in crees if i not in terminees]
+    print(f"\n[missions] terminees={len(terminees)} en-attente={len(attente)}")
+    if attente:
+        print(f"  file: {', '.join(attente)}")
+
+    # 2. Stats auto-evolution (bdd frictions)
+    print("\n[frictions]")
+    r = subprocess.run([sys.executable, str(outils / "bdd-frictions" / "main.py"), "stats"],
+                       capture_output=True, text=True)
+    print("  " + (r.stdout.strip().replace("\n", "\n  ") if r.returncode == 0 else f"outil KO: {r.stderr.strip()[:200]}"))
+
+    # 3. Suivi-optimus + lecons
+    try:
+        n_suivi = sum(1 for _ in open(data / "suivi-optimus.jsonl", encoding="utf-8"))
+    except OSError:
+        n_suivi = -1
+    try:
+        lecons = json.loads((data / "lecons.json").read_text(encoding="utf-8"))
+        n_lecons = len(lecons.get("lecons", []))
+    except (OSError, ValueError):
+        n_lecons = -1
+    print(f"\n[traces] suivi-optimus={n_suivi} evenements, lecons={n_lecons}")
+
+    # 4. Verdict non-regression (sauf --rapide)
+    if args.rapide:
+        print("\n[non-regression] sautee (--rapide)")
+    else:
+        print("\n[non-regression]")
+        r = subprocess.run([sys.executable, str(outils / "lanceur-non-regression.py"),
+                            "--racine", str(racine)], capture_output=True, text=True)
+        for ligne in r.stdout.strip().splitlines():
+            if ligne.startswith(("==", "  ", "VERDICT")):
+                print(f"  {ligne}")
+
+    print("\n=== FIN BILAN ===")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

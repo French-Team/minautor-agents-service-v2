@@ -65,3 +65,59 @@ CE QUE CELA DIT DU DECOUPAGE : la reparation de masse tient en UNE mission au do
 - LES DEUX VOIES POSSIBLES, a trancher sur mesure : (1) le DOMICILE rend le refus impossible a oublier -- le parseur signale par DEFAUT, l appelant ne peut plus avaler ; (2) une REPARATION PAR FAMILLE, outil par outil dans le lot courant. La voie (1) est plus forte mais elle change un contrat partage : portee a mesurer et NEMESIS obligatoire.
 - LE GAIN REEL, chiffre : nombre d outils devenus conformes par voie, nombre d editions evitees, et contre-temoin avant/apres sur la MEME sonde.
 
+## TODO (TD-002) -- le decoupage par FAMILLE (4 rounds au lieu de 32), avec sa preuve
+
+MESURE DU 2026-09-20 (rejouee avant d ecrire, sonde `sc-004-auto-diagnostic inspection`) :
+35 sondes | conformes : 3 | ecarts : 32 -- les 32 sont nommes (11 bdd-*, bilan-periode,
+chaine-pense-bete, corriger-ascii, dialoguer, domicilier, dupliquer-template, ecrire,
+editer-agents-md, executer, journal-multi-encarts, lire, lister, machine-defcon, pause-session,
+selecteur-flux, signaler, suivi-optimus, theme-vivier, verifier-conventions, verifier-protocoles,
+verifier-regles). La sonde rend code 1 des qu il y a un ecart : c est la condition du T4.
+
+LES 32 MISSIONS UNITAIRES (MO-252 a MO-283) SONT RETIREES DU LOT : la decision du 2026-09-19
+interdit de recopier le motif outil par outil (M-076) et la mesure donne 4 rounds. Elles
+RESTENT dans la file, statut `retiree`, avec leur motif : leur sort est visible, aucune
+disparition silencieuse (EO-265).
+
+REGLE COMMUNE : chaque round livre par la PORTE, compile (py_compile), trace en BDD, repose
+l integrite, et passe la non-regression. Toute mesure est faite AVANT d ecrire. Le seul verdict
+est la SONDE rejouee, jamais une declaration.
+
+- T1 -- LE REFUS AU DOMICILE (le round qui couvre la MASSE). Un seul domicile :
+  `matrice/data/commun/options.py` : `extraire_options` relaie LUI-MEME l inconnue
+  (`signaler_inconnues`, refus par DEFAUT, nom de l outil deduit de `sys.argv`, usage s il est
+  fourni). Portee AUTORISEE par la mesure : 0 appelant ne passe `refuser=False` sur tout le depot.
+  Couvre les outils qui appellent `extraire_options` (25 mesures ce jour, dont 24 muets).
+  INTERDIT : recopier le motif hors du domicile.
+  Preuve exigee : sonde rejouee AVANT/APRES (conformes 3 -> N) ; COBAYE sur 3 outils de la famille
+  (option inconnue -> le refus NOMME l option, code 2) ; CONTRE-TEMOIN : un appel VALIDE reste
+  code 0 et MUET ; aucun appelant casse (0 `refuser=False` re-mesure).
+
+- T2 -- LES 3 FAUTIFS HORS DOMICILE (parsing maison, mesures ce jour). `bilan-periode`,
+  `corriger-ascii`, `journal-multi-encarts` : aucun n appelle le domicile ni argparse ; une option
+  inconnue est IGNOREE, l usage s affiche, l option n est PAS nommee (code 2). Chacun relaie
+  l inconnue en consommant le domicile partage (aucune copie locale du motif).
+  Preuve exigee : pour CHACUN, l option inconnue NOMMEE (code 2, aucun effet) ; contre-temoin
+  (appel valide : code 0 et sortie inchangee).
+
+- T3 -- LES 4 SONDES A EXAMINER (ne pas reparer a l aveugle). `selecteur-flux` : argparse NOMME
+  l option (`unrecognized arguments: --...`) -> CONFORME par un autre chemin (stdlib), a EXEMPTER
+  dans la sonde. `verifier-conventions`, `verifier-protocoles`, `verifier-regles` : AUCUN parsing
+  d option (0 mesuree) ; une option inconnue est ignoree et l usage s affiche -- verdict a
+  TRANCHER sur mesure : les exempter (aucune option a nommer) ou les faire dire l inconnue.
+  Livrable : une EXEMPTION DECLAREE et VISIBLE dans la sonde, jamais un silence.
+  Preuve exigee : la sonde DIT pourquoi elle n accuse plus ces cas, et les 4 sont rejoues.
+
+- T4 -- LE CONTROLE PERMANENT. La sonde `sc-004-auto-diagnostic inspection` devient un MAILLON du
+  lanceur de non-regression (elle rend deja code 1 sur un ecart, mesure) : un refus muet ne peut
+  plus revenir sans faire rougir la suite.
+  Preuve exigee : suite VERTE quand tout est conforme ; suite ROUGE, nommee, sur un COBAYE qui
+  rend un refus muet (fixture jetable, jamais un outil reel abime).
+
+ORDRE : T1 (le domicile : la masse) -> T2 (les 3 hors domicile) -> T3 (les 4 a examiner) ->
+T4 (le controle permanent). T4 ne peut pas preceder T1 a T3 : un maillon qui crie sur 32 ecarts
+rougirait la suite des le premier jour.
+
+CE QUE LA CHAINE REMPLACE, CHIFFRE : 32 missions unitaires et environ 128 editions evitees
+(MO-239 : 2 fichiers et 4 editions pour UN outil) -> 4 rounds, dont 1 au domicile pour 24 outils,
+3 pour les outils qui n ont pas de relais, et 4 cas declares (1 conforme autrement, 3 sans option).

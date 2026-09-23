@@ -12,7 +12,7 @@ import unicodedata
 
 from constants import (
     CHAMP_NEMESIS,
-    CHEMIN_PORTE_ECRIRE,
+    NOM_PORTE_ECRIRE,
     ENCODAGE,
     EXTENSION,
     FORMAT_NUMERO,
@@ -24,6 +24,8 @@ from constants import (
     SEPARATEUR_CARTE,
 )
 from constants import CHAMPS_ETAPE
+# EO-287 : la resolution d un outil par son NOM est PARTAGEE (un seul domicile).
+from resolution_outils import chemin_outil  # noqa: E402
 
 
 def lire_texte(chemin):
@@ -121,7 +123,7 @@ def identifiant_suivant(compteurs, etape):
 
 def ecrire_par_la_porte(chemin, contenu, mode):
     """Ecrit par la PORTE unique (jamais a la main). Rend (code, sortie)."""
-    commande = [sys.executable, str(CHEMIN_PORTE_ECRIRE), "ecrire",
+    commande = [sys.executable, str(chemin_outil(NOM_PORTE_ECRIRE)), "ecrire",
                 "--fichier", str(chemin), "--contenu", contenu, "--mode", mode]
     resultat = subprocess.run(commande, capture_output=True, text=True)
     return resultat.returncode, (resultat.stdout or "") + (resultat.stderr or "")

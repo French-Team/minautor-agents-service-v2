@@ -43,6 +43,16 @@ CHEMIN_VERIFIER_REGLES = REPERTOIRE_MATRIX / "matrice" / "data" / "outils" / "ve
 # fait d un declencheur declare un declencheur BRANCHE (un mot sans appelant
 # serait un declencheur mort, le defaut que l audit EO-181 a trouve).
 CHEMIN_MACHINE_DEFCON = REPERTOIRE_MATRIX / "matrice" / "data" / "outils" / "machine-defcon"
+
+# MO-366 : le JOURNAL VISUEL de la Matrice (matrice/journal-multi-encarts.md) se
+# declare "VISUEL GENERE depuis les BDD" et donne son remede (main.py construire)
+# -- mais AUCUN appelant ne l appliquait : mesure du 2026-09-23, trois jours de
+# retard sans un signe (classe L-055 : un etat passe se lit comme l etat courant).
+# La veille REGENERE donc ce document a chaque passe, et la cible se nomme ici une
+# seule fois (le chemin et le libelle portable partagent la meme chaine).
+CHEMIN_JOURNAL_MULTI_ENCARTS = REPERTOIRE_MATRIX / "matrice" / "data" / "outils" / "journal-multi-encarts"
+CIBLE_VISUEL = "matrice/journal-multi-encarts.md"
+CHEMIN_VISUEL_RELATIF = Path(CIBLE_VISUEL)
 CHEMIN_VERIFIER_PROTOCOLES = (
     REPERTOIRE_MATRIX / "matrice" / "data" / "outils" / "verifier-protocoles"
 )
@@ -141,6 +151,31 @@ SECTION_PASSES = "passes"
 CHEMIN_ENTONNOIR = REPERTOIRE_MATRIX / "_operateur" / "optimus-prime" / "pilote" / "entonnoir"
 URGENCE_VEILLE = "bloquante"
 THEME_REPARATION = "reparer"
+
+# ROUTE DE LA MISSION VERSEE AU VRAC (protocole 8) : la porte du depot ECRIT dans
+# l OBJECTIF le pointeur de SA route. Mesure du 2026-09-21 (MO-332) : le
+# declencheur de proto-8 est code ICI depuis M-020 (`theme "reparer <cible>"`,
+# urgence bloquante, source veille) et il a TIRE 9 fois (dernier depot
+# 2026-09-17) ; la route a meme ete SUIVIE 4 fois (M-022, M-048, M-085, M-087),
+# mais AUCUN porteur ne la NOMMAIT -- l agent arrivait sur une route qu il
+# n avait jamais lue. Pourquoi le pointeur vit ICI et pas ailleurs, mesure :
+# (1) le THEME libre du depot ne survit PAS au classement -- 0 mission sur 331
+# porte `reparer <cible>` : une route qui s appuierait sur le theme serait morte ;
+# (2) le champ `source` des missions recentes ne porte plus l urgence (format
+# court `entonnoir:EO-XXX` ; seules 8 anciennes missions portent `:bloquante`),
+# donc le pilote ne peut plus detecter cette route depuis la mission ; (3)
+# l OBJECTIF, lui, survit MOT POUR MOT dans le briefing de l agent. Symetrique de
+# `RAPPEL_ROUTE_OUTIL` (pilote/constants.py), qui porte proto-10 dans le `rappel`
+# de la mission.
+RAPPEL_ROUTE_REPARATION = (
+    "ROUTE REPARATION VEILLE (protocole 8, "
+    "_operateur/optimus-prime/protocoles/proto-8-route-reparation-veille.md) : "
+    "REPRODUIRE la detection AVANT de reparer (relancer la passe cible a la main "
+    "et confirmer le meme ecart), diagnostiquer a la RACINE, reparer a la SOURCE "
+    "(jamais une rustine), prouver le retour vert, et si le perimetre depasse la "
+    "mission : SIGNALER -- jamais improviser."
+)
+
 
 # Porte OFFICIELLE d'alerte : l'UNIQUE voie d'ecriture dans l'inbox Matrice.
 # Deux consommateurs lisent cette boite et ne routent QUE `type == "signaler"` :

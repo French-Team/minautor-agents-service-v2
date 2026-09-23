@@ -1,0 +1,160 @@
+"""Sac a dos embarque : chaque outil note LUI-MEME ses usages en BDD (M-076).
+
+Porte unique respectee : la note part par l'outil bdd-usages (subprocess),
+jamais d'ecriture directe du journal (proto-7). Un echec de notation
+n'arrete JAMAIS l'outil (best-effort, comme la veille-flux).
+bdd-usages ne se note pas lui-meme : le garde OUTIL_EXCLU interdit la recursion.
+
+Amelioration (audit protections 2026-09-09, decision createur) : quand l'outil
+REFUSE (code != 0), le message de protection (lignes REFUS) est note en DETAIL
+dans la BDD -- le sac a dos devient le journal des protections declenchees
+(raison tracee, pas seulement le code). La sortie console reste inchangee.
+
+Espion tokens (E-097, imperatif 56) : chaque appel note aussi le POIDS du
+contexte -- tokens AVANT (l'ordre donne a l'outil : sa commande et ses
+arguments) et tokens APRES (la sortie que le LLM devra lire). Estimation
+DETERMINISTE (1 token ~ 4 caracteres) via data/commun/tokens.py : la Matrice ne
+voit pas la tokenisation du LLM, elle mesure un POIDS. L'ecart avant/apres
+designe les outils bavards, exactement ce qu'un centre de controle veut voir.
+"""
+import contextlib
+import io
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+try:
+    from tokens import estimer_tokens, peser_tokens
+except ImportError:  # importe comme paquet (chemin complet)
+    from commun.tokens import estimer_tokens, peser_tokens
+
+# T1 de la chaine PB-002 : le refus de l OPTION EN TETE vit au DOMICILE
+# (options.py) -- le sac a dos le CONSOMME, il ne le recopie jamais (M-076).
+try:
+    from options import nom_de_l_outil, refuser_option_en_tete
+except ImportError:  # importe comme paquet (chemin complet)
+    from commun.options import nom_de_l_outil, refuser_option_en_tete
+
+REPERTOIRE_COMMUN = Path(__file__).resolve().parent
+REPERTOIRE_DATA = REPERTOIRE_COMMUN.parent
+OUTIL_EXCLU = "bdd-usages"
+TAGS_SAC_A_DOS = "sac-a-dos"
+CHEMIN_BDD_USAGES = REPERTOIRE_DATA / "outils" / OUTIL_EXCLU
+TIMEOUT_NOTATION = 30
+LONGUEUR_MAX_DETAIL = 300
+
+
+def extraire_protection(sortie):
+    """Retourne le message de protection declenchee (lignes REFUS), tronque.
+
+    Priorite aux lignes portant le marqueur REFUS (protection explicite) ;
+    a defaut, la derniere ligne non vide (message d'erreur). Vide si aucune.
+    """
+    lignes = [ligne.strip() for ligne in sortie.splitlines() if ligne.strip()]
+    refus = [ligne for ligne in lignes if "REFUS" in ligne]
+    if refus:
+        return (" | ".join(refus))[:LONGUEUR_MAX_DETAIL]
+    if lignes:
+        return lignes[-1][:LONGUEUR_MAX_DETAIL]
+    return ""
+
+
+def noter_usage(arguments, code, duree_ms, detail="", tokens_avant=0, tokens_apres=0):
+    """Note UN usage via bdd-usages (porte unique). Echec jamais bloquant.
+
+    Porte aussi le poids du contexte (espion E-097) : tokens avant (l'ordre)
+    et tokens apres (la sortie).
+    """
+    nom_outil = nom_de_l_outil()
+    if nom_outil == OUTIL_EXCLU:
+        return
+    commande = arguments[0] if arguments else "-"
+    contenu = [
+        sys.executable, "main.py", "noter",
+        "--outil", nom_outil, "--commande", commande,
+        "--code", str(code), "--duree", str(duree_ms),
+        "--tokens-avant", str(tokens_avant), "--tokens-apres", str(tokens_apres),
+        "--tags", TAGS_SAC_A_DOS,
+    ]
+    if detail:
+        contenu += ["--detail", detail]
+    try:
+        termine = subprocess.run(
+            contenu,
+            cwd=str(CHEMIN_BDD_USAGES),
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=TIMEOUT_NOTATION,
+        )
+    except (OSError, subprocess.TimeoutExpired) as erreur:
+        print("sac-a-dos : notation impossible (" + type(erreur).__name__ + ")", file=sys.stderr)
+        return
+    if termine.returncode != 0:
+        print("sac-a-dos : notation refusee (code " + str(termine.returncode) + ")", file=sys.stderr)
+
+
+def commandes_de(principal):
+    """Les VERBES declares par le module de l'outil, ou None s il n en declare pas.
+
+    Convention d architecture : un outil qui declare COMMANDES attend un VERBE en
+    tete ; une option a cette place est une FAUTE, qui se DIT (T1). Un outil qui ne
+    declare pas de verbes accepte une option en tete (mesure 2026-09-20 : 6 outils)
+    et n est JAMAIS accuse a tort : chez lui, le refus appartient au parseur
+    d options. La declaration de l OUTIL decide, jamais une liste tenue ici.
+    """
+    globales = getattr(principal, "__globals__", None) or {}
+    commandes = globales.get("COMMANDES")
+    return commandes if isinstance(commandes, dict) and commandes else None
+
+
+def envelopper(principal, arguments):
+    """Execute principal(arguments), chronometre, note l'usage, retourne le code.
+
+    La sortie console est capturee puis reaffichee a l'identique (rien ne
+    change pour l'appelant) ; en cas de refus (code != 0), le message de
+    protection est note en detail dans la BDD usages.
+
+    T1 de la chaine PB-002 (2026-09-20) : deux garde-fous, poses ICI parce que ce
+    point est commun a TOUS les outils.
+      1. L OPTION EN TETE : une option la ou un VERBE est attendu est REFUSEE et
+         NOMMEE, par le message du domicile (options.py). Sans cela, 28 outils
+         imprimaient leur doc sans jamais nommer l option fautive (sonde sc-004 :
+         32 ecarts mesures le 2026-09-20).
+      2. L ARRET FORCE COMPRIS : un `SystemExit` leve par le refus par defaut du
+         domicile sortait du `with` sans reafficher la sortie capturee -- le refus
+         devenait MUET pour l appelant. Le code est desormais rendu comme les
+         autres et l usage est note (un refus est un usage).
+    """
+    nom_outil = nom_de_l_outil()
+    debut = time.monotonic()
+    # Espion tokens (E-097) : AVANT = l'ordre donne (la commande et ses arguments).
+    tokens_avant = peser_tokens(" ".join(str(morceau) for morceau in arguments))
+    tampon = io.StringIO()
+    with contextlib.redirect_stdout(tampon):
+        code_tete = refuser_option_en_tete(arguments, nom_outil)
+        if code_tete:
+            code = code_tete
+        else:
+            try:
+                code = principal(arguments)
+            except SystemExit as arret:
+                # sys.exit(2) -> 2 ; sys.exit("message") -> 1 ; sys.exit() -> 0.
+                if isinstance(arret.code, int):
+                    code = arret.code
+                elif arret.code is None:
+                    code = 0
+                else:
+                    print(str(arret.code))
+                    code = 1
+    duree_ms = int((time.monotonic() - debut) * 1000)
+    sortie = tampon.getvalue()
+    if sortie:
+        sys.stdout.write(sortie)
+    # APRES = la sortie produite (ce que le LLM devra lire).
+    tokens_apres = estimer_tokens(sortie)
+    detail = extraire_protection(sortie) if code != 0 else ""
+    noter_usage(arguments, code, duree_ms, detail, tokens_avant, tokens_apres)
+    return code

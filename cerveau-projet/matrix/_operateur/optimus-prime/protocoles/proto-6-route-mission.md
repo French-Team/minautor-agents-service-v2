@@ -22,6 +22,15 @@ identite:
    les fichiers -- convention-indices), puis les interfaces FERMEES des
    outils que la mission va appeler (usage main.py, codes 0/1/2).
    JAMAIS d'interface inventee.
+   CES INTERFACES ME SONT JOINTES (revision createur du 2026-09-20, MO-313) :
+   le pilote met le MINI MODE D EMPLOI des outils du TYPE dans le champ
+   `modes_emploi` de l'injection (but + usage, extrait de chaque brique par
+   `injection/modes_emploi.py`), et le catalogue sert la CARTE de toutes les
+   briques (une ligne par brique) au demarrage. Jadis il servait une LISTE DE
+   NOMS : l'agent devait relire chaque outil pour retrouver son usage, et c'est
+   de la que venaient les appels fautifs. La regle est gravee dans
+   `regles-immuables/faciliter-vie-llm.md` et le garde
+   `verifier-contrats-outils.py` (contrat 6) l'accuse si elle tombe.
 3. **Executer** : par les portes officielles uniquement (outils dedies,
    jamais a la main). Tests reels a chaque etape : un controle non prouve
    n'est pas un controle. Incident de chemin/interface : rejouer par la
@@ -36,7 +45,7 @@ identite:
 6. **Noter** : BDD modifications pour CHAQUE fichier modifie (action fermee
    cree|modifie|corrige|supprime, detail, tags). La note passe par l'outil
    bdd-modifications, jamais en commentaire dans le fichier.
-7. **Finir** : `python main.py fin --bilan "..."` avec un bilan SUBSTANTIEL
+7. **Finir** : `python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py fin --bilan "..."` avec un bilan SUBSTANTIEL
    (realisations + preuves + incidents assumes). La relance automatique
    enchaine la mission suivante (lot -> file -> tresse) toute seule.
 

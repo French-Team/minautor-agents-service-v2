@@ -1,0 +1,107 @@
+---
+identite:
+  type: convention
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# CONVENTION -- LES DEMANDES A CROCHETS
+
+> Source : decision createur du 2026-09-07 (mission M-062), amendee M-080
+> (crochets v3 : [alerte] remplace [alerte=defcon:N], [pause] ajoute),
+> puis M-131 ([preparation] ajoute), puis amendee le 2026-09-20
+> (MO-303, demande createur : [corriger] et [super-combos] nu entrent dans la
+> liste -- ils etaient employes par l'operateur SANS etre reconnus, donc chaque
+> demande ainsi posee ne declenchait RIEN). Les
+> demandes de
+> l'operateur qui commencent par un MOT ENTRE CROCHETS declenchent un
+> traitement officiel. La liste des mots est FERMEE : tout autre mot-crochet
+> n'est pas reconnu et doit d'abord faire evoluer CETTE convention
+> (decision createur, puis mise a jour de l'index).
+
+## La regle
+
+1. Le mot-crochet est place EN DEBUT de demande : `[mot] le reste de la demande`.
+2. Le mot est reconnu EXACTEMENT (liste fermee ci-dessous) ; sans crochet,
+   la demande suit le dialogue normal (pas de traitement automatique).
+3. Chaque mot a UNE porte officielle : la demande est traitee par la porte,
+   jamais a la main (doctrine de la porte unique).
+
+## Les mots reconnus (liste fermee)
+
+| Mot | Porte officielle | Effet |
+|---|---|---|
+| [mission] | entonnoir, verbe `deposer` | verse une nouvelle mission au vrac (AMONT) ; classement, tresse et injection suivent le cycle normal ; historiques-missions reste l'AVAL (journal des missions finies) |
+| [question] | pilote, verbe `lot` | suit le theme en 4 parts de LOT : analyse -> recherche approfondie (+ web si besoin) -> contre-analyse (Nemesis incarne en THEME, pas un agent) -> rapport pour/contre ; le pilote charge optimus-prime pour CHAQUE part, avec SON theme du vivier |
+| [audit] | entonnoir `deposer` (type audit) | lance un audit sur le sujet donne |
+| [revision] | entonnoir `deposer` (type revision) | lance une revision sur le sujet donne |
+| [outil] | entonnoir, verbe `deposer` (type DECLARE `reparation`) | signale un OUTIL fautif trouve EN TRAVAILLANT : la demande part en REPARATION (jamais en simple constat) ; route complete `protocoles/proto-10-route-outil-defaillant.md` (reproduire -> reparer DANS l outil -> prouver -> tracer -> reprendre) |
+| [alerte] | outil `machine-defcon` | met la Matrice en securite : defcon 5 (mise en pause de la session-matrix, cameleon stoppe, optimus reveille) ; variante detaillee possible `[alerte=defcon:N]` |
+| [pause] | outil `pause-session`, verbe `pause` | ouvre la MAINTENANCE avec optimus (pause manuelle user, hors defcon) : session-matrix en pause, cameleon notifie (raison "maintenance"), reprise par `reprendre` |
+| [bilan] | outil `bilan-periode` | bilan de la derniere heure, des dernieres heures (6 h), des dernieres 24 h, des 3 derniers jours, de la semaine ou du mois |
+| [preparation] | theme `PREPARATION` (`preparation/journal-preparation.md` + `theme-preparation.json`) | ouvre l'espace de DISCUSSION & PREPARATION hors code : inventorier les natifs, dessiner leurs versions ameliorees non configurables, prioriser la serie, attendre GO avant tout CREER-OUTIL |
+| [purification] | theme `PURIFICATION` (`theme-purification.json` + analyse prealable `purification/analyse-nemesis.md`) | ordonne la chaine demande -> audit -> nemesis -> decision -> ajouter : controle et purifie fichiers, BDD, journaux et registres SANS jamais supprimer (archivage ou signalement) ; la case [decision] est obligatoire (purger / reparer / declarer dette) |
+| [corriger] | entonnoir `deposer` (type DECLARE `reparation`) | demande une CORRECTION explicite : la demande part en reparation, CLASSEE A LA NAISSANCE (file, categorie et role poses d'un coup), comme [outil] |
+| [super-combos] | brique `lancer-super-combos`, `--lister` | le mot NU liste les super-combos disponibles ; la forme d'ACTION reste `[super-combos: #N]` (crochet de TRAVAIL, MOTS-CLES.md) |
+| [???] | theme `CADRAGE` (`parcours/themes/theme-cadrage.json`) | declenche le PARCOURS DEDIE ou optimus CONSTITUE LA CHAINE de missions (inventaire -> audit -> nemesis -> depot) AVANT de resoudre quoi que ce soit : l'ensemble devient UNE mission contenant plusieurs missions a enchainer de bout en bout. Mis en file NORMALE, sauf si classe urgent. Le SEUL crochet qui n'est PAS un mot francais : `???` DIT que la demande ne sera pas toujours precise ni claire, donc qu'on ne sait pas encore COMMENT AGIR (raison du createur, 2026-09-20) |
+| [preparer] | theme `CADRAGE` (le MEME parcours) | ALIAS officiel de `[???]` : deux mots, une seule porte. `[preparer]` est le mot que le createur a employe (mesure avant MO-317 : il n'etait PAS reconnu -- refus nomme) ; les deux declenchent le meme parcours |
+
+> DEUX CROCHETS, UNE ROUTE (MO-317, demande createur) : `[???]` et `[preparer]` sont
+> declares SEPAREMENT dans la liste fermee (le routeur les reconnait tous les deux) et
+> pointent le MEME theme `CADRAGE`. Les separer dans la liste -- plutot qu'une table
+> d'alias a cote -- garde le controle `crochets` du contrat fondamental capable de
+> comparer la liste fermee a cette page et a `pilote/MOTS-CLES.md` : un alias declare
+> hors des trois miroirs serait un mot reconnu par personne.
+>
+> LIMITE DITE : `[???]` est le SEUL crochet hors mot francais (le lexique
+> `CROCHETS.md`, section 5, ecarte les crochets qui ne sont pas des mots). Il n'est pas
+> un PLACEHOLDER : c'est un mot de DEMANDE reconnu, dont le sens est \"je ne sais pas
+> encore quoi demander -- lance l'analyse\". Le `?` n'est admis que pour ce token : la
+> classe de caracteres des crochets reste stricte partout ailleurs.
+
+## L'echelle defcon (liste fermee, N de 1 a 5, 5 = le plus grave)
+
+| Niveau | Nom | Comportement |
+|---|---|---|
+| 5 | mise en securite totale | l'agent unique (cameleon) est STOPPE : la session-matrix est mise EN PAUSE (protocole M-080, outil pause-session -- cameleon notifie "maintenance", jamais la raison) et optimus-prime est REVEILLE pour reprendre le controle avec le createur ; seules les missions themees DEFCON restent injectables (gardes posees dans le pilote) |
+| 4 | suivi | suivi des problemes a resoudre, de bout en bout |
+| 3 | surveiller | surveiller (temps a definir) puis valider : la periode de validation definitive CLOT def3 |
+| 2 | normal | etat normal de la Matrice |
+| 1 | reserve | non defini par l'operateur ; jamais atteint (la descente s'arrete a 2) |
+
+## Les transitions defcon (outil machine-defcon)
+
+- MONTREE libre (sauts permis, avec raison obligatoire) : 2 -> 3/4/5.
+- DESCENTE stricte UN echelon a la fois : 5 -> 4, 4 -> 3.
+- La descente 3 -> 2 passe UNIQUEMENT par `valider` (la validation clot la
+  periode de surveillance de def3).
+- Chaque transition est journalisee dans `data/defcon-historique.jsonl` ;
+  le niveau courant vit dans le classeur-variables (cle `defcon`).
+
+## Le protocole de pause session-matrix (M-080, outil pause-session)
+
+- CYCLE : defcon 5 (auto) OU [pause] (manuel) -> cameleon arrete + mission
+  sauvegardee A LA PAUSE SEULEMENT (etat serialise data/session-matrix-etat.json,
+  retiree de la file du pilote) -> notification cameleon "maintenance" (JAMAIS
+  la raison) -> maintenance par optimus + createur -> `reprendre` -> mission
+  restoree A L'IDENTIQUE (meme place dans la file) + notification
+  "maintenance terminee" (sans detail).
+- PERIMETRE REDUCTIBLE : la Matrice seule reduit le perimetre de lecture du
+  cameleon (verbe `perimetre --zones "..."` ; cle `perimetre-cameleon` du
+  classeur-variables ; regle matrice-utilise-cameleon).
+- PENDANT la pause : aucune injection, aucun enchainement, aucune relance
+  automatique (gardes session_en_pause posees dans le pilote).
+
+## Les indices
+
+- `[purification]` (ajoute 2026-09-14, demande createur) : la chaine est
+  ORDONNEE et la case `[decision]` est BLOQUANTE -- c'est le Nemesis qui l'a
+  imposee (analyse `purification/analyse-nemesis.md`) : une purification qui
+  supprime neutralise les controles qui lisent ce qu'elle retire (L-040),
+  donc elle ARCHIVE ou elle SIGNALE, et elle ne touche a rien sans verdict.
+- Les themes des chains `[question]` (ANALYSE, RECHERCHE, CONTRE-ANALYSE,
+  RAPPORT) seront ajoutes au vivier a la premiere demande [question]
+  (porte : outil theme-vivier) -- le theme DEFCON existe deja (TH-012).
+- Le defcon 5 reveille optimus-prime ET met la session-matrix en pause :
+  tant que l'agent cameleon n'est pas branche, c'est l'agent incarne qui
+  assume ce role (decision createur).

@@ -26,8 +26,14 @@ FONCTIONS_ENCARTS = {
 }
 
 
+USAGE = "Usage : python main.py construire"
+
+
 def executer(arguments):
     """Regenere le journal complet (ordre ferme des encarts). Retourne 0."""
+    from options import extraire_options
+    # Ce VERBE ne declare AUCUNE option : le domicile refuse tout --xxx (T2 de PB-002).
+    extraire_options(arguments, (), outil="journal-multi-encarts", usage=USAGE)
     blocs = [
         "# Journal multi-encarts de la Matrice (v3)",
         "",

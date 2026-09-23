@@ -2,7 +2,7 @@
 
 Interface entre main.py et les fonctions simples (noter/fonctions.py).
 """
-from commun import charger_bdd, enregistrer_bdd, extraire_options
+from commun import canoniser_cle, charger_bdd, enregistrer_bdd, extraire_options
 from constants import ACTIONS_PERMISES
 from noter.fonctions import ajouter_modification, separer_tags, valider_action
 
@@ -22,6 +22,15 @@ def executer(arguments):
     if not valider_action(action, ACTIONS_PERMISES):
         print("Action inconnue : " + action + " (permises : " + ", ".join(ACTIONS_PERMISES) + ")")
         return 2
+
+    # EO-363 : la cle s ECRIT dans SA forme canonique. Une forme NON canonique se
+    # DIT (elle ne se refuse pas : c est la MEME cible, dite autrement) -- et deux
+    # histoires pour un seul fichier ne peuvent plus naitre.
+    cle = canoniser_cle(chemin_fichier)
+    if cle != chemin_fichier:
+        print("CLE CANONISEE (EO-363) : " + chemin_fichier + " -> " + cle
+              + " (forme relative a la racine de la Matrice)")
+    chemin_fichier = cle
 
     donnees = charger_bdd()
     ajouter_modification(donnees, chemin_fichier, action, detail, tags)

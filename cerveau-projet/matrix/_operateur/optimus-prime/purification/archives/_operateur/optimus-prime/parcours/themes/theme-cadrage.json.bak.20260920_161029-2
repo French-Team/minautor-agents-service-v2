@@ -1,0 +1,88 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "CADRAGE",
+    "description": "Parcours dedie des crochets [???] et [preparer] (MO-317, demande createur 2026-09-20) : CONSTITUER LA CHAINE de missions (manques, memoire, audit, nemesis, chaine, depot) AVANT d'agir -- parce que la demande ne sera pas toujours precise et claire, donc on ne sait pas encore vraiment comment agir. L'ensemble devient UNE mission contenant plusieurs missions a enchainer de bout en bout."
+  },
+  "theme": {
+    "nom": "CADRAGE",
+    "but": "Repondre a une demande qui manque d'informations en CONSTITUANT LA LISTE -- une suite ordonnee de missions (analyse, audit, nemesis, ...) qui se termine par LA mission reelle, deposee en file NORMALE sauf urgence ; l'ensemble est injecte comme un seul bloc a enchainer de bout en bout",
+    "redirects": [
+      {
+        "besoin": "[manques] -- dire ce qu'on sait, puis NOMMER ce qui manque",
+        "action": "procedure",
+        "etapes": [
+          "Reformuler la demande en UNE phrase, telle qu'elle a ete dite -- meme incomplete (c'est la matiere premiere, pas le probleme)",
+          "Lister les MANQUES, un par ligne, sous la forme : 'il me faut <information> pour savoir <decision>' -- un manque qu'on ne peut pas nommer n'est pas un manque, c'est une intuition",
+          "Ecrire la liste des manques dans le bilan de la case (jamais dans un fichier de la Matrice : cette case ne modifie RIEN)",
+          "Si AUCUN manque n'est nommable : la demande n'a pas besoin du parcours -- le DIRE et rendre la main (le parcours s'arrete la, sans rien deposer)"
+        ],
+        "regle": "AUCUNE ecriture tant que les manques ne sont pas nommes. Une demande sans manque nommable sort du parcours par la premiere case -- c'est un resultat, jamais un echec."
+      },
+      {
+        "besoin": "[memoire] -- reprendre ce que le projet SAIT DEJA",
+        "action": "procedure",
+        "etapes": [
+          "Interroger la memoire du projet AVANT de redemander : la demande injectee porte le champ `recherche` (sa `question` et sa `commande`) -- poser la commande telle quelle",
+          "python3 cerveau-projet/matrix/lancer.py rechercher rechercher --requete \"<question>\" --dans tous --prive  (le Flux 2 ouvre SA zone ; le Flux 1 s'en passe, L-016)",
+          "Croiser : chaque MANQUE de la case precedente est clos s'il est deja ecrit quelque part (mission, lecon, regle, BDD) ; sinon il reste ouvert",
+          "Ne JAMAIS redemander au createur ce que le projet sait deja -- c'est le seul cout de cette case"
+        ],
+        "regle": "La memoire du projet se lit AVANT la question au createur (EO-131) : un manque qui etait deja ecrit est une faute de recherche, pas un manque."
+      },
+      {
+        "besoin": "[audit] -- constater l'etat REEL du perimetre (lecture seule)",
+        "action": "procedure",
+        "etapes": [
+          "Mesurer ce que le DISQUE dit du sujet : fichiers, portes, regles et outils reellement presents (les outils de mesure : rechercher, lister, espion-integrite, lire)",
+          "Noter chaque constat sous la forme fichier:ligne ou porte/verbe -- une affirmation sans temoin n'entre pas dans la chaine",
+          "Ne rien reparer, ne rien modifier : cette case CONSTATE (lecture seule, comme la case [audit] de la purification)",
+          "Confronter les manques restants au disque : ce qui est mesurable cesse d'etre un manque, ce qui ne l'est pas devient une DECISION du createur"
+        ],
+        "regle": "AUCUNE ecriture en audit. Ce que le disque dit prime sur ce qu'on croit savoir ; ce qui n'est pas mesurable se declare comme une DECISION, jamais comme un fait."
+      },
+      {
+        "besoin": "[nemesis] -- avis contradictoire sur la chaine ENVISAGEE",
+        "action": "procedure",
+        "etapes": [
+          "Prendre la liste des manques et des constats et l'ATTAQUER : qu'est-ce qui est faux, inutile, ou deja resolu ?",
+          "Chercher les cas limites : une demande dont la reponse rendrait la chaine ENTIERE inutile ; une chaine qui n'aurait aucun point d'arret ; une case qui ne produit rien",
+          "Verifier la SECURITE : la chaine ne doit rien supprimer, rien ecrire hors des portes, et ne doit jamais rendre la main au milieu d'un enchainement",
+          "Reecrire la liste des manques APRES l'attaque -- ce qui a survecu est ce qui restera a demander"
+        ],
+        "regle": "Un avis qui ne retire RIEN ne sert a rien (lecon L-032) : si l'attaque ne change pas la liste, le DIRE explicitement plutot que de laisser croire qu'elle a ete eprouvee."
+      },
+      {
+        "besoin": "[chaine] -- CONSTITUER LA LISTE (la suite ordonnee des missions)",
+        "action": "procedure",
+        "etapes": [
+          "Ecrire la CHAINE : une ligne par mission a enchainer, dans l'ORDRE, chacune avec sa CASE, son TYPE (dev|reparation|doc|audit|revision), son OBJECTIF en une phrase, et la PREUVE attendue",
+          "La chaine est LOGIQUE : chaque maillon consomme la sortie du precedent (on n'audite pas avant d'avoir mesure, on ne decide pas avant l'avis contradictoire)",
+          "La DERNIERE ligne est LA MISSION : celle qui resolvait la demande du createur -- les maillons precedents n'existent que pour la rendre sure",
+          "Une chaine d'UN SEUL maillon est legitime : si l'analyse conclut que la mission suffit, le DIRE (une chaine fabriquee pour elle-meme est du bruit)",
+          "Cette case n'ecrit RIEN dans la Matrice : la liste vit dans le bilan, puis passe par la case [depot]"
+        ],
+        "regle": "AUCUN maillon sans PREUVE attendue ni TYPE declare, et AUCUNE liste sans sa DERNIERE ligne (la mission). Une chaine sans fin n'est pas une chaine."
+      },
+      {
+        "besoin": "[depot] -- verser la chaine et l'injecter comme UN ensemble",
+        "action": "procedure",
+        "etapes": [
+          "Deposer CHAQUE maillon par la porte du depot, en file NORMALE (sauf urgence DECLAREE par le createur) : python3 cerveau-projet/matrix/lancer.py entonnoir deposer --theme \"<maillon>\" --objectif \"<objectif>\" --source createur --type <type> --trace \"<chaine, maillon k/n>\"",
+          "Classer ce qui doit l'etre (le type DECLARE le fait a la naissance) puis TRESSER : python3 cerveau-projet/matrix/lancer.py entonnoir tresse tisser",
+          "Devenir UN SEUL bloc a enchainer quand la chaine doit courir d'un trait : python3 cerveau-projet/matrix/lancer.py pilote file verser --lot CADRAGE  (echelon 4 bis, EO-148 : le brin ENTIER devient UN lot, numerotation k/n et retour consolide) -- c'est CE mecanisme qui donne 'UNE mission contenant plusieurs missions', on n'en invente pas un second",
+          "Sans lot : la chaine reste portee par la FILE (le brin, dans l'ordre) et chaque maillon donne son bilan au suivant -- l'enchainement de bout en bout est celui du cycle normal, jamais un mecanisme parallele",
+          "Annoncer au createur la chaine COMPLETE (les maillons, leur ordre, ce que chacun prouvera) -- il peut la tronquer, la reordonner ou la refuser AVANT le premier lancement",
+          "Reprendre sa mission parquee (le parcours de cadrage n'est pas une mission : il rend la main sur la file)"
+        ],
+        "regle": "Priorite NORMALE sauf urgence declaree (decision createur 2026-09-20). Aucun depot ne contourne la porte : la chaine entre dans l'entonnoir exactement comme une demande ordinaire, un maillon a la fois."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

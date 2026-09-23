@@ -29,6 +29,13 @@ try:
 except ImportError:  # importe comme paquet (chemin complet)
     from commun.tokens import estimer_tokens, peser_tokens
 
+# T1 de la chaine PB-002 : le refus de l OPTION EN TETE vit au DOMICILE
+# (options.py) -- le sac a dos le CONSOMME, il ne le recopie jamais (M-076).
+try:
+    from options import nom_de_l_outil, refuser_option_en_tete
+except ImportError:  # importe comme paquet (chemin complet)
+    from commun.options import nom_de_l_outil, refuser_option_en_tete
+
 REPERTOIRE_COMMUN = Path(__file__).resolve().parent
 REPERTOIRE_DATA = REPERTOIRE_COMMUN.parent
 OUTIL_EXCLU = "bdd-usages"
@@ -59,7 +66,7 @@ def noter_usage(arguments, code, duree_ms, detail="", tokens_avant=0, tokens_apr
     Porte aussi le poids du contexte (espion E-097) : tokens avant (l'ordre)
     et tokens apres (la sortie).
     """
-    nom_outil = Path(sys.argv[0]).resolve().parent.name
+    nom_outil = nom_de_l_outil()
     if nom_outil == OUTIL_EXCLU:
         return
     commande = arguments[0] if arguments else "-"
@@ -89,19 +96,89 @@ def noter_usage(arguments, code, duree_ms, detail="", tokens_avant=0, tokens_apr
         print("sac-a-dos : notation refusee (code " + str(termine.returncode) + ")", file=sys.stderr)
 
 
+def noms_declares(declaration):
+    """Les NOMS de verbes d une DECLARATION, ou None si elle n en declare aucun.
+
+    LA FORME NE DECIDE PAS, LA DECLARATION DECIDE (T4 de PB-002, 2026-09-20) :
+    l outil peut declarer ses verbes par la TABLE DE ROUTAGE `COMMANDES =
+    {verbe: handler}` (l usage majoritaire) OU par une SUITE DE NOMS
+    (`COMMANDES = ("a", "b")`, ou `VERBES = [...]`). Les deux formes expriment
+    exactement la meme intention -- "cet outil attend un VERBE en tete" -- et
+    seule la seconde etait ignoree. Mesure : deux outils neufs declaraient leurs
+    verbes en TUPLE ; ils ECHAPPAIENT donc au refus nomme, une option en tete
+    rendait leur doc sans jamais la nommer (sonde sc-004 : 2 ecarts).
+    Seules les CLES d un dict sont des noms (jamais les handlers).
+    """
+    if isinstance(declaration, dict):
+        noms = [cle for cle in declaration if isinstance(cle, str)]
+        return noms or None
+    if isinstance(declaration, (list, tuple, set, frozenset)):
+        noms = [element for element in declaration if isinstance(element, str)]
+        return noms or None
+    return None
+
+
+def commandes_de(principal):
+    """Les VERBES declares par le module de l'outil, ou None s il n en declare pas.
+
+    Convention d architecture : un outil qui declare un VERBE attend un VERBE en
+    tete ; une option a cette place est une FAUTE, qui se DIT (T1). Un outil qui ne
+    declare pas de verbes accepte une option en tete (mesure 2026-09-20 : 6 outils)
+    et n est JAMAIS accuse a tort : chez lui, le refus appartient au parseur
+    d options. La declaration de l OUTIL decide, jamais une liste tenue ici.
+
+    La declaration est lue dans TOUTES ses formes legitimes -- `COMMANDES` (table
+    de routage OU suite de noms), puis `VERBES` en secours (noms_declares) : une
+    forme non reconnue faisait ECHAPPER l outil au refus nomme en silence (T4).
+    """
+    globales = getattr(principal, "__globals__", None) or {}
+    for nom in ("COMMANDES", "VERBES"):
+        verbes = noms_declares(globales.get(nom))
+        if verbes:
+            return verbes
+    return None
+
+
 def envelopper(principal, arguments):
     """Execute principal(arguments), chronometre, note l'usage, retourne le code.
 
     La sortie console est capturee puis reaffichee a l'identique (rien ne
     change pour l'appelant) ; en cas de refus (code != 0), le message de
     protection est note en detail dans la BDD usages.
+
+    T1 de la chaine PB-002 (2026-09-20) : deux garde-fous, poses ICI parce que ce
+    point est commun a TOUS les outils.
+      1. L OPTION EN TETE : une option la ou un VERBE est attendu est REFUSEE et
+         NOMMEE, par le message du domicile (options.py). Sans cela, 28 outils
+         imprimaient leur doc sans jamais nommer l option fautive (sonde sc-004 :
+         32 ecarts mesures le 2026-09-20).
+      2. L ARRET FORCE COMPRIS : un `SystemExit` leve par le refus par defaut du
+         domicile sortait du `with` sans reafficher la sortie capturee -- le refus
+         devenait MUET pour l appelant. Le code est desormais rendu comme les
+         autres et l usage est note (un refus est un usage).
     """
+    nom_outil = nom_de_l_outil()
     debut = time.monotonic()
     # Espion tokens (E-097) : AVANT = l'ordre donne (la commande et ses arguments).
     tokens_avant = peser_tokens(" ".join(str(morceau) for morceau in arguments))
     tampon = io.StringIO()
     with contextlib.redirect_stdout(tampon):
-        code = principal(arguments)
+        code_tete = refuser_option_en_tete(arguments, nom_outil,
+                                           commandes=commandes_de(principal))
+        if code_tete:
+            code = code_tete
+        else:
+            try:
+                code = principal(arguments)
+            except SystemExit as arret:
+                # sys.exit(2) -> 2 ; sys.exit("message") -> 1 ; sys.exit() -> 0.
+                if isinstance(arret.code, int):
+                    code = arret.code
+                elif arret.code is None:
+                    code = 0
+                else:
+                    print(str(arret.code))
+                    code = 1
     duree_ms = int((time.monotonic() - debut) * 1000)
     sortie = tampon.getvalue()
     if sortie:

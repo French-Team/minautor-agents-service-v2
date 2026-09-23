@@ -8,6 +8,20 @@
 # REFUSEE, jamais avalee en silence) ; (3) PREPARER les missions de reparation en
 # deposant les items a l entonnoir par SA porte.
 #
+# LA SONDE A DEUX AXES (T3 de PB-002, MO-302). MESURE qui l a imposee : la sonde ne
+# posait l option inconnue qu EN TETE (la ou un VERBE est attendu) ; 6 outils qui
+# l avalaient ou la refusaient MUETTEMENT APRES leur verbe etaient donc declares
+# CONFORMES -- un defaut invisible a la sonde se lit comme une couverture. L axe 2
+# lit le premier verbe declare par l outil (AST : COMMANDES puis VERBES, jamais une
+# liste recopiee, M-076) et pose l option APRES lui.
+#
+# LE CRITERE, lui aussi mesure : un refus est un refus des lors qu il NOMME la
+# fautive -- le marqueur du domicile OU le nom de l option cite. Le critere precedent
+# ne connaissait que le marqueur : il accusait a tort un outil qui refuse autrement
+# (argparse accuse la VALEUR, pas l option -- et l option fautive, elle, restait
+# invisible). Un outil sans verbe declare n est pas jugeable sur l axe 2 : la sonde
+# le DIT.
+#
 # Regle : ce super-combo DIAGNOSTIQUE et PREPARE, il ne REPARE jamais lui-meme.
 #
 # Usage :
@@ -18,9 +32,11 @@
 #     python main.py auto-test
 
 import argparse
+import ast
 import json
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 SUPER_ID = "sc-004"
@@ -53,7 +69,13 @@ URGENCE_QUALITE = "normale"
 PLAFOND_DEFAUT = 5
 # La sonde : une option qui n existe nulle part doit provoquer un REFUS NOMME.
 OPTION_BIDON = "--option-bidon-mo202"
+# Le marqueur du DOMICILE (la forme la plus frequente du refus) -- mais le critere
+# ne s y limite plus : voir sonder().
 MARQUEUR_REFUS = "OPTION INCONNUE"
+# LES DEUX POSITIONS sondees, DITES telles quelles dans la sortie : un ecart sans sa
+# position se lit comme un ecart qu on ne sait pas reproduire.
+POSITION_TETE = "option EN TETE"
+POSITION_APRES_VERBE = "option APRES le verbe"
 
 CODE_OK = 0
 CODE_ECHEC = 1
@@ -193,18 +215,96 @@ def outils_du_dossier(dossier):
     return outils
 
 
-def sonder(main):
-    # SONDER un outil : une option inconnue doit etre REFUSEE et NOMMEE. Un code 0
-    # signifie que l appel a rendu le resultat du DEFAUT, indiscernable d un
-    # resultat correct (EO-179, L-055) : c est un ecart, pas un silence a ignorer.
-    code, sortie = lancer_outil(main, [OPTION_BIDON, "1"])
+def premiere_ligne(sortie):
+    # Ce que l outil a DIT : une accusation qui ne cite qu un code ne dit rien du refus.
+    for ligne in (sortie or "").splitlines():
+        if ligne.strip():
+            return ligne.strip()[:120]
+    return "(aucune sortie)"
+
+
+def sonder(main, verbe=None):
+    # SONDER un outil SUR UNE POSITION : l option inconnue posee EN TETE (la ou un
+    # verbe est attendu), ou APRES le verbe declare. Un code 0 signifie que l appel a
+    # rendu le resultat du DEFAUT, indiscernable d un resultat correct (EO-179,
+    # L-055) : c est un ecart, pas un silence a ignorer.
+    #
+    # LE CRITERE (T3 de PB-002) : un refus est un refus des lors qu il NOMME la
+    # fautive -- le marqueur du domicile OU le nom de l option cite. L ancien critere
+    # ne connaissait que le marqueur et accusait donc a tort un outil qui refuse
+    # autrement.
+    code, sortie = lancer_outil(main, ([verbe] if verbe else []) + [OPTION_BIDON, "1"])
     if code == 127:
         return "injoignable", sortie
     if code == 0:
         return "avale", "code 0 au lieu d un refus : l option inconnue est ignoree"
-    if MARQUEUR_REFUS in sortie:
+    if MARQUEUR_REFUS in sortie or OPTION_BIDON in sortie:
         return "refuse", ""
-    return "refus-muet", "code " + str(code) + " mais le refus ne NOMME pas l option inconnue"
+    return ("refus-muet", "code " + str(code) + " mais le refus ne NOMME pas l option inconnue"
+            + " -- il dit : " + premiere_ligne(sortie))
+
+
+def _premier_nom(declaration):
+    """Le premier nom de verbe d une declaration AST, ou None (T4 de PB-002).
+
+    LA FORME NE DECIDE PAS (meme regle que le garde du domicile, sac_a_dos
+    noms_declares) : `COMMANDES` peut etre la table de routage (Dict : on lit ses
+    CLES) OU une suite de noms (List/Tuple/Set). Mesure : deux outils neufs
+    declaraient leurs verbes en TUPLE sous le nom COMMANDES ; l ancien lecteur ne
+    lisait que le Dict et les comptait "sans verbe declare" -- leur axe 2 n etait
+    donc jamais sonde, un defaut invisible qui se lisait comme une couverture.
+    """
+    if isinstance(declaration, ast.Dict):
+        for cle in declaration.keys:
+            if isinstance(cle, ast.Constant) and isinstance(cle.value, str):
+                return cle.value
+        return None
+    if isinstance(declaration, (ast.List, ast.Tuple, ast.Set)):
+        for element in declaration.elts:
+            if isinstance(element, ast.Constant) and isinstance(element.value, str):
+                return element.value
+    return None
+
+
+def premier_verbe(main):
+    """Le premier VERBE declare par l outil, lu par AST (COMMANDES puis VERBES).
+
+    T3 de PB-002 : l axe "apres le verbe" a besoin du verbe REEL de l outil. Il se LIT
+    dans sa declaration, jamais recopie a la main (M-076 : une liste recopiee diverge
+    en silence). Un outil qui ne declare rien rend None : il n est pas jugeable sur cet
+    axe, et la sonde le DIT au lieu de le compter conforme.
+    """
+    try:
+        arbre = ast.parse(main.read_text(encoding="utf-8"))
+    except (OSError, SyntaxError, UnicodeDecodeError):
+        return None
+    declarations = {}
+    for noeud in ast.walk(arbre):
+        if not isinstance(noeud, ast.Assign):
+            continue
+        for cible in noeud.targets:
+            if isinstance(cible, ast.Name):
+                declarations.setdefault(cible.id, noeud.value)
+    for nom in ("COMMANDES", "VERBES"):
+        verbe = _premier_nom(declarations.get(nom))
+        if verbe is not None:
+            return verbe
+    return None
+
+
+def sonder_outil(main):
+    """Sonde les DEUX positions d un outil : (resultats, non_jugeable).
+
+    AXE 1 : l option EN TETE. AXE 2 : l option APRES le premier verbe declare.
+    Rend la liste des (position, etat, detail) et le motif de non-jugeabilite (ou "").
+    """
+    resultats = [(POSITION_TETE,) + sonder(main)]
+    verbe = premier_verbe(main)
+    if verbe is None:
+        return resultats, ("aucun verbe declare (ni COMMANDES ni VERBES) : l axe \""
+                           + POSITION_APRES_VERBE + "\" n est pas jugeable")
+    resultats.append((POSITION_APRES_VERBE + " " + verbe,) + sonder(main, verbe))
+    return resultats, ""
 
 
 def cmd_inspection(arguments):
@@ -220,17 +320,27 @@ def cmd_inspection(arguments):
         return CODE_ECHEC
     if parsed.limite:
         outils = outils[:parsed.limite]
-    ecarts = []
+    accuses = {}
+    non_juges = []
     print("INSPECTION DES OUTILS (sonde " + OPTION_BIDON + " : refus directionnel attendu)")
+    print("  axes : " + POSITION_TETE + " puis " + POSITION_APRES_VERBE + " (verbe lu par AST)")
     for nom, main in outils:
-        etat, detail = sonder(main)
-        if etat == "refuse":
-            continue
-        ecarts.append((nom, etat, detail))
-        print("  [" + etat + "] " + nom + " : " + detail)
-    print("  sondes : " + str(len(outils)) + " | conformes : " + str(len(outils) - len(ecarts))
-          + " | ecarts : " + str(len(ecarts)))
-    return CODE_DIAGNOSTIC_NON_VIDE if ecarts else CODE_OK
+        resultats, non_jugeable = sonder_outil(main)
+        if non_jugeable:
+            non_juges.append(nom)
+        for position, etat, detail in resultats:
+            if etat == "refuse":
+                continue
+            accuses.setdefault(nom, []).append((position, etat, detail))
+    for nom in sorted(accuses):
+        for position, etat, detail in accuses[nom]:
+            print("  [" + etat + "] " + nom + " (" + position + ") : " + detail)
+    print("  sondes : " + str(len(outils)) + " outil(s) | conformes : "
+          + str(len(outils) - len(accuses)) + " | ecarts : " + str(len(accuses)) + " outil(s)")
+    if non_juges:
+        print("  NON JUGES sur l axe 2 : " + str(len(non_juges)) + " outil(s) : "
+              + ", ".join(non_juges) + " -- aucun verbe declare, l axe n a rien a sonder")
+    return CODE_DIAGNOSTIC_NON_VIDE if accuses else CODE_OK
 
 
 def marqueur_outil(outil):
@@ -268,11 +378,14 @@ def outils_a_preparer(fiche, journal, dossier):
         entree = a_preparer.setdefault(outil, {"motifs": []})
         entree["motifs"].append("defaut declare (" + mission + ") : " + (defaut.get("defaut") or ""))
     for nom, main in outils_du_dossier(dossier):
-        etat, detail = sonder(main)
-        if etat == "refuse":
-            continue
-        entree = a_preparer.setdefault(nom, {"motifs": []})
-        entree["motifs"].append("inspection " + etat + " : " + detail)
+        resultats, _non_jugeable = sonder_outil(main)
+        for position, etat, detail in resultats:
+            if etat == "refuse":
+                continue
+            entree = a_preparer.setdefault(nom, {"motifs": []})
+            # La POSITION entre dans le motif : un item qui ne dit pas OU l option est
+            # avalee ne dit pas comment la reproduire.
+            entree["motifs"].append("inspection " + etat + " (" + position + ") : " + detail)
     return a_preparer
 
 
@@ -362,21 +475,95 @@ def ordonner_par_gravite(a_preparer):
     return sorted(a_preparer, key=lambda nom: (urgence_de(a_preparer[nom]["motifs"]), nom))
 
 
+# --- LE COBAYE DE LA SONDE (T3 de PB-002, MO-302) ---------------------------
+# Trois cobayes ECRITS DANS UNE ZONE JETABLE SYSTEME (hors Matrice : aucun fichier
+# de la Matrice n est cree par une epreuve). Chacun eprouve une exigence PRECISE de
+# la sonde -- un autotest qui ne peut pas echouer ne prouve rien.
+COBAYE_CONFORME = '''import sys
+COMMANDES = {"verbe": lambda reste: 0}
+def principal(arguments):
+    for morceau in arguments:
+        if morceau.startswith("--"):
+            print("OPTION INCONNUE : " + morceau)
+            return 2
+    if not arguments or arguments[0] not in COMMANDES:
+        return 2
+    return COMMANDES[arguments[0]](arguments[1:])
+if __name__ == "__main__":
+    sys.exit(principal(sys.argv[1:]))
+'''
+COBAYE_AVALE_APRES_VERBE = '''import sys
+COMMANDES = {"verbe": lambda reste: 0}
+def principal(arguments):
+    if arguments and arguments[0] in COMMANDES:
+        print("cobaye : option avalee, travail fait")
+        return 0
+    return 2
+if __name__ == "__main__":
+    sys.exit(principal(sys.argv[1:]))
+'''
+COBAYE_NOMME_AUTREMENT = '''import sys
+def principal(arguments):
+    inconnus = [morceau for morceau in arguments if morceau.startswith("--")]
+    if inconnus:
+        print("argument(s) non reconnu(s) : " + ", ".join(inconnus))
+        return 2
+    return 0
+if __name__ == "__main__":
+    sys.exit(principal(sys.argv[1:]))
+'''
+
+
+def eprouver_le_cobaye(nom, source, attendu_accuse):
+    """Ecrit le cobaye dans une zone jetable, le sonde, rend (ok, dit)."""
+    with tempfile.TemporaryDirectory(prefix="cobaye-sc004-") as zone:
+        racine = Path(zone)
+        dossier = racine / nom
+        dossier.mkdir()
+        (dossier / "main.py").write_text(source, encoding="utf-8")
+        resultats, non_jugeable = sonder_outil(dossier / "main.py")
+        accuses = [(position, etat) for position, etat, _detail in resultats if etat != "refuse"]
+        ok = bool(accuses) == attendu_accuse
+        dit = ("accuse (" + ", ".join(position + " : " + etat for position, etat in accuses) + ")"
+               if accuses else "conforme")
+        if non_jugeable:
+            dit += " | non jugeable sur l axe 2"
+        return ok, dit
+
+
 def cmd_auto_test(arguments):
-    # Preuve que ce super-combo SAIT ACCUSER : un verbe hors contrat est REFUSE et
-    # la sonde a bien des outils a regarder (un controle sans cible ne dit rien).
+    # Preuve que ce super-combo SAIT ACCUSER -- et qu il n accuse pas a tort : un
+    # verbe hors contrat est REFUSE, la sonde a des outils a regarder, et les trois
+    # cobayes rendent le verdict ATTENDU (un controle sans cible ne dit rien).
     ecarts = []
     if principal(["verbe-hors-contrat"]) != CODE_ECHEC:
         ecarts.append("un verbe hors contrat est ACCEPTE")
     if not outils_du_dossier(DOSSIER_OUTILS):
         ecarts.append("aucun outil trouve : la sonde ne regarderait rien")
+    cobayes = (
+        ("cobaye-avale-apres-son-verbe", COBAYE_AVALE_APRES_VERBE, True),
+        ("cobaye-nomme-autrement", COBAYE_NOMME_AUTREMENT, False),
+        ("cobaye-conforme", COBAYE_CONFORME, False),
+    )
+    dires = []
+    for nom, source, attendu in cobayes:
+        ok, dit = eprouver_le_cobaye(nom, source, attendu)
+        dires.append(nom + " : " + dit)
+        if not ok:
+            ecarts.append(nom + " -- attendu " + ("accuse" if attendu else "non accuse")
+                          + ", rendu : " + dit)
     if ecarts:
         print("AUTO-TEST " + SUPER_ID + " : " + str(len(ecarts)) + " ecart(s)")
         for ecart in ecarts:
             print("  - " + ecart)
+        for dit in dires:
+            print("  cobaye -- " + dit)
         return CODE_ECHEC
     print("AUTO-TEST " + SUPER_ID + " : conforme (" + str(len(PHASES)) + " phase(s), "
-          + str(len(outils_du_dossier(DOSSIER_OUTILS))) + " outil(s) a sonder)")
+          + str(len(outils_du_dossier(DOSSIER_OUTILS))) + " outil(s) a sonder, "
+          + str(len(cobayes)) + " cobaye(s))")
+    for dit in dires:
+        print("  cobaye -- " + dit)
     return CODE_OK
 
 

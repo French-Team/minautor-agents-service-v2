@@ -1,0 +1,493 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+verifier-source-item.py -- Garde : la SOURCE d'une mission nee d'un item ne perd RIEN.
+
+Pourquoi (demande createur du 2026-09-21) : < reparer le champ source des missions
+recentes : il a perdu le type, la cible et l urgence que portaient les anciennes >.
+Mesure du jour : la fabrique AUTOMATIQUE (`commun.mission_depuis_item`) composait la
+forme LONGUE `entonnoir:<id>:<type>/<categorie>:<urgence>` -- 96 missions la portent
+-- quand les DEUX chemins MANUELS (`pilote charger --item`, `pilote enregistrer
+--item`) ecrivaient `entonnoir:<id>` : 46 missions ont perdu a la NAISSANCE le type,
+la categorie et l urgence de leur item. Trois domiciles pour une idee, deux en
+desaccord (L-029) -- et c est la FABRIQUE qui divergeait, pas le lecteur.
+
+CE QU'IL EXIGE (5 controles) :
+  1. UN SEUL DOMICILE : une seule fonction compose la source (`source_depuis_item`),
+     et la fabrique automatique l APPELLE au lieu de recomposer sur place.
+  2. AUCUN COMPOSEUR COURT RESIDUEL : les deux chemins de `file/fonctions.py`
+     appellent le joint (`_source_de_l_item`) et ne composent plus jamais eux-memes.
+  3. LE REPLI EST NOMME : un item INTROUVABLE rend la forme COURTE **et le DIT**
+     (jamais un silence -- un repli muet se lirait comme une source complete).
+  4. AUCUNE NAISSANCE COURTE : toute mission nee APRES le correctif porte ses trois
+     champs. La borne est REELLE : les 46 anciennes ne sont PAS accusees -- on ne
+     reecrit pas l histoire avec des valeurs inventees (mesure : categorie 3/46,
+     urgence 0/46, items consommes, donc definitivement perdues).
+  5. LES LECTEURS ACCEPTENT LA FORME LONGUE : l idempotence (`item_deja_servi`) et le
+     refus nomme de l injection reconnaissent les deux formes -- reparer la fabrique
+     ne doit casser aucun consommateur.
+  6. MEMOIRE DE NAISSANCE (MO-334) : l identite d un item CONSOMME (id, type,
+     categorie, urgence, + la date de consommation) est GARDEE dans l etat de
+     l entonnoir, son domicile. La cle est declaree dans les DEUX maisons avec le
+     MEME litteral (`pilote/constants.py` et `entonnoir/listes.py`), et les TROIS
+     chemins de consommation l ecrivent : un seul qui l oublierait rouvrirait la
+     perte qu on ferme.
+  7. LA TOMBE NE PRIME JAMAIS SUR L ITEM : un item VIVANT fait foi (la memoire parle
+     quand l item n est plus la), une tombe INCOMPLETE rend la forme COURTE avec ses
+     champs manquants NOMMES, et la tombe ne porte JAMAIS de champ `source` -- l auto-
+     soin `reparer_sources` (stockage.py) reecrit tout noeud qui en porte un, et une
+     tombe n est pas une provenance.
+
+L'AUTOTEST le PIEGE (lecon L-032) : le MEME detecteur est joue sur un cobaye en zone
+jetable -- une naissance courte posterieure au correctif doit etre ACCUSEE, la meme
+en forme longue NON, une ANCIENNE courte NON (la borne temporelle ne doit pas faire
+de faux positif), un type HORS LISTE oui, et une CATEGORIE hors liste de son type
+aussi (le vocabulaire est verifie, pas seulement la ponctuation). Un cobaye qui ne
+mord pas ne prouve rien.
+
+MESURE QUI A CORRIGE CE GARDE (meme jour) : l identifiant admet DEUX eres -- `E-N`
+(ancienne, 18 missions en forme longue) et `EO-N` (recente). Exiger la seule ere
+recente accusait ces 18 a tort ; la borne temoin est donc `(?:E|EO)-N`.
+
+CE QU'IL NE FAIT PAS : aucune ecriture hors de la zone jetable de son flux, et il la
+laisse VIDE (le cobaye est supprime dans tous les cas). Il ne reecrit AUCUNE mission :
+les 46 anciennes restent telles quelles -- leur perte est declaree, jamais inventee.
+
+Usage: python verifier-source-item.py [--racine <path>]
+  code 0 = sain, 1 = ecart (liste et nomme), 2 = zone introuvable.
+"""
+
+import argparse
+import contextlib
+import io
+import json
+import re
+import sys
+from pathlib import Path
+
+# Les domiciles : declares UNE fois, jamais recopies dans la logique.
+FICHIER_COMMUN = Path("_operateur") / "optimus-prime" / "pilote" / "commun.py"
+FICHIER_FILE = (Path("_operateur") / "optimus-prime" / "pilote" / "file"
+                / "fonctions.py")
+FICHIER_MISSIONS = (Path("_operateur") / "optimus-prime" / "pilote"
+                    / "file-missions-optimus.json")
+FICHIER_LISTES = (Path("_operateur") / "optimus-prime" / "pilote" / "entonnoir"
+                  / "listes.py")
+
+# Le marqueur du domicile : le texte EXACT que la logique ecrit.
+MARQUEUR_DOMICILE = "def source_depuis_item("
+DOMICILES_ATTENDUS = 1
+# La fabrique automatique doit APPELER le domicile, plus le recomposer.
+MARQUEUR_FABRIQUE = "source_depuis_item(item)"
+# Le joint des deux chemins manuels, et sa forme interdite (la divergence d'origine).
+MARQUEUR_JOINT = "_source_de_l_item(item)"
+APPELS_ATTENDUS = 2
+MARQUEUR_COMPOSEUR_COURT = 'mission["source"] = "entonnoir:" + item'
+COMPOSEURS_ATTENDUS = 0
+# Le repli doit etre NOMME (un item introuvable ne se tait pas).
+MARQUEUR_REPLI = "INTROUVABLE"
+
+# LA MEMOIRE DE NAISSANCE (MO-334) : sa cle, ses DEUX maisons (meme litteral), et
+# les TROIS chemins de consommation qui doivent ecrire la tombe.
+MOTIF_CLE_MEMOIRE = r'^\s*CLE_MEMOIRE_NAISSANCE\s*=\s*"([^"]+)"'
+DOMICILES_CLE_ATTENDUS = 2
+FICHIER_LISTES_ENTONNOIR = (Path("_operateur") / "optimus-prime" / "pilote"
+                            / "entonnoir" / "listes.py")
+MOTIF_APPEL_TOMBE = r"(?m)^\s+noter_naissance\(etat,"
+TOMBES_ATTENDUES = 3
+MARQUEUR_RESOLVEUR = "source_de_l_item(item_id)"
+RESOLVEURS_ATTENDUS = 1
+
+PREFIXE_SOURCE = "entonnoir:"
+# Les DEUX eres d'identifiants d'item (mesure : 18 missions en `E-N`, le reste en
+# `EO-N`). Exiger une seule ere ferait accuser des sources COMPLETES.
+MOTIF_ID = r"(?:E|EO)-\d+"
+# Le correctif (2026-09-21) : borne REELLE des naissances -- ce qui est ne avant
+# garde son histoire, ce qui nait apres doit porter ses trois champs.
+DATE_CORRECTIF = "2026-09-21 00:00:00"
+
+# Zones jetables et caches : hors champ (meme regle que verifier-recherche, L-029).
+PREFIXE_ZONE_JETABLE = "tmp-"
+DOSSIERS_IGNORES = ("__pycache__",)
+NOM_COBAYE = "cobaye-naissances.json"
+
+RESULTATS = []
+
+
+def controler(nom, condition, detail=""):
+    RESULTATS.append((nom, bool(condition), detail))
+    print("[" + ("OK" if condition else "KO") + "] " + nom + " : " + detail)
+    return bool(condition)
+
+
+def trouver_racine(racine):
+    """Retourne le dossier matrix/ (celui qui porte `matrice` et `_operateur`), ou None."""
+    for candidat in [racine, racine / "cerveau-projet" / "matrix", racine / "matrix"]:
+        if (candidat / FICHIER_COMMUN).is_file():
+            return candidat
+    return None
+
+
+def est_en_champ(chemin, racine):
+    """Vrai si le fichier est du CODE de la zone (hors garde, zones jetables, caches)."""
+    try:
+        parties = chemin.relative_to(racine).parts
+    except ValueError:
+        return False
+    if parties[-1] == Path(__file__).name:
+        return False
+    for partie in parties[:-1]:
+        if partie in DOSSIERS_IGNORES or partie.startswith(PREFIXE_ZONE_JETABLE):
+            return False
+    return True
+
+
+def charger_zone(racine):
+    """Le chemin de la zone jetable du flux, LU au domicile partage. -> (chemin, erreur)."""
+    commun = str(racine / "matrice" / "data" / "commun")
+    if commun not in sys.path:
+        sys.path.insert(0, commun)
+    try:
+        from zone_tmp import chemin_zone_optimus
+    except Exception as erreur:
+        return None, repr(erreur)
+    return chemin_zone_optimus(racine), None
+
+
+def charger_vocabulaire(racine):
+    """Les listes FERMEES lues a leur domicile. -> (types, categories, urgences)."""
+    pilote = str(racine / "_operateur" / "optimus-prime" / "pilote")
+    if pilote not in sys.path:
+        sys.path.insert(0, pilote)
+    try:
+        from entonnoir import listes
+    except Exception:
+        return (), {}, ()
+    return tuple(listes.TYPES), dict(listes.CATEGORIES), tuple(listes.URGENCES)
+
+
+def charger_commun(racine):
+    """Importe le module commun du pilote. -> (module, erreur)."""
+    pilote = str(racine / "_operateur" / "optimus-prime" / "pilote")
+    if pilote not in sys.path:
+        sys.path.insert(0, pilote)
+    try:
+        import commun
+    except Exception as erreur:
+        return None, repr(erreur)
+    return commun, None
+
+
+# --- LE DETECTEUR (PUR) : il est joue sur la file reelle ET sur les cobayes -------
+
+def forme_longue(source, types, categories, urgences):
+    """Vrai si la source porte ses TROIS champs, pris dans les listes FERMEES.
+
+    Le vocabulaire est verifie, pas seulement la ponctuation : `bidon/pilote:haute`
+    a la bonne forme et reste un ecart, et `dev/marbre:haute` aussi -- la categorie
+    appartient a la liste de SON type (listes.CATEGORIES), pas a la liste de tous.
+    """
+    morceaux = re.match(r"^entonnoir:(" + MOTIF_ID + r"):([a-z]+)/([a-z]+):([a-z]+)$",
+                        str(source or ""))
+    if not morceaux:
+        return False
+    type_source = morceaux.group(2)
+    categorie = morceaux.group(3)
+    urgence = morceaux.group(4)
+    if types and type_source not in types:
+        return False
+    if categories and categorie not in categories.get(type_source, ()):
+        return False
+    if urgences and urgence not in urgences:
+        return False
+    return True
+
+
+def naissances_courtes(missions, date_min, types, categories, urgences):
+    """Les missions NEES apres `date_min` dont la source a perdu ses trois champs.
+
+    Une mission ANTERIEURE au correctif est hors borne : on ne reecrit pas l histoire
+    (les 46) avec des valeurs inventees. Une mission sans `chargee_le` est traitee
+    comme ancienne -- mais elle est COMPTEE a part, jamais ignoree en silence.
+    """
+    fautives, sans_date = [], 0
+    for mission in missions:
+        source = str(mission.get("source") or "")
+        if not source.startswith(PREFIXE_SOURCE):
+            continue
+        if forme_longue(source, types, categories, urgences):
+            continue
+        date = str(mission.get("chargee_le") or "")
+        if not date:
+            sans_date += 1
+            continue
+        if date >= date_min:
+            fautives.append((mission.get("id"), source))
+    return fautives, sans_date
+
+
+def lire_missions(chemin):
+    """Les missions d'un fichier de file. -> (liste, erreur)."""
+    try:
+        contenu = json.loads(chemin.read_text(encoding="utf-8"))
+    except Exception as erreur:
+        return [], repr(erreur)
+    return contenu.get("missions", []) if isinstance(contenu, dict) else [], None
+
+
+# --- LES CONTROLES ---------------------------------------------------------------
+
+def verifier_domicile(racine):
+    """1. UN SEUL DOMICILE : une seule fonction compose la source."""
+    domiciles = []
+    for chemin in racine.rglob("*.py"):
+        if not est_en_champ(chemin, racine):
+            continue
+        if MARQUEUR_DOMICILE in chemin.read_text(encoding="utf-8", errors="replace"):
+            domiciles.append(chemin)
+    detail = (str(len(domiciles)) + " domicile(s) composent la source (attendu : "
+              + str(DOMICILES_ATTENDUS) + ")")
+    if len(domiciles) != DOMICILES_ATTENDUS:
+        detail = "COPIES : " + ", ".join(str(c) for c in domiciles)
+    if controler("domicile-unique", len(domiciles) == DOMICILES_ATTENDUS, detail):
+        return []
+    return ["composeurs de source : " + str(len(domiciles))]
+
+
+def verifier_fabrique(racine):
+    """2a. La fabrique AUTOMATIQUE appelle le domicile au lieu de recomposer."""
+    texte = (racine / FICHIER_COMMUN).read_text(encoding="utf-8", errors="replace")
+    appel = texte.count(MARQUEUR_FABRIQUE)
+    if controler("fabrique-appelle-domicile", appel >= 1,
+                 str(appel) + " appel(s) du domicile dans la fabrique"):
+        return []
+    return ["la fabrique automatique ne consomme pas le domicile"]
+
+
+def verifier_chemins_manuels(racine):
+    """2b. Les DEUX chemins manuels appellent le joint, et ne composent plus."""
+    texte = (racine / FICHIER_FILE).read_text(encoding="utf-8", errors="replace")
+    appels = texte.count(MARQUEUR_JOINT)
+    courts = texte.count(MARQUEUR_COMPOSEUR_COURT)
+    details = (str(appels) + " appel(s) du joint (attendu : " + str(APPELS_ATTENDUS)
+               + "), " + str(courts) + " composeur(s) court(s) residuel(s) (attendu : "
+               + str(COMPOSEURS_ATTENDUS) + ")")
+    ok = appels == APPELS_ATTENDUS and courts == COMPOSEURS_ATTENDUS
+    if controler("chemins-manuels", ok, details):
+        return []
+    return ["chemins manuels : " + details]
+
+
+def verifier_repli(racine):
+    """3. Le repli (item introuvable) est NOMME, jamais muet."""
+    texte = (racine / FICHIER_FILE).read_text(encoding="utf-8", errors="replace")
+    if controler("repli-nomme", MARQUEUR_REPLI in texte,
+                 "le repli dit `" + MARQUEUR_REPLI + "` au lieu de se taire"):
+        return []
+    return ["le repli d'un item introuvable n'est pas nomme"]
+
+
+def verifier_naissances(racine, types, categories, urgences):
+    """4. Aucune mission nee APRES le correctif ne porte une source amputee."""
+    missions, erreur = lire_missions(racine / FICHIER_MISSIONS)
+    if erreur:
+        return ["file de missions illisible : " + erreur]
+    fautives, sans_date = naissances_courtes(missions, DATE_CORRECTIF, types, categories,
+                                             urgences)
+    detail = (str(len(fautives)) + " naissance(s) courte(s) apres le correctif"
+              + " ; " + str(sans_date) + " mission(s) d'entonnoir sans date (hors borne)")
+    if fautives:
+        detail += " : " + ", ".join(str(i) for i, _ in fautives[:5])
+    if controler("aucune-naissance-courte", not fautives, detail):
+        return []
+    return ["naissances courtes : " + ", ".join(str(i) for i, _ in fautives[:5])]
+
+
+def verifier_lecteurs(commun):
+    """5. Les lecteurs acceptent la forme LONGUE (aucun consommateur casse)."""
+    if commun is None:
+        return ["commun illisible"]
+    file_longue = {"missions": [{"source": "entonnoir:EO-1:dev/pilote:haute"}]}
+    lu_long = commun.item_deja_servi(file_longue, "EO-1")
+    lu_court = commun.item_deja_servi({"missions": [{"source": "entonnoir:EO-2"}]}, "EO-2")
+    lu_autre = commun.item_deja_servi(file_longue, "EO-3")
+    ok = lu_long and lu_court and not lu_autre
+    detail = ("la forme longue est reconnue : " + str(lu_long) + ", la courte aussi : "
+              + str(lu_court) + ", un AUTRE item non : " + str(not lu_autre))
+    if controler("lecteurs-tolerants", ok, detail):
+        return []
+    return ["un lecteur ne reconnait plus la source"]
+
+
+def verifier_memoire(racine, commun):
+    """6. MEMOIRE DE NAISSANCE : une cle, DEUX maisons, TROIS tombes, UNE verite."""
+    ecarts = []
+    trouvees = []
+    for chemin in (FICHIER_COMMUN.with_name("constants.py"), FICHIER_LISTES_ENTONNOIR):
+        try:
+            texte = (racine / chemin).read_text(encoding="utf-8", errors="replace")
+        except Exception as erreur:
+            ecarts.append("memoire: " + str(chemin) + " illisible (" + repr(erreur) + ")")
+            continue
+        morceaux = re.search(MOTIF_CLE_MEMOIRE, texte, re.MULTILINE)
+        if morceaux:
+            trouvees.append(morceaux.group(1))
+    memes = (len(trouvees) == DOMICILES_CLE_ATTENDUS and len(set(trouvees)) == 1)
+    if not controler("memoire-deux-maisons", memes,
+                     str(len(trouvees)) + " declaration(s), litteraux : "
+                     + str(sorted(set(trouvees)) or "AUCUN")):
+        ecarts.append("memoire: la cle doit etre declaree dans les DEUX maisons, au MEME litteral")
+    texte = (racine / FICHIER_COMMUN).read_text(encoding="utf-8", errors="replace")
+    tombes = len(re.findall(MOTIF_APPEL_TOMBE, texte))
+    if not controler("tombes-trois-chemins", tombes == TOMBES_ATTENDUES,
+                     str(tombes) + " chemin(s) ecrivent la tombe (attendu : "
+                     + str(TOMBES_ATTENDUES) + ")"):
+        ecarts.append("memoire: " + str(tombes) + " chemins sur " + str(TOMBES_ATTENDUES)
+                      + " ecrivent la tombe")
+    texte_file = (racine / FICHIER_FILE).read_text(encoding="utf-8", errors="replace")
+    resolveurs = texte_file.count(MARQUEUR_RESOLVEUR)
+    if not controler("resolveur-consomme", resolveurs >= RESOLVEURS_ATTENDUS,
+                     str(resolveurs) + " appel(s) du resolveur unique (attendu : "
+                     + str(RESOLVEURS_ATTENDUS) + ")"):
+        ecarts.append("memoire: les chemins manuels n'appellent pas le resolveur unique")
+    # UNE VERITE : une tombe ne nomme JAMAIS un item encore vivant (deux verites
+    # divergeraient -- la lecon d EO-154, ou c est la COPIE qui bloquait `retirer`).
+    if commun is not None:
+        etat = commun.charger_entonnoir_pilote()
+        memoires = etat.get("memoire_naissance") or []
+        doubles = [str(t.get("id")) for t in memoires
+                   if commun.item_dans_etat(etat, t.get("id")) is not None]
+        if not controler("aucune-tombe-vivante", not doubles,
+                         str(len(memoires)) + " tombe(s) ; item(s) a la fois vivant(s) et"
+                         " enterre(s) : " + str(doubles or "AUCUN")):
+            ecarts.append("memoire: des items sont a la fois vivants et enterres : "
+                          + ", ".join(doubles[:5]))
+    return ecarts
+
+
+def auto_test_memoire(commun):
+    """LE COBAYE de la memoire (L-032) : elle s ecrit, elle REND, elle ne devine JAMAIS.
+
+    Tout est joue sur des etats FABRIQUES : aucune ecriture dans l etat reel (la
+    seule lecture reelle est celle de `verifier_memoire`, en lecture seule).
+    """
+    if commun is None:
+        print("cobaye memoire : IMPOSSIBLE (commun illisible)")
+        return False
+    item = {"id": "EO-900", "type": "dev", "categorie": "pilote", "urgence": "haute",
+            "source": "createur", "theme": "PILOTE"}
+    etat = {"files": {}}
+    ecrit = commun.noter_naissance(etat, item)
+    doublon = commun.noter_naissance(etat, item)
+    tombe = commun.naissance_de_l_item("EO-900", etat) or {}
+    champs = sorted(tombe)
+    attendus = sorted(["id", "type", "categorie", "urgence", "consomme_le"])
+    propre = champs == attendus and "source" not in tombe
+    rendue = commun.source_depuis_item(tombe)
+    rend_bon = rendue == "entonnoir:EO-900:dev/pilote:haute"
+    print("cobaye memoire : tombe ecrite = " + str(ecrit) + ", 2e appel (idempotent) = "
+          + str(doublon) + ", champs = " + str(champs)
+          + ("" if propre else " [KO : champs attendus " + str(attendus) + " et aucun `source`]")
+          + ", rendue = " + rendue + " (" + ("juste" if rend_bon else "FAUSSE") + ")")
+    # INCOMPLETE : ce qui manque est NOMME, jamais invente.
+    incomplete = {"id": "EO-901", "type": "dev", "consomme_le": "2026-09-21 08:00:00"}
+    manquants = commun.champs_manquants_naissance(incomplete)
+    incomplete_ok = manquants == ["categorie", "urgence"]
+    print("cobaye memoire incomplete : champs manquants = " + str(manquants)
+          + " (" + ("juste" if incomplete_ok else "FAUX") + ")")
+    # SANS IDENTIFIANT : aucune tombe, et le fait est DIT (un refus muet ne vaut rien).
+    muet = io.StringIO()
+    with contextlib.redirect_stdout(muet):
+        sans_id = commun.noter_naissance(etat, {"type": "dev"})
+    alerte_dite = "SANS IDENTIFIANT" in muet.getvalue()
+    sans_id_ok = (sans_id is False and alerte_dite
+                  and len(etat.get("memoire_naissance") or []) == 1)
+    print("cobaye memoire sans identifiant : rien ecrit = " + str(sans_id is False)
+          + ", alerte DITE = " + str(alerte_dite) + " (" + ("juste" if sans_id_ok else "FAUX") + ")")
+    return bool(ecrit and not doublon and propre and rend_bon and incomplete_ok and sans_id_ok)
+
+
+def auto_test(zone, types, categories, urgences):
+    """LE COBAYE (L-032) : le MEME detecteur doit MORDRE, et la zone rester VIDE."""
+    missions = [
+        {"id": "MO-900", "source": "entonnoir:EO-900", "chargee_le": "2026-09-21 10:00:00"},
+        {"id": "MO-901", "source": "entonnoir:EO-901:dev/pilote:haute",
+         "chargee_le": "2026-09-21 10:00:00"},
+        {"id": "MO-902", "source": "entonnoir:EO-902", "chargee_le": "2026-09-19 10:00:00"},
+        {"id": "MO-903", "source": "entonnoir:EO-903:bidon/pilote:haute",
+         "chargee_le": "2026-09-21 10:00:00"},
+        {"id": "MO-904", "source": "entonnoir:EO-904:dev/marbre:haute",
+         "chargee_le": "2026-09-21 10:00:00"},
+        {"id": "MO-905", "source": "entonnoir:E-905:audit/file:normale",
+         "chargee_le": "2026-09-21 10:00:00"},
+    ]
+    chemin = zone / NOM_COBAYE
+    chemin.write_text(json.dumps({"missions": missions}), encoding="utf-8", newline="\n")
+    lues, erreur = lire_missions(chemin)
+    fautives, _ = naissances_courtes(lues, DATE_CORRECTIF, types, categories, urgences)
+    accuses = [str(i) for i, _ in fautives]
+    # MO-903 (type hors liste) et MO-904 (categorie hors liste de SON type) doivent
+    # tomber ; MO-905 (id de l ANCIENNE ere) doit passer : la borne d'ere est reelle.
+    attendus = ["MO-900", "MO-903", "MO-904"]
+    mord = accuses == attendus
+    print("cobaye naissances : accuse " + str(accuses) + " (attendu : " + str(attendus)
+          + ") -- mord : " + str(mord) + ("" if not erreur else " ; " + erreur))
+    # La forme longue N EST PAS accusee, et l ANCIENNE courte non plus : sans ces
+    # deux contre-temoins, un detecteur qui accuse TOUT passerait pour un bon garde.
+    contre = "MO-901" not in accuses and "MO-902" not in accuses
+    print("cobaye contre-temoins : forme longue, ANCIENNE courte et ancienne ere (E-N)"
+          " epargnees : " + str(contre))
+    chemin.unlink(missing_ok=True)
+    reste = [p.name for p in zone.iterdir() if p.name.startswith("cobaye-")]
+    propre = not reste
+    print("cobaye nettoyage : zone jetable " + ("vide (cobaye supprime)" if propre
+                                               else "SOUILLEE : " + str(reste)))
+    return (mord and contre), propre
+
+
+def main():
+    parseur = argparse.ArgumentParser(description="Garde : la source d'une mission ne perd rien.")
+    parseur.add_argument("--racine", default=".", help="racine du depot")
+    parseur.add_argument("--auto-test", action="store_true", help="ne joue que le cobaye")
+    arguments = parseur.parse_args()
+    racine = trouver_racine(Path(arguments.racine).resolve())
+    if racine is None:
+        print("ECART : racine introuvable (aucun " + str(FICHIER_COMMUN) + ").")
+        return 2
+    types, categories, urgences = charger_vocabulaire(racine)
+    if not types or not categories or not urgences:
+        print("ECART : listes fermees illisibles (" + str(FICHIER_LISTES) + ").")
+        return 1
+    zone, erreur_zone = charger_zone(racine)
+    if zone is None:
+        print("ECART : zone jetable introuvable : " + str(erreur_zone))
+        return 2
+    zone.mkdir(parents=True, exist_ok=True)
+    ecarts = []
+    if not arguments.auto_test:
+        ecarts += verifier_domicile(racine)
+        ecarts += verifier_fabrique(racine)
+        ecarts += verifier_chemins_manuels(racine)
+        ecarts += verifier_repli(racine)
+        ecarts += verifier_naissances(racine, types, categories, urgences)
+        commun, _ = charger_commun(racine)
+        ecarts += verifier_lecteurs(commun)
+        ecarts += verifier_memoire(racine, commun)
+        if not auto_test_memoire(commun):
+            ecarts.append("le cobaye de la memoire n'a pas mordu")
+    mord, propre = auto_test(zone, types, categories, urgences)
+    if not mord:
+        ecarts.append("le cobaye n'a pas mordu (le garde serait vert par construction)")
+    if not propre:
+        ecarts.append("le cobaye a laisse des fichiers dans la zone jetable")
+    if ecarts:
+        print("\nVERDICT KO : " + str(len(ecarts)) + " ecart(s) :")
+        for ecart in ecarts:
+            print("  - " + ecart)
+        return 1
+    print("\nVERDICT OK : la source d'une mission nee d'un item ne perd plus rien.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

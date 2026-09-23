@@ -13,7 +13,8 @@ import subprocess
 import sys
 
 from commun import charger_classeur, trouver_defcon
-from constants import NIVEAU_NORMAL, REPERTOIRE_OUTIL
+from constants import NIVEAU_NORMAL, NOM_OUTIL_MACHINE_DEFCON
+from resolution_outils import chemin_outil  # noqa: E402
 from surveiller.fonctions import decider, evaluer
 
 
@@ -38,7 +39,7 @@ def executer(arguments):
         return 0
 
     raison = "declencheur " + " ; ".join(motifs)
-    commande = [sys.executable, str(REPERTOIRE_OUTIL / "main.py"),
+    commande = [sys.executable, str(chemin_outil(NOM_OUTIL_MACHINE_DEFCON)),
                 "monter", "--niveau", str(niveau), "--raison", raison]
     resultat = subprocess.run(commande, capture_output=True)
     sortie = resultat.stdout.decode("utf-8", errors="replace").strip()

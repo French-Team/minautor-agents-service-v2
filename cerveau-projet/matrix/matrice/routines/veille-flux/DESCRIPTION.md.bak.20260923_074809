@@ -1,0 +1,89 @@
+# ROUTINE veille-flux
+
+> Routine de la Matrice (M-012, doctrine du createur) : surveille les fichiers
+> modifies et sauvegardes, declenche les combos de verification/correction en
+> ARRIERE-PLAN, sans interrompre le travail du LLM.
+
+## Deux etats possibles
+
+| Etat | Commande | Ce qui tourne |
+|---|---|---|
+| RELAX (defaut) | `python3 cerveau-projet/matrix/lancer.py veille-flux veille` | corriger-ascii (scan+correction) + py_compile global + regeneration du journal visuel |
+| VIGILE (apres modifications) | `python3 cerveau-projet/matrix/lancer.py veille-flux veille --vigile` | RELAX + les 3 verifier-marbre + verifications cibles |
+
+## Ce que fait chaque passe
+
+1. Purge des morts (M-051/M-052) : les signatures `python-compile` dont la
+   cible n'existe plus sont retirees de `alertes-emises.json` (une signature
+   morte bloquerait la future alerte si la cible etait recreee) ET les
+   alertes-grave fantomes de la boite Matrice (`intercom/matrice/inbox.jsonl`)
+   sont retirees (fichier cible supprime = incident resolu). Les cibles
+   non-fichier (comme l'etiquette `py_compile`) ne sont JAMAIS declarees
+   mortes. Les autres messages de la boite (fin-mission, retour-lot,
+   incident...) sont INTOUCHABLES. Jamais bloquant (incident journalise),
+   resultats dans le journal (`purge-signatures`, `purge-boite`).
+2. corriger-ascii : scan + correction auto (BDD empreintees intouchables,
+   caracteres inconnus laisses et signales = probleme plus grave).
+3. py_compile global (syntaxe Python cassee = probleme plus grave).
+4. REGENERER le journal visuel de la Matrice (`matrice/journal-multi-encarts.md`,
+   MO-366) : ce document se declare GENERE depuis les BDD et donnait son remede
+   (`construire`) sans qu AUCUN appelant ne l applique -- mesure du 2026-09-23,
+   trois jours de retard sans un signe. Le cout est MESURE (370 ms pour neuf
+   encarts) et le geste est TRACE au journal (retard REPARE + duree). Un refus de
+   la porte devient une DETECTION `visuel-perime` : jamais un silence. Le passant
+   choisi est celui qui EXISTE deja -- une routine neuve aurait duplique toute la
+   machinerie PID/cadence/drapeau pour 370 ms.
+5. [VIGILE seulement] verifier-conventions / -regles / -protocoles +
+   verification des cibles de la Matrice (DESCRIPTION.md, main.py, entry.py,
+   fonctions.py des outils et routines ; DESCRIPTION + main du pilote).
+
+## Etats de sortie (definition stricte)
+
+- `RELAX` : aucune detection. Sortie 0.
+- `VIGILE` : au moins une detection. Sortie 1.
+- Chaque passe ecrit une ligne dans le journal (ajout seul).
+- Etat VIGILE = retour RELAX : la re-veille a RESTAURE le probleme
+  (correction/reparation) et la passe s'est terminee proprement.
+
+## Problemes graves (PAS d'auto-correction -> alerte intercom)
+
+- Caractere non convertible laisse en place.
+- Fichier Python qui ne compile pas.
+- Ecart de marbre (conventions/regles/protocoles) en mode VIGILE.
+
+Grave -> message dans `matrice/intercom/matrice/inbox.jsonl` (type
+`alerte-grave`, avec fichier et raison) -> la Matrice peut redonner une
+mission via le pilote.
+
+## Arriere-plan et arret cooperatif
+
+    python main.py veille            (une passe)
+    python main.py veille --boucle   (surveillance continue, refus de double lancement via PID)
+    python main.py veille --boucle --vigile
+    python main.py veille arret      (drapeau d'arret cooperatif, zero processus tue)
+    python main.py rotation          (borne journal-veille.txt en ARCHIVANT ses anciens)
+
+## Rotation du journal (MO-078)
+
+`journal-veille.txt` est le PLUS GROS des journaux de la Matrice (mesure du
+2026-09-13 : 3,85 Mo / 44 050 lignes, environ 0,5 Mo par jour, aucune borne).
+Un troisieme lecteur entier avait ete mesure : l'outil `journal-multi-encarts`
+en lisait 3,85 Mo pour n'en afficher que 5 evenements.
+
+- Le moteur est PARTAGE (`matrice/data/commun/rotation_journal.py`, motif unique
+  M-076) : la veille ne declare que SES constantes (seuil en octets, nombre
+  d'evenements gardes, prefixe d'archive). La rotation DEPLACE les evenements
+  anciens dans `journal-veille-archive-AAAAMMJJ.jsonl` -- jamais de suppression.
+- ARCHIVER d'abord, reecrire ensuite, controler apres ; l'archive fait partie du
+  "deja connu" (lecon L-040 : une reprise apres arret n'ecrit aucun jumeau) ;
+  une COURSE est REFUSEE en le nommant, le journal n'est jamais ecrase.
+- La boucle verifie la rotation AVANT chaque passe, et un refus ne tue jamais la
+  passe (lecon L-026).
+- Les lecteurs (garde de flux, garde d'attente, encart routines) lisent la QUEUE
+  du journal (256 Ko), jamais tout l'historique.
+
+## Frontiere absolue
+
+- Un fichier sous etalon .sha256 n'est JAMAIS reecrit.
+- L'histoire (.jsonl) n'est jamais reecrite.
+- La reparation d'un probleme grave reste une MISSION, jamais une routine silencieuse.

@@ -1,0 +1,496 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# sc-004-auto-diagnostic -- super-combo numerote sc-004
+# Genere par creer-combo.py le 2026-09-19, implementation par MO-202.
+#
+# Auto-diagnostic des outils : (1) AGREGER les defauts DECLARES par les missions
+# (R5, champ `defauts`) ; (2) SONDER chaque outil (une option inconnue doit etre
+# REFUSEE, jamais avalee en silence) ; (3) PREPARER les missions de reparation en
+# deposant les items a l entonnoir par SA porte.
+#
+# LA SONDE A DEUX AXES (T3 de PB-002, MO-302). MESURE qui l a imposee : la sonde ne
+# posait l option inconnue qu EN TETE (la ou un VERBE est attendu) ; 6 outils qui
+# l avalaient ou la refusaient MUETTEMENT APRES leur verbe etaient donc declares
+# CONFORMES -- un defaut invisible a la sonde se lit comme une couverture. L axe 2
+# lit le premier verbe declare par l outil (AST : COMMANDES puis VERBES, jamais une
+# liste recopiee, M-076) et pose l option APRES lui.
+#
+# LE CRITERE, lui aussi mesure : un refus est un refus des lors qu il NOMME la
+# fautive -- le marqueur du domicile OU le nom de l option cite. Le critere precedent
+# ne connaissait que le marqueur : il accusait a tort un outil qui refuse autrement
+# (argparse accuse la VALEUR, pas l option -- et l option fautive, elle, restait
+# invisible). Un outil sans verbe declare n est pas jugeable sur l axe 2 : la sonde
+# le DIT.
+#
+# Regle : ce super-combo DIAGNOSTIQUE et PREPARE, il ne REPARE jamais lui-meme.
+#
+# Usage :
+#     python main.py diagnostic [--fiche <json>]
+#     python main.py inspection [--outils <dossier>] [--limite N]
+#     python main.py preparer [--simuler] [--fiche <json>] [--outils <dossier>]
+#     python main.py status
+#     python main.py auto-test
+
+import argparse
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+SUPER_ID = "sc-004"
+SUPER_NOM = "sc-004-auto-diagnostic"
+PHASES = ["diagnostic", "inspection", "preparer"]
+VERBES = ["diagnostic", "inspection", "preparer", "status", "auto-test"]
+VERBE_DEFAUT = "diagnostic"
+
+# Le champ R5 et le statut de reparation : consommes du DOMICILE du pilote quand
+# il est joignable, jamais recopies (une liste recopiee diverge en silence, L-035).
+CHAMPS_DEFAUTS = ("outil", "defaut", "reproduit", "reparation", "preuve", "statut")
+STATUT_DEFAUT_REPARE = "repare"
+
+# --- POLITIQUE DE DEPOT (MO-237, decision de l operateur 2026-09-19) ---------
+# MESURE : deposer ne FORCE aucune urgence par la source -- proposer_urgence rend
+# l urgence DEMANDEE, ou URGENCE_DEFAUT (normale). URGENCE_VEILLE (bloquante)
+# n est donc PAS pose par la porte : c est la ROUTINE DE VEILLE qui l ecrit en
+# clair dans son appel (veille-flux/commun.py : --urgence bloquante --source
+# veille). L AUTO-DIAGNOSTIC n est pas la veille : il n a pas a crier bloquant,
+# il porte SA politique et l ECRIT -- c est ce que fait ce super-combo.
+# URGENCE GRADUEE -- un auto-diagnostic ne casse pas le flux, il ne crie donc
+# jamais bloquant : il distingue la PANNE OBSERVEE (defaut R5 declare, ou outil
+# qui AVALE -- il rend un resultat FAUX en silence) de la QUALITE DU REFUS
+# (refus-muet : l outil refuse mais ne dit pas le remede).
+URGENCE_PANNE = "haute"
+URGENCE_QUALITE = "normale"
+# PLAFOND par passe : un flot d items noierait les autres files. Le reste n est
+# PAS perdu -- il est COMPTE et DIT, et la passe suivante le prend (l idempotence
+# saute ce qui est deja depose : la file d attente se vide d elle-meme).
+PLAFOND_DEFAUT = 5
+# La sonde : une option qui n existe nulle part doit provoquer un REFUS NOMME.
+OPTION_BIDON = "--option-bidon-mo202"
+# Le marqueur du DOMICILE (la forme la plus frequente du refus) -- mais le critere
+# ne s y limite plus : voir sonder().
+MARQUEUR_REFUS = "OPTION INCONNUE"
+# LES DEUX POSITIONS sondees, DITES telles quelles dans la sortie : un ecart sans sa
+# position se lit comme un ecart qu on ne sait pas reproduire.
+POSITION_TETE = "option EN TETE"
+POSITION_APRES_VERBE = "option APRES le verbe"
+
+CODE_OK = 0
+CODE_ECHEC = 1
+CODE_DIAGNOSTIC_NON_VIDE = 1
+
+BORNES_REMONTEE = 30
+REPERTOIRE_SUPER = Path(__file__).resolve().parent
+_courant = REPERTOIRE_SUPER
+for _ in range(BORNES_REMONTEE):
+    if (_courant / "matrice" / "data" / "commun" / "racine.py").is_file():
+        break
+    _courant = _courant.parent
+else:
+    raise RuntimeError("Racine matrix/ introuvable en remontant.")
+RACINE_MATRICE = _courant
+
+# MESURE (faute du premier jet, attrapee par l auto-test de ce jour) : les
+# outils vivent sous <racine>/matrice/data/outils -- le premier jet omettait le
+# dossier `matrice/`, la sonde ne trouvait AUCUNE cible et le diagnostic ne
+# lisait pas le journal. Une cible vide se lit comme un fait : elle est CRIMEE.
+DOSSIER_OUTILS = RACINE_MATRICE / "matrice" / "data" / "outils"
+DOSSIER_PILOTE = RACINE_MATRICE / "_operateur" / "optimus-prime" / "pilote"
+FICHE_MISSIONS = DOSSIER_PILOTE / "file-missions-optimus.json"
+JOURNAL_MISSIONS = RACINE_MATRICE / "matrice" / "data" / "historiques-missions-optimus.jsonl"
+PORTE_ENTONNOIR = DOSSIER_PILOTE / "entonnoir" / "main.py"
+# L etat de l entonnoir, lu EN LECTURE SEULE : c est lui qui rend la preparation
+# IDEMPOTENTE (un item qui nomme deja l outil ne se redepose pas).
+CHEMIN_ENTONNOIR = DOSSIER_PILOTE / "entonnoir-files-optimus.json"
+
+
+def lire_json(chemin):
+    # Lire un JSON ; une absence est DITE par l appelant, jamais devinee.
+    if not chemin.is_file():
+        return None
+    with open(chemin, "r", encoding="utf-8") as fichier:
+        return json.load(fichier)
+
+
+def lancer_outil(chemin, arguments):
+    # Lancer un outil de la Matrice : (code, sortie) ; un outil absent ne casse rien.
+    if not chemin.is_file():
+        return 127, "outil introuvable : " + str(chemin)
+    resultat = subprocess.run(
+        [sys.executable, str(chemin)] + arguments,
+        capture_output=True, text=True,
+    )
+    return resultat.returncode, (resultat.stdout or "") + (resultat.stderr or "")
+
+
+def lire_lignes_jsonl(chemin):
+    # Lire un JSONL en AJOUT SEUL ; une ligne illisible est SIGNALEE, jamais sautee.
+    if not chemin.is_file():
+        return [], "journal absent : " + str(chemin)
+    objets = []
+    for numero, ligne in enumerate(chemin.read_text(encoding="utf-8").splitlines(), 1):
+        if not ligne.strip():
+            continue
+        try:
+            objets.append(json.loads(ligne))
+        except json.JSONDecodeError:
+            return objets, "ligne " + str(numero) + " illisible : ignoree"
+    return objets, ""
+
+
+def defauts_declares(fiche, journal):
+    # Collecter les defauts DECLARES (R5) : la FICHE des missions d abord, puis le
+    # JOURNAL (un defaut historise reste un fait, meme si la mission a quitte la fiche).
+    trouves = []
+    for mission in fiche.get("missions", []):
+        for defaut in mission.get("defauts") or []:
+            trouves.append((mission.get("id", "?"), defaut))
+    objets, ecart = lire_lignes_jsonl(journal)
+    for objet in objets:
+        for defaut in objet.get("defauts") or []:
+            trouves.append((objet.get("id", "?"), defaut))
+    return trouves, ecart
+
+
+def defauts_ouverts(trouves):
+    # Un defaut OUVERT : son statut n est pas `repare`. Un statut VIDE n est pas
+    # cache : il est compte ouvert (une colonne vide se lit comme un fait).
+    return [(mission, defaut) for mission, defaut in trouves
+            if (defaut.get("statut") or "") != STATUT_DEFAUT_REPARE]
+
+
+def grouper_par_outil(ouverts):
+    # Agreger par OUTIL : le diagnostic se lit par outil, jamais mission par mission.
+    par_outil = {}
+    for mission, defaut in ouverts:
+        outil = defaut.get("outil") or "(sans outil)"
+        entree = par_outil.setdefault(outil, {"defauts": [], "missions": []})
+        entree["defauts"].append(defaut.get("defaut") or "(sans texte)")
+        if mission not in entree["missions"]:
+            entree["missions"].append(mission)
+    return par_outil
+
+
+def cmd_diagnostic(arguments):
+    # Phase 1 : AGREGER les defauts declares par les missions (matiere premiere R5).
+    parser = argparse.ArgumentParser(description="Agreger les defauts R5 declares")
+    parser.add_argument("--fiche", default=None, help="Fiche des missions (cobaye)")
+    parser.add_argument("--journal", default=None, help="Journal JSONL (cobaye)")
+    parsed = parser.parse_args(arguments)
+    fiche = lire_json(Path(parsed.fiche) if parsed.fiche else FICHE_MISSIONS)
+    if fiche is None:
+        print("DIAGNOSTIC : fiche des missions illisible : " + str(FICHE_MISSIONS))
+        return CODE_ECHEC
+    journal = Path(parsed.journal) if parsed.journal else JOURNAL_MISSIONS
+    trouves, ecart = defauts_declares(fiche, journal)
+    if ecart:
+        print("DIAGNOSTIC : " + ecart)
+    ouverts = defauts_ouverts(trouves)
+    par_outil = grouper_par_outil(ouverts)
+    print("DIAGNOSTIC DES OUTILS (defauts declares R5)")
+    print("  defauts lus : " + str(len(trouves)) + " | ouverts : " + str(len(ouverts))
+          + " | repares : " + str(len(trouves) - len(ouverts)))
+    if not par_outil:
+        print("  AUCUN defaut ouvert : rien a preparer.")
+        return CODE_OK
+    for outil in sorted(par_outil):
+        entree = par_outil[outil]
+        print("  " + outil + " (" + str(len(entree["defauts"])) + " defaut(s), missions "
+              + ", ".join(entree["missions"]) + ")")
+        for texte in entree["defauts"]:
+            print("    - " + texte)
+    return CODE_DIAGNOSTIC_NON_VIDE
+
+
+def outils_du_dossier(dossier):
+    # Les outils de la Matrice : un dossier = un outil, avec SON main.py.
+    outils = []
+    if not dossier.is_dir():
+        return outils
+    for entree in sorted(dossier.iterdir()):
+        if entree.is_dir() and (entree / "main.py").is_file():
+            outils.append((entree.name, entree / "main.py"))
+    return outils
+
+
+def premiere_ligne(sortie):
+    # Ce que l outil a DIT : une accusation qui ne cite qu un code ne dit rien du refus.
+    for ligne in (sortie or "").splitlines():
+        if ligne.strip():
+            return ligne.strip()[:120]
+    return "(aucune sortie)"
+
+
+def sonder(main, verbe=None):
+    # SONDER un outil SUR UNE POSITION : l option inconnue posee EN TETE (la ou un
+    # verbe est attendu), ou APRES le verbe declare. Un code 0 signifie que l appel a
+    # rendu le resultat du DEFAUT, indiscernable d un resultat correct (EO-179,
+    # L-055) : c est un ecart, pas un silence a ignorer.
+    #
+    # LE CRITERE (T3 de PB-002) : un refus est un refus des lors qu il NOMME la
+    # fautive -- le marqueur du domicile OU le nom de l option cite. L ancien critere
+    # ne connaissait que le marqueur et accusait donc a tort un outil qui refuse
+    # autrement.
+    code, sortie = lancer_outil(main, ([verbe] if verbe else []) + [OPTION_BIDON, "1"])
+    if code == 127:
+        return "injoignable", sortie
+    if code == 0:
+        return "avale", "code 0 au lieu d un refus : l option inconnue est ignoree"
+    if MARQUEUR_REFUS in sortie or OPTION_BIDON in sortie:
+        return "refuse", ""
+    return ("refus-muet", "code " + str(code) + " mais le refus ne NOMME pas l option inconnue"
+            + " -- il dit : " + premiere_ligne(sortie))
+
+
+def premier_verbe(main):
+    """Le premier VERBE declare par l outil, lu par AST (COMMANDES puis VERBES).
+
+    T3 de PB-002 : l axe "apres le verbe" a besoin du verbe REEL de l outil. Il se LIT
+    dans sa declaration, jamais recopie a la main (M-076 : une liste recopiee diverge
+    en silence). Un outil qui ne declare rien rend None : il n est pas jugeable sur cet
+    axe, et la sonde le DIT au lieu de le compter conforme.
+    """
+    try:
+        arbre = ast.parse(main.read_text(encoding="utf-8"))
+    except (OSError, SyntaxError, UnicodeDecodeError):
+        return None
+    declarations = {}
+    for noeud in ast.walk(arbre):
+        if not isinstance(noeud, ast.Assign):
+            continue
+        for cible in noeud.targets:
+            if isinstance(cible, ast.Name):
+                declarations.setdefault(cible.id, noeud.value)
+    dictionnaire = declarations.get("COMMANDES")
+    if isinstance(dictionnaire, ast.Dict):
+        for cle in dictionnaire.keys:
+            if isinstance(cle, ast.Constant) and isinstance(cle.value, str):
+                return cle.value
+    liste = declarations.get("VERBES")
+    if isinstance(liste, (ast.List, ast.Tuple)):
+        for element in liste.elts:
+            if isinstance(element, ast.Constant) and isinstance(element.value, str):
+                return element.value
+    return None
+
+
+def sonder_outil(main):
+    """Sonde les DEUX positions d un outil : (resultats, non_jugeable).
+
+    AXE 1 : l option EN TETE. AXE 2 : l option APRES le premier verbe declare.
+    Rend la liste des (position, etat, detail) et le motif de non-jugeabilite (ou "").
+    """
+    resultats = [(POSITION_TETE,) + sonder(main)]
+    verbe = premier_verbe(main)
+    if verbe is None:
+        return resultats, ("aucun verbe declare (ni COMMANDES ni VERBES) : l axe \""
+                           + POSITION_APRES_VERBE + "\" n est pas jugeable")
+    resultats.append((POSITION_APRES_VERBE + " " + verbe,) + sonder(main, verbe))
+    return resultats, ""
+
+
+def cmd_inspection(arguments):
+    # Phase 2 : SONDER les outils (l angle mort qu aucune mission ne declare).
+    parser = argparse.ArgumentParser(description="Sonder les outils de la Matrice")
+    parser.add_argument("--outils", default=None, help="Dossier des outils (cobaye)")
+    parser.add_argument("--limite", type=int, default=0, help="Limiter le nombre d outils sondes")
+    parsed = parser.parse_args(arguments)
+    dossier = Path(parsed.outils) if parsed.outils else DOSSIER_OUTILS
+    outils = outils_du_dossier(dossier)
+    if not outils:
+        print("INSPECTION : aucun outil trouve dans " + str(dossier))
+        return CODE_ECHEC
+    if parsed.limite:
+        outils = outils[:parsed.limite]
+    accuses = {}
+    non_juges = []
+    print("INSPECTION DES OUTILS (sonde " + OPTION_BIDON + " : refus directionnel attendu)")
+    print("  axes : " + POSITION_TETE + " puis " + POSITION_APRES_VERBE + " (verbe lu par AST)")
+    for nom, main in outils:
+        resultats, non_jugeable = sonder_outil(main)
+        if non_jugeable:
+            non_juges.append(nom)
+        for position, etat, detail in resultats:
+            if etat == "refuse":
+                continue
+            accuses.setdefault(nom, []).append((position, etat, detail))
+    for nom in sorted(accuses):
+        for position, etat, detail in accuses[nom]:
+            print("  [" + etat + "] " + nom + " (" + position + ") : " + detail)
+    print("  sondes : " + str(len(outils)) + " outil(s) | conformes : "
+          + str(len(outils) - len(accuses)) + " | ecarts : " + str(len(accuses)) + " outil(s)")
+    if non_juges:
+        print("  NON JUGES sur l axe 2 : " + str(len(non_juges)) + " outil(s) : "
+              + ", ".join(non_juges) + " -- aucun verbe declare, l axe n a rien a sonder")
+    return CODE_DIAGNOSTIC_NON_VIDE if accuses else CODE_OK
+
+
+def marqueur_outil(outil):
+    # MARQUEUR d idempotence, pose par sc-004 : un motif PRECIS, jamais le nom nu.
+    return "[outil=" + outil + "]"
+
+
+def outil_deja_present(outil, etat_entonnoir):
+    # IDEMPOTENCE : un item qui VISE deja cet outil ne se redepose pas -- le
+    # diagnostic est rejouable sans fabriquer de doublons (EO-153).
+    # MESURE MO-238 : chercher le NOM NU rendait des FAUX POSITIFS -- le mot `lire`
+    # vit dans l objectif d une AUTRE reparation, `chaine-pense-bete` dans une
+    # source_trace, `suivi-optimus` dans la demande EO-227. Trois outils etaient
+    # donc masques POUR TOUJOURS (un controle qui masque se lit comme un fait).
+    # On cherche desormais le MARQUEUR, ou la forme LEGACY des items deposes avant
+    # MO-238 -- jamais un morceau de phrase.
+    motifs = (marqueur_outil(outil), "reparer l outil " + outil + ".")
+    files = (etat_entonnoir.get("files") or {}).values()
+    for mission in list(etat_entonnoir.get("vrac", [])) + [m for liste in files for m in liste]:
+        texte = (mission.get("objectif") or "") + " " + (mission.get("theme") or "")
+        for motif in motifs:
+            if motif in texte:
+                return True
+    return False
+
+
+def outils_a_preparer(fiche, journal, dossier):
+    # La matiere du diagnostic : les defauts DECLARES (R5) ET les ecarts d inspection.
+    a_preparer = {}
+    trouves, _ecart = defauts_declares(fiche or {"missions": []}, journal)
+    for mission, defaut in defauts_ouverts(trouves):
+        outil = defaut.get("outil") or ""
+        if not outil:
+            continue
+        entree = a_preparer.setdefault(outil, {"motifs": []})
+        entree["motifs"].append("defaut declare (" + mission + ") : " + (defaut.get("defaut") or ""))
+    for nom, main in outils_du_dossier(dossier):
+        etat, detail = sonder(main)
+        if etat == "refuse":
+            continue
+        entree = a_preparer.setdefault(nom, {"motifs": []})
+        entree["motifs"].append("inspection " + etat + " : " + detail)
+    return a_preparer
+
+
+def cmd_preparer(arguments):
+    # Phase 3 : PREPARER la mission -- deposer l item a l entonnoir par SA porte.
+    parser = argparse.ArgumentParser(description="Preparer les missions de reparation")
+    parser.add_argument("--simuler", action="store_true", help="Ne rien deposer, DIRE ce qui le serait")
+    parser.add_argument("--fiche", default=None, help="Fiche des missions (cobaye)")
+    parser.add_argument("--journal", default=None, help="Journal JSONL (cobaye)")
+    parser.add_argument("--outils", default=None, help="Dossier des outils (cobaye)")
+    parser.add_argument("--plafond", type=int, default=PLAFOND_DEFAUT,
+                        help="Items deposes par passe (0 = illimite)")
+    parsed = parser.parse_args(arguments)
+    fiche = lire_json(Path(parsed.fiche) if parsed.fiche else FICHE_MISSIONS)
+    journal = Path(parsed.journal) if parsed.journal else JOURNAL_MISSIONS
+    dossier = Path(parsed.outils) if parsed.outils else DOSSIER_OUTILS
+    a_preparer = outils_a_preparer(fiche, journal, dossier)
+    if not a_preparer:
+        print("PREPARATION : aucun outil a reparer (aucun defaut ouvert, aucun ecart de sonde).")
+        return CODE_OK
+    etat = lire_json(CHEMIN_ENTONNOIR) or {}
+    ordonnes = ordonner_par_gravite(a_preparer)
+    candidats = []
+    ignores = 0
+    for outil in ordonnes:
+        if outil_deja_present(outil, etat):
+            print("  [deja] " + outil + " : un item le nomme deja -- rien de depose.")
+            ignores += 1
+            continue
+        candidats.append(outil)
+    a_deposer = candidats if not parsed.plafond else candidats[:parsed.plafond]
+    restants = [outil for outil in candidats if outil not in a_deposer]
+    print("  file d attente : " + str(len(candidats)) + " outil(s) ; plafond : "
+          + (str(parsed.plafond) if parsed.plafond else "illimite"))
+    depots = 0
+    for outil in a_deposer:
+        motifs = a_preparer[outil]["motifs"]
+        urgence = urgence_de(motifs)
+        objectif = ("AUTO-DIAGNOSTIC " + marqueur_outil(outil) + " : reparer cet outil. Motifs : "
+                    + " | ".join(motifs)
+                    + ". Route proto-10 : reproduire, reparer DANS l outil, prouver, tracer.")
+        if parsed.simuler:
+            print("  [simule] " + outil + " [" + urgence + "] : " + str(len(motifs)) + " motif(s)")
+            depots += 1
+            continue
+        code, sortie = lancer_outil(PORTE_ENTONNOIR, [
+            "deposer", "--theme", "Reparer l outil " + outil, "--objectif", objectif,
+            "--type", "reparation", "--source", "veille", "--urgence", urgence,
+            "--trace", "sc-004-auto-diagnostic (defauts R5 + inspection ; politique MO-237)",
+        ])
+        if code == 0:
+            depots += 1
+            print("  [depose] " + outil)
+        else:
+            premiere = (sortie.strip().splitlines() or ["(sans message)"])[0]
+            print("  [REFUS] " + outil + " : " + premiere)
+    print("PREPARATION : " + str(depots) + " depose(s), " + str(ignores) + " deja present(s), "
+          + str(len(restants)) + " en attente de la prochaine passe"
+          + (" (NON PERDUS : l idempotence saute les deja deposes)." if restants else "."))
+    return CODE_OK
+
+
+def cmd_status(arguments):
+    # Etat de l objet : sa matiere, ses domiciles, et ce qui manque.
+    print("Super-combo  : " + SUPER_NOM + " (" + SUPER_ID + ")")
+    print("Phases       : " + ", ".join(PHASES))
+    print("Missions     : " + str(FICHE_MISSIONS) + " [" + ("OK" if FICHE_MISSIONS.is_file() else "ABSENT") + "]")
+    print("Journal      : " + str(JOURNAL_MISSIONS) + " [" + ("OK" if JOURNAL_MISSIONS.is_file() else "ABSENT") + "]")
+    print("Outils       : " + str(DOSSIER_OUTILS) + " [" + ("OK" if DOSSIER_OUTILS.is_dir() else "ABSENT") + "]")
+    print("Entonnoir    : " + str(CHEMIN_ENTONNOIR) + " [" + ("OK" if CHEMIN_ENTONNOIR.is_file() else "ABSENT") + "]")
+    return CODE_OK
+
+
+def urgence_de(motifs):
+    # LA PANNE OBSERVEE passe avant la QUALITE DU REFUS : un defaut R5 declare ou un
+    # outil qui AVALE (il rend un resultat FAUX en silence) est une PANNE ; un
+    # refus-muet est un defaut de remede (friction 77 -- un refus qui ne dit pas).
+    for motif in motifs:
+        if motif.startswith("defaut declare") or motif.startswith("inspection avale"):
+            return URGENCE_PANNE
+    return URGENCE_QUALITE
+
+
+def ordonner_par_gravite(a_preparer):
+    # Ordre de depot : panne d abord, puis qualite du refus ; a gravite egale, par
+    # nom -- un ordre STABLE, sinon deux passes ne prendraient pas la meme suite.
+    return sorted(a_preparer, key=lambda nom: (urgence_de(a_preparer[nom]["motifs"]), nom))
+
+
+def cmd_auto_test(arguments):
+    # Preuve que ce super-combo SAIT ACCUSER : un verbe hors contrat est REFUSE et
+    # la sonde a bien des outils a regarder (un controle sans cible ne dit rien).
+    ecarts = []
+    if principal(["verbe-hors-contrat"]) != CODE_ECHEC:
+        ecarts.append("un verbe hors contrat est ACCEPTE")
+    if not outils_du_dossier(DOSSIER_OUTILS):
+        ecarts.append("aucun outil trouve : la sonde ne regarderait rien")
+    if ecarts:
+        print("AUTO-TEST " + SUPER_ID + " : " + str(len(ecarts)) + " ecart(s)")
+        for ecart in ecarts:
+            print("  - " + ecart)
+        return CODE_ECHEC
+    print("AUTO-TEST " + SUPER_ID + " : conforme (" + str(len(PHASES)) + " phase(s), "
+          + str(len(outils_du_dossier(DOSSIER_OUTILS))) + " outil(s) a sonder)")
+    return CODE_OK
+
+
+def principal(arguments):
+    # Diriger : verbe connu -> sa phase ; verbe inconnu -> REFUS NOMME, jamais un silence.
+    if not arguments:
+        print("Usage : python main.py " + " | ".join(VERBES))
+        return CODE_ECHEC
+    verbe = arguments[0]
+    table = {
+        "diagnostic": cmd_diagnostic,
+        "inspection": cmd_inspection,
+        "preparer": cmd_preparer,
+        "status": cmd_status,
+        "auto-test": cmd_auto_test,
+    }
+    if verbe in table:
+        return table[verbe](arguments[1:])
+    print("REFUS : verbe inconnu : " + verbe)
+    print("  verbes acceptes : " + ", ".join(VERBES))
+    return CODE_ECHEC
+
+
+if __name__ == "__main__":
+    sys.exit(principal(sys.argv[1:]))

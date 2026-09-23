@@ -9,20 +9,24 @@ from bilan.fonctions import (
 from commun import analyser_periode, borne_periode
 from constants import CHEMINS_HISTORIQUES, CHEMIN_ACTIVITES, CHEMIN_DEFCON, CHEMIN_USAGES
 
+USAGE = 'Usage : python main.py bilan --periode <1h|heures|24h|3j|semaine|mois>'
+# Options DECLAREES par ce verbe : le domicile refuse tout le reste et NOMME le
+# fautif (T2 de PB-002).
+OPTIONS = ("periode",)
+
 
 def executer(arguments):
-    options = {}
-    index = 0
-    while index < len(arguments):
-        if arguments[index] == "--periode" and index + 1 < len(arguments):
-            options["--periode"] = arguments[index + 1]
-            index += 2
-        else:
-            index += 1
-    if "--periode" not in options:
-        print('Usage : python main.py bilan --periode <1h|heures|24h|3j|semaine|mois>')
+    # Parsing d options par le DOMICILE (options.py) : la boucle maison IGNORAIT
+    # l option inconnue -- l appel obtenait le resultat du DEFAUT, indiscernable
+    # d un resultat correct (EO-179, L-055), et son refus ne la NOMMAIT jamais
+    # (friction 77).
+    from options import extraire_options
+    options = extraire_options(arguments, OPTIONS, outil="bilan-periode", usage=USAGE)
+    periode = options.get("periode")
+    if periode is None:
+        print(USAGE)
         return 2
-    heures, message = analyser_periode(options["--periode"])
+    heures, message = analyser_periode(periode)
     if heures is None:
         print(message)
         return 2
@@ -33,4 +37,4 @@ def executer(arguments):
     usages = collecter_usages(CHEMIN_USAGES, borne)
     activites = collecter_activites(CHEMIN_ACTIVITES, borne)
     transitions = collecter_defcon(CHEMIN_DEFCON, borne)
-    return afficher_bilan(options["--periode"], heures, missions, usages, activites, transitions)
+    return afficher_bilan(periode, heures, missions, usages, activites, transitions)

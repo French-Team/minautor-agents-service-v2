@@ -9,10 +9,12 @@ from pathlib import Path
 
 from constants import (
     ENCODAGE,
+    NOM_OUTIL_SUIVI,
     RACINE,
-    REPERTOIRE_DATA,
     REPERTOIRE_MATRIX,
 )
+# EO-287 : la resolution d un outil par son NOM est PARTAGEE (un seul domicile).
+from resolution_outils import OutilIntrouvable, chemin_outil  # noqa: E402
 
 
 def valider_question(question):
@@ -83,9 +85,10 @@ def tracer_decision(mission, question, reponse):
     """Trace la decision dans suivi-optimus (Flux 2)."""
     try:
         import subprocess
+
         cmd = [
             sys.executable,
-            str(REPERTOIRE_DATA / "outils" / "suivi-optimus" / "main.py"),
+            str(chemin_outil(NOM_OUTIL_SUIVI)),
             "noter",
             "--mission", mission,
             "--theme", "DIALOGUER",
@@ -96,6 +99,8 @@ def tracer_decision(mission, question, reponse):
             cmd, capture_output=True, timeout=10,
             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
         )
+    except OutilIntrouvable as refus:
+        print("[TRACE] REFUS : " + str(refus), file=sys.stderr)
     except (subprocess.TimeoutExpired, OSError) as e:
         print("[TRACE] trace decision echouee (best effort) : " + str(e), file=sys.stderr)
 

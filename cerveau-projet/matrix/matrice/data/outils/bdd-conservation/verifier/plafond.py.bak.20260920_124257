@@ -1,0 +1,80 @@
+"""Le PLAFOND des actes en attente : une masse qui grandit en silence (P4, MO-309).
+
+P4, validee par le createur le 2026-09-20 (rapport-revision-MO-305, section 3) :
+"UN GARDE accuse quand le nombre d actes en attente depasse un plafond declare :
+une masse qui grandit en silence n est pas une politique".
+
+CE QUI EST MESURE, et pourquoi les DEUX natures ne se confondent pas :
+
+  1. les ACTES EN ATTENTE -- elements decides `archiver` que la rotation n a pas
+     encore joues. La rotation les traite a CHAQUE cloture (P1, MO-306) : ce stock
+     doit rester PETIT. Il en reste pourtant TROIS qui ne partiront JAMAIS : leur
+     point a disparu du disque (tmp-optimus purge), donc la porte de rotation les
+     REFUSE a chaque fois. Un acte injouable n attend pas -- il est BLOQUE ;
+  2. les ARCHIVES DECLAREES DONT LA COPIE A DISPARU -- le registre declare une
+     archive que le disque n a plus. Meme nature de dette, autre population.
+
+DEUX SORTIES, jamais une seule (le vocabulaire de la Matrice les distingue deja) :
+  ECART -- le PLAFOND est DEPASSE : c est un fait que l agent a produit, il ACCUSE ;
+  DETTE -- une piece manque (acte injouable, archive absente) : c est un defaut
+           de la Matrice, NOMME et compte, mais il n accuse pas l agent du round.
+
+La porte NOMME chaque acte et son motif, et CITE le plafond declare : un controle
+qui dit "c est trop" sans dire QUOI n est pas un controle.
+"""
+from constants import PLAFOND_ACTES_EN_ATTENTE, STATUT_DISPARU
+from cible import resoudre_dans_matrice
+
+ECART_PLAFOND_DEPASSE = "ACTES EN ATTENTE AU-DESSUS DU PLAFOND DECLARE"
+
+
+def mesurer_attente(donnees, depart):
+    """(actes, archives_absentes) : l etat REEL de chaque attente, jamais suppose."""
+    actes = []
+    for entree in donnees.get("elements", []):
+        if entree.get("statut") != "decide" or entree.get("verdict") != "archiver":
+            continue
+        source = str(entree.get("source", ""))
+        chemin, motif = resoudre_dans_matrice(source, depart)
+        jouable = chemin is not None and chemin.is_file()
+        actes.append({
+            "id": entree.get("id", ""),
+            "source": source,
+            "jouable": jouable,
+            "motif": ("" if jouable else ("point introuvable : " + str(motif))),
+        })
+    archives_absentes = []
+    for entree in donnees.get("elements", []):
+        if entree.get("statut") != "archive":
+            continue
+        chemin, motif = resoudre_dans_matrice(str(entree.get("archive", "")), depart)
+        if chemin is None or not chemin.is_file():
+            archives_absentes.append({"id": entree.get("id", ""), "motif": str(motif)})
+    return actes, archives_absentes
+
+
+def controler_plafond(donnees, depart):
+    """Rend (ecarts, dettes, mesure). L ecart CITE le plafond et NOMME les actes."""
+    actes, archives_absentes = mesurer_attente(donnees, depart)
+    injouables = [acte for acte in actes if not acte["jouable"]]
+    mesure = {
+        "plafond": PLAFOND_ACTES_EN_ATTENTE,
+        "attente": len(actes),
+        "jouables": len(actes) - len(injouables),
+        "injouables": len(injouables),
+        "archives_absentes": len(archives_absentes),
+    }
+    ecarts = []
+    dettes = []
+    if len(actes) > PLAFOND_ACTES_EN_ATTENTE:
+        ecarts.append(ECART_PLAFOND_DEPASSE + " : " + str(len(actes)) + " acte(s) en"
+                      " attente contre un plafond declare de "
+                      + str(PLAFOND_ACTES_EN_ATTENTE) + " -- "
+                      + ", ".join(acte["id"] for acte in actes))
+    for acte in injouables:
+        dettes.append("ACTE INJOUABLE (il ne partira JAMAIS tout seul) : " + acte["id"]
+                      + " -- " + acte["motif"])
+    for absent in archives_absentes:
+        dettes.append("ARCHIVE DECLAREE ABSENTE DU DISQUE : " + absent["id"]
+                      + " -- " + absent["motif"])
+    return ecarts, dettes, mesure

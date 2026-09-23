@@ -90,19 +90,19 @@ cote sous des noms libres, sans moyen de les distinguer).
 
 ```bash
 # Banque des BDD disponibles
-python combos/outils/creer-combo.py banque
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/creer-combo.py banque
 
 # Generer un combo numerote (le numero suivant est attribue par le registre)
-python combos/outils/creer-combo.py creer <slug> --bdd <id>
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/creer-combo.py creer <slug> --bdd <id>
 
 # Controler un combo (numero + main + README + compile + ASCII + registre)
-python combos/outils/creer-combo.py verifier c-001-lecons
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/creer-combo.py verifier c-001-lecons
 
 # Etat numerote du disque vs registre, compteurs (0 ecart attendu)
-python combos/outils/creer-combo.py lister
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/creer-combo.py lister
 
 # Lancer un super-combo par son numero (le lanceur vit avec SES objets)
-python super-combos/lancer-super-combos.py --numero sc-001 [--fichier <fichier>]
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/lancer-super-combos.py --numero sc-001 [--fichier <fichier>]
 ```
 
 ## Controle

@@ -1,10 +1,54 @@
-"""Porte de verification du registre de conservation."""
+"""Porte de verification du registre de conservation.
+
+DEUX VERBES : `verifier` (la forme et l integrite du registre) et
+`controler-plafond` (la MASSE des actes en attente contre son plafond declare,
+P4 / MO-309). Les deux lisent le MEME registre -- aucune copie, aucune porte
+parallele.
+"""
+from pathlib import Path
+
 from commun import charger_bdd, calculer_empreinte_si_existe, lire_empreinte
 from constants import CHEMIN_BDD
 from verifier.fonctions import controler_census, verifier_integrite, verifier_structure
+from verifier.plafond import controler_plafond
+
+DEPART = Path(__file__).resolve().parent
+
+
+def _controler_plafond(donnees):
+    """Rend la masse des ACTES EN ATTENTE, son plafond declare, et son verdict.
+
+    Le controle REND TOUJOURS ses trois chiffres, meme quand il ne dit rien : un
+    compte muet se lirait comme un zero (L-100). Il NOMME les dettes (acte
+    injouable, archive absente) sans en faire un ecart : une dette n accuse pas
+    l agent du round, elle dit ce que la Matrice doit.
+    """
+    ecarts, dettes, mesure = controler_plafond(donnees, DEPART)
+    print("PLAFOND DES ACTES EN ATTENTE -- une masse qui grandit en silence n est pas"
+          " une politique")
+    print("  plafond declare            : " + str(mesure["plafond"]) + " acte(s)")
+    print("  actes en attente (mesure)  : " + str(mesure["attente"])
+          + " (" + str(mesure["jouables"]) + " jouable(s), "
+          + str(mesure["injouables"]) + " injouable(s))")
+    print("  archives declarees absentes : " + str(mesure["archives_absentes"]))
+    print("  declarees DISPARUES (EO-276) : " + str(mesure["declares_disparus"])
+          + " (fait declare : elles ne reviendront pas, elles ne sont plus en attente)")
+    for dette in dettes:
+        print("  DETTE : " + dette)
+    for ecart in ecarts:
+        print("  ECART : " + ecart)
+    if ecarts:
+        print("VERDICT : PLAFOND DEPASSE (" + str(mesure["attente"]) + " acte(s) pour un"
+              " plafond de " + str(mesure["plafond"]) + ").")
+        return 1
+    print("VERDICT : PLAFOND TENU (" + str(mesure["attente"]) + " acte(s) pour un"
+          " plafond de " + str(mesure["plafond"]) + ").")
+    return 0
 
 
 def executer(arguments):
+    if arguments and arguments[0] == "controler-plafond":
+        return _controler_plafond(charger_bdd())
     donnees = charger_bdd()
     erreurs = verifier_structure(donnees) if CHEMIN_BDD.exists() else ["BDD absente"]
     ok, message = verifier_integrite(

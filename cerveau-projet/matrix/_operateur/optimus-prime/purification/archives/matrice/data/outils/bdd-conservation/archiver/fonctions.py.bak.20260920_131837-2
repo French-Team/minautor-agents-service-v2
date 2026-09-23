@@ -1,0 +1,823 @@
+"""Fonctions metier de la PORTE DE ROTATION des points de restauration.
+
+CASE 7 de la suite de purification (EO-136 / MO-160). Cette porte ne DECIDE
+rien : elle EXECUTE une decision deja tracee dans la BDD de conservation
+(statut `decide`, verdict `archiver`). Sa surete vient d'un moteur PARTAGE --
+la doctrine de `data/commun/rotation_journal.py` (MO-101), dont le deplacement
+d'un FICHIER est ici la transposition exacte :
+
+  1. ARCHIVER D'ABORD : on COPIE, on VERIFIE la copie, et seulement alors on
+     retire la source. Si la copie echoue, la source n'a pas ete touchee ; si le
+     retrait echoue, l'archive contient deja tout.
+  2. L'ARCHIVE EST LE DEJA CONNU : une destination qui porte deja le MEME
+     contenu n'est pas reecrite -- une rotation relancee ne fabrique pas de
+     jumeaux (idempotence).
+  3. UNE COURSE SE REFUSE, ELLE NE S'ECRASE PAS : si la source change entre la
+     mesure et le retrait, on REFUSE en le nommant, et rien n'est perdu.
+
+LES 5 REFUS DU CONTRAT DE ROTATION (contre-analyse NEMESIS MO-156, case 5) :
+
+  1. jamais un point PLUS RECENT que sa source (seul temoin d'une ecriture qui
+     n'a pas abouti) ;
+  2. jamais le DERNIER point d'une source ABSENTE (plus aucun chemin de
+     restauration) ;
+  3. jamais une FORME NON CONFORME -- on SIGNALE, on n'absorbe pas (l'exemption
+     du contrat fondamental est bornee par le motif du domicile) ;
+  4. jamais une ZONE HORS PERIMETRE -- on SIGNALE (hors Matrice, ou zone du
+     voisin Flux 1) ;
+  5. jamais DEUX FOIS le meme element (idempotence).
+
+LES PROTECTIONS STRUCTURELLES DU PLAN (plan-conservation, section 5) :
+aucune entree sans decision ; aucune destination occupee par un contenu
+DIFFERENT ; aucun point introuvable.
+
+ORDRE DES IMPORTS : `constants` d'abord -- c'est LUI qui met `data/commun` sur
+le chemin (le motif racine y vit), et `cible` n'est importable qu'apres lui
+(L-013 : le motif racine est PARTAGE, jamais recopie).
+"""
+import ast
+import hashlib
+import json
+import os
+import re
+import shutil
+from datetime import datetime
+from pathlib import Path
+
+from constants import (
+    CHEMIN_DOMICILE_FORME_BAK, ENCODAGE, NOM_LIGNE_ABANDON, NOM_MANIFESTE, NOM_TEMOIN,
+    NON_MESURE, ORIGINE_LECTURE_DISQUE, ORIGINE_LECTURE_REGISTRE, REPERTOIRE_ARCHIVES,
+    STATUT_DISPARU, STATUT_SUPPRIME, TAG_FAMILLE_RESTAURATION, TAILLE_BLOC_LECTURE,
+    ZONES_CAMELEON,
+)
+from cible import arbres_matrice, racine_matrice, resoudre, resoudre_dans_matrice
+
+# --- LES 5 REFUS DU CONTRAT DE ROTATION ------------------------------------
+REFUS_PLUS_RECENT = "REFUS 1 (point plus recent que sa source)"
+REFUS_SOURCE_ABSENTE = "REFUS 2 (dernier point d'une source absente)"
+REFUS_FORME = "REFUS 3 (forme non conforme -- SIGNALE, jamais absorbe)"
+REFUS_HORS_PERIMETRE = "REFUS 4 (zone hors perimetre -- SIGNALE)"
+REFUS_DEJA_ARCHIVE = "REFUS 5 (deja archive -- idempotence)"
+# --- LES PROTECTIONS STRUCTURELLES DU PLAN ---------------------------------
+REFUS_SANS_DECISION = "REFUS (element sans decision : statut decide + verdict archiver attendus)"
+REFUS_SANS_LECTEUR = "REFUS (element sans LECTEUR recense -- plan-conservation section 5)"
+REFUS_POINT_INTROUVABLE = "REFUS (point de restauration introuvable sur le disque)"
+REFUS_DESTINATION_OCCUPEE = "REFUS (destination occupee par un contenu different)"
+
+NOM_CONSTANTE_FORME = "MOTIF_BAK_HORODATE"
+NOM_CONSTANTE_SUFFIXE = "SUFFIXE_BAK"
+
+_cache = {}
+
+
+def horodater():
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+# --- LECTURE DU DOMICILE DE LA FORME (jamais de recopie : M-076) ------------
+
+def lire_constante_litterale(nom, chemin_constantes=None):
+    """Valeur LITTERALE d'une constante de module, lue chez son PROPRIETAIRE.
+
+    Pourquoi lire au lieu d'importer (L-029) : tous les modules `constants` de la
+    Matrice portent le MEME nom ; les importer ferait se marcher dessus.
+    Pourquoi `ast` et non `importlib` : lire une constante ne doit EXECUTER aucun
+    fichier du projet (aucun effet de bord, aucun sys.path pollue).
+    """
+    chemin = Path(chemin_constantes or CHEMIN_DOMICILE_FORME_BAK)
+    try:
+        arbre = ast.parse(chemin.read_text(encoding=ENCODAGE))
+    except (OSError, SyntaxError):
+        return None
+    for noeud in arbre.body:
+        if isinstance(noeud, ast.Assign) and len(noeud.targets) == 1:
+            cible = noeud.targets[0]
+            if isinstance(cible, ast.Name) and cible.id == nom:
+                try:
+                    return ast.literal_eval(noeud.value)
+                except (ValueError, TypeError, SyntaxError):
+                    return None
+    return None
+
+
+def motif_forme():
+    """Le motif du point de restauration, compile depuis SON domicile (ou None)."""
+    if "motif" not in _cache:
+        brut = lire_constante_litterale(NOM_CONSTANTE_FORME)
+        try:
+            _cache["motif"] = re.compile(brut) if brut else None
+        except re.error:
+            _cache["motif"] = None
+    return _cache["motif"]
+
+
+def suffixe_point():
+    """Le suffixe `.bak` declare par le domicile (ou None)."""
+    if "suffixe" not in _cache:
+        _cache["suffixe"] = lire_constante_litterale(NOM_CONSTANTE_SUFFIXE)
+    return _cache["suffixe"]
+
+
+def nom_origine(nom):
+    """Le nom du fichier que ce point de restauration restaure.
+
+    Le suffixe vient du DOMICILE (jamais recopie) : si la porte qui produit la
+    forme change son suffixe, cette fonction suit -- sans qu'aucun appelant soit
+    touche (une forme redevinee derive en silence : M-076/L-100).
+    """
+    suffixe = suffixe_point()
+    if not suffixe:
+        return str(nom)
+    position = str(nom).rfind(suffixe)
+    return str(nom)[:position] if position > 0 else str(nom)
+
+
+def origine_complete(source):
+    """Le chemin COMPLET de l'origine d'un point (dossier + nom sans horodate).
+
+    La FAMILLE d'un point, c'est ses jumeaux de la MEME origine COMPLETE : deux
+    `fonctions.py.bak.*` de deux dossiers differents ne sont PAS de la meme
+    famille (defaut mesure trois fois dans les cobayes de MO-154 et MO-156, qui
+    groupaient par nom de base). Le regroupement se fait donc ici, une fois.
+    """
+    texte = str(source).replace("\\", "/")
+    dossier, _, nom = texte.rpartition("/")
+    origine = nom_origine(nom)
+    return (dossier + "/" if dossier else "") + origine
+
+
+def famille(donnees, source):
+    """Les entrees de la BDD qui portent un point de la MEME origine complete."""
+    cle = origine_complete(source)
+    return [
+        entree for entree in donnees.get("elements", [])
+        if str(entree.get("source", "")) and origine_complete(entree.get("source", "")) == cle
+    ]
+
+
+# --- MESURE ----------------------------------------------------------------
+
+def mesurer(chemin):
+    """(sha256, octets, lignes) d'un fichier ; (None, None, None) s'il est absent."""
+    if chemin is None:
+        return None, None, None
+    chemin = Path(str(chemin))
+    if not chemin.is_file():
+        return None, None, None
+    hacheur = hashlib.sha256()
+    octets = 0
+    with open(str(chemin), "rb") as flux:
+        for bloc in iter(lambda: flux.read(TAILLE_BLOC_LECTURE), b""):
+            hacheur.update(bloc)
+            octets += len(bloc)
+    try:
+        lignes = len(chemin.read_text(encoding=ENCODAGE, errors="replace").splitlines())
+    except OSError:
+        lignes = None
+    return hacheur.hexdigest(), octets, lignes
+
+
+def chemin_archive(depart):
+    """(repertoire, manifeste, temoin) de l'archive, resolus dans la Matrice."""
+    base, motif = resoudre_dans_matrice(REPERTOIRE_ARCHIVES, depart)
+    if base is None:
+        raise RuntimeError("Domicile d'archive hors Matrice : " + str(motif))
+    return base, base / NOM_MANIFESTE, base / NOM_TEMOIN
+
+
+def relatif_matrice(chemin, depart):
+    """Forme relative a la Matrice, en `/` (le contrat des chemins de la BDD)."""
+    base = racine_matrice(depart)
+    try:
+        return Path(chemin).resolve().relative_to(base).as_posix()
+    except ValueError:
+        return str(chemin).replace("\\", "/")
+
+
+def hors_perimetre(chemin, depart):
+    """True si le chemin sort de la Matrice, ou tombe dans une zone du voisin.
+
+    La zone jetable du cameleon (Flux 1) est nommee par son DOMICILE
+    (`ZONES_CAMELEON`) : un point qui s'y trouve est HORS PERIMETRE et se
+    SIGNALE -- jamais absorbe.
+    """
+    base = racine_matrice(depart)
+    try:
+        rel = Path(chemin).resolve().relative_to(base)
+    except ValueError:
+        return True
+    return any(zone in rel.parts for zone in ZONES_CAMELEON)
+
+
+# --- LES REFUS ---------------------------------------------------------------
+
+def controler(entree, donnees, depart):
+    """Rend (code_refus, message) ou (None, ""). L'ORDRE des refus est le contrat.
+
+    La DECISION d'abord (rien ne bouge sans verdict), puis la FORME (un nom non
+    conforme n'est meme pas un point de restauration), puis le PERIMETRE, puis
+    les refus de ROTATION (plus recent, source absente), puis la DESTINATION.
+    """
+    source = str(entree.get("source", ""))
+    if not source:
+        return REFUS_SANS_DECISION, "source absente de l'entree"
+
+    # REFUS 5 -- idempotence : un element DEJA archive ne se re-archive pas.
+    # Ce refus vient AVANT celui de la decision, sinon il serait INATTEIGNABLE
+    # et son message MENTIRAIT : un element archive A une decision -- il l'a
+    # deja executee. (Defaut trouve par le cobaye de MO-160 : le statut `archive`
+    # tombait dans "sans decision".)
+    if entree.get("statut") == "archive":
+        return REFUS_DEJA_ARCHIVE, "statut deja archive"
+
+    # PROTECTION -- une operation ne remplace jamais une decision.
+    if entree.get("statut") != "decide" or entree.get("verdict") != "archiver":
+        return REFUS_SANS_DECISION, (
+            "statut=" + str(entree.get("statut")) + ", verdict=" + str(entree.get("verdict"))
+        )
+
+    # PROTECTION DU PLAN section 5 (volet 1 de la friction 88, MO-192) -- jamais
+    # d'archivage d'un element SANS LECTEUR RECENSE : une archive qu'aucun
+    # lecteur connu ne reference est une disparition silencieuse, et le plan
+    # (plan-conservation, section 5) l'INTERDIT. Ce refus MANQUAIT : la
+    # contre-analyse MO-156 (5 refus de rotation) ne l'avait pas ecarte -- il
+    # n'avait simplement jamais ete ecrit. Meme ordre : APRES la decision
+    # (rien ne bouge sans verdict), AVANT de toucher au disque.
+    if not entree.get("lecteurs"):
+        return REFUS_SANS_LECTEUR, "aucun lecteur recense (plan-conservation section 5)"
+
+    # REFUS 3 -- la FORME : ce qui n'est pas un point de restauration se SIGNALE.
+    motif = motif_forme()
+    if motif is None:
+        return REFUS_FORME, ("le domicile de la forme est illisible : "
+                             + str(CHEMIN_DOMICILE_FORME_BAK))
+    nom = Path(source.replace("\\", "/")).name
+    if not motif.search(nom):
+        return REFUS_FORME, ("le nom ne porte pas la forme du domicile ("
+                             + motif.pattern + ") : " + nom)
+
+    # Le point doit EXISTER : sinon il n'y a rien a deplacer.
+    chemin_point, motif_resolution = resoudre(source, depart)
+    if chemin_point is None:
+        return REFUS_POINT_INTROUVABLE, motif_resolution
+
+    # REFUS 4 -- le PERIMETRE : hors Matrice, ou zone du voisin (Flux 1).
+    if hors_perimetre(chemin_point, depart):
+        return REFUS_HORS_PERIMETRE, ("hors Matrice ou zone du voisin : "
+                                      + relatif_matrice(chemin_point, depart))
+
+    chemin_origine, _ = resoudre(origine_complete(source), depart)
+
+    # REFUS 1 -- un point PLUS RECENT que sa source est le seul temoin d'une
+    # ecriture qui n'a pas abouti : on ne l'archive pas.
+    if chemin_origine is not None and chemin_origine.is_file():
+        if chemin_point.stat().st_mtime_ns > chemin_origine.stat().st_mtime_ns:
+            return REFUS_PLUS_RECENT, ("le point est plus recent que sa source ("
+                                       + relatif_matrice(chemin_origine, depart) + ")")
+
+    # REFUS 2 -- le DERNIER point d'une source absente : plus de chemin de retour.
+    if chemin_origine is None or not chemin_origine.is_file():
+        if len(famille(donnees, source)) <= 1:
+            return REFUS_SOURCE_ABSENTE, ("la source est absente et ce point est le dernier "
+                                          "de sa famille")
+
+    # DESTINATION -- libre, ou identique (deja faite), jamais DIFFERENTE.
+    destination = str(entree.get("destination", ""))
+    if not destination:
+        return REFUS_SANS_DECISION, "destination absente de la decision"
+    chemin_destination, motif_destination = resoudre_dans_matrice(destination, depart)
+    if chemin_destination is None:
+        return REFUS_HORS_PERIMETRE, motif_destination
+    if chemin_destination.exists():
+        sha_point, _, _ = mesurer(chemin_point)
+        sha_destination, _, _ = mesurer(chemin_destination)
+        if sha_point == sha_destination:
+            return REFUS_DEJA_ARCHIVE, "la destination porte deja le MEME contenu"
+        return REFUS_DESTINATION_OCCUPEE, ("la destination existe avec un contenu DIFFERENT : "
+                                           + relatif_matrice(chemin_destination, depart))
+    return None, ""
+
+
+# --- L'ACTE ------------------------------------------------------------------
+
+def ligne_manifeste(entree, source, mesures):
+    """La ligne du manifeste d'archivage (append-only, jamais reecrite)."""
+    sha_avant, octets_avant, lignes_avant, sha_apres, octets_apres, lignes_apres = mesures
+    return {
+        "type": "archivage",
+        "id": entree.get("id", ""),
+        "date": horodater(),
+        "mission": entree.get("mission", ""),
+        "source": source,
+        "destination": entree.get("destination", ""),
+        "categorie": entree.get("categorie", ""),
+        "verdict": entree.get("verdict", ""),
+        "sha_avant": sha_avant,
+        "sha_apres": sha_apres,
+        "octets_avant": octets_avant,
+        "octets_apres": octets_apres,
+        "lignes_avant": lignes_avant,
+        "lignes_apres": lignes_apres,
+        "restaurable": True,
+        "preuve": ("copie verifiee : sha avant = sha apres = " + str(sha_avant)
+                   + " ; source retiree APRES verification de la copie"
+                   " (moteur : archiver d'abord, course refusee)"),
+    }
+
+
+def ajouter_manifeste(chemin_manifeste, ligne):
+    """AJOUTE une ligne au manifeste (append, LF forces, dossier au besoin)."""
+    chemin_manifeste = Path(chemin_manifeste)
+    chemin_manifeste.parent.mkdir(parents=True, exist_ok=True)
+    with open(str(chemin_manifeste), "a", encoding=ENCODAGE, newline="\n") as flux:
+        flux.write(json.dumps(ligne, ensure_ascii=True, sort_keys=True) + "\n")
+
+
+def _retirer(chemin):
+    """Retire une copie NON CONFORME (rollback). Ne leve jamais."""
+    try:
+        Path(chemin).unlink()
+    except OSError:
+        pass
+
+
+def archiver_un(entree, donnees, depart, chemin_manifeste, simuler=False):
+    """Archive UN element. Rend (code, message). Ne touche rien si un refus tombe.
+
+    Ordre de l'acte, celui du moteur : controler -> copier -> verifier la copie
+    -> controler la COURSE -> retirer la source -> tracer au manifeste.
+    """
+    refus, message = controler(entree, donnees, depart)
+    if refus:
+        return 1, refus + " : " + message
+    source = str(entree["source"])
+    chemin_point, _ = resoudre(source, depart)
+    chemin_destination, _ = resoudre_dans_matrice(str(entree["destination"]), depart)
+    if chemin_destination is None:
+        return 1, REFUS_HORS_PERIMETRE + " : destination hors Matrice"
+    if simuler:
+        return 0, "SIMULATION : " + source + " -> " + str(entree["destination"])
+
+    sha_avant, octets_avant, lignes_avant = mesurer(chemin_point)
+    if sha_avant is None:
+        return 1, REFUS_POINT_INTROUVABLE + " : " + source
+
+    chemin_destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(str(chemin_point), str(chemin_destination))
+    sha_apres, octets_apres, lignes_apres = mesurer(chemin_destination)
+    if sha_apres != sha_avant:
+        _retirer(chemin_destination)
+        return 1, ("REFUS (copie non conforme : le sha de l'archive differe de la source ; "
+                   "copie retiree, source intacte)")
+
+    sha_controle, _, _ = mesurer(chemin_point)
+    if sha_controle != sha_avant:
+        _retirer(chemin_destination)
+        return 1, ("REFUS (course : la source a change pendant la copie ; archive retiree, "
+                   "source intacte)")
+
+    try:
+        chemin_point.unlink()
+    except OSError as erreur:
+        return 1, ("REFUS (retrait impossible : " + type(erreur).__name__ + " ; l'archive "
+                   "contient tout, la source est intacte)")
+
+    entree["statut"] = "archive"
+    entree["operation"] = "archiver"
+    entree["date"] = horodater()
+    entree["sha_avant"] = sha_avant
+    entree["sha_apres"] = sha_apres
+    entree["octets_avant"] = octets_avant
+    entree["octets_apres"] = octets_apres
+    entree["lignes_avant"] = lignes_avant
+    entree["lignes_apres"] = lignes_apres
+    entree["archive"] = relatif_matrice(chemin_destination, depart)
+    entree["restaurable"] = True
+    ajouter_manifeste(
+        chemin_manifeste,
+        ligne_manifeste(entree, source,
+                        (sha_avant, octets_avant, lignes_avant,
+                         sha_apres, octets_apres, lignes_apres)),
+    )
+    return 0, ("archive : " + source + " -> " + str(entree["archive"])
+               + " (" + str(octets_avant) + " octets, sha " + sha_avant[:16] + "...)")
+
+
+# --- L'ORIGINE (temoin) et la CASE 8 ----------------------------------------
+
+def _mesure_du_registre(entree, statut):
+    """La derniere mesure CONNUE d'un element que le disque n'a plus. Rend 4 valeurs.
+
+    Ce qui est parti par la porte P3 (`supprime`) a laisse ses octets APRES le
+    deplacement ; ce qui a DISPARU sans porte (`disparu`, EO-276) a laisse la
+    mesure de la declaration -- la derniere que le temoin qui l'a vu a pu
+    prendre. Quand le registre est muet, la lecture vaut NON_MESURE : un `None`
+    mesure et un `None` jamais mesure ne disent PAS la meme chose, et le total
+    des octets ne peut se boucler que si le temoin les distingue (L-100).
+    """
+    if statut == STATUT_SUPPRIME:
+        sha, octets, lignes = (entree.get("sha_apres"), entree.get("octets_apres"),
+                               entree.get("lignes_apres"))
+    else:
+        sha, octets, lignes = (entree.get("sha_avant"), entree.get("octets_avant"),
+                               entree.get("lignes_avant"))
+    if octets in ("", None):
+        return None, None, None, NON_MESURE
+    try:
+        octets = int(octets)
+    except (TypeError, ValueError):
+        return None, None, None, NON_MESURE
+    return (str(sha) if sha else None), octets, (lignes or None), ORIGINE_LECTURE_REGISTRE
+
+
+def inventaire(donnees, depart):
+    """L'ORIGINE : l'etat MESURE des points de restauration de la BDD.
+
+    Ecrit AVANT le premier deplacement : c'est la reference a laquelle la
+    verification comparera `archive + actif`.
+
+    Chaque element est mesure A SON DOMICILE DU MOMENT (MO-162) : la source s'il
+    est encore actif, l'ARCHIVE s'il est deja archive. Le temoin DIT d'ou il a
+    lu (`origine`) -- un temoin qui ne dit pas ce qu'il a mesure ne peut pas etre
+    contredit, et il accuse a la place du disque.
+
+    DEUX POPULATIONS N'ONT PLUS DE FICHIER, ET LE TEMOIN LES LIT AU REGISTRE
+    (EO-276, MO-310) -- il ne les compte plus pour zero :
+
+      - `supprime` (purge P3) : le contenu est parti sur PREUVE de recouvrabilite ;
+      - `disparu` (declaration EO-276) : le contenu a quitte la Matrice sans porte.
+
+    Mesure du 2026-09-20 : le temoin precedent lisait les 799 purges
+    `introuvable`, donc pour 0 octet, alors que le registre en declarait 14,2 Mo --
+    et l'invariant des octets ne pouvait PLUS se boucler. Un temoin qui n'a pas su
+    lire ne doit pas mesurer zero : il lit au bon domicile, ou il le DIT
+    (`non_mesures` au total, `lecture` par element).
+    """
+    elements = []
+    non_mesures = []
+    for entree in donnees.get("elements", []):
+        source = str(entree.get("source", ""))
+        if not source or "bak" not in entree.get("tags", []):
+            continue
+        # D'OU VIENT L'OCTET au moment du temoin ? (MO-162)
+        # Un point DEJA archive n'a plus sa source : ses octets vivent dans
+        # l'archive. Mesurer la source rendait sha=None, et la case 8 accusait
+        # ensuite "sha de l'archive different de l'origine" -- 73 faux ecarts,
+        # mesures sur les 73 points archives par MO-160, PLUS l'invariant de
+        # COMPTAGE qui tombait avec eux (le `continue` les sortait du total).
+        # Or les 73 archives existaient toutes et portaient un sha EGAL au
+        # `sha_avant` de la BDD : les octets n'avaient pas bouge, c'est la MESURE
+        # qui regardait au mauvais domicile. Un temoin qui n'a pas su lire ne
+        # doit pas ACCUSER : il mesure le bon endroit, ou il le DIT.
+        statut = entree.get("statut")
+        lecture = ORIGINE_LECTURE_DISQUE
+        if statut in (STATUT_SUPPRIME, STATUT_DISPARU):
+            # PLUS DE FICHIER : la seule trace qui reste est le REGISTRE, et le
+            # temoin DIT qu'il y a lu (`lecture`). Ce qui est parti par la porte
+            # P3 a laisse ses octets APRES le deplacement ; ce qui a DISPARU a
+            # laisse la mesure de la declaration. Un registre muet n'est pas un
+            # zero : l'element rejoint `non_mesures`, et il est NOMME.
+            sha, octets, nb_lignes, lecture = _mesure_du_registre(entree, statut)
+            origine = (("purge" if statut == STATUT_SUPPRIME else "declaration")
+                       if lecture == ORIGINE_LECTURE_REGISTRE else "introuvable")
+        else:
+            deja_archive = statut == "archive"
+            if deja_archive:
+                chemin, _ = resoudre_dans_matrice(str(entree.get("archive", "")), depart)
+            else:
+                chemin, _ = resoudre(source, depart)
+            sha, octets, nb_lignes = mesurer(chemin) if chemin else (None, None, None)
+            origine = (("archive" if deja_archive else "source")
+                       if sha is not None else "introuvable")
+        if origine == "introuvable":
+            non_mesures.append(entree.get("id", ""))
+        elements.append({
+            "id": entree.get("id", ""),
+            "source": source,
+            "verdict": entree.get("verdict", ""),
+            "origine": origine,
+            "lecture": lecture,
+            "sha": sha,
+            "octets": octets,
+            "lignes": nb_lignes,
+        })
+    return {
+        "type": "temoin-avant",
+        "date": horodater(),
+        "nb": len(elements),
+        "octets": sum(element["octets"] or 0 for element in elements),
+        "non_mesures": {"nb": len(non_mesures), "ids": non_mesures},
+        "elements": elements,
+    }
+
+
+def ecrire_temoin(chemin_temoin, temoin):
+    """Ecrit le temoin (JSON, LF, ASCII, atomique) et REND ce qu'il ABANDONNE.
+
+    Reposer un temoin REMPLACE le precedent : ce que le nouveau ne peut plus
+    mesurer n'a plus AUCUNE trace si personne ne le dit. C'est exactement ce qui
+    faisait disparaitre la PREUVE d'une disparition au lot suivant (EO-276, mesure
+    du 2026-09-20) : chaque `archiver --lot` reposait l'origine, et l'element qui
+    avait perdu sa source sortait du temoin sans un mot.
+
+    Est ABANDONNE ce qui PORTAIT une mesure dans le precedent et que le nouveau ne
+    mesure plus (ni disque, ni registre). L'appelant les NOMME et les TRACE au
+    manifeste, qui est append-only : la trace SURVIT au temoin qu'elle remplace.
+    """
+    chemin_temoin = Path(chemin_temoin)
+    precedent = lire_temoin(chemin_temoin)
+    abandonnes = []
+    if isinstance(precedent, dict):
+        mesures = {element.get("id") for element in temoin.get("elements", [])
+                   if element.get("origine") != "introuvable"}
+        abandonnes = [element for element in precedent.get("elements", [])
+                      if element.get("id") not in mesures
+                      and (element.get("sha") or element.get("octets"))]
+    chemin_temoin.parent.mkdir(parents=True, exist_ok=True)
+    temporaire = chemin_temoin.with_name(chemin_temoin.name + ".tmp")
+    with open(str(temporaire), "w", encoding=ENCODAGE, newline="\n") as flux:
+        json.dump(temoin, flux, ensure_ascii=True, indent=2, sort_keys=True)
+        flux.write("\n")
+    os.replace(str(temporaire), str(chemin_temoin))
+    return abandonnes
+
+
+def ligne_abandon(abandonnes):
+    """La ligne du manifeste qui TRACE ce qu'un temoin abandonne (EO-276).
+
+    Elle porte la MESURE PERDUE (sha, octets) : c'est elle, et elle seule, qui
+    permet de retrouver le poids d'un point dont ni le disque ni le registre ne
+    gardent trace. Sans elle, la substitution du temoin serait une perte muette.
+    """
+    return {
+        "type": NOM_LIGNE_ABANDON,
+        "date": horodater(),
+        "nb": len(abandonnes),
+        "elements": [{"id": element.get("id"),
+                      "source": element.get("source"),
+                      "origine": element.get("origine"),
+                      "sha": element.get("sha"),
+                      "octets": element.get("octets")} for element in abandonnes],
+        "preuve": ("le temoin precedent portait la mesure de ces elements ; le nouveau ne la "
+                   "reproduit plus (ni sur le disque, ni au registre) -- la substitution est "
+                   "tracee ici parce que le temoin, lui, est REMPLACE"),
+    }
+
+
+def lire_temoin(chemin_temoin):
+    """Le temoin, ou None s'il est absent ou illisible."""
+    try:
+        return json.loads(Path(chemin_temoin).read_text(encoding=ENCODAGE))
+    except (OSError, ValueError):
+        return None
+
+
+def trouver(donnees, identifiant):
+    for entree in donnees.get("elements", []):
+        if entree.get("id") == identifiant:
+            return entree
+    return None
+
+
+def verifier_archives(donnees, depart, chemin_temoin):
+    """CASE 8 : `archive + actif = origine` (aucun octet perdu). Rend (ecarts, mesure).
+
+    Trois invariants, chacun mesure :
+      1. chaque element archive est dans l'archive (sha identique au temoin) ET
+         sa source a disparu : l'octet a DEMENAGE, il n'a pas disparu ;
+      2. le total `archive + actif + purge + disparu` EGALE l'origine (nombre ET
+         octets) : rien n'est perdu, rien n'est duplique -- ce qui est PURGE
+         (P3, MO-308) et ce qui est DECLARE DISPARU (EO-276, MO-310) est compte
+         SEPAREMENT, chacun avec sa preuve citee dans le registre ;
+      3. chaque archive est dans une ZONE INVISIBLE declaree (aucune fuite
+         nouvelle vers le cameleon).
+    """
+    ecarts = []
+    temoin = lire_temoin(chemin_temoin)
+    if temoin is None:
+        return ["temoin absent ou illisible : " + str(chemin_temoin)], {}
+    if not donnees.get("elements"):
+        return ["BDD vide"], {}
+
+    octets_archive = 0
+    octets_actif = 0
+    octets_purge = 0
+    octets_disparu = 0
+    nb_archive = 0
+    nb_actif = 0
+    nb_purge = 0
+    nb_disparu = 0
+    non_mesures = []
+    for element in temoin["elements"]:
+        entree = trouver(donnees, element["id"])
+        if entree is None:
+            ecarts.append("element du temoin absent de la BDD : " + str(element["id"]))
+            continue
+        chemin_source, _ = resoudre(element["source"], depart)
+        present = chemin_source is not None and chemin_source.is_file()
+        if entree.get("statut") == "archive":
+            chemin_destination, _ = resoudre_dans_matrice(str(entree.get("archive", "")), depart)
+            sha_archive, octets_archive_element, _ = mesurer(chemin_destination)
+            if sha_archive is None:
+                ecarts.append("archive introuvable pour " + str(element["id"]))
+                continue
+            if element.get("sha") is None:
+                ecarts.append("origine NON MESURABLE au temoin (ni source ni archive "
+                              "lisible) : " + str(element["id"]))
+                continue
+            if sha_archive != element["sha"]:
+                ecarts.append("sha de l'archive different de l'origine : " + str(element["id"]))
+                continue
+            if present:
+                ecarts.append("element archive ENCORE present a sa source : " + str(element["id"]))
+                continue
+            octets_archive += octets_archive_element or 0
+            nb_archive += 1
+        elif entree.get("statut") == STATUT_SUPPRIME:
+            # PURGEE (P3, MO-308) : l octet a quitte la Matrice SUR PREUVE de
+            # recouvrabilite. Le controle ne peut donc plus le MESURER -- mais il
+            # ne croit pas le registre pour autant : il exige que l archive ne
+            # soit PLUS la, et il confronte les octets enregistres a l origine du
+            # temoin. Un element purge ENCORE present sur le disque est un ecart :
+            # la preuve de sa disparition serait un mensonge.
+            chemin_purge, _ = resoudre_dans_matrice(str(entree.get("archive", "")), depart)
+            if chemin_purge is not None and chemin_purge.is_file():
+                ecarts.append("element PURGE encore present a son archive : "
+                              + str(element["id"]))
+                continue
+            octets_purge_element = int(entree.get("octets_apres") or 0)
+            if element.get("octets") is not None and octets_purge_element \
+                    and octets_purge_element != element["octets"]:
+                ecarts.append("element PURGE : octets enregistres differents de l origine : "
+                              + str(element["id"]))
+                continue
+            octets_purge += octets_purge_element
+            nb_purge += 1
+        elif entree.get("statut") == STATUT_DISPARU:
+            # DECLARE DISPARU (EO-276, MO-310) : le point a quitte le disque sans
+            # passer par une porte. Une disparition DECLAREE n'est plus un ecart --
+            # c'est un FAIT date, motive et mesure. Le controle ne la croit pas sur
+            # parole pour autant : il exige que le point ne soit NI revenu a sa
+            # source, NI vivant dans l'archive, et que les octets enregistres a la
+            # declaration ne contredisent pas le temoin qui l'a vu.
+            chemin_revenu, _ = resoudre(element["source"], depart)
+            if chemin_revenu is not None and chemin_revenu.is_file():
+                ecarts.append("element DECLARE DISPARU REVENU a sa source : " + str(element["id"]))
+                continue
+            chemin_vivant, _ = resoudre_dans_matrice(str(entree.get("archive", "")), depart)
+            if chemin_vivant is not None and chemin_vivant.is_file():
+                ecarts.append("element DECLARE DISPARU vivant dans l'archive : " + str(element["id"]))
+                continue
+            octets_disparu_element = entree.get("octets_avant")
+            if octets_disparu_element in ("", None):
+                # AUCUNE MESURE AU REGISTRE : le temoin qui l'a vu est le seul a en
+                # porter une -- et s'il n'en a pas non plus, le temoin le DIT
+                # (`non_mesures`). Un element jamais mesure ne compte pas pour zero
+                # par hasard : il compte pour zero parce que PERSONNE ne l'a mesure.
+                octets_disparu_element = element.get("octets")
+                if octets_disparu_element in ("", None):
+                    non_mesures.append(str(element["id"]))
+                    octets_disparu_element = 0
+            else:
+                try:
+                    octets_disparu_element = int(octets_disparu_element)
+                except (TypeError, ValueError):
+                    octets_disparu_element = 0
+                if element.get("octets") is not None and octets_disparu_element != element["octets"]:
+                    ecarts.append("element DECLARE DISPARU : octets differents du temoin : "
+                                  + str(element["id"]))
+                    continue
+            octets_disparu += octets_disparu_element
+            nb_disparu += 1
+        else:
+            if not present:
+                # LE REMEDE EST NOMME (EO-276) : un point dont la source a disparu
+                # se DECLARE -- aucune autre porte ne peut le solder, car
+                # `archiver` exige un fichier a deplacer et `purger` une archive.
+                ecarts.append("element non archive DISPARU de sa source : " + str(element["id"])
+                              + " -- remede : declarer-disparition --id " + str(element["id"]))
+                continue
+            sha_source, octets_source, _ = mesurer(chemin_source)
+            if element["sha"] and sha_source != element["sha"]:
+                ecarts.append("element non archive MODIFIE depuis le temoin : " + str(element["id"]))
+                continue
+            octets_actif += octets_source or 0
+            nb_actif += 1
+
+    if nb_archive + nb_actif + nb_purge + nb_disparu != temoin["nb"]:
+        ecarts.append("comptage : " + str(nb_archive) + " archive(s) + " + str(nb_actif)
+                      + " actif(s) + " + str(nb_purge) + " purge(s) + " + str(nb_disparu)
+                      + " declare(s) disparu(s) != origine " + str(temoin["nb"]))
+    if octets_archive + octets_actif + octets_purge + octets_disparu != temoin["octets"]:
+        ecarts.append("octets : " + str(octets_archive) + " + " + str(octets_actif)
+                      + " + " + str(octets_purge) + " + " + str(octets_disparu)
+                      + " (declares disparus) != origine " + str(temoin["octets"]))
+
+    # 3. L'archive doit etre INVISIBLE (zone declaree exclue : plan-conservation).
+    try:
+        import invisibilite
+        for entree in donnees.get("elements", []):
+            if entree.get("statut") != "archive":
+                continue
+            if not invisibilite.est_invisible(str(entree.get("archive", ""))):
+                ecarts.append("archive VISIBLE (zone non declaree) : " + str(entree.get("id")))
+    except ImportError:
+        ecarts.append("domicile d'invisibilite introuvable : la zone d'archive n'est pas prouvee")
+
+    mesure = {
+        "origine_nb": temoin["nb"],
+        "origine_octets": temoin["octets"],
+        "archive_nb": nb_archive,
+        "archive_octets": octets_archive,
+        "actif_nb": nb_actif,
+        "actif_octets": octets_actif,
+        "purge_nb": nb_purge,
+        "purge_octets": octets_purge,
+        "disparu_nb": nb_disparu,
+        "disparu_octets": octets_disparu,
+        "non_mesures_nb": len(non_mesures),
+        "non_mesures": non_mesures,
+    }
+    return ecarts, mesure
+
+
+def points_sans_decision(donnees, depart):
+    """Les points de restauration PRESENTS sur le disque et ABSENTS de la BDD.
+
+    L'acte ne les touche pas, il les SIGNALE : rien ne bouge sans decision (et un
+    classement est DATE -- friction 79). Deux exclusions, sans quoi le signal
+    mentirait :
+
+      - l'ARCHIVE elle-meme : ses fichiers portent la forme du point de
+        restauration (c'est leur nom d'origine), mais ils sont DEJA traites ;
+      - les sources DECLAREES dans la BDD, meme si elles ne sont plus sur le
+        disque (une source devenue absente est un FAIT de la BDD, pas un
+        orphelin anonyme).
+    """
+    motif = motif_forme()
+    if motif is None:
+        return []
+    base_archive, _, _ = chemin_archive(depart)
+    connus = set()
+    for entree in donnees.get("elements", []):
+        source = str(entree.get("source", ""))
+        if source:
+            connus.add(source.replace("\\", "/").strip("/").lower())
+    trouves = []
+    # LE PERIMETRE DE BALAYAGE VIENT DE SON DOMICILE (M-076) : la valeur `les arbres
+    # de la Matrice` n est plus ecrite ICI. Elle y etait EN DUR sous la forme
+    # ("matrice", "_operateur"), ce qui laissait la RACINE de la Matrice HORS du
+    # balayage -- deux points y vivaient, jamais juges, et le balayage rendait EN
+    # ORDRE (EO-277, mesure du 2026-09-19). Un consommateur qui doit EXCLURE une
+    # zone l exclut EN LE DISANT : l archive est exclue nommement juste en dessous.
+    for base in arbres_matrice(depart):
+        for chemin in base.rglob("*"):
+            if not chemin.is_file() or "__pycache__" in chemin.parts:
+                continue
+            if not motif.search(chemin.name):
+                continue
+            if base_archive == chemin or base_archive in chemin.parents:
+                continue
+            relatif = relatif_matrice(chemin, depart)
+            if relatif.strip("/").lower() in connus:
+                continue
+            trouves.append(relatif)
+    return sorted(trouves)
+
+
+# --- RESTAURATION (la reversibilite doit se PROUVER, pas se croire) ---------
+
+def restaurer_un(entree, depart, simuler=False):
+    """Restaure un element depuis son archive. Rend (code, message)."""
+    if entree.get("statut") != "archive":
+        return 1, ("REFUS (restauration : statut attendu archive, vu "
+                   + str(entree.get("statut")) + ")")
+    chemin_archive_element, motif_archive = resoudre_dans_matrice(
+        str(entree.get("archive") or entree.get("destination") or ""), depart
+    )
+    if chemin_archive_element is None or not chemin_archive_element.is_file():
+        return 1, "REFUS (archive introuvable : " + str(motif_archive) + ")"
+    chemin_source, motif_source = resoudre_dans_matrice(str(entree.get("source", "")), depart)
+    if chemin_source is None:
+        return 1, "REFUS (source hors Matrice : " + str(motif_source) + ")"
+    if chemin_source.exists():
+        return 1, "REFUS (la source existe deja : une restauration n'ecrase JAMAIS)"
+    sha_archive, _, _ = mesurer(chemin_archive_element)
+    enregistre = str(entree.get("sha_apres") or "")
+    if enregistre and sha_archive != enregistre:
+        return 1, "REFUS (le sha de l'archive differe de celui enregistre)"
+    if simuler:
+        return 0, "SIMULATION : restauration " + str(entree.get("source")) + " depuis l'archive"
+    chemin_source.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(str(chemin_archive_element), str(chemin_source))
+    sha_controle, _, _ = mesurer(chemin_source)
+    if sha_controle != sha_archive:
+        _retirer(chemin_source)
+        return 1, "REFUS (restauration non conforme : copie retiree, archive intacte)"
+    entree["statut"] = "restaure"
+    entree["operation"] = "restaurer"
+    entree["date"] = horodater()
+    entree["preuve"] = (str(entree.get("preuve", ""))
+                        + " | RESTAURE le " + horodater() + " : sha verifie = "
+                        + str(sha_archive) + " (l'archive est CONSERVEE comme preuve)")
+    return 0, "restaure : " + str(entree.get("source")) + " (archive conservee)"

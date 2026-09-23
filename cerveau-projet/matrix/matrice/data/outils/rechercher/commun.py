@@ -32,6 +32,7 @@ from constants import (
     RACINE,
     REPERTOIRE_DATA,
     REPERTOIRE_MATRIX,
+    SUR_CARTE,
     SUR_CONTENU,
     SUR_NOM,
 )
@@ -47,6 +48,18 @@ from vocabulaire_invisible import contient_invisible  # noqa: E402
 # cible.py) : cette porte le CONSOMME, elle ne le recopie pas (M-076 -- mesure
 # MO-184 : cinq perimetres, quatre jugeaient un PREFIXE avant la resolution).
 from cible import est_dans_matrice  # noqa: E402
+
+# La GRAMMAIRE de la carte d'identite vit dans SON domicile (data/commun/
+# carte_identite.py, M-076) : cette porte la CONSOMME, elle ne la recopie pas.
+# C'est le MEME lecteur que celui du garde des cartes -- un document ne peut donc
+# pas etre "une carte" pour l'un et "pas une carte" pour l'autre (mesure
+# 2026-09-21 : la grammaire n'existait qu'en UNE copie, il en fallait deux).
+from carte_identite import (  # noqa: E402
+    correspond,
+    lire_carte,
+)
+from carte_identite import EXTENSION as EXTENSION_CARTE  # noqa: E402
+from carte_identite import resume as resume_carte  # noqa: E402
 
 
 # --- Perimetre ---
@@ -193,6 +206,97 @@ def _scan_python(requete, repertoire):
     except OSError:
         pass
     return hits, False
+
+
+# --- Scan par CARTE D'IDENTITE (combinaison de champs) ---
+
+
+def scanner_cartes(couples, inclure_prive=False, repertoire=None):
+    """Documents dont la CARTE porte TOUS les couples demandes, un hit PAR DOCUMENT.
+
+    Pourquoi ce mode (demande createur, 2026-09-21) : chercher "convention" rend
+    les LIGNES qui PARLENT de conventions (106 hits de texte) ; chercher
+    `appartient_a=optimus-prime;type=convention` doit rendre les DOCUMENTS qui
+    SONT la chose. Un nom de fichier, une ligne de contenu et un document qui
+    porte une carte sont trois sortes de resultats : le hit dit laquelle.
+
+    Un document SANS carte ne correspond jamais (il ne peut pas repondre a une
+    combinaison) : il est COMPTE, jamais tu -- un corpus incomplet qu'on tairait
+    se lirait "0 resultat", indiscernable d'une absence (lecon MO-055).
+
+    Rend (hits, rapport). Le rapport porte le PERIMETRE et ses manques :
+    documents_lus, avec_carte, sans_carte, exclus_invisibles, hors_perimetre,
+    tronque, et les CARTES lues (vocabulaire et valeurs, pour un refus NOMME).
+    """
+    if repertoire is None:
+        repertoire = REPERTOIRE_MATRIX
+    elif not isinstance(repertoire, Path):
+        repertoire = Path(repertoire)
+
+    rapport = {
+        "documents_lus": 0,
+        "avec_carte": 0,
+        "sans_carte": 0,
+        "exclus_invisibles": 0,
+        "hors_perimetre": 0,
+        "illisibles": 0,
+        "tronque": False,
+        "cartes": [],
+    }
+    hits = []
+    for chemin in _parcourir_documents(repertoire):
+        fp = Path(chemin)
+        relatif = fp.relative_to(RACINE) if fp.is_relative_to(RACINE) else fp
+        # Le MEME perimetre et le MEME filtre L-016 que le scan de texte : deux
+        # portes de lecture ne peuvent pas avoir deux perimetres (MO-184).
+        if not dans_perimetre(str(relatif)):
+            rapport["hors_perimetre"] += 1
+            continue
+        if not inclure_prive and est_zone_invisible(fp):
+            rapport["exclus_invisibles"] += 1
+            continue
+        rapport["documents_lus"] += 1
+        carte = lire_carte(_lire_texte(fp))
+        if carte is None:
+            rapport["sans_carte"] += 1
+            continue
+        rapport["avec_carte"] += 1
+        rapport["cartes"].append(carte)
+        if correspond(carte, couples):
+            hits.append({
+                "fichier": str(fp),
+                "ligne": 0,
+                "sur": SUR_CARTE,
+                "texte": resume_carte(carte),
+                "carte": carte,
+            })
+            if len(hits) >= LIMITE_FICHIERS:
+                rapport["tronque"] = True
+                break
+
+    hits.sort(key=lambda h: h["fichier"])
+    return hits, rapport
+
+
+def _parcourir_documents(repertoire):
+    """Chemins des fichiers `.md` du repertoire (memes exclusions que le scan)."""
+    for racine_d, dossiers, fichiers in os.walk(str(repertoire)):
+        dossiers[:] = [d for d in dossiers if d not in ("__pycache__", ".git")]
+        for nom_f in sorted(fichiers):
+            if not nom_f.endswith(EXTENSION_CARTE):
+                continue
+            if est_fichier_ignore(nom_f):
+                continue
+            yield Path(racine_d) / nom_f
+
+
+def _lire_texte(chemin):
+    """Texte d'un fichier (jamais une exception qui remonte au visage de l'agent)."""
+    try:
+        with open(chemin, "r", encoding=ENCODAGE, errors="replace") as fichier:
+            return fichier.read()
+    except OSError:
+        return ""
 
 
 # --- Scan BDD (palier 1 : scan JSON par ENTREE) ---
@@ -412,6 +516,13 @@ def formatter_hit(hit, index):
     """
     src = hit.get("source", "fichier")
     if src == "fichier":
+        if hit.get("sur") == SUR_CARTE:
+            # Le DOCUMENT repond : pas de numero de ligne a afficher (l'afficher
+            # comme `<fichier>:0` ferait croire a une ligne zero qui n'existe pas).
+            return (
+                f"  {index + 1}. {hit['fichier']}\n"
+                f"     (carte) {hit['texte'][:160]}"
+            )
         if hit.get("sur") == SUR_NOM:
             return (
                 f"  {index + 1}. {hit['fichier']}\n"

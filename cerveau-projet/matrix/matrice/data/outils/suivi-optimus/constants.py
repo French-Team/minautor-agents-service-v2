@@ -32,6 +32,13 @@ ACTIONS = (
                     # porte noter REFUSAIT l'evenement et la suppression d'une preuve
                     # partait sans trace (mesure MO-136 : "Action inconnue : 'purge'").
     "bilan",        # bilan-periode demande et rendu
+    "intervention",  # INTERVENTION du createur sur la mission EN COURS (crochet
+                     # `[si]`, 2026-09-21) : une mini-reflexion de remise en question,
+                     # tenue PENDANT le round et morte avec lui. Meme lecon que `purge` :
+                     # un acte qui n'est pas une action DECLAREE part sans trace -- ici
+                     # la porte REFUSAIT l'evenement (mesure : "Action inconnue :
+                     # 'intervention'"), donc l'intervention du createur n'aurait
+                     # laisse AUCUNE trace lisible apres coup.
     "report",       # mission PARQUEE par le verbe `reporter` (EO-182 / MO-199) :
                     # le pilote la remet en attente, donc le DEBUT est NEUTRALISE
                     # (elle n'est plus en cours) SANS etre termine. Mesure EO-190 :
@@ -40,6 +47,35 @@ ACTIONS = (
                     # pilote de ne pas l'avoir chargee -- un faux diagnostic.
                     # NON SINGULIERE (hors ACTIONS_SINGULIERES) : une mission peut
                     # etre parquee plusieurs fois.
+    "charge",       # mission FORGEE par le verbe `charger` du pilote (demande du
+                    # createur, 2026-09-22) : l'acte de charger une mission n'etait
+                    # trace NULLE PART -- la file portait bien `chargee_le`, mais un
+                    # LOT entier partage cet horodatage (mesure du jour : les 30
+                    # missions en attente du lot REPRISE DU RETARD portent TOUTES le
+                    # meme `chargee_le`), donc < chargee > et < chargee avec d autres >
+                    # etaient indiscernables. Consequence mesuree : la CLOTURE FAUSSE
+                    # payee en MO-387 (deux missions closes qui n'avaient pas eu lieu,
+                    # avec une coherence file <-> journal PARFAITE) n'etait detectable
+                    # par AUCUN garde. Meme lecon que `purge` et `intervention` : un
+                    # acte qui n'est pas une action DECLAREE part sans trace -- la porte
+                    # `noter` REFUSERAIT l'evenement. Le detail porte le NOM DU LOT
+                    # quand c'en est un, et rien du tout quand la charge est
+                    # individuelle : c'est ce qui separe les deux classes.
+                    # NON SINGULIERE : une mission peut etre chargee plusieurs fois.
+    "prise",        # PRISE DE ROUND par l agent (EO-360, demande du createur
+                    # 2026-09-22) : la doctrine du demarrage PROMETTAIT que la chaine
+                    # repart toute seule, mais elle n ecrivait JAMAIS le geste de
+                    # boucle -- donc RIEN ne distinguait un round ARME (la machine a
+                    # injecte et pose le debut) d un round PRIS (l agent l a recu et
+                    # le conduit). Mesure du 2026-09-22 : MO-348 etait en-cours, son
+                    # debut etait trace, l injection etait deposee, et PERSONNE ne
+                    # l avait pris -- les trois traces disaient d ACCORD et elles
+                    # etaient fausses (famille de la cloture fausse de MO-387).
+                    # Meme lecon que `purge`, `intervention` et `charge` : un acte qui
+                    # n est pas une action DECLAREE part sans trace. Elle est notee par
+                    # le GESTE DE RECEPTION (le verbe `injecter` : ORDRE 2 du demarrage
+                    # et boucle de l ORDRE 4.7) -- l agent n a rien de plus a jouer.
+                    # NON SINGULIERE : un round peut etre repris plusieurs fois.
 )
 
 ENCODAGE = "utf-8"

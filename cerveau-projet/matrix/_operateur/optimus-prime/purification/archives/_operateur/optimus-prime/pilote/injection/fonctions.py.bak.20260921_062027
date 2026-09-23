@@ -1,0 +1,767 @@
+"""Fonctions simples de la categorie injection : une seule tache chacune."""
+import json
+import re
+
+from commun import (
+    annoncer,
+    annoncer_debut,
+    armer_lot,
+    bilan_consolide,
+    charger_entonnoir_pilote,
+    declarer_auto_validation,
+    defcon_bloque_theme,
+    deposer_message,
+    enregistrer_file,
+    horodater,
+    ids_en_lot,
+    item_du_vivier,
+    mission_en_cours,
+    declarer_borne_marbre,
+    prochaine_du_lot,
+    prochaine_en_attente,
+    puiser_tresse,
+    rafraichir_vue_suivi,
+    resume_mission,
+    session_en_pause,
+    journaliser_mission,
+    valider_theme,
+)
+from personnalites import role_de_mission
+from injection.modes_emploi import mode_emploi_brique
+from checklist.listes import OUTILS_COMMUNS, OUTILS_PAR_TYPE, TYPES
+from checklist.stockage import fabrique_checklist
+from entonnoir.listes import CHAMP_OUTILS
+from constants import (
+    BOITE_PILOTE_OUT,
+    CHAMP_AUTO_VALIDATION,
+    CHAMP_RAPPEL,
+    CHEMIN_THEMES,
+    CLE_AUTO_VALIDEES,
+    ENCODAGE,
+    GABARIT_COMMANDE_RECHERCHE,
+    RAPPEL_CHAINE_ARMEE,
+    RAPPEL_ROUTE_OUTIL,
+    REPERTOIRE_DATA,
+    PLAFOND_OUTILS_MODE_EMPLOI,
+    STATUT_EN_ATTENTE,
+    STATUT_EN_COURS,
+    TYPE_ROUTE_OUTIL,
+    VALEUR_AUTO_VALIDATION,
+)
+
+try:
+    from tokens import peser_tokens
+except ImportError:  # jamais bloquant : sans le motif, l'injection part sans poids
+    peser_tokens = None
+
+# MOTEUR DE RECHERCHE (EO-131) : la QUESTION a poser vient du module PARTAGE
+# (data/commun/recherche_mission.py) -- les DEUX flux consomment le meme, ils ne
+# le recopient pas (lecon L-029). Absent, l'injection ne meurt pas : elle le DIT
+# (doctrine du sac-a-dos : jamais bloquant) -- c'est le GARDE qui refuse, jamais
+# le flux de travail.
+try:
+    from recherche_mission import preparer_recherche
+except ImportError:
+    preparer_recherche = None
+
+# Espion de POIDS des injections (E-097, imperatif 56) : le sac-a-dos remis a
+# l'agent est pese -- on voit combien de contexte la Matrice lui demande de lire
+# (objectif + checklist + lecons + themes + role + recherche + rappel). Champs
+# fermes : liste unique. Le RAPPEL (R5) est du contexte OFFERT : il se compte
+# comme le reste -- un rappel qu'on ne pese pas serait du contexte en franchise.
+# CHAMPS PESES (MO-314) : tout ce que le sac-a-dos PORTE doit etre pese, sinon la
+# mesure se tait sur ce qui a grandi. `modes_emploi` a ete ajoute le 2026-09-20 : les
+# modes d emploi injectes n entraient dans AUCUN poids, donc le sac-a-dos annoncait
+# moins qu il ne livrait. MESURE 2026-09-20 (apres le plafond, MO-314) : les quatre
+# cartes pesent 1792 tokens bornees (2373 completes, 51 briques sur 98 servies) et
+# l injection avant-mission entiere 7435 -- la mesure se rejoue :
+#   python injecter.py avant-mission --peser
+CHAMPS_PESES = ("objectif", "checklist", "lecons_utiles", "themes_utiles", "role",
+                "recherche", CHAMP_RAPPEL, "modes_emploi")
+
+
+def poids_injection(injection):
+    """Retourne le poids estime (tokens) du sac-a-dos remis a l'agent.
+
+    0 si le motif tokens est absent : une injection n'echoue JAMAIS parce que
+    l'espion manque (doctrine : jamais bloquant).
+    """
+    if peser_tokens is None:
+        return 0
+    morceaux = [
+        json.dumps(injection.get(champ), ensure_ascii=True)
+        for champ in CHAMPS_PESES
+        if injection.get(champ)
+    ]
+    return peser_tokens(*morceaux)
+
+
+def afficher_statut(file_missions):
+    """Affiche l'etat de la mission en cours (ou l'absence de mission en cours)."""
+    mission = mission_en_cours(file_missions)
+    if mission is None:
+        en_attente = sum(1 for m in file_missions.get("missions", []) if m.get("statut") == STATUT_EN_ATTENTE)
+        print("Aucune mission en cours. File : " + str(en_attente) + " en attente.")
+        return 0
+    print("Mission en cours : " + mission["id"] + " (theme : " + mission["theme"] + ") -- " + mission["objectif"])
+    # AUTO-VALIDATION (EO-143) : la garantie est AFFICHEE, et son ABSENCE se DIT.
+    # Une garantie qui ne vit que dans une absence se re-cree au premier garde qui
+    # l ignore (ecart mesure par MO-160) ; un repli muet la rendrait invisible.
+    auto_validation = mission.get(CHAMP_AUTO_VALIDATION, "")
+    if auto_validation:
+        print("Auto-validation : " + auto_validation
+              + " -- mission deja vue avec le createur : enchaine sans redemander"
+              + " (le CRITIQUE reste au createur).")
+    else:
+        print("Auto-validation : champ ABSENT (mission anterieure au champ, EO-143)"
+              + " -- la regle immuable auto-validation-missions s applique.")
+    return 0
+
+
+def garder_theme_et_checklist(mission):
+    """Garde le THEME (champ ferme) et fabrique la checklist. -> (code, checklist).
+
+    UN SEUL endroit pour les DEUX chemins d'injection (mission simple et lot) :
+    deux copies de ce garde recreeraient exactement le trou qu'on vient de
+    fermer (deux implementations = deux comportements, un chemin protege et
+    l'autre non).
+
+    Garde du theme (trou ferme le 2026-09-13) : un theme hors vivier ne doit
+    JAMAIS devenir du travail. C'est le POINT DE PASSAGE UNIQUE -- il couvre
+    l'entonnoir, `charger` ET une file modifiee a la main -- sans dupliquer la
+    lecture du vivier (une seule source : commun.valider_theme).
+    La mission RESTE en attente : on ne la rejoue pas, on la corrige
+    (`python main.py retiqueter --id MO-XXX --theme <nom>`).
+
+    Checklist : le SPECIFIQUE vient du type (liste fermee de l'entonnoir), les
+    garde-fous COMMUNS valent pour toute mission -- un type absent ne supprime
+    plus les garde-fous (fabrique_checklist ne rend jamais une liste vide).
+
+    code != 0 -> injection REFUSEE, mission laissee en attente.
+    """
+    code, theme_valide = valider_theme(mission.get("theme", ""))
+    if code != 0:
+        # Le refus NOMME la porte qui repare, selon l'ORIGINE de la mission :
+        # une mission nee d'un item d'entonnoir se repare a la porte de
+        # l'ENTONNOIR (son role, L-061/MO-076) -- retiqueter la mission ne
+        # servirait a rien, elle serait re-ecrasee au prochain puisage du brin.
+        origine = mission.get("source", "")
+        morceaux = origine.split(":")
+        if origine.startswith("entonnoir:") and len(morceaux) > 1:
+            porte = ("python entonnoir/main.py retiqueter --id " + morceaux[1]
+                     + " --role <THEME du vivier>")
+        else:
+            porte = ("python main.py retiqueter --id " + mission.get("id", "?")
+                     + " --theme <nom du vivier>")
+        print("(mission " + mission.get("id", "?") + " laissee en attente : corrige son ROLE -- " + porte + ")")
+        return code, []
+    type_mission = mission.get("type") or theme_valide
+    checklist = mission.get("checklist") or fabrique_checklist(type_mission)
+    if type_mission not in TYPES:
+        print(
+            "ECART : " + mission["id"] + " sans type ferme (type/theme : " + type_mission
+            + ") -- checklist REDUITE aux garde-fous communs (le specifique du type manque)."
+        )
+    return 0, checklist
+
+
+
+
+def index_auto_valide():
+    """L INDEX des missions auto-validees : une liste d IDS (3e jambe MO-175).
+
+    L index vit dans l ETAT DE L ENTONNOIR : le pilote le LIT (pour decider de
+    l enchainement), il ne l ecrit jamais -- la queue appartient a l entonnoir.
+    Un etat illisible se DIT et rend une liste vide : la priorite continue, sans
+    repli muet (une auto-validee ne disparait jamais en silence).
+    """
+    try:
+        etat = charger_entonnoir_pilote()
+    except Exception as erreur:
+        print("[--] index auto-valide illisible (" + type(erreur).__name__
+              + ") : aucun item auto-valide lu.")
+        return []
+    if not isinstance(etat, dict):
+        return []
+    return list(etat.get(CLE_AUTO_VALIDEES) or [])
+
+
+def est_auto_validee(mission, index_auto):
+    """Vrai si la mission est AUTO-VALIDEE : par son CHAMP, ou par l INDEX.
+
+    Le champ est porte par l ENREGISTREMENT de la mission
+    (constants.CHAMP_AUTO_VALIDATION, GO createur) ; l index est la file. Les
+    deux disent la meme chose -- on accepte l un OU l autre, jamais un repli muet.
+    """
+    if not isinstance(mission, dict):
+        return False
+    if mission.get(CHAMP_AUTO_VALIDATION) == VALEUR_AUTO_VALIDATION:
+        return True
+    return mission.get("id") in index_auto
+
+
+def tete_brin():
+    """La TETE du brin en LECTURE SEULE -- meme source que le puisage (commun).
+
+    Coup d oeil : on ne consomme rien tant que la decision n est pas prise (un
+    puisage pour rien ferait disparaitre la tete du brin, donc l item).
+    """
+    try:
+        etat = charger_entonnoir_pilote()
+    except Exception:
+        return None
+    if not isinstance(etat, dict):
+        return None
+    brin = etat.get("brin") or []
+    return brin[0] if brin else None
+
+
+def decision_enchainement(mission, depuis_lot, enchainer, index_auto):
+    """DECISION PURE (testable sans disque) : faut-il ARRETER l enchainement ?
+
+    - un LOT arme est une decision EXPLICITE du createur : la chaine continue ;
+    - une injection EXPLICITE (enchainer faux) n est pas un enchainement : elle
+      passe (le verbe `injecter` reste un ordre, pas une decision automatique) ;
+    - sinon -- c est la CHAINE -- une mission NON auto-validee ARRETE tout : le
+      pilote rend la main (decision createur MO-175).
+    Rend (arret, motif) : le motif est toujours DIT quand la chaine s arrete.
+    """
+    if mission is None or depuis_lot or not enchainer:
+        return False, ""
+    if est_auto_validee(mission, index_auto):
+        return False, ""
+    return True, (str(mission.get("id", "?")) + " n est PAS auto-validee --"
+                  " la chaine s arrete ici (le createur reprend la main).")
+
+
+def _noms_des_outils(mission):
+    """Les noms des outils de la mission, par la VOIE qui a parle. Rend (noms, voie).
+
+    DEUX VOIES (EO-313, demande createur du 2026-09-20) :
+      - `item` : la LISTE PREPAREE sur l item (porte `preparer` de l entonnoir), que
+        le pont a RECOPIEE dans la mission -- la mission porte donc SES outils, et
+        deux missions du meme TYPE peuvent en avoir des differents ;
+      - `type` : le REPLI par TYPE (OUTILS_PAR_TYPE), quand AUCUNE liste n a ete
+        preparee. C est le comportement d avant MO-313, conserve pour ne casser
+        aucune mission existante -- et la voie est DITE, jamais supposee.
+    Un outil cite deux fois ne se sert QU UNE fois : l ORDRE de declaration est
+    conserve, premiere mention gagnante (meme regle que la deduplication du pont).
+    """
+    prepares = []
+    for nom in (mission.get(CHAMP_OUTILS) or []):
+        nom = str(nom).strip()
+        if nom and nom not in prepares:
+            prepares.append(nom)
+    if prepares:
+        return prepares, "item"
+    noms = []
+    for nom in list(OUTILS_COMMUNS) + list(OUTILS_PAR_TYPE.get(str(mission.get("type", "")), ())):
+        if nom not in noms:
+            noms.append(nom)
+    return noms, "type"
+
+
+def charger_modes_emploi(mission):
+    """Les MINI modes d emploi des outils que la mission VA APPELER (proto-6, etape 2).
+
+    POURQUOI (revision createur du 2026-09-20, MO-313) : l agent recevait une LISTE
+    DE NOMS et devait relire chaque outil pour retrouver son usage -- c est de la que
+    naissent les appels fautifs constates par le createur. Le mode d emploi est
+    EXTRAIT de la brique elle-meme (injection/modes_emploi.py : jamais une fiche
+    recopiee, M-076) et BORNE (PLAFOND_OUTILS_MODE_EMPLOI).
+
+    QUELLE LISTE (EO-313) : celle PREPAREE sur l item quand elle existe, sinon le
+    repli par TYPE -- et les champs `voie` et `source` DISENT laquelle a servi. Une
+    liste servie sans dire d ou elle vient ne se relit pas : elle se croit.
+
+    Une brique DECLAREE mais INTROUVABLE est DITE : elle ne disparait pas en silence,
+    c est l ecart que le garde des contrats des outils accuse.
+    """
+    noms, voie = _noms_des_outils(mission)
+    outils = []
+    introuvables = []
+    for nom in noms[:PLAFOND_OUTILS_MODE_EMPLOI]:
+        texte, origine = mode_emploi_brique(nom)
+        if not texte:
+            introuvables.append(nom)
+            continue
+        outils.append({"nom": nom, "origine": origine, "mode_emploi": texte})
+    return {
+        "voie": voie,
+        "source": ("la LISTE PREPAREE de l item (EO-313)" if voie == "item"
+                   else "le repli par TYPE : aucune liste preparee pour cette mission"),
+        "outils": outils,
+        "introuvables": introuvables,
+        "ecartes_par_plafond": noms[PLAFOND_OUTILS_MODE_EMPLOI:],
+    }
+
+
+def preparer_injection(charger_file, enchainer=False, mission_forcee=None):
+    """Prepare et depose l'injection ordonnee de la mission suivante.
+
+    Serie stricte : REFUS si une mission est deja en cours.
+    Protocole de pause (M-080) : REFUS si la session-matrix est EN PAUSE.
+    Priorite au createur : 1) le lot arme, 2) l ITEM AUTO-VALIDE en tete du brin
+    (decision MO-175 : l auto-validee passe AVANT la file chargee, juste apres
+    le lot arme), 3) la file des missions chargees, 4) la TRESSE (puisage
+    automatique : tisser si besoin, puis tete du brin).
+    ENCHAINEMENT (3e jambe MO-175) : quand `enchainer` est vrai (appel depuis
+    `fin`), la chaine s ARRETE des que la mission a injecter n est PAS
+    auto-validee -- le createur reprend la main. Une injection EXPLICITE
+    (`enchainer` faux, verbe `injecter`) n est pas un enchainement : elle passe.
+    Un STOP NE CONSOMME RIEN (decision createur 2026-09-18) : le candidat est
+    juge AVANT d etre tire -- la tete du brin reste en tete, la file garde sa
+    mission. Un arret ne se paie donc d aucun effet de bord.
+    """
+    if session_en_pause():
+        print("REFUS : session-matrix EN PAUSE (protocole M-080) -- aucune injection pendant la maintenance.")
+        print("(reprise par l'outil pause-session, verbe reprendre, apres maintenance user)")
+        return 1
+    file_missions = charger_file()
+    if mission_en_cours(file_missions) is not None:
+        print("REFUS : une mission est deja en cours (serie stricte). Termine-la d'abord : python main.py fin --bilan ...")
+        return 1
+    index_auto = index_auto_valide()
+    mission = prochaine_du_lot(file_missions)
+    if mission_forcee is not None:
+        # EO-185 : une mission CONDUITE et NOMMEE (verbe `conduire`) passe AVANT
+        # le lot arme -- c'est le SEUL chemin qui manquait pour conduire une
+        # mission chargee HORS lot sans consommer un creneau de la chaine. Le
+        # 2026-09-19, MO-200 est restee un FANTOME faute de ce chemin : `fin` a
+        # clos MO-190, la mission courante du lot.
+        mission = next((m for m in file_missions.get("missions", [])
+                        if m.get("id") == mission_forcee), None)
+        if mission is None:
+            print("REFUS : mission inconnue : " + mission_forcee)
+            return 2
+        if mission.get("statut") != STATUT_EN_ATTENTE:
+            print("REFUS : " + mission_forcee + " n'est pas en attente (statut : "
+                  + str(mission.get("statut")) + ").")
+            return 2
+    if mission is None:
+        # UN SEUL CANDIDAT, JUGE AVANT D ETRE TIRE (decision createur 2026-09-18) :
+        # l auto-validee en TETE du brin passe avant la file chargee, et RIEN n est
+        # consomme tant que la chaine a le droit d enchainer. Un STOP laisse donc
+        # l etat EXACTEMENT comme il etait (la tete reste en tete).
+        tete = tete_brin()
+        auto_en_tete = tete is not None and est_auto_validee(tete, index_auto)
+        en_file = None if auto_en_tete else prochaine_en_attente(file_missions)
+        if auto_en_tete or en_file is None:
+            candidat, origine = tete, "brin"
+        else:
+            candidat, origine = en_file, "file"
+        # Aucun lot ici (la branche lot est sortie plus haut) : depuis_lot=False.
+        arret, motif = decision_enchainement(candidat, False, enchainer, index_auto)
+        if arret:
+            print("STOP ENCHAINEMENT : " + motif)
+            print("(RIEN n a ete consomme -- "
+                  + ("la tete du brin reste EN PLACE" if origine == "brin"
+                     else "la mission reste dans sa file") + " ;")
+            print(" injection explicite : python main.py injecter)")
+            return 0
+        if candidat is not None:
+            mission = puiser_tresse(file_missions) if origine == "brin" else candidat
+    if mission is None:
+        print("Aucune mission en attente (lot, file et tresse vides).")
+        return 0
+    code, message = defcon_bloque_theme(mission.get("theme", ""))
+    if code != 0:
+        print(message)
+        print("(mission " + mission["id"] + " laissee en attente pendant la mise en securite)")
+        return code
+    code, checklist = garder_theme_et_checklist(mission)
+    if code != 0:
+        return code
+    role = charger_role_mission(mission)
+    if role.get("refus"):
+        print("REFUS : la mission " + mission["id"] + " n'a pas de ROLE injectable (posture hors vivier).")
+        for ecart in role.get("ecarts", []):
+            print("  " + ecart)
+        return 2
+    for ecart in role.get("ecarts", []):
+        print("ALERTE : " + ecart)
+    # AUTO-VALIDATION (EO-143) : le champ est pose AVANT l injection -- l agent
+    # doit le LIRE, il ne le devine pas (un champ que personne ne lit est une
+    # absence, et c est exactement l ecart mesure par MO-160).
+    declarer_auto_validation(mission)
+    injection = {
+        "type": "injection",
+        "date": horodater(),
+        "mission": mission["id"],
+        "theme": mission["theme"],
+        "role": role,
+        "objectif": mission["objectif"],
+        CHAMP_AUTO_VALIDATION: mission[CHAMP_AUTO_VALIDATION],
+        "checklist": checklist,
+        "modes_emploi": charger_modes_emploi(mission),
+        "lecons_utiles": charger_lecons_utiles(mission),
+        "themes_utiles": charger_themes_utiles(),
+        "recherche": preparer_recherche_mission(mission),
+        CHAMP_RAPPEL: charger_rappel_route(mission),
+    }
+    injection["poids_tokens"] = poids_injection(injection)
+    deposer_message(BOITE_PILOTE_OUT, injection)
+
+    mission["statut"] = STATUT_EN_COURS
+    mission["injectee_le"] = horodater()
+    mission["checklist"] = checklist
+    enregistrer_file(file_missions)
+    annoncer_debut(file_missions, mission)
+    # Suivi-optimus (MO-108) : le pilote DECLARE la borne de debut, en mode
+    # `--si-absent oui` -- la porte n'ecrit QUE si l'evenement manque, donc le
+    # doublon MO-030 (2e debut fabrique par l'appel automatique d'autrefois) est
+    # impossible PAR CONSTRUCTION. Motif mesure le 2026-09-15 : MO-105 et MO-106
+    # ont ete closes SANS fin au marbre parce que la declaration reposait sur la
+    # MEMOIRE de l'agent. L'agent garde le droit de declarer lui-meme.
+    declarer_borne_marbre(
+        mission,
+        "debut",
+        "debut declare par le pilote (injection) : " + resume_mission(mission),
+        portes=["pilote:injecter"],
+    )
+    # La VUE derivee est elle aussi rafraichie par le pilote : DEBUT.
+    rafraichir_vue_suivi()
+    print("Injection deposee pour " + mission["id"] + " -> " + str(BOITE_PILOTE_OUT))
+    return 0
+
+
+def conduire(charger_file, identifiant):
+    """CONDUIT une mission chargee HORS lot : elle devient COURANTE et injectee.
+
+    EO-185 (2026-09-19). Mesure : `injecter` et `fin` operent sur la mission
+    COURANTE, et `preparer_injection` priorise TOUJOURS le lot arme -- une mission
+    chargee hors lot ne pouvait donc JAMAIS etre conduite. Ce jour-la, MO-200
+    (chargee pour EO-184) est restee un FANTOME, et `fin` a clos MO-190, la
+    mission courante DU LOT : une demande du createur n'avait aucun chemin
+    conforme, d'ou trois missions menees HORS FILE le meme jour.
+
+    Refus NOMMES : une mission est deja en cours (parquer d'abord, `reporter`) ;
+    identifiant inconnu ; mission pas en attente ; mission du LOT arme (la chaine
+    a son propre chemin : `injecter`) -- `conduire` est fait pour le HORS lot.
+    """
+    file_missions = charger_file()
+    courante = mission_en_cours(file_missions)
+    if courante is not None:
+        print("REFUS : une mission est deja en cours (" + courante["id"]
+              + "). Parque-la d'abord : python main.py reporter --raison \"...\"")
+        return 1
+    mission = next((m for m in file_missions.get("missions", [])
+                    if m.get("id") == identifiant), None)
+    if mission is None:
+        print("REFUS : mission inconnue : " + identifiant)
+        return 2
+    if mission.get("statut") != STATUT_EN_ATTENTE:
+        print("REFUS : " + identifiant + " n'est pas en attente (statut : "
+              + str(mission.get("statut")) + ").")
+        return 2
+    if identifiant in ids_en_lot(file_missions):
+        print("REFUS : " + identifiant + " appartient au lot arme -- la chaine a son"
+              " propre chemin (python main.py injecter). `conduire` est pour une"
+              " mission HORS lot.")
+        return 2
+    return preparer_injection(charger_file, mission_forcee=identifiant)
+
+
+def enchainer(charger_file):
+    """Arme le round multiple : la premiere mission du lot passe en cours.
+
+    Ensuite, chaque `fin` declenche automatiquement la mission suivante du lot
+    (annonce FIN puis DEBUT), jusqu'au RETOUR consolide a la Matrice quand
+    toutes les missions du lot sont terminees.
+    Protocole de pause (M-080) : REFUS si la session-matrix est EN PAUSE.
+    """
+    if session_en_pause():
+        print("REFUS : session-matrix EN PAUSE (protocole M-080) -- aucun enchainement pendant la maintenance.")
+        return 1
+    file_missions = charger_file()
+    if mission_en_cours(file_missions) is not None:
+        print("REFUS : une mission est deja en cours (serie stricte).")
+        return 1
+    if not ids_en_lot(file_missions):
+        print('Aucun lot arme. Chargez-en un : python main.py lot --lot "nom" --theme "t1,t2" --objectif "o1|o2"')
+        return 1
+    mission = prochaine_du_lot(file_missions)
+    if mission is None:
+        print("Le lot est deja termine (aucune mission en attente dans le lot).")
+        return 0
+    # Meme garde que l'injection simple : le chemin du LOT ne doit pas etre une
+    # porte derobee (mise en securite defcon + champ ferme des themes).
+    code, message = defcon_bloque_theme(mission.get("theme", ""))
+    if code != 0:
+        print(message)
+        print("(mission " + mission["id"] + " laissee en attente pendant la mise en securite)")
+        return code
+    code, checklist = garder_theme_et_checklist(mission)
+    if code != 0:
+        return code
+    role = charger_role_mission(mission)
+    if role.get("refus"):
+        print("REFUS : la mission " + mission["id"] + " n'a pas de ROLE injectable (posture hors vivier).")
+        for ecart in role.get("ecarts", []):
+            print("  " + ecart)
+        return 2
+    for ecart in role.get("ecarts", []):
+        print("ALERTE : " + ecart)
+    # Meme champ sur le chemin du LOT : le lot n est pas une porte derobee
+    # (meme garde, meme declararation -- une seule fonction pour les deux).
+    declarer_auto_validation(mission)
+    injection = {
+        "type": "injection",
+        "date": horodater(),
+        "mission": mission["id"],
+        "theme": mission["theme"],
+        "role": role,
+        "objectif": mission["objectif"],
+        "lot": True,
+        CHAMP_AUTO_VALIDATION: mission[CHAMP_AUTO_VALIDATION],
+        "checklist": checklist,
+        "lecons_utiles": charger_lecons_utiles(mission),
+        "themes_utiles": charger_themes_utiles(),
+        "recherche": preparer_recherche_mission(mission),
+        CHAMP_RAPPEL: charger_rappel_route(mission),
+    }
+    injection["poids_tokens"] = poids_injection(injection)
+    deposer_message(BOITE_PILOTE_OUT, injection)
+
+    mission["statut"] = STATUT_EN_COURS
+    mission["checklist"] = checklist
+    mission["injectee_le"] = horodater()
+    enregistrer_file(file_missions)
+    annoncer_debut(file_missions, mission)
+    # Meme borne de debut que l'injection simple (MO-108, mode --si-absent oui).
+    declarer_borne_marbre(
+        mission,
+        "debut",
+        "debut declare par le pilote (chaine armee) : " + resume_mission(mission),
+        portes=["pilote:injecter"],
+    )
+    rafraichir_vue_suivi()
+    print("Chaine armee : chaque 'fin' enchainra la mission suivante du lot.")
+    return 0
+
+
+# Le VOCABULAIRE interdit vit dans son DOMICILE (data/commun/vocabulaire_invisible.py)
+# depuis MO-153 : les DEUX pilotes et le moteur de recherche le CONSOMMENT, ils ne
+# le recopient plus (M-076 ; L-100/L-102 : trois listes recopiees, trois longueurs).
+from vocabulaire_invisible import MOTS_INTERDITS  # noqa: E402
+
+
+def filtrer_pour_cameleon(items):
+    """Filtre L-016/invisibilite : retire tout item lisible par le cameleon qui nomme l'invisible.
+
+    Meme contrat que le pilote du Flux 1 : le vocabulaire vient du DOMICILE
+    data/commun/vocabulaire_invisible.py -- deux copies divergeraient (MO-153).
+    """
+    interdits = MOTS_INTERDITS
+    filtres = []
+    for it in items:
+        texte = " ".join([
+            it.get("lecon", ""),
+            it.get("but", ""),
+            it.get("description", ""),
+            it.get("nom", ""),
+            " ".join(it.get("tags", [])),
+            it.get("source", ""),
+        ]).lower()
+        if any(m in texte for m in interdits):
+            continue
+        filtres.append(it)
+    return filtres
+
+
+def charger_role_mission(mission):
+    """Le ROLE de la mission, remis AVANT la mission (MAILLON 2/5, 2026-09-14).
+
+    Le cameleon recoit UNE personnalite par mission (categorie PERSONNALITE du
+    vivier) ; Optimus n'en recevait AUCUNE : ses missions n'avaient qu'un theme de
+    chantier. Le role porte donc les DEUX, et chacun est NOMME :
+      - `posture` : QUI conduit (PERSONNALITE deduite du TYPE par la table fermee
+        du pilote, `personnalites.py`) -- jamais choisie par l'agent ;
+      - `theme` : le chantier FERME de la mission (le QUOI toucher).
+    Chaque nom est accompagne de son ITEM DU VIVIER (but + description) : le
+    pilote fournit la CONDUITE au debut de la mission, jamais la fiche entiere.
+    L'ecart (type absent, posture hors vivier) est DEPOSE dans le role : il est
+    vu par l'agent au debut de sa mission, pas seulement dans un journal.
+    """
+    code, role, ecarts = role_de_mission(mission)
+    role["posture_declaree"] = item_du_vivier(role.get("posture", "")) or {}
+    role["chantier_declare"] = item_du_vivier(role.get("theme", "")) or {}
+    role["ecarts"] = ecarts
+    role["refus"] = code != 0
+    return role
+
+
+def preparer_recherche_mission(mission):
+    """La QUESTION a poser au moteur, habillee de la commande de CE flux (EO-131).
+
+    Le module PARTAGE (`data/commun/recherche_mission.py`) derive la question du
+    sujet de la mission ; ICI on l'habille du chemin et des options du Flux 2 --
+    dont `--prive`, qui ouvre la zone de l'operateur. Le cameleon consomme le
+    MEME module avec SON gabarit : une seule derivation, deux habillages.
+
+    Absent, le module ne fait pas mourir l'injection : le bloc porte un
+    avertissement NOMME, et c'est le garde BLOQUANT (maillon 24) qui refuse.
+    """
+    if preparer_recherche is None:
+        return {
+            "quand": "module partage ABSENT",
+            "question": "",
+            "commande": "",
+            "avertissement": ("recherche_mission.py introuvable dans data/commun : "
+                              "la question de recherche n'est PAS injectee"),
+        }
+    return preparer_recherche(mission, GABARIT_COMMANDE_RECHERCHE)
+
+
+def charger_rappel_route(mission):
+    """La ROUTE du defaut d'OUTIL, portee par le sac-a-dos de la mission (R5).
+
+    Mesure de l'audit MO-174 : la regle que le createur venait d'enoncer (reparer
+    DANS l'outil, jamais contourner a la main) n'etait ecrite NULLE PART ou
+    l'agent la cherche -- c'est-a-dire AU MOMENT ou il en a besoin. Elle voyage
+    donc AVEC la mission dont le TYPE est `reparation` : le type que declarent le
+    crochet `[outil]` (filtrer/entry.py) et la liste fermee TYPES.
+
+    Tout autre type rend une chaine VIDE, et c'est voulu : un rappel toujours
+    present ne se lit plus. Le champ est PESE avec les autres (CHAMPS_PESES) --
+    c'est du contexte offert a l'agent, il se compte comme le reste.
+    """
+    morceaux = []
+    # CHAINE ARMEE (EO-274) : une mission de lot DIT qu elle doit etre suivie -- une
+    # mission hors lot ne le dit pas (un rappel permanent ne se lit plus).
+    if mission.get("lot"):
+        morceaux.append(RAPPEL_CHAINE_ARMEE)
+    if str(mission.get("type", "") or "").strip() == TYPE_ROUTE_OUTIL:
+        morceaux.append(RAPPEL_ROUTE_OUTIL)
+    return " ".join(morceaux)
+
+
+# PLAFOND DU SAC-A-DOS (EO-270) : la commande de travail pese 750 tokens ; le
+# savoir injecte d office en pesait 23378, soit 89 pour cent de l injection
+# (mesure MO-241). Le poids d une injection a ete multiplie par 5.4 en six jours
+# (4865 tokens le 2026-09-13 contre 26295 le 2026-09-19) : le contexte d une
+# session se remplissait donc en un a trois rounds, et la chaine k/n s arretait
+# faute de place. Le sac-a-dos est desormais BORNE : les lecons PERTINENTES pour
+# la mission d abord, puis les plus RECENTES, jusqu au plafond. Les ecartees ne
+# sont PAS perdues : elles restent dans matrice/data/lecons.json et leur nombre
+# est DIT a chaque injection (un reste tu redevient une absence).
+PLAFOND_LEGONS_TOKENS = 6000
+PLAFOND_LEGONS_NOMBRE = 30
+FACTEUR_ESTIMATION = 4  # repli (caracteres -> tokens) si le motif tokens manque
+
+
+def _vocabulaire_mission(mission):
+    """Mots de la mission qui decident de la PERTINENCE d une lecon."""
+    if not isinstance(mission, dict):
+        return set()
+    morceaux = [str(mission.get("theme", "")), str(mission.get("type", "")),
+                str(mission.get("source", ""))]
+    role = mission.get("role")
+    if isinstance(role, dict):
+        for cle in ("id", "nom", "theme", "but"):
+            morceaux.append(str(role.get(cle, "")))
+    elif role:
+        morceaux.append(str(role))
+    morceaux.append(str(mission.get("objectif", "")))
+    mots = set()
+    for morceau in morceaux:
+        for mot in re.split(r"[^0-9A-Za-z_]+", morceau.lower()):
+            if len(mot) >= 4:
+                mots.add(mot)
+    return mots
+
+
+def _score_lecon(lecon, vocabulaire):
+    """Nombre de tags de la lecon presents dans le vocabulaire de la mission."""
+    tags = lecon.get("tags") or []
+    if not isinstance(tags, list):
+        return 0
+    score = 0
+    for tag in tags:
+        if str(tag).lower() in vocabulaire:
+            score += 1
+    return score
+
+
+def _poids_lecon(lecon):
+    """Poids d une lecon (motif partage si present, repli declare sinon)."""
+    texte = json.dumps(lecon, ensure_ascii=True)
+    if peser_tokens is None:
+        return max(1, len(texte) // FACTEUR_ESTIMATION)
+    return peser_tokens(texte)
+
+
+def selectionner_lecons(lecons, mission=None, plafond_tokens=None, plafond_nombre=None):
+    """LE PLAFOND (EO-270) : rend (retenues, ecartees), ordre stable et dicte.
+
+    Ordre : pertinence (tags de la lecon presents dans la mission) d abord, puis
+    recence (date, puis id) -- deux passes ne prennent donc jamais une autre
+    suite. Un plafond atteint ECARTE la suite sans la perdre : l appelant la DIT.
+    La premiere lecon passe toujours, meme plus lourde que le plafond : un
+    plafond qui viderait le sac-a-dos serait pire que pas de plafond.
+    """
+    if plafond_tokens is None:
+        plafond_tokens = PLAFOND_LEGONS_TOKENS
+    if plafond_nombre is None:
+        plafond_nombre = PLAFOND_LEGONS_NOMBRE
+    vocabulaire = _vocabulaire_mission(mission)
+    classees = sorted(lecons, key=lambda l: (str(l.get("date", "")), str(l.get("id", ""))),
+                      reverse=True)
+    classees.sort(key=lambda l: -_score_lecon(l, vocabulaire))
+    retenues = []
+    ecartees = []
+    poids = 0
+    for lecon in classees:
+        cout = _poids_lecon(lecon)
+        if retenues and (len(retenues) >= plafond_nombre or poids + cout > plafond_tokens):
+            ecartees.append(lecon)
+            continue
+        retenues.append(lecon)
+        poids += cout
+    return retenues, ecartees
+
+
+def charger_lecons_utiles(mission=None):
+    """Charge les lecons de la BDD lecons.json, BORNEES par le plafond (EO-270).
+
+    BDD en cours de construction : jamais de faux blocage, jamais de type surprenant.
+    Format prevu (contrat data) : {"lecons": [{...tags...}, ...]}.
+    Filtre L-016 : les lecons qui nomment l invisible sont retirees de l injection
+    (le cameleon ne doit jamais lire _operateur/optimus/suivi-optimus -- audit-invisibilite).
+    Le plafond ne bloque rien : il selectionne, et il DIT combien il ecarte.
+    """
+    chemin_lecons = REPERTOIRE_DATA / "lecons.json"
+    if not chemin_lecons.exists():
+        return []
+    try:
+        with open(chemin_lecons, "r", encoding=ENCODAGE) as flux:
+            donnees = json.load(flux)
+        lecons = donnees.get("lecons", []) if isinstance(donnees, dict) else []
+        lecons = filtrer_pour_cameleon(lecons)
+    except (OSError, ValueError):
+        return []
+    retenues, ecartees = selectionner_lecons(lecons, mission)
+    if ecartees:
+        print("lecons_utiles : " + str(len(retenues)) + " injectees / " + str(len(ecartees))
+              + " ecartees (plafond " + str(PLAFOND_LEGONS_TOKENS) + " tokens, EO-270)"
+              + " -- pertinentes d abord puis recentes ; les ecartees restent lisibles"
+              + " dans matrice/data/lecons.json.")
+    return retenues
+
+
+def charger_themes_utiles():
+    """Charge les themes du registre vivier-themes.json (liste vide si absent).
+
+    Meme doctrine que lecons_utiles : garde jamais bloquant, type toujours sur.
+    Format (moule theme-bdd) : {"themes": [{"id", "nom", "but", ...}, ...]}.
+    Filtre L-016 : un theme qui nommerait l'invisible est retire (meme regle que lecons).
+    """
+    if not CHEMIN_THEMES.exists():
+        return []
+    try:
+        with open(CHEMIN_THEMES, "r", encoding=ENCODAGE) as flux:
+            donnees = json.load(flux)
+        themes = donnees.get("themes", []) if isinstance(donnees, dict) else []
+        return filtrer_pour_cameleon(themes)
+    except (OSError, ValueError):
+        return []

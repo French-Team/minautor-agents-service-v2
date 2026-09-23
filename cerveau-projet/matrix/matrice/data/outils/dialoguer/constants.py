@@ -30,5 +30,9 @@ TIMEOUT_QUESTION = 0
 # Mode : Flux 2 seul (jamais cameleon)
 FLUX = "optimus"
 
+# EO-287 : le NOM de l outil de trace, jamais son chemin -- la resolution (et
+# son refus nomme) vit dans data/commun/resolution_outils.py.
+NOM_OUTIL_SUIVI = "suivi-optimus"
+
 NOMS_OPTIONS_DIALOGUER = ("question", "choix", "timeout", "json")
 NOMS_OPTIONS_PLAN = ("todos", "json")

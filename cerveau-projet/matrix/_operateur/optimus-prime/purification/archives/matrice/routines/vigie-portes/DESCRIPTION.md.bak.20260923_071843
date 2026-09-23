@@ -1,0 +1,164 @@
+---
+identite:
+  type: routine
+  appartient_a: matrice-routines
+  nom: vigie-portes
+  flux: 1
+  version: 1.0.0
+---
+
+# Routine VIGIE-PORTES -- les portes et ceux qui les utilisent
+
+## Pourquoi elle existe
+
+Une **porte** est la seule voie legitime pour ecrire une donnee (ouvrir un
+journal, poser une convention, enregistrer une mission). La session du
+2026-09-13 en a trouve **quatre pannes**, toutes invisibles, aucune n'etant un
+crash :
+
+| Panne | Ce qui se passait |
+|---|---|
+| **Introuvable** | le questionnaire du profil etait un cran trop haut ; la porte repondait < Questionnaire absent > depuis toujours (MO-051) |
+| **Aveugle** | le moteur de recherche scannait un dossier parasite supprime la veille : < 0 resultat > sur **toutes** les requetes (MO-055) |
+| **Neutralisee** | `suivi-sync` reimportait ce que la porte `archiver` venait de deplacer, a chaque passe (MO-052) |
+| **A moitie** | `enregistrer` ecrivait la file sans le journal : un ecart de coherence a chaque appel (MO-054) |
+
+Une porte qui ne dit rien et une porte qui va bien **se ressemblent**. Cette
+vigie est le temoin qui les distingue.
+
+## Ce qu'elle surveille
+
+**Les portes** (`matrice/data/outils/`) :
+
+| Controle | Ce qu'il attrape | Niveau |
+|---|---|---|
+| RECETTE | `main.py` ou `DESCRIPTION.md` absent (recette CV-010) | moyenne |
+| SANTE | `main.py` qui **ne compile pas** (compile() en memoire, aucune execution) | critique |
+| VERBES | sous-dossier sans `entry.py` = verbe **fantome** | haute |
+| MOTEUR | requete **temoine** sur le moteur de recherche : 0 resultat = moteur **aveugle** | critique |
+
+**Ceux qui les utilisent** (`matrice/data/usages-outils-combos.jsonl`, fenetre glissante) :
+
+| Controle | Ce qu'il attrape | Niveau |
+|---|---|---|
+| USAGE | porte **mal utilisee** : refus (code 2) majoritaires | moyenne |
+| CITATION | porte **muette** mais **citee** ailleurs = incoherente | moyenne |
+| CITATION | porte **orpheline** : ni appel, ni citation (candidate a l'archivage) | basse |
+
+La citation est demandee au **moteur de recherche** (porte unique de recherche),
+jamais par un scan a la main.
+
+## Verbes
+
+```
+python3 cerveau-projet/matrix/lancer.py vigie-portes tour [--racine <matrix>] [--sans-signal] une passe, affichee
+python3 cerveau-projet/matrix/lancer.py vigie-portes rotation [--racine <matrix>] borne le journal en ARCHIVANT
+python3 cerveau-projet/matrix/lancer.py vigie-portes boucle [--interval <secondes>] boucle de fond
+python3 cerveau-projet/matrix/lancer.py vigie-portes boucle arret arret cooperatif
+```
+
+- `--racine` : controler un autre arbre (cobaye). Un controle qu'on ne peut pas
+  pieger ne prouve rien (L-032).
+- `--sans-signal` : passe a blanc -- rapport et journal, **aucun** depot dans
+  l'inbox. Pour regarder la vigie avant qu'elle tire.
+
+## Alertes et anti-spam
+
+Les alertes de niveau `critique`, `haute` ou `moyenne` partent dans l'inbox de
+la Matrice par la **porte officielle `signaler`** (jamais une ecriture directe).
+Le niveau `basse` reste au journal.
+
+L'etat `vigie-portes-etat.json` porte la **signature du dernier jeu d'alertes
+NOTABLES** -- celles qui partent dans l'inbox (c'est lui la "mission" de la
+vigie). Le depot est **borne par mission et par le temps** (correction MO-073,
+jumelle de MO-070) :
+
+- une variation d'une observation `basse` (porte muette, nom inconnu) **ne
+  compte pas** : elle n'a rien a dire dans l'inbox, et son mouvement reposait
+  auparavant un depot IDENTIQUE ;
+- un **vrai** changement de jeu notable moins de `ANTI_SPAM_SECONDES` (900 s,
+  secondes MURALES) apres le dernier depot est **RETENU** -- journalise, et
+  repris a la passe suivante (jamais perdu) ;
+- quand les alertes notables disparaissent, la vigie note `MOTIF_RESOLU` ;
+- une passe sans alerte notable **n'horodate plus de depot** (avant, elle
+  repoussait le plancher a chaque mouvement d'usage : la vigie se rendait
+  muette elle-meme).
+
+Chaque passe journalise sa **decision** (champ `motif` : `depot`,
+`deja-signale`, `plancher`, `aucune-alerte-notable`), donc rien n'est supprime
+en silence.
+
+## Fichiers
+
+```
+vigie-portes/
+  main.py                  point d'entree (DIRIGER)
+  constants.py             chemins relatifs (cobayables), recette, seuils
+  commun.py                journal, etat, PID, appel de porte
+  tour/                    LA passe (recette, sante, verbes, moteur, usage, citation)
+  boucle/                  boucle de fond + arret cooperatif par drapeau
+  vigie-portes-log.jsonl   journal en ajout seul (uniquement des FAITS)
+  vigie-portes-etat.json   signature anti-spam
+  vigie-portes-etat-passes.json  etat court de la passe (photo + compteur, ECRASE)
+  vigie-portes.pid         PID de la boucle
+```
+
+## Etat et histoire de la passe (MO-082)
+
+La passe ecrivait la MEME ligne a chaque tour, quand rien n'avait bouge --
+mesure du 2026-09-14 : 204 lignes pour 19 contenus distincts, la meme
+signature 105 fois (51,5 %), une par tour de 900 s. La photo de la passe est un
+ETAT : elle s'ecrit a CHAQUE passe dans `vigie-portes-etat-passes.json` (ecrase)
+et porte la signature de la derniere passe JOURNALISEE, le motif de la decision
+anti-spam et le nombre de passes absorbees. L'HISTOIRE
+(`vigie-portes-log.jsonl`) ne recoit la passe que si ce que la vigie a VU a
+change : les observations BASSES (porte muette, nom inconnu, orpheline) n'entrent
+PAS dans cette signature -- elles bougent sans rien dire (lecon MO-073), et leur
+mouvement ne doit ni deposer ni gonfler le journal.
+
+Aucun controle ne lit ces lignes (la cadence se lit dans
+`vigie-portes-cadence.json` depuis MO-078) : il n'y a donc pas de temoin de vie a
+conserver ici, contrairement a l'espion dont la derniere ligne `passe` est lue
+par la non-regression du flux. La decision (signature + absorption) vient du
+moteur PARTAGE `data/commun/etat_histoire.py` (motif unique, jamais recopie).
+
+## Anneau de passes et cadence MESUREE (friction 28, MO-084)
+
+L'etat court porte aussi `dernieres_passes` -- les `PASSES_GARDEES_ETAT` derniers
+horodatages de passe, fabriques par le moteur PARTAGE
+`data/commun/battement.py` (la vigie ne declare QUE sa longueur, elle ne recopie
+pas le decoupage qui borne la suite). C'est ce qui rend le battement REEL
+mesurable par `verifier-cadence`, en ECART MEDIAN : une routine qui DECLARE sa
+cadence et la PUBLIE n'est pas encore une routine dont on sait qu'elle la TIENT.
+
+Pourquoi pas une moyenne : le premier temoin de cadence calculait
+`(date - derniere_ecriture) / passes_absorbes` et a lu 450,5 s puis 600,3 s pour
+une cadence de 900 s -- pourtant prouvee par le journal et avec un compteur juste
+(3 -> 4 en une passe). Une moyenne ne decrit AUCUN intervalle reel des qu'une
+passe n'est pas a l'heure (redemarrage, passe a la demande), et une valeur fausse
+mais DANS la tolerance ne crie pas : c'est le pire des temoins, il rassure.
+
+## Rotation du journal (MO-078)
+
+Le journal `vigie-portes-log.jsonl` est en AJOUT SEUL : le borner, c'est
+DEPLACER ses evenements les plus anciens dans une archive datee
+(`vigie-portes-archive-AAAAMMJJ.jsonl`). Jamais de suppression.
+
+- Le moteur est PARTAGE (`matrice/data/commun/rotation_journal.py`, motif unique
+  M-076) : la vigie ne declare que SES constantes (seuil en octets, nombre
+  d'evenements gardes, prefixe d'archive).
+- ARCHIVER d'abord, reecrire ensuite, controler apres ; l'archive fait partie du
+  "deja connu" (lecon L-040 : une reprise apres arret n'ecrit aucun jumeau).
+- Une COURSE (le journal bouge entre la lecture et le remplacement) est REFUSEE
+  en le nommant -- le journal n'est jamais ecrase.
+- La boucle verifie la rotation AVANT chaque passe, et un refus ne tue jamais la
+  passe (lecon L-026).
+
+## Regles tenues
+
+1. **Elle SIGNALE, elle ne repare pas** (doctrine des routines) : aucune
+   ecriture hors de ses propres fichiers (journal, etat, PID, drapeau).
+2. **Aucune exception ne remonte** : une porte injoignable est une
+   **observation**, pas un plantage de la vigie.
+3. **Une seule boucle** : PID present = refus du second lancement.
+4. **Arret cooperatif** : drapeau, jamais un processus tue.

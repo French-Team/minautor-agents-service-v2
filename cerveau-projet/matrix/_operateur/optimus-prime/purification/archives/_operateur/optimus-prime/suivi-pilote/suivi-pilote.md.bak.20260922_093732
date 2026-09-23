@@ -1,0 +1,151 @@
+---
+identite:
+  type: analyse
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# SUIVI DU PILOTE -- la vue derivee
+
+> Regeneree par la porte `suivi-pilote` (T2 de PB-003/SP-003/TD-003).
+> Jamais editee a la main : elle se RECALCULE. Les faits du pilote vivent
+> dans suivi-optimus, file-missions, entonnoir, cycle-historique, outbox et
+> le journal des pauses -- ici, seulement ce que l instrument a JUGE.
+
+Mesure du 2026-09-22 09:37:21 | pannes declarees : 12 | detecteurs joues : 11.
+
+Pannes DECLAREES sans detecteur (couverture dite, jamais muette) :
+- injection-refusee : le refus d injection N EST PAS JOURNALISE (mesure du 2026-09-22 : aucun evenement de refus dans l outbox) -- aucune source ne porte le fait
+- pilote-muet : couvert par le detecteur serie-stricte-violee (meme lecture : le code de la porte)
+
+## Table 0 -- PANNES (la seule qui crie)
+
+| Gravite | Panne | Constat | Silence | Porte qui repare |
+|---|---|---|---|---|
+| haute | pause-oubliee | journal en PAUSE sans reprise, etat de pause ABSENT | 2026-09-12 11:07:23 | pause-session reprendre (leve l etat ET journalise la reprise) |
+
+Motifs : pause-oubliee -- derniere ligne : pause du 2026-09-12 11:07:23 (il y a 9.9 j), etat absent.
+
+OUVERTES (constatees, deposees, suivies -- jamais tues) :
+- pause-oubliee : item EO-357 -- CONSTATEE VIVANTE le 2026-09-22 et DEPOSEE : aucune porte ne peut clore une ligne de pause dont l etat a disparu (reprendre REFUSE tant qu une mission est en cours). Une exception OUVERTE se NOMME et se SUIT -- elle reste dans la table, elle n arrete plus la suite.
+
+## Table 1 -- INJECTION (partie injection/)
+
+> Une injection est un INSTANT : aucune duree. La colonne Refus n EXISTE PAS : le refus d injection n est pas journalise (mesure du 2026-09-22) -- une colonne toujours < inconnu > serait un placeholder qui ment.
+
+| Mission | Injectee le | Poids (tok) | Lecons utiles |
+|---|---|---|---|
+| MO-385 | 2026-09-22 06:58:41 | 10072 | 23 |
+| MO-344 | 2026-09-22 07:25:59 | 10228 | 25 |
+| MO-345 | 2026-09-22 07:44:25 | 9949 | 21 |
+| MO-386 | 2026-09-22 07:55:48 | 10280 | 23 |
+| MO-345 | 2026-09-22 08:20:51 | 9949 | 21 |
+| MO-345 | 2026-09-22 08:36:02 | 9949 | 21 |
+| MO-346 | 2026-09-22 08:51:02 | 9871 | 22 |
+| MO-347 | 2026-09-22 08:58:34 | 10211 | 25 |
+| MO-387 | 2026-09-22 09:00:43 | 10185 | 26 |
+| MO-347 | 2026-09-22 09:10:34 | 10211 | 25 |
+| MO-348 | 2026-09-22 09:31:02 | 10156 | 20 |
+| MO-388 | 2026-09-22 09:33:22 | 10015 | 23 |
+
+## Table 2 -- FILE (partie file/)
+
+> Silence = l ecart entre l ouverture et le dernier fait : la colonne qui voit une mission ouverte qui n avance plus.
+
+| Mission | Statut | Dans le lot | En attente depuis | Dernier fait | Silence |
+|---|---|---|---|---|---|
+| MO-348 | en-attente | oui | 23.8 h | report | 4 min |
+| MO-349 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-350 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-351 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-352 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-353 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-354 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-355 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-356 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-357 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-358 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-360 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-361 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-362 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-363 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-364 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-365 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-366 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-367 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-368 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-369 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-370 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-371 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-372 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-373 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-374 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-375 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-376 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-377 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-378 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-379 | en-attente | oui | 23.8 h | inconnu | inconnu |
+| MO-388 | en-cours | non | 4 min | debut | 4 min |
+
+## Table 3 -- LOT (partie file/, a part)
+
+> Panne lue : portee sans tete, ou STOP sans motif. Les colonnes Arme le et Retour consolide n existent PAS : aucune source ne les porte aujourd hui -- une colonne toujours < inconnu > serait un placeholder.
+
+| Lot | Portee | Ecoulees | Retirees | Tete | Enchainement |
+|---|---|---|---|---|---|
+| lot-36 | 36 | 5 | 0 | MO-388 | MO-388 |
+
+## Table 4 -- ENTONNOIR (files)
+
+> Age : un item qui vieillit est un travail qui dort.
+
+| File | Items | Tete | Urgence de la tete | Age de la tete |
+|---|---|---|---|---|
+| audit | 0 | inconnu | inconnu | inconnu |
+| dev | 1 | EO-357 | haute | 15 min |
+| doc | 0 | inconnu | inconnu | inconnu |
+| reparation | 2 | EO-353 | haute | 1.9 h |
+| revision | 0 | inconnu | inconnu | inconnu |
+
+## Table 5 -- BRIN
+
+> Coherence : brin = 3 ; files = 3.
+
+| Rang | Item | Urgence | Categorie | Depose le | Age |
+|---|---|---|---|---|---|
+| 1 | EO-357 | haute | pilote | 2026-09-22 09:21:59 | 15 min |
+| 2 | EO-353 | haute | outil | 2026-09-22 07:41:07 | 1.9 h |
+| 3 | EO-356 | normale | pilote | 2026-09-22 09:10:48 | 27 min |
+
+## Table 6 -- CLOTURES ET ENCHAINEMENT (partie fin/)
+
+> La DUREE d une mission vit dans suivi-optimus : elle n est PAS recopiee ici. Le verdict d enchainement vient de la FONCTION du pilote (provenance de l item), jamais d une comparaison d ids.
+
+| Mission close | Fin a | Bilan | Enchainement |
+|---|---|---|---|
+| MO-343 | 2026-09-22 06:26:30 | pose | auto |
+| MO-381 | 2026-09-22 06:35:38 | pose | auto |
+| MO-382 | 2026-09-22 06:43:15 | pose | auto |
+| MO-383 | 2026-09-22 06:50:36 | pose | auto |
+| MO-384 | 2026-09-22 06:56:29 | pose | auto |
+| MO-385 | 2026-09-22 07:25:20 | pose | auto |
+| MO-344 | 2026-09-22 07:43:40 | pose | auto |
+| MO-386 | 2026-09-22 08:20:08 | pose | auto |
+| MO-345 | 2026-09-22 08:50:19 | pose | auto |
+| MO-346 | 2026-09-22 08:57:52 | pose | auto |
+| MO-387 | 2026-09-22 09:09:52 | pose | auto |
+| MO-347 | 2026-09-22 09:30:19 | pose | auto |
+
+## Table 7 -- DEMANDES FILTREES (vrac)
+
+> Panne lue : une demande recue et jamais classee (le vrac ne se vide pas).
+
+(rien a lire sur cette partie)
+
+## Table 8 -- GARDES (pause de session, defcon)
+
+> Panne lue : une pause armee et oubliee -- ou le JOURNAL et l ETAT qui se contredisent (l agent s arrete et personne ne le voit).
+
+| Garde | Etat | Depuis | Motif |
+|---|---|---|---|
+| pause de session | active | 2026-09-12 11:07:23 | pause : maintenance manuelle demandee par le createur [pause] pendant  |

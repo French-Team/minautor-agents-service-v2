@@ -5,6 +5,7 @@ Chaque fonction fait UNE chose (convention-architecture-outils).
 import hashlib
 import json
 import os
+from pathlib import Path
 
 from constants import (
     CHEMIN_BDD,
@@ -14,6 +15,30 @@ from constants import (
     NOM_BDD_TMP,
     TAILLE_BLOC_LECTURE,
 )
+
+# Le DOMICILE des formes de la Matrice (cible.NOMS_MATRICE) : cette fonction le
+# CONSOMME, elle ne le recopie pas (M-076 ; L-029) -- une forme recopiee derive
+# en silence, et c est exactement le defaut repare ici. L import vient APRES
+# `constants`, qui installe data/commun dans sys.path (motif unique M-076).
+from cible import NOMS_MATRICE, forme_canonique, racine_matrice  # noqa: E402, F401
+
+
+def canoniser_cle(chemin):
+    """La CLE canonique d'un fichier : RELATIVE A LA RACINE DE LA MATRICE (EO-363).
+
+    LA REGLE N'EST PLUS ICI. Mesure du 2026-09-22 : la BDD portait 935 cles = 232
+    prefixees < cerveau-projet/matrix/ > + 703 relatives, et 158 fichiers sous les
+    DEUX formes -- donc DEUX HISTOIRES pour un seul fichier, et la vue pouvait
+    lister le meme fichier DEUX FOIS. La cause : la porte enregistrait la cle TELLE
+    QU'ON LA LUI DONNAIT, donc la forme dependait du repertoire courant de
+    l'appelant.
+
+    La FORME a UN SEUL DOMICILE : `cible.forme_canonique` (data/commun/). Elle y a
+    ete portee le 2026-09-22 quand un SECOND consommateur a eu besoin d'elle -- les
+    LIENS d'une carte d'identite (EO-347). Deux copies d'une meme regle divergent
+    toujours en silence (L-029/M-076) : ici on ne la recopie pas, on l'appelle.
+    """
+    return forme_canonique(chemin, CHEMIN_BDD)
 
 
 def charger_bdd():

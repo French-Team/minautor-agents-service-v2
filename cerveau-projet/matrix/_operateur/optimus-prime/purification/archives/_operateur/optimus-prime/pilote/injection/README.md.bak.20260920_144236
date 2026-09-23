@@ -1,0 +1,102 @@
+---
+identite:
+  type: readme
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# Porte `injection/` -- injections du pilote Optimus Prime
+
+> **Un seul dossier d'injection.** Le dossier `injections/` (moteur de catalogue
+> parallelle, cree le 2026-09-12) a ete **fusionne ici** le 2026-09-13 : deux
+> dossiers dont le nom ne differait que d'un `s` etaient un piege (deux
+> *namespace packages* voisins, aucun `__init__.py`). Le nom qui fait foi est
+> celui de l'architecture officielle (`DESCRIPTION.md`) : `injection/`.
+
+## Les 6 pieces de la porte
+
+| Piece | Role |
+|---|---|
+| `entry.py` | la porte : verbes `statut`, `injecter`, `enchainer` (et `mission --action`) |
+| `cycle.py` | le **cycle** : orchestre les injections par phase (`demarrer`, `mission_debut/pendant/fin`) |
+| `fonctions.py` | l'injection de **mission** : ordonnee, filtree L-016, pesee en tokens, deposee dans l'outbox intercom |
+| `injecter.py` | le **moteur du catalogue** : sert les injections de DEMARRAGE et de PHASE |
+| `modes_emploi.py` | l **extracteur des MODES D EMPLOI** : pour chaque brique, son but et son usage, EXTRAITS de la brique elle-meme (`main.py`, `README.md`) -- jamais une fiche recopiee (M-076). Type de catalogue `modes-emploi` |
+| `config.json` | le **catalogue** : quelles sources, pour quelle phase, obligatoires ou non |
+| `README.md` | ce fichier |
+
+## Qui appelle quoi (le vrai cablage)
+
+```
+python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/main.py injecter <- ORDRE 2 de demarrer-optimus-prime.md
+  -> injection/entry.py  (verbe injecter)
+     -> injection/cycle.py (CycleOptimus.demarrer)
+        -> injection/injecter.py demarrage  <- le CATALOGUE (fiche + theme de reprise + protocole)
+     -> injection/fonctions.py (preparer_injection)
+        -> l'injection de MISSION dans l'outbox intercom
+```
+
+## Lancer le catalogue directement
+
+```bash
+python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/injection/injecter.py --categories # la liste vient du CATALOGUE
+python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/injection/injecter.py demarrage # fiche + theme de reprise + protocole de reprise
+python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/injection/injecter.py demarrage --format json
+python3 cerveau-projet/matrix/_operateur/optimus-prime/pilote/injection/injecter.py mission # les 3 phases d'un coup
+```
+
+## L'entree `role` : la conduite AVANT la mission (MAILLON 2/5, 2026-09-14)
+
+Le cameleon recoit **UNE personnalite par mission** (categorie `PERSONNALITE` du
+vivier), jamais choisie par lui. Optimus n'en recevait **aucune** : ses missions
+ne portaient qu'un theme de **chantier** (le QUOI toucher) et le catalogue lui
+**deversait la fiche entiere** au demarrage.
+
+L'entree `role` est donc la **premiere** de `avant-mission` :
+
+```json
+{
+  "id": "role",
+  "description": "Role d'Optimus pour cette mission (postures du vivier : QUI conduit)",
+  "source": "../../../matrice/data/vivier-themes.json",
+  "type": "json",
+  "obligatoire": true,
+  "categorie": "PERSONNALITE"
+}
+```
+
+- Le filtre `categorie` sert les **postures** du vivier (le **QUI**) ; le
+  **QUOI** (theme de chantier) reste porte par la mission et par l'injection de
+  mission (`fonctions.py` -> champ `role` : `posture` + `theme` + items declares).
+- Le mappage ferme **type -> posture** vit dans `pilote/personnalites.py` et il
+  est **porte par le pilote**, jamais par l'agent.
+- Le garde `verifier-roles.py` (maillon **22**) exige que cette entree soit
+  **declaree** ET **servie**, et que les **deux** chemins d'injection la portent.
+
+> Voir [README-roles.md](../README-roles.md) pour le mappage et ses regles.
+
+## Doctrine : aucune degradation silencieuse (2026-09-13)
+
+| Cas | Comportement |
+|---|---|
+| source absente, `"obligatoire": true` | **REFUS nomme**, code 2 |
+| source absente, `"obligatoire": false` | **ALERTE nommee**, code 0 (on continue) |
+| `"obligatoire"` non declare | traite comme **obligatoire** (prudence) + alerte |
+| `type` inconnu du moteur | **REFUS nomme**, code 2 |
+| `section` demandee et introuvable | **REFUS nomme**, code 2 |
+| categorie absente du catalogue | **REFUS nomme**, code 2 |
+| filtre `categorie` qui vide le contenu | **ALERTE nommee** (contenu vide signale, jamais muet) |
+
+Types servis : `fichier`, `json`, `bdd`, `dossier`, `outil` (fichier lu, dossier liste).
+Les **categories viennent du catalogue** : aucune liste en dur dans le moteur.
+
+> **Historique des reparations du 2026-09-13** (mesurees, pas supposees) :
+> 1. **les 11 sources etaient 100 % mortes** -- les chemins portaient un segment
+>    `optimus-prime/` en trop (`RACINE/optimus-prime/optimus-prime.md`). Ils sont
+>    desormais **relatifs au pilote** (`../optimus-prime.md`), comme ceux du cameleon.
+> 2. `"obligatoire"` etait declare sur chaque entree et **jamais lu** : chaque
+>    source morte imprimait `[FICHIER INTRUVABLE: ...]` et rendait **code 0**.
+> 3. `type: "outil"` (declare **6 fois**) etait **inconnu du moteur** -> "Type inconnu".
+> 4. `section` (declaree 1 fois) etait **ignoree** -> extraction markdown ajoutee.
+> 5. la categorie `outils` **dupliquait** deux entrees de `avant-mission` (memes id,
+>    memes sources) : retiree (deux verites pour un meme besoin).

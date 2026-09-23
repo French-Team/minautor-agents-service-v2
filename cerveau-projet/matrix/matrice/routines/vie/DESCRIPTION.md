@@ -9,9 +9,9 @@
 ## Options
 
 ```
-python main.py etat                        -> etat des boucles (ARRET / ACTIVE / fantome nettoye)
-python main.py activer                     -> lance le server matrice (porte unique)
-python main.py activer --intervalle <s>    -> lancement du server avec intervalle personnalise
+python3 cerveau-projet/matrix/lancer.py vie etat -> etat des boucles (ARRET / ACTIVE / fantome nettoye)
+python3 cerveau-projet/matrix/lancer.py vie activer -> lance le server matrice (porte unique)
+python3 cerveau-projet/matrix/lancer.py vie activer --intervalle <s> -> lancement du server avec intervalle personnalise
 ```
 
 ## Garanties
@@ -48,7 +48,7 @@ python main.py activer --intervalle <s>    -> lancement du server avec intervall
 
 `demarrer-optimus-prime.md` (racine, hors perimetre d'ecriture de l'operateur)
 reste le point d'entree de developpement : il pourra appeler
-`python cerveau-projet/matrix/matrice/routines/vie/main.py activer`.
+`python3 cerveau-projet/matrix/matrice/routines/vie/main.py activer`.
 Le demarrage final de production de la Matrice et du cameleon sera defini
 par le futur fichier de demarrage global ; Optimus Prime reste reveille
 pendant cette construction puis sera sollicite seulement au besoin.

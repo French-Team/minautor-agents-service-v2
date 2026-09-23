@@ -13,29 +13,29 @@ identite:
 
 ```bash
 # Phase 1: Detecter une friction pendant le travail
-python auto-evolution/main.py detecter "Quand je reprends une mission, je ne sais pas par ou commencer, car ordre non explicite" --type ordre --gravite mineure --frequence recurrente --mission-id MO-001
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-002-auto-evolution/main.py detecter "Quand je reprends une mission, je ne sais pas par ou commencer, car ordre non explicite" --type ordre --gravite mineure --frequence recurrente --mission-id MO-001
 
 # Phase 2: Qualifier les frictions en fin de mission
-python auto-evolution/main.py qualifier --mission-id MO-001
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-002-auto-evolution/main.py qualifier --mission-id MO-001
 
 # Phase 3: Cibler (verrouiller fichier)
-python auto-evolution/main.py cibler --fichier cerveau-projet/matrix/_operateur/optimus-prime/parcours/themes/theme-reprise-mission.json
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-002-auto-evolution/main.py cibler --fichier cerveau-projet/matrix/_operateur/optimus-prime/parcours/themes/theme-reprise-mission.json
 
 # Phase 4a: Avant-modification (lecture + hash, non-bloquant)
-python auto-evolution/main.py modifier-avant --fichier cerveau-projet/matrix/_operateur/optimus-prime/parcours/themes/theme-reprise-mission.json
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-002-auto-evolution/main.py modifier-avant --fichier cerveau-projet/matrix/_operateur/optimus-prime/parcours/themes/theme-reprise-mission.json
 # ... modifiez le fichier (edit ou outils specialises) ...
 # Phase 4b: Apres-modification (hash + tests + BDD, non-bloquant)
-python auto-evolution/main.py modifier-apres --fichier cerveau-projet/matrix/_operateur/optimus-prime/parcours/themes/theme-reprise-mission.json --hash-avant <HASH_AVANT> --friction-id 1 --raison "Ajout case reprise explicite" --type theme
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-002-auto-evolution/main.py modifier-apres --fichier cerveau-projet/matrix/_operateur/optimus-prime/parcours/themes/theme-reprise-mission.json --hash-avant <HASH_AVANT> --friction-id 1 --raison "Ajout case reprise explicite" --type theme
 
 # Phase 5: Auto-valider (faible/moyen) ou valider createur (critique)
-python auto-evolution/main.py valider --fichier cerveau-projet/matrix/_operateur/optimus-prime/parcours/themes/theme-reprise-mission.json --friction-id 1 --statut valide --risque faible
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-002-auto-evolution/main.py valider --fichier cerveau-projet/matrix/_operateur/optimus-prime/parcours/themes/theme-reprise-mission.json --friction-id 1 --statut valide --risque faible
 # Risque critique : --risque critique (attente createur)
 
 # Preuve de l ancrage de la cible (friction 80 : le cwd n est jamais une base)
-python auto-evolution/main.py auto-test
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-002-auto-evolution/main.py auto-test
 
 # Statistiques
-python auto-evolution/main.py stats
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-002-auto-evolution/main.py stats
 ```
 
 ## Outils utilises (ordre d'appel)

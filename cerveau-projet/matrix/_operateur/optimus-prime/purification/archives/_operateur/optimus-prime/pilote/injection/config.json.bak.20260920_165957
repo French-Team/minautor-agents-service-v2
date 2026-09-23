@@ -1,0 +1,134 @@
+{
+  "injections": {
+    "demarrage": [
+      {
+        "id": "fiche",
+        "description": "Fiche d'identite d'Optimus",
+        "source": "../optimus-prime.md",
+        "type": "fichier",
+        "obligatoire": true
+      },
+      {
+        "id": "theme-reprise",
+        "description": "Theme de reprise",
+        "source": "../parcours/themes/theme-reprise-mission.json",
+        "type": "json",
+        "obligatoire": true
+      },
+      {
+        "id": "protocole-reprise",
+        "description": "Protocole de reprise",
+        "source": "../protocoles/proto-1-reprise-mission.md",
+        "type": "fichier",
+        "obligatoire": true
+      }
+    ],
+    "avant-mission": [
+      {
+        "id": "role",
+        "description": "Role d'Optimus pour cette mission (postures du vivier : QUI conduit)",
+        "source": "../../../matrice/data/vivier-themes.json",
+        "type": "json",
+        "obligatoire": true,
+        "categorie": "PERSONNALITE"
+      },
+      {
+        "id": "fiche-rappel",
+        "description": "Rappel des regles absolues",
+        "source": "../optimus-prime.md",
+        "type": "fichier",
+        "obligatoire": true,
+        "section": "REGLES ABSOLUES"
+      },
+      {
+        "id": "theme-actif",
+        "description": "Theme de la mission",
+        "source": "../parcours/themes/index-themes.json",
+        "type": "json",
+        "obligatoire": true
+      },
+      {
+        "id": "modes-emploi-outils",
+        "description": "MODE D EMPLOI DES OUTILS du pilote (but + usage, extrait de chaque brique -- jamais une liste de noms)",
+        "source": "../super-combos/combos/outils",
+        "type": "modes-emploi",
+        "obligatoire": true
+      },
+      {
+        "id": "modes-emploi-combos",
+        "description": "MODE D EMPLOI DES COMBOS (but + usage, extrait de chaque combo)",
+        "source": "../super-combos/combos",
+        "type": "modes-emploi",
+        "obligatoire": true
+      },
+      {
+        "id": "modes-emploi-super-combos",
+        "description": "MODE D EMPLOI DES SUPER-COMBOS (but + usage, extrait de chaque super-combo)",
+        "source": "../super-combos",
+        "type": "modes-emploi",
+        "obligatoire": true
+      },
+      {
+        "id": "modes-emploi-matrice",
+        "description": "MODE D EMPLOI DES OUTILS DE LA MATRICE (but + usage, extrait de chaque main.py)",
+        "source": "../../../matrice/data/outils",
+        "type": "modes-emploi",
+        "obligatoire": true
+      },
+      {
+        "id": "garde-perimetre",
+        "description": "Garde du perimetre",
+        "source": "../super-combos/combos/outils/garde-perimetre-write.py",
+        "type": "outil",
+        "obligatoire": true
+      },
+      {
+        "id": "garde-flux2",
+        "description": "Garde du flux 2",
+        "source": "../super-combos/combos/outils/garde-flux2.py",
+        "type": "outil",
+        "obligatoire": true
+      },
+      {
+        "id": "contexte-machine",
+        "description": "CONTEXTE MACHINE : la section courte (OS, capacites, outils, reseau) de la fiche systeme-machine.md, tenue a jour par la porte inventaire-systeme (MO-251)",
+        "source": "../../../matrice/data/systeme-machine.md",
+        "type": "fichier",
+        "obligatoire": false,
+        "section": "RESUME MACHINE-FANTOME"
+      }
+    ],
+    "pendant-mission": [
+      {
+        "id": "suivi-optimus",
+        "description": "Outil de suivi",
+        "source": "../../../matrice/data/outils/suivi-optimus",
+        "type": "outil",
+        "obligatoire": true
+      },
+      {
+        "id": "bdd-modifications",
+        "description": "BDD des modifications",
+        "source": "../../../matrice/data/modifications-par-fichier.json",
+        "type": "bdd",
+        "obligatoire": false
+      }
+    ],
+    "apres-mission": [
+      {
+        "id": "rituel-fin",
+        "description": "Protocole de fin de mission",
+        "source": "../protocoles/proto-2-auto-evolution.md",
+        "type": "fichier",
+        "obligatoire": true
+      },
+      {
+        "id": "metriques",
+        "description": "Cockpit metriques",
+        "source": "../cockpit/cockpit-matrice.py",
+        "type": "outil",
+        "obligatoire": false
+      }
+    ]
+  }
+}

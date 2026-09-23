@@ -1,4 +1,4 @@
-"""Point d'entree global de l'entonnoir (echelons 0-3).
+"""Point d'entree global de l'entonnoir (echelons 0-3 + la PREPARATION).
 
 Role : DIRIGER (parser la commande, router vers la categorie).
 Aucune logique metier ici (convention-architecture-outils).
@@ -21,6 +21,12 @@ Usage :
     python main.py classer  --id EO-XXX --type <dev|reparation|doc|audit|revision> [--categorie c] [--role THEME]
     python main.py urgencer --id EO-XXX --urgence <bloquante|haute|normale|basse>
     python main.py retiqueter --id EO-XXX [--categorie c] [--role THEME]  (REPARE les etiquettes + retisse)
+    python main.py preparer --id EO-XXX --outils <nom1,nom2,...>  (PREPARE la LISTE DES
+                                       OUTILS que la mission va appeler : elle vit sur l ITEM
+                                       (la memoire durable), elle est VALIDEE a la pose contre
+                                       les briques que l INJECTION sait servir, et le pont
+                                       item -> mission la RECOPIE. --outils "" la VIDE : le
+                                       repli par TYPE s applique alors. EO-313)
     python main.py corriger --id EO-XXX ( --theme "..." | --objectif "..." ) [--motif "..."]
                                        (rectifie EN PLACE, id CONSERVE + trace
                                        dans l item, puis retisse -- EO-175)
@@ -33,6 +39,7 @@ import sys
 
 from classer.entry import executer as classer_executer
 from corriger.entry import executer as corriger_executer
+from preparer.entry import executer as preparer_executer
 from retiqueter.entry import executer as retiqueter_executer
 from retirer.entry import executer as retirer_executer
 from listes import CHAMP_SOURCE_TRACE
@@ -47,6 +54,7 @@ COMMANDES = {
     "corriger": corriger_executer,
     "urgencer": urgencer_executer,
     "retiqueter": retiqueter_executer,
+    "preparer": preparer_executer,
     "retirer": retirer_executer,
     "tresse": tresse_executer,
 }

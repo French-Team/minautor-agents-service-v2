@@ -19,13 +19,17 @@ CODE DE SORTIE : 0 quand la borne tient, 1 quand au moins une famille est en exc
 (chaque famille EN EXCES est NOMMEE avec ses identifiants), 2 quand la forme du
 point de restauration est introuvable chez son proprietaire.
 """
+from pathlib import Path
+
 from archiver.fonctions import motif_forme
 from borne.fonctions import (
-    compter_en_place, familles, familles_en_exces, points_en_attente,
+    compter_en_place, etat_disque_familles, familles, familles_en_exces,
+    points_en_attente, points_en_place_absents,
 )
 from commun import charger_bdd
 
 NOM_OPTIONS = ()
+DEPART = Path(__file__).resolve().parent
 
 
 def executer(arguments):
@@ -42,6 +46,12 @@ def executer(arguments):
     exces = familles_en_exces(entrees, motif)
     attente = points_en_attente(entrees, motif)
     trop = sum(len(ids) - 1 for ids in exces.values())
+    # LA MEME BORNE, MESUREE SUR LE DISQUE (P2, MO-309) : le registre dit ce qui est
+    # DECIDE, le disque dit ce qui EXISTE. Les deux comptes peuvent diverger, et
+    # c est le disque que les portes de revert lisent.
+    exces_disque, transitoires_disque = etat_disque_familles(entrees, DEPART)
+    trop_disque = sum(len(chemins) - 1 for chemins in exces_disque.values())
+    vides = points_en_place_absents(entrees, motif, DEPART)
 
     print("BORNE N=1 PAR FAMILLE -- un seul point de restauration EN PLACE par famille")
     print("  familles connues        : " + str(len(connues)))
@@ -51,16 +61,35 @@ def executer(arguments):
     print("  points en trop          : " + str(trop))
     print("  points en attente d acte: " + str(len(attente))
           + " (decide + archiver -- information, pas un ecart)")
+    print("  familles hors borne SUR LE DISQUE: " + str(len(exces_disque))
+          + " (P2 : la borne se mesure des DEUX cotes)")
+    print("  famille(s) EN TRANSITOIRE sur le disque: " + str(len(transitoires_disque))
+          + " (un point neuf, son age part a la CLOTURE : le balayage juge, l acte suit)")
+    print("  points de TROP sur le disque    : " + str(trop_disque))
+    print("  places VIDES (fichier disparu)  : " + str(len(vides))
+          + " (DETTE : le registre declare une place que le disque n occupe plus)")
     if exces:
         print("")
-        print("FAMILLES EN EXCES (plus d'un point EN PLACE -- l'actif grandit) :")
+        print("FAMILLES EN EXCES DANS LE REGISTRE (plus d'un point EN PLACE) :")
         for famille, ids in exces.items():
             print("  " + famille)
             print("      -> " + ", ".join(ids))
+    if exces_disque:
+        print("")
+        print("FAMILLES EN EXCES SUR LE DISQUE (les points ages n ont pas quitte leur place) :")
+        for famille, chemins in exces_disque.items():
+            print("  " + famille)
+            print("      -> " + ", ".join(chemins))
+    if vides:
+        print("")
+        print("PLACES VIDES (une place declaree, aucun fichier) :")
+        for famille, identifiant, source in vides:
+            print("  " + identifiant + " : " + source)
     print("")
-    if exces:
-        print("VERDICT : BORNE N=1 ROMPUE (" + str(trop)
-              + " point(s) de trop dans " + str(len(exces)) + " famille(s)).")
+    if exces or exces_disque:
+        print("VERDICT : BORNE N=1 ROMPUE (" + str(trop) + " point(s) de trop dans "
+              + str(len(exces)) + " famille(s) du registre, " + str(trop_disque)
+              + " sur le disque).")
         return 1
     print("VERDICT : BORNE N=1 TIENUE (" + str(en_place) + " point(s) EN PLACE pour "
           + str(len(connues)) + " famille(s)).")

@@ -127,6 +127,20 @@ FENETRE_MENTION_DETAIL = 60
 CHEMIN_SUPER_COMBO_SUIVI = (
     REPERTOIRE_OPERATEUR / "super-combos" / "sc-003-auto-suivi" / "main.py"
 )
+
+# CREDIBILITE DES MISSIONS RESTAUREES (process automatique, MO-387 ; tache du createur
+# du 2026-09-22). Le pilote le JOUE a chaque DEMARRAGE. Une mission qui existe a DEJA
+# ete demandee et discutee : la seule question est < est-elle DEVENUE OBSOLETE ? > --
+# deja faite par une plus recente, ou premisse morte (un nom qu elle vise n existe plus).
+# Si oui, elle est RETIREE du lot automatiquement : aucun createur, aucune memoire d agent
+# a solliciter (la demande vient d AVOIR LIEU). Chemin ET verbe declares UNE fois
+# (zero-valeur-en-dur).
+CHEMIN_CREDIBILITE_MISSIONS = (
+    REPERTOIRE_OPERATEUR / "super-combos" / "combos" / "outils"
+    / "verifier-credibilite-missions.py"
+)
+VERBE_CREDIBILITE_MISSIONS = "--auto"
+DELAI_CREDIBILITE_MISSIONS = 60
 VERBE_ENTRETIEN_SUIVI = "rapide"
 # Le super-combo lance deux portes en sous-processus : la borne est large, mais
 # elle EXISTE -- une porte morte ne doit jamais figer une cloture.
@@ -174,6 +188,35 @@ DELAI_ARCHIVAGE_CONSERVATION = 180
 # APRES l'acte qui doit l'etablir.
 VERBE_CONTROLE_BORNE_CONSERVATION = "controler-borne"
 DELAI_CONTROLE_BORNE_CONSERVATION = 60
+# LE PLAFOND DES ACTES EN ATTENTE (P4, MO-309) : la MASSE se borne, elle ne se
+# raconte pas. Le plafond lui-meme vit au domicile de la porte qui le juge
+# (bdd-conservation/constants.py, PLAFOND_ACTES_EN_ATTENTE) : le pilote ne
+# recopie AUCUNE valeur, il LIT le verdict de la porte -- et il la lance a CHAQUE
+# cloture, sinon le controle existerait sans jamais tourner (lecon EO-152).
+VERBE_CONTROLE_PLAFOND_CONSERVATION = "controler-plafond"
+DELAI_CONTROLE_PLAFOND_CONSERVATION = 60
+# L ACTE de PURGE de la MEME famille (P3, MO-308) : une archive ne meurt que
+# RECOUVRABLE, et la porte `purger --lot oui` TRI (elle ne supprime que ce qu elle
+# peut rappeler). Sans ce geste, l archive regrossit sans fin -- exactement le
+# defaut que V2 de la revision decrit ("un mecanisme dont l acte est manuel n est
+# pas une politique"). Le pilote le joue donc a CHAQUE cloture, APRES la rotation
+# qui vient d y deposer les points ages.
+VERBE_PURGE_CONSERVATION = "purger"
+OPTION_LOT_PURGE_CONSERVATION = "--lot"
+DELAI_PURGE_CONSERVATION = 300
+# LES ARCHIVES DATEES DE LA MATRICE (regle createur du 2026-09-20) : la purge P3
+# ci-dessus ne traite QUE la famille du registre (points de restauration). Les
+# archives produites par la ROTATION DES JOURNAUX ET DES BOITES n avaient donc
+# AUCUNE porte : mesure du 2026-09-20, 116 Mo d archives datees vivantes, dont
+# 90,6 Mo pour la seule archive de l espion-integrite, et environ 2 Mo par jour
+# pour les boites. LA REGLE : une archive datee ne vit que par sa PREUVE (son
+# contenu VIT dans un blob engage du depot) ; sinon elle RESTE, et /sante la
+# mesure. Le pilote joue le balayage a CHAQUE cloture, APRES la purge de la
+# famille : un mecanisme dont l acte est manuel n est pas une politique.
+VERBE_PURGE_ARCHIVE_CONSERVATION = "purger-archive"
+OPTION_BALAYAGE_PURGE_ARCHIVE_CONSERVATION = "--balayer"
+OPTION_MISSION_PURGE_ARCHIVE_CONSERVATION = "--mission"
+DELAI_PURGE_ARCHIVE_CONSERVATION = 300
 # L'ECHEC de ce controle part AU MARBRE (le pilote l'y note) : la vue la relira
 # bien apres que la console s'est refermee, donc la MESURE de la porte -- les
 # familles en exces et leurs identifiants -- doit voyager AVEC l'alerte. Sans
@@ -191,6 +234,33 @@ LONGUEUR_MESURE_ALERTE_CONSERVATION = 1200
 # domicile a change (demande createur) -- `_operateur/optimus-prime/tmp-optimus/`.
 NOM_README_ZONE_TMP = "README.md"
 REPERTOIRE_ZONE_TMP = chemin_zone_optimus(REPERTOIRE_MATRIX)
+
+# LES DISPARITIONS QUE LA PURGE CAUSE (V5, MO-304) : la cloture vide la zone
+# jetable ci-dessus -- et un point de restauration dont la SOURCE vivait dans
+# cette zone disparait alors SANS passer par une porte. Le registre le gardait
+# non-archive et `controler-archives` le comptait en ECART, sans que RIEN ne le
+# solde (mesure du 2026-09-20 : 7 points, 8 ecarts accuses ; 17 du meme genre
+# avaient deja ete declares A LA MAIN a EO-276, ou la porte est nee pour cela).
+# Le pilote DECLARE donc les disparitions qu il vient de causer, PAR la porte,
+# et APRES la purge -- jamais avant : une declaration se pose sur un FAIT, et la
+# porte refuse un point encore PRESENT sur le disque.
+VERBE_DISPARITION_CONSERVATION = "declarer-disparition"
+OPTION_LOT_DISPARITION_CONSERVATION = "--lot"
+OPTION_RAISON_DISPARITION_CONSERVATION = "--raison"
+OPTION_MISSION_DISPARITION_CONSERVATION = "--mission"
+RAISON_DISPARITION_ZONE_TMP = ("zone jetable " + NOM_ZONE_TMP + " videe a la cloture"
+                               " (pilote:purge) : les points enregistres dont la source"
+                               " vivait dans la zone ont disparu sans passer par une porte")
+DELAI_DISPARITION_CONSERVATION = 180
+# LE GARDE DE LA PERTE (case 8, `controler-archives`) : la borne MESURE l exces,
+# le plafond MESURE la masse -- lui mesure la PERTE (`archive + actif + disparu
+# + purge = origine`) et le fait qu aucun element ne quitte sa source sans
+# passer par une porte. Il etait joue par PERSONNE : la cloture ne le lancait
+# pas, et la mesure MO-304 a trouve 8 ecarts qu AUCUN instrument ne voyait. Un
+# controle que personne ne lance ne protege rien (lecon EO-152) : le pilote le
+# lance donc a CHAQUE cloture, APRES la declaration qui doit le satisfaire.
+VERBE_CONTROLE_ARCHIVES_CONSERVATION = "controler-archives"
+DELAI_CONTROLE_ARCHIVES_CONSERVATION = 300
 
 # MOTEUR DE RECHERCHE (EO-131) : le projet se souvient mieux que l'agent, mais
 # encore faut-il le lui DEMANDER au bon moment -- le sujet de la mission. Le
@@ -210,6 +280,20 @@ GABARIT_COMMANDE_RECHERCHE = (
 BOITE_PILOTE_OUT = REPERTOIRE_INTERCOM / "pilote" / "outbox.jsonl"
 BOITE_MATRICE_IN = REPERTOIRE_INTERCOM / "matrice" / "inbox.jsonl"
 
+# LES BOITES INTERCOM SE BORNENT (demande createur, 2026-09-20) : une boite est en
+# AJOUT SEUL, donc elle ne grandit que par ABSENCE d acte. Mesure du jour : l outbox
+# du pilote portait 17,5 Mo / 708 messages, soit 24,7 Ko par message (chaque ligne
+# porte la mission ou le bilan ENTIER) -- 3,5 fois le plafond ci-dessous -- et RIEN
+# ne mesurait sa TAILLE : le cockpit n en comptait que les LIGNES, donc une boite qui
+# quadruple restait invisible. Le moteur est celui des JOURNAUX (data/commun/
+# rotation_journal.py, M-076) : archivage PREALABLE, archive DATEE a cote de la boite,
+# dedup contre le deja connu, course refusee. Le pilote le joue a CHAQUE cloture,
+# apres l entretien de la boite et AVANT le depot de la fin de mission.
+SEUIL_OCTETS_BOITES_INTERCOM = 5 * 1024 * 1024
+MESSAGES_GARDES_BOITES_INTERCOM = 200
+ESSAIS_ROTATION_BOITES_INTERCOM = 3
+PREFIXE_ARCHIVE_BOITES_INTERCOM = "boite-archive"
+
 STATUT_EN_ATTENTE = "en-attente"
 STATUT_EN_COURS = "en-cours"
 STATUT_TERMINEE = "terminee"
@@ -217,6 +301,16 @@ STATUT_TERMINEE = "terminee"
 # chaine, mais RESTENT dans la file pour que leur sort soit VISIBLE (afficher_file
 # les montre). Un statut nomme vaut mieux qu une disparition silencieuse.
 STATUT_RETIREE = "retiree"
+
+# LA PRISE DE ROUND (EO-360, demande du createur 2026-09-22) : l acte par lequel
+# l AGENT recoit le round que la machine vient d armer (le `fin` precedent a pose
+# le debut et depose l injection). Sans cette trace, RIEN ne separe un round ARME
+# d un round PRIS : la file, le journal et l outbox disent tous les trois que le
+# round a commence. Le geste qui la NOTE est le GESTE DE RECEPTION (`pilote
+# injecter`, ORDRE 2 du demarrage et boucle de l ORDRE 4.7) -- l agent n a donc
+# aucun geste de plus a jouer.
+ACTION_PRISE_ROUND = "prise"
+PORTE_PRISE_ROUND = "pilote:prise"
 
 # IDENTITE D'UNE MISSION : DEUX champs distincts (L-061 / MO-076).
 # Un item d'entonnoir porte son TITRE en texte libre (`theme`, nom historique)
@@ -255,6 +349,35 @@ VALEUR_AUTO_VALIDATION = "auto"
 # rester EGAUX (une divergence rendrait l auto-validee invisible au pilote).
 CLE_AUTO_VALIDEES = "auto_validees"
 
+# MEMOIRE DE NAISSANCE (demande createur 2026-09-21, MO-334) : l'identite de chaque
+# item CONSOMME -- {id, type, categorie, urgence, consomme_le} -- gardee dans l'ETAT
+# DE L'ENTONNOIR, son domicile (comme l'index des auto-validees). Pourquoi : un item
+# consomme emporte ses trois champs, et la source d'une mission nee d'un item qui les
+# a perdus ne peut plus etre NI rendue NI verifiee (mesure MO-333 : 46 missions
+# amputees, categorie 3/46, urgence 0/46, items introuvables -- la perte est
+# DEFINITIVE pour elles). La tombe se lit quand l'item n'est plus la, jamais a sa
+# place : un item vivant fait toujours foi. Meme litteral que entonnoir/listes.py --
+# les deux doivent rester EGAUX (une divergence rendrait la memoire invisible).
+CLE_MEMOIRE_NAISSANCE = "memoire_naissance"
+
+# Les TROIS champs qui composent une source, dans l'ORDRE de la grammaire
+# (`type/categorie/urgence`). Declares UNE fois : la fabrique, la memoire de
+# naissance et la lecture des champs manquants les lisent ICI (trois copies
+# divergeraient en silence, L-029). Le pilote ne prononce plus ces champs en dur.
+CHAMPS_SOURCE = ("type", "categorie", "urgence")
+
+# LE CHAMP DE DATE DE LA TOMBE : quand l'item a ete consomme.
+CHAMP_CONSOMME_LE = "consomme_le"
+
+# LES QUATRE PROVENANCES D'UNE SOURCE (jamais un booleen : un repli se DIT) :
+# l'item est VIVANT dans l'entonnoir, ou sa TOMBE le rend (memoire), ou la tombe
+# est INCOMPLETE, ou rien ne l'a jamais vu (inconnu). Les deux dernieres rendent la
+# forme COURTE -- et le disent.
+SOURCE_VIVANTE = "vivant"
+SOURCE_MEMOIRE = "memoire"
+SOURCE_MEMOIRE_INCOMPLETE = "memoire-incomplete"
+SOURCE_INCONNUE = "inconnu"
+
 # DEFAUTS STRUCTURES D'UNE MISSION (R5, audit MO-174) : un OUTIL fautif rencontre
 # EN TRAVAILLANT se declare a la cloture, et sa declaration VOYAGE avec la mission
 # (fichier + journal + retour Matrice). Avant, le defaut n'existait que dans le
@@ -283,14 +406,48 @@ STATUTS_DEFAUT = (STATUT_DEFAUT_REPARE, "signale", "hors-perimetre", "bloque")
 TYPE_ROUTE_OUTIL = "reparation"
 CHAMP_RAPPEL = "rappel"
 
-# RAPPEL DE LA CHAINE ARMEE (EO-274) : le pilote lance depuis toujours la suivante du
-# lot (chaque fin injecte la mission suivante), mais RIEN dans le sac-a-dos ne le disait
-# a l agent : il devait s en souvenir, et il s arretait apres chaque mission. L instruction
-# doit voyager AVEC la mission, au moment ou l agent en a besoin. Une mission HORS lot ne
-# la porte pas (un rappel toujours present ne se lit plus).
-RAPPEL_CHAINE_ARMEE = (
-    "CHAINE ARMEE (lot) : cette mission fait partie d une CHAINE armee -- chaque fin "
-    "lance la mission suivante du lot, automatiquement. Conduis-la jusqu a sa cloture "
+# --- MODES D EMPLOI A L INJECTION (revision createur du 2026-09-20, MO-313) ---
+# Le pilote joint a la mission le mode d emploi des outils qu elle va appeler. Le
+# mode d emploi est EXTRAIT de chaque brique (injection/modes_emploi.py) ; ce
+# plafond borne le NOMBRE d outils joints, et les ecartes sont DITS (un plafond
+# muet se lirait comme une liste complete).
+PLAFOND_OUTILS_MODE_EMPLOI = 8
+
+# --- PROFIL DE L'UTILISATEUR DANS LE SAC-A-DOS (demande createur, 2026-09-21) ---
+# La fiche `matrix/USER-PROFIL.md` etait REMPLIE avec le createur (pseudo, style,
+# interets, niveau technique...) mais AUCUN agent ne la lisait. Mesure du
+# 2026-09-21 : le pilote ne l'ouvrait qu'au DEMARRAGE (injection/cycle.py), pour
+# tester si la ligne `**Pseudo**` etait remplie, puis jetait le contenu -- les 8
+# champs n'atteignaient donc aucune mission, alors que la fiche annonce elle-meme
+# etre lue par Optimus. Meme doctrine que la posture et la question de recherche :
+# ce que l'agent doit CONNAITRE voyage AVEC sa mission. Nom du champ declare ICI
+# (proprietaire du contrat, L-035) ; le chemin de la fiche, les champs ATTENDUS et
+# la lecture des valeurs vivent au motif PARTAGE (data/commun/fiche_profil.py,
+# M-076) et ne sont JAMAIS recopies dans la logique.
+CHAMP_PROFIL = "profil"
+# PLAFOND DU PROFIL (tokens) : une fiche est un fichier OUVERT a l'ecriture
+# manuelle -- une valeur collee (un paragraphe dans "Sujets d'interet") ferait
+# grossir CHAQUE injection, a chaque mission. Mesure du 2026-09-21 : les 8 champs
+# attendus remplis pesent 79 tokens, quand le sac-a-dos mesure pese 9660 a 9887
+# tokens ; le plafond vaut donc environ 3,8 fois le contenu reel. Ce qui depasse
+# est ECARTE ET DIT (ecartes_par_plafond) : un plafond muet se lirait comme un
+# profil complet.
+PLAFOND_PROFIL_TOKENS = 300
+
+# CONTRAT DE CONTINUITE DE LA CHAINE (EO-274, GENERALISE MO-318 le 2026-09-21) : le
+# pilote lance depuis toujours la suivante (celle du lot, ou le candidat auto-valide du
+# brin / de la file), mais RIEN dans le sac-a-dos ne le disait a l agent : il devait s en
+# souvenir, et il s arretait apres chaque mission. L instruction doit voyager AVEC la
+# mission, au moment ou l agent en a besoin.
+# MESURE MO-318 (2026-09-21) : le rappel n etait servi que pour une mission de LOT -- or
+# le lot n est pas toujours arme (56 missions historiques en portent un, AUCUN lot arme
+# le 2026-09-21) : le contrat n atteignait donc JAMAIS l agent dans le cas le plus
+# frequent, celui ou la suite vient du brin ou de la file. Il est desormais servi des
+# qu une SUITE existe (lot arme, OU candidat auto-valide) -- et jamais autrement : un
+# rappel toujours present ne se lit plus.
+RAPPEL_CHAINE = (
+    "CHAINE : cette mission a une SUITE -- chaque fin lance la suivante (celle du lot, "
+    "ou du brin / de la file), automatiquement. Conduis-la jusqu a sa cloture "
     "DANS LE MEME TOUR, puis lance la suivante : la chaine ne te redemande rien et ne "
     "s arrete que sur son RETOUR CONSOLIDE. Une mission qui attend est une mission que "
     "personne ne conduit."

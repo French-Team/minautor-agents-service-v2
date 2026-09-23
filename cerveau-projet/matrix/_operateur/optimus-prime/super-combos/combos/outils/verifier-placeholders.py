@@ -8,7 +8,18 @@ et AUCUN instrument ne s en plaignait.
 
 CE QU IL ACCUSE, ET RIEN D AUTRE : un champ declare qui CONTREDIT une mesure
 calculable depuis le meme document. Un SILENCE n est pas un mensonge : une duree
-inconnue (vide) n est jamais accusee, et un zero LEGITIME non plus.
+inconnue (vide) n est jamais accusee.
+
+REVERSEMENT DU 2026-09-21 (demande createur) : ce garde tenait un cas nomme
+"zero LEGITIME NON accuse (les bornes donnent bien 0 s)". C ETAIT FAUX, et la
+mesure le prouve : 59 missions portent un `debut` a la SECONDE EXACTE de leur
+`fin`, parce que le garde anti-fin-orphelin de la porte `noter` cree la borne
+manquante au moment ou la fin arrive -- ce n est pas une mission de zero seconde,
+c est un debut POSE APRES COUP. La duree de ces missions est INCONNUE (la vue
+affiche `inconnue`, plus jamais 0), et un declare POSITIF sur de telles bornes est
+un MENSONGE CERTAIN : il affirme une mesure que rien ne peut produire (L-055).
+La POPULATION des bornes identiques est DESORMAIS DITE par ce garde (comptee,
+nommee) : une duree inconnue qui n est jamais nommee se lit comme une duree.
 
 LA REGLE N EST PAS RECOPIEE : l agregat et le calcul de duree viennent du DOMICILE
 (suivi-optimus/vue/fonctions.py). Un garde qui rejoue la regle ne prouve rien (L-032).
@@ -80,6 +91,34 @@ def declarees(evenements, mission):
     return valeurs
 
 
+def raison_sans_mesure(agregat, vue):
+    """POURQUOI aucune duree n est mesurable -- le texte vient du DOMICILE (M-076).
+
+    Deux causes, deux textes : les deux bornes sont le MEME instant (le debut a ete
+    pose apres coup), ou elles sont illisibles / inversees. Les recopier ici ferait
+    naitre la divergence que ce garde surveille.
+    """
+    if agregat.get("debut") and agregat["debut"] == agregat.get("fin"):
+        return getattr(vue, "DUREE_INCONNUE_BORNES_IDENTIQUES", "bornes identiques")
+    return getattr(vue, "DUREE_INCONNUE_BORNES_ILLISIBLES", "bornes illisibles")
+
+
+def durees_inconnues(agregats, vue):
+    """Les missions dont la DUREE n est pas mesurable : la population, NOMMEE.
+
+    Elle n est pas accusee (une duree inconnue n est pas un mensonge) mais elle est
+    DITE : sans ce compte, une colonne pleine d `inconnue` resterait inexpliquee,
+    et le phenomene (des debuts poses apres coup) redeviendrait invisible.
+    """
+    missions = []
+    for mission, agregat in sorted(agregats.items()):
+        if not agregat.get("debut") or not agregat.get("fin"):
+            continue
+        if vue.calculer_duree(agregat["debut"], agregat["fin"]) is None:
+            missions.append(mission)
+    return missions
+
+
 def ecarts_pour(agregats, evenements, vue):
     """Les declares qui CONTREDISENT la mesure des bornes, et rien d autre."""
     ecarts = []
@@ -88,6 +127,24 @@ def ecarts_pour(agregats, evenements, vue):
             continue
         mesure = vue.calculer_duree(agregat["debut"], agregat["fin"])
         if mesure is None:
+            # AUCUNE MESURE POSSIBLE : un declare POSITIF affirme alors une duree
+            # que les bornes ne peuvent pas produire -- c est un mensonge certain
+            # (mesure du 2026-09-21 : 0 mission dans ce cas aujourd hui, l accusation
+            # est donc un PIEGE pour l avenir, pas une dette). Un "0" (placeholder)
+            # ou un silence ne pretendent rien : ils passent.
+            for declaree in sorted(set(declarees(evenements, mission))):
+                try:
+                    nombre = int(float(declaree))
+                except ValueError:
+                    ecarts.append(mission + " : " + CHAMP + " declare " + repr(declaree)
+                                  + " n est pas un nombre (aucune mesure possible : "
+                                  + raison_sans_mesure(agregat, vue) + ")")
+                    continue
+                if nombre > 0:
+                    ecarts.append(mission + " : " + CHAMP + " declare " + str(nombre)
+                                  + " alors qu AUCUNE duree n est mesurable ("
+                                  + raison_sans_mesure(agregat, vue) + ") -- un declare"
+                                  + " positif sur ces bornes se lit comme une mesure (L-055)")
             continue
         # UNE accusation par mission et par VALEUR distincte : le journal porte la
         # meme declaration sur plusieurs evenements (debut ET fin), et 3 lignes
@@ -109,12 +166,20 @@ def ecarts_pour(agregats, evenements, vue):
 
 
 def autotest(vue):
-    """4 cas : un detecteur jamais vu crier ne prouve rien (L-032)."""
+    """5 cas : un detecteur jamais vu crier ne prouve rien (L-032).
+
+    Le quatrieme cas REMPLACE "zero LEGITIME NON accuse" (ancienne doctrine,
+    renversee le 2026-09-21) : des bornes IDENTIQUES ne mesurent rien, donc un
+    declare 0 y est un PLACEHOLDER (non accuse) et un declare 42 y est un MENSONGE
+    (accuse). Le cinquieme cas est l accusation POSITIVE : le meme cobaye, un
+    declare qui doit mordre.
+    """
     base = [{"mission": "MO-901", "action": "debut", "date": "2026-01-01 10:00:00"},
             {"mission": "MO-901", "action": "fin", "date": "2026-01-01 10:02:29"}]
-    zero = [{"mission": "MO-902", "action": "debut", "date": "2026-01-01 10:00:00",
-             "duree_s": "0"},
-            {"mission": "MO-902", "action": "fin", "date": "2026-01-01 10:00:00"}]
+    identiques = [{"mission": "MO-902", "action": "debut",
+                   "date": "2026-01-01 10:00:00"},
+                  {"mission": "MO-902", "action": "fin",
+                   "date": "2026-01-01 10:00:00"}]
     cas = (
         ("contradiction ACCUSEE (0 declare contre 149 s mesurees)",
          [dict(e, duree_s="0") for e in base], 1),
@@ -122,13 +187,21 @@ def autotest(vue):
          [dict(e, duree_s="") for e in base], 0),
         ("declare JUSTE NON accuse (149 declare, 149 mesure)",
          [dict(e, duree_s="149") for e in base], 0),
-        ("zero LEGITIME NON accuse (les bornes donnent bien 0 s)", zero, 0),
+        ("bornes IDENTIQUES + declare 0 NON accuse (placeholder, aucune mesure)",
+         [dict(e, duree_s="0") for e in identiques], 0),
+        ("bornes IDENTIQUES + declare 42 ACCUSE (mensonge certain)",
+         [dict(e, duree_s="42") for e in identiques], 1),
     )
     epreuves = []
     for nom, evenements, attendu in cas:
         obtenu = ecarts_pour(vue.agreger_par_mission(evenements), evenements, vue)
         epreuves.append((nom + " -> " + str(len(obtenu)) + " ecart(s)",
                          len(obtenu) == attendu))
+    # LE CAS REEL QUI A DECIDE : des bornes identiques SONT une duree inconnue --
+    # le cobaye prouve que la population est VUE (sinon le compte serait muet).
+    vues = durees_inconnues(vue.agreger_par_mission(identiques), vue)
+    epreuves.append(("bornes identiques COMPTEES comme duree inconnue -> "
+                     + str(len(vues)) + " mission(s)", vues == ["MO-902"]))
     return epreuves
 
 
@@ -157,7 +230,17 @@ def main():
               + str(len(epreuves)) + " epreuve(s) tenue(s)")
         return 1 if ratees else 0
     evenements = lire_evenements(racine)
-    ecarts = ecarts_pour(vue.agreger_par_mission(evenements), evenements, vue)
+    agregats = vue.agreger_par_mission(evenements)
+    # LA POPULATION EST DITE (2026-09-21) : les missions dont la duree n est pas
+    # mesurable sont comptees et nommees. Les taire laisserait la vue afficher une
+    # colonne d `inconnue` sans cause lisible.
+    inconnues = durees_inconnues(agregats, vue)
+    if inconnues:
+        print("  [--] duree NON MESURABLE : " + str(len(inconnues)) + " mission(s) -- "
+              + raison_sans_mesure(agregats[inconnues[0]], vue) + " : "
+              + ", ".join(inconnues[:8])
+              + (" ..." if len(inconnues) > 8 else ""))
+    ecarts = ecarts_pour(agregats, evenements, vue)
     for ecart in ecarts:
         print("  [KO] " + ecart)
     if ecarts:

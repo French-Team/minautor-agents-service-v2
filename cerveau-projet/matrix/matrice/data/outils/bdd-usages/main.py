@@ -11,6 +11,13 @@ Usage :
 """
 import sys
 
+import constants  # noqa: F401  -- installe data/commun dans sys.path (motif M-076)
+
+# T1 de la chaine PB-002 : cet outil est le SEUL qui n entre pas par le sac a dos
+# (`envelopper`), donc le refus de l OPTION EN TETE lui incombe ICI -- il CONSOMME
+# le message du domicile (options.py), il ne le recopie jamais (M-076).
+from options import nom_de_l_outil, refuser_option_en_tete
+
 from lire.entry import executer as lire_executer
 from noter.entry import executer as noter_executer
 from rotation.entry import executer as rotation_executer
@@ -25,6 +32,9 @@ COMMANDES = {
 
 
 def principal(arguments):
+    code_tete = refuser_option_en_tete(arguments, nom_de_l_outil(), commandes=COMMANDES)
+    if code_tete:
+        return code_tete
     if not arguments or arguments[0] not in COMMANDES:
         print(__doc__)
         return 2

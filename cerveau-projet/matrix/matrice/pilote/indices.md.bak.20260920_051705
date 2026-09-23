@@ -1,0 +1,41 @@
+# INDICES -- pilote/ (file de missions et chaine)
+
+> Tete de lecture : lire CECI avant les fichiers. L'indice pointe, le contrat fait foi.
+
+| Besoin | Lire (fichier, section) |
+|---|---|
+| Toutes les commandes, options, protections | `matrice/data/manuel-outils.md` (fiche 3, pilote) |
+| Etat de la file | `file-missions.json` (via l'outil, jamais a la main) |
+| Architecture (main -> categories -> fonctions) | `DESCRIPTION.md` + table architecture |
+| Priorite d'injection + puisage auto (tresse) | `commun.py` (tisser_tresse, puiser_tresse) + `injection/fonctions.py` (preparer_injection) |
+| Consommation manuelle de la tresse (echelon 4) | `commun.py` (consommer_tete_tresse) + `file/entry.py` |
+| Checklist par type (auto a l'injection) | `checklist/listes.py` (listes fermees) + `checklist/entry.py` |
+| Les echelons 0-4 de la file | `entonnoir/indices.md` (indices dedies de l'entonnoir) |
+
+## Commandes (memorisees vite fait, details dans le manuel)
+
+    file / charger --theme --objectif / lot --lot --theme t1,t2 --objectif o1|o2
+    transformer --id --theme --objectif / statut / injecter / enchainer / fin --bilan
+    file consommer (echelon 4 : tete du brin -> file du pilote)
+    checklist --id M-XXX
+
+## Conventions de la zone
+
+- SERIE STRICTE : au maximum une mission en cours ; le refus de double injection est normal.
+- CHAMP THEME FERME : charger / lot / transformer valident le theme contre le
+  vivier (valider_theme dans commun.py) -- refus code 2 + liste si hors vivier,
+  canonisation a la porte (casse ignoree) ; la TRESSE reste ouverte (le vrac
+  accepte le brut, c'est son role).
+- PRIORITE CREATEUR de `injecter` : 1) le lot arme, 2) la file des missions chargees,
+  3) la TRESSE (puisage automatique). La tresse est toujours TISSEE avant le puisage
+  (brin frais et deterministe), via la PORTE OFFICIELLE de l'entonnoir : sous-processus
+  `python entonnoir/main.py tresse tisser` -- JAMAIS d'import croise (modules homonymes,
+  lecon L-009).
+- Un lot = plusieurs rounds dans la meme boucle : `enchainer` lance la 1re, chaque `fin`
+  enchaine la suivante (DEBUT/FIN annonces), RETOUR consolide a la Matrice a la fin du lot.
+- Apres un `fin` SANS lot : la mission suivante DEMARRE automatiquement (priorite
+  lot -> file -> tresse, E-008) -- la boucle ne meurt jamais ; quand tout est vide,
+  le fin se termine proprement (message d'etat, jamais d'erreur).
+- Modules homonymes interdits dans les sous-outils du pilote : `listes.py`/`stockage.py`
+  (jamais constants.py/commun.py -- collision avec ceux du pilote).
+- Traces : historique en BDD (data/historiques-missions.jsonl) + boites intercom.

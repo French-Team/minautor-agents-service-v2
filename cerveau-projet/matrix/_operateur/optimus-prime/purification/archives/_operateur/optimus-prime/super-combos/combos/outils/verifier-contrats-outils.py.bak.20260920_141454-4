@@ -1,0 +1,476 @@
+#!/usr/bin/env python3
+"""verifier-contrats-outils.py -- Garde : les contrats gagnes le 2026-09-19 tiennent encore.
+
+POURQUOI CE GARDE (MO-214 / EO-204, 2026-09-19) : les preuves d'une mission vivaient
+dans `tmp-optimus`, que le pilote PURGE a chaque cloture. Les 17 controles de MO-210
+(la porte corrige l'ASCII et refuse le reste) et les 29 de MO-211/MO-212 (l'aide de la
+porte dit son contrat) ont donc disparu AVEC leur mission : verifie aujourd'hui, pas
+surveille demain. Un controle qui meurt a la cloture ne protege rien.
+
+CE QU'IL EXIGE (ce que ces missions ont gagne) :
+  1. LA CARTE ASCII A UN SEUL DOMICILE (MO-210) : l'outil de maintenance et la porte
+     `ecrire` lisent la MEME carte (identite d'objet) -- une copie recopiee serait deux
+     verites, dont l'une corrigerait ce que l'autre ignore.
+  2. LA PORTE `ecrire` CORRIGE LES FAUTES FUTILES ET REFUSE LE RESTE (MO-210) : ce que
+     la carte connait est corrige ET DIT ; ce qu'elle ignore est REFUSE en NOMMANT le
+     caractere et sa ligne -- jamais un fichier non-ASCII qui aurait l'air propre.
+  3. L'AIDE DE LA PORTE DIT SON CONTRAT (MO-212) : les douze groupes de garanties de sa
+     DESCRIPTION.md sont AUSSI dans l'aide affichee. Deux documents d'un meme contrat ne
+     peuvent plus deriver chacun de son cote.
+  4. L'ENTONNOIR REPARE LA CATEGORIE COMME LE ROLE (MO-213) : un item classe repare sa
+     categorie (validee contre SA liste, TRACEE), une categorie hors liste est refusee en
+     NOMMANT la liste, un item au vrac est refuse en NOMMANT le geste, et le role
+     declare n'est jamais reecrit en silence.
+  5. AUCUNE PORTE MUETTE AU JOURNAL D'USAGES (MO-219) : chaque outil de data/outils pose
+     le sac a dos dans sa porte. Sinon son usage est INVISIBLE au journal -- mesure du
+     2026-09-19 : 5 outils a 0 ligne sur 10 478, dont le moteur de recherche que sa PROPRE
+     vigie appelle -- et toute mesure d'usage les condamne a l'aveugle (donc on archive
+     des outils qui marchent). LIMITE ASSUMEE : ce controle lit la SOURCE (le sac a dos
+     est pose) ; la preuve que son import SE RESOUT a l'execution reste au cobaye de
+     MO-219. `bdd-usages` est exclu par construction (anti-recursion du sac a dos).
+
+  6. UN OUTIL SE LIVRE AVEC SON MODE D EMPLOI (revision createur 2026-09-20, MO-313) :
+     le catalogue servait un os.listdir -- des NOMS, __pycache__ et les .bak compris, et
+     AUCUN usage -- alors que proto-6 etape 2 PROMET deja "les interfaces fermees des
+     outils que la mission va appeler (usage main.py, codes 0/1/2)". Le createur l a dit :
+     fournir un outil SANS explication "n est pas productif et genere des actions
+     inutiles". Ce controle exige DEUX choses : aucune carte servie n est trouee (toute
+     brique dit son usage DANS la brique elle-meme, jamais dans une fiche recopiee) et
+     AUCUN dossier de briques n est plus servi en liste nue.
+
+L AUTOTEST LE PIEGE (lecon L-032) : chaque juge est eprouve sur une donnee SAINE (qui
+doit passer) ET sur une donnee CASSEE (qui doit crier) -- voir `--autotest`. Un
+detecteur jamais vu crier ne prouve rien.
+
+CE QU'IL NE FAIT PAS : lecture seule. Il lit des fichiers et lance, en SOUS-PROCESSUS
+ISOLES, les fonctions pures des outils -- aucun item cree, aucune mission, aucune
+ecriture. L'isolement n'est pas un confort : DEUX outils ont chacun un module
+`constants`, et les charger ensemble les ferait collisionner (mesure MO-213).
+
+Usage: python verifier-contrats-outils.py [--racine <path>] [--autotest]
+  code 0 = sain, 1 = ecart (liste et nomme), 2 = zone introuvable.
+"""
+
+import argparse
+import importlib.util
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+# Les temoins du contrat de la porte `ecrire` : douze groupes, cherches dans les DEUX
+# documents (l'aide affichee ET la DESCRIPTION.md). Meme liste que le cobaye de MO-212,
+# qui meurt a la cloture de sa mission -- ici elle est PERMANENTE.
+GROUPES_CONTRAT = (
+    ("ATOMIQUE", ("os.replace",)),
+    ("LF FORCES", ("lf forces", "l-001", "mo-173")),
+    ("REVERSIBLE", (".bak",)),
+    ("PROUVE", ("sha-256",)),
+    ("VALIDE AVANT PUBLICATION", ("py_compile", "json.load", "eo-129")),
+    ("PERIMETRE RESOLU", ("allowlist", "mo-183")),
+    ("OCCURRENCE UNIQUE", ("occurrence",)),
+    ("MODE FERME ET OPTION SANS VALEUR", ("creer|remplacer|ajouter", "eo-156")),
+    ("TRANSPORT SUR", ("@fichier", "--contenu-base64")),
+    ("GARDE D ORDRE", ("importerror", "eo-159")),
+    ("ASCII CORRIGE PUIS REFUSE", ("carte_ascii.py", "mo-210")),
+    ("CODES DE SORTIE", ("code 1", "code 2")),
+)
+
+# Une faute futile (accents) et ce que la doctrine en fait ; un caractere HORS carte,
+# que personne ne doit deviner.
+TEXTE_FUTILE = "Le caf\u00e9 est pr\u00eat\n"
+TEXTE_FUTILE_ATTENDU = "Le cafe est pret\n"
+TEXTE_HORS_CARTE = "Temperature : 20\u00b0C\n"
+CODE_POINT = "U+00B0"
+
+RESULTATS = []
+
+
+def controler(nom, condition, detail=""):
+    RESULTATS.append((nom, bool(condition), detail))
+    print("[" + ("OK" if condition else "KO") + "] " + nom + " : " + detail)
+    return bool(condition)
+
+
+def trouver_zone(racine):
+    """Retourne le dossier _operateur/optimus-prime/, ou None."""
+    candidats = [racine,
+                 racine / "cerveau-projet" / "matrix" / "_operateur" / "optimus-prime",
+                 racine / "_operateur" / "optimus-prime"]
+    for candidat in candidats:
+        if (candidat / "pilote" / "entonnoir" / "listes.py").is_file():
+            return candidat
+    return None
+
+
+def dans_un_sous_processus(code):
+    """Lance un fragment Python ISOLE et rend l'objet JSON qu'il imprime (None si echec)."""
+    r = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True,
+                       encoding="utf-8", errors="replace")
+    if r.returncode != 0:
+        return None
+    for ligne in reversed(r.stdout.strip().splitlines()):
+        try:
+            return json.loads(ligne)
+        except ValueError:
+            continue
+    return None
+
+
+def relever_carte(matrice):
+    """Les deux consommateurs lisent-ils la MEME carte ? (un seul sous-processus)."""
+    code = (
+        "import json, sys\n"
+        "sys.path.insert(0, " + ascii(str(matrice / "data" / "commun")) + ")\n"
+        "sys.path.insert(0, " + ascii(str(matrice / "data" / "outils" / "corriger-ascii")) + ")\n"
+        "import carte_ascii\n"
+        "import constants as const_ascii\n"
+        "import commun as comm_ascii\n"
+        "print(json.dumps({'carte': const_ascii.CARTE_CONVERSION is carte_ascii.CARTE_CONVERSION,\n"
+        "  'fonction': comm_ascii.convertir_texte is carte_ascii.convertir_texte,\n"
+        "  'convertit': carte_ascii.convertir_texte(" + ascii(TEXTE_FUTILE) + ")[0]}))\n")
+    return dans_un_sous_processus(code)
+
+
+def relever_porte(matrice):
+    """La porte corrige-t-elle les futiles, et refuse-t-elle le reste ? (sous-processus)."""
+    code = (
+        "import contextlib, io, json, sys\n"
+        "sys.path.insert(0, " + ascii(str(matrice / "data" / "outils" / "ecrire")) + ")\n"
+        "import commun\n"
+        "tampon = io.StringIO()\n"
+        "with contextlib.redirect_stdout(tampon):\n"
+        "    texte, refus = commun.corriger_contenu(" + ascii(TEXTE_FUTILE) + ")\n"
+        "journal_futile = tampon.getvalue()\n"
+        "tampon2 = io.StringIO()\n"
+        "with contextlib.redirect_stdout(tampon2):\n"
+        "    texte2, refus2 = commun.corriger_contenu(" + ascii(TEXTE_HORS_CARTE) + ")\n"
+        "print(json.dumps({'futile': texte, 'futile_journal': journal_futile,\n"
+        "  'futile_refus': refus, 'hors': texte2, 'hors_refus': refus2}))\n")
+    return dans_un_sous_processus(code)
+
+
+def relever_aide(matrice):
+    """L'aide affichee par la porte, et le contrat ecrit a cote (lecture seule)."""
+    porte = matrice / "data" / "outils" / "ecrire"
+    r = subprocess.run([sys.executable, str(porte / "main.py")], capture_output=True,
+                       text=True, encoding="utf-8", errors="replace")
+    contrat = porte / "DESCRIPTION.md"
+    return {"aide": r.stdout,
+            "contrat": contrat.read_text(encoding="utf-8") if contrat.is_file() else ""}
+
+
+def relever_categorie(zone):
+    """L'entonnoir repare-t-il la categorie ? (fonction pure, sous-processus isole)."""
+    entonnoir = zone / "pilote" / "entonnoir"
+    code = (
+        "import importlib, json, sys\n"
+        "sys.path.insert(0, " + ascii(str(entonnoir)) + ")\n"
+        "sys.path.insert(0, " + ascii(str(zone / "pilote")) + ")\n"
+        "m = importlib.import_module('retiqueter.fonctions')\n"
+        "base = {'id': 'EO-000', 'categorie': 'pilote', 'role': 'ROUTINE'}\n"
+        "mission = dict(base)\n"
+        "c_repare, _m1 = m.reparer_categorie(mission, 'dev', 'EO-000', 'routine')\n"
+        "hors = dict(base)\n"
+        "c_hors, msg_hors = m.reparer_categorie(hors, 'dev', 'EO-000', 'hors-liste')\n"
+        "vrac = dict(base)\n"
+        "c_vrac, msg_vrac = m.reparer_categorie(vrac, '', 'EO-000', 'routine')\n"
+        "print(json.dumps({'repare': [c_repare, mission.get('categorie'),\n"
+        "  mission.get('categorie_avant'), mission.get('role')],\n"
+        "  'hors': [c_hors, msg_hors], 'vrac': [c_vrac, msg_vrac]}))\n")
+    return dans_un_sous_processus(code)
+
+
+# --- Les juges : ils ne lisent que le RELEVE, donc ils sont eprouvables a vide -----
+
+def juger_carte(ev):
+    if not ev:
+        return False, "releve impossible (sous-processus en echec : l'outil ne s'importe plus)"
+    if not ev.get("carte"):
+        return False, "l'outil de maintenance lit une AUTRE carte que le domicile"
+    if not ev.get("fonction"):
+        return False, "convertir_texte de l'outil n'est pas celui du domicile"
+    if ev.get("convertit") != TEXTE_FUTILE_ATTENDU:
+        return False, "le domicile ne corrige plus : " + repr(ev.get("convertit"))
+    return True, "une seule carte, deux consommateurs"
+
+
+def juger_porte(ev):
+    if not ev:
+        return False, "releve impossible (sous-processus en echec : la porte ne s'importe plus)"
+    if ev.get("futile") != TEXTE_FUTILE_ATTENDU:
+        return False, "la faute futile n'est plus corrigee : " + repr(ev.get("futile"))
+    if "CORRIGE" not in ev.get("futile_journal", ""):
+        return False, "la correction n'est pas DITE (aucun CORRIGE au journal)"
+    if ev.get("futile_refus"):
+        return False, "une faute FUTILE a ete refusee au lieu d'etre corrigee"
+    if not ev.get("hors_refus"):
+        return False, "le hors-carte n'est plus refuse : un fichier non-ASCII passerait"
+    if CODE_POINT not in ev["hors_refus"]:
+        return False, "le refus ne NOMME pas le caractere (attendu " + CODE_POINT + ")"
+    if "carte_ascii.py" not in ev["hors_refus"]:
+        return False, "le refus ne NOMME pas le remede (le domicile de la carte)"
+    return True, "corrige et DIT, refuse et NOMME le caractere"
+
+
+def juger_aide(ev):
+    if not ev:
+        return False, "releve impossible"
+    aide, contrat = ev.get("aide", ""), ev.get("contrat", "")
+    if not aide.strip():
+        return False, "l'aide de la porte ne s'affiche pas (le contrat n'est plus lisible)"
+    if not contrat.strip():
+        return False, "DESCRIPTION.md est absent : le contrat n'existe plus"
+    absents_aide = [nom for nom, temoins in GROUPES_CONTRAT
+                    if any(t not in aide.lower() for t in temoins)]
+    absents_contrat = [nom for nom, temoins in GROUPES_CONTRAT
+                       if any(t not in contrat.lower() for t in temoins)]
+    if absents_aide:
+        return False, "garanties absentes de l'AIDE : " + ", ".join(absents_aide)
+    if absents_contrat:
+        return False, "garanties absentes du CONTRAT : " + ", ".join(absents_contrat)
+    return True, str(len(GROUPES_CONTRAT)) + " groupes dans les DEUX documents"
+
+
+def juger_categorie(ev):
+    if not ev:
+        return False, "releve impossible (sous-processus en echec : l'entonnoir ne s'importe plus)"
+    repare = ev.get("repare") or []
+    if len(repare) != 4:
+        return False, "releve de la reparation incomplet"
+    if repare[0] != 0:
+        return False, "une categorie VALIDE est refusee (code " + str(repare[0]) + ")"
+    if repare[1] != "routine":
+        return False, "la categorie n'a pas ete posee : " + repr(repare[1])
+    if repare[2] != "pilote":
+        return False, "l'ancienne categorie n'est plus TRACEE : " + repr(repare[2])
+    if repare[3] != "ROUTINE":
+        return False, "le ROLE a ete reecrit en silence : " + repr(repare[3])
+    hors = ev.get("hors") or [0, ""]
+    if hors[0] != 2:
+        return False, "une categorie HORS liste est acceptee (code " + str(hors[0]) + ")"
+    if "categories fermees de dev" not in str(hors[1]).lower():
+        return False, "le refus ne NOMME pas la liste du type"
+    vrac = ev.get("vrac") or [0, ""]
+    if vrac[0] != 2:
+        return False, "la categorie d'un item AU VRAC est acceptee (code " + str(vrac[0]) + ")"
+    if "classer --id" not in str(vrac[1]):
+        return False, "le refus ne NOMME pas le geste (classer d'abord)"
+    return True, "reparation tracee, refus directionnels"
+
+
+# --- 5. AUCUNE PORTE MUETTE -------------------------------------------------------
+
+# L'outil exclu par construction : le sac a dos ne se note pas lui-meme (anti-recursion).
+OUTILS_EXCLUS = ("bdd-usages",)
+
+
+def relever_muet(matrice):
+    """Chaque porte de data/outils pose-t-elle le sac a dos (donc SE NOTE-t-elle) ?"""
+    racine_outils = matrice / "data" / "outils"
+    outils = {}
+    if racine_outils.is_dir():
+        for porte in sorted(racine_outils.iterdir()):
+            if not porte.is_dir() or porte.name.startswith("__"):
+                continue
+            main = porte / "main.py"
+            if not main.is_file():
+                continue
+            source = main.read_text(encoding="utf-8", errors="replace")
+            outils[porte.name] = "envelopper(principal" in source
+    return {"outils": outils}
+
+
+def juger_muet(ev):
+    """Toute porte se NOTE-t-elle ? Une porte muette rend son usage INVISIBLE."""
+    outils = ev.get("outils") or {}
+    attendues = {nom: pose for nom, pose in outils.items() if nom not in OUTILS_EXCLUS}
+    if not attendues:
+        return False, "aucune porte lue sous data/outils"
+    muettes = sorted(nom for nom, pose in attendues.items() if not pose)
+    if muettes:
+        return False, ("portes MUETTES (usage invisible, mesure aveugle) : " + ", ".join(muettes)
+                       + " -- pose le sac a dos comme lire/ecrire/lister :"
+                       " from sac_a_dos import envelopper ;"
+                       " sys.exit(envelopper(principal, sys.argv[1:]))")
+    return True, str(len(attendues)) + " portes notent leur usage (bdd-usages exclu : anti-recursion)"
+
+
+
+
+def relever_modes_emploi(zone):
+    """Ce que le pilote SERT comme mode d emploi, et ce qu il sert encore en liste nue.
+
+    Deux mesures dans UN seul releve : les CARTES servies par l extracteur (avec les
+    briques qu elles laissent MUETTES) et le CATALOGUE d injection -- une entree
+    `dossier` dont la source est un dossier de BRIQUES est l ecart que cette revision
+    ferme (c est ce que l agent recevait : des noms, et rien d autre).
+    """
+    pilote = zone / "pilote"
+    chemin_extracteur = pilote / "injection" / "modes_emploi.py"
+    chemin_catalogue = pilote / "injection" / "config.json"
+    releve = {"extracteur": chemin_extracteur.is_file(), "declarees": [],
+              "listes_nues": [], "manquantes": {}}
+    if not releve["extracteur"]:
+        return releve
+    specification = importlib.util.spec_from_file_location(
+        "modes_emploi_garde", str(chemin_extracteur))
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    for cle in sorted(module.RACINES):
+        _texte, absentes = module.carte((module.PILOTE / module.RACINES[cle]).resolve())
+        if absentes:
+            releve["manquantes"][cle] = absentes
+    if not chemin_catalogue.is_file():
+        return releve
+    try:
+        donnees = json.loads(chemin_catalogue.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return releve
+    entrees = [entree for phase in (donnees.get("injections") or {}).values()
+               for entree in phase]
+    releve["declarees"] = sorted(str(e.get("id", "?")) for e in entrees
+                                 if e.get("type") == "modes-emploi")
+    for entree in entrees:
+        if entree.get("type") != "dossier":
+            continue
+        source = (pilote / str(entree.get("source", ""))).resolve()
+        if source.is_dir() and module.lister_briques(source):
+            releve["listes_nues"].append(str(entree.get("id", "?")))
+    releve["listes_nues"] = sorted(releve["listes_nues"])
+    return releve
+
+
+def juger_modes_emploi(ev):
+    """Un outil se livre AVEC son mode d emploi : jamais des noms, jamais un trou tu."""
+    if not ev.get("extracteur"):
+        return False, "extracteur de modes d emploi ABSENT : le pilote ne peut plus servir un usage"
+    if not ev.get("declarees"):
+        return False, "aucune entree `modes-emploi` au catalogue : l agent ne recoit que des NOMS"
+    if ev.get("listes_nues"):
+        return False, ("dossier(s) de briques servi(s) en LISTE DE NOMS (aucun usage) : "
+                       + ", ".join(ev["listes_nues"])
+                       + " -- servir une entree `modes-emploi` a la place")
+    manquantes = ev.get("manquantes") or {}
+    if manquantes:
+        detail = " ; ".join(cle + " -> " + ", ".join(noms)
+                            for cle, noms in sorted(manquantes.items()))
+        return False, ("brique(s) SANS mode d emploi (le poser DANS la brique, son domicile) : "
+                       + detail)
+    return True, str(len(ev["declarees"])) + " carte(s) servie(s), aucune brique muette"
+
+
+def releves_sains():
+    tout = " ".join(t for _n, temoins in GROUPES_CONTRAT for t in temoins)
+    return {
+        "carte": {"carte": True, "fonction": True, "convertit": TEXTE_FUTILE_ATTENDU},
+        "porte": {"futile": TEXTE_FUTILE_ATTENDU,
+                  "futile_journal": "[ASCII] CORRIGE : 3 caractere(s) en lignes 1,2\n",
+                  "futile_refus": "", "hors": TEXTE_HORS_CARTE,
+                  "hors_refus": "REFUS (code 2) : 1 caractere(s) ... ligne 1 : " + CODE_POINT
+                                + " ... matrice/data/commun/carte_ascii.py (CARTE_CONVERSION)."},
+        "aide": {"aide": "Point d'entree\n" + tout, "contrat": tout},
+        "muet": {"outils": {"lire": True, "ecrire": True, "bdd-usages": False}},
+        "categorie": {"repare": [0, "routine", "pilote", "ROUTINE"],
+                      "hors": [2, "REFUS : categorie inconnue pour le type dev : 'x'\n"
+                                  "  Categories fermees de dev : outil, routine, bdd, pilote"],
+                      "vrac": [2, "REFUS : EO-000 est encore AU VRAC\n"
+                                  "  Classe-le d'abord :  python main.py classer --id EO-000"]},
+    }
+
+
+def releves_casses():
+    """Chaque cas casse DOIT faire crier le juge (sinon le controle est creux)."""
+    return (
+        ("carte", "une copie de carte", {"carte": False, "fonction": True,
+                                        "convertit": TEXTE_FUTILE_ATTENDU}),
+        ("carte", "une fonction recopiee", {"carte": True, "fonction": False,
+                                           "convertit": TEXTE_FUTILE_ATTENDU}),
+        ("carte", "une carte qui ne convertit plus", {"carte": True, "fonction": True,
+                                                     "convertit": "Le caf\u00e9 est pr\u00eat\n"}),
+        ("porte", "une faute futile non corrigee", {"futile": TEXTE_FUTILE, "futile_journal": "",
+                                                   "futile_refus": "", "hors": "",
+                                                   "hors_refus": "x carte_ascii.py " + CODE_POINT}),
+        ("porte", "une correction MUETTE", {"futile": TEXTE_FUTILE_ATTENDU, "futile_journal": "",
+                                           "futile_refus": "", "hors": "",
+                                           "hors_refus": "x carte_ascii.py " + CODE_POINT}),
+        ("porte", "un hors-carte accepte", {"futile": TEXTE_FUTILE_ATTENDU,
+                                            "futile_journal": "CORRIGE", "futile_refus": "",
+                                            "hors": TEXTE_HORS_CARTE, "hors_refus": ""}),
+        ("porte", "un refus qui ne nomme pas le caractere",
+         {"futile": TEXTE_FUTILE_ATTENDU, "futile_journal": "CORRIGE", "futile_refus": "",
+          "hors": TEXTE_HORS_CARTE, "hors_refus": "REFUS (code 2) carte_ascii.py"}),
+        ("porte", "un refus sans remede",
+         {"futile": TEXTE_FUTILE_ATTENDU, "futile_journal": "CORRIGE", "futile_refus": "",
+          "hors": TEXTE_HORS_CARTE, "hors_refus": "REFUS (code 2) " + CODE_POINT}),
+        ("aide", "une garantie oubliee dans le CONTRAT",
+         {"aide": "x os.replace lf forces", "contrat": "os.replace"}),
+        ("muet", "une porte qui ne se note pas", {"outils": {"lire": True, "muette": False}}),
+        ("muet", "aucune porte lue", {"outils": {}}),
+        ("categorie", "une categorie valide refusee", {"repare": [2, "routine", "pilote", "ROUTINE"],
+                                                      "hors": [2, "categories fermees de dev"],
+                                                      "vrac": [2, "classer --id"]}),
+        ("categorie", "un avant non trace", {"repare": [0, "routine", None, "ROUTINE"],
+                                            "hors": [2, "categories fermees de dev"],
+                                            "vrac": [2, "classer --id"]}),
+        ("categorie", "un role reecrit en silence", {"repare": [0, "routine", "pilote", "PILOTE"],
+                                                    "hors": [2, "categories fermees de dev"],
+                                                    "vrac": [2, "classer --id"]}),
+        ("categorie", "un refus qui ne nomme pas la liste", {"repare": [0, "routine", "pilote", "ROUTINE"],
+                                                            "hors": [2, "REFUS"], "vrac": [2, "classer --id"]}),
+        ("categorie", "un vrac accepte", {"repare": [0, "routine", "pilote", "ROUTINE"],
+                                          "hors": [2, "categories fermees de dev"], "vrac": [0, ""]}),
+    )
+
+
+JUGES = {"carte": juger_carte, "porte": juger_porte, "aide": juger_aide,
+         "categorie": juger_categorie, "muet": juger_muet}
+
+
+def autotest():
+    """Epreuve du PIEGE : chaque donnee saine doit PASSER, chaque donnee cassee CRIER."""
+    print("== autotest du garde (L-032) ==")
+    echecs = 0
+    for nom, releve in releves_sains().items():
+        ok, detail = JUGES[nom](releve)
+        if not ok:
+            echecs += 1
+        print("[" + ("OK" if ok else "KO") + "] sain accepte : " + nom + " -- " + detail)
+    for nom, motif, releve in releves_casses():
+        ok, _detail = JUGES[nom](releve)
+        if ok:
+            echecs += 1
+        print("[" + ("OK" if not ok else "KO") + "] casse accuse : " + nom + " (" + motif + ")")
+    print("\n" + ("PIEGE OK : chaque juge accepte le sain et crie sur le casse." if not echecs
+                  else "PIEGE KO : " + str(echecs) + " verdict(s) faux."))
+    return 1 if echecs else 0
+
+
+def main():
+    analyseur = argparse.ArgumentParser()
+    analyseur.add_argument("--racine", default=".")
+    analyseur.add_argument("--autotest", action="store_true")
+    arguments = analyseur.parse_args()
+    if arguments.autotest:
+        return autotest()
+    racine = Path(arguments.racine).resolve()
+    zone = trouver_zone(racine)
+    if zone is None:
+        print("Zone optimus-prime introuvable sous " + str(racine))
+        return 2
+    matrice = zone.parent.parent / "matrice"
+    controler("carte ascii : un seul domicile", *juger_carte(relever_carte(matrice)))
+    controler("porte ecrire : corrige et refuse", *juger_porte(relever_porte(matrice)))
+    controler("aide <-> contrat de la porte", *juger_aide(relever_aide(matrice)))
+    controler("entonnoir : la categorie se repare", *juger_categorie(relever_categorie(zone)))
+    controler("outils : aucune porte muette au journal", *juger_muet(relever_muet(matrice)))
+    ko = [nom for nom, ok, _detail in RESULTATS if not ok]
+    if ko:
+        print("\nECART CONTRATS : " + str(len(ko)) + " controle(s) en echec : " + ", ".join(ko))
+        return 1
+    print("\nVERDICT OK : les contrats tiennent (" + str(len(RESULTATS)) + " controles).")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

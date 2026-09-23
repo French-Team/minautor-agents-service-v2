@@ -35,6 +35,9 @@ from racine import detecter_racine  # noqa: E402
 # CONTRAT DE TRANSPORT des listes (frictions 72 et 73) : --route est une LISTE
 # ("sante,flux2") ; son caractere appartient a son domicile, jamais au cockpit.
 from transport_listes import decouper_liste  # noqa: E402
+# Le PLAFOND des boites intercom se LIT chez son domicile (lecteur PARTAGE, M-076) :
+# le cockpit ne recopie aucune valeur, il mesure et il cite sa source.
+from rotation_journal import lire_constante_declaree, lire_constante_texte  # noqa: E402
 
 ENCODAGE = "utf-8"
 ROUTES = ("etat", "sante", "flux1", "flux2", "chercher", "metriques", "complet")
@@ -46,6 +49,54 @@ ROUTES_EXPANDED = ("etat", "sante", "flux1", "flux2", "chercher", "metriques")
 # VIVANTE (un moteur aveugle repond "0 resultat" : lecon MO-055).
 REQUETE_TEMOIN = "moteur de recherche"
 REQUETE_ROUTE = ""
+
+# --- BOITES INTERCOM : MESUREES, ET JUGEES QUAND ELLES ONT UN CONTRAT (MO-322) --
+# Demande createur (2026-09-20) : l outbox du flux pesait 17,5 Mo pour un plafond de
+# 5 Mo et RIEN n en mesurait la TAILLE -- le cockpit n en comptait que les LIGNES,
+# donc une boite qui quadruple restait invisible sous un /sante VERT. Ces listes
+# disent QUI est JUGE (les boites que le pilote borne : il en repond) et QUI est
+# seulement DECLARE (le heritage v2 et les boites d optimus-prime/intercom : la
+# regle immuable perimetre-write interdit d y ecrire, donc on les mesure sans les
+# juger -- un controle qui crie sur ce que personne ne repare ne garde plus rien).
+# Le PLAFOND, lui, ne vit PAS ici : il est LU chez son domicile (les constantes du
+# pilote) -- une seule source pour toute la Matrice.
+CHEMIN_CONSTANTES_PILOTE = ("_operateur", "optimus-prime", "pilote", "constants.py")
+NOM_CONSTANTE_SEUIL_BOITES = "SEUIL_OCTETS_BOITES_INTERCOM"
+BOITES_INTERCOM_JUGEES = (
+    ("pilote/outbox (flux)", ("_operateur", "maintenance", "pilote", "outbox.jsonl")),
+    ("matrice/inbox (flux)", ("_operateur", "maintenance", "matrice", "inbox.jsonl")),
+)
+BOITES_INTERCOM_DECLAREES = (
+    ("v2 pilote/outbox", ("matrice", "intercom", "pilote", "outbox.jsonl")),
+    ("v2 matrice/inbox", ("matrice", "intercom", "matrice", "inbox.jsonl")),
+    ("v2 cameleon/inbox", ("matrice", "intercom", "cameleon", "inbox.jsonl")),
+    ("optimus-prime pilote/outbox", ("_operateur", "optimus-prime", "intercom", "pilote", "outbox.jsonl")),
+    ("optimus-prime matrice/inbox", ("_operateur", "optimus-prime", "intercom", "matrice", "inbox.jsonl")),
+)
+
+# --- JOURNAUX DES ROUTINES : LE VIVANT SE JUGE, LES ARCHIVES SE DISENT (MO-324) --
+# Demande createur (2026-09-20, suite de MO-322/323) : "etendre la porte de taille
+# de /sante aux journaux des routines -- l espion-integrite a deja pese 87 Mo".
+# Mesure du jour : l archive de l espion-integrite pese 90 580 798 o et RIEN ne la
+# mesurait. Aucune liste n est ecrite ici : chaque routine DECLARE son journal
+# (NOM_JOURNAL), sa borne (SEUIL_OCTETS_JOURNAL) et son prefixe d archive
+# (NOM_ARCHIVE_PREFIXE) dans SON constants.py -- on LIT ces trois valeurs chez
+# elle, par les lecteurs PARTAGES (entier et texte), jamais recopiees.
+# Le PLANCHER de visibilite ne juge aucun journal (chacun a sa borne declaree) :
+# il sert a ACCUSER un fichier du repertoire `routines/` qui grandit sans etre NI
+# journal declare NI archive declaree -- c est ainsi qu une archive de 90 Mo a
+# vecu sans que /sante la voie.
+PLANCHER_VISIBILITE_JOURNAUX = 1024 * 1024
+EXTENSIONS_JOURNAUX_SUIVIES = (".jsonl", ".txt", ".log")
+# ATTENTION AUX DEUX NIVEAUX : la racine detectee est celle du WORKSPACE, et le
+# dossier `matrix` contient lui-meme l arbre de la Matrice (`matrix/matrice/...`).
+# C est le meme piege que REPERTOIRE_MATRICE = REPERTOIRE_MATRIX / "matrice" en
+# tete de ce fichier -- et il s est paye UNE FOIS : la premiere version de cette
+# porte cherchait `<matrix>/routines` et ne trouvait RIEN, donc elle rendait un
+# VERT SILENCIEUX ("aucune routine ne declare de journal"). Un controle qui ne
+# trouve rien doit se demander s il cherche au bon endroit : le chemin est donc
+# declare ici, en morceaux, une seule fois.
+REPERTOIRE_ROUTINES = ("matrice", "routines")
 
 # --- POLITIQUE D'AFFICHAGE DU COCKPIT (jamais des mesures) -------------------
 # P6 de la revue MO-098 : ces nombres ne MESURENT rien -- ils decident COMBIEN
@@ -126,10 +177,230 @@ def route_etat(racine):
         p = REPERTOIRE_MATRICE / "intercom" / rel
         try:
             n = sum(1 for _ in p.open(encoding=ENCODAGE)) if p.exists() else -1
-            out.append(f"[intercom {rel}] lignes={n}")
+            # MO-322 : la TAILLE accompagne les lignes -- une boite qui grandit se
+            # voit ici comme dans la porte de /sante (un compte de lignes seul ne
+            # dit rien du POIDS d une boite : 708 messages pesaient 17,5 Mo).
+            o = p.stat().st_size if p.exists() else -1
+            out.append(f"[intercom {rel}] lignes={n} octets={o}")
         except OSError as e:
             out.append(f"[intercom {rel}] {e}")
     return "\n".join(out)
+
+
+def _racine_matrice(racine):
+    """Le dossier matrix/ a partir de la racine passee (convention des gardes)."""
+    depart = Path(racine).resolve()
+    if depart.name == "matrix":
+        return depart
+    for candidat in (depart / "matrix", depart / "cerveau-projet" / "matrix"):
+        if candidat.is_dir():
+            return candidat
+    return depart
+
+
+def _octets_fichier(chemin):
+    """Taille d un fichier en octets, ou None s il est absent ou illisible."""
+    try:
+        return chemin.stat().st_size
+    except OSError:
+        return None
+
+
+def porte_boites_intercom(racine):
+    """MESURE la TAILLE des boites intercom et JUGE celles qui ont un contrat.
+
+    Mesure du defaut (2026-09-20, MO-322) : l outbox du flux portait 17 458 027
+    octets, soit 3,5 fois le plafond de 5 Mo, et RIEN ne mesurait sa TAILLE -- les
+    routes du cockpit n en comptaient que les LIGNES, donc une boite qui quadruple
+    restait invisible sous un `/sante` VERT. Une surveillance qui ne mesure pas la
+    grandeur qu elle surveille ne surveille rien.
+
+    Le PLAFOND n est pas recopie : il est LU chez son domicile (le `constants.py`
+    du PILOTE, la porte qui borne) par le lecteur PARTAGE `lire_constante_declaree`
+    (M-076). Quand il est ILLISIBLE, il n est pas suppose : la porte ACCUSE en le
+    nommant -- une valeur lue nulle part se lirait comme un fait (L-055).
+
+    Les boites du HERITAGE v2 et celles d optimus-prime/intercom sont MESUREES et
+    NOMMEES, jamais jugees : la regle immuable `perimetre-write` interdit d y
+    ecrire, et un controle qui crie sur ce que personne ne repare ne garde plus
+    rien (lecon EO-152, vraie ici une quatrieme fois).
+
+    Rend (code, texte) : code 1 des qu une boite JUGEABLE depasse le plafond, ou
+    quand le plafond lui-meme est illisible.
+    """
+    matrice = _racine_matrice(racine)
+    lignes = ["  BOITES INTERCOM -- la taille se MESURE, le contrat se JUGE"]
+    depassements = []
+    seuil = lire_constante_declaree(matrice.joinpath(*CHEMIN_CONSTANTES_PILOTE),
+                                    NOM_CONSTANTE_SEUIL_BOITES)
+    if seuil is None:
+        lignes.append("  plafond ILLISIBLE : " + NOM_CONSTANTE_SEUIL_BOITES + " absent de "
+                      + str(Path(*CHEMIN_CONSTANTES_PILOTE))
+                      + " -- la porte ne SUPPOSE pas un seuil, elle ne peut donc pas juger")
+    else:
+        lignes.append("  plafond LU chez son domicile : " + NOM_CONSTANTE_SEUIL_BOITES
+                      + " = " + str(seuil) + " o")
+    for nom, morceaux in BOITES_INTERCOM_JUGEES:
+        octets = _octets_fichier(matrice.joinpath(*morceaux))
+        if octets is None:
+            lignes.append("  JUGEABLE " + nom + " : ABSENTE (" + "/".join(morceaux)
+                          + ") -- une boite absente se DIT, elle ne se lit pas comme un zero")
+            continue
+        if seuil is not None and octets > seuil:
+            depassements.append(nom + " = " + str(octets) + " o")
+            lignes.append("  JUGEABLE " + nom + " : " + str(octets) + " o -- DEPASSE le plafond"
+                          " (le pilote la borne a sa prochaine cloture)")
+        else:
+            lignes.append("  JUGEABLE " + nom + " : " + str(octets) + " o -- sous le plafond")
+    for nom, morceaux in BOITES_INTERCOM_DECLAREES:
+        octets = _octets_fichier(matrice.joinpath(*morceaux))
+        if octets is None:
+            continue
+        lignes.append("  HORS CONTRAT (mesuree, non jugee) " + nom + " : " + str(octets) + " o")
+    if depassements:
+        return 1, "\n".join(lignes + ["  ACCUSE : " + " | ".join(depassements)])
+    if seuil is None:
+        return 1, "\n".join(lignes)
+    return 0, "\n".join(lignes)
+
+
+def _cle_chemin(chemin):
+    """Cle de comparaison d un chemin (absolu si possible, en minuscules)."""
+    try:
+        return str(chemin.resolve()).lower()
+    except OSError:
+        return str(chemin).lower()
+
+
+def _journaux_declares(matrice):
+    """Les routines qui DECLARENT leur journal : (routine, nom, borne, prefixe).
+
+    Aucune liste en dur : les trois valeurs sont LUES dans le `constants.py` de
+    chaque routine, par les lecteurs PARTAGES (entier et texte). Une routine qui ne
+    declare pas sa borne ne peut pas etre JUGEe -- elle sort de cette population,
+    et ses fichiers ne tombent pas dans l oubli pour autant : les angles morts
+    ci-dessous les rattrapent.
+    """
+    declarees = []
+    repertoire = matrice.joinpath(*REPERTOIRE_ROUTINES)
+    if not repertoire.is_dir():
+        return declarees
+    for constants in sorted(repertoire.glob("*/constants.py")):
+        nom = lire_constante_texte(constants, "NOM_JOURNAL")
+        borne = lire_constante_declaree(constants, "SEUIL_OCTETS_JOURNAL")
+        if not nom or not borne:
+            continue
+        declarees.append((constants.parent.name, nom, borne,
+                          lire_constante_texte(constants, "NOM_ARCHIVE_PREFIXE") or ""))
+    return declarees
+
+
+def porte_journaux_routines(racine):
+    """MESURE la TAILLE des journaux des routines et JUGE ceux qui ont une borne.
+
+    Demande createur (2026-09-20, suite de MO-322/MO-323) : "etendre la porte de
+    taille de /sante aux journaux des routines -- l espion-integrite a deja pese
+    87 Mo". Mesure du jour : l archive de l espion-integrite pese 90 580 798 o et
+    RIEN ne la mesurait ; son journal VIVANT, lui, est borne par sa routine (8 Mo)
+    et la rotation a joue.
+
+    CE QUI EST JUGE : le JOURNAL VIVANT de chaque routine qui DECLARE une borne
+    (`SEUIL_OCTETS_JOURNAL`, lue chez elle). Depasser sa propre borne veut dire que
+    la rotation qui doit le borner n a pas tourne -- la routine est arretee ou
+    cassee -- et c est exactement ce qu un cockpit doit dire.
+
+    CE QUI EST DECLARE, JAMAIS JUGE : les ARCHIVES de ces memes routines. La
+    rotation ne SUPPRIME rien (son contrat est de DEPLACER) : une archive ne peut
+    donc grandir que par decision, et la borner serait une decision du createur.
+    Elles sont MESUREES et NOMMEES avec leur prefixe de domicile -- une masse
+    visible n est plus un angle mort.
+
+    LES ANGLES MORTS sont ACCUSES : tout fichier du repertoire `routines/` au-dessus
+    du plancher de visibilite qui n est NI un journal declare NI une archive
+    declaree grandit sans que rien ne le mesure -- c est ainsi qu une archive de
+    90 Mo a vecu sans que /sante la voie.
+
+    Rend (code, texte) : code 1 des qu un journal depasse SA borne, ou qu un angle
+    mort existe.
+    """
+    matrice = _racine_matrice(racine)
+    lignes = ["  JOURNAUX DES ROUTINES -- le VIVANT se juge, les ARCHIVES se disent"]
+    depassements = []
+    mesures = set()
+    declarees = _journaux_declares(matrice)
+    if not declarees:
+        lignes.append("  aucune routine ne declare de journal (NOM_JOURNAL + SEUIL_OCTETS_JOURNAL)")
+    for routine, nom, borne, prefixe in declarees:
+        dossier = matrice.joinpath(*REPERTOIRE_ROUTINES) / routine
+        vivant = dossier / nom
+        relatif = "routines/" + routine + "/" + nom
+        mesures.add(_cle_chemin(vivant))
+        octets = _octets_fichier(vivant)
+        if octets is None:
+            lignes.append("  JUGEABLE " + routine + " : journal ABSENT (" + relatif + ") -- une"
+                          " absence se DIT, elle ne se lit pas comme un zero")
+        elif octets > borne:
+            depassements.append(relatif + " = " + str(octets) + " o")
+            lignes.append("  JUGEABLE " + routine + " : " + str(octets) + " o -- DEPASSE sa borne de "
+                          + str(borne) + " o : la rotation qui doit le borner n a pas tourne")
+        else:
+            lignes.append("  JUGEABLE " + routine + " : " + str(octets) + " o -- sous sa borne de "
+                          + str(borne) + " o")
+        if prefixe:
+            lots = sorted(dossier.glob(prefixe + "-*"))
+            total = 0
+            for archive in lots:
+                mesures.add(_cle_chemin(archive))
+                poids = _octets_fichier(archive)
+                if poids is not None:
+                    total += poids
+            if lots:
+                lignes.append("  DECLAREE " + routine + " : " + str(len(lots))
+                              + " archive(s) du prefixe `" + prefixe + "`, " + str(total)
+                              + " o -- la rotation ne SUPPRIME rien : leur poids est une decision"
+                              " du createur, il est MESURE et DIT")
+            else:
+                lignes.append("  DECLAREE " + routine + " : aucune archive du prefixe `" + prefixe + "`")
+    angles = []
+    repertoire = matrice.joinpath(*REPERTOIRE_ROUTINES)
+    if repertoire.is_dir():
+        for fichier in repertoire.rglob("*"):
+            if not fichier.is_file() or fichier.suffix.lower() not in EXTENSIONS_JOURNAUX_SUIVIES:
+                continue
+            if _cle_chemin(fichier) in mesures:
+                continue
+            poids = _octets_fichier(fichier)
+            if poids is None or poids < PLANCHER_VISIBILITE_JOURNAUX:
+                continue
+            angles.append((fichier, poids))
+    if angles:
+        for fichier, poids in angles:
+            relatif = str(fichier.relative_to(matrice)).replace("\\", "/")
+            lignes.append("  ANGLE MORT " + relatif + " : " + str(poids) + " o -- NI journal declare NI"
+                          " archive declaree : rien ne le mesure (le declarer chez sa routine, ou le"
+                          " faire tourner)")
+            depassements.append("ANGLE MORT " + relatif + " = " + str(poids) + " o")
+    else:
+        lignes.append("  angle mort : AUCUN fichier au-dessus du plancher de "
+                      + str(PLANCHER_VISIBILITE_JOURNAUX) + " o n echappe a la mesure")
+    if depassements:
+        return 1, "\n".join(lignes + ["  ACCUSE : " + " | ".join(depassements)])
+    return 0, "\n".join(lignes)
+
+
+# --- LE LOT ARME DU PILOTE : LA REPRISE SE LIT, ET SA MEMOIRE SE JUGE (MO-380) ---
+# POURQUOI (demande du createur, 2026-09-21) : la REPRISE DU RETARD -- 37 missions
+# versees d'un seul geste par `file verser` -- ne se lisait qu'en ouvrant le JSON a
+# la main. Un lot qu'on ne voit pas est un lot qu'on ne suit pas.
+# Le cockpit n'affiche RIEN lui-meme : il appelle le verbe du pilote (`lot etat`),
+# qui est le domicile du lot. Son code entre dans le bilan comme celui des autres
+# portes : un maillon qui a perdu sa memoire de naissance est ACCUSE (sans elle, son
+# verdict d'origine n'est plus atteignable -- panne MO-339, mesuree), il ne se fond
+# pas dans une liste de 37.
+def porte_lot_arme(racine):
+    cmd = [sys.executable, str(REPERTOIRE_OP / "pilote" / "main.py"), "lot", "etat"]
+    code, txt = _run(cmd)
+    return code, txt.strip()[:TAILLE_SORTIE_LARGE]
 
 
 def route_sante(racine):
@@ -175,6 +446,29 @@ def route_sante(racine):
         code, txt = _run(cmd)
         bilan.append((label, code))
         out.append(f"\n[{label}] code={code}\n" + txt.strip()[:TAILLE_SORTIE_STANDARD])
+    # LES BOITES INTERCOM (MO-322) : leur TAILLE entre dans le bilan de /sante.
+    # Elle n etait mesuree par AUCUNE porte -- le cockpit ne comptait que les
+    # lignes -- donc une boite de 17,5 Mo pour un plafond de 5 Mo vivait sous un
+    # /sante VERT. Une porte qui ne mesure pas la grandeur qu elle surveille ne
+    # surveille rien.
+    code_boites, texte_boites = porte_boites_intercom(racine)
+    bilan.append(("boites intercom (taille)", code_boites))
+    out.append("\n[boites intercom (taille)] code=" + str(code_boites) + "\n" + texte_boites)
+    # LES JOURNAUX DES ROUTINES (MO-324) : meme doctrine, autre population. Le
+    # VIVANT se juge contre la borne que SA routine declare ; les ARCHIVES sont
+    # mesurees et DITES (la rotation ne supprime rien) ; les fichiers qui ne sont ni
+    # l un ni l autre sont des ANGLES MORTS et ils sont ACCUSES -- c est ainsi
+    # qu une archive de 90 Mo a vecu sans que /sante la voie.
+    code_journaux, texte_journaux = porte_journaux_routines(racine)
+    bilan.append(("journaux des routines (taille)", code_journaux))
+    out.append("\n[journaux des routines (taille)] code=" + str(code_journaux) + "\n" + texte_journaux)
+    # LE LOT ARME (MO-380) : la reprise du retard se lit ICI (rang k/n, item, type,
+    # urgence, statut) et sa memoire entre dans le verdict. Un lot de 37 maillons
+    # versees d'un seul geste etait invisible au cockpit ; une reprise qu'on ne voit
+    # pas ne se reprend pas.
+    code_lot, texte_lot = porte_lot_arme(racine)
+    bilan.append(("lot arme (memoire des maillons)", code_lot))
+    out.append("\n[lot arme (memoire des maillons)] code=" + str(code_lot) + "\n" + texte_lot)
     out.append(_verdict_sante(bilan))
     return "\n".join(out)
 

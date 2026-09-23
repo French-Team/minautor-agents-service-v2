@@ -1,0 +1,118 @@
+---
+identite:
+  type: analyse
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# AUDIT -- CE QUE LE PILOTE PORTE DES ERREURS ET PROBLEMES RENCONTRES EN TRAVAILLANT
+
+> Consigne du createur (2026-09-18) : verifier les regles, conventions, protocoles,
+> parcours et themes du cas "erreur ou probleme trouve EN TRAVAILLANT", et reviser le
+> pilote s il est la vraie cause (il dirige optimus). Mission MO-174 (EO-162).
+> Ce document rend l ecart MESURE, jamais une opinion : chaque ligne porte son
+> domicile (fichier:ligne) ou sa mesure.
+>
+> TYPE : analyse -- le vocabulaire des cartes d identite est FERME (17 types,
+> garde `verifier-cartes-identite`) et ne contient pas `audit` ; ajouter un type
+> est une DECISION, non prise ici. R7 propose le dossier audits/ pour domicilier
+> ce genre de document (un AUDIT est une ANALYSE d ecart).
+
+## 1. Les DEVOIRS du pilote sur ce sujet (la reference)
+
+| # | Ce que le pilote devrait porter | Pourquoi |
+|---|---|---|
+| D1 | DETECTER un defaut d outil et le REPRODUIRE avant de decider | mesurer avant de corriger |
+| D2 | QUALIFIER (mineure / moyenne / grave) et ROUTER la reparation | AUTO-CORRECTION classe, mais parle des erreurs de DONNEES |
+| D3 | METTRE LA MISSION EN PAUSE le temps de la reparation | serie stricte : on ne continue pas sur un outil douteux |
+| D4 | TRACER la reparation (BDD modifications + marbre) | une reparation non tracee est invisible |
+| D5 | PROUVER : un cobaye qui rejoue l ancienne regle et l ACCUSE | une reparation sans preuve est une opinion |
+| D6 | REPRENDRE la mission la ou elle s est arretee | la reparation ne doit pas couter la mission |
+| D7 | NE JAMAIS CONTOURNER (aucun geste manuel qui esquive l outil) | un contournement manuel est une dette cachee |
+| D8 | ALERTER si la reparation sort du perimetre | inter-round / machine-defcon : le pilote decide du largage |
+
+## 2. Ce que le pilote porte AUJOURD HUI (mesure)
+
+| Ce qui existe | Domicile (preuve) | Ce que ca couvre |
+|---|---|---|
+| Doctrine d ALERTE de ses propres portes : echec JAMAIS bloquant, alerte persistante | `pilote/commun.py` (826, 876, 921, 1119, 1165, 1207, 1249, 1261) | un INCIDENT D APPEL (porte injoignable, refusee), pas un outil FAUTIF |
+| Garde de mise en securite par THEME | `pilote/commun.py:171` (`defcon_bloque_theme`) | defcon 5 : seul le theme DEFCON est injectable |
+| Crochets routes par le filtre | `pilote/filtrer/entry.py:19-26` : mission, audit, revision, question, alerte, pause, bilan, preparation | 8 routes, **aucune route OUTIL** |
+| Champs PESES de l injection | `pilote/injection/fonctions.py:60-61` : objectif, checklist, lecons_utiles, themes_utiles, role, recherche | rien sur les defauts trouves en seance |
+| Lecons CONSOMMEES par l injection | `pilote/injection/fonctions.py:380` (`charger_lecons_utiles`) | le pilote LIT les lecons, il n en ECRIT aucune |
+| Production de lecon : une ligne de CHECKLIST | `pilote/checklist/listes.py:58` | la lecon est un geste MANUEL de l agent, pas une etape du pilote |
+| Cloture de mission : session, rattrapage des fichiers non traces, rotation, purge, vue, coherence | `pilote/fin/fonctions.py:41-195` | rien ne COLLECTE les erreurs ou problemes rencontres |
+| Bilan de fin : texte LIBRE | `pilote/fin/entry.py:12` (`--bilan` / `--bilan-fichier`) | aucun champ STRUCTURE pour des defauts |
+
+## 3. L ECART (mesure le 2026-09-18)
+
+| Devoir | Ce qui est porte aujourd hui | Ecart | Gravite |
+|---|---|---|---|
+| D1 detecter / reproduire | la doctrine existe pour la VEILLE et les erreurs de DONNEES, pas pour un OUTIL fautif en seance | **aucune porte** du pilote pour ce cas | MOYENNE |
+| D2 qualifier / router | AUTO-CORRECTION classe MINEURE/MOYENNE/GRAVE, mais sur des fichiers ; `filtrer` n a pas de crochet `outil` | un defaut d outil ne peut etre route que comme `[audit]` (constat), **jamais comme reparation** | MOYENNE |
+| D3 pause de mission | rien : la seule pause connue est `pause-session` (session LLM, pas outil) | une reparation en seance se fait **hors doctrine** | MOYENNE |
+| D4 tracer | le marbre note la MISSION ; le bilan est du texte libre | la reparation de la porte (MO-173) n a laisse qu un recit : **aucun fait structure** | MOYENNE |
+| D5 prouver | rien dans le pilote | la preuve reste une bonne pratique de l agent, jamais exigee | FAIBLE a MOYENNE |
+| D6 reprendre | la reprise existe (proto-1, ETAPE 0) mais pour un redemarrage | le lien reparation -> reprise n est pas porte | FAIBLE |
+| D7 ne jamais contourner | **aucun texte** ne l interdit : ni les 20 regles immuables, ni la fiche, ni un protocole | c est l ecart CENTRAL : le comportement demande par le createur n est **ecrit nulle part** | **GRAVE** |
+| D8 alerter hors perimetre | l alerte existe (`[alerte]` -> machine-defcon) | elle ne NOMME pas le cas "defaut d outil" et ne propose aucune route | FAIBLE |
+
+## 4. Ce qui est deja bon (a NE PAS casser)
+
+- L **alerte persistante** : une alerte qui ne vit que sur la console se perd (`commun.py:876` et `1249`) :
+  le defaut d outil doit utiliser CE canal, pas en inventer un.
+- L **ordre de la cloture** (rattrapage AVANT la vue, purge EN DERNIER) est declare et tenu :
+  toute nouvelle collecte doit s y INSERER, pas le doubler.
+- Les **champs peses** de l injection (6) sont fermes : un champ de plus se DECLARE.
+- Le **garde defcon** par theme : une mise en securite ne doit pas etre court-circuitee par une reparation.
+
+## 5. Reparations proposees
+
+| # | Reparation | Domicile | Risque (proto-2) |
+|---|---|---|---|
+| R1 | Regle immuable : **UN DEFAUT D OUTIL SE REPARE DANS L OUTIL** (reproduire, reparer dans l outil, prouver, tracer, reprendre ; jamais contourner) | `regles-immuables/` | **CRITIQUE** : accord du createur |
+| R2 | Protocole `proto-10-route-outil-defaillant.md` : la route en 8 temps (D1..D8) | `protocoles/` | **CRITIQUE** |
+| R3 | Fiche : une ligne aux REGLES ABSOLUES (renvoi R1) + une aux LIMITES ("un contournement manuel est une faute de process, pas une astuce") | `optimus-prime.md` | **CRITIQUE** |
+| R4 | Theme `auto-correction` : une case **OUTIL** (un defaut d outil n est pas un defaut de donnees) + le routage | `parcours/themes/` | **CRITIQUE** |
+| R5 | Pilote : crochet `[outil]` dans `filtrer`, `fin --defauts <fiche>` (defauts STRUCTURES, journalises avec la mission), rappel d injection | `pilote/` | MOYENNE (autonomie) |
+| R6 | Entrees a texte libre : `--detail-fichier` (ou base64) pour `suivi-optimus` et `bdd-modifications` : des backticks dans `--detail` ont ete EXECUTES par le shell, le texte est arrive AMPUTE | `data/outils/` | MINEURE / MOYENNE (autonomie) |
+| R7 | Domicile des audits : le dossier `audits/` (ce document en est le premier) | `_operateur/optimus-prime/` | MINEURE (autonomie) |
+
+## 6. Verdict
+
+Le pilote n est pas muet : il ALERTE (et le fait bien) sur les incidents d APPEL. Mais il ne
+porte ni la QUALIFICATION ni la ROUTE du cas "**l outil est en cause**", et la regle que le
+createur vient d enoncer (reparer dans l outil, jamais contourner) n etait ecrite NULLE PART :
+ni dans les 20 regles immuables, ni dans la fiche, ni dans un protocole. L ecart est donc
+principalement DOCTRINAL (R1..R4, CRITIQUE : accord du createur) et, une fois la doctrine posee,
+le pilote lui doit la ROUTE (R5).
+## 7. Suite donnee (2026-09-18, GO createur)
+
+| # | Etat | Domicile livre |
+|---|---|---|
+| R1 | **POSEE** | `regles-immuables/defaut-outil-repare-sur-place.md` -- 6 temps, 5 contournements INTERDITS, 2 limites. Nommee par la fiche (garde `aucune-regle-perdue`) et declaree a l index. |
+| R2 | **POSE** | `protocoles/proto-10-route-outil-defaillant.md` -- la route en 8 temps (D1..D8), distincte de `proto-8` (celui de la VEILLE : ici le defaut est trouve EN SEANCE). Declare a l index. |
+| R3 | **POSE** | `optimus-prime.md` -- une ligne aux REGLES ABSOLUES (renvoi R1) + une LIMITE ("un contournement manuel est une FAUTE de process, jamais une astuce"). 143 lignes / plafond declare 150. |
+| R4 | **POSEE** | `parcours/themes/theme-auto-correction.json` -- case **OUTIL** ("un defaut d OUTIL n est pas une erreur de DONNEE"), 7 etapes, regle pointant `proto-10`. 8 cases. |
+| R5 | **POSE** | pilote : crochet `[outil]` (type `reparation` TRANSMIS au depot, plus decoratif) + `[purification]` REPARE (la convention le declarait, le code l ignorait) ; maillon **28. crochets** (le miroir code<->convention, BLOQUANT dans les deux sens, cobaye 4 cas rejoues, et `TYPE_ROUTE_OUTIL` doit appartenir a la liste fermee `TYPES`) ; `fin --defauts-fichier` (JSONL a champs FERMES : champ inconnu, requis vide ou statut hors liste = REFUS nommant la ligne ; les defauts sont attaches a la MISSION, historises au journal et remontes a la Matrice ; un defaut NON REPARE est CRIE) ; 7e champ pese **`rappel`** -- la route outil voyage dans le sac-a-dos des qu une mission est de type `reparation`, sur les DEUX sites du sac (simple ET lot). |
+
+| R6 | a faire | entrees a texte libre : `--detail-fichier` (backticks executes par le shell : texte ampute). |
+| R7 | **FAIT** | le dossier `audits/` existe et ce document est son premier habitant. |
+
+**Controle** : non-regression **29/29 VERTE** (fiche, parcours, themes, cartes d identite
+compris, plus le maillon 28 `crochets` -- le miroir code<->convention -- et le maillon 29
+`appels-non-lies`, nes tous deux de R5).
+Le devoir D7 (GRAVE dans le tableau 3) n est plus un trou : il est ECRIT.
+
+**Une decouverte faite EN POSANT R5 (2026-09-18)** : `pilote/fin/entry.py` appelait
+`lire_defauts` SANS l avoir importe. Trois instruments etaient VERTS et ne pouvaient pas
+le voir : `py_compile` (le compilateur ne resout pas les noms), la porte `editer` (elle
+verifie que les imports ECRITS existent -- jamais qu un nom UTILISE est importe), et les
+preuves unitaires (elles appelaient la fonction DIRECTEMENT : c est la PORTE qui manquait a
+l epreuve). Seule la FUMEE de la commande reelle (`python main.py fin`) l a vu -- un
+NameError au coeur de la chaine de cloture. Repare dans l outil, puis COUVERT : le maillon
+**29** refuse desormais tout nom APPELE que rien ne lie, et son cobaye rejoue le bug
+lui-meme (import retire, en memoire) a chaque execution. La lecon de methode est gravee
+en BDD : **une preuve qui n exerce pas la PORTE ne prouve pas le chemin**.
+
+

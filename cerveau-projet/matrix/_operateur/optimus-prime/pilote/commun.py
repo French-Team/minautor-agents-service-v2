@@ -6,9 +6,11 @@ import json
 import os
 import subprocess
 import sys
+from pathlib import Path
 from datetime import datetime
 
 from constants import (
+    ACTION_PRISE_ROUND,
     BOITE_MATRICE_IN,
     BOITE_PILOTE_OUT,
     CHAMPS_DEFAUTS,
@@ -17,6 +19,7 @@ from constants import (
     CHAMP_ROLE_ITEM,
     CHAMP_TITRE_MISSION,
     CHEMIN_CLASSEUR_VARIABLES,
+    CHEMIN_CREDIBILITE_MISSIONS,
     CHEMIN_ENTONNOIR,
     CHEMIN_ETAT_PAUSE,
     CHEMIN_FILE,
@@ -27,15 +30,30 @@ from constants import (
     CHEMIN_PORTE_SESSIONS,
     CHEMIN_SUPER_COMBO_SUIVI,
     CHEMIN_THEMES,
+    CHAMP_CONSOMME_LE,
+    CHAMPS_SOURCE,
     CLE_DEFCON,
+    CLE_MEMOIRE_NAISSANCE,
+    SOURCE_INCONNUE,
+    SOURCE_MEMOIRE,
+    SOURCE_MEMOIRE_INCOMPLETE,
+    SOURCE_VIVANTE,
     DELAI_ARCHIVAGE_CONSERVATION,
     DELAI_BALAYAGE_CONSERVATION,
+    DELAI_CONTROLE_ARCHIVES_CONSERVATION,
     DELAI_CONTROLE_BORNE_CONSERVATION,
+    DELAI_CONTROLE_PLAFOND_CONSERVATION,
+    DELAI_DISPARITION_CONSERVATION,
+    DELAI_CREDIBILITE_MISSIONS,
     DELAI_ENTRETIEN_SUIVI,
+    DELAI_PURGE_ARCHIVE_CONSERVATION,
+    DELAI_PURGE_CONSERVATION,
     ENCODAGE,
+    ESSAIS_ROTATION_BOITES_INTERCOM,
     FENETRE_MENTION_DETAIL,
     INDENTATION_JSON,
     LONGUEUR_MESURE_ALERTE_CONSERVATION,
+    MESSAGES_GARDES_BOITES_INTERCOM,
     NIVEAU_DEFCON_MAX,
     NOM_ENTONNOIR,
     NOM_FILE,
@@ -43,14 +61,24 @@ from constants import (
     NOM_MODIFICATIONS,
     NOM_README_ZONE_TMP,
     NOM_ZONE_TMP,
+    OPTION_BALAYAGE_PURGE_ARCHIVE_CONSERVATION,
     OPTION_DEFAUTS,
     OPTION_LOT_ARCHIVAGE_CONSERVATION,
+    OPTION_LOT_DISPARITION_CONSERVATION,
+    OPTION_LOT_PURGE_CONSERVATION,
+    OPTION_MISSION_DISPARITION_CONSERVATION,
+    OPTION_MISSION_PURGE_ARCHIVE_CONSERVATION,
+    OPTION_RAISON_DISPARITION_CONSERVATION,
+    PREFIXE_ARCHIVE_BOITES_INTERCOM,
     PREFIXE_ID,
+    RAISON_DISPARITION_ZONE_TMP,
     REPERTOIRE_DATA,
     REPERTOIRE_INTERCOM,
     REPERTOIRE_MATRIX,
     REPERTOIRE_THEMES_PRIVES,
     REPERTOIRE_ZONE_TMP,
+    SEUIL_OCTETS_BOITES_INTERCOM,
+    PORTE_PRISE_ROUND,
     STATUTS_DEFAUT,
     STATUT_EN_ATTENTE,
     STATUT_EN_COURS,
@@ -60,20 +88,34 @@ from constants import (
     VALEUR_AUTO_VALIDATION,
     VERBE_ARCHIVAGE_CONSERVATION,
     VERBE_BALAYAGE_CONSERVATION,
+    VERBE_CONTROLE_ARCHIVES_CONSERVATION,
     VERBE_CONTROLE_BORNE_CONSERVATION,
+    VERBE_CONTROLE_PLAFOND_CONSERVATION,
+    VERBE_DISPARITION_CONSERVATION,
+    VERBE_CREDIBILITE_MISSIONS,
     VERBE_ENTRETIEN_SUIVI,
+    VERBE_PURGE_ARCHIVE_CONSERVATION,
+    VERBE_PURGE_CONSERVATION,
 )
 
 # Moteurs partages (M-076) : data/commun est installe dans sys.path par
 # constants.py. Le VOCABULAIRE de la trace de session y vit : celui qui
 # ECRIT et celui qui LIT importent le MEME module (friction 41, L-093).
 from trace_session import ETAT_OUVERTE, MARQUEUR_ETAT, TAG_SESSION_OUVERTE  # noqa: E402
+
+# Le MOTEUR de rotation est PARTAGE (M-076) : celui des journals borne les BOITES
+# intercom par le MEME motif, jamais recopie (lecon L-029).
+from rotation_journal import tourner  # noqa: E402
 from transport_listes import (  # noqa: E402
     SEPARATEUR_LISTE,
     joindre_liste,
     partager_liste,
 )
 from zone_tmp import vider as vider_zone_tmp  # noqa: E402
+# EO-313 : le champ de la LISTE DES OUTILS PREPAREE SUR L ITEM. UNE declaration :
+# elle vit dans les listes de l entonnoir (a cote de categorie et source_trace),
+# et les consommateurs l importent -- jamais un litteral "outils" disperse.
+from entonnoir.listes import CHAMP_OUTILS  # noqa: E402
 
 
 def horodater():
@@ -351,6 +393,29 @@ def mission_en_cours(file_missions):
     return None
 
 
+def refus_serie_stricte(file_missions):
+    """LE refus de la serie stricte, ou "" -- une seule forme, et elle DONNE le remede.
+
+    POURQUOI (MO-341, demande createur : < on doit FORCER >) : la continuite de la
+    chaine ne tient pas a un rappel, elle tient a un REFUS. Or la meme regle etait
+    ecrite en TROIS formes (l injection, le chargement d un lot) et -- mesure du
+    2026-09-21 -- elle MANQUAIT au chargement d une mission simple : l agent pouvait
+    donc ouvrir un travail NEUF pendant qu une mission attendait d etre conduite, et
+    la chaine mourait en silence (personne n accusait rien). Une seule forme, la ou
+    la regle vit, et elle NOMME la mission ET ses deux remedes : terminer (`fin`) ou
+    parquer (`reporter`). Un refus sans remede se lit comme une panne, pas comme une
+    regle (lecon du refus nomme).
+    """
+    mission = mission_en_cours(file_missions)
+    if mission is None:
+        return ""
+    return ("REFUS : une mission est deja en cours (serie stricte) : "
+            + str(mission.get("id", "?"))
+            + (" (" + str(mission.get("theme", "")) + ")" if mission.get("theme") else "")
+            + ". Termine-la d abord (python main.py fin --bilan ...) ou parque-la"
+              " (python main.py reporter --raison \"...\") AVANT de continuer.")
+
+
 # Nombre minimal de chiffres d'un identifiant (MO-001, pas MO-1).
 LONGUEUR_MIN_NUMERO = 3
 
@@ -435,6 +500,13 @@ def annoncer_debut(file_missions, mission):
     annoncer("debut-mission", mission, extra)
     suffixe = " (round " + str(k) + "/" + str(total) + ")" if ids else ""
     print("DEBUT mission " + mission["id"] + " -- " + mission["theme"] + suffixe)
+    # EO-364 : LA CLOTURE N EST PAS UNE FIN DE TOUR. Le pilote vient de SERVIR ce round
+    # (au demarrage comme a la chaine, apres un `fin`) ; l agent le CONDUIT MAINTENANT
+    # (ORDRE 4.2), sans bilan-rapport et sans presentation entre deux missions. Le bilan
+    # est un ACTE DE TRACE : il ne termine pas le tour -- la main ne se rend que dans les
+    # TROIS cas d ORDRE 4.7 (lot termine, CRITIQUE, question du createur).
+    print("  LA BOUCLE CONTINUE : conduis " + mission["id"] + " MAINTENANT (ORDRE 4.2). "
+          "Aucun bilan-rapport ni presentation entre deux missions.")
 
 
 def annoncer_fin(file_missions, mission, portee=None):
@@ -694,6 +766,30 @@ def charger_domicile_modifications():
         return None
 
 
+def cle_de_mission(valeur):
+    """La CLE de comparaison d un IDENTIFIANT de mission (EO-362, 2026-09-22).
+
+    Le FAIT est l IDENTITE de la mission, jamais sa CASSE. La derivation ci-dessous
+    comparait pourtant par egalite EXACTE : un tag `mo-389` ne repondait pas a la
+    mission `MO-389`. MESURE du 2026-09-22 : sur les 309 missions du JOURNAL, 52
+    avaient une colonne `Fichiers` VIDE avant ce correctif et 48 apres -- les QUATRE
+    basculees sont MO-045, MO-131, MO-316 et MO-389. Le domicile porte par ailleurs
+    77 tags de mission en minuscules (contre 165 missions taggees en majuscules), mais
+    un tag minuscule N EFFACE RIEN quand la meme mission porte aussi son tag en
+    majuscules ailleurs : une premiere estimation, partie du nombre de TAGS, avait
+    annonce 77 missions -- elle etait FAUSSE, et elle est dite ici pour que la mesure
+    prime sur le raisonnement qui la precede (lecon de ce meme round).
+
+    Une colonne vide se lit "aucun fichier touche" : c est EO-130, le defaut que ce
+    garde a ete bati pour empecher, et il MENTAIT donc sur ces 4 missions. Accuser a
+    tort est aussi corrompu qu un vert qui ment : le cas vivant est MO-389 (10 notes
+    REELLES, 0 vues ; la cloture a crie TRACE MUETTE alors que la trace existait).
+    Aucun historique a reecrire : la CASSE se normalise A LA COMPARAISON, dans la
+    SEULE regle de derivation (L-029).
+    """
+    return str(valeur or "").strip().upper()
+
+
 def fichiers_de_la_mission(mission_id, donnees=None):
     """Retourne les FICHIERS touches par une mission, LUS dans leur domicile.
 
@@ -712,6 +808,11 @@ def fichiers_de_la_mission(mission_id, donnees=None):
     fichiers retrouves). Les deux voies sont donc lues (tag, ou mention en TETE
     du detail) ; le jour ou le taggage sera tenu, la premiere suffira.
 
+    DEPUIS EO-362 (2026-09-22), les deux voies comparent HORS CASSE (`cle_de_mission`) :
+    un tag `mo-389` NOMME la mission `MO-389`. Avant, QUATRE missions du journal avaient
+    une colonne `Fichiers` vide a cause de la casse ; la mesure et le raisonnement sont
+    ecrits sur `cle_de_mission`, un seul domicile.
+
     La mention est lue en TETE, et pas n'importe ou : une mention d'EXEMPLE vit
     loin dans le texte. Mesure du 2026-09-16 -- `MO-999`, identifiant de cobaye
     cite dans un detail qui recopie une commande, sortait 1 fichier en recherche
@@ -728,7 +829,8 @@ def fichiers_de_la_mission(mission_id, donnees=None):
     la MEME lecture, au lieu de relire 646 Ko par mission. La REGLE de derivation,
     elle, reste ecrite ICI et nulle part ailleurs (L-029, un seul domicile).
     """
-    if not mission_id:
+    cible = cle_de_mission(mission_id)
+    if not cible:
         return []
     if donnees is None:
         donnees = charger_domicile_modifications()
@@ -741,7 +843,8 @@ def fichiers_de_la_mission(mission_id, donnees=None):
         for modification in (contenu.get("modifications", []) or []):
             tags = [str(tag) for tag in (modification.get("tags", []) or [])]
             detail = str(modification.get("detail", ""))
-            if mission_id in tags or mission_id in detail[:FENETRE_MENTION_DETAIL]:
+            if (cible in [cle_de_mission(tag) for tag in tags]
+                    or cible in cle_de_mission(detail[:FENETRE_MENTION_DETAIL])):
                 fichiers.append(chemin)
                 break
     return fichiers
@@ -913,6 +1016,28 @@ def rattraper_fichiers_non_traces():
         "muets au journal).")
 
 
+def resoudre_chemin_bilan(chemin):
+    """Les candidats d'un chemin de bilan, DANS L ORDRE ou le pilote les essaie (MO-364).
+
+    POURQUOI : ORDRE 4.7 du demarrage annonce le chemin du bilan relatif a la racine
+    de la Matrice, mais cette porte ouvrait le chemin TEL QUEL -- donc relatif au
+    dossier COURANT. La commande copiee du demarrage ne marchait donc que depuis UN
+    dossier, et un chemin relatif qui change de sens selon l'appelant est exactement
+    ce que le contrat fondamental interdit (mesure MO-246). TROIS CANDIDATS, dans cet
+    ordre : (1) le chemin TEL QUEL (le comportement historique, jamais casse) ; (2) la
+    RACINE DE LA MATRICE (le contrat annonce par le demarrage) ; (3) la ZONE JETABLE
+    prise par son PARENT -- le raccourci `tmp-optimus/bilan-XXX.txt` que le demarrage
+    ecrit s'y resout. Seul le PREMIER candidat qui EXISTE est lu, et un refus NOMME
+    les trois : un chemin introuvable ne se devine jamais.
+    """
+    chemin_relatif = Path(chemin)
+    if chemin_relatif.is_absolute():
+        return [chemin_relatif]
+    return [chemin_relatif,
+            REPERTOIRE_MATRIX / chemin_relatif,
+            REPERTOIRE_ZONE_TMP.parent / chemin_relatif]
+
+
 def lire_bilan(options, cle="bilan", cle_fichier="bilan-fichier"):
     """Le bilan de cloture, ecrit OU LU DANS UN FICHIER (EO-132, friction 70/71).
 
@@ -938,11 +1063,15 @@ def lire_bilan(options, cle="bilan", cle_fichier="bilan-fichier"):
         return 2, "", ("--" + cle + " et --" + cle_fichier
                        + " sont exclusifs : donne l'un OU l'autre.")
     if chemin:
-        try:
-            with open(chemin, "r", encoding=ENCODAGE) as flux:
-                return 0, flux.read().strip(), ""
-        except OSError as erreur:
-            return 2, "", "--" + cle_fichier + " illisible : " + str(erreur)
+        candidats = resoudre_chemin_bilan(chemin)
+        for candidat in candidats:
+            try:
+                with open(candidat, "r", encoding=ENCODAGE) as flux:
+                    return 0, flux.read().strip(), ""
+            except OSError:
+                continue
+        return 2, "", ("--" + cle_fichier + " INTROUVABLE : " + chemin + " (cherche en : "
+                       + " ; ".join(str(candidat) for candidat in candidats) + ")")
     return 0, texte_direct, ""
 
 
@@ -976,6 +1105,91 @@ def crier_mission_muette(mission, fichiers):
                   "decouverte", detail)
     return 1, ("ALERTE trace muette : " + identifiant + " est close SANS modification "
                "tracee -- le constat est ecrit au marbre (action decouverte).")
+
+
+def derniere_injection(mission_id):
+    """La DERNIERE injection deposee pour cette mission, ou None (EO-370).
+
+    Le SEUL domicile du CONTENU d'une injection est la boite de sortie du pilote :
+    ici on la LIT, on ne la fabrique pas -- le fabriquant est
+    `injection.preparer_injection`. Dupliquer ce contenu serait deux verites.
+    """
+    if not mission_id:
+        return None
+    try:
+        with open(BOITE_PILOTE_OUT, "r", encoding=ENCODAGE) as flux:
+            lignes = flux.readlines()
+    except OSError:
+        return None
+    for ligne in reversed(lignes):
+        if mission_id not in ligne:
+            continue
+        try:
+            entree = json.loads(ligne)
+        except ValueError:
+            continue
+        if entree.get("mission") == mission_id and entree.get("objectif"):
+            return entree
+    return None
+
+
+def noter_prise_round(charger_file, par_la_cloture=False):
+    """NOTE la PRISE DU ROUND -- par la CLOTURE, ou par l agent (EO-360/EO-367).
+
+    LA MESURE : la doctrine du demarrage PROMETTAIT que la chaine repart toute
+    seule, mais AUCUNE ligne n ecrivait le geste de boucle -- apres un `fin`,
+    l agent n etait renvoye nulle part. Le SEUL geste qui lit une injection etait
+    l ORDRE 2, un ordre de DEMARRAGE : la lecture de l injection etait donc placee
+    au demarrage, JAMAIS dans la boucle. Resultat mesure le 2026-09-22 : apres la
+    cloture de MO-388, MO-348 etait EN COURS, son debut etait pose (par la MACHINE,
+    au `fin` precedent), l injection etait deposee -- et PERSONNE ne l avait prise.
+    Les trois traces disaient d ACCORD, et elles etaient fausses : c est la famille
+    de la cloture fausse de MO-387, et la PRISE TRACEE est ce qui les separe.
+
+    POURQUOI ICI : le geste de RECEPTION (`pilote injecter`) est exactement le
+    moment ou l agent recoit son round. L acte est donc note pour la mission EN
+    COURS -- y compris quand l injection a ete refusee parce que le round etait
+    DEJA arme, qui est le cas de la reprise apres une cloture. Un round qui n est
+    pas en cours se DIT : il n y a rien a prendre.
+
+    NON SINGULIERE (si_absent faux) : un round peut etre repris plusieurs fois, et
+    c est la DERNIERE prise qui dit que le round a ete pris.
+
+    QUI PREND (EO-367, demande du createur 2026-09-22 : < c est le PILOTE qui doit te
+    faire continuer les rounds >). DANS LA BOUCLE, C EST LA CLOTURE QUI PREND
+    (`par_la_cloture=True`) : elle sert la suite, donc elle sait qu une suite existe,
+    et elle la prend dans le meme geste. Le round arrive alors SERVI **ET PRIS** :
+    l agent n a plus AUCUN geste a faire pour continuer -- on n oublie pas un geste
+    qu on n a pas a faire. Mesure payee deux fois le 2026-09-22 : un round servi et
+    PRIS (par l agent, a la main) est reste SANS CONDUITE ; la prise etait un geste de
+    l agent, donc OUBLIABLE. `par_la_cloture=False` reste le geste de l AGENT (reprise
+    apres une coupure, ou prise a la main), et le DETAIL dit toujours qui a pris :
+    une prise de machine ne doit jamais se lire comme un acte de l agent.
+
+    NON BLOQUANT : un echec de la trace se DIT (la porte crie), il ne tue JAMAIS la
+    reception.
+    """
+    missions = (charger_file() or {}).get("missions") or []
+    en_cours = [m for m in missions if m.get("statut") == STATUT_EN_COURS]
+    if not en_cours:
+        print("PRISE DE ROUND : aucune mission en cours -- rien a prendre"
+              " (le pilote n a pas de round arme a te servir).")
+        return 0
+    mission = en_cours[0]
+    origine = ("prise de round par la CLOTURE (le pilote prend la suite qu il sert)"
+               if par_la_cloture
+               else "prise de round par l agent (geste de reception)")
+    declarer_borne_marbre(
+        mission,
+        ACTION_PRISE_ROUND,
+        origine + " : " + resume_mission(mission),
+        portes=[PORTE_PRISE_ROUND],
+        si_absent=False,
+    )
+    print("PRISE DE ROUND : " + str(mission.get("id", "?"))
+          + " -- conduis-la jusqu a sa cloture (ORDRE 4.2), puis PRENDS la suivante"
+          " (ORDRE 4.7).")
+    return 0
 
 
 def declarer_borne_marbre(mission, action, detail, fichiers=None, portes=None,
@@ -1330,8 +1544,230 @@ def controler_borne_conservation(mission=None):
     return 0, ""
 
 
-def crier_borne_rompue(mission, code, message):
-    """Crie quand le CONTROLE DE LA BORNE echoue a la cloture (EO-152).
+def purger_archives_conservation(mission=None):
+    """JOUE l acte de PURGE de la famille des points de restauration (P3, MO-308).
+
+    P3 (validee par le createur le 2026-09-20) ne supprime une archive que si son
+    contenu est PROUVE recouvrable : la porte `purger --lot oui` TRI -- elle
+    supprime ce qu elle peut rappeler, et REFUSE le reste en le nommant. Sans ce
+    geste, l archive regrossit sans fin, et le cycle repart : c est le defaut que
+    V2 de la revision a nomme ("un mecanisme dont l acte est manuel n est pas une
+    politique"). Le pilote le joue donc a CHAQUE cloture, APRES la rotation qui
+    vient d y deposer les points ages.
+
+    JAMAIS bloquant : son echec ne tue JAMAIS une mission (on alerte). Retourne
+    (code, message) -- le message est imprime par l appelant.
+    """
+    commande = [sys.executable, str(CHEMIN_PORTE_CONSERVATION),
+                VERBE_PURGE_CONSERVATION, OPTION_LOT_PURGE_CONSERVATION, "oui"]
+    try:
+        resultat = subprocess.run(
+            commande, capture_output=True, timeout=DELAI_PURGE_CONSERVATION,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+    except (subprocess.TimeoutExpired, OSError) as erreur:
+        return 1, ("ALERTE conservation : porte de purge injoignable (" + str(erreur)
+                   + ") -- les archives recouvrables n ont PAS ete purgees.")
+    sortie = ((resultat.stdout or b"").decode(ENCODAGE, "replace")).strip()
+    for ligne in sortie.splitlines():
+        if ligne.strip().startswith(("ARRIVEE", "RESTEES", "ANOMALIES")):
+            print("  " + ligne.strip())
+    if resultat.returncode != 0:
+        mesure = " | ".join(ligne.strip() for ligne in sortie.splitlines() if ligne.strip())
+        return 1, ("ALERTE conservation : purge en echec (code " + str(resultat.returncode)
+                   + " -- une ANOMALIE n est pas une politique). MESURE DE LA PORTE : "
+                   + mesure[:LONGUEUR_MESURE_ALERTE_CONSERVATION])
+    return 0, ""
+
+
+def purger_archives_journaux(mission=None):
+    """JOUE la PURGE des archives DATEES, sur preuve (regle createur, 2026-09-20).
+
+    Mesure du 2026-09-20 : 116 Mo d archives datees vivantes, dont les cinq
+    archives des journaux et des boites (90,6 Mo pour la seule archive de
+    l espion-integrite). Elles sont produites par la rotation -- et AUCUNE porte
+    ne les faisait mourir : la purge P3 ne traite que la famille du registre.
+
+    LA REGLE jouee ici : une archive datee ne vit que par sa PREUVE. La porte
+    `purger-archive --balayer oui` reconnait la CONVENTION de nom de la rotation
+    (`<prefixe>-archive-<AAAAMMJJ>.jsonl`), prouve que le contenu VIT dans un blob
+    engage du depot, et ne supprime QUE cela. Ce qui n est pas engage RESTE -- et
+    c est heureux : l archive que la rotation vient d ecrire porte la memoire de
+    dedoublonnage de son propre lot, donc elle ne devient purgeable qu une fois
+    FIGEE dans le depot.
+
+    JAMAIS bloquant : son echec ne tue JAMAIS une mission (on alerte). Retourne
+    (code, message) -- le message est imprime par l appelant.
+    """
+    commande = [sys.executable, str(CHEMIN_PORTE_CONSERVATION),
+                VERBE_PURGE_ARCHIVE_CONSERVATION,
+                OPTION_BALAYAGE_PURGE_ARCHIVE_CONSERVATION, "oui"]
+    identifiant = str((mission or {}).get("id", ""))
+    if identifiant:
+        commande += [OPTION_MISSION_PURGE_ARCHIVE_CONSERVATION, identifiant]
+    try:
+        resultat = subprocess.run(
+            commande, capture_output=True, timeout=DELAI_PURGE_ARCHIVE_CONSERVATION,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+    except (subprocess.TimeoutExpired, OSError) as erreur:
+        return 1, ("ALERTE conservation : porte de purge des archives datees injoignable ("
+                   + str(erreur) + ") -- les archives engagees n ont PAS ete purgees.")
+    sortie = ((resultat.stdout or b"").decode(ENCODAGE, "replace")).strip()
+    for ligne in sortie.splitlines():
+        if ligne.strip().startswith(("ARRIVEE", "RESTEES", "ANOMALIES", "manifeste")):
+            print("  " + ligne.strip())
+    if resultat.returncode != 0:
+        mesure = " | ".join(ligne.strip() for ligne in sortie.splitlines() if ligne.strip())
+        return 1, ("ALERTE conservation : purge des archives datees en echec (code "
+                   + str(resultat.returncode) + " -- une ANOMALIE n est pas une"
+                   " politique). MESURE DE LA PORTE : "
+                   + mesure[:LONGUEUR_MESURE_ALERTE_CONSERVATION])
+    return 0, ""
+
+
+def controler_plafond_conservation(mission=None):
+    """MESURE le PLAFOND des actes en attente (P4, MO-309).
+
+    P4 (validee par le createur le 2026-09-20) : "UN GARDE accuse quand le nombre
+    d actes en attente depasse un plafond declare". Le PLAFOND vit au domicile de
+    la porte qui le juge (bdd-conservation/constants.py) : le pilote ne recopie
+    AUCUNE valeur, il lit le VERDICT -- et il lance la porte a CHAQUE cloture,
+    APRES la rotation qui doit vider l attente. Un controle que personne ne lance
+    ne protege rien (mesure EO-152, deja vraie pour la borne).
+
+    JAMAIS bloquant. Retourne (code, message) -- le message est imprime par
+    l appelant.
+    """
+    commande = [sys.executable, str(CHEMIN_PORTE_CONSERVATION),
+                VERBE_CONTROLE_PLAFOND_CONSERVATION]
+    try:
+        resultat = subprocess.run(
+            commande, capture_output=True, timeout=DELAI_CONTROLE_PLAFOND_CONSERVATION,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+    except (subprocess.TimeoutExpired, OSError) as erreur:
+        return 1, ("ALERTE conservation : porte du plafond injoignable (" + str(erreur)
+                   + ") -- la masse des actes en attente n a PAS ete mesuree.")
+    sortie = ((resultat.stdout or b"").decode(ENCODAGE, "replace")).strip()
+    for ligne in sortie.splitlines():
+        if ligne.strip():
+            print("  " + ligne)
+    if resultat.returncode != 0:
+        mesure = " | ".join(ligne.strip() for ligne in sortie.splitlines() if ligne.strip())
+        return 1, ("ALERTE conservation : PLAFOND DES ACTES EN ATTENTE DEPASSE -- une "
+                   "masse qui grandit en silence n est pas une politique. MESURE DE LA "
+                   "PORTE : " + mesure[:LONGUEUR_MESURE_ALERTE_CONSERVATION])
+    return 0, ""
+
+
+def declarer_disparitions_conservation(mission=None):
+    """DECLARE les disparitions de points de restauration nees de la PURGE (V5, MO-304).
+
+    Mesure du 2026-09-20 (revision MO-304) : la cloture VIDE la zone jetable
+    (purger_zone_temporaire, juste avant) -- et un point de restauration dont la
+    SOURCE vivait dans cette zone disparait alors SANS passer par une porte. Le
+    registre le gardait non-archive, `controler-archives` le comptait en ECART
+    (7 points, 8 ecarts), et RIEN ne pouvait le solder : `archiver` exige un
+    fichier a deplacer, `purger` exige une archive. La porte
+    `declarer-disparition` a ete batie pour cela (EO-276) -- mais elle n'etait
+    jouee par AUCUN instrument : les 17 disparitions du moment avaient ete
+    declarees A LA MAIN, et le meme stock s'est reconstitue tout seul.
+
+    Le pilote DECLARE donc ce qu'il vient de causer, et il le fait APRES la
+    purge : la declaration porte sur un FAIT, et la porte refuse un point encore
+    PRESENT sur le disque (une declaration posee avant serait une intention).
+    Le LOT est IDEMPOTENT -- relancer rend les memes refus `deja declare`, qui ne
+    comptent pas comme anomalies -- donc le geste est sans cout quand tout va bien.
+
+    JAMAIS bloquant : son echec ne tue JAMAIS une mission (on alerte), comme le
+    balayage, la rotation et la purge. Retourne (code, message) -- le message est
+    imprime par l'appelant.
+    """
+    identifiant = str((mission or {}).get("id", ""))
+    if not identifiant:
+        # La porte REFUSE une declaration sans auteur (REFUS_SANS_MISSION) : le
+        # dire ici evite d'aller poser un refus que l'on connait deja.
+        return 1, ("ALERTE conservation : disparitions NON declarees -- la mission est"
+                   " sans identifiant, et une declaration sans auteur ne serait pas"
+                   " une trace (rien n'a ete ecrit).")
+    commande = [sys.executable, str(CHEMIN_PORTE_CONSERVATION),
+                VERBE_DISPARITION_CONSERVATION,
+                OPTION_LOT_DISPARITION_CONSERVATION, "oui",
+                OPTION_RAISON_DISPARITION_CONSERVATION, RAISON_DISPARITION_ZONE_TMP,
+                OPTION_MISSION_DISPARITION_CONSERVATION, identifiant]
+    try:
+        resultat = subprocess.run(
+            commande, capture_output=True, timeout=DELAI_DISPARITION_CONSERVATION,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+    except (subprocess.TimeoutExpired, OSError) as erreur:
+        return 1, ("ALERTE conservation : porte de declaration injoignable (" + str(erreur)
+                   + ") -- les points disparus avec la zone jetable restent NON declares et"
+                   " `controler-archives` les comptera en ecart.")
+    sortie = ((resultat.stdout or b"").decode(ENCODAGE, errors="replace")).strip()
+    for ligne in sortie.splitlines():
+        if ligne.strip().startswith(("POPULATION", "ARRIVEE", "REFUS QUI")):
+            print("  " + ligne.strip())
+    if resultat.returncode != 0:
+        mesure = " | ".join(ligne.strip() for ligne in sortie.splitlines() if ligne.strip())
+        return 1, ("ALERTE conservation : declaration des disparitions en echec (code "
+                   + str(resultat.returncode) + " -- un refus qui apprend quelque chose"
+                   " n'est pas une politique). MESURE DE LA PORTE : "
+                   + mesure[:LONGUEUR_MESURE_ALERTE_CONSERVATION])
+    return 0, ""
+
+
+def controler_archives_conservation(mission=None):
+    """MESURE la PERTE de la famille des points de restauration (case 8, MO-304).
+
+    Les deux controles voisins mesurent l'EXCES (borne N=1) et la MASSE (plafond
+    des actes en attente) ; celui-ci mesure la PERTE : `archive + actif + disparu
+    + purge = origine`, et aucun element ne doit avoir quitte sa source sans
+    passer par une porte. C'est la mesure de la case 8, et PERSONNE ne la jouait
+    -- la cloture lancait la borne et le plafond, jamais elle.
+
+    Mesure du 2026-09-20 (revision MO-304) : elle ACCUSAIT 8 ecarts (7
+    disparitions nees de la purge de la zone jetable, jamais declarees, plus le
+    comptage qui les suivait) alors qu'AUCUN instrument ne les voyait : un
+    controle qui ne tourne pas ne protege rien (mesure EO-152, deja vraie pour la
+    borne). Il est donc lance a CHAQUE cloture, APRES les gestes qui doivent le
+    satisfaire -- et son echec part AU MARBRE par le meme canal que les autres.
+
+    JAMAIS bloquant : son echec ne tue JAMAIS une mission (on alerte). Retourne
+    (code, message) -- le message est imprime par l'appelant.
+    """
+    commande = [sys.executable, str(CHEMIN_PORTE_CONSERVATION),
+                VERBE_CONTROLE_ARCHIVES_CONSERVATION]
+    try:
+        resultat = subprocess.run(
+            commande, capture_output=True, timeout=DELAI_CONTROLE_ARCHIVES_CONSERVATION,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+    except (subprocess.TimeoutExpired, OSError) as erreur:
+        return 1, ("ALERTE conservation : porte de controle de la perte injoignable ("
+                   + str(erreur) + ") -- rien ne prouve que l'archive, l'actif, les"
+                   " purgees et les declarees disparues refont l'origine.")
+    sortie = ((resultat.stdout or b"").decode(ENCODAGE, errors="replace")).strip()
+    for ligne in sortie.splitlines():
+        if ligne.strip():
+            print("  " + ligne.strip())
+    if resultat.returncode == 1:
+        mesure = " | ".join(ligne.strip() for ligne in sortie.splitlines() if ligne.strip())
+        return 1, ("ALERTE conservation : ECARTS dans la famille des points de restauration"
+                   " -- un element a quitte sa source sans passer par une porte, ou le"
+                   " compte ne referme plus l'origine (archive + actif + disparu + purge"
+                   " = origine). MESURE DE LA PORTE : "
+                   + mesure[:LONGUEUR_MESURE_ALERTE_CONSERVATION])
+    if resultat.returncode != 0:
+        return resultat.returncode, ("ALERTE conservation : controle de la perte refuse"
+                                     " (code " + str(resultat.returncode) + ") -- "
+                                     + (sortie[:200] or "aucune sortie"))
+    return 0, ""
+
+
+def crier_controle_conservation(mission, code, message):
+    """Crie quand un CONTROLE DE CONSERVATION echoue a la cloture (EO-152, MO-304).
 
     Le pilote MESURE la borne a chaque cloture (cablage de MO-165), mais son
     constat d'echec etait rendu NU : il ne vivait que sur la console. C'est
@@ -1352,9 +1788,15 @@ def crier_borne_rompue(mission, code, message):
     pas un verdict de la famille : il est dit de la meme facon, jamais tu. Un
     controle dont l'absence ne se voit pas est un controle qui n'existe pas.
 
+    Le meme cri sert les TROIS controles de la famille (EO-152 : borne N=1 ; P4,
+    MO-309 : plafond des actes en attente ; V5, MO-304 : la perte, case 8) : son
+    nom dit desormais ce qu'elle fait -- crier un controle de CONSERVATION -- au
+    lieu d'une seule de ses trois causes, et le constat porte le nom de la porte
+    qui a parle.
+
     NON bloquant : une borne rompue ne tue JAMAIS la mission (on alerte) -- le
     meme contrat que le balayage et la rotation.
-    Retourne le message a imprimer ("" quand la borne tient).
+    Retourne le message a imprimer ("" quand le controle tient).
     """
     if code == 0 or not message:
         return ""
@@ -1395,6 +1837,44 @@ def annoncer_reprise():
     # lecture console Windows (charmap) peut quand meme mourir sur un caractere
     # hors de sa table -- l'annonce de reprise ne doit JAMAIS dependre du codec
     # console. Double ceinture : enfant en UTF-8 force + sortie assainie ici.
+    brut = (resultat.stdout or resultat.stderr).decode(ENCODAGE, errors="replace")
+    sortie = brut.encode("ascii", errors="ignore").decode("ascii").strip()
+    return resultat.returncode, sortie
+
+
+def annoncer_credibilite():
+    """Joue le PROCESS de credibilite des missions RESTAUREES (automatique, MO-387).
+
+    Tache du createur (2026-09-22) : le CREATEUR n est PAS dans ce process -- une mission
+    qui existe a deja ete demandee et discutee avec lui -- et le process doit etre
+    AUTOMATIQUE : il determine si une mission ancienne est devenue OBSOLETE (deja faite
+    par une plus recente, ou premisse morte) et, si oui, la RETIRE du lot tout seul.
+
+    Pourquoi ICI : le pilote ne doit pas dependre de la MEMOIRE de l agent. Ce qui se
+    joue a chaque reprise se joue au DEMARRAGE, pas dans une consigne que quelqu un
+    pourrait oublier (meme doctrine que le super-combo de suivi, appelle a chaque
+    cloture). OPTIMUS decide : la mesure rend le verdict, et l obsolescence s applique.
+
+    Ce qui est ecrit part par les PORTES (journal des verdicts, lot du pilote) ; ce qui
+    n est pas mesurable n est PAS supprime (il est signale).
+    NON bloquant : un echec se DIT, il ne tue jamais un demarrage.
+    Retourne (code, sortie) -- l appelant imprime la sortie.
+    """
+    commande = [
+        sys.executable,
+        str(CHEMIN_CREDIBILITE_MISSIONS),
+        VERBE_CREDIBILITE_MISSIONS,
+    ]
+    try:
+        resultat = subprocess.run(
+            commande, capture_output=True, timeout=DELAI_CREDIBILITE_MISSIONS,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+            env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+        )
+    except (subprocess.TimeoutExpired, OSError) as erreur:
+        return 1, "process de credibilite injoignable : " + str(erreur)
+    # Meme double ceinture que la reprise : le process ne doit JAMAIS dependre du codec
+    # de la console (enfant en UTF-8 force, sortie assainie ici).
     brut = (resultat.stdout or resultat.stderr).decode(ENCODAGE, errors="replace")
     sortie = brut.encode("ascii", errors="ignore").decode("ascii").strip()
     return resultat.returncode, sortie
@@ -1446,6 +1926,200 @@ def valider_role_item(item, contexte):
     return 0, role
 
 
+def item_dans_etat(etat, item_id):
+    """L'ITEM d'un etat DEJA CHARGE, a TOUS les echelons (vrac, sa file, brin), ou None.
+
+    Le CENTRE de la recherche (M-076, MO-333/MO-334) : la consommation doit LIRE
+    l'item qu'elle retire -- pour en garder l'identite (la tombe) -- et elle tient
+    deja l'etat en main ; deux recherches divergeraient (L-029). Rend None quand
+    l'item est INTROUVABLE : l'appelant en fait un etat DIT, jamais un silence.
+    """
+    candidats = list(etat.get("vrac", [])) + list(etat.get("brin", []))
+    for missions in (etat.get("files") or {}).values():
+        candidats.extend(missions)
+    for item in candidats:
+        if str(item.get("id")) == str(item_id):
+            return item
+    return None
+
+
+def item_du_entonnoir(item_id):
+    """L'ITEM de l'entonnoir (l'etat est LU ici), ou None : le lecteur de l'exterieur."""
+    return item_dans_etat(charger_entonnoir_pilote(), item_id)
+
+
+# LE FORMAT de la provenance d'une mission nee d'un item (UN SEUL domicile, MO-339) :
+# la fabrique l'ECRIT ici, les lecteurs le RELISENT ici -- personne ne recompose le
+# prefixe sur place. Mesure du 2026-09-21 : TROIS lectures du meme format vivaient
+# dispersees (`item_deja_servi`, le refus nomme de l'injection, et la decision
+# d'enchainement qui ne le lisait PAS), donc une quatrieme allait naitre.
+FAMILLE_SOURCE_ENTONNOIR = "entonnoir"
+PREFIXE_SOURCE_ENTONNOIR = FAMILLE_SOURCE_ENTONNOIR + ":"
+
+
+def item_id_de_la_source(source):
+    """L'ID D'ITEM porte par une source de mission, ou "" (JAMAIS une devinette).
+
+    POURQUOI (MO-339, demande createur EO-264) : la provenance est le SEUL lien qui
+    survit a la consommation de l'item -- donc le seul chemin par lequel le verdict
+    d'auto-validation reste atteignable quand l'item n'est plus la. Sans ce lecteur,
+    la decision d'enchainement comparait l'id de la MISSION (MO-N) a un index qui ne
+    porte que des ids d'ITEM (EO-N) : aucun ne correspondait jamais, une mission
+    chargee PERDAIT son verdict, et la chaine s'arretait APRES CHAQUE mission.
+    """
+    morceaux = str(source or "").split(":")
+    if (len(morceaux) > 1 and morceaux[0] == FAMILLE_SOURCE_ENTONNOIR
+            and morceaux[1]):
+        return morceaux[1]
+    return ""
+
+
+def memoire_de_la_source(source):
+    """Les TROIS champs de NAISSANCE portes par une source, ou {} (MO-380).
+
+    POURQUOI : la forme LONGUE `entonnoir:<id>:<type>/<categorie>:<urgence>` est la
+    SEULE memoire qui survit a la consommation de l'item (sa tombe, MO-334). Sans ce
+    lecteur, un consommateur qui veut AFFICHER un maillon (le lot de la reprise) doit
+    redecouper la chaine a la main -- un second domicile du format, donc un second
+    endroit ou le decoupage peut diverger.
+
+    Ne DEVINE jamais : une source courte (`entonnoir:<id>`, les 46 missions nees
+    avant le correctif MO-333) rend un dict VIDE, et l'appelant DIT ce qui manque
+    au lieu d'afficher un type ou une urgence inventes.
+    """
+    morceaux = str(source or "").split(":")
+    if (len(morceaux) < 4 or morceaux[0] != FAMILLE_SOURCE_ENTONNOIR
+            or not morceaux[1]):
+        return {}
+    type_categorie = morceaux[2].split("/")
+    if (len(type_categorie) != 2 or not type_categorie[0]
+            or not type_categorie[1] or not morceaux[3]):
+        return {}
+    return {
+        CHAMPS_SOURCE[0]: type_categorie[0],
+        CHAMPS_SOURCE[1]: type_categorie[1],
+        CHAMPS_SOURCE[2]: morceaux[3],
+    }
+
+
+def source_depuis_item(item):
+    """LA source d'une mission nee d'un item : `entonnoir:<id>:<type>/<categorie>:<urgence>`.
+
+    UN SEUL domicile (MO-333). Mesure du 2026-09-21 : la fabrique automatique
+    (`mission_depuis_item`) composait la forme LONGUE -- 150 missions la portent --
+    quand les DEUX chemins manuels de `file/fonctions.py` composaient
+    `entonnoir:<id>` : 46 missions ont ainsi perdu a la NAISSANCE le type, la
+    categorie et l'urgence de leur item. Ceux-ci sont CONSOMMES depuis, donc
+    l'information est DEFINITIVEMENT perdue pour ces 46 (mesure : 0 item sur 46
+    encore lisible). Le defaut n'etait pas le lecteur -- les deux consommateurs
+    (`item_deja_servi`, le refus nomme de l'injection) acceptent les deux formes --
+    mais la FABRIQUE, qui divergeait d'un chemin a l'autre.
+    """
+    valeurs = [str(item.get(champ, "?")) for champ in CHAMPS_SOURCE]
+    return (PREFIXE_SOURCE_ENTONNOIR + str(item.get("id", "E-???"))
+            + ":" + valeurs[0] + "/" + valeurs[1] + ":" + valeurs[2])
+
+
+def noter_naissance(etat, item):
+    """GARDE l'identite d'un item qui PART (MO-334) : une TOMBE, jamais une copie.
+
+    Appelee par les TROIS chemins de consommation (l'item nomme, la tete du brin,
+    le brin entier) : un seul chemin qui l'oublierait rouvrirait la perte qu'on
+    ferme. Le champ `source` de l'item n'est JAMAIS recopie -- l'auto-soin
+    `reparer_sources` (entonnoir/stockage.py) reecrit TOUT noeud portant un
+    `source`, et une tombe n'est pas une provenance.
+
+    IDEMPOTENTE : une seule tombe par item (une reprise apres incident ne les
+    empile pas). Un item SANS IDENTIFIANT est DIT : sans lui, aucune tombe n'a de
+    cle. Rend True si une tombe a ete ECRITE, False sinon (rien a dire de plus).
+
+    VOLUME (mesure du 2026-09-21) : une tombe pese 111 octets ; les 332 items deja
+    consommes en representeraient 36 Ko, contre 155 594 octets d'etat aujourd'hui.
+    Elle n'a PAS de plafond PAR CHOIX, et c'est un choix : sa borne est STRUCTURELLE
+    (une tombe par item, jamais une par evenement, et un id ne se reutilise pas), la
+    ou une tombe qui expirerait rouvrirait exactement la perte qu'elle ferme.
+    """
+    identifiant = str((item or {}).get("id") or "")
+    if not identifiant:
+        print("ALERTE memoire de naissance (MO-334) : item SANS IDENTIFIANT -- aucune"
+              " tombe ecrite (la source de sa mission ne pourra plus etre rendue).")
+        return False
+    memoires = etat.setdefault(CLE_MEMOIRE_NAISSANCE, [])
+    for tombe_connue in memoires:
+        if str(tombe_connue.get("id")) == identifiant:
+            return False
+    tombe = {"id": identifiant}
+    for champ in CHAMPS_SOURCE:
+        valeur = str((item or {}).get(champ) or "")
+        if valeur:
+            tombe[champ] = valeur
+    tombe[CHAMP_CONSOMME_LE] = horodater()
+    memoires.append(tombe)
+    return True
+
+
+def naissance_de_l_item(item_id, etat=None):
+    """La TOMBE d'un item consomme, ou None (MO-334).
+
+    Un item VIVANT n'a pas de tombe : c'est `item_du_entonnoir` qui le rend, et lui
+    seul fait FOI. La tombe parle quand l'item n'est plus la -- elle dit ce que
+    l'item ETAIT, jamais ce qu'on voudrait qu'il ait ete. Sans `etat` fourni, l'etat
+    de l'entonnoir est lu ici.
+    """
+    if etat is None:
+        etat = charger_entonnoir_pilote()
+    for tombe in etat.get(CLE_MEMOIRE_NAISSANCE) or []:
+        if str(tombe.get("id")) == str(item_id):
+            return tombe
+    return None
+
+
+def champs_manquants_naissance(tombe):
+    """Les champs de la source ABSENTS d'une tombe : ils sont DITS, jamais devines."""
+    return [champ for champ in CHAMPS_SOURCE if not str((tombe or {}).get(champ) or "")]
+
+
+def source_de_l_item(item_id):
+    """La source d'une mission nee d'un item : le RESOLVEUR UNIQUE (MO-333/MO-334).
+
+    Trois provenances, trois reponses, jamais un melange :
+      - `vivant` : l'item est encore dans l'entonnoir -- il fait FOI ;
+      - `memoire` : l'item est consomme, sa TOMBE porte ses trois champs -- la forme
+        longue est rendue DEPUIS LA MEMOIRE (elle est DATEE, jamais inventee) ;
+      - `memoire-incomplete` ou `inconnu` : il manque un champ, ou l'item n'a jamais
+        ete vu -- forme COURTE, et ce qui manque est DIT.
+
+    Rend (source, provenance, champs_manquants) : l'appelant DECIDE quoi dire, il ne
+    recompose rien (un second composeur divergerait, L-029).
+    """
+    etat = charger_entonnoir_pilote()
+    item = item_dans_etat(etat, item_id)
+    if item is not None:
+        return source_depuis_item(item), SOURCE_VIVANTE, []
+    tombe = naissance_de_l_item(item_id, etat)
+    if tombe is None:
+        return PREFIXE_SOURCE_ENTONNOIR + str(item_id), SOURCE_INCONNUE, []
+    manquants = champs_manquants_naissance(tombe)
+    if manquants:
+        return (PREFIXE_SOURCE_ENTONNOIR + str(item_id), SOURCE_MEMOIRE_INCOMPLETE,
+                manquants)
+    return source_depuis_item(tombe), SOURCE_MEMOIRE, []
+
+
+def outils_de_l_item(item_id):
+
+    """La LISTE DES OUTILS preparee sur un item de l entonnoir (EO-313), ou [].
+
+    A LIRE AVANT LA CONSOMMATION : l item quitte le brin a la naissance de la
+    mission, donc une lecture APRES rendrait une liste vide et la mission partirait
+    sans ses outils, en silence -- exactement ce que cette porte existe pour eviter.
+    Cherche a TOUS les echelons : l item prepare peut etre au vrac, dans sa file, ou
+    dans le brin.
+    """
+    item = item_du_entonnoir(item_id)
+    return [str(nom) for nom in ((item or {}).get(CHAMP_OUTILS) or []) if str(nom).strip()]
+
+
 def mission_depuis_item(file_missions, item, role, nom_lot=None):
     """Fabrique la mission d'un item du brin (forme PARTAGEE par les deux versements).
 
@@ -1461,8 +2135,14 @@ def mission_depuis_item(file_missions, item, role, nom_lot=None):
         "type": item.get("type", ""),
         "statut": STATUT_EN_ATTENTE,
         "chargee_le": horodater(),
-        "source": "entonnoir:" + item.get("id", "E-???") + ":" + item.get("type", "?") + "/" + item.get("categorie", "?") + ":" + item.get("urgence", "?"),
+        "source": source_depuis_item(item),
     }
+    # EO-313 : la LISTE DES OUTILS preparee sur l item est RECOPIEE ici. Les DEUX
+    # versements (la tete du brin et le brin ENTIER) passent par cette fabrique :
+    # c est le seul endroit ou la recopie ne peut pas etre oubliee pour l un des deux.
+    outils = [str(nom) for nom in (item.get(CHAMP_OUTILS) or []) if str(nom).strip()]
+    if outils:
+        mission[CHAMP_OUTILS] = outils
     if nom_lot:
         mission["lot"] = nom_lot
     return mission
@@ -1477,7 +2157,7 @@ def item_deja_servi(file_missions, item_id):
     file courante : une mission archivee a deja ete servie, et un item qu'elle
     nomme ne peut plus etre dans le brin.
     """
-    prefixe = "entonnoir:" + str(item_id)
+    prefixe = PREFIXE_SOURCE_ENTONNOIR + str(item_id)
     for mission in file_missions.get("missions", []):
         source = str(mission.get("source") or "")
         if source == prefixe or source.startswith(prefixe + ":"):
@@ -1497,6 +2177,9 @@ def consommer_item(item_id):
     """
     etat = charger_entonnoir_pilote()
     identifiant = str(item_id)
+    # MO-334 : l'item est LU AVANT de partir -- c'est sa derniere apparition, et sa
+    # tombe se remplit de ce qu'il EST, jamais de ce qu'on suppose.
+    item_retire = item_dans_etat(etat, item_id)
     dans_brin = any(str(i.get("id")) == identifiant for i in etat.get("brin", []))
     dans_file = retirer_de_ses_files(etat, item_id)
     avant_vrac = len(etat.get("vrac", []))
@@ -1505,6 +2188,7 @@ def consommer_item(item_id):
     if not dans_brin and not dans_file and not dans_vrac:
         return 1, "item inconnu (ni brin, ni file, ni vrac) : " + identifiant
     etat["brin"] = [i for i in etat.get("brin", []) if str(i.get("id")) != identifiant]
+    noter_naissance(etat, item_retire)
     enregistrer_entonnoir_pilote(etat)
     return 0, "item consomme : " + identifiant + " (retire du brin, de sa file et du vrac)"
 
@@ -1535,8 +2219,11 @@ def verser_tresse(file_missions, nom_lot=None):
     des missions en attente (un lot courant ne se remplace pas en silence).
     Retourne (code, message).
     """
-    if mission_en_cours(file_missions) is not None:
-        return 1, "REFUS : une mission est deja en cours (serie stricte). Termine-la d'abord."
+    # MO-341 : la MEME regle, la MEME forme -- son domicile est `refus_serie_stricte`
+    # (mesure du 2026-09-21 : elle vivait en SEPT endroits, dont un sans aucune garde).
+    refus = refus_serie_stricte(file_missions)
+    if refus:
+        return 1, refus
     if ids_en_lot(file_missions) and prochaine_du_lot(file_missions) is not None:
         return 1, "REFUS : un lot est deja arme et en attente -- termine-le avant d'en verser un autre."
     etat = charger_entonnoir_pilote()
@@ -1577,6 +2264,9 @@ def verser_tresse(file_missions, nom_lot=None):
         file_missions.setdefault("missions", []).append(mission)
         ids.append(mission["id"])
         consommes.append(item.get("id", "E-???"))
+        # MO-334 : la tombe s'ecrit au moment OU l'item devient mission -- un seul
+        # geste, sinon un des deux versements (la tete, le brin entier) l'oublierait.
+        noter_naissance(etat, item)
     armer_lot(file_missions, ids)
     # 3) Les items verses quittent le brin ET leur file-type (sinon tisser les remet).
     for item_id in consommes:
@@ -1597,8 +2287,9 @@ def consommer_tete_tresse(file_missions):
     la re-tisserait). REFUS si le pilote a deja une mission en cours.
     Retourne (code, message).
     """
-    if mission_en_cours(file_missions) is not None:
-        return 1, "REFUS : une mission est deja en cours (serie stricte). Termine-la d'abord."
+    refus = refus_serie_stricte(file_missions)
+    if refus:
+        return 1, refus
     etat = charger_entonnoir_pilote()
     brin = etat.get("brin", [])
     if not brin:
@@ -1629,6 +2320,8 @@ def consommer_tete_tresse(file_missions):
     mission = mission_depuis_item(file_missions, tete_consommee, role)
     file_missions.setdefault("missions", []).append(mission)
     retirer_de_ses_files(etat, tete.get("id"))
+    # MO-334 : la tete du brin part AVEC sa tombe (meme geste que le brin entier).
+    noter_naissance(etat, tete_consommee)
     enregistrer_file(file_missions)
     enregistrer_entonnoir_pilote(etat)
     return 0, (
@@ -1721,6 +2414,83 @@ def verification_post_fin(mission, bilan):
                 pass
 
     return code_global, messages
+
+
+def rotation_boites_intercom(mission=None):
+    """BORNE les boites intercom du flux a la cloture (demande createur, 2026-09-20).
+
+    Une boite intercom est en AJOUT SEUL : elle ne grandit que par ABSENCE d acte.
+    Mesure du jour : `pilote/outbox.jsonl` portait 17,5 Mo et 708 messages, soit
+    24,7 Ko par message (chaque ligne porte la mission ou le bilan ENTIER) -- 3,5
+    fois le plafond de 5 Mo -- et RIEN ne mesurait sa TAILLE : le cockpit n en
+    comptait que les LIGNES, donc une boite qui quadruple restait invisible.
+
+    Le MOTEUR est celui des journaux (`data/commun/rotation_journal.py`, M-076) :
+    le meme motif, jamais recopie. Trois invariants viennent avec lui, et c est
+    pour eux qu on ne reecrit pas un rotateur maison :
+
+      1. ARCHIVER D ABORD : l archive du jour est ecrite et VERIFIEE avant que la
+         boite soit reecrite -- une panne entre les deux ne perd aucun message ;
+      2. LE DEJA CONNU : une rotation qui ignore ce qu elle a deja deplace se
+         recree des jumeaux au passage suivant (relancer est donc sans effet) ;
+      3. UNE COURSE SE REFUSE : si la boite a grandi entre la lecture et la
+         reecriture, on recommence, et on REFUSE en le nommant si ca bouge encore
+         -- on n ecrase JAMAIS un message arrive pendant la rotation.
+
+    L ACTE est du PILOTE, a CHAQUE cloture, et il est MESURE : la sortie dit la
+    taille AVANT, la taille APRES, ce qui est parti a l archive et ce qui reste,
+    et le fait est note AU MARBRE (action `porte`, porte `pilote:rotation-intercom`)
+    -- une rotation dont la seule trace est la console se perd dans le tuyau.
+
+    Elle passe APRES `nettoyer_intercom` (les messages traites sont partis) et
+    AVANT le depot de la fin de mission : la ligne qu on vient d ecrire n est
+    jamais la premiere candidate au depart.
+
+    JAMAIS bloquant : son echec ne tue JAMAIS une mission (on alerte). Retourne
+    (code, message) -- le message est imprime par l appelant.
+    """
+    boites = (("pilote/outbox", BOITE_PILOTE_OUT), ("matrice/inbox", BOITE_MATRICE_IN))
+    mesures = []
+    alertes = []
+    for nom, chemin in boites:
+        try:
+            rapport = tourner(chemin, SEUIL_OCTETS_BOITES_INTERCOM,
+                              MESSAGES_GARDES_BOITES_INTERCOM,
+                              ESSAIS_ROTATION_BOITES_INTERCOM,
+                              PREFIXE_ARCHIVE_BOITES_INTERCOM)
+        except Exception as erreur:  # le moteur promet de ne pas lever : on le dit, on ne le suppose pas
+            ligne = nom + " : moteur de rotation en echec (" + str(erreur) + ")"
+            alertes.append(ligne)
+            mesures.append(ligne)
+            print("  " + ligne)
+            continue
+        avant = rapport.get("octets_avant")
+        motif = str(rapport.get("motif", ""))
+        if rapport.get("rotation"):
+            ligne = (nom + " " + str(avant) + " -> " + str(rapport.get("octets_apres")) + " o, "
+                     + str(rapport.get("lignes_archivees")) + " message(s) archive(s) dans "
+                     + str(rapport.get("archive")) + ", " + str(rapport.get("lignes_gardees"))
+                     + " garde(s) pour un seuil de " + str(SEUIL_OCTETS_BOITES_INTERCOM) + " o")
+        elif "REFUS" in motif or "ECART" in motif:
+            ligne = nom + " NON BORNEE -- " + motif
+            alertes.append(ligne)
+        else:
+            ligne = (nom + " " + str(avant if avant is not None else 0)
+                     + " o (sous le seuil de " + str(SEUIL_OCTETS_BOITES_INTERCOM) + " o)")
+        mesures.append(ligne)
+        print("  " + ligne)
+    sortie = " ; ".join(mesures)
+    if mission is not None and mission.get("id"):
+        # Le fait est note MEME quand la boite est sous le seuil : sinon un outbox
+        # qui quadruple en une journee ne laisserait aucune mesure derriere lui.
+        noter_journal(mission["id"], mission.get("theme", "") or THEME_DEFCON, "porte",
+                      "rotation des boites intercom : " + sortie,
+                      portes=["pilote:rotation-intercom"])
+    if alertes:
+        return 1, ("ALERTE intercom : une boite n a PAS pu etre bornee -- " + " ; ".join(alertes)
+                   + ". Une boite qui grandit sans borne finit par etre illisible, et l illisible"
+                   " se jette : la rotation sera retentee a la prochaine cloture.")
+    return 0, ""
 
 
 def nettoyer_intercom():

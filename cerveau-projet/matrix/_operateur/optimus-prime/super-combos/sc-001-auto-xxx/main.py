@@ -32,6 +32,7 @@ TROIS REFUS, tous NOMMES (une impossibilite de conclure ne se declare jamais
 Usage:
     python main.py executer [--fichier <fichier>] [--mission <id>]
     python main.py executer-complet [--fichier <fichier>] [--mission <id>]
+    python main.py pilote                      (LA CHAINE DU PILOTE : ses 7 portes, temoin ou rien)
     python main.py auto-test
     python main.py status
 """
@@ -83,6 +84,7 @@ REPERTOIRE_THEMES = REPERTOIRE_OPTIMUS / NOM_DOSSIER_PARC / NOM_DOSSIER_THEMES
 REPERTOIRE_OUTILS = REPERTOIRE_SUPER_COMBOS / "combos" / "outils"
 
 # PORTE OFFICIELLE du test d'un theme : on ne recopie pas le test, on l'appelle.
+NOM_LANCEUR = "lancer.py"
 NOM_OUTIL_TEST_THEME = "tester-theme.py"
 CHEMIN_OUTIL_TEST_THEME = REPERTOIRE_OUTILS / NOM_OUTIL_TEST_THEME
 
@@ -110,6 +112,26 @@ SUFFIXE_FICHIER_THEME = ".json"
 # Codes NOMMES : un code magique dans la logique est une decision cachee.
 CODE_NON_TESTABLE = 2
 LONGUEUR_MOTIF = 160
+
+
+# --- LA CHAINE DU PILOTE (EO-275, demande du createur) ---------------------
+# La MEME mecanique que les six phases -- un TEMOIN ou RIEN -- mais sur les PORTES
+# du pilote et de sa surveillance. Chaque porte est appelee par la PORTE OFFICIELLE
+# (lancer.py) : on ne recopie ni son code ni son perimetre (convention LIEN, 2).
+# Son TEMOIN est la phrase qu'elle imprime quand elle a VRAIMENT regarde : un code 0
+# sans temoin ne distingue pas < verifie > de < aveugle > -- c'est la lecon de
+# `juger_phase`, appliquee telle quelle. Temoins MESURES le 2026-09-22 (une sortie
+# reelle par porte), jamais devines.
+CHEMIN_LANCEUR = REPERTOIRE_MATRICE / NOM_LANCEUR
+PORTES_PILOTE = (
+    ("FLUX2", ("garde-flux2",), "FLUX 2 RESPECTE"),
+    ("MARBRE", ("suivi-optimus", "verifier"), "Coherence debut/fin : OK"),
+    ("TRACE", ("bdd-modifications", "verifier"), "toutes relatives a la racine de la Matrice"),
+    ("CARTES", ("verifier-cartes-identite",), "VERDICT OK : tout document de la zone"),
+    ("MACHINE", ("inventaire-systeme", "verifier"), "VERDICT OK : la fiche dit la machine"),
+    ("COMMANDES", ("verifier-commandes",), "Commandes fautives : 0"),
+    ("INTEGRITE", ("espion-integrite", "verifier"), "Passe complete : aucune alerte"),
+)
 
 
 # --- CHEMINS DES THEMES ----------------------------------------------------
@@ -217,6 +239,76 @@ def resumer(resultats, verbeux=True):
         return 1
     if verbeux:
         print("VERDICT OK : les six themes sont bien formes (temoin present a chaque phase).")
+    return 0
+
+
+# --- TEST D'UNE PORTE DU PILOTE --------------------------------------------
+
+def tester_porte(arguments):
+    """(code, stdout, stderr) de la porte, par le LANCEUR OFFICIEL du workspace.
+
+    code 2 = on N'A PAS PU tester (lanceur absent). Comme pour un theme : une
+    impossibilite de conclure ne se declare JAMAIS < reussie >.
+    """
+    if not CHEMIN_LANCEUR.is_file():
+        return CODE_NON_TESTABLE, "", "lanceur introuvable : " + str(CHEMIN_LANCEUR)
+    resultat = subprocess.run(
+        [sys.executable, str(CHEMIN_LANCEUR)] + list(arguments),
+        capture_output=True, text=True,
+    )
+    return resultat.returncode, resultat.stdout, resultat.stderr
+
+
+def juger_porte(code, sortie, erreur, temoin):
+    """(ok, motif) : DECISION PURE sur une porte -- un TEMOIN ou rien.
+
+    Meme contrat que `juger_phase`, et pure pour la meme raison : le cobaye la
+    rejoue sur des cas pieges sans disque, sans horloge et sans sous-processus.
+    """
+    if code == CODE_NON_TESTABLE:
+        return False, "non testable : " + premiere_ligne(erreur or "cause non dite")
+    if code != 0:
+        return False, "code " + str(code) + " : " + premiere_ligne(erreur or sortie or "sans message")
+    if temoin not in (sortie or ""):
+        return False, "code 0 mais AUCUN TEMOIN : la porte n'a pas dit < " + temoin + " >"
+    return True, "temoin present (" + temoin + ")"
+
+
+def executer_portes(verbeux=True):
+    """Teste les portes du pilote, dans l'ordre declare. Rend (code, resultats)."""
+    resultats = []
+    for nom, arguments, temoin in PORTES_PILOTE:
+        if verbeux:
+            print("=" * 60)
+            print("PORTE " + nom + " : " + " ".join(arguments))
+            print("=" * 60)
+        code, sortie, erreur = tester_porte(arguments)
+        ok, motif = juger_porte(code, sortie, erreur, temoin)
+        if verbeux:
+            print(("  [OK] " if ok else "  [KO] ") + motif)
+        resultats.append({"theme": nom, "ok": ok, "code": code, "motif": motif})
+    echecs = [resultat for resultat in resultats if not resultat["ok"]]
+    return (1 if echecs else 0), resultats
+
+
+def resumer_portes(resultats, verbeux=True):
+    """Resume de la chaine du pilote : les portes ACCUSEES sont NOMMEES."""
+    echecs = [resultat["theme"] for resultat in resultats if not resultat["ok"]]
+    if verbeux:
+        print("=" * 60)
+        print("RESUME DE LA CHAINE DU PILOTE")
+        print("=" * 60)
+        print("Portes testees : " + str(len(resultats)))
+        print("Reussis : " + str(len(resultats) - len(echecs)))
+        print("Echecs : " + str(len(echecs)))
+    if echecs:
+        if verbeux:
+            print("PORTES ACCUSEES : " + ", ".join(echecs))
+            print("VERDICT KO : ces portes n'ont pas pu etre prouvees.")
+        return 1
+    if verbeux:
+        print("VERDICT OK : les " + str(len(resultats))
+              + " portes du pilote temoignent (un temoin a chaque porte).")
     return 0
 
 
@@ -357,6 +449,21 @@ def cmd_auto_test(args):
                   "code " + str(code_manquant) + ", accuses : " + (", ".join(accuses) or "(aucun)"),
                   resultats)
 
+    print("-- 3 bis. la CHAINE DU PILOTE (EO-275) : un temoin ou rien --")
+    cas_portes = (
+        ("porte qui temoigne", juger_porte(0, "FLUX 2 RESPECTE\n", "", "FLUX 2 RESPECTE"), True),
+        ("code 0 SANS temoin (le faux vert)", juger_porte(0, "tout va bien\n", "", "FLUX 2 RESPECTE"), False),
+        ("porte en erreur (code 1)", juger_porte(1, "", "refus nomme", "FLUX 2 RESPECTE"), False),
+        ("non testable (code 2)", juger_porte(CODE_NON_TESTABLE, "", "lanceur introuvable", "FLUX 2 RESPECTE"), False),
+    )
+    for nom, (ok, _), attendu in cas_portes:
+        controler(nom, ok == attendu,
+                  "attendu " + ("OK" if attendu else "ACCUSE") + " -- obtenu " + ("OK" if ok else "ACCUSE"),
+                  resultats)
+    controler("les 7 portes du pilote sont declarees avec leur temoin",
+              len(PORTES_PILOTE) == 7 and all(t for _, _, t in PORTES_PILOTE),
+              str(len(PORTES_PILOTE)) + " portes", resultats)
+
     print("-- 4. la CIBLE : ancree sur la racine, jamais sur le cwd --")
     cible_ok, motif_cible = verifier_cible("/chemin/qui/n/existe/pas.py")
     controler("cible absente refusee", not cible_ok, motif_cible, resultats)
@@ -396,9 +503,24 @@ def cmd_auto_test(args):
     return 0
 
 
+def cmd_pilote(args):
+    """Verb `pilote` : enchainer la chaine du PILOTE (meme mecanique, autres portes).
+
+    Le super-combo sert le pilote : il ne JUGE pas ses missions, il verifie que ses
+    PORTES repondent avec leur temoin (flux 2, marbre, trace, cartes, machine,
+    commandes, integrite) et il NOMME celles qui ne temoignent pas.
+    """
+    print("=" * 60)
+    print("SUPER-COMBOS sc-001 -- CHAINE DU PILOTE (temoin ou rien)")
+    print("=" * 60)
+    code, resultats = executer_portes()
+    return resumer_portes(resultats)
+
+
 COMMANDES = {
     "executer": cmd_executer,
     "executer-complet": lambda args: cmd_executer(args, complet=True),
+    "pilote": cmd_pilote,
     "status": cmd_status,
     "auto-test": cmd_auto_test,
 }
@@ -408,7 +530,7 @@ def main():
     if len(sys.argv) < 2 or sys.argv[1] not in COMMANDES:
         print(__doc__)
         print("\nVerbes :")
-        for nom in ("executer", "executer-complet", "status", "auto-test"):
+        for nom in ("executer", "executer-complet", "pilote", "status", "auto-test"):
             print("  " + nom)
         return 1
     return COMMANDES[sys.argv[1]](sys.argv[2:])

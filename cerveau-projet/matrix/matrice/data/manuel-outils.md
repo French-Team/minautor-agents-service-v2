@@ -4,13 +4,38 @@
 > MIS A JOUR A CHAQUE NAISSANCE OU MODIFICATION D'OUTIL (convention-indices).
 > Pour l'architecture d'un outil : lire son DESCRIPTION.md.
 
+## 0. lancer.py -- lanceur UNIQUE (MO-249)
+
+Toute commande d outil passe par le lanceur : le NOM suffit, l interpreteur et le
+chemin sont poses par LUI -- la commande n est plus jamais ecrite a la main.
+
+| Commande | Usage |
+|---|---|
+| lancer un outil | `python3 cerveau-projet/matrix/lancer.py <outil> <verbe> [arguments...]` |
+| lister | `python3 cerveau-projet/matrix/lancer.py --lister` |
+| aide | `python3 cerveau-projet/matrix/lancer.py --aide` |
+
+**Refus NOMME** : nom inconnu = code 2, avec les noms proches. Le lanceur resout
+`matrice/data/outils/<nom>/main.py` et `matrice/routines/<nom>/main.py`.
+
+**Source UNIQUE de resolution (EO-287)** : la resolution et son refus vivent dans
+`matrice/data/commun/resolution_outils.py` -- le lanceur les LIT, et les appelants
+INTERNES aussi (`from resolution_outils import chemin_outil`) au lieu de recopier
+`data/outils/<nom>/main.py` : un chemin recopie ne se plaint JAMAIS quand l outil
+disparait, il plante sans dire pourquoi.
+
+**Garde des commandes (P3)** : le maillon 21 quinquies (`verifier-commandes.py`)
+accuse, dans les documents, un python -c, un heredoc, un appel sans interpreteur,
+un chemin non ancre et un NOM de brique INCONNU -- commandes des blocs de code ET
+commandes inline (EO-287 : 77 lignes nommaient `outils`, qui n est pas une brique).
+
 ## 1. bdd-modifications -- `matrice/data/outils/bdd-modifications/`
 
 | Commande | Usage |
 |---|---|
-| `noter` | `python main.py noter --fichier <chemin> --action <cree\|modifie\|corrige\|supprime> --detail "..." --tags "a,b"` |
-| `lire` | `python main.py lire [--fichier X] [--tag Y]` (filtres combinables, reponse vide = aucun resultat) |
-| `verifier` | `python main.py verifier` (empreinte reelle vs etalon) |
+| `noter` | `python3 cerveau-projet/matrix/lancer.py bdd-modifications noter --fichier <chemin> --action <cree\|modifie\|corrige\|supprime> --detail "..." --tags "a,b"` |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py bdd-modifications lire [--fichier X] [--tag Y]` (filtres combinables, reponse vide = aucun resultat) |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py bdd-modifications verifier` (empreinte reelle vs etalon) |
 
 **Protections** : actions en vocabulaire ferme (cree/modifie/corrige/supprime), ecriture atomique LF, empreinte SHA-256 dans un fichier separe, garde-fou structurel sur `data/`.
 **Quand** : APRES chaque modification d'un fichier de la Matrice (anti-surcharge : jamais de commentaire de modification dans le fichier).
@@ -19,10 +44,10 @@
 
 | Commande | Usage |
 |---|---|
-| `ajouter` | `python main.py ajouter --lecon "..." --tags "a,b" [--source "..."]` |
-| `modifier` | `python main.py modifier --id L-XXX --lecon "..." [--source "..."]` (correction, garde l'id) |
-| `lire` | `python main.py lire [--tag X]` |
-| `verifier` | `python main.py verifier` |
+| `ajouter` | `python3 cerveau-projet/matrix/lancer.py bdd-lecons ajouter --lecon "..." --tags "a,b" [--source "..."]` |
+| `modifier` | `python3 cerveau-projet/matrix/lancer.py bdd-lecons modifier --id L-XXX --lecon "..." [--source "..."]` (correction, garde l'id) |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py bdd-lecons lire [--tag X]` |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py bdd-lecons verifier` |
 
 **Protections** : porte unique des lecons (corrections.md est supprime), tags obligatoires, ecriture atomique LF, empreinte.
 **Quand** : fin d'une evolution validee (proto-2), apres chaque lecon reelle ; le pilote consomme ces lecons taguees dans ses injections.
@@ -31,12 +56,12 @@
 
 | Commande | Usage |
 |---|---|
-| `ajouter` | `python main.py ajouter --session "..." --tags "a,b" [--source "..."]` |
-| `lire` | `python main.py lire [--tag X]` |
-| `resume` | `python main.py resume --derniere` (la DERNIERE session, lecture bornee via `data/commun/derniere_session.py` ; GARDE DE RETARD MO-121 : le retard est DIT des qu'une session FERMEE est plus ancienne que des entrees presentes -- une reponse en retard qui se tait passe pour la verite) |
-| `etat` | `python main.py etat` (l'ETAT SEUL, une ligne : `SESSION : ouverte\|fermee\|aucune` -- format partage declare dans `data/commun/trace_session.py`, MO-121) |
-| `retiqueter` | `python main.py retiqueter --id S-0XX [--tags "a,b"] [--horodatage "AAAA-MM-JJ HH:MM:SS"] [--motif "..."]` (CORRIGE les tags ET/OU la DATE d'une entree existante, TRACE conservee : `tags_avant`, `horodatage_avant`, `retiquete_le`/`re_date_le`, `motif_retiquetage` ; le texte n'est jamais touche -- MO-122) ; depuis MO-124 le RE-DATAGE refuse une seconde DEJA OCCUPEE (nommee) et un horodatage illisible -- dans les deux cas RIEN n'est ecrit |
-| `verifier` | `python main.py verifier` |
+| `ajouter` | `python3 cerveau-projet/matrix/lancer.py bdd-sessions ajouter --session "..." --tags "a,b" [--source "..."]` |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py bdd-sessions lire [--tag X]` |
+| `resume` | `python3 cerveau-projet/matrix/lancer.py bdd-sessions resume --derniere` (la DERNIERE session, lecture bornee via `data/commun/derniere_session.py` ; GARDE DE RETARD MO-121 : le retard est DIT des qu'une session FERMEE est plus ancienne que des entrees presentes -- une reponse en retard qui se tait passe pour la verite) |
+| `etat` | `python3 cerveau-projet/matrix/lancer.py bdd-sessions etat` (l'ETAT SEUL, une ligne : `SESSION : ouverte\|fermee\|aucune` -- format partage declare dans `data/commun/trace_session.py`, MO-121) |
+| `retiqueter` | `python3 cerveau-projet/matrix/lancer.py bdd-sessions retiqueter --id S-0XX [--tags "a,b"] [--horodatage "AAAA-MM-JJ HH:MM:SS"] [--motif "..."]` (CORRIGE les tags ET/OU la DATE d'une entree existante, TRACE conservee : `tags_avant`, `horodatage_avant`, `retiquete_le`/`re_date_le`, `motif_retiquetage` ; le texte n'est jamais touche -- MO-122) ; depuis MO-124 le RE-DATAGE refuse une seconde DEJA OCCUPEE (nommee) et un horodatage illisible -- dans les deux cas RIEN n'est ecrit |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py bdd-sessions verifier` |
 
 **Ordre des entrees (MO-125)** : la recence d'une entree se mesure sur `(horodatage, rang d'append)` -- a la MEME SECONDE, l'entree ECRITE APRES est la plus recente (la BDD est en ajout seul). Le departage est fait par le moteur PARTAGE `data/commun/derniere_session.py` pour `etat`, `resume` et le garde de retard ; il remplace l'ancien "la cloture gagne a la seconde" qui pouvait annoncer l'INVERSE de la verite (accident S-052/S-053). Une entree peut en plus etre RE-DATEE par `retiqueter --horodatage` (MO-124).
 **Contrat ECRIT/LU (MO-121)** : le vocabulaire et le format vivent a UN domicile, `data/commun/trace_session.py` -- celui qui ECRIT et celui qui LIT importent le meme module au lieu de se recopier. Mesure d'origine : le pilote notait `travail` quand la reprise ne lisait que `session-*` (19 missions couvertes par le silence, friction 41).
@@ -46,16 +71,16 @@
 
 | Commande | Usage |
 |---|---|
-| `file` | `python main.py file` (affiche la file) |
-| `charger` | `python main.py charger --theme <nom> --objectif "..."` |
-| `lot` | `python main.py lot --lot "nom" --theme "t1,t2" --objectif "o1\|o2"` (plusieurs missions, lot arme) |
-| `transformer` | `python main.py transformer --id M-00X --theme <nom> --objectif "..."` (en attente seulement) |
-| `statut` | `python main.py statut` |
-| `injecter` | `python main.py injecter` (mission suivante, serie stricte ; puisage AUTO dans la tresse si lot et file vides : tisser, puis tete du brin) |
-| `enchainer` | `python main.py enchainer` (demarre le lot : rounds dans la meme boucle) |
-| `fin` | `python main.py fin --bilan "..."` (cloture ; avec lot : enchainement + RETOUR consolide ; sans lot : la suivante (file ou tresse) demarre automatiquement, sortie propre si tout est vide) |
-| `file consommer` | `python main.py file consommer` (echelon 4 : tete du brin tresse -> file du pilote, garde serie stricte) |
-| `checklist` | `python main.py checklist --id M-XXX` (checklist de la mission selon son type) |
+| `file` | `python3 cerveau-projet/matrix/matrice/pilote/main.py file` (affiche la file) |
+| `charger` | `python3 cerveau-projet/matrix/matrice/pilote/main.py charger --theme <nom> --objectif "..."` |
+| `lot` | `python3 cerveau-projet/matrix/matrice/pilote/main.py lot --lot "nom" --theme "t1,t2" --objectif "o1\|o2"` (plusieurs missions, lot arme) |
+| `transformer` | `python3 cerveau-projet/matrix/matrice/pilote/main.py transformer --id M-00X --theme <nom> --objectif "..."` (en attente seulement) |
+| `statut` | `python3 cerveau-projet/matrix/matrice/pilote/main.py statut` |
+| `injecter` | `python3 cerveau-projet/matrix/matrice/pilote/main.py injecter` (mission suivante, serie stricte ; puisage AUTO dans la tresse si lot et file vides : tisser, puis tete du brin) |
+| `enchainer` | `python3 cerveau-projet/matrix/matrice/pilote/main.py enchainer` (demarre le lot : rounds dans la meme boucle) |
+| `fin` | `python3 cerveau-projet/matrix/matrice/pilote/main.py fin --bilan "..."` (cloture ; avec lot : enchainement + RETOUR consolide ; sans lot : la suivante (file ou tresse) demarre automatiquement, sortie propre si tout est vide) |
+| `file consommer` | `python3 cerveau-projet/matrix/matrice/pilote/main.py file consommer` (echelon 4 : tete du brin tresse -> file du pilote, garde serie stricte) |
+| `checklist` | `python3 cerveau-projet/matrix/matrice/pilote/main.py checklist --id M-XXX` (checklist de la mission selon son type) |
 
 **Protections** : refus de double injection (serie stricte), CHAMP THEME FERME (charger / lot / transformer refusent un theme hors vivier vivier-themes.json, code 2 + liste, canonisation a la porte casse-ignoree ; la tresse reste ouverte), lot -> chaque `fin` enchaine la suivante + RETOUR consolide a la Matrice, traces en BDD + intercom.
 **Quand** : toute mission passe par le pilote -- jamais de travail hors mission.
@@ -64,11 +89,11 @@
 
 | Commande | Usage |
 |---|---|
-| `tour` | `python main.py tour` (une passe : integrite des 14 BDD + presence des a-construire, journalisee) |
-| `verifier` | `python main.py verifier` (meme verdict, ZERO ligne ecrite : diagnostic des routes en lecture seule) |
-| `rotation` | `python main.py rotation` (borne le journal en ARCHIVANT ses evenements anciens -- jamais de suppression) |
-| `boucle` | `python main.py boucle` (surveillance a intervalle, refus de double lancement) |
-| `boucle arret` | `python main.py boucle arret` (arret cooperatif par drapeau) |
+| `tour` | `python3 cerveau-projet/matrix/lancer.py espion-integrite tour` (une passe : integrite des 14 BDD + presence des a-construire, journalisee) |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py espion-integrite verifier` (meme verdict, ZERO ligne ecrite : diagnostic des routes en lecture seule) |
+| `rotation` | `python3 cerveau-projet/matrix/lancer.py espion-integrite rotation` (borne le journal en ARCHIVANT ses evenements anciens -- jamais de suppression) |
+| `boucle` | `python3 cerveau-projet/matrix/lancer.py espion-integrite boucle` (surveillance a intervalle, refus de double lancement) |
+| `boucle arret` | `python3 cerveau-projet/matrix/lancer.py espion-integrite boucle arret` (arret cooperatif par drapeau) |
 
 **Protections** : rotation du journal par le moteur PARTAGE `data/commun/rotation_journal.py` (le meme pour les QUATRE journaux de routines -- espion, veille, vigies -- seuil en constantes, archive datee, jamais de suppression, l'archive est dans le "deja connu" et une course est refusee), ne repare JAMAIS (signale ECART, code 1), a-construire = INFO (pas de fausse alerte, seule source du chapitre 2), chapitres ANNONCES calculees du registre (aucun canal declare sans production), PID + drapeau (zero processus fantome), journal en ajout seul et ROTATIONNE (archive datee, rien ne se perd, l'archive est dans le "deja connu" -- L-040 -- et une course est refusee plutot qu'ecrasee), cadence publiee dans un ETAT COURT (espion-etat.json) pour survivre a une rotation.
 **Quand** : `tour` apres chaque mission (passe finale) ; `verifier` pour tout diagnostic (jamais `tour` : une route en lecture seule ne doit pas ecrire) ; `boucle` en surveillance continue si demande (elle verifie la rotation avant chaque passe).
@@ -77,7 +102,7 @@
 
 | Commande | Usage |
 |---|---|
-| `verifier` | `python main.py verifier` (3 controles : ASCII strict, front-matter identite, index synchronise) |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py verifier-conventions verifier` (3 controles : ASCII strict, front-matter identite, index synchronise) |
 
 **Protections** : LECTURE SEULE (signale, ne repare jamais le marbre), index = lignes de tableau seulement (prose ignoree), code 0/1.
 **Quand** : apres toute modification d'une convention ou de son index ; integre a la veille (M-012).
@@ -86,7 +111,7 @@
 
 | Commande | Usage |
 |---|---|
-| `verifier` | `python main.py verifier` (3 controles : ASCII strict, front-matter identite, index synchronise) |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py verifier-regles verifier` (3 controles : ASCII strict, front-matter identite, index synchronise) |
 
 **Protections** : LECTURE SEULE, index = lignes de tableau, code 0/1.
 **Racine** : DETECTEE par remontee jusqu'a AGENTS.md (pattern v1) -- tourne depuis n'importe quel repertoire courant, plus aucun chemin compte a la main.
@@ -96,7 +121,7 @@
 
 | Commande | Usage |
 |---|---|
-| `verifier` | `python main.py verifier` (3 controles : ASCII strict, front-matter identite, index synchronise) |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py verifier-protocoles verifier` (3 controles : ASCII strict, front-matter identite, index synchronise) |
 
 **Protections** : LECTURE SEULE, index = lignes de tableau, citations avec chemin relatif acceptees (resolues depuis le dossier), code 0/1.
 **Racine** : DETECTEE par remontee jusqu'a AGENTS.md (pattern v1).
@@ -106,9 +131,9 @@
 
 | Commande | Usage |
 |---|---|
-| `verifier` | `python main.py verifier` (scan seul : ecarts + convertibilite, code 0/1) |
-| `corriger` | `python main.py corriger` (rapport, rien n'ecrit) |
-| `corriger --appliquer` | `python main.py corriger --appliquer` (convertit, ecriture atomique LF) |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py corriger-ascii verifier` (scan seul : ecarts + convertibilite, code 0/1) |
+| `corriger` | `python3 cerveau-projet/matrix/lancer.py corriger-ascii corriger` (rapport, rien n'ecrit) |
+| `corriger --appliquer` | `python3 cerveau-projet/matrix/lancer.py corriger-ascii corriger --appliquer` (convertit, ecriture atomique LF) |
 
 **Protections** : UN FICHIER SOUS ETALON .sha256 n'est JAMAIS reecrit ; .jsonl (histoire) hors cibles ; caracteres inconnus laisses et signales (jamais de perte) ; affichage console = points de code (jamais de caractere non-ASCII brut).
 **Exemptions VISIBLES (MO-075)** : les fichiers hors du champ de reecriture (BDD sous etalon + journaux .jsonl) sont NOMMES en fin de rapport, chacun avec son motif -- l'exclusion n'est jamais muette (mesure : 546 reecrivables contre 578 vus). Le rapport ne cite aucun point de code pour eux (la veille extrait les U+XXXX de la sortie d'un combo : un code cite pour un exempte deviendrait une fausse alerte).
@@ -119,12 +144,12 @@
 
 | Commande | Usage |
 |---|---|
-| `veille` | `python main.py veille` (une passe RELAX : corriger-ascii + py_compile) |
+| `veille` | `python3 cerveau-projet/matrix/lancer.py veille-flux veille` (une passe RELAX : corriger-ascii + py_compile) |
 | `veille --vigile` | (une passe VIGILE : + les 3 verifiers du marbre) |
 | `veille --boucle` | (surveillance continue a intervalle, refus de double lancement) |
 | `veille --boucle --vigile --intervalle <s>` | (mode et intervalle combinables) |
 | `veille arret` | (drapeau d'arret cooperatif, zero processus tue) |
-| `rotation` | `python main.py rotation` (borne journal-veille.txt en ARCHIVANT ses anciens -- jamais de suppression) |
+| `rotation` | `python3 cerveau-projet/matrix/lancer.py veille-flux rotation` (borne journal-veille.txt en ARCHIVANT ses anciens -- jamais de suppression) |
 
 **Protections** : journal ROTATIONNE (MO-078 : archive datee par le moteur PARTAGE `data/commun/rotation_journal.py`, l'archive fait partie du "deja connu" -- L-040 -- et une course est refusee plutot qu'ecrasee ; la boucle verifie la rotation avant chaque passe) ; BDD empreintees intouchables (via corriger-ascii) ; base-acceptee.json (les caracteres acceptes du createur ne produisent JAMAIS d'alerte) ; anti-spam (une seule alerte par signature, `alertes-emises.json`) ; re-test apres pause (fichier en cours d'ecriture = pas de fausse alerte) ; crash de sous-processus JAMAIS confondu avec un verdict (la signature de crash fait foi) ; timeout=120s sur chaque sous-processus (E-045 : un combo bloquant est tue, code 124, incident journalise -- la boucle ne pend jamais) ; alertes graves dans `intercom/matrice/inbox.jsonl` -> missions de reparation.
 **Racine** : DETECTEE par remontee jusqu'a AGENTS.md (pattern v1).
@@ -134,9 +159,9 @@
 
 | Commande | Usage |
 |---|---|
-| `noter` | `python main.py noter --outil <nom> --commande <verbe> --code <n> [--duree <ms>] [--detail "..."] --tags "a,b"` |
-| `lire` | `python main.py lire [--outil X] [--tag Y]` (filtres combinables, reponse vide = aucun resultat) |
-| `verifier` | `python main.py verifier` (structurel : JSON valide, cles requises, tags non vides) |
+| `noter` | `python3 cerveau-projet/matrix/lancer.py bdd-usages noter --outil <nom> --commande <verbe> --code <n> [--duree <ms>] [--detail "..."] --tags "a,b"` |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py bdd-usages lire [--outil X] [--tag Y]` (filtres combinables, reponse vide = aucun resultat) |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py bdd-usages verifier` (structurel : JSON valide, cles requises, tags non vides) |
 
 **Protections** : journal jsonl en AJOUT SEUL (l'histoire jamais reecrite, sans empreinte -- comme historiques-missions) ; tags obligatoires (refus code 2) ; ecriture LF ; garde-fou structurel sur `data/`.
 **Amelioration sac a dos (audit protections 2026-09-09)** : quand un outil REFUSE (code != 0), le message de protection (ligne REFUS) est note en DETAIL dans la BDD et affiche par `lire` -- le sac a dos trace la RAISON de chaque protection declenchee, pas seulement le code. Teste en reel (categorie hors liste fermee -> code 1 + message).
@@ -146,9 +171,9 @@
 
 | Commande | Usage |
 |---|---|
-| `definir` | `python main.py definir --cle <nom> --valeur "<valeur>" [--source "..."] --tags "a,b"` |
-| `lire` | `python main.py lire [--cle X] [--tag Y]` |
-| `verifier` | `python main.py verifier` (structurel + empreinte reelle vs etalon) |
+| `definir` | `python3 cerveau-projet/matrix/lancer.py bdd-variables definir --cle <nom> --valeur "<valeur>" [--source "..."] --tags "a,b"` |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py bdd-variables lire [--cle X] [--tag Y]` |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py bdd-variables verifier` (structurel + empreinte reelle vs etalon) |
 
 **Protections** : une CLE = une valeur courante (re-definir met a jour, l'identifiant V-XXX est conserve, jamais de doublon) ; tags obligatoires (refus code 2) ; ecriture atomique LF ; empreinte SHA-256 dans un fichier separe ; garde-fou structurel sur `data/`.
 **Quand** : toute variable vivante de la Matrice (etats, seuils, config decidee) -- modele-mere : le classeur v1 ; l'espion-integrite controle son integrite.
@@ -157,9 +182,9 @@
 
 | Commande | Usage |
 |---|---|
-| `noter` | `python main.py noter --section <missions\|alertes\|passes\|decisions> --detail "..." --tags "a,b"` |
-| `lire` | `python main.py lire [--section X] [--tag Y]` |
-| `verifier` | `python main.py verifier` (structurel + empreinte reelle vs etalon) |
+| `noter` | `python3 cerveau-projet/matrix/lancer.py bdd-activites noter --section <missions\|alertes\|passes\|decisions> --detail "..." --tags "a,b"` |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py bdd-activites lire [--section X] [--tag Y]` |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py bdd-activites verifier` (structurel + empreinte reelle vs etalon) |
 
 **Protections** : sections PRE-DECLAREES (une section inconnue est refusee, code 2 -- la structure ne derive jamais) ; rotation automatique a 50 entrees par section (les plus recentes, modeles-mere : AGENTS-activite-recente) ; tags obligatoires (refus code 2) ; ecriture atomique LF ; empreinte SHA-256 ; garde-fou structurel sur `data/`.
 **Quand** : chaque activite notable de la Matrice (missions, alertes, passes, decisions) -- revue RECENTE par emplacements precis, jamais "a la suite" ; l'espion-integrite controle son integrite.
@@ -168,10 +193,10 @@
 
 | Commande | Usage |
 |---|---|
-| `noter` | `python main.py noter --type <type> --detail "..." --tags "a,b"` (doublon actif refuse, code 2) |
-| `lire` | `python main.py lire [--type X] [--tag Y] [--depuis AAAA-MM-JJ] [--tout]` (actifs par defaut) |
-| `marquer-obsolete` | `python main.py marquer-obsolete --id H-XXX [--motif "..."]` |
-| `verifier` | `python main.py verifier` (structurel selon le type de ligne, sans empreinte) |
+| `noter` | `python3 cerveau-projet/matrix/lancer.py bdd-historique noter --type <type> --detail "..." --tags "a,b"` (doublon actif refuse, code 2) |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py bdd-historique lire [--type X] [--tag Y] [--depuis AAAA-MM-JJ] [--tout]` (actifs par defaut) |
+| `marquer-obsolete` | `python3 cerveau-projet/matrix/lancer.py bdd-historique marquer-obsolete --id H-XXX [--motif "..."]` |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py bdd-historique verifier` (structurel selon le type de ligne, sans empreinte) |
 
 **Protections** : journal jsonl en AJOUT SEUL (l'histoire jamais reecrite) ; obsolete SUR AJOUT (un marqueur vise l'id, l'entree originale intacte) ; doublons ACTIFS refuses (le marquer obsolete pour re-noter) ; cles requises SELON LE TYPE de ligne (evenement vs marqueur) ; ids uniques, cibles verifiees.
 **Quand** : tout evenement significatif de la Matrice (mission, reparation, decision, incident) -- filtrage par type/tag/date pour les revues ; l'espion-integrite surveille sa presence.
@@ -180,15 +205,20 @@
 
 | Commande | Usage |
 |---|---|
-| `deposer` | `python main.py deposer --theme "..." --objectif "..." [--urgence u] [--source s]` (echelon 0 : vrac, type propose par MOTS ENTIERS) |
-| `classer` | `python main.py classer --id E-XXX --type <dev\|reparation\|doc\|audit\|revision> [--categorie c]` (echelons 1-2 ; categorie PROPOSEE auto par mots entiers si absente -- gardee si dans les categories du type, sinon defaut ; `--categorie` explicite souveraine mais verifiee) |
-| `urgencer` | `python main.py urgencer --id E-XXX --urgence <bloquante\|haute\|normale\|basse>` (echelon 3) |
-| `retirer` | `python main.py retirer --id E-XXX` (sortie PROPRE du vrac -- M-058 : la mission sort avec son historique horodate dans le message ; inconnue code 1, usage code 2 ; ne touche JAMAIS une mission deja classee) |
-| `file` | `python main.py file` (affiche vrac + files, echelon par echelon) |
-| `tresse brin` | `python main.py tresse brin` (affiche le brin tisse) |
-| `tresse tisser` | `python main.py tresse tisser` (recompose le brin : urgence d'abord, puis round-robin par palier) |
+| `deposer` | `python3 cerveau-projet/matrix/matrice/pilote/main.py deposer --theme "..." --objectif "..." [--urgence u] [--source s]` (echelon 0 : vrac, type propose par MOTS ENTIERS) |
+| `classer` | `python3 cerveau-projet/matrix/matrice/pilote/main.py classer --id E-XXX --type <dev\|reparation\|doc\|audit\|revision> [--categorie c]` (echelons 1-2 ; categorie PROPOSEE auto par mots entiers si absente -- gardee si dans les categories du type, sinon defaut ; `--categorie` explicite souveraine mais verifiee) |
+| `urgencer` | `python3 cerveau-projet/matrix/matrice/pilote/main.py urgencer --id E-XXX --urgence <bloquante\|haute\|normale\|basse>` (echelon 3) |
+| `retirer` | `python3 cerveau-projet/matrix/matrice/pilote/main.py retirer --id E-XXX` (sortie PROPRE du vrac -- M-058 : la mission sort avec son historique horodate dans le message ; inconnue code 1, usage code 2 ; ne touche JAMAIS une mission deja classee) |
+| `file` | `python3 cerveau-projet/matrix/matrice/pilote/main.py file` (affiche vrac + files, echelon par echelon) |
+| `tresse brin` | `python3 cerveau-projet/matrix/matrice/pilote/main.py tresse brin` (affiche le brin tisse) |
+| `tresse tisser` | `python3 cerveau-projet/matrix/matrice/pilote/main.py tresse tisser` (recompose le brin : urgence d'abord, puis round-robin par palier) |
 
 **Protections** : listes FERMEES (types, categories, urgences -- une valeur hors liste est refusee, code 2) ; classement PROPOSE deterministe par MOTS ENTIERS (module `mots.py` : casse ignoree, pluriel simple tolere -- M-026 : 'preparer' ne propose plus 'reparation'), reclassable a la main (le createur reste souverain) ; au `classer`, la categorie est proposee auto si absente (gardee seulement si elle est dans les categories du type, sinon defaut -- M-027) ; ecriture atomique (tmp + remplacement) ; modules `listes.py`/`stockage.py`/`mots.py` (jamais constants/commun : collision avec le pilote).
+> **Copie OPTIMUS (EO-) :** l operateur a SA copie de l entonnoir (`_operateur/optimus-prime/pilote/entonnoir/`,
+> items `EO-NNN`), et elle porte UN verbe de plus -- `preparer` (EO-313) : il declare la LISTE
+> DES OUTILS d une mission sur son item, validee a la pose contre les briques servables a
+> l injection. Fiche de la zone : `_operateur/optimus-prime/pilote/entonnoir/indices.md`.
+
 **Quand** : tout volume de missions passe par le vrac -- l'echelon 4 (tresse de la file principale) consommera ces files (M-019).
 
 ## 15. Outils de l'operateur -- `_operateur/optimus-prime/super-combos/combos/outils/`
@@ -210,7 +240,7 @@ bdd-frictions) et espions annexes. Leur fiche de reference est
 
 | Commande | Usage |
 |---|---|
-| `generer` | `python main.py generer --moule <outil-bdd\|theme-bdd> --nom <nom> ...` (outil-bdd : --bdd --prefixe --liste --champ [--humain] ; theme-bdd : --bdd --prefixe [--nom-affiche] ; defaut : outil-bdd) |
+| `generer` | `python3 cerveau-projet/matrix/lancer.py dupliquer-template generer --moule <outil-bdd\|theme-bdd> --nom <nom> ...` (outil-bdd : --bdd --prefixe --liste --champ [--humain] ; theme-bdd : --bdd --prefixe [--nom-affiche] ; defaut : outil-bdd) |
 
 **Protections** : le generateur lit le MOULE (jamais un outil vivant) ; sources traduites EN MEMOIRE puis verifiees avant toute ecriture (py_compile + ASCII + aucun jeton residuel, puis clone executable) ; nom ferme PAR MOULE (`bdd-*` pour outil-bdd, `theme-*` pour theme-bdd) et moule inconnu refuse (code 2) ; jamais d'ecrasement (code 2 si l'outil existe) ; un seul ecart = aucune ecriture. Le moule theme-bdd genere un registre de themes a NOM UNIQUE (doublon casse-ignoree refuse code 2) avec SORTIE du registre par `retirer` (par id ou nom).
 **Quand** : chaque nouvelle BDD-registre de la Matrice (entrees taguees + empreinte) -- plus jamais de recopie a la main d'un outil existant.
@@ -222,11 +252,11 @@ bdd-frictions) et espions annexes. Leur fiche de reference est
 
 | Verbe | Commande |
 |---|---|
-| `proposer` | `python main.py proposer --source <chemin> --categorie <categorie> --raison <raison> --tags <a,b> [--mission MO-XXX]` |
-| `classer` | `python main.py classer --id K-XXX --categorie <categorie> --raison <raison>` |
-| `decider` | `python main.py decider --id K-XXX --verdict <conserver|archiver|reparer|dette|signaler> --preuve <preuve> [--destination <chemin>]` |
-| `lire` | `python main.py lire [--id K-XXX] [--categorie X] [--statut X] [--verdict X] [--tag X]` |
-| `verifier` | `python main.py verifier` |
+| `proposer` | `python3 cerveau-projet/matrix/lancer.py bdd-conservation proposer --source <chemin> --categorie <categorie> --raison <raison> --tags <a,b> [--mission MO-XXX]` |
+| `classer` | `python3 cerveau-projet/matrix/lancer.py bdd-conservation classer --id K-XXX --categorie <categorie> --raison <raison>` |
+| `decider` | `python3 cerveau-projet/matrix/lancer.py bdd-conservation decider --id K-XXX --verdict <conserver|archiver|reparer|dette|signaler> --preuve <preuve> [--destination <chemin>]` |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py bdd-conservation lire [--id K-XXX] [--categorie X] [--statut X] [--verdict X] [--tag X]` |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py bdd-conservation verifier` |
 
 **Categories fermees** : VIVANT, STRUCTUREL, GENERE, HISTORIQUE, OBSOLETE, COBAYE, ORPHELIN, HORS-PERIMETRE.
 **Statuts** : propose -> classe -> decide -> archive/conserve/repare/dette/signale/restaure.
@@ -243,11 +273,11 @@ bdd-frictions) et espions annexes. Leur fiche de reference est
 
 | Verbe | Commande |
 |---|---|
-| `ajouter` | `python main.py ajouter --nom "NOM" --but "..." [--description "..."]` |
-| `modifier` | `python main.py modifier --id TH-XXX --but "..."` (correction, garde l'id) |
-| `lire` | `python main.py lire [--nom "NOM"]` |
-| `retirer` | `python main.py retirer --id "TH-XXX"` (ou `--nom "NOM"`) |
-| `verifier` | `python main.py verifier` |
+| `ajouter` | `python3 cerveau-projet/matrix/lancer.py theme-vivier ajouter --nom "NOM" --but "..." [--description "..."]` |
+| `modifier` | `python3 cerveau-projet/matrix/lancer.py theme-vivier modifier --id TH-XXX --but "..."` (correction, garde l'id) |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py theme-vivier lire [--nom "NOM"]` |
+| `retirer` | `python3 cerveau-projet/matrix/lancer.py theme-vivier retirer --id "TH-XXX"` (ou `--nom "NOM"`) |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py theme-vivier verifier` |
 
 **Themes poses** : BDD, OUTIL, ROUTINE, INDICES, CONTRATS, PILOTE, TEMPLATES, REPARATION (TH-002 a TH-009, chacun fonde sur ses missions de preuve).
 **Consommation pilote** : depuis M-042, le champ theme du pilote est FERME sur ce vivier (charger / lot / transformer refusent hors vivier) -- le vivier devient la source canonique des themes de mission.
@@ -265,10 +295,10 @@ bdd-frictions) et espions annexes. Leur fiche de reference est
 
 | Verbe | Commande |
 |---|---|
-| `lire` | `python main.py lire` (etat + echelle + dernieres transitions) |
-| `monter` | `python main.py monter --niveau <3-5> --raison "..."` (montee libre, sauts permis) |
-| `descendre` | `python main.py descendre --niveau <cible> --raison "..."` (stricte : 5->4, 4->3) |
-| `valider` | `python main.py valider --raison "..."` (clot def3 : 3 -> 2 uniquement) |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py machine-defcon lire` (etat + echelle + dernieres transitions) |
+| `monter` | `python3 cerveau-projet/matrix/lancer.py machine-defcon monter --niveau <3-5> --raison "..."` (montee libre, sauts permis) |
+| `descendre` | `python3 cerveau-projet/matrix/lancer.py machine-defcon descendre --niveau <cible> --raison "..."` (stricte : 5->4, 4->3) |
+| `valider` | `python3 cerveau-projet/matrix/lancer.py machine-defcon valider --raison "..."` (clot def3 : 3 -> 2 uniquement) |
 
 **Protections** : la descente 3 -> 2 passe UNIQUEMENT par `valider` (la validation clot la periode de surveillance) ; descente stricte UN echelon a la fois ; `--raison` obligatoire ; ecriture atomique + empreinte du classeur maintenue ; journal des transitions `defcon-historique.jsonl` (append-only, surveille par l'espion).
 **Quand** : a la reception d'une demande `[alerte]` (variante detaillee `[alerte=defcon:N]`, convention des crochets v3), pour suivre la mise en securite (def4 = suivi de bout en bout), et pour clore une periode de surveillance (`valider`).
@@ -283,7 +313,7 @@ bdd-frictions) et espions annexes. Leur fiche de reference est
 
 | Verbe | Commande |
 |---|---|
-| `bilan` | `python main.py bilan --periode <1h|heures|24h|3j|semaine|mois>` (heures = 6 h, mois = 30 jours) |
+| `bilan` | `python3 cerveau-projet/matrix/lancer.py bilan-periode bilan --periode <1h|heures|24h|3j|semaine|mois>` (heures = 6 h, mois = 30 jours) |
 
 **Protections** : periode FERMEE (refus code 2 hors liste) ; lecture seule (n'ecrit jamais, aucune empreinte touchee) ; source absente ou cassee = section vide (jamais bloquant) ; lignes cassees des journaux ignorees.
 **Quand** : a la reception d'une demande `[bilan]`, avant une revision strategique, pour verifier ce que la Matrice a fait sur une periode.
@@ -298,9 +328,9 @@ bdd-frictions) et espions annexes. Leur fiche de reference est
 
 | Verbe | Commande |
 |---|---|
-| `etat` | `python main.py etat` (encart actuel + empreinte) |
-| `definir` | `python main.py definir --nom-llm <id> --agent <nom> --raison "..."` (creation OU maj idempotente) |
-| `verifier` | `python main.py verifier` (marqueurs apparies + empreinte reelle vs etalon `data/agents-md-empreinte.txt`) |
+| `etat` | `python3 cerveau-projet/matrix/lancer.py editer-agents-md etat` (encart actuel + empreinte) |
+| `definir` | `python3 cerveau-projet/matrix/lancer.py editer-agents-md definir --nom-llm <id> --agent <nom> --raison "..."` (creation OU maj idempotente) |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py editer-agents-md verifier` (marqueurs apparies + empreinte reelle vs etalon `data/agents-md-empreinte.txt`) |
 
 **Flux v3 grave dans l'encart** : la Matrice accueille au demarrage -> l'operateur fait sa demande -> la Matrice lance le cameleon pour sa mission (serie stricte). L'outil detecte AGENTS.md par remontee (motif unique `data/commun/racine.py`, L-013) et ecrit de facon atomique (tmp + remplacement, LF).
 
@@ -330,11 +360,11 @@ bdd-frictions) et espions annexes. Leur fiche de reference est
 
 | Commande | Effet |
 |---|---|
-| `python routines/vie/main.py etat` | etat des boucles (ARRET / ACTIVE / fantome nettoye) |
-| `python routines/vie/main.py activer` | lance les boucles arretees (detache invisible) |
-| `python routines/vie/server_matrice.py` | DEMARRE le server matrice (boucle de surveillance, intervalle 60 s) |
-| `python routines/vie/main.py server arret` | arret cooperatif du server (drapeau, jamais de kill) |
-| `python routines/vie/main.py server etat` | etat du server matrice (PID REELMENT sonde ; fantome detecte + nettoye) |
+| `python3 cerveau-projet/matrix/lancer.py vie etat` | etat des boucles (ARRET / ACTIVE / fantome nettoye) |
+| `python3 cerveau-projet/matrix/lancer.py vie activer` | lance les boucles arretees (detache invisible) |
+| `python3 cerveau-projet/matrix/matrice/routines/vie/server_matrice.py` | DEMARRE le server matrice (boucle de surveillance, intervalle 60 s) |
+| `python3 cerveau-projet/matrix/lancer.py vie server arret` | arret cooperatif du server (drapeau, jamais de kill) |
+| `python3 cerveau-projet/matrix/lancer.py vie server etat` | etat du server matrice (PID REELMENT sonde ; fantome detecte + nettoye) |
 
 **Correction audit protections 2026-09-09** : `server etat` lisait le fichier
 PID sans verifier le processus (faux `ACTIVE` avec un PID mort). Desormais il
@@ -351,8 +381,8 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 
 | Verbe | Commande |
 |---|---|
-| `construire` | `python main.py construire` (regenere le journal complet, ordre ferme des encarts) |
-| `lire` | `python main.py lire` (journal entier) ; `python main.py lire --encart <nom>` (UN encart ; inconnu -> code 2) |
+| `construire` | `python3 cerveau-projet/matrix/lancer.py journal-multi-encarts construire` (regenere le journal complet, ordre ferme des encarts) |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py journal-multi-encarts lire` (journal entier) ; `python3 cerveau-projet/matrix/lancer.py journal-multi-encarts lire --encart <nom>` (UN encart ; inconnu -> code 2) |
 
 **Lecture BORNEE (MO-078)** : l'encart routines lisait `journal-veille.txt` EN ENTIER (mesure du 2026-09-13 : 3,85 Mo / 44 050 lignes) pour n'afficher que 5 evenements ; il lit desormais la QUEUE (256 Ko) par le lecteur PARTAGE `data/commun/rotation_journal.py` -- cout constant quelle que soit la taille du journal.
 
@@ -371,11 +401,11 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 
 | Verbe | Commande |
 |---|---|
-| `pause` | `python main.py pause [--raison "..."]` (manuel `[pause]` ou defcon 5 auto) |
-| `reprendre` | `python main.py reprendre` (apres maintenance user ; restore + notifie) |
-| `etat` | `python main.py etat` (montre l'etat de pause s'il existe) |
-| `perimetre` | `python main.py perimetre --zones "a,b"` (reduit la lecture cameleon ; vide = restaure) |
-| `journal` | `python main.py journal` (10 derniers evenements pause/reprise) |
+| `pause` | `python3 cerveau-projet/matrix/lancer.py pause-session pause [--raison "..."]` (manuel `[pause]` ou defcon 5 auto) |
+| `reprendre` | `python3 cerveau-projet/matrix/lancer.py pause-session reprendre` (apres maintenance user ; restore + notifie) |
+| `etat` | `python3 cerveau-projet/matrix/lancer.py pause-session etat` (montre l'etat de pause s'il existe) |
+| `perimetre` | `python3 cerveau-projet/matrix/lancer.py pause-session perimetre --zones "a,b"` (reduit la lecture cameleon ; vide = restaure) |
+| `journal` | `python3 cerveau-projet/matrix/lancer.py pause-session journal` (10 derniers evenements pause/reprise) |
 
 **Protections** : REFUS si pause deja posee (pas de pause double) ; REFUS de reprendre si une mission est en cours (serie stricte) ; pendant la pause, le pilote REFUSE toute injection/enchainement (garde `session_en_pause`) et la fin HORS lot ne relance rien ; defcon 5 declenche la pause AUTOMATIQUEMENT (raccord dans machine-defcon `monter`) ; perimetre tenu dans le classeur-variables (cle `perimetre-cameleon`, ecriture atomique + empreinte) ; journal `data/pauses-session-matrix.jsonl` (append-only). Boite cameleon : `intercom/cameleon/inbox.jsonl` (etancheite : raison "maintenance" seulement).
 **Etancheite des sorties (audit protections 2026-09-09)** : aucune sortie console de la Matrice (pause-session, machine-defcon, pilote, verifier-*) ne revele le nom de l'entite interne -- terme neutre "maintenance" uniquement. La zone `perimetre-cameleon` du classeur porte la zone NEUTRE `maintenance` ; `lire_perimetre` la RESOUT vers les chemins reels a exclure (le classeur ne fuit jamais le nom).
@@ -418,12 +448,13 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 
 | Verbe | Commande |
 |---|---|
-| `noter` | `python main.py noter --mission M-XXX --theme SUIVI --action <action> --detail "..." [--fichiers "a,b"] [--portes "a,b"] [--duree-s N]` |
-| `lire` | `python main.py lire [--mission M] [--action a] [--n N]` (filtres + n derniers) |
-| `vue` | `python main.py vue` (genere le markdown dedie `_operateur/optimus-prime/suivi-optimus.md`, tous les evenements) |
-| `verifier` | `python main.py verifier` (integrite SHA-256, etalon-or) |
-| `coherence` | `python main.py coherence [--racine <matrix>]` (croise la file du pilote et ce journal) |
-| `archiver` | `python main.py archiver [--racine <matrix>]` (sort du journal les evenements hors perimetre OPTIMUS en les ARCHIVANT dans `suivi-optimus-hors-perimetre.jsonl` ; journal reecrit, empreinte recalculee, idempotent) -- `--doublons` sort les 2e debut / 2e fin d'une meme mission (l'ECART que `verifier` remonte) vers `suivi-optimus-doublons.jsonl`, le PREMIER evenement faisant foi |
+| `noter` | `python3 cerveau-projet/matrix/lancer.py suivi-optimus noter --mission M-XXX --theme SUIVI --action <action> --detail "..." [--fichiers "a,b"] [--portes "a,b"] [--duree-s N]` |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py suivi-optimus lire [--mission M] [--action a] [--n N]` (filtres + n derniers) |
+| `vue` | `python3 cerveau-projet/matrix/lancer.py suivi-optimus vue` (genere le markdown dedie `_operateur/optimus-prime/suivi-optimus.md`, tous les evenements) |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py suivi-optimus verifier` (integrite SHA-256, etalon-or) |
+| `coherence` | `python3 cerveau-projet/matrix/lancer.py suivi-optimus coherence [--racine <matrix>]` (croise la file du pilote et ce journal) |
+| `archiver` | `python3 cerveau-projet/matrix/lancer.py suivi-optimus archiver [--racine <matrix>]` (sort du journal les evenements hors perimetre OPTIMUS en les ARCHIVANT dans `suivi-optimus-hors-perimetre.jsonl` ; journal reecrit, empreinte recalculee, idempotent) -- `--doublons` sort les 2e debut / 2e fin d'une meme mission (l'ECART que `verifier` remonte) vers `suivi-optimus-doublons.jsonl`, le PREMIER evenement faisant foi |
+| `corriger` | `python3 cerveau-projet/matrix/lancer.py suivi-optimus corriger [--mission MO-XXX] --motif "..." [--simuler oui] [--racine <matrix>]` (corrige EN PLACE une `duree_s` DECLAREE qui CONTREDIT la mesure des bornes : la valeur honnete est VIDE -- le pilote n'a jamais mesure, la VUE calcule -- et l'ancienne valeur reste relisible dans `corrections` AVEC son motif ; aucune ligne supprimee ni ajoutee, empreinte recalculee, idempotent). Decision operateur 2026-09-19 (EO-269) : JAMAIS un bornage du controle par DATE (un bandeau sur les yeux) ; le motif est OBLIGATOIRE |
 
 **Actions fermees (enum, anti-bruit par EVENEMENT)** : `debut`, `fin`, `porte`, `depot`, `decision`, `decouverte`, `bilan` -- hors enum refusee (code 2). Format d'une ligne : `date, mission, theme, action, detail, fichiers[], portes[], duree_s`.
 **Vue** : `vue` genere le fichier markdown dedie `_operateur/optimus-prime/suivi-optimus.md` avec UN TABLEAU PAR ACTION (sections fermees dans l'ordre de l'enum) -- decision createur 2026-09-09 : optimus n'a PAS d'encart au journal multi-encarts (il reste invisible), SON fichier est la seule vue de son travail. Le fichier est genere, jamais edite a la main.
@@ -437,9 +468,9 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 
 | Verbe | Commande |
 |---|---|
-| `lire` | `python main.py lire --fichier <chemin> [--lignes debut:fin] [--hash]` |
-|  | `python main.py lire --fichiers <c1,c2> [--lignes debut:fin] [--hash]` |
-|  | `python main.py lire --dossier <chemin> [--filtre *.py] [--recursif] [--hash]` |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py lire lire --fichier <chemin> [--lignes debut:fin] [--hash]` |
+|  | `python3 cerveau-projet/matrix/lancer.py lire lire --fichiers <c1,c2> [--lignes debut:fin] [--hash]` |
+|  | `python3 cerveau-projet/matrix/lancer.py lire lire --dossier <chemin> [--filtre *.py] [--recursif] [--hash]` |
 
 **Protections** : perimetre `matrix/` seul (hors perimetre = code 2, allowlist racine) ; fichier absent = code 1 ; tranche `--lignes` hors bornes = tronquee annoncee ; non-UTF8/binaire = code 1 ; BOM/CRLF detectes et signales ; 2e canal L-009 (relecture croisee si doute) ; lecture seule (jamais de tmp/empreinte).
 **Benchmark** : 5000 lignes lues `5000/5000` (0.4ms direct, vs natif tronque a 2000 sans alerte) ; 1000 lignes <1ms.
@@ -451,11 +482,11 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 
 | Verbe | Commande |
 |---|---|
-| `ecrire` | `python main.py ecrire --fichier <chemin> --contenu "<texte|@fichier>" [--mode creer|remplacer|ajouter]` |
-|  | `python main.py ecrire --fichier <chemin> --contenu-fichier <chemin-source> [--mode creer|remplacer|ajouter]` |
-|  | `python main.py ecrire --fichier <chemin> --contenu-base64 <blob> [--mode creer|remplacer|ajouter]` |
-| `editer` | `python main.py editer --fichier <chemin> --ancien "<old|@fichier>" --nouveau "<new|@fichier>"` |
-|  | `python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fichier <chemin>` |
+| `ecrire` | `python3 cerveau-projet/matrix/lancer.py ecrire ecrire --fichier <chemin> --contenu "<texte|@fichier>" [--mode creer|remplacer|ajouter]` |
+|  | `python3 cerveau-projet/matrix/lancer.py ecrire ecrire --fichier <chemin> --contenu-fichier <chemin-source> [--mode creer|remplacer|ajouter]` |
+|  | `python3 cerveau-projet/matrix/lancer.py ecrire ecrire --fichier <chemin> --contenu-base64 <blob> [--mode creer|remplacer|ajouter]` |
+| `editer` | `python3 cerveau-projet/matrix/lancer.py ecrire editer --fichier <chemin> --ancien "<old|@fichier>" --nouveau "<new|@fichier>"` |
+|  | `python3 cerveau-projet/matrix/lancer.py ecrire editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fichier <chemin>` |
 
 **Protections** : perimetre `matrix/` seul (hors = code 2, allowlist `AGENTS.md`/`demarrer-*.md`) ; `--mode` ferme `creer|remplacer|ajouter` ; `creer` refuse si existe (code 2) ; `editer` exige 1 occurrence unique (0 ou >1 = code 2) ; l EXTRAIT a deux formes (exacte, puis SANS son LF final : `ecrire` en force un, L-001) et la forme retenue est DITE -- si elle perd le LF, le NOUVEAU le perd aussi ; rien ne s execute apres la publication (compte-rendu construit AVANT, MO-173) ; validation `.py` (`py_compile` + garde d ORDRE) et `.json` (`json.load`) -- echec = code 1 et **RIEN n est ecrit** (la cible reste INTACTE, `.bak` de la tentative conserve) ; LF forces (L-001) ; `.bak` horodate ; SHA avant/apres ; ASCII signale ; `@file` anti-heredoc (`--contenu @chemin` ou `--contenu-fichier`) ; ecriture atomique `tmp+os.replace` ; valeur a tirets acceptee (`---` : une carte d identite s ecrit en UNE passe) ; option PRIVEE de valeur = REFUS nomme (code 2, EO-156) -- jamais videe en silence ; les **TROIS sources de contenu sont EXCLUSIVES** (`--contenu`, `--contenu-fichier`, `--contenu-base64`) et seule leur PRESENCE compte ; une source VIDE est REFUSEE (ecrire un fichier vide est une intention, pas un oubli) ; **`--contenu-base64` = transport SANS echappement (MO-173)** : blob base64 STRICT (refus nomme si invalide ou non-UTF8), le MEME contenu traverse la chaine CORROMPU en brut et **BIT-EXACT** en base64 ; garde d ORDRE (EO-159) : un import LOCAL dont le nom n est pas lie par le fournisseur = REFUS avant publication (un ImportError n est pas une SyntaxError : `py_compile` le laisse passer) ; secours DECLARE : le point de restauration `.bak` + `revert-fichier.py` (combos/outils) qui ecrit hors porte EXPRES, quand la porte est la chose cassee.
 **Benchmark** : 1000 lignes <30ms ; LF pur verifie (CRLF 0).
@@ -468,7 +499,7 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 
 | Verbe | Commande |
 |---|---|
-| `lister` | `python main.py lister --dossier <chemin> [--filtre <glob>] [--recursif] [--json]` |
+| `lister` | `python3 cerveau-projet/matrix/lancer.py lister lister --dossier <chemin> [--filtre <glob>] [--recursif] [--json]` |
 
 **Protections** : perimetre `matrix/` seul (hors = code 2, allowlist `AGENTS.md`/`demarrer-*.md`) ; dossier absent = code 1 ; `__pycache__/.git` exclus ; zones L-016 (`_operateur/tmp-optimus/suivi-optimus`) exclues (0 fuite) ; tri mtime deterministe ; 1 porte couvre `glob+list_directory`.
 **Benchmark** : `matrix/` recursif 464 entrees en 174ms ; `outils` recursif `.py` 182 fichiers.
@@ -480,7 +511,7 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 
 | Verbe | Commande |
 |---|---|
-| `rechercher` | `python main.py rechercher --requete <texte> [--dans fichiers\|bdd\|tous]` |
+| `rechercher` | `python3 cerveau-projet/matrix/lancer.py rechercher rechercher --requete <texte> [--dans fichiers\|bdd\|tous]` |
 |  | `[--tag <tag>] [--mot-cle <texte>] [--source <nom>] [--periode 7j\|30j\|3m\|1a]` |
 |  | `[--json] [--limite N]` |
 |  | `[--prive]` (EO-126 : inclut les zones invisibles L-016 -- FICHIERS seulement) |
@@ -499,10 +530,80 @@ prouvee en reel : espion tue, relance par le server en ~2 s (nouveau PID).
 
 | Verbe | Commande |
 |---|---|
-| `auditer` | `python main.py auditer [--plan <chemin>] [--perimetre <dossier>] [--json]` |
-| `aligner` | `python main.py aligner [--plan <chemin>] [--perimetre <dossier>] [--simuler\|--publier]` |
+| `auditer` | `python3 cerveau-projet/matrix/lancer.py domicilier auditer [--plan <chemin>] [--perimetre <dossier>] [--json]` |
+| `aligner` | `python3 cerveau-projet/matrix/lancer.py domicilier aligner [--plan <chemin>] [--perimetre <dossier>] [--simuler\|--publier]` |
 
 **Protections** : **`--simuler` est le DEFAUT** (aucune ecriture sans `--publier`) ; la remorque n ecrit JAMAIS elle-meme -- fragments compris, tout passe par la PORTE `ecrire` (garde, validation, `.bak`, SHA), et une validation refusee laisse la cible INTACTE ; plan incomplet / domicile absent / **exclusion qui n exclut rien** = REFUS (code 2) ; une copie que le plan ne LISTE pas (`attendu`) = **TROU** et alignement REFUSE ; une copie attendue qui ne porte plus la fonction = plan **PERIME** (code 1) ; le DOMICILE n est jamais compte comme une copie de lui-meme ; `--json` ne porte QUE le rapport (aucune prose).
 **Contrat du plan** : champs fermes `classe`, `fonction`, `domicile`, `marqueur`, `docstring`, `import`, `appel` ; optionnels `exclus` (homonymes declares), `attendu` (perimetre declare), `extras` (le plan gagne sur la deduction), `derive` (deduire le suffixe du texte ANCIEN : drapeaux, sans_tirets). Le TEXTE ANCIEN n est jamais redevine : le bloc de la fonction est LU puis remplace exactement.
 **Benchmark** : plan reel (`plans/parseur-options.json`, classe du parseur d options) : **41 copies alignees, 1 exclue, 0 trou** en une passe ; epreuve MO-172 : **18 controles OK** dans un bac a sable (aucune ecriture hors du bac).
 **Quand** : quand un motif a ete RECOPIE et qu il faut domestiquer la classe -- mesurer l ecart (`auditer`), puis aligner (`aligner --publier`) ; suite directe de MO-171 (domicile `data/commun/options.py`).
+## 33. registre-outils -- `matrice/data/outils/registre-outils/` (EO-314, MO-316)
+
+> Le REGISTRE DES OUTILS : une BDD **UNIQUE** (colonne `proprietaire`) qui dit ce que le
+> parc des briques **EST maintenant**, et la **PROPOSITION** d une liste d outils pour une
+> mission -- chacun avec **SON MOTIF**. Il ne remplace ni l extracteur
+> (`pilote/injection/modes_emploi.py`) ni la porte `entonnoir preparer` : il les relie --
+> le registre **propose**, l operateur **decide**, la porte **pose**.
+
+| Verbe | Commande |
+|---|---|
+| `rafraichir` | `python3 cerveau-projet/matrix/lancer.py registre-outils rafraichir` |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py registre-outils verifier` |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py registre-outils lire [--proprietaire <optimus\|matrice\|cameleon>] [--servis]` |
+| `proposer` | `python3 cerveau-projet/matrix/lancer.py registre-outils proposer --theme "..." --objectif "..." [--plafond N]` |
+
+**BDD** : `matrice/data/registre-outils.json` (+ son empreinte etalon `.sha256`). Entree =
+`nom`, `proprietaire`, `domicile`, `chemin`, `servi_a_l_injection`, `origine`, `but`,
+`snippet`, `empreinte_texte`, `statut`. La BDD porte aussi `perimetre` et `homonymes`.
+**Penurie de recouvrement** : le journal `usages-outils-combos.jsonl` raconte les APPELS
+(des evenements) ; le registre est un ETAT -- aucun recouvrement, aucune duplication.
+**Protections** : la BDD est **regeneree**, jamais editee a la main (`rafraichir` repose
+l empreinte etalon ; l espion d integrite la declare `integrite verifiee`) ; l usage reste
+**extrait de la brique** (M-076/L-032) et l empreinte couvre **ce qui est range**
+(`but` + `snippet`) -- une correction de code qui ne change pas le texte servi n est PAS un
+ecart ; les **racines servies** sont LUES dans l extracteur (la colonne `servi` dit ce que
+l injection sert vraiment) ; **un plafond illisible = REFUS** (une proposition non bornee
+se lirait comme un conseil ferme) et les **ecartees par le plafond sont DITES** avec leur
+motif ; **la proposition n ecrit RIEN** (elle imprime le geste `entonnoir preparer`) ;
+**une brique non servie n est jamais proposee** et **une brique muette est enregistree ET
+accusee** ; ecriture atomique LF.
+**Contrat de `verifier`** : les QUATRE ecarts -- `perimes` (avec ce qui a change : but,
+snippet), `disparus`, `non_enregistres`, `muets` -- et le remede est nomme (`rafraichir`).
+**Branchement** : la porte `entonnoir preparer` (la proposition fournit la liste que
+l operateur pose) ; registre de l espion-integrite (`BDDS`) ; registre de
+conservation (`K-1440`, VIVANT conserver).
+**Quand** : avant de poser la liste d outils d une mission (`preparer --outils`), et a
+chaque doute sur ce que le parc contient ou sur ce qu il a change.
+
+## 34. inventaire-systeme -- `matrice/data/outils/inventaire-systeme/` (MO-251)
+
+> La FICHE MACHINE : un fichier qui dit sur quelle machine vit la Matrice (OS,
+> architecture, hote, session, capacites, reseau, outils installes), et la PORTE
+> qui la tient a jour. Modele : la v1 (`agents/tools/verifier/verifier-systeme`).
+
+| Verbe | Commande |
+|---|---|
+| `mesurer` | `python3 cerveau-projet/matrix/lancer.py inventaire-systeme mesurer` |
+| `lire` | `python3 cerveau-projet/matrix/lancer.py inventaire-systeme lire [--resume]` |
+| `verifier` | `python3 cerveau-projet/matrix/lancer.py inventaire-systeme verifier` |
+
+**Fiche** : `matrice/data/systeme-machine.md` (carte d identite `type: fiche`), a cote des
+autres fiches de la Matrice. Sections : `RESUME MACHINE` (courte, servie a l injection),
+`SYSTEME`, `CAPACITES`, `RESEAU`, `OUTILS INSTALLES`, `TENUE A JOUR`.
+**Injection** : l entree `contexte-machine` de `avant-mission` (catalogue
+`_operateur/optimus-prime/pilote/injection/config.json`) sert la SEULE section
+`RESUME MACHINE` -- une fiche entiere deversee a chaque mission serait du poids sans
+usage. Mesure du 2026-09-20 : 205 tokens, pour un total avant-mission de 7753.
+**Protections** : une mesure NON faite est DITE `-` (dependance absente, mesureur muet),
+jamais `0` (0 serait un fait, et il serait faux) ; la **VRAM** est lue au REGISTRE
+(`HardwareInformation.qwMemorySize`, 64 bits) et NON par `AdapterRAM` (DWORD signe
+plafonne a 4 Go -- mesure du jour : 12272 Mo au lieu de 4095) ; les commandes systeme sont lancees en
+LISTE d arguments (aucun shell) et les scripts Windows sont lances par `cmd /c` (mesure
+du jour : `npm.CMD` rendait `Version inconnue`) ; ecriture ATOMIQUE (tmp + remplacement,
+LF forces) ; **un fait non mesure est un fait qui ment** (L-055).
+**Contrat de `verifier`** : la carte d identite, la section servie, les cases du resume,
+les champs COMPARES contre une mesure FRAICHE (OS, architecture, hote, versions de
+python3, node, git), et l entree du catalogue d injection (declaree, pointant la fiche,
+avec SA section) -- code 0 sain, 1 ecart nomme, 2 fiche absente.
+**Quand** : au premier demarrage sur une machine, apres un changement de machine ou de
+version d outil, et avant toute decision qui depend de ce que la machine SAIT FAIRE.

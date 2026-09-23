@@ -14,15 +14,15 @@
         "AUTO-OPTIMISATION",
         "AUTO-PERFORMANCE",
         "AUTO-AUDIT-NEMESIS"
-      ],
-      "usage": "python main.py <executer|executer-complet|status|auto-test> [--fichier <fichier>] [--mission <id>]",
-      "verbe": "executer",
-      "verbes": [
-        "executer",
-        "executer-complet",
-        "status",
-        "auto-test"
-      ],
+      ],   "usage": "python main.py <executer|executer-complet|pilote|status|auto-test> [--fichier <fichier>] [--mission <id>]",
+   "verbe": "executer",
+   "verbes": [
+    "executer",
+    "executer-complet",
+    "pilote",
+    "status",
+    "auto-test"
+   ],
       "cree_le": ""
     },
     {

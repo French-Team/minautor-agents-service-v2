@@ -27,7 +27,7 @@ l'interroge meme cameleon en pause. Seul point commun des flux : la Matrice.*
 | Route | Ce que tu consultes | Sous-jacent (portes officielles) |
 |---|---|---|
 | `/etat` | Sante du serveur + session | `vie etat` + `server etat` + `pause-session etat/journal` + `machine-defcon lire` + `classeur perimetre/defcon` |
-| `/sante` | Integrite du marbre + BDD | `espion-integrite verifier` (diagnostic sans ecriture, MO-077) + `verifier-conventions/regles/protocoles` + `bdd-regles/conventions/protocoles verifier` + `bdd-modifications/suivi-optimus verifier` |
+| `/sante` | Integrite du marbre + BDD | `espion-integrite verifier` (diagnostic sans ecriture, MO-077) + `verifier-conventions/regles/protocoles` + `bdd-regles/conventions/protocoles verifier` + `bdd-modifications/suivi-optimus verifier` + `boites intercom (taille)` (MO-322 : la TAILLE des boites se mesure, et le plafond est LU chez le pilote qui les borne ; les boites de l heritage v2 sont mesurees sans etre jugees) + `journaux des routines (taille)` (MO-324 : le journal VIVANT se juge contre la borne que SA routine declare, les ARCHIVES sont mesurees et dites, les fichiers qui ne sont ni l un ni l autre sont ACCUSES comme angles morts) + `garde-ascii` + `garde-perimetre WRITE` + `garde-tmp` |
 | `/flux1` | Flux Cameleon (Matrice guide) | `pilote file` + `entonnoir file/tresse` + `intercom pilote/cameleon` + `veille journal` |
 | `/flux2` | Flux Maintenance (Matrice te surveille) | `espion-integrite-optimus` + `espion-activite-optimus` + `remorque etat` + `suivi-optimus lire/verifier` |
 | `/metriques` | Performances + activite | `bilan-periode` + `bilan-matrice --rapide` + `journal-multi-encarts` + `usages` |
@@ -41,7 +41,7 @@ l'interroge meme cameleon en pause. Seul point commun des flux : la Matrice.*
 ## Outil
 
 ```
-python cockpit-matrice.py --route <etat|sante|flux1|flux2|chercher|metriques|complet> [--json] [--racine .] [--requete <texte>]
+python3 cerveau-projet/matrix/_operateur/optimus-prime/cockpit/cockpit-matrice.py --route <etat|sante|flux1|flux2|chercher|metriques|complet> [--json] [--racine .] [--requete <texte>]
 ```
 
 - `--json` : sortie machine (JSON) pour chaine.

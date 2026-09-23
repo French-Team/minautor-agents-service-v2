@@ -1,9 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-creer-outil.py -- Creer un squelette d'outil Python (architecture Matrice)
+creer-outil.py -- Creer un squelette d'outil Python de la FAMILLE SUPER-COMBOS.
 
-Usage: python creer-outil.py <nom-outil> --description "<desc>" [--categories cat1,cat2]
+FORME (nommee le 2026-09-20, MO-228) -- la forme de la famille super-combos :
+    <nom>/main.py            point d'entree global (DIRIGE)
+    <nom>/entry.py           orchestrateur de l'outil, A LA RACINE
+    <nom>/fonctions/*.py     fonctions atomiques
+    <nom>/README.md
+
+C'est la forme que portent bdd-frictions/, bdd-modifs/ et bdd-lecons-matrice/.
+
+CE GENERATEUR NE PRODUIT PAS LA FORME DES OUTILS DE LA MATRICE : la leur est CV-001
+(conventions/convention-architecture-outils.md) -- main.py + <categorie>/entry.py.
+Un outil de matrice/data/outils/ n'a JAMAIS d'entry.py a la racine : l'entree est main.py.
+La forme se NOMME par famille ; l'option --categories (vocabulaire CV-001) a ete RETIREE
+le 2026-09-20 : cette famille n'a pas de dossier de categorie.
+
+Usage: python creer-outil.py <nom-outil> --description "<desc>"
+       APRES CREATION : un equipement NEUF se DECLARE (mesure du 2026-09-21) --
+       ajouter l'outil a la table de sa famille dans outils-readme.md, puis
+       regenerer l'inventaire (python remorque/remorque-optimus.py inventorier).
+       Le PRE-VOL du lanceur de non-regression REFUSE un equipement non declare.
+
 """
 
 import sys
@@ -16,7 +35,7 @@ TEMPLATE_MAIN = '''#!/usr/bin/env python3
 """
 {nom} -- {description}
 
-Point d'entree global. Dirige vers la categorie demandee.
+Point d'entree global de l'outil (DIRIGE). Forme famille super-combos : l'orchestrateur est entry.py, A LA RACINE.
 """
 
 import sys
@@ -54,7 +73,7 @@ if __name__ == "__main__":
 TEMPLATE_ENTRY = '''#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-{nom}/entry.py -- Orchestrateur categorie {nom}
+{nom}/entry.py -- Orchestrateur de l'outil {nom} (forme famille super-combos)
 """
 
 import sys
@@ -160,9 +179,14 @@ TEMPLATE_README = '''# {nom}
 ## Description
 {description}
 
+## Famille et forme
+Famille SUPER-COMBOS : main.py + entry.py A LA RACINE + fonctions/.
+Ce n'est PAS la forme des outils de la Matrice (CV-001 : main.py +
+<categorie>/entry.py) : sur un outil de la Matrice, entry.py a la racine n'existe pas.
+
 ## Structure
 - main.py : point d'entree global
-- entry.py : orchestrateur
+- entry.py : orchestrateur de l'outil (A LA RACINE)
 - fonctions/{nom_lower}.py : fonctions atomiques
 
 ## Commandes
@@ -177,7 +201,6 @@ def main():
     parser = argparse.ArgumentParser(description="Creer un squelette d'outil")
     parser.add_argument("nom", help="Nom de l'outil (ex: bdd-nouveau)")
     parser.add_argument("--description", required=True, help="Description de l'outil")
-    parser.add_argument("--categories", default="", help="Categories separees par virgules (optionnel)")
     args = parser.parse_args()
 
     nom = args.nom
@@ -210,10 +233,12 @@ def main():
     )
 
     print(f"Outil cree: {base_path}")
+    print("FORME : famille SUPER-COMBOS -- main.py + entry.py A LA RACINE + fonctions/")
     print("  - main.py")
     print("  - entry.py")
     print(f"  - fonctions/{nom_lower}.py")
     print("  - README.md")
+    print("Ce n'est PAS la forme CV-001 des outils de la Matrice (main.py + <categorie>/entry.py).")
     print("\\nA completer : adapter les commandes, fonctions, BDD selon besoins.")
     return 0
 

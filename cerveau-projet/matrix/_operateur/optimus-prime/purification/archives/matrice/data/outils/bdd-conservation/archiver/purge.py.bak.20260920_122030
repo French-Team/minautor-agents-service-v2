@@ -1,0 +1,46 @@
+"""Porte de PURGE de l archive : une archive ne meurt que RECOUVRABLE, PROUVEE.
+
+P3, validee par le createur le 2026-09-20 (rapport-revision-MO-305, section 3) :
+"une archive est SUPPRIMEE quand son contenu est prouve recouvrable (engage dans
+git, OU empreinte + copie dans la conservation BDD) ; sinon elle reste".
+
+Le registre DISAIT "aucune porte de suppression" -- c etait vrai, et c est ce qui
+faisait survivre les archives SANS duree de vie (V3 mesure : 898 fichiers, 18 Mo,
+jamais relus). Cette porte n a pas le droit de supprimer sur une PROMESSE : elle
+supprime sur une PREUVE, et elle la CITE, dans son acte comme dans son refus.
+
+DEUX PREUVES, essayees dans cet ordre, et un refus les DIT TOUTES LES DEUX :
+
+  1. GIT -- le CONTENU de l archive vit dans les objets du depot : l octet n est
+     pas perdu, il est AILLEURS, et l acte donne le blob exact pour le rappeler
+     (git cat-file blob <oid>).
+  2. COPIE -- le meme contenu vit AILLEURS sur le disque, HORS de l archive (une
+     source revenue a sa place, ou un autre point EN PLACE de la meme famille) :
+     l archive est alors un DOUBLON.
+
+CE QUI N EST JAMAIS PURGE : une archive dont la seule copie est elle-meme --
+l exception nommee par V4 ("le .bak d un fichier NON ENGAGE est la seule copie de
+l avant-dernier etat"). Un refus n ecrit RIEN : ni BDD, ni disque, ni manifeste.
+
+ORDRE DES IMPORTS : `constants` d abord -- c est LUI qui met `data/commun` sur le
+chemin (`lancement`, `cible` ne sont importables qu apres lui, L-013).
+"""
+import subprocess
+from pathlib import Path
+
+from constants import (
+    MOTIF_PREUVE_COPIE, MOTIF_PREUVE_GIT, NOM_LIGNE_PURGE, NOM_PROGRAMME_GIT,
+    NOM_TYPE_OBJET_BLOB, OPERATION_PURGER, STATUT_SUPPRIME,
+)
+from archiver.fonctions import (
+    ajouter_manifeste, chemin_archive, famille, horodater, mesurer,
+    relatif_matrice,
+)
+from cible import racine_matrice, resoudre_dans_matrice
+from lancement import delai_sous_processus
+
+REFUS_PURGE_STATUT = "REFUS (purge : statut attendu archive)"
+REFUS_PURGE_INTROUVABLE = "REFUS (purge : archive introuvable)"
+REFUS_PURGE_SHA = "REFUS (purge : contenu de l archive different de celui enregistre)"
+REFUS_PURGE_SANS_PREUVE = "REFUS (purge : recouvrabilite NON PROUVEE)"
+REFUS_PURGE_RETRAIT = "REFUS (purge : retrait impossible)"

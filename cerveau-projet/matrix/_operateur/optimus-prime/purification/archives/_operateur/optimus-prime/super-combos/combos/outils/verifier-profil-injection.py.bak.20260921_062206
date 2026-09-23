@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+verifier-profil-injection.py -- Garde : le profil utilisateur est INJECTE, et BORNE.
+
+Pourquoi (demande createur du 2026-09-21) : la fiche `matrix/USER-PROFIL.md` est
+remplie AVEC le createur (pseudo, style, interets, niveau technique...) mais AUCUN
+agent ne la lisait. Mesure du jour : le pilote ne l'ouvrait qu'au DEMARRAGE
+(`injection/cycle.py`), pour tester si la ligne `**Pseudo**` etait remplie, puis
+jetait le contenu -- les 8 champs n'atteignaient donc aucune mission, alors que la
+fiche annonce elle-meme etre lue par Optimus.
+
+CE QU'IL EXIGE :
+  1. UN SEUL DOMICILE : les champs ATTENDUS et la lecture des valeurs vivent dans
+     le module PARTAGE (data/commun/fiche_profil.py) -- deux copies divergeraient,
+     et l'une des deux pointerait un fichier mythique (c'est arrive : MO-043).
+  2. CHAMP PESE : `profil` appartient a CHAMPS_PESES -- un champ livre sans poids
+     est du contexte en franchise (le defaut exact de MO-314, modes d emploi).
+  3. DEUX CHEMINS : l'injection SIMPLE et l'injection de LOT portent le profil --
+     deux copies d'un mecanisme = un chemin protege et l'autre non.
+  4. RIEN DANS L'OMBRE : chaque champ ATTENDU est SOIT injecte, SOIT dit
+     (`a_remplir`), SOIT dit ecarte (`ecartes_par_plafond`). Un champ qui
+     disparaitrait sans le dire est le vrai risque d'un ecretage silencieux.
+  5. BORNE REELLE : sur une fiche OBESE, le bloc est ECRETE et les champs ecartes
+     sont DITS ; sous un plafond enorme, le MEME cobaye passe ENTIER -- preuve que
+     l'ecretage vient du plafond, et de rien d'autre.
+  6. AUCUN SILENCE : fiche absente ou illisible -> un AVERTISSEMENT NOMME dans le
+     bloc (un bloc vide se lirait comme "profil complet").
+
+L'AUTOTEST le PIEGE (lecon L-032) : le cobaye obese est ecrete, le meme cobaye
+passe entier sous un plafond enorme, et le premier champ passe toujours seul sous
+un plafond minuscule -- un detecteur jamais vu crier ne prouve rien.
+
+CE QU'IL NE FAIT PAS : AUCUNE ecriture dans la zone reelle. Le seul fichier qu'il
+cree est son cobaye, dans la zone JETABLE de son flux (declaree au domicile
+partage `data/commun/zone_tmp.py`), et il le supprime dans tous les cas. Il ne
+lance aucune mission et ne touche aucune porte.
+
+Usage: python verifier-profil-injection.py [--racine <path>]
+  code 0 = sain, 1 = ecart (liste et nomme), 2 = zone introuvable.
+"""
+
+import argparse
+import sys
+from pathlib import Path

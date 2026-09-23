@@ -1,0 +1,90 @@
+---
+identite:
+  type: readme
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# SUIVI DU PILOTE -- le domicile du suivi (chaine PB-003 / SP-003 / TD-003, EO-273)
+
+Ce dossier est INVISIBLE : il vit sous _operateur/optimus-prime/, jamais dans la zone visible.
+Un moule ou une vue d ici ne sert donc QUE de l invisible (L-016 : le cameleon ne lit pas cette
+zone).
+
+## Qui ecrit, qui lit, ou ca vit
+
+| Objet | Qui l ECRIT | Qui le LIT | Nature |
+|---|---|---|---|
+| `pannes-declarees.json` | la porte d ecriture (jamais a la main) | la porte `suivi-pilote` et son controle permanent | la liste FERMEE des pannes (verite) |
+| `suivi-pilote.md` | la porte `suivi-pilote`, par la PORTE ECRIRE | l operateur, le lanceur de non-regression | VUE DERIVEE et regenerable |
+| `suivi-pilote.jsonl` | la porte `suivi-pilote`, par la PORTE ECRIRE | l operateur (historique des verdicts) | journal APPEND-ONLY des verdicts |
+| `templates/` | la porte d ecriture | la porte `poser-template-pilote` | moules a jetons (zone invisible) |
+
+REGLE : une panne qui n est pas declaree dans `pannes-declarees.json` n existe PAS pour la porte.
+La liste est fermee, et elle se modifie par la porte, jamais a la main. **Les seuils vivent ICI,
+pas dans le code** : la porte les LIT, et un seuil illisible se DIT (jamais d accusation a
+l aveugle).
+
+## T1 -- la liste fermee des pannes (mesuree le 2026-09-22)
+
+La declaration du 2026-09-19 portait des seuils NON MESURES. Mesure faite sur
+matrice/data/suivi-optimus.jsonl (1099 evenements, 303 missions) :
+
+| Distribution | p50 | p90 | p95 | p99 | max |
+|---|---|---|---|---|---|
+| ecart entre deux evenements (min) | 0.3 | 12.3 | 26.5 | 541 | 1218 |
+| duree debut -> fin d une mission (min) | 3 | 31 | 92 | 753 | 1862 |
+
+- **Le seuil de 30 minutes de `mission-qui-n-avance-pas` est REFUTE** : une mission NORMALE ne
+  produit aucun evenement entre son debut et sa fin (p90 = 31 min), donc ce seuil crierait sur
+  **11 % des missions normales**. Corrige a **2880 minutes**, AU-DESSUS du plus long round
+  LEGITIME mesure (1862 min -- un round qui traverse des redemarrages).
+- **`pause-oubliee` avait une source incomplete** : elle ne lisait que l ETAT de pause, qui est
+  ABSENT -- la panne etait donc invisible PAR CONSTRUCTION. Le fait est la **CONTRADICTION** du
+  journal et de l etat.
+- **`mission-chargee-sans-conduite`** : la premiere regle accusait aussi le statut `en-attente`,
+  or les 31 missions du lot REPRISE DU RETARD portent TOUTES le meme `chargee_le` (la date du
+  chargement du lot) et aucune n a de `debut` -- elle aurait crie 31 fois. Le fait mesurable est
+  la CONTRADICTION INTERNE du pilote (une mission EN COURS sans ouverture tracee).
+
+### Une panne VIVANTE, trouvee par la mesure
+
+`pauses-session-matrix.jsonl` : cinq evenements, le dernier est une **pause** du 2026-09-12
+11:07:23 **sans reprise**. `session-matrix-etat.json` : **absent**. Les deux traces se
+contredisent depuis dix jours, et personne ne le voyait. **Deposee en EO-357** (aucune porte ne
+peut clore une ligne dont l etat a disparu : `reprendre` refuse tant qu une mission est en cours).
+
+Refus d accuser : une pause **longue** avec un etat **present** est un etat legitime
+(maintenance). La panne est la **contradiction**, jamais la duree.
+
+### Verdict du T1
+
+**12 pannes declarees, 8 vues par PERSONNE.** Les maillons voient ce qui est ECRIT et ce qui
+REPOND ; ils ne voient ni le SILENCE, ni l AGE, ni le LOT, ni une CONTRADICTION dont l une des
+traces est absente.
+
+## T2 -- la porte (`super-combos/combos/outils/suivi-pilote.py`)
+
+- **La vue** `suivi-pilote.md` : Table 0 (PANNES, la seule qui crie) puis Table 1 a 8 -- injection,
+  file, lot, entonnoir, brin, clotures et enchainement, vrac, gardes. Posee par la PORTE ECRIRE.
+- **Le journal** `suivi-pilote.jsonl` : les VERDICTS seulement, append-only. Une panne deja tracee
+  pour la meme signature n est pas reecrite.
+- **La loi des colonnes** : une colonne constante ET sans verdict est OMISE, et la vue DIT
+  lesquelles (une omission muette serait l angle mort meme que ce suivi surveille, MO-075).
+- **La couverture est DITE** : une panne declaree sans detecteur est NOMMEE ; une panne constatee
+  et deposee peut etre OUVERTE (exception nommee et motivee -- elle reste dans la table, elle
+  n arrete plus la suite).
+- **10 detecteurs** pour 12 pannes declarees, **2 nommees sans detecteur** avec leur raison.
+- Auto-test **10/10** (il MORD et il EPARGNE) ; trois mesures ont corrige la porte avant sa pose.
+
+## T3 -- les gabarits invisibles (`templates/`, posees par `poser-template-pilote`)
+
+Deux moules a jetons : la DECLARATION d un suivi et sa VUE. Une pose n ecrase jamais, un moule
+sans trou est REFUSE (copie morte), un jeton inconnu est REFUSE, le contenu est valide avant
+d ecrire. Preuve du 2026-09-22 : un artefact a carte et un `.json` valide poses de bout en bout
+dans une zone jetable, puis purges.
+
+## T4 -- le controle permanent
+
+La non-regression porte un **maillon 37** : la vue est recalculee et la suite TOMBE si la Table 0
+n est pas vide. Une panne OUVERTE reste VISIBLE dans la sortie sans geler la suite.

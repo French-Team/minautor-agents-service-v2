@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""lancer.py -- lanceur UNIQUE des outils de la Matrice.
+
+Le NOM suffit : le lanceur resout l outil vers son main.py, pose l INTERPRETEUR
+(sys.executable) et le CHEMIN ABSOLU -- la commande n est plus jamais ecrite a la
+main (question du createur : moins d erreurs de syntaxe).
+
+Usage :
+  python3 cerveau-projet/matrix/lancer.py <outil> [arguments...]
+  python3 cerveau-projet/matrix/lancer.py --lister
+  python3 cerveau-projet/matrix/lancer.py --aide
+
+Resolution :
+  1. un outil de la Matrice : matrix/matrice/data/outils/<nom>/main.py
+  2. une routine            : matrix/matrice/routines/<nom>/main.py
+  3. un chemin explicite    : un fichier .py EXISTANT (chemin ancre)
+
+Refus NOMMES (code 2) : nom inconnu (avec les noms proches), aucun main.py.
+Le lanceur ne devine JAMAIS : il DIT quoi faire.
+"""
+
+import subprocess
+import sys
+from pathlib import Path
+
+RACINE = Path(__file__).resolve().parent
+MOT_MATRICE = "matrice"
+DOSSIER_OUTILS = RACINE / MOT_MATRICE / "data" / "outils"
+DOSSIER_ROUTINES = RACINE / MOT_MATRICE / "routines"
+
+
+def entrer_outils():
+    """(famille, nom, main.py) pour chaque brique resolvable par son NOM."""
+    briques = []
+    for famille, dossier in (("outil", DOSSIER_OUTILS), ("routine", DOSSIER_ROUTINES)):
+        if not dossier.is_dir():
+            continue
+        for sous in sorted(dossier.iterdir()):
+            principal = sous / "main.py"
+            if sous.is_dir() and principal.is_file():
+                briques.append((famille, sous.name, principal))
+    return briques
+
+
+def resoudre(nom):
+    """Rend (cible, None) ou (None, message de refus nomme)."""
+    for _, _, principal in entrer_outils():
+        if principal.parent.name == nom:
+            return principal, None
+    direct = Path(nom)
+    if nom.endswith(".py") and direct.is_file():
+        return direct.resolve(), None
+    noms = sorted({n for _, n, _ in entrer_outils()})
+    proches = [n for n in noms if nom and (nom in n or n in nom)]
+    message = "nom inconnu : " + nom
+    if proches:
+        message += " -- proches : " + ", ".join(proches[:8])
+    message += " -- remede : --lister, ou un .py existant (chemin ancre)"
+    return None, message
+
+
+def lister():
+    for famille, nom, _ in entrer_outils():
+        print(famille + "  " + nom)
+    return 0
+
+
+def main():
+    arguments = sys.argv[1:]
+    if not arguments:
+        print(__doc__)
+        return 2
+    if arguments[0] in ("--aide", "-h", "--help"):
+        print(__doc__)
+        return 0
+    if arguments[0] == "--lister":
+        return lister()
+    nom, suite = arguments[0], arguments[1:]
+    cible, refus = resoudre(nom)
+    if refus is not None:
+        print("REFUS : " + refus)
+        return 2
+    interieur = subprocess.run([sys.executable, str(cible), *suite])
+    return interieur.returncode
+
+
+if __name__ == "__main__":
+    sys.exit(main())

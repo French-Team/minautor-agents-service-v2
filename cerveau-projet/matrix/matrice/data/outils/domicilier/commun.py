@@ -22,7 +22,7 @@ from constants import (
     MOTIF_POINT_RESTAURATION,
     PERIMETRE,
     PLACEHOLDER_EXTRAS,
-    PORTE_ECRIRE,
+    NOM_PORTE_ECRIRE,
     RACINE,
     ZONE_FRAGMENTS,
 )
@@ -30,6 +30,8 @@ from constants import (
 # Le DOMICILE partage (EO-158) : le parseur d options est PARTAGE, jamais
 # recopie -- cette remorque est NEE de ce constat, elle ne va pas le contredire.
 from options import CLE_SANS_VALEUR, extraire_options  # noqa: E402
+# EO-287 : la resolution d un outil par son NOM est PARTAGEE (un seul domicile).
+from resolution_outils import chemin_outil  # noqa: E402
 
 
 def lire_texte(chemin):
@@ -217,7 +219,7 @@ def auditer(plan, perimetre=None):
 
 def appeler_porte(arguments):
     """Passe par le DERNIER outil qui a le droit d'ecrire : la porte."""
-    p = subprocess.run([sys.executable, str(PORTE_ECRIRE)] + arguments,
+    p = subprocess.run([sys.executable, str(chemin_outil(NOM_PORTE_ECRIRE))] + arguments,
                        capture_output=True, text=True, cwd=str(RACINE))
     sortie = ((p.stdout or "") + (p.stderr or "")).strip().splitlines()
     return p.returncode, (sortie[-1] if sortie else "code " + str(p.returncode))

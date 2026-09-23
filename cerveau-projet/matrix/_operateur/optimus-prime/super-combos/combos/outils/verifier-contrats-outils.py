@@ -29,7 +29,16 @@ CE QU'IL EXIGE (ce que ces missions ont gagne) :
      est pose) ; la preuve que son import SE RESOUT a l'execution reste au cobaye de
      MO-219. `bdd-usages` est exclu par construction (anti-recursion du sac a dos).
 
-L'AUTOTEST LE PIEGE (lecon L-032) : chaque juge est eprouve sur une donnee SAINE (qui
+  6. UN OUTIL SE LIVRE AVEC SON MODE D EMPLOI (revision createur 2026-09-20, MO-313) :
+     le catalogue servait un os.listdir -- des NOMS, __pycache__ et les .bak compris, et
+     AUCUN usage -- alors que proto-6 etape 2 PROMET deja "les interfaces fermees des
+     outils que la mission va appeler (usage main.py, codes 0/1/2)". Le createur l a dit :
+     fournir un outil SANS explication "n est pas productif et genere des actions
+     inutiles". Ce controle exige DEUX choses : aucune carte servie n est trouee (toute
+     brique dit son usage DANS la brique elle-meme, jamais dans une fiche recopiee) et
+     AUCUN dossier de briques n est plus servi en liste nue.
+
+L AUTOTEST LE PIEGE (lecon L-032) : chaque juge est eprouve sur une donnee SAINE (qui
 doit passer) ET sur une donnee CASSEE (qui doit crier) -- voir `--autotest`. Un
 detecteur jamais vu crier ne prouve rien.
 
@@ -43,6 +52,7 @@ Usage: python verifier-contrats-outils.py [--racine <path>] [--autotest]
 """
 
 import argparse
+import importlib.util
 import json
 import subprocess
 import sys
@@ -288,6 +298,141 @@ def juger_muet(ev):
 
 
 
+def relever_modes_emploi(zone):
+    """Ce que le pilote SERT comme mode d emploi, et ce qu il sert encore en liste nue.
+
+    Deux mesures dans UN seul releve : les CARTES servies par l extracteur (avec les
+    briques qu elles laissent MUETTES) et le CATALOGUE d injection -- une entree
+    `dossier` dont la source est un dossier de BRIQUES est l ecart que cette revision
+    ferme (c est ce que l agent recevait : des noms, et rien d autre).
+    """
+    pilote = zone / "pilote"
+    chemin_extracteur = pilote / "injection" / "modes_emploi.py"
+    chemin_catalogue = pilote / "injection" / "config.json"
+    releve = {"extracteur": chemin_extracteur.is_file(), "declarees": [],
+              "listes_nues": [], "manquantes": {}, "briques": 0, "silencieuses": []}
+    if not releve["extracteur"]:
+        return releve
+    specification = importlib.util.spec_from_file_location(
+        "modes_emploi_garde", str(chemin_extracteur))
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    for cle in sorted(module.RACINES):
+        racine = (module.PILOTE / module.RACINES[cle]).resolve()
+        texte, absentes = module.carte(racine)
+        briques = module.lister_briques(racine)
+        releve["briques"] += len(briques)
+        if absentes:
+            releve["manquantes"][cle] = absentes
+        # LA COUPE DOIT SE DIRE (MO-314) : une carte qui depasse le plafond declare et ne
+        # le dit pas se lit comme une carte complete -- la MEME faute que le plafond
+        # existe pour empecher, deplacee de la donnee vers la lecture.
+        if len(briques) > module.PLAFOND_BRIQUES_CARTE and "NON AFFICHEE" not in texte:
+            releve["silencieuses"].append(cle)
+    if not chemin_catalogue.is_file():
+        return releve
+    try:
+        donnees = json.loads(chemin_catalogue.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return releve
+    entrees = [entree for phase in (donnees.get("injections") or {}).values()
+               for entree in phase]
+    releve["declarees"] = sorted(str(e.get("id", "?")) for e in entrees
+                                 if e.get("type") == "modes-emploi")
+    for entree in entrees:
+        if entree.get("type") != "dossier":
+            continue
+        source = (pilote / str(entree.get("source", ""))).resolve()
+        if source.is_dir() and module.lister_briques(source):
+            releve["listes_nues"].append(str(entree.get("id", "?")))
+    releve["listes_nues"] = sorted(releve["listes_nues"])
+    releve.update(relever_outils_prepares(pilote, module))
+    return releve
+
+
+def relever_outils_prepares(pilote, module):
+    """Les LISTES D OUTILS PREPAREES (EO-313) portees par les missions, et leurs ecarts.
+
+    Cote MISSION de la meme promesse que les cartes (cote ITEM : la porte `preparer`
+    valide a la pose). Sans ce releve, une liste ecrite A LA MAIN dans le fichier des
+    missions -- ou preparee AVANT que le plafond change -- passerait sans temoin, et
+    l injection servirait en silence une partie de ce qui a ete declare.
+
+    DEUX ECARTS, ceux qui font mal : un nom que l injection ne SAIT PAS servir, et une
+    liste plus longue que le PLAFOND d outils joints.
+    """
+    chemin_file = pilote / "file-missions-optimus.json"
+    chemin_constantes = pilote / "constants.py"
+    releve = {"missions": 0, "preparees": 0, "inservables": [], "hors_plafond": [],
+              "plafond": 0}
+    plafond = 0
+    if chemin_constantes.is_file():
+        specification = importlib.util.spec_from_file_location("constants_garde",
+                                                               str(chemin_constantes))
+        constantes = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(constantes)
+        plafond = int(getattr(constantes, "PLAFOND_OUTILS_MODE_EMPLOI", 0) or 0)
+    releve["plafond"] = plafond
+    if not chemin_file.is_file():
+        return releve
+    try:
+        donnees = json.loads(chemin_file.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return releve
+    for mission in donnees.get("missions", []):
+        releve["missions"] += 1
+        outils = [str(nom) for nom in (mission.get("outils") or []) if str(nom).strip()]
+        if not outils:
+            continue
+        releve["preparees"] += 1
+        for nom in outils:
+            if module.trouver_brique(nom) is None:
+                releve["inservables"].append(str(mission.get("id", "?")) + ":" + nom)
+        if plafond and len(outils) > plafond:
+            releve["hors_plafond"].append(str(mission.get("id", "?")) + " ("
+                                          + str(len(outils)) + "/" + str(plafond) + ")")
+    return releve
+
+
+def juger_modes_emploi(ev):
+    """Un outil se livre AVEC son mode d emploi : jamais des noms, jamais un trou tu."""
+    if not ev.get("extracteur"):
+        return False, "extracteur de modes d emploi ABSENT : le pilote ne peut plus servir un usage"
+    if not ev.get("declarees"):
+        return False, "aucune entree `modes-emploi` au catalogue : l agent ne recoit que des NOMS"
+    if ev.get("listes_nues"):
+        return False, ("dossier(s) de briques servi(s) en LISTE DE NOMS (aucun usage) : "
+                       + ", ".join(ev["listes_nues"])
+                       + " -- servir une entree `modes-emploi` a la place")
+    if ev.get("silencieuses"):
+        return False, ("carte(s) COUPEE(S) EN SILENCE (plafond atteint, rien de dit) : "
+                       + ", ".join(ev["silencieuses"])
+                       + " -- dire les briques non affichees ET le geste qui les rend")
+    if not ev.get("briques"):
+        return False, ("AUCUNE brique lue sous les racines declarees : une carte vide ne prouve"
+                       " rien (racines du domicile a reparer, ou arbre incomplet)")
+    if ev.get("inservables"):
+        return False, ("mission(s) qui DECLARENT un outil NON SERVABLE : "
+                       + ", ".join(ev["inservables"])
+                       + " -- la liste se prepare a SA porte (preparer) : un nom accepte"
+                       " a la pose est un nom que l injection sait servir")
+    if ev.get("hors_plafond"):
+        return False, ("mission(s) au-dela du PLAFOND d outils joints ("
+                       + str(ev.get("plafond", "?")) + ") : " + ", ".join(ev["hors_plafond"])
+                       + " -- l injection n en servirait qu une PARTIE : la liste se borne"
+                       " a la PREPARATION, pas a l injection")
+    manquantes = ev.get("manquantes") or {}
+    if manquantes:
+        detail = " ; ".join(cle + " -> " + ", ".join(noms)
+                            for cle, noms in sorted(manquantes.items()))
+        return False, ("brique(s) SANS mode d emploi (le poser DANS la brique, son domicile) : "
+                       + detail)
+    return True, (str(len(ev["declarees"])) + " carte(s) servie(s), "
+                  + str(ev.get("preparees", 0)) + " liste(s) d outils preparee(s) sur "
+                  + str(ev.get("missions", 0)) + " mission(s), aucune brique muette"
+                  " ni non servable")
+
+
 def releves_sains():
     tout = " ".join(t for _n, temoins in GROUPES_CONTRAT for t in temoins)
     return {
@@ -299,6 +444,10 @@ def releves_sains():
                                 + " ... matrice/data/commun/carte_ascii.py (CARTE_CONVERSION)."},
         "aide": {"aide": "Point d'entree\n" + tout, "contrat": tout},
         "muet": {"outils": {"lire": True, "ecrire": True, "bdd-usages": False}},
+        "modes": {"extracteur": True, "declarees": ["modes-emploi-outils"],
+                  "listes_nues": [], "manquantes": {}, "briques": 51, "silencieuses": [],
+                  "missions": 89, "preparees": 1, "inservables": [], "hors_plafond": [],
+                  "plafond": 8},
         "categorie": {"repare": [0, "routine", "pilote", "ROUTINE"],
                       "hors": [2, "REFUS : categorie inconnue pour le type dev : 'x'\n"
                                   "  Categories fermees de dev : outil, routine, bdd, pilote"],
@@ -348,11 +497,35 @@ def releves_casses():
                                                             "hors": [2, "REFUS"], "vrac": [2, "classer --id"]}),
         ("categorie", "un vrac accepte", {"repare": [0, "routine", "pilote", "ROUTINE"],
                                           "hors": [2, "categories fermees de dev"], "vrac": [0, ""]}),
+        ("modes", "un extracteur ABSENT", {"extracteur": False, "declarees": ["x"],
+                                           "listes_nues": [], "manquantes": {}, "briques": 0}),
+        ("modes", "aucune entree au catalogue", {"extracteur": True, "declarees": [],
+                                                 "listes_nues": [], "manquantes": {}, "briques": 3}),
+        ("modes", "une liste de NOMS servie", {"extracteur": True, "declarees": ["x"],
+                                               "listes_nues": ["outils-disponibles"],
+                                               "manquantes": {}, "briques": 3}),
+        ("modes", "une brique MUETTE (aucun usage)",
+         {"extracteur": True, "declarees": ["x"], "listes_nues": [],
+          "manquantes": {"outils": ["muet.py"]}, "briques": 3}),
+        ("modes", "une carte VIDE (racines mortes)",
+         {"extracteur": True, "declarees": ["x"], "listes_nues": [],
+          "manquantes": {}, "briques": 0, "silencieuses": []}),
+        ("modes", "une carte COUPEE EN SILENCE",
+         {"extracteur": True, "declarees": ["x"], "listes_nues": [],
+          "manquantes": {}, "briques": 51, "silencieuses": ["outils"]}),
+        ("modes", "une mission qui DECLARE un outil NON SERVABLE",
+         {"extracteur": True, "declarees": ["x"], "listes_nues": [], "manquantes": {},
+          "briques": 51, "silencieuses": [], "missions": 3, "preparees": 1,
+          "inservables": ["MO-900:outil-fantome.py"], "hors_plafond": [], "plafond": 8}),
+        ("modes", "une liste preparee AU-DELA du plafond",
+         {"extracteur": True, "declarees": ["x"], "listes_nues": [], "manquantes": {},
+          "briques": 51, "silencieuses": [], "missions": 3, "preparees": 1,
+          "inservables": [], "hors_plafond": ["MO-900 (9/8)"], "plafond": 8}),
     )
 
 
 JUGES = {"carte": juger_carte, "porte": juger_porte, "aide": juger_aide,
-         "categorie": juger_categorie, "muet": juger_muet}
+         "categorie": juger_categorie, "muet": juger_muet, "modes": juger_modes_emploi}
 
 
 def autotest():
@@ -392,6 +565,8 @@ def main():
     controler("aide <-> contrat de la porte", *juger_aide(relever_aide(matrice)))
     controler("entonnoir : la categorie se repare", *juger_categorie(relever_categorie(zone)))
     controler("outils : aucune porte muette au journal", *juger_muet(relever_muet(matrice)))
+    controler("modes d emploi : un outil se livre avec son usage",
+              *juger_modes_emploi(relever_modes_emploi(zone)))
     ko = [nom for nom, ok, _detail in RESULTATS if not ok]
     if ko:
         print("\nECART CONTRATS : " + str(len(ko)) + " controle(s) en echec : " + ", ".join(ko))

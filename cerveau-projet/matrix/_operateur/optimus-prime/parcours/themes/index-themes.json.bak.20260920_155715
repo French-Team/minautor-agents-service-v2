@@ -1,0 +1,100 @@
+{
+  "identite": {
+    "type": "index-themes",
+    "appartient_a": "optimus-prime"
+  },
+  "themes": [
+    {
+      "nom": "REPRISE-MISSION",
+      "fichier": "theme-reprise-mission.json",
+      "protocole": "../../protocoles/proto-1-reprise-mission.md",
+      "statut": "pret",
+      "description": "Reprendre ma mission unique au demarrage : relire, mesurer, choisir, executer, rendre la main"
+    },
+    {
+      "nom": "FICHIER",
+      "fichier": "theme-fichier.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Theme fichier executant (imperatifs 66-83) : parcours TOUJOURS le meme -- extension (.py/.json/.md) puis action (ajouter/modifier/corriger) -- chaque case donnant la porte officielle, la preuve a produire et la regle"
+    },
+    {
+      "nom": "AUTO-EVOLUTION",
+      "fichier": "theme-auto-evolution.json",
+      "protocole": "../../protocoles/proto-2-auto-evolution.md",
+      "statut": "pret",
+      "description": "Grandir en travaillant : detecter, qualifier, cibler, modifier, valider -- un changement reversible a la fois"
+    },
+    {
+      "nom": "CONTRE-ANALYSE",
+      "fichier": "theme-contre-analyse.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Part 3 d'une [question] : Nemesis incarnee en THEME -- avis contradictoire sur 3 axes (cas limites, optimisation, securite), lecture seule"
+    },
+    {
+      "nom": "PREPARATION",
+      "fichier": "theme-preparation.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Phase de discussion & preparation hors code : inventorier les natifs, dessiner leurs versions ameliorees non configurables, prioriser la serie, attendre GO avant CREER-OUTIL"
+    },
+    {
+      "nom": "CREER-OUTIL",
+      "fichier": "theme-creer-outil.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Construire un nouvel outil a partir des templates et moules existants"
+    },
+    {
+      "nom": "AUTO-CORRECTION",
+      "fichier": "theme-auto-correction.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Corriger automatiquement les erreurs detectees : ASCII, syntaxe, imports, conventions. Probleme grave = alerte intercom."
+    },
+    {
+      "nom": "AUTO-TESTING",
+      "fichier": "theme-auto-testing.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Tests automatiques post-modification : py_compile, tests unitaires, verification d'integrite, non-regression."
+    },
+    {
+      "nom": "AUTO-OPTIMISATION",
+      "fichier": "theme-auto-optimisation.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Optimiser les performances : mesurer avant, optimiser un seul element, mesurer apres. Jamais sans preuve."
+    },
+    {
+      "nom": "AUTO-PERFORMANCE",
+      "fichier": "theme-auto-performance.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Round de performance apres creation : mesurer, comparer aux seuils, detecter regressions. Systematique apres OUTIL/ROUTINE/BDD."
+    },
+    {
+      "nom": "AUTO-AUDIT-NEMESIS",
+      "fichier": "theme-auto-audit-nemesis.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Avant TOUTE validation : audit 3 axes (cas limites, optimisation, securite). TOUJOURS repondre 'Oui, mais...'. Jamais de validation sans preuve de robustesse."
+    },
+    {
+      "nom": "AUTO-XXX",
+      "fichier": "super-combos/sc-001-auto-xxx/main.py",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Super-combos intelligent qui enchaine PREPARATION -> AUTO-CORRECTION -> AUTO-TESTING -> AUTO-OPTIMISATION -> AUTO-PERFORMANCE -> AUTO-AUDIT-NEMESIS"
+    },
+    {
+      "nom": "PURIFICATION",
+      "fichier": "theme-purification.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Suite [purification] : demande -> cartographie -> classification -> audit -> nemesis -> decision -> execution-par-porte -> verification -> bilan. Controle et purifie toute la Matrice v3 sans suppression ; les anciens correctifs sont classes avant decision. Plan : purification/plan-conservation.md ; analyse : purification/analyse-nemesis.md",
+      "analyse": "../../purification/analyse-nemesis.md"
+    }
+  ]
+}

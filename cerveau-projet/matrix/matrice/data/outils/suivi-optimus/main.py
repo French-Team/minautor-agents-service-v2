@@ -16,12 +16,18 @@ Usage :
                                        mission -- l ECART que `verifier` remonte, le
                                        PREMIER evenement fait foi ; archive dediee
                                        suivi-optimus-doublons.jsonl)
+    python main.py corriger [--mission MO-XXX] --motif "..." [--simuler oui]
+                                       (corrige EN PLACE une duree_s DECLAREE qui
+                                       contredit la mesure des bornes : la valeur
+                                       honnete est VIDE, l ancienne valeur reste
+                                       relisible dans `corrections`)
     python main.py vue   (genere la vue markdown dediee _operateur/optimus-prime/suivi-optimus.md)
 """
 import sys
 
 from archiver.entry import executer as archiver_executer
 from coherence.entry import executer as coherence_executer
+from corriger.entry import executer as corriger_executer
 from lire.entry import executer as lire_executer
 from noter.entry import executer as noter_executer
 from verifier.entry import executer as verifier_executer
@@ -32,6 +38,7 @@ COMMANDES = {
     "lire": lire_executer,
     "verifier": verifier_executer,
     "coherence": coherence_executer,
+    "corriger": corriger_executer,
     "archiver": archiver_executer,
     "vue": vue_executer,
 }

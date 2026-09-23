@@ -165,6 +165,41 @@ def lire_constante_declaree(chemin_constantes, nom):
     return _valeur_entiere(valeurs.get(nom, ""), valeurs)
 
 
+def lire_constante_texte(chemin_constantes, nom):
+    """Valeur TEXTE d une constante, lue dans SON fichier de declarations.
+
+    Le lecteur d a cote (`lire_constante_declaree`) ne rend que des ENTIERS : il a
+    ete ecrit pour les BORNES de rotation. Un NOM de journal, un PREFIXE d archive
+    sont des CHAINES -- et faute de lecteur partage, chaque appelant recopiait son
+    propre motif d extraction (lecon L-029 : un motif recopie diverge). Ce lecteur
+    est celui des NOMS : il rend la valeur SANS ses guillemets (un seul niveau), et
+    None quand la constante manque ou que le fichier est illisible -- jamais une
+    valeur inventee.
+
+    Mesure de la demande (2026-09-20, MO-324) : le cockpit doit mesurer les
+    journaux des routines ; la borne est un entier (lue par l autre lecteur) mais le
+    NOM du journal et le PREFIXE de ses archives sont des chaines. Le domicile qui
+    les declare est le `constants.py` de la routine : on l y LIT, on ne l importe
+    pas (les modules `constants` des routines portent tous le meme nom, L-029).
+    """
+    chemin = Path(chemin_constantes)
+    if not chemin.is_file():
+        return None
+    try:
+        contenu = chemin.read_text(encoding=ENCODAGE, errors="replace")
+    except OSError:
+        return None
+    for ligne in contenu.splitlines():
+        resultat = MOTIF_ASSIGNATION.match(ligne)
+        if not resultat or resultat.group(1) != nom:
+            continue
+        valeur = resultat.group(2).split("#")[0].strip()
+        if len(valeur) >= 2 and valeur[0] == valeur[-1] and valeur[0] in "\u0022\u0027":
+            return valeur[1:-1]
+        return valeur or None
+    return None
+
+
 def octets_queue(borne_declaree=None):
     """Fenetre de lecture (octets) : jamais moins que le planCHER ni que la borne.
 

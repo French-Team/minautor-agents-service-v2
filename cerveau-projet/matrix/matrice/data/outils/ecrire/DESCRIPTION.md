@@ -5,11 +5,11 @@
 ## Verbes
 
 ```
-python main.py ecrire --fichier <chemin> --contenu "<texte|@fichier>" [--mode creer|remplacer|ajouter]
-python main.py ecrire --fichier <chemin> --contenu-fichier <chemin-source> [--mode creer|remplacer|ajouter]
-python main.py ecrire --fichier <chemin> --contenu-base64 <blob> [--mode creer|remplacer|ajouter]
-python main.py editer --fichier <chemin> --ancien "<old|@fichier>" --nouveau "<new|@fichier>"
-python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fichier <chemin>
+python3 cerveau-projet/matrix/lancer.py ecrire ecrire --fichier <chemin> --contenu "<texte|@fichier>" [--mode creer|remplacer|ajouter]
+python3 cerveau-projet/matrix/lancer.py ecrire ecrire --fichier <chemin> --contenu-fichier <chemin-source> [--mode creer|remplacer|ajouter]
+python3 cerveau-projet/matrix/lancer.py ecrire ecrire --fichier <chemin> --contenu-base64 <blob> [--mode creer|remplacer|ajouter]
+python3 cerveau-projet/matrix/lancer.py ecrire editer --fichier <chemin> --ancien "<old|@fichier>" --nouveau "<new|@fichier>"
+python3 cerveau-projet/matrix/lancer.py ecrire editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fichier <chemin>
 ```
 
 - `--fichier` : cible (relatif a la racine, detectee par `data/commun/racine.py`).
@@ -23,6 +23,36 @@ python main.py editer --fichier <chemin> --ancien-fichier <chemin> --nouveau-fic
 - **Rien apres la publication (MO-173)** : le compte-rendu est construit AVANT `os.replace` ; apres la publication il ne reste que le SHA et le retour. Une porte qui ecrit PUIS crie annonce un faux echec (mesure : un NameError declenche apres l ecriture).
 - `--ancien-fichier` / `--nouveau-fichier` : variantes fichier pour gros blocs.
 - **Valeur a tirets (EO-156)** : une valeur peut commencer par `--` -- un document a carte d'identite COMMENCE par `---` : la carte s'ecrit donc en UNE passe. Le morceau suivant n'est pris pour une option que s'il est un NOM connu (`--contenu`). Seule limite : une valeur qui serait exactement un nom d'option connu (ex. `--mode`) passe par `@fichier`.
+
+## Preparer la paire ancien/nouveau (module fragment)
+
+> Une recopie A LA MAIN d un fragment existant a fait entrer un bloc AUTRE que le
+> fichier (MO-207 : refuse a l edition, et `py_compile` ne l a pas vu), des
+> guillemets non-ASCII (MO-206) et un texte modifie par le shell (EO-192 : des
+> accents graves EXECUTES). Le module PARTAGE `matrice/data/commun/fragment.py`
+> compose la paire : la donnee vient du FICHIER, l unicite est PROUVEE, l ASCII
+> est mesure AVANT, et rien ne passe par la ligne de commande -- la commande ne
+> porte que des CHEMINS.
+
+| Verbe | Commande |
+|---|---|
+| `extraire` | `python3 cerveau-projet/matrix/matrice/data/commun/fragment.py extraire --fichier <cible> ( --lignes a,b \| --ancre <texte> ) --sortie <fichier>` |
+| `verifier` | `python3 cerveau-projet/matrix/matrice/data/commun/fragment.py verifier --fichier <cible> ( --fragment <fichier> \| --ancre <texte> )` |
+| `poser` | `python3 cerveau-projet/matrix/matrice/data/commun/fragment.py poser --fichier <cible> --fragment <fichier> --nouveau <fichier> [--dossier <zone>]` |
+
+- `--lignes a,b` : EXACT, bloc CONTIGU (1-based, bornes INCLUSES) ;
+- `--ancre <texte>` : resiste au DEPLACEMENT ; elle doit etre UNIQUE, sinon le
+  refus NOMME les lignes candidates ;
+- `--sortie` est EXIGEE : le fragment va dans un FICHIER, jamais dans un
+  affichage (un affichage n est PAS le fichier -- c est la panne MO-207).
+
+`poser` ne fait que PREPARER : il ecrit la paire dans la zone jetable et REND la
+commande `editer` a copier. La POSE (backup, empreinte, BDD, garde, validation)
+reste a CETTE porte -- une seule maison par geste. Le module est PARTAGE (pas de
+`main.py`) : le lanceur ne resout que les outils et les routines, donc il s
+invoque PAR SON CHEMIN, et c est DIT ici. Dettes nommees par le GO : les octets
+atomiques (I-02 `fichier.py`) et l ASCII vu avant (I-05 `texte.py`) vivent dans le
+module jusqu a la naissance de ces deux modules.
 
 ## Garanties (pourquoi meilleur que le natif)
 

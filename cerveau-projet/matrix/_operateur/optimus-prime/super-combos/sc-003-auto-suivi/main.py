@@ -225,7 +225,10 @@ def _evenement(action):
         "detail": "cobaye sc-003",
         "fichiers": [],
         "portes": [],
-        "duree_s": "0",
+        # Forme HONNETE (EO-267, 2026-09-21) : le journal ne declare plus "0" --
+        # un zero se lisait comme une mesure. Le cobaye doit imiter la forme
+        # REELLE, sinon il apprend aux lecteurs une valeur que le domicile refuse.
+        "duree_s": "",
     }
 
 

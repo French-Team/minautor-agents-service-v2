@@ -1,0 +1,200 @@
+---
+identite:
+  type: lexique-crochets
+  appartient_a: matrice
+  commun: false
+  version: 1.0
+  cree: 2026-09-19
+---
+
+# Lexique des crochets
+
+> Tous les mots entre crochets du projet, avec une definition pour chacun.
+> Ce fichier est un RECENSEMENT : chaque mot vient d'un fichier du disque,
+> jamais de memoire (la methode est donnee en fin de fiche).
+>
+> Un CROCHET est un mot entre crochets place EN DEBUT d'une demande
+> (`[mot] le reste de la demande`). Il declenche un traitement officiel :
+> la demande est traitee par SA porte, jamais a la main.
+
+## Les trois familles (ne pas les confondre)
+
+| Famille | Qui l'emploie | Effet |
+|---|---|---|
+| **Crochets de DEMANDE** | l'operateur, au debut d'une demande | ouvre un traitement officiel (liste FERMEE) |
+| **Crochets de TRAVAIL** | le pilote (mots-cles) | oriente la demande vers une action, une phase, une priorite |
+| **Crochets de CHAINE** | un theme / parcours | nomme les CASES d'une chaine, **PAS une demande** |
+
+Deux mots vivent dans DEUX familles : `[audit]` et `[bilan]` sont a la fois
+des demandes officielles ET des cases de la chaine `[purification]`. Le
+contexte dit lequel : en DEBUT de message = demande ; en case de chaine =
+etape. C'est le seul piege de ce lexique.
+
+---
+
+## 1. Crochets de DEMANDE (liste FERMEE -- 10 mots)
+
+> Source : `_operateur/optimus-prime/conventions/convention-crochets.md`.
+> La liste est FERMEE : tout autre mot n'est pas reconnu et doit d'abord
+> faire evoluer cette convention (decision createur).
+
+| Mot | Definition | Porte officielle |
+|---|---|---|
+| `[mission]` | Verse une nouvelle mission au vrac (AMONT) ; le classement, la tresse et l'injection suivent le cycle normal. `historiques-missions` reste l'AVAL (le journal des missions finies). | entonnoir, verbe `deposer` |
+| `[question]` | Suit le theme en 4 parts de LOT : analyse -> recherche approfondie (+ web si besoin) -> contre-analyse (Nemesis incarne en THEME, jamais un agent) -> rapport pour/contre. Le pilote charge optimus-prime pour CHAQUE part, avec SON theme du vivier. | pilote, verbe `lot` |
+| `[audit]` | Lance un audit sur le sujet donne (constat factuel, lecture seule). | entonnoir `deposer` (type audit) |
+| `[revision]` | Lance une revision sur le sujet donne (relire en entier et proposer les changements ; decision du createur obligatoire). | entonnoir `deposer` (type revision) |
+| `[outil]` | Signale un OUTIL fautif trouve EN TRAVAILLANT : la demande part en REPARATION, jamais en simple constat. Route complete `protocoles/proto-10-route-outil-defaillant.md` : reproduire -> reparer DANS l'outil -> prouver -> tracer -> reprendre. | entonnoir `deposer` (type DECLARE reparation) |
+| `[alerte]` | Met la Matrice en securite : defcon 5 (mise en pause de la session-matrix, cameleon stoppe, optimus reveille). Variante detaillee possible : `[alerte=defcon:N]`. | outil `machine-defcon` |
+| `[pause]` | Ouvre la MAINTENANCE avec optimus (pause MANUELLE de l'operateur, hors defcon) : session-matrix en pause, cameleon notifie (raison "maintenance"). Reprise par le verbe `reprendre`. | outil `pause-session`, verbe `pause` |
+| `[bilan]` | Bilan de la derniere heure, des dernieres heures (6 h), des dernieres 24 h, des 3 derniers jours, de la semaine ou du mois. | outil `bilan-periode` |
+| `[preparation]` | Ouvre l'espace de DISCUSSION et PREPARATION hors code : inventorier les natifs, dessiner leurs versions ameliorees non configurables, prioriser la serie, attendre le GO avant tout CREER-OUTIL. | theme `PREPARATION` |
+| `[purification]` | Ordonne la chaine demande -> cartographie -> classification -> audit -> nemesis -> decision -> execution-par-porte -> verification -> bilan : controle et purifie fichiers, BDD, journaux et registres SANS jamais supprimer (archivage ou signalement). La case `[decision]` est OBLIGATOIRE. | theme `PURIFICATION` |
+
+### La variante `[alerte=defcon:N]`
+
+Le meme crochet `[alerte]`, avec le niveau demande explicitement (N de 1 a 5,
+5 = le plus grave). Sans precision, `[alerte]` vaut defcon 5.
+
+### L'echelle defcon (liste fermee -- pour lire `[alerte]`)
+
+| Niveau | Nom | Comportement |
+|---|---|---|
+| **5** | mise en securite totale | l'agent unique (cameleon) est STOPPE : la session-matrix est mise EN PAUSE et optimus-prime est REVEILLE pour reprendre le controle avec le createur. Seules les missions themees DEFCON restent injectables. |
+| **4** | suivi | suivi des problemes a resoudre, de bout en bout. |
+| **3** | surveiller | surveiller (temps a definir) puis valider : la validation definitive CLOT defcon 3. |
+| **2** | normal | etat normal de la Matrice. |
+| **1** | reserve | non defini par l'operateur ; jamais atteint (la descente s'arrete a 2). |
+
+Transitions : MONTEE libre (sauts permis, raison obligatoire) ; DESCENTE stricte
+d'UN echelon a la fois (5 -> 4, 4 -> 3) ; la descente 3 -> 2 passe UNIQUEMENT
+par le verbe `valider`.
+
+---
+
+## 2. Crochets de TRAVAIL (mots-cles -- 7 mots)
+
+> Sources : `_operateur/optimus-prime/pilote/MOTS-CLES.md` et
+> `matrice/pilote/detecteur-mots-cles.py`. Ces mots orientent la demande :
+> le detecteur leur associe une ACTION, une PHASE et une PRIORITE.
+
+| Mot | Definition | Action / phase / priorite |
+|---|---|---|
+| `[tache]` | Tache specifique a executer. | executer-tache / execution / normale |
+| `[bug]` | Bug detecte (le comportement observe n'est pas celui attendu). | corriger / correction / **haute** |
+| `[probleme]` | Probleme dans les flux (le pilote, la Matrice ou une routine ne tourne pas). | diagnostiquer / diagnostic / **haute** |
+| `[incoherence]` | Incoherence percue (des fichiers se contredisent). | analyser / analyse / moyenne |
+| `[correction]` | Correction necessaire (reprise d'un travail deja fait). | (MOTS-CLES.md seul -- absent du detecteur) |
+| `[test-reel]` | Lancer un processus de validation reel. | valider / validation / normale |
+| `[super-combos: #N]` | Lancer un super-combos par son numero (N = le numero du combo). Exemple : `[super-combos: #1]`. | executer-super-combos / execution / normale |
+
+Regles de la source : un SEUL mot-cle par demande (sauf super-combos, qui porte
+un parametre) ; les mots-cles de detection (`[bug]`, `[probleme]`,
+`[incoherence]`) ont la PRIORITE sur les autres.
+
+---
+
+## 3. Crochets de CHAINE (cases d'un theme -- 9 mots, PAS des demandes)
+
+> Source : `_operateur/optimus-prime/parcours/themes/theme-purification.json`.
+> Ce sont les cases du parcours `[purification]`, dans leur ordre. Un item ne
+> les tape JAMAIS au debut d'une demande : c'est la chaine qui les enchaine.
+
+| Case | Definition |
+|---|---|
+| `[demande]` | Recevoir et cadrer la demande de purification : formuler en 1 phrase, avec le PERIMETRE exact et l'objectif chiffre. |
+| `[cartographie]` | Inventorier le perimetre AVANT tout classement : fichiers, BDD, journaux, registres, index, archives, empreintes, et leurs lecteurs/ecrivains. |
+| `[classification]` | Classer AVANT de decider : attribuer une categorie unique (VIVANT, STRUCTUREL, GENERE, HISTORIQUE, OBSOLETE, COBAYE, ORPHELIN, HORS-PERIMETRE). |
+| `[audit]` | Auditer et produire la liste des ecarts -- AUCUNE ecriture a ce stade (`fichier:ligne`, garde, gravite, preuve). |
+| `[nemesis]` | Avis contradictoire avant de toucher quoi que ce soit : attaquer la liste des ecarts sur les cas limites, l'optimisation et la securite. |
+| `[decision]` | Trancher CHAQUE ecart par un verdict unique : CONSERVER, ARCHIVER, REPARER, DECLARER DETTE ou SIGNALER. Case OBLIGATOIRE. |
+| `[execution-par-porte]` | Executer UNIQUEMENT le verdict decide, et par la porte du fichier concerne -- jamais a la main. |
+| `[verification]` | Prouver la conservation et la non-regression : schemas, empreintes, journaux, restauration d'un cobaye, gardes verts. |
+| `[bilan]` | Rendre un bilan recuperable : ce qui a ete classe, les verdicts, les preuves, et les restes (dettes, blocages, decisions necessaires). |
+
+Le meme vocabulaire sert au theme `PREPARATION` (`[mission]`, `[preparation]`)
+et au theme `CONTRE-ANALYSE` (`[question]`) : ce sont des RENVOIS vers les
+demandes officielles, pas de nouveaux mots.
+
+---
+
+## 4. Crochets EMPLOYES SANS ETRE RECONNUS (2 mots)
+
+> Verifie par recherche sur TOUT `cerveau-projet` (md, py, json) : ces mots
+> n'existent dans AUCUNE des trois sources. Un crochet non reconnu ne
+> declenche RIEN -- il reste dans le dialogue normal.
+
+| Mot | Constat mesure |
+|---|---|
+| `[corriger]` | Employe par le createur ; **introuvable** dans tout `cerveau-projet`. Le mot reconnu qui porte cette idee est `[bug]` (action `corriger`, priorite haute). |
+| `[super-combos]` (nu, sans numero) | Employe par le createur ; le format RECONNU est `[super-combos: #N]`. Le mot nu n'est reconnu nulle part. |
+
+Ces deux mots sont la seule divergence entre le vocabulaire reel de l'operateur
+et le vocabulaire reconnu. Les faire entrer dans la liste fermee est une
+decision createur (la convention est fermee : elle evolue sur decision, pas
+par usage).
+
+---
+
+## 5. Ce qui n'est PAS un crochet (les faux amis)
+
+Les crochets servent aussi de PLACEHOLDERS dans les textes d'usage et de
+CLASSES DE CARACTERES dans les expressions regulieres. Ce ne sont pas des
+crochets de demande :
+
+| Faux crochet | Nature | Exemple |
+|---|---|---|
+| `[nom]`, `[champ]`, `[cle]`, `[fichier]`, `[valeur]`, `[chemin]` | placeholder : "mets ici le nom / le champ / le fichier" | `python3 main.py editer --fichier [chemin]` |
+| `[str]`, `[dict]`, `[rel]` | type de valeur dans un contrat | `def charger([str]) -> [dict]` |
+| `[a-z]`, `[a-z0-9]`, `[0-9]`, `[n]`, `[k]`, `[x]` | classe de caracteres d'une REGEX | `^[a-z0-9-]+$` |
+
+Regle simple pour trancher : un crochet de demande est un mot FRANCAIS en
+DEBUT de message. S'il est au milieu d'une phrase d'usage, c'est un placeholder.
+
+---
+
+## 6. Les trois sources, mesurees
+
+| Source | Nombre | Contenu |
+|---|---|---|
+| `conventions/convention-crochets.md` | 10 | la liste FERMEE officielle (les demandes) |
+| `pilote/MOTS-CLES.md` | 11 | mots-cles standard + detection + action |
+| `matrice/pilote/detecteur-mots-cles.py` | 8 | les mots-cles OUTILLES (action, phase, priorite) |
+
+Ce que la comparaison montre :
+
+- **Reconnus par les TROIS** : `[mission]`, `[revision]` (2 mots seulement).
+- **Officiels mais que le detecteur ignore** : `[audit]`, `[outil]`, `[alerte]`,
+  `[pause]`, `[bilan]`, `[preparation]`, `[purification]` (7 mots) -- normal :
+  ils sont traites par une PORTE (un outil ou un theme), pas par le detecteur
+  de mots-cles.
+- **Mots-cles du pilote absents de la liste officielle** : `[bug]`, `[probleme]`,
+  `[incoherence]`, `[tache]`, `[correction]`, `[test-reel]`,
+  `[super-combos: #N]` (7 mots) -- ils orientent le travail sans ouvrir de
+  traitement officiel.
+- **MOTS-CLES.md et le detecteur divergent d'un mot** : `[correction]` figure
+  dans le document, pas dans le detecteur.
+
+Le total du lexique : **26 mots distincts** = 10 demandes + 7 mots-cles de
+travail + 7 cases de chaine nouvelles + 2 employes sans etre reconnus.
+Soit **28 lignes** dans les tableaux des sections 1 a 4, pour **26 mots
+distincts** : `[audit]` et `[bilan]` y figurent deux fois (demande ET case de
+chaine). Ne comptent PAS a part : la variante `[alerte=defcon:N]`, qui est le
+MEME mot que `[alerte]`, ni l'exemple `[super-combos: #1]`, qui est une forme
+de `[super-combos: #N]`.
+
+---
+
+## 7. Methode de recensement (pour re-verifier)
+
+1. Extraire tous les crochets du disque :
+   `grep -rhoE "\[[a-z][a-z0-9_-]*\]" --include=*.md --include=*.py --include=*.json . | sort | uniq -c | sort -rn`
+2. Ecarter les FAUX crochets (placeholders et classes de regex, section 5) :
+   ce sont les plus FREQUENTS du brut, ils polluent le comptage.
+3. Croiser avec les trois sources (section 6) et la chaine `[purification]`
+   (section 3).
+4. Ce qui reste et qui n'est dans aucune source = section 4 (les non reconnus).
+
+> Un crochet nouveau s'ajoute ICI quand il entre dans une source : ce lexique
+> est la vue de l'operateur, il ne remplace pas les sources (la liste fermee
+> reste `convention-crochets.md`).

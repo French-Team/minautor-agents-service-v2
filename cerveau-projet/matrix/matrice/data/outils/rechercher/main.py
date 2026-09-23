@@ -2,6 +2,14 @@
 
 Sac a dos : guide l'outil dans tous les cas d'usage.
 Dispatch : rechercher | indexer | schema | --help | sans arg.
+
+Usage: python main.py rechercher --requete <texte> [--dans fichiers|bdd|tous]
+           [--champ "cle=valeur;cle=valeur" --prive] [--json] [--limite N]
+  LA MEMOIRE DU PROJET SE CHERCHE ICI (2026-09-21) : les cartes d identite
+  (--champ), les BDD, le contenu et les NOMS des fichiers. Un outil de recherche
+  natif ne connait ni les cartes, ni les BDD, ni les zones invisibles (L-016) :
+  lance-le ici, jamais ailleurs -- un mot rend des LIGNES, --champ rend les
+  DOCUMENTS qui portent la carte.
 """
 import sys
 import os

@@ -11,14 +11,160 @@ Ce dossier est INVISIBLE : il vit sous _operateur/optimus-prime/, jamais dans la
 Un moule ou une vue d ici ne sert donc QUE de l invisible (L-016 : le cameleon ne lit pas cette
 zone).
 
-- pannes-declarees.json : LA LISTE FERMEE des pannes du pilote (T1). Pour chaque panne : le fait
-  ATTENDU, la source qui le porte, le seuil de silence, la gravite, qui la voit, et la porte qui
-  repare. Qui la LIT : la porte du suivi (T2) et son controle permanent (T4). Qui l ECRIT :
-  l auditeur du pilote, par la porte d ecriture.
-- suivi-pilote.md et suivi-pilote.jsonl (T2, a venir) : la vue DERIVEE et le journal des VERDICTS.
-  Aucun fait n y est recopie -- la vue se recalcule depuis les sources : outbox.jsonl,
-  suivi-optimus.jsonl, file-missions-optimus.json, entonnoir-files-optimus.json,
-  defcon-historique.jsonl et le journal du marbre.
+## Qui ecrit, qui lit, ou ca vit
 
-REGLE : une panne qui n est pas declaree dans pannes-declarees.json n existe PAS pour la porte.
-La liste est fermee, et elle se modifie par la porte, jamais a la main.
+| Objet | Qui l ECRIT | Qui le LIT | Nature |
+|---|---|---|---|
+| `pannes-declarees.json` | la porte d ecriture (jamais a la main) | la porte `suivi-pilote` et son controle permanent | la liste FERMEE des pannes (verite) |
+| `suivi-pilote.md` | la porte `suivi-pilote`, par la PORTE ECRIRE | l operateur, le lanceur de non-regression | VUE DERIVEE et regenerable |
+| `suivi-pilote.jsonl` | la porte `suivi-pilote`, par la PORTE ECRIRE | l operateur (historique des verdicts) | journal APPEND-ONLY des verdicts |
+| `templates/` | la porte d ecriture | la porte `poser-template-pilote` | moules a jetons (zone invisible) |
+
+REGLE : une panne qui n est pas declaree dans `pannes-declarees.json` n existe PAS pour la porte.
+La liste est fermee, et elle se modifie par la porte, jamais a la main. **Les seuils vivent ICI,
+pas dans le code** : la porte les LIT, et un seuil illisible se DIT (jamais d accusation a
+l aveugle).
+
+## T1 -- la liste fermee des pannes (mesuree le 2026-09-22)
+
+La declaration du 2026-09-19 portait des seuils NON MESURES. Mesure faite sur
+matrice/data/suivi-optimus.jsonl (1099 evenements, 303 missions) :
+
+| Distribution | p50 | p90 | p95 | p99 | max |
+|---|---|---|---|---|---|
+| ecart entre deux evenements (min) | 0.3 | 12.3 | 26.5 | 541 | 1218 |
+| duree debut -> fin d une mission (min) | 3 | 31 | 92 | 753 | 1862 |
+| armement -> premier acte du round (min) | 6.3 | 27.2 | 41.5 | 615 | 664 |
+
+- **Le seuil de 30 minutes de `mission-qui-n-avance-pas` est REFUTE** : une mission NORMALE ne
+  produit aucun evenement entre son debut et sa fin (p90 = 31 min), donc ce seuil crierait sur
+  **11 % des missions normales**. Corrige a **2880 minutes**, AU-DESSUS du plus long round
+  LEGITIME mesure (1862 min -- un round qui traverse des redemarrages).
+- **`pause-oubliee` avait une source incomplete** : elle ne lisait que l ETAT de pause, qui est
+  ABSENT -- la panne etait donc invisible PAR CONSTRUCTION. Le fait est la **CONTRADICTION** du
+  journal et de l etat.
+- **`mission-chargee-sans-conduite`** : la premiere regle accusait aussi le statut `en-attente`,
+  or les 31 missions du lot REPRISE DU RETARD portent TOUTES le meme `chargee_le` (la date du
+  chargement du lot) et aucune n a de `debut` -- elle aurait crie 31 fois. Le fait mesurable est
+  la CONTRADICTION INTERNE du pilote (une mission EN COURS sans ouverture tracee). Depuis le
+  2026-09-22 l acte de CHARGER est TRACE (action declarative `charge`, voir T5) : le fait
+  < chargee INDIVIDUELLEMENT et jamais conduite > est donc devenu MESURABLE -- c est le cas
+  paye en MO-387. Une charge de LOT reste EPARGNEE (elle ATTEND son tour, et le detail de la
+  trace NOMME le lot : l exemption a une source, elle ne se devine pas).
+
+### Une panne VIVANTE, trouvee par la mesure
+
+`pauses-session-matrix.jsonl` : cinq evenements, le dernier est une **pause** du 2026-09-12
+11:07:23 **sans reprise**. `session-matrix-etat.json` : **absent**. Les deux traces se
+contredisent depuis dix jours, et personne ne le voyait. **Deposee en EO-357** (aucune porte ne
+peut clore une ligne dont l etat a disparu : `reprendre` refuse tant qu une mission est en cours).
+
+Refus d accuser : une pause **longue** avec un etat **present** est un etat legitime
+(maintenance). La panne est la **contradiction**, jamais la duree.
+
+### Verdict du T1
+
+**15 pannes declarees, 11 vues par PERSONNE** (le compte se MESURE dans la declaration, il ne
+se declare pas). Les maillons voient ce qui est ECRIT et ce qui
+REPOND ; ils ne voient ni le SILENCE, ni l AGE, ni le LOT, ni une CONTRADICTION dont l une des
+traces est absente.
+
+## T2 -- la porte (`super-combos/combos/outils/suivi-pilote.py`)
+
+- **La vue** `suivi-pilote.md` : Table 0 (PANNES, la seule qui crie) puis Table 1 a 8 -- injection,
+  file, lot, entonnoir, brin, clotures et enchainement, vrac, gardes. Posee par la PORTE ECRIRE.
+- **Le journal** `suivi-pilote.jsonl` : les VERDICTS seulement, append-only. Une panne deja tracee
+  pour la meme signature n est pas reecrite.
+- **La loi des colonnes** : une colonne constante ET sans verdict est OMISE, et la vue DIT
+  lesquelles (une omission muette serait l angle mort meme que ce suivi surveille, MO-075).
+- **La couverture est DITE** : une panne declaree sans detecteur est NOMMEE ; une panne constatee
+  et deposee peut etre OUVERTE (exception nommee et motivee -- elle reste dans la table, elle
+  n arrete plus la suite).
+- **13 detecteurs** pour 15 pannes declarees, **2 nommees sans detecteur** avec leur raison.
+- **La prise ne blanchit plus le round** (EO-364) : `round-arme-jamais-pris` EPARGNAIT tout
+  round PRIS, < meme s il dure trente heures > -- une prise tracee suffisait donc a FAIRE
+  TAIRE l accusation. La panne neuve `round-pris-jamais-conduit` regarde le DERNIER acte :
+  s il reste la PRISE au-dela du seuil (240 min : 2.3 fois le p95 des rounds legitimes, et
+  38 fois le pire ecart jamais observe entre une prise et l acte suivant), le round a ete
+  PRIS puis RENDU -- et ca se VOIT. Paye deux fois le 2026-09-22 (fin MO-390 -> prise MO-349
+  -> RIEN). LIMITE DITE : le journal ne voit pas le TRAVAIL, une mission menee en silence
+  est accusee -- c est une SUSPICION, et le remede est nomme.
+- **La casse ne fait pas le fait** (EO-362) : la colonne `Fichiers` d une mission derive des
+  notes du domicile par `cle_de_mission`, donc HORS CASSE. Mesure du 2026-09-22 : sur les 309
+  missions du journal, 52 colonnes `Fichiers` etaient VIDES avant le correctif et 48 apres --
+  les **quatre basculees** sont MO-045, MO-131, MO-316 et MO-389. L objectif de cette meme
+  mission portait d abord 77 : la mesure (des MISSIONS) a refute l estimation (des TAGS).
+- Auto-test **24/24** (il MORD et il EPARGNE) ; quatre mesures ont corrige la porte avant sa pose,
+  et les quatre epreuves d EO-362 eprouvent LA REGLE DU PILOTE elle-meme (importee, jamais
+  recopiee) : le cobaye MORD sur un tag en minuscules, trois contre-temoins EPARGNENT (mention
+  hors fenetre, mission voisine, mission sans note). Trois epreuves d EO-364 eprouvent le round
+  pris puis rendu : il MORD quand la prise est le dernier acte hors seuil, il EPARGNE quand un
+  ACTE suit la prise, et il EPARGNE une prise recente (le seuil compte).
+
+## T3 -- les gabarits invisibles (`templates/`, posees par `poser-template-pilote`)
+
+Deux moules a jetons : la DECLARATION d un suivi et sa VUE. Une pose n ecrase jamais, un moule
+sans trou est REFUSE (copie morte), un jeton inconnu est REFUSE, le contenu est valide avant
+d ecrire. Preuve du 2026-09-22 : un artefact a carte et un `.json` valide poses de bout en bout
+dans une zone jetable, puis purges.
+
+## T4 -- le controle permanent
+
+La non-regression porte un **maillon 37** : la vue est recalculee et la suite TOMBE si la Table 0
+n est pas vide. Une panne OUVERTE reste VISIBLE dans la sortie sans geler la suite.
+
+## T5 -- la TRACE de CHARGE (2026-09-22) : la classe EO-356 devient MESURABLE
+
+`chargee_le` ne distinguait pas < chargee SEULE > de < chargee AVEC d autres > : un LOT entier
+partage le meme horodatage. L acte de charger est donc NOTE par la porte `noter` (action
+declarative `charge`, au vocabulaire FERME de suivi-optimus), par les DEUX chemins du pilote :
+la charge INDIVIDUELLE (son detail ne nomme aucun lot) et la charge de LOT (son detail NOMME le
+lot). Le refus est symetrique : une trace qui n a pas pu etre posee se DIT, elle ne part pas en
+silence.
+
+Deux pannes en decoulent, ajoutees a la liste fermee :
+
+| panne | fait mesure | epargne (contre-temoin) |
+|---|---|---|
+| `mission-chargee-sans-conduite` | charge INDIVIDUELLE tracee et AUCUN `debut` apres le seuil | la charge de LOT (elle ATTEND son tour) ; aucune trace de charge = aucune accusation (la porte ne devine pas) |
+| `cloture-fausse` | la charge d une mission est suivie de la cloture d une AUTRE mission | la cloture qui NOMME la mission chargee ; une charge de LOT |
+
+La panne payee en MO-387 etait INVISIBLE : la file disait MO-345 terminee, le journal aussi --
+les deux traces etaient d ACCORD, et c etait faux. C est la trace de charge qui dit QUELLE
+mission le round avait ouverte ; la cloture doit NOMMER celle-la.
+
+## T6 -- la PRISE DE ROUND (2026-09-22) : la classe < round arme > devient MESURABLE
+
+La doctrine du demarrage PROMETTAIT que la chaine repart toute seule (ORDRE 4.7 : < si un LOT est
+arme, la mission suivante demarre seule >) mais elle n ecrivait JAMAIS le geste de boucle : apres
+un `fin`, l agent n etait renvoye nulle part, et le SEUL geste qui LIT une injection etait
+l ORDRE 2 -- un ordre de DEMARRAGE. Mesure du 2026-09-22 : apres la cloture de MO-388, MO-348
+etait EN COURS, son `debut` etait pose par la MACHINE (au `fin` precedent), l injection etait
+deposee -- et PERSONNE ne l avait prise. Onze heures plus tard, la non-regression (37 maillons) et
+`/sante` (16 portes) etaient DEUX VERTS. C est la famille de la cloture fausse de MO-387 : les
+traces sont d ACCORD, et elles sont fausses.
+
+**L acte de PRENDRE son round est desormais TRACE** (action declarative `prise`, au vocabulaire
+FERME de suivi-optimus), note par le **GESTE DE RECEPTION** : les verbes `injecter` (ORDRE 2 du
+demarrage et boucle de l ORDRE 4.7) et `conduire` (voie hors lot). L agent n a donc AUCUN geste de
+plus a jouer : le fait est note la ou il se produit, et il est NON SINGULIER (un round peut etre
+repris plusieurs fois).
+
+| panne | fait mesure | epargne (contre-temoin) |
+|---|---|---|
+| `round-arme-jamais-pris` | mission EN COURS servie depuis plus de 120 min SANS aucune `prise` posterieure a son `injectee_le` | un round PRIS (prise posterieure a l injection), meme long ; une injection recente (sous le seuil) ; AUCUNE prise au journal = mecanisme NEUF, la porte ne devine pas |
+
+**Seuil MESURE (120 min)** : sur suivi-optimus.jsonl, 148 armements portent un premier acte --
+p50 = 6.3 min, p90 = 27.2 min, p95 = 41.5 min ; 142 des 148 tiennent en moins de 60 min, et la
+PREMIERE valeur de la famille separee (les rounds qui ont dormi) est a 448.8 min (MO-248). 120 min
+tombe donc DANS LE TROU mesure : deux fois le plafond des rounds reactifs, et 3.7 fois sous le
+premier dormeur. **Limite DITE** : un tour d agent qui se termine avec un round arme est, par
+doctrine (ORDRE 4.7), une FAUTE -- cette panne le rend VISIBLE au lieu de le laisser vert.
+
+**Preuve de bout en bout** (arbre jetable, portes REELLES -- le pilote `charger` et la porte
+`noter`, puis la porte de suivi) : **21/21** -- charge individuelle et charge de LOT tracees,
+morsure sur la charge jamais conduite et sur la cloture fausse, epargne du lot, de la mission
+conduite et de la charge RECENTE (sous le seuil). Et depuis EO-362, la casse de l IDENTIFIANT DE
+MISSION : un tag `mo-389` nomme la mission `MO-389`, sans elargir la fenetre de mention (le
+contre-temoin `loin.py` reste hors du detail en tete). Aucun seuil en dur : la porte les lit dans
+la declaration.

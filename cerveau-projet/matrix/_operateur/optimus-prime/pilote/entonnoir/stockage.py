@@ -160,3 +160,24 @@ def enregistrer_entonnoir(etat):
 def horodater():
     """Retourne la date-heure locale au format des journaux."""
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+def trouver_item(etat, identifiant):
+    """Retourne (mission, type_file) pour un item, a TOUS les echelons.
+
+    Le type_file (cle de la file, vide si l item est encore au vrac) est ce qui
+    permet de valider les champs FERMES PAR TYPE -- la liste ou se ranger depend
+    de la file ou l item vit.
+
+    DOMICILE (EO-313) : ce chercheur etait defini dans `retiqueter/fonctions.py`,
+    son premier consommateur. La porte `preparer` en a besoin AUSSI : une seule
+    copie, ici, avec le reste du stockage -- deux copies divergeraient (M-076).
+    """
+    for mission in etat.get("vrac", []):
+        if mission.get("id") == identifiant:
+            return mission, ""
+    for type_file, missions in (etat.get("files") or {}).items():
+        for mission in missions:
+            if mission.get("id") == identifiant:
+                return mission, type_file
+    return None, ""

@@ -5,7 +5,7 @@ identite:
   commun: false
 ---
 
-# INDICES -- pilote/entonnoir/ (echelons 0-4 de la file de missions)
+# INDICES -- pilote/entonnoir/ (echelons 0-4 de la file de missions + la PREPARATION)
 
 > Tete de lecture : lire CECI avant les fichiers. L'indice pointe, le contrat fait foi.
 
@@ -15,6 +15,7 @@ identite:
 | Les listes FERMEES (types, categories, urgences, mots-cles, chemins) | `listes.py` (la SEULE source des valeurs) |
 | Deposer au vrac (echelon 0) | `vrac/entry.py` (type PROPOSE par mots-cles, reclassable a la main) |
 | Classer (echelons 1-2, categorie proposee auto -- M-027) / poser le ROLE / urgencer (echelon 3) | `classer/fonctions.py` (classer_mission : proposition + gardes + role) / `retiqueter/entry.py` (reparer les ETIQUETTES d'un item : categorie et/ou role) / `urgencer/entry.py` |
+| **PREPARER** les OUTILS d une mission (entre l echelon 3 et l echelon 4) | `preparer/entry.py` (la porte : `--outils n1,n2,...`, la chaine vide VIDE) + `preparer/fonctions.py` (validation a la POSE contre les briques que l INJECTION sait servir, plafond IMPORTE de son domicile, liste d avant tracee) |
 | La table (type, categorie) -> ROLE (vivier) | `roles.py` (table COMPLETE, verifiee au chargement) |
 | La tresse (echelon 4) : tisser le brin, l'afficher | `tresse/fonctions.py` (paliers d'urgence + round-robin) + `tresse/entry.py` |
 | Persistance + garde de racine | `stockage.py` (ecriture atomique, tmp + remplacement) |
@@ -26,6 +27,8 @@ identite:
     python main.py retiqueter --id EO-XXX [--categorie c] [--role THEME]  (REPARE les etiquettes + retisse)
     python main.py retirer  --id EO-XXX   (sortie PROPRE du vrac -- M-058)
     python main.py urgencer --id EO-XXX --urgence <bloquante|haute|normale|basse>
+    python main.py preparer --id EO-XXX --outils n1,n2,...   (PREPARE la liste des outils de la
+                                       MISSION ; --outils "" la VIDE et le repli par TYPE revient)
     python main.py tresse tisser / tresse brin / file
 
 ## Conventions de la zone
@@ -50,6 +53,15 @@ identite:
   -- la structure ne derive jamais (decision createur).
 - Le classement PROPOSE (mots-cles) est deterministe et reclassable a la main : le
   createur reste souverain.
+- PREPARATION (EO-313, decision createur 2026-09-20) : un item peut DECLARER les OUTILS
+  que sa mission va appeler (`preparer --outils`). La liste vit sur l ITEM -- la memoire
+  durable, celle qui survit au redemarrage -- et le pont item -> mission la RECOPIE. Sans
+  elle, les outils etaient une FONCTION DU TYPE (deux missions dev recevaient les memes).
+  DEUX GARDES DE LA PORTE : chaque nom est resolu contre les briques que l INJECTION sait
+  servir (un nom non servable REFUSE l ecriture, avec ses proches), et une liste plus longue
+  que le PLAFOND de l injection est refusee (jamais servie en partie en silence). Le vocabulaire
+  de la preparation est DECLARATIF : aucune proposition, aucune devinette (le REGISTRE des
+  outils, EO-314, la proposera un jour -- sous validation).
 - ECHELON 4 : le brin se recompose TOUJOURS par `tresse tisser` (deterministe : meme
   contenu = meme sequence) avant lecture ; le pilote consomme la tete (`file consommer`
   ou puisage auto de `injecter`) -- la mission sort du brin ET de sa file-type.

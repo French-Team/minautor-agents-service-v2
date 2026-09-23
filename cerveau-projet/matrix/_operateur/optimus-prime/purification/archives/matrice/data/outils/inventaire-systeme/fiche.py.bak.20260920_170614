@@ -1,0 +1,204 @@
+"""La FICHE machine : la COMPOSER depuis une mesure, l ECRIRE, la RELIRE.
+
+La fiche est la memoire DURABLE de ce que la Matrice sait de sa machine : elle
+survit au redemarrage, la ou une injection ne survit pas. L ecriture est
+ATOMIQUE (tmp + remplacement, LF forces) : un lecteur ne voit jamais une fiche a
+moitie ecrite (M-018).
+
+DEUX LECTURES, une seule mesure :
+  - la fiche ENTIERE (systeme, capacites, reseau, outils) pour le createur ;
+  - la section RESUME MACHINE, courte et bornee, que l injection du pilote sert
+    aux missions (inventaire-systeme lire --resume).
+"""
+import os
+from datetime import datetime
+
+from constants import (CARTE_IDENTITE, CHEMIN_FICHE, CHEMIN_TMP, ENCODAGE, NF,
+                       TITRE_FICHE, TITRE_RESUME)
+
+
+def horodater():
+    """La date-heure locale, au format des journaux de la Matrice."""
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+def texte_mo(valeur):
+    """Une mesure en Mo LISIBLE ; une mesure NON faite est DITE (-), jamais 0."""
+    try:
+        nombre = int(valeur)
+    except (TypeError, ValueError):
+        return "-"
+    return str(nombre) if nombre >= 0 else "-"
+
+
+def texte_go(valeur):
+    """Une mesure en Go LISIBLE ; une mesure NON faite est DITE (-), jamais 0.0."""
+    try:
+        nombre = float(valeur)
+    except (TypeError, ValueError):
+        return "-"
+    return ("%.1f" % nombre) if nombre >= 0 else "-"
+
+
+def version_courte(entree):
+    """La version NUE d un outil pour le resume (Python 3.14.4 -> 3.14.4)."""
+    from mesure import extraire_version
+    if not entree["disponible"]:
+        return "absent"
+    return extraire_version(entree["version"])
+
+
+def _resume(mesure, date_mesure):
+    """La section COURTE servie a l injection : ce qu une mission doit savoir."""
+    systeme = mesure["systeme"]
+    ressources = mesure["ressources"]
+    reseau = mesure["reseau"]
+    outils = {entree["nom"]: entree for entree in mesure["outils"]}
+    adresses = ", ".join(reseau["adresses-ipv4"]) or "-"
+    connus = ("python3", "node", "git", "bash", "npm")
+    liste = ", ".join(nom + " " + version_courte(outils[nom])
+                      for nom in connus if nom in outils)
+    lignes = [TITRE_RESUME, ""]
+    lignes.append("- **Machine** : " + systeme["os"] + " " + systeme["version"]
+                  + " (" + systeme["arch"] + ") -- hote " + systeme["hote"]
+                  + ", utilisateur " + systeme["utilisateur"]
+                  + ", session " + systeme["session"])
+    lignes.append("- **CPU** : coeurs " + str(ressources["cpu-coeurs"])
+                  + " (" + ressources["cpu-modele"] + ")")
+    lignes.append("- **RAM** : " + texte_mo(ressources["ram-totale-mo"]) + " Mo"
+                  + " (disponible " + texte_mo(ressources["ram-disponible-mo"])
+                  + " Mo au moment de la mesure)")
+    lignes.append("- **Disque libre** : " + texte_go(ressources["disque-libre-go"])
+                  + " Go -- charge CPU " + str(ressources["charge-cpu"]) + " %")
+    lignes.append("- **GPU** : " + ressources["gpu"])
+    lignes.append("- **Reseau** : hote " + reseau["hote"] + " [" + adresses + "]")
+    lignes.append("- **Outils** : " + (liste or "-"))
+    lignes.append("- **Racine de la Matrice** : " + systeme["racine-matrix"])
+    lignes.append("")
+    lignes.append("> Mesure du " + date_mesure + " par la porte inventaire-systeme"
+                  " -- fiche complete : matrice/data/systeme-machine.md.")
+    return lignes
+
+
+def _table(lignes, entetes, rangees):
+    lignes.append("| " + " | ".join(entetes) + " |")
+    lignes.append("|" + "---|" * len(entetes))
+    for rangee in rangees:
+        lignes.append("| " + " | ".join(str(cellule) for cellule in rangee) + " |")
+
+
+def composer(mesure, date_mesure=None):
+    """Le TEXTE COMPLET de la fiche, depuis une mesure. Rend une chaine."""
+    date_mesure = date_mesure or horodater()
+    systeme = mesure["systeme"]
+    ressources = mesure["ressources"]
+    reseau = mesure["reseau"]
+    lignes = list(CARTE_IDENTITE)
+    lignes.append("")
+    lignes.append(TITRE_FICHE)
+    lignes.append("")
+    lignes.append("> Fiche UNIQUE de la machine sur laquelle vit la Matrice : elle dit")
+    lignes.append("> sur quel SYSTEME nous sommes, ce que la machine SAIT FAIRE, et")
+    lignes.append("> quels OUTILS sont installes. Elle est TENUE A JOUR par la porte")
+    lignes.append("> inventaire-systeme -- jamais a la main : un fait non mesure est")
+    lignes.append("> un fait qui ment (L-055).")
+    lignes.append("")
+    lignes.append("> Modele : la v1 (cerveau-projet/agents/tools/verifier/verifier-systeme).")
+    lignes.append("")
+    lignes.extend(_resume(mesure, date_mesure))
+    lignes.append("")
+    lignes.append("## SYSTEME")
+    lignes.append("")
+    _table(lignes, ("Element", "Valeur"), (
+        ("OS", systeme["os"]),
+        ("Version", systeme["version"]),
+        ("Architecture", systeme["arch"]),
+        ("Hote", systeme["hote"]),
+        ("Utilisateur", systeme["utilisateur"]),
+        ("Session", systeme["session"]),
+        ("Python d execution", systeme["python"]),
+        ("Racine de la Matrice", systeme["racine-matrix"]),
+    ))
+    lignes.append("")
+    lignes.append("## CAPACITES")
+    lignes.append("")
+    _table(lignes, ("Capacite", "Valeur"), (
+        ("CPU -- coeurs logiques", ressources["cpu-coeurs"]),
+        ("CPU -- modele", ressources["cpu-modele"]),
+        ("RAM -- totale (Mo)", texte_mo(ressources["ram-totale-mo"])),
+        ("RAM -- disponible (Mo)", texte_mo(ressources["ram-disponible-mo"])),
+        ("Disque libre (Go)", texte_go(ressources["disque-libre-go"])),
+        ("Charge CPU (%)", ressources["charge-cpu"]),
+        ("GPU", ressources["gpu"]),
+    ))
+    lignes.append("")
+    lignes.append("> Le tiret veut dire NON MESURE (dependance absente ou mesureur muet),")
+    lignes.append("> jamais une valeur nulle : 0 serait un fait, et il serait faux.")
+    lignes.append("")
+    lignes.append("## RESEAU")
+    lignes.append("")
+    _table(lignes, ("Element", "Valeur"), (
+        ("Hote", reseau["hote"]),
+        ("Adresses IPv4", ", ".join(reseau["adresses-ipv4"]) or "-"),
+    ))
+    lignes.append("")
+    lignes.append("## OUTILS INSTALLES")
+    lignes.append("")
+    _table(lignes, ("Outil", "Disponible", "Version", "Chemin"),
+           [(entree["nom"], "Oui" if entree["disponible"] else "Non",
+             entree["version"], entree["chemin"]) for entree in mesure["outils"]])
+    lignes.append("")
+    lignes.append("## TENUE A JOUR")
+    lignes.append("")
+    lignes.append("| Geste | Commande |")
+    lignes.append("|---|---|")
+    lignes.append("| MESURER la machine et reecrire la fiche | python3 cerveau-projet/matrix/lancer.py inventaire-systeme mesurer |")
+    lignes.append("| LIRE la fiche | python3 cerveau-projet/matrix/lancer.py inventaire-systeme lire |")
+    lignes.append("| LIRE le resume seul | python3 cerveau-projet/matrix/lancer.py inventaire-systeme lire --resume |")
+    lignes.append("| VERIFIER la fiche contre la machine | python3 cerveau-projet/matrix/lancer.py inventaire-systeme verifier |")
+    lignes.append("")
+    lignes.append("Derniere mesure : " + date_mesure + ".")
+    lignes.append("")
+    return NF.join(lignes)
+
+
+def ecrire(texte):
+    """Ecrit la fiche de facon ATOMIQUE (tmp + remplacement, LF forces)."""
+    CHEMIN_FICHE.parent.mkdir(parents=True, exist_ok=True)
+    with open(CHEMIN_TMP, "w", encoding=ENCODAGE, newline=NF) as flux:
+        flux.write(texte)
+    os.replace(CHEMIN_TMP, CHEMIN_FICHE)
+    return CHEMIN_FICHE
+
+
+def lire():
+    """Le texte de la fiche, ou None si elle n existe pas encore."""
+    if not CHEMIN_FICHE.is_file():
+        return None
+    with open(CHEMIN_FICHE, "r", encoding=ENCODAGE) as flux:
+        return flux.read()
+
+
+def section(texte, titre):
+    """La SECTION d un document markdown, de son titre a la prochaine section.
+
+    Rend None si le titre est ABSENT : un appelant qui demande une section
+    inexistante doit le SAVOIR, jamais recevoir un texte vide qui se lit comme un
+    succes (lecon L-055).
+    """
+    if texte is None:
+        return None
+    lignes = texte.splitlines()
+    debut = None
+    for indice, ligne in enumerate(lignes):
+        if ligne.strip() == titre:
+            debut = indice
+            break
+    if debut is None:
+        return None
+    fin = len(lignes)
+    for indice in range(debut + 1, len(lignes)):
+        if lignes[indice].startswith("## "):
+            fin = indice
+            break
+    return NF.join(lignes[debut:fin]).strip()

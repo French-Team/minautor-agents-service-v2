@@ -1,0 +1,98 @@
+---
+identite:
+  type: convention
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# CONVENTION -- CREDIBILITE D'UNE MISSION ANCIENNE
+
+> Source : demande du createur (tache du 2026-09-22 : < quand on reprend des missions
+> anciennes, on doit mettre en place un process pour verifier et valider leur
+> credibilite avant de les executer -- on doit definir QUI et QUAND >) et mesure du
+> meme jour sur le lot REPRISE DU RETARD (37 missions, 35 a executer, toutes restaurees).
+>
+> Une mission ancienne n'est pas CRUE : elle est VERIFIEE, puis VALIDEE -- ou elle ne
+> s'execute pas.
+
+## QUI juge
+
+**L'OPERATEUR (optimus-prime) juge.** L'outil `verifier-credibilite-missions.py` MESURE
+les faits et PROPOSE un verdict ; il ne juge pas a la place de l'operateur, parce que les
+deux choses qui manquent a une machine sont le SENS de la demande et sa PLACE dans le
+projet. Le verdict est pose par l'operateur, NOMME, MOTIVE et TRACE.
+
+**Le CREATEUR est sollicite quand un verdict RETIRE une mission** (`perimee`,
+`deja-faite`) : retirer une demande est une decision, jamais une mesure.
+
+## QUAND
+
+1. **A la REPRISE, AVANT d'executer une mission RESTAUREE** -- c'est-a-dire dont la
+   charge (`chargee_le`) date d'un jour ANTERIEUR au jour courant : lot arme la veille et
+   rejoue aujourd'hui, ou mission ramenee par un redemarrage.
+2. **JAMAIS pour une mission nee dans le round courant** : elle n'a pas vecu, rien n'a
+   bouge dans le projet depuis sa demande -- un controle qui crie la ou rien n'a change
+   cesse de garder.
+
+    python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-credibilite-missions.py
+
+L'appel est LECTURE SEULE ; il rend **code 1** quand une mission restauree serait
+executee SANS verdict (le process n'a pas ete joue), **code 0** quand toute mission
+ancienne a juger porte un verdict trace.
+
+## Ce qui est MESURE -- et ce qui ne l'est pas
+
+| Fait | Mesure | Ce qu'il vaut |
+|---|---|---|
+| AGE et REPRISE | jours depuis la charge, et charge anterieure au jour courant | dit si la mission est ANCIENNE, jamais si elle est bonne |
+| PREMISSES | les fichiers (extension) que l'objectif nomme existent-ils encore | un nom MORT rend la mission PERIMEE, non executable en l'etat |
+| DOUBLON | une mission plus recente et TERMINEE porte deja le sujet (regle de ressemblance CONSOMMEE de `filtrer/cadrage.py`) | propose `deja-faite` |
+| SOURCE | l'item d'origine est-il encore relisible dans l'entonnoir | INFORME, ne juge pas (memoire bornee) |
+| VERDICT | un verdict a-t-il DEJA ete rendu et trace | un verdict est rendu UNE fois, puis relu |
+
+## Les VERDICTS (liste fermee)
+
+| Verdict | Sens |
+|---|---|
+| `credible` | premisses mesurees tenues, aucun doublon : la demande a ete RELUE et reste dans la ligne du projet |
+| `perimee` | un nom de fichier de l'objectif n'existe plus : la mission n'est PAS executable en l'etat, elle se reformule |
+| `deja-faite` | une mission plus recente et terminee porte deja le sujet (mesure, ou verdict de l'operateur mieux informe que la mesure) |
+| `a-revoir` | l'anciennete n'est pas mesurable : l'operateur relit la demande avant d'executer |
+
+## Reconnaitre une anciennete MUETTE (lecon du 2026-09-22)
+
+Un lot rejoue est charge **EN UNE FOIS** : toutes ses missions portent le **MEME**
+`chargee_le`. Le critere d'age seul ne peut donc PAS mordre sur le cas pour lequel il
+est ecrit -- la premiere version de l'outil rendait < VERDICT OK : toute mission ANCIENNE
+porte un verdict > devant un **journal VIDE**. D'ou la definition :
+
+    ANCIENNE = age >= seuil, OU age illisible, OU RESTAUREE (chargee un jour anterieur).
+
+**Un controleur qui ne peut pas mordre rend un vert MUET** (L-163). Avant de declarer un
+controle fini, on exige de lui qu'il **morde sur le cas reel** : ici, la mesure du
+2026-09-22 (35 missions flaggees sur 36 a executer, et le seul lot est celui-la).
+
+## TRACE
+
+Domicile : `cerveau-projet/matrix/_operateur/optimus-prime/credibilite/credibilite-verdicts.jsonl`,
+ecrit par la **PORTE ECRIRE** (jamais a la main), une ligne par verdict :
+
+    {mission, verdict, motif, juge_le, par}
+
+**Un verdict sans motif ne s'explique pas ; un verdict non trace n'existe pas.**
+
+## LIMITES declarees
+
+- `credible` dit : *les premisses MESUREES tiennent et la demande a ete RELUE*. Il ne dit
+  pas que la mission est la MEILLEURE facon de faire : ce jugement-la appartient au round
+  d'execution, et une mission credible peut rester mal concue.
+- La memoire des items consommes est **BORNEE** (41 entrees au 2026-09-22) : < source non
+  relisible > est le cas NORMAL d'une mission ancienne, jamais un verdict.
+- La mesure des premisses est **TEXTUELLE** : un nom GABARIT (`bilan-moXXX.txt`) est hors
+  mesure, et un nom retrouve AILLEURS sur le disque (meme nom, autre dossier) passe.
+
+## Mesure d'ouverture (2026-09-22)
+
+35 missions restaurees mesurees et jugees : **34 `credible`**, **1 `deja-faite`**
+(MO-359 : MO-306 portait deja P1 < la fin JOUE les actes de rotation en attente >, et la
+rotation joue a la cloture depuis MO-344 -- 0 acte en attente mesure), **0 `perimee`**.

@@ -1,0 +1,652 @@
+"""fragment -- extraire d un fichier EXISTANT le fragment EXACT, prouver son
+unicite, et composer la paire ancien/nouveau pour la porte editer.
+
+POURQUOI (GO createur 2026-09-19, PREP-001, item EO-197, mission MO-209) : cinq
+pannes MESUREES de la recopie d un fragment existant, le meme jour.
+  1. un bloc d imports recopie depuis un AFFICHAGE est entre dans --ancien
+     AUTREMENT que le fichier (MO-207) : la porte a refuse (0 occurrence) et
+     py_compile passait -- c etait un NameError A L EXECUTION ;
+  2. un point de restauration choisi par ls | head -1 etait un etat
+     INTERMEDIAIRE (MO-194, MO-204) : le contre-temoin comparait la version A
+     ELLE-MEME ;
+  3. deux guillemets francais sont entres dans un fichier (MO-206) ;
+  4. un texte passe par la LIGNE DE COMMANDE a ete modifie par le shell (EO-192 :
+     des accents graves ont ete EXECUTES et ont troue la trace deposee) ;
+  5. quatre editions dans la MEME seconde n ont laisse QU UN point de
+     restauration (EO-191 -- cette panne-la n est PAS de ce pas : elle a son item,
+     deux problemes differents, deux items differents).
+
+CE QUE CE MODULE GARANTIT -- le coeur du sujet :
+  - la donnee vient du FICHIER, jamais d un affichage : extraire ECRIT le
+    fragment dans un fichier, il ne le sert pas a l oeil ;
+  - l unicite est PROUVEE AVANT la pose (compte + numeros de lignes candidats) ;
+  - l ASCII est mesure AVANT la pose, avec le caractere ET sa ligne ;
+  - AUCUN transport par shell : le fragment, l ancien et le nouveau voyagent dans
+    des FICHIERS -- la ligne de commande ne porte que des CHEMINS ;
+  - un refus est DIRECTIONNEL : il NOMME les lignes candidates, jamais un choix
+    silencieux.
+
+TROIS VERBES, PAS UN DE PLUS (arbitrage 2 du GO : les deux designations dans un
+seul verbe) :
+    extraire --fichier <cible> ( --lignes a,b | --ancre <texte> ) --sortie <fichier>
+    verifier --fichier <cible> ( --fragment <fichier> | --ancre <texte> )
+    poser    --fichier <cible> --fragment <fichier> --nouveau <fichier> [--dossier <zone>]
+  - --lignes a,b : EXACT, pour un bloc CONTIGU (1-based, bornes INCLUSES) ;
+  - --ancre <texte> : resiste au DEPLACEMENT, pour un fragment qui a bouge ; elle
+    doit etre UNIQUE (le refus NOMME les lignes candidates).
+
+PERIMETRE (arbitrage 3 du GO) : la lecture et la pose restent DANS la Matrice
+(matrix/) ; hors de la, REFUS qui NOMME le perimetre. Une extension hors matrix/
+sera une decision NOMMEE, jamais un glissement silencieux.
+
+PLACE (arbitrage 4 du GO) : transversal IMMEDIAT -- la porte editer est DEJA en
+service et la panne est QUOTIDIENNE. Ce module ne remplace PAS la porte : il la
+PREPARE. UNE SEULE MAISON PAR GESTE : la pose (backup, empreinte, BDD, garde,
+validation) reste a la porte editer.
+
+DEUX DETTES NOMMEES par le GO (declarees, donc ce ne sont pas des crimes) : les
+OCTETS ATOMIQUES (I-02 fichier.py) et l ASCII VU AVANT (I-05 texte.py). Tant que
+ces modules ne sont pas nes, ce pas porte ces controles LUI-MEME et le DIT. Il
+porte de meme, DITE, la forme d extrait a DEUX essais (exacte, puis sans LF final,
+contrat publie de la porte editer, MO-173) : trois recopies d une regle font trois
+verites, alors elles sont NOMMEES ici pour etre soldees, pas oubliees.
+
+Usage (le lanceur ne resout QUE les outils et les routines : un module PARTAGE,
+qui n a pas de main.py, se lance par son CHEMIN, et c est DIT) :
+    python3 cerveau-projet/matrix/matrice/data/commun/fragment.py extraire --fichier <cible> --lignes 12,18 --sortie <fichier>
+    python3 cerveau-projet/matrix/matrice/data/commun/fragment.py verifier --fichier <cible> --fragment <fichier>
+    python3 cerveau-projet/matrix/matrice/data/commun/fragment.py poser --fichier <cible> --fragment <fichier> --nouveau <fichier>
+"""
+import hashlib
+import os
+import sys
+from pathlib import Path
+
+from carte_ascii import CARTE_CONVERSION
+from cible import (
+    NOMS_MATRICE,
+    est_dans_matrice,
+    motif_hors_perimetre,
+    racine_matrice,
+    resoudre,
+    resoudre_dans_matrice,
+)
+from options import (
+    CLE_SANS_VALEUR,
+    extraire_options,
+    refuser_option_en_tete,
+)
+from racine import detecter_racine
+from transport_listes import decouper_liste
+from zone_tmp import chemin_zone_optimus
+
+ENCODAGE = "utf-8"
+NOM_OUTIL = "fragment"
+# Codes d une porte de la Matrice : 0 = fait, 1 = mesure PROBLEME (rien n est
+# ecrit), 2 = REFUS directionnel (mauvais appel, rien n est ecrit).
+CODE_OK = 0
+CODE_PROBLEME = 1
+CODE_REFUS = 2
+
+VERBES = ("extraire", "verifier", "poser")
+
+# La forme d un extrait : la porte editer essaie l EXACTE, puis la SANS LF final
+# (contrat publie MO-173). Les MEMES etiquettes vivent ici : un seul vocabulaire
+# pour un seul contrat.
+FORME_EXACTE = "exacte"
+FORME_SANS_LF = "sans LF final"
+
+USAGE = ("verbes : extraire / verifier / poser -- voir le docstring du module"
+         " (matrice/data/commun/fragment.py)")
+
+NOMS_EXTRAIRE = ("fichier", "lignes", "ancre", "sortie", "afficher")
+NOMS_VERIFIER = ("fichier", "fragment", "ancre")
+NOMS_POSER = ("fichier", "fragment", "nouveau", "dossier")
+
+# Les noms de la paire composee : le STEM de la cible les distingue quand
+# plusieurs poses vivent dans la meme zone jetable.
+PREFIXE_ANCIEN = "ancien-"
+PREFIXE_NOUVEAU = "nouveau-"
+SUFFIXE_POSE = ".txt"
+
+
+# --- le socle de lecture, PARTAGE par les trois verbes -----------------------
+
+def _texte(chemin):
+    """Le texte d un fichier, sauts de ligne UNIVERSELS -- ce que la porte LIRA.
+
+    Mesure : la porte editer lit avec les sauts de ligne universels, donc un
+    fichier CRLF lui arrive en LF. Lire autrement ici fabriquerait un fragment qui
+    ne correspond a RIEN (deux lectures d une meme cible feraient deux verites).
+    """
+    return Path(chemin).read_text(encoding=ENCODAGE)
+
+
+def _lignes(texte):
+    """Les lignes AVEC leur terminaison : la tranche est alors une COUPE EXACTE."""
+    return texte.splitlines(keepends=True)
+
+
+def _tranche(lignes, debut, fin):
+    """La tranche EXACTE des lignes debut..fin (1-based, INCLUSES), terminators compris."""
+    return "".join(lignes[debut - 1:fin])
+
+
+def _numeros(texte, extrait):
+    """Les numeros de ligne (1-based) de CHAQUE occurrence de l extrait."""
+    numeros = []
+    depart = texte.find(extrait)
+    while depart >= 0:
+        numeros.append(texte.count("\n", 0, depart) + 1)
+        depart = texte.find(extrait, depart + 1)
+    return numeros
+
+
+def _formes(extrait):
+    """Les formes d un extrait, dans l ordre -- le contrat de la porte (MO-173)."""
+    if extrait.endswith("\n"):
+        return ((FORME_EXACTE, extrait), (FORME_SANS_LF, extrait[:-1]))
+    return ((FORME_EXACTE, extrait),)
+
+
+def _occurrences(texte, extrait):
+    """(forme, compte, lignes) : ou et COMBIEN de fois l extrait est dans le texte.
+
+    Rend la PREMIERE forme qui existe (exacte d abord), son compte, et les lignes
+    candidates -- ce qu un refus doit NOMMER.
+    """
+    for forme, candidat in _formes(extrait):
+        if not candidat:
+            continue
+        compte = texte.count(candidat)
+        if compte:
+            return forme, compte, _numeros(texte, candidat)
+    return None, 0, []
+
+
+def _source(fichier, depart):
+    """(chemin, refus) : la cible de LECTURE, ancree et DANS la Matrice.
+
+    Le perimetre est CONSOMME (cible.est_dans_matrice), jamais recopie : une seule
+    source de perimetre pour toute la Matrice (M-076, MO-183/MO-184).
+    """
+    chemin, motif = resoudre(fichier, depart)
+    if chemin is None:
+        return None, "REFUS : " + motif
+    if not est_dans_matrice(chemin, depart):
+        return None, motif_hors_perimetre(chemin, usage="lecture", depart=depart)
+    return chemin, ""
+
+
+def _destination(chemin, depart):
+    """(chemin, motif) : une DESTINATION dans la Matrice, les DEUX formes acceptees.
+
+    `cible.resoudre` accepte DEUX formes pour une source (relative a la racine du
+    workspace, cerveau-projet/matrix/..., ou relative a la Matrice). Une
+    destination doit les accepter AUSSI : deux formes pour un meme geste, c est
+    deux verites -- et la commande copiee d un document serait refusee ici alors
+    qu elle marche partout ailleurs (friction 77 : un refus qui ne dit pas OU il a
+    cherche coute trois essais).
+    """
+    cible, motif = resoudre_dans_matrice(chemin, depart)
+    if cible is not None:
+        return cible, motif
+    brut = Path(str(chemin).strip())
+    if brut.is_absolute() or not brut.parts:
+        return None, motif
+    for nom in NOMS_MATRICE:
+        prefixe = Path(nom).parts
+        if brut.parts[:len(prefixe)] == prefixe:
+            return resoudre_dans_matrice(Path(*brut.parts[len(prefixe):]), depart)
+    return None, motif
+
+
+def _valeur_ou_fichier(valeur, etiquette):
+    """(texte, refus) : la valeur, ou le CONTENU du fichier quand elle dit @chemin.
+
+    Un @ qui ne designe AUCUN fichier n est pas devine : il est REFUSE en nommant
+    le chemin (un texte qui commence par @ reste possible -- 1 caractere suffit a
+    lever l ambiguite).
+    """
+    texte = str(valeur)
+    if not texte.startswith("@"):
+        return texte, ""
+    chemin = Path(texte[1:].strip())
+    if not chemin.is_file():
+        return None, ("REFUS : " + etiquette + " @fichier INTROUVABLE : " + str(chemin)
+                      + " -- pour un texte qui commence par @, ecrivez-le dans un"
+                      " fichier, ou changez la valeur.")
+    return chemin.read_text(encoding=ENCODAGE), ""
+
+
+def _non_ascii(texte):
+    """Les caracteres non-ASCII, avec leur ligne : la mesure I-05, vue AVANT.
+
+    Rend une liste de (ligne, point de code, converti) : converti dit si la carte
+    PARTAGEE sait le remplacer (la porte corrigera) ou si PERSONNE ne le connait
+    (la porte le refusera -- autant le dire maintenant, jamais apres).
+    """
+    trouves = []
+    for numero, ligne in enumerate(texte.split("\n"), start=1):
+        for caractere in ligne:
+            if ord(caractere) > 127:
+                trouves.append((numero, ord(caractere), caractere in CARTE_CONVERSION))
+    return trouves
+
+
+def _motif_non_ascii(trouves, etiquette):
+    """Le refus NOMME d un caractere HORS carte : point de code, ligne, remede.
+
+    Le message est 100 pour cent ASCII (jamais le caractere brut) : une sortie non
+    ASCII casse tout appelant qui capture la console (mesure du cobaye MO-210).
+    """
+    ligne, point, _ = trouves[0]
+    return ("REFUS : " + etiquette + " porte " + str(len(trouves))
+            + " caractere(s) non-ASCII ; le premier : U+" + format(point, "04X")
+            + " a la ligne " + str(ligne) + " -- la carte partagee (carte_ascii.py)"
+            " ne le connait PAS, la porte editer le refuserait : corrigez la SOURCE"
+            " de ce texte (la donnee ne doit pas etre devinee).")
+
+
+def _empreinte(texte):
+    """L empreinte COURTE (16) du fragment -- la forme des traces (I-06 a naitre)."""
+    return hashlib.sha256(texte.encode(ENCODAGE)).hexdigest()[:16]
+
+
+def _ecrire_atomique(chemin, texte):
+    """Ecrit un fichier en tmp + os.replace, LF forces (L-001). Rend (code, message).
+
+    LA DETTE I-02, DITE : fichier.py est le domicile promis de ce geste ; il n est
+    pas ne, donc le geste vit ICI et le DIT (une dette declaree n est pas un crime,
+    une dette silencieuse en est un).
+    """
+    chemin = Path(chemin)
+    contenu = texte.replace("\r\n", "\n").replace("\r", "\n")
+    if contenu and not contenu.endswith("\n"):
+        contenu += "\n"
+    tmp = chemin.with_name(chemin.name + ".tmp")
+    try:
+        with open(str(tmp), "w", encoding=ENCODAGE, newline="\n") as flux:
+            flux.write(contenu)
+        os.replace(str(tmp), str(chemin))
+    except OSError as erreur:
+        try:
+            os.remove(str(tmp))
+        except OSError:
+            pass
+        return CODE_PROBLEME, "REFUS : ecriture impossible : " + str(erreur)
+    return CODE_OK, ""
+
+
+def _chemin_relatif_racine(chemin, depart):
+    """La forme d une commande : le chemin RELATIF a la racine du workspace.
+
+    La porte editer ancre ses chemins sur la racine (celle qui porte AGENTS.md) :
+    lui servir un autre ancrage fabriquerait une commande qui ne trouve rien.
+    """
+    try:
+        return str(Path(chemin).resolve().relative_to(detecter_racine(depart))).replace("\\", "/")
+    except (ValueError, RuntimeError):
+        return str(Path(chemin).resolve()).replace("\\", "/")
+
+
+# --- verbe 1 : EXTRAIRE ------------------------------------------------------
+
+def _par_ancre(texte, ancre):
+    """(fragment, detail, refus) : le fragment designe par une ANCRE UNIQUE.
+
+    Le fragment est fait des LIGNES ENTIERES de l ancre : du DEBUT de sa premiere
+    ligne a la FIN de sa derniere. Une ancre ambigue ne se devine pas : le refus
+    NOMME les lignes candidates.
+    """
+    compte = texte.count(ancre)
+    if compte == 0:
+        return None, "", ("REFUS : ancre INTROUVABLE -- aucune occurrence dans le fichier"
+                          " (" + str(len(_lignes(texte))) + " lignes) : verifiez les"
+                          " espaces et la casse, ou designez par --lignes a,b.")
+    if compte > 1:
+        return None, "", ("REFUS : ancre AMBIGUE -- trouvee " + str(compte) + " fois,"
+                          " lignes " + ", ".join(str(n) for n in _numeros(texte, ancre))
+                          + " : allongez l ancre pour n en garder QU UNE (les candidates"
+                          " sont NOMMEES, jamais choisies en silence).")
+    debut_ancre = texte.find(ancre)
+    debut = texte.rfind("\n", 0, debut_ancre) + 1
+    fin_ancre = debut_ancre + len(ancre)
+    if ancre.endswith("\n"):
+        fin = fin_ancre
+    else:
+        coupe = texte.find("\n", fin_ancre)
+        fin = coupe + 1 if coupe >= 0 else len(texte)
+    fragment = texte[debut:fin]
+    premiere = texte.count("\n", 0, debut) + 1
+    derniere = premiere + len(_lignes(fragment)) - 1
+    return fragment, ("ancre UNIQUE (1 occurrence) -- lignes " + str(premiere)
+                      + "," + str(derniere)), ""
+
+
+def extraire(fichier, lignes=None, ancre=None, sortie=None, afficher=False, depart=None):
+    """Le fragment EXACT d un fichier EXISTANT, ECRIT dans un fichier. Rend (code, message, fragment).
+
+    La donnee ne passe JAMAIS par l affichage : sortie est EXIGEE. afficher est un
+    confort DECLARE, et le message DIT que la DONNEE est le fichier ecrit.
+    """
+    depart = depart if depart is not None else __file__
+    if bool(lignes) == bool(ancre):
+        return CODE_REFUS, ("REFUS : une SEULE designation a la fois -- --lignes a,b"
+                            " (exacte) OU --ancre <texte> (resiste au deplacement)"), ""
+    if not sortie:
+        return CODE_REFUS, ("REFUS : --sortie est EXIGEE -- le fragment va dans un FICHIER,"
+                            " jamais dans un affichage (mesure MO-207 : un bloc recopie"
+                            " depuis un affichage est entre AUTREMENT dans --ancien, et"
+                            " py_compile ne l a pas vu)."), ""
+    chemin, refus = _source(fichier, depart)
+    if chemin is None:
+        return CODE_REFUS, refus, ""
+    try:
+        texte = _texte(chemin)
+    except (OSError, UnicodeDecodeError) as erreur:
+        return CODE_PROBLEME, "REFUS : lecture impossible : " + str(erreur), ""
+
+    morceaux = _lignes(texte)
+    if ancre is not None:
+        fragment, provenance, refus = _par_ancre(texte, ancre)
+        if fragment is None:
+            return CODE_REFUS, refus, ""
+    else:
+        parts = decouper_liste(lignes)
+        if len(parts) != 2:
+            return CODE_REFUS, ("REFUS : --lignes attend a,b (1-based, bornes INCLUSES) :"
+                                " recu " + str(lignes)), ""
+        try:
+            debut, fin = int(parts[0]), int(parts[1])
+        except ValueError:
+            return CODE_REFUS, "REFUS : --lignes n est pas numerique : " + str(lignes), ""
+        if debut < 1 or fin < debut or fin > len(morceaux):
+            return CODE_REFUS, ("REFUS : --lignes " + str(debut) + "," + str(fin)
+                                + " hors bornes -- le fichier porte " + str(len(morceaux))
+                                + " lignes"), ""
+        fragment = _tranche(morceaux, debut, fin)
+        provenance = "lignes " + str(debut) + "," + str(fin) + " (plage EXACTE)"
+
+    if not fragment:
+        return CODE_PROBLEME, "REFUS : le fragment est VIDE (rien a extraire).", ""
+    destination, motif = _destination(sortie, depart)
+    if destination is None:
+        return CODE_REFUS, "REFUS : " + motif, ""
+    code, message = _ecrire_atomique(destination, fragment)
+    if code != CODE_OK:
+        return code, message, ""
+    return CODE_OK, ("OK : fragment " + provenance + " de " + str(chemin) + " -- ecrit"
+                     " dans " + str(destination) + " (" + str(len(fragment)) + " octets,"
+                     " empreinte " + _empreinte(fragment) + "). La DONNEE est le FICHIER"
+                     " ecrit, jamais un affichage."), fragment
+
+
+# --- verbe 2 : VERIFIER ------------------------------------------------------
+
+def verifier(fichier, fragment=None, ancre=None, depart=None):
+    """L unicite est-elle PROUVEE ? Rend (code, message).
+
+    code 0 = UNE occurrence ; 1 = 0 occurrence ou PLUSIEURS (l ambiguite est
+    NOMMEE avec ses lignes). C est la mesure qui doit passer AVANT la pose.
+    """
+    depart = depart if depart is not None else __file__
+    if bool(fragment) == bool(ancre):
+        return CODE_REFUS, ("REFUS : une SEULE mesure a la fois -- --fragment <fichier>"
+                            " OU --ancre <texte>")
+    chemin, refus = _source(fichier, depart)
+    if chemin is None:
+        return CODE_REFUS, refus
+    try:
+        texte = _texte(chemin)
+    except (OSError, UnicodeDecodeError) as erreur:
+        return CODE_PROBLEME, "REFUS : lecture impossible : " + str(erreur)
+
+    if ancre is not None:
+        extrait, refus = _valeur_ou_fichier(ancre, "ancre")
+        if extrait is None:
+            return CODE_REFUS, refus
+        compte, numeros = texte.count(extrait), _numeros(texte, extrait)
+        etiquette = "ancre"
+        forme = FORME_EXACTE
+    else:
+        chemin_fragment, refus = _source(fragment, depart)
+        if chemin_fragment is None:
+            return CODE_REFUS, "REFUS : " + refus
+        try:
+            extrait = _texte(chemin_fragment)
+        except (OSError, UnicodeDecodeError) as erreur:
+            return CODE_PROBLEME, "REFUS : lecture du fragment impossible : " + str(erreur)
+        forme, compte, numeros = _occurrences(texte, extrait)
+        etiquette = "fragment"
+        if forme is None:
+            compte, numeros = 0, []
+
+    if compte == 1:
+        return CODE_OK, ("UNIQUE : le " + etiquette + " existe 1 fois -- ligne "
+                         + str(numeros[0]) + " (forme : " + forme + ").")
+    if compte == 0:
+        return CODE_PROBLEME, ("ECART : le " + etiquette + " existe 0 fois dans "
+                               + str(chemin) + " -- la donnee ne vient PAS de ce fichier,"
+                               " ou il a change : reEXTRAIRE plutot que recopier.")
+    return CODE_PROBLEME, ("ECART : le " + etiquette + " existe " + str(compte)
+                           + " fois -- lignes " + ", ".join(str(n) for n in numeros)
+                           + " : il n est PAS unique, la porte editer refuserait."
+                           " Allongez la designation (plus de lignes, ou une ancre PLUS"
+                           " precise).")
+
+
+# --- verbe 3 : POSER --------------------------------------------------------
+
+def poser(fichier, fragment, nouveau, dossier=None, depart=None):
+    """Compose la PAIRE ancien/nouveau pour la porte editer. Rend (code, message).
+
+    Ce qu il fait : PROUVER l unicite, MESURER l ASCII, ECRIRE la paire dans la
+    zone jetable, et RENDRE la commande exacte de la porte. Ce qu il ne fait PAS :
+    l edition -- backup, empreinte, BDD, garde et validation restent a la porte.
+    """
+    depart = depart if depart is not None else __file__
+    if not fragment or not nouveau:
+        return CODE_REFUS, ("REFUS : --fragment et --nouveau sont EXIGES -- la donnee"
+                            " voyage dans des FICHIERS, jamais dans la ligne de commande.")
+    chemin, refus = _source(fichier, depart)
+    if chemin is None:
+        return CODE_REFUS, refus
+    try:
+        texte = _texte(chemin)
+    except (OSError, UnicodeDecodeError) as erreur:
+        return CODE_PROBLEME, "REFUS : lecture de la cible impossible : " + str(erreur)
+
+    chemin_fragment, refus = _source(fragment, depart)
+    if chemin_fragment is None:
+        return CODE_REFUS, "REFUS : " + refus
+    chemin_nouveau, refus = _source(nouveau, depart)
+    if chemin_nouveau is None:
+        return CODE_REFUS, "REFUS : " + refus
+    try:
+        ancien_texte = _texte(chemin_fragment)
+        nouveau_texte = _texte(chemin_nouveau)
+    except (OSError, UnicodeDecodeError) as erreur:
+        return CODE_PROBLEME, "REFUS : lecture de la paire impossible : " + str(erreur)
+
+    # 1. L UNICITE, PROUVEE AVANT tout le reste (la garde du GO, arbitrage 2).
+    forme, compte, numeros = _occurrences(texte, ancien_texte)
+    if forme is None or compte == 0:
+        return CODE_PROBLEME, ("REFUS : l ANCIEN existe 0 fois dans " + str(chemin)
+                               + " -- il ne vient PAS de ce fichier (ou il a change)."
+                               " ReEXTRAIRE : c est exactement la panne MO-207, ou un"
+                               " fragment d AFFICHAGE ne correspondait a rien.")
+    if compte > 1:
+        return CODE_REFUS, ("REFUS : l ANCIEN existe " + str(compte) + " fois -- lignes "
+                            + ", ".join(str(n) for n in numeros) + " : la porte editer"
+                            " exige UNE occurrence UNIQUE. Allongez l extrait (--lignes"
+                            " a,b plus large) plutot que de choisir en silence.")
+
+    # 2. L ASCII, VU AVANT (la dette I-05, portee ici et DITE).
+    trouves_ancien = _non_ascii(ancien_texte)
+    trouves_nouveau = _non_ascii(nouveau_texte)
+    hors_carte = [t for t in trouves_nouveau if not t[2]]
+    if hors_carte:
+        return CODE_REFUS, _motif_non_ascii(hors_carte, "le NOUVEAU")
+    notes = []
+    if trouves_ancien:
+        notes.append("[ASCII] l ANCIEN porte " + str(len(trouves_ancien))
+                     + " non-ASCII : il vient de la CIBLE, il n est pas reecrit"
+                     " (c est la routine corriger-ascii qui repasse sur un fichier"
+                     " entier).")
+    convertibles = [t for t in trouves_nouveau if t[2]]
+    if convertibles:
+        notes.append("[ASCII] le NOUVEAU porte " + str(len(convertibles))
+                     + " caractere(s) que la carte SAIT convertir (lignes "
+                     + ",".join(str(t[0]) for t in convertibles[:5])
+                     + " ...) : la porte editer les corrigera AVANT d ecrire.")
+
+    # 3. La PAIRE, ecrite dans la zone jetable (dette I-02, portee ici et DITE).
+    if dossier:
+        zone, motif = _destination(dossier, depart)
+        if zone is None:
+            return CODE_REFUS, "REFUS : " + motif
+    else:
+        zone = chemin_zone_optimus(racine_matrice(depart))
+    if not zone.is_dir():
+        return CODE_REFUS, ("REFUS : la zone jetable " + str(zone) + " N EXISTE PAS --"
+                            " elle est preparee par le pilote de son flux (zone_tmp.py),"
+                            " jamais creee en silence par un consommateur.")
+    stem = Path(chemin).stem
+    chemin_ancien = zone / (PREFIXE_ANCIEN + stem + SUFFIXE_POSE)
+    chemin_nouveau = zone / (PREFIXE_NOUVEAU + stem + SUFFIXE_POSE)
+    code, message = _ecrire_atomique(chemin_ancien, ancien_texte)
+    if code != CODE_OK:
+        return code, message
+    code, message = _ecrire_atomique(chemin_nouveau, nouveau_texte)
+    if code != CODE_OK:
+        return code, message
+
+    cible_rel = _chemin_relatif_racine(chemin, depart)
+    ancien_rel = _chemin_relatif_racine(chemin_ancien, depart)
+    nouveau_rel = _chemin_relatif_racine(chemin_nouveau, depart)
+    commande = ("python3 cerveau-projet/matrix/lancer.py ecrire editer --fichier "
+                + cible_rel + " --ancien-fichier " + ancien_rel
+                + " --nouveau-fichier " + nouveau_rel)
+    lignes_message = [
+        "OK : paire composee pour " + str(chemin) + " -- ANCIEN unique (forme " + forme
+        + ", ligne " + str(numeros[0]) + "), empreinte " + _empreinte(ancien_texte)
+        + " ; NOUVEAU empreinte " + _empreinte(nouveau_texte) + ".",
+        "  ancien  : " + ancien_rel,
+        "  nouveau : " + nouveau_rel,
+    ]
+    lignes_message.extend("  " + note for note in notes)
+    lignes_message.append("  la POSE reste a la porte (une seule maison par geste) :")
+    lignes_message.append("  " + commande)
+    if " " in cible_rel or " " in ancien_rel or " " in nouveau_rel:
+        lignes_message.append("  ALERTE : un chemin porte une ESPACE -- entourez-le de"
+                              " guillemets avant de copier la commande.")
+    return CODE_OK, "\n".join(lignes_message)
+
+
+# --- la facade --------------------------------------------------------------
+
+def _refuser_sans_valeur(options):
+    """Le refus NOMME d une option privee de valeur (contrat du parseur partage)."""
+    noms = options.get(CLE_SANS_VALEUR) or []
+    if not noms:
+        return 0
+    print("REFUS : option --" + str(noms[0]) + " sans valeur -- une option videe en"
+          " silence se lit comme un fait (EO-156). Donnez sa valeur.")
+    return CODE_REFUS
+
+
+def _executer_verbe(arguments):
+    """Route le verbe et rend le code de la porte (0/1/2)."""
+    refus = refuser_option_en_tete(arguments, outil=NOM_OUTIL, usage=USAGE,
+                                   commandes=VERBES)
+    if refus:
+        return refus
+    verbe = arguments[0]
+    if verbe == "extraire":
+        options = extraire_options(arguments[1:], NOMS_EXTRAIRE, drapeaux=("afficher",),
+                                   outil=NOM_OUTIL, usage=USAGE)
+        return _verbe_extraire(options)
+    if verbe == "verifier":
+        options = extraire_options(arguments[1:], NOMS_VERIFIER, outil=NOM_OUTIL, usage=USAGE)
+        return _verbe_verifier(options)
+    options = extraire_options(arguments[1:], NOMS_POSER, outil=NOM_OUTIL, usage=USAGE)
+    return _verbe_poser(options)
+
+
+def _verbe_extraire(options):
+    refus = _refuser_sans_valeur(options)
+    if refus:
+        return refus
+    code, message, fragment = extraire(
+        options.get("fichier"), lignes=options.get("lignes"), ancre=options.get("ancre"),
+        sortie=options.get("sortie"), afficher=bool(options.get("afficher")))
+    print(message)
+    if code == CODE_OK and options.get("afficher"):
+        print("--- AFFICHAGE DE CONFORT (la DONNEE est le fichier "
+              + str(options.get("sortie")) + ") ---")
+        sys.stdout.write(fragment if fragment.endswith("\n") else fragment + "\n")
+    return code
+
+
+def _verbe_verifier(options):
+    refus = _refuser_sans_valeur(options)
+    if refus:
+        return refus
+    code, message = verifier(options.get("fichier"), fragment=options.get("fragment"),
+                             ancre=options.get("ancre"))
+    print(message)
+    return code
+
+
+def _verbe_poser(options):
+    refus = _refuser_sans_valeur(options)
+    if refus:
+        return refus
+    code, message = poser(options.get("fichier"), options.get("fragment"),
+                          options.get("nouveau"), dossier=options.get("dossier"))
+    print(message)
+    return code
+
+
+def main(arguments):
+    """La facade : verbes FERMES, refus NOMMES, aucun travail hors les 3 verbes."""
+    if not arguments or arguments[0] in ("--aide", "-h", "--help"):
+        print(__doc__)
+        return CODE_REFUS
+    if arguments[0] not in VERBES and not arguments[0].startswith("--"):
+        print("REFUS : verbe inconnu : " + str(arguments[0]) + " -- verbes : "
+              + ", ".join(VERBES) + " (" + USAGE + ")")
+        return CODE_REFUS
+    if arguments[0] == "--auto-test":
+        return _auto_test()
+    return _executer_verbe(arguments)
+
+
+def _auto_test():
+    """Un auto-test MINIMAL : la porte se declare saine ou elle le DIT.
+
+    Il n a pas la pretention d un cobaye : les cobayes de la mission vivent dans la
+    zone jetable et sont rejoues par le round. Ici, seulement trois faits : les
+    trois verbes sont lies, le perimetre rend un refus NOMME, et une ancre ambigue
+    est accusee avec ses lignes.
+    """
+    problemes = []
+    for nom in VERBES:
+        if not callable(globals().get(nom)):
+            problemes.append("verbe non lie : " + nom)
+    code, message, _ = extraire("hors/perimetre.txt", lignes="1,2", sortie="x.txt")
+    if code != CODE_REFUS or not message.startswith("REFUS"):
+        problemes.append("refus attendu : recu code " + str(code) + " / " + message)
+    fragment, _, refus = _par_ancre("a\nb\nc\nb\n", "b")
+    if fragment is not None or "AMBIGUE" not in refus:
+        problemes.append("ancre ambigue : refus attendu")
+    if problemes:
+        print("AUTO-TEST : ECART -- " + " ; ".join(problemes))
+        return CODE_PROBLEME
+    print("AUTO-TEST : sain -- 3 verbes, perimetre NOMME, ancre ambigue accusee.")
+    return CODE_OK
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

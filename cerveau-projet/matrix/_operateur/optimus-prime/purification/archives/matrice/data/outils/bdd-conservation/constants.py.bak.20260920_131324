@@ -1,0 +1,152 @@
+"""Constantes de l outil bdd-conservation."""
+import sys
+from pathlib import Path
+
+REPERTOIRE_OUTIL = Path(__file__).resolve().parent
+REPERTOIRE_DATA = REPERTOIRE_OUTIL.parent.parent
+if REPERTOIRE_DATA.name != "data":
+    raise RuntimeError("Structure inattendue : " + str(REPERTOIRE_DATA))
+
+NOM_BDD = "conservation.json"
+NOM_BDD_TMP = NOM_BDD + ".tmp"
+CHEMIN_BDD = REPERTOIRE_DATA / NOM_BDD
+CHEMIN_EMPREINTE = REPERTOIRE_DATA / (NOM_BDD + ".sha256")
+
+PREFIXE_ID = "K-"
+CATEGORIES = (
+    "VIVANT", "STRUCTUREL", "GENERE", "HISTORIQUE",
+    "OBSOLETE", "COBAYE", "ORPHELIN", "HORS-PERIMETRE",
+)
+STATUTS = (
+    "propose", "classe", "decide", "archive", "conserve",
+    "repare", "dette", "signale", "restaure", "supprime",
+    # `disparu` (EO-276, MO-310) : l element a quitte le disque SANS passer par une
+    # porte. Ce n est ni une decision ni une rotation -- c est un FAIT, declare.
+    "disparu",
+)
+VERDICTS = ("conserver", "archiver", "reparer", "dette", "signaler", "disparu")
+OPERATIONS = ("proposer", "classer", "decider", "preciser", "recenser", "rejuger", "manifester",
+              "archiver", "restaurer", "purger", "declarer-disparition")
+
+ENCODAGE = "utf-8"
+INDENTATION_JSON = 2
+TAILLE_BLOC_LECTURE = 65536
+
+sys.path.insert(0, str(REPERTOIRE_DATA / "commun"))
+from racine import detecter_racine  # noqa: E402
+
+RACINE = detecter_racine(REPERTOIRE_OUTIL)
+
+# --- PORTE DE ROTATION (MO-160, cases 7 et 8 de la suite de purification) ---
+# L'archive de la famille des points de restauration. La DESTINATION de chaque
+# element vient de SA decision (colonne `destination`, posee par la case 6) : la
+# porte ne la calcule pas, elle la RESOUT. Ce qui se declare ICI, c'est le
+# DOMICILE de l'archive, le nom de son manifeste et celui de son temoin.
+# Ce domicile vit sous `_operateur/` : c'est le PLANCHER du domicile
+# d'invisibilite (data/commun/invisibilite.py), donc une zone que le cameleon ne
+# lit jamais -- l'archive contient du CONTENU INTERNE (contre-analyse MO-156).
+REPERTOIRE_ARCHIVES = "_operateur/optimus-prime/purification/archives"
+NOM_MANIFESTE = "manifeste-archives.jsonl"
+NOM_TEMOIN = "temoin-avant.json"
+# La zone JETABLE du voisin (Flux 1) : un point qui s'y trouve est HORS
+# PERIMETRE et se SIGNALE (regle immuable perimetre-tmp, point 1).
+# Zone DECLAREE du cameleon : depuis la regle R-005 (MO-189) elle vit HORS de
+# la Matrice (workspace/tmp-cameleon), donc l'archiveur -- qui balaie matrix/ --
+# ne la rencontre plus EN SERVICE. Le critere n'est pas mort pour autant : il
+# sert encore les chemins en MIROIR des archives (purification/archives/...), ou
+# la zone apparait toujours. Un critere qui ne juge plus rien doit le DIRE.
+ZONES_CAMELEON = ('tmp-cameleon',)
+# La FORME du point de restauration a UN domicile : la porte qui le PRODUIT
+# (`data/outils/ecrire/constants.py`). Cette porte la CONSOMME -- elle ne la
+# recopie jamais (M-076 ; friction 42).
+CHEMIN_DOMICILE_FORME_BAK = REPERTOIRE_DATA / "outils" / "ecrire" / "constants.py"
+
+# --- RECENSEMENT DE LA FAMILLE DES POINTS DE RESTAURATION (MO-306) ---
+# Le plan (plan-conservation, section 5) IMPOSE a la porte de rotation de refuser
+# "un element sans lecteur recense". Or le BALAYAGE cree ses entrees (propose ->
+# classe -> decide) sans jamais ecrire les trois champs de recensement
+# (`lecteurs`/`ecrivains`/`index`) : leurs colonnes restaient VIDES, et l'acte les
+# refusait -- la famille jugee ne pouvait donc JAMAIS quitter sa place (mesure du
+# 2026-09-20 : 430 elements refuses pour ce seul motif).
+#
+# Le recensement a UN domicile (M-076) : il vit ICI, et le balayage le CONSOMME.
+# Les valeurs sont MESUREES (MO-192, friction 88), pas inventees : les deux portes
+# de revert restaurent depuis un point de restauration, la porte `ecrire` le cree,
+# et le registre de conservation le reference. Elles sont FAMILIALES : tout point
+# de la famille a ces lecteurs/ecrivain/index, ce que la BDD portait deja pour 878
+# de ses 1211 elements.
+LECTEURS_FAMILLE_RESTAURATION = ("revert-fichier", "revert-periode")
+ECRIVAINS_FAMILLE_RESTAURATION = ("matrice/data/outils/ecrire",)
+INDEX_FAMILLE_RESTAURATION = ("matrice/data/conservation.json",)
+MOTIF_RECENSEMENT_FAMILLE = ("MO-306 : recensement de la famille applique par le balayage "
+                              "(revert-fichier + revert-periode restaurent depuis les .bak ; "
+                              "la porte ecrire cree le point ; conservation.json l indexe).")
+
+# --- LA PURGE DES ARCHIVES (MO-308 / P3) : ne meurt que RECOUVRABLE, PROUVEE ---
+# Le createur a valide P3 le 2026-09-20 (rapport-revision-MO-305, section 3) :
+# "une archive est SUPPRIMEE quand son contenu est prouve recouvrable (engage
+# dans git, OU empreinte + copie dans la conservation BDD) ; sinon elle reste".
+# Jusqu ici le registre DISAIT "aucune porte de suppression" : c etait vrai, et
+# c est exactement ce qui faisait vivre 898 archives SANS duree de vie (V3 :
+# 898 fichiers, 18 Mo, jamais relus). La porte ajoutee ici n a pas le droit de
+# supprimer sur une PROMESSE -- elle supprime sur une PREUVE. Les DEUX modes de
+# preuve sont donc DECLARES au domicile (M-076) et CONSOMMES par la porte : un
+# mode de preuve recopie chez un appelant deriverait en silence.
+STATUT_SUPPRIME = "supprime"
+OPERATION_PURGER = "purger"
+NOM_LIGNE_PURGE = "purge"
+MOTIF_PREUVE_GIT = "git"
+MOTIF_PREUVE_COPIE = "copie"
+# Le programme juge par la preuve 1 : son NOM vit ici (zero valeur en dur).
+NOM_PROGRAMME_GIT = "git"
+# Le type d objet que git doit rendre pour que le contenu soit RECOUVRABLE.
+NOM_TYPE_OBJET_BLOB = "blob"
+
+# --- LE PLAFOND DES ACTES EN ATTENTE (P4, MO-309) ---
+# P4, validee par le createur le 2026-09-20 (rapport-revision-MO-305, section 3) :
+# "UN GARDE accuse quand le nombre d actes en attente depasse un plafond declare :
+# une masse qui grandit en silence n est pas une politique". Le plafond vit ICI
+# (un seul domicile, M-076) et la porte `controler-plafond` le LIT -- elle ne le
+# recopie jamais.
+# MESURE du 2026-09-20 (MO-309) : 3 actes en attente, tous INJOUABLES -- leur
+# point a disparu du disque (tmp-optimus purge), donc la rotation les refuse A
+# CHAQUE cloture (EO-276). Le plafond declare est donc 8 : le stock mesure (3)
+# plus la marge d UNE cloture -- le balayage ecrit ses decisions AVANT que la
+# rotation ne les joue, et quelques points dans cet intervalle sont une operation
+# saine. Au-dela, la porte ACCUSE en nommant le plafond ET les actes.
+PLAFOND_ACTES_EN_ATTENTE = 8
+
+# --- LA DECLARATION D UNE DISPARITION (EO-276, MO-310) -----------------------
+# Mesure du 2026-09-20 : 17 points de restauration de la famille avaient quitte le
+# disque SANS passer par une porte (zones jetables purgees par le garde-tmp). Le
+# registre les gardait non-archives, `controler-archives` les comptait en ECART,
+# et RIEN ne pouvait les solder : `archiver` exige un FICHIER A DEPLACER, et il n
+# y en avait plus. Pire : chaque `archiver --lot` REPOSE le temoin (inventaire du
+# disque), donc la PREUVE de la disparition s effacait au lot suivant.
+#
+# Le verbe ajoute ici DECLARE le fait (il ne l efface pas) : l entree RESTE, elle
+# CHANGE de statut et de verdict, elle GARDE la derniere mesure connue, et elle
+# porte la DATE, la RAISON et la MISSION de la declaration. Un statut et un
+# verdict DEDIES sont donc necessaires : les partager avec une decision ferait
+# lire une disparition comme une decision, et le plafond des actes en attente
+# (P4) continuerait de compter comme `en attente` un point qui ne reviendra
+# JAMAIS.
+STATUT_DISPARU = "disparu"
+VERDICT_DISPARU = "disparu"
+OPERATION_DECLARER_DISPARITION = "declarer-disparition"
+
+# --- LE TEMOIN DIT D OU IL A LU (EO-276, MO-310) -----------------------------
+# Deux populations n ont PLUS de fichier : ce qui est parti par la porte P3
+# (`supprime`) et ce qui a disparu sans porte (`disparu`). Le temoin precedent les
+# lisait `introuvable`, donc pour ZERO octet, alors que la conservation en
+# declarait 14,2 Mo -- et l invariant des octets ne pouvait donc plus se boucler
+# (mesure : origine 5 030 206 octets contre 18 880 860 comptes). Un temoin qui n a
+# pas su lire ne mesure pas zero : il lit au REGISTRE, et il le DIT.
+ORIGINE_LECTURE_DISQUE = "disque"
+ORIGINE_LECTURE_REGISTRE = "registre"
+NON_MESURE = "non mesure (aucune trace au registre)"
+
+# Les lignes que la porte ajoute au manifeste (append-only : elles SURVIVENT au
+# temoin qu elles remplacent).
+NOM_LIGNE_DISPARITION = "disparition"
+NOM_LIGNE_ABANDON = "abandon"

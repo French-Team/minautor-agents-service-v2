@@ -1,0 +1,59 @@
+---
+identite:
+  type: readme
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# SUIVI DU PILOTE -- le domicile du suivi (chaine PB-003 / SP-003 / TD-003, EO-273)
+
+Ce dossier est INVISIBLE : il vit sous _operateur/optimus-prime/, jamais dans la zone visible.
+Un moule ou une vue d ici ne sert donc QUE de l invisible (L-016 : le cameleon ne lit pas cette
+zone).
+
+- pannes-declarees.json : LA LISTE FERMEE des pannes du pilote (T1). Pour chaque panne : le fait
+  ATTENDU, la source qui le porte, le seuil de silence, la gravite, qui la voit, et la porte qui
+  repare. Qui la LIT : la porte du suivi (T2) et son controle permanent (T4). Qui l ECRIT : le
+  pilote, ou l auditeur du pilote, par la porte d ecriture.
+- suivi-pilote.md et suivi-pilote.jsonl (T2) : la vue DERIVEE et le journal des VERDICTS.
+  Aucun fait n y est recopie -- la vue se recalcule depuis les sources : outbox.jsonl,
+  suivi-optimus.jsonl, file-missions-optimus.json, entonnoir-files-optimus.json,
+  defcon-historique.jsonl, pauses-session-matrix.jsonl et le journal du marbre.
+
+REGLE : une panne qui n est pas declaree dans pannes-declarees.json n existe PAS pour la porte.
+La liste est fermee, et elle se modifie par la porte, jamais a la main.
+
+## T1 repris le 2026-09-22 (MO-347) -- la mesure qui manquait
+
+La declaration du 2026-09-19 portait des seuils NON MESURES. Mesure faite sur
+matrice/data/suivi-optimus.jsonl (1099 evenements, 303 missions) :
+
+| Distribution | p50 | p90 | p95 | p99 | max |
+|---|---|---|---|---|---|
+| ecart entre deux evenements (min) | 0.3 | 12.3 | 26.5 | 541 | 1218 |
+| duree debut -> fin d une mission (min) | 3 | 31 | 92 | 753 | 1862 |
+
+- **Le seuil de 30 minutes de `mission-qui-n-avance-pas` est REFUTE** : une mission NORMALE ne
+  produit aucun evenement entre son debut et sa fin (p90 = 31 min), donc ce seuil crierait sur
+  **11 % des missions normales**. Corrige a **720 minutes** (~8x le p95 mesure).
+- **`pause-oubliee` avait une source incomplete** : elle ne lisait que l ETAT de pause, qui est
+  ABSENT -- la panne etait donc invisible PAR CONSTRUCTION. Le fait est la **CONTRADICTION** du
+  journal et de l etat.
+- **AJOUT `mission-chargee-sans-conduite`** : la panne payee en MO-387 (deux missions chargees
+  sans conduire, deux clotures qui ont clos la TETE DU LOT a leur place, avec une coherence
+  file<->journal parfaite).
+
+### Une panne VIVANTE, trouvee par la mesure
+
+`pauses-session-matrix.jsonl` : cinq evenements, le dernier est une **pause** du 2026-09-12
+11:07:23 **sans reprise**. `session-matrix-etat.json` : **absent**. Les deux traces se
+contredisent depuis dix jours, et personne ne le voyait.
+
+Refus d accuser : une pause **longue** avec un etat **present** est un etat legitime
+(maintenance). La panne est la **contradiction**, jamais la duree.
+
+### Verdict du T1 repris
+
+**12 pannes declarees, 8 vues par PERSONNE.** Les maillons voient ce qui est ECRIT et ce qui
+REPOND ; ils ne voient ni le SILENCE, ni l AGE, ni le LOT, ni une CONTRADICTION dont l une des
+traces est absente.

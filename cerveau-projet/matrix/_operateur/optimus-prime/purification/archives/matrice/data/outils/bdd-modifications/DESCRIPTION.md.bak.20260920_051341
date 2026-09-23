@@ -1,0 +1,40 @@
+# OUTIL -- bdd-modifications
+
+> Outil Python dedie a la BDD `modifications-par-fichier.json`.
+> Porte la REGLE ANTI-SURCHARGE : chaque modification d'un fichier est notee ICI,
+> jamais en commentaire dans le fichier lui-meme.
+
+## Role
+
+- **noter** : enregistrer une modification (action, detail, tags) pour un fichier.
+- **lire** : consulter la BDD (tout, par fichier, ou par tag).
+- **verifier** : controler l'integrite de la BDD par empreinte SHA-256.
+
+## Options
+
+```
+python3 cerveau-projet/matrix/lancer.py bdd-modifications noter --fichier <chemin> --action <cree|modifie|corrige|supprime>
+                     --detail "..." --tags "tag1,tag2"
+python3 cerveau-projet/matrix/lancer.py bdd-modifications lire [--fichier <chemin>] [--tag <tag>]
+python3 cerveau-projet/matrix/lancer.py bdd-modifications verifier
+```
+
+- `--fichier` : chemin relatif a `matrix/` (ex: `matrice/data/data-readme.md`).
+- `--tags` : liste separee par des virgules (tri et injection futurs).
+
+## Architecture (convention-architecture-outils)
+
+| Piece | Role |
+|---|---|
+| `DESCRIPTION.md` | la facade (ce fichier) |
+| `main.py` | point d'entree global : DIRIGE, ne travaille pas |
+| `constants.py` | TOUTES les valeurs (zero valeur en dur dans la logique) |
+| `commun.py` | fonctions communes : charger, enregistrer (atomique), empreinte |
+| `noter/`, `lire/`, `verifier/` | categories : `entry.py` orchestre, `fonctions.py` fait |
+
+## Protections
+
+- Ecriture atomique : fichier temporaire puis remplacement (jamais de BDD a moitie ecrite).
+- Empreinte SHA-256 recalculee et enregistree A CHAQUE ecriture.
+- Actions filtrees par liste permise (constants.py).
+- Aucun processus residuel : l'outil demarre, travaille, rend la main, s'arrete.

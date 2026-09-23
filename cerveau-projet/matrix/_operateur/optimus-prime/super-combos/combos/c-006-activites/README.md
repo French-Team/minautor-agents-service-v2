@@ -25,9 +25,9 @@ Combo dedie a la BDD **Activites recentes (activites-recentes.json)** (`activite
 ## Usage
 
 ```bash
-python main.py executer [--tag <tag>] [--mission <id>]
-python main.py lire [--tag <tag>]
-python main.py status
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-006-activites/main.py executer [--tag <tag>] [--mission <id>]
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-006-activites/main.py lire [--tag <tag>]
+python3 cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-006-activites/main.py status
 ```
 
 ## Tags de la BDD

@@ -1,0 +1,85 @@
+"""Resolution d'un OUTIL de la Matrice par son NOM (source UNIQUE, EO-287).
+
+Pourquoi ce module existe : les appelants INTERNES recopiaient chacun le chemin
+de l'outil qu'ils appelaient (`data/outils/<nom>/main.py`). Le jour ou l'outil
+est renomme ou deplace, l'appel echouait SANS DIRE POURQUOI -- un traceback
+opaque au lieu d'un refus nomme. Ici la resolution ET le refus vivent UNE fois
+(M-076, zero duplication) ; la facade CLI `matrix/lancer.py` les reutilise.
+
+Contrat :
+    chemin_outil(nom) -> Path du main.py, ou leve OutilIntrouvable (refus nomme).
+    resoudre(nom)     -> (chemin, None) ou (None, message) : la facade CLI.
+
+Le refus NOMME dit le nom fautif, les noms proches et le remede -- il ne devine
+jamais, et il ne rend JAMAIS None en silence.
+"""
+from pathlib import Path
+
+# data/commun/resolution_outils.py -> data/commun -> data -> matrice
+RACINE_MATRICE = Path(__file__).resolve().parents[2]
+DOSSIER_OUTILS = RACINE_MATRICE / "data" / "outils"
+DOSSIER_ROUTINES = RACINE_MATRICE / "routines"
+
+# L'ordre fait la PRIORITE : un outil avant une routine homonyme (meme regle
+# que la facade matrix/lancer.py, qui lit ce module).
+FAMILLES = (("outil", DOSSIER_OUTILS), ("routine", DOSSIER_ROUTINES))
+
+
+class OutilIntrouvable(RuntimeError):
+    """Le nom ne resout aucune brique : le message EST le refus nomme."""
+
+
+def entrer_outils():
+    """(famille, nom, main.py) pour chaque brique resolvable par son NOM."""
+    briques = []
+    for famille, dossier in FAMILLES:
+        if not dossier.is_dir():
+            continue
+        for sous in sorted(dossier.iterdir()):
+            principal = sous / "main.py"
+            if sous.is_dir() and principal.is_file():
+                briques.append((famille, sous.name, principal))
+    return briques
+
+
+def noms_connus():
+    """Les noms resolvables, tries -- sert au refus (noms proches) et au --lister."""
+    return sorted({nom for _, nom, _ in entrer_outils()})
+
+
+def refus_nom(nom):
+    """Le refus NOMME : le nom fautif, les noms proches, le remede."""
+    proches = [n for n in noms_connus() if nom and (nom in n or n in nom)]
+    message = "nom inconnu : " + nom
+    if proches:
+        message += " -- proches : " + ", ".join(proches[:8])
+    message += " -- remede : --lister, ou un .py existant (chemin ancre)"
+    return message
+
+
+def resoudre(nom):
+    """Rend (main.py, None) ou (None, refus nomme).
+
+    Un chemin .py EXISTANT reste accepte (derniere regle) : la facade CLI sert
+    aussi a lancer un script qui n'est pas une brique nommee.
+    """
+    for _, dossier in FAMILLES:
+        candidat = dossier / nom / "main.py"
+        if candidat.is_file():
+            return candidat, None
+    direct = Path(nom)
+    if nom.endswith(".py") and direct.is_file():
+        return direct.resolve(), None
+    return None, refus_nom(nom)
+
+
+def chemin_outil(nom):
+    """Rend le main.py de la brique <nom> -- ou REFUSE en la nommant.
+
+    Aucun appelant ne fabrique ce chemin lui-meme : un chemin recopie ne se
+    plaint jamais quand l'outil disparait, il rend un traceback opaque.
+    """
+    chemin, refus = resoudre(nom)
+    if refus is not None:
+        raise OutilIntrouvable(refus)
+    return chemin

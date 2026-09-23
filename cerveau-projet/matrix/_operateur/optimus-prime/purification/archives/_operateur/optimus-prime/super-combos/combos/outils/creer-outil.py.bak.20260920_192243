@@ -1,0 +1,236 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+creer-outil.py -- Creer un squelette d'outil Python de la FAMILLE SUPER-COMBOS.
+
+FORME (nommee le 2026-09-20, MO-228) -- la forme de la famille super-combos :
+    <nom>/main.py            point d'entree global (DIRIGE)
+    <nom>/entry.py           orchestrateur de l'outil, A LA RACINE
+    <nom>/fonctions/*.py     fonctions atomiques
+    <nom>/README.md
+
+C'est la forme que portent bdd-frictions/, bdd-modifs/ et bdd-lecons-matrice/.
+
+CE GENERATEUR NE PRODUIT PAS LA FORME DES OUTILS DE LA MATRICE : la leur est CV-001
+(conventions/convention-architecture-outils.md) -- main.py + <categorie>/entry.py.
+Un outil de matrice/data/outils/ n'a JAMAIS d'entry.py a la racine : l'entree est main.py.
+La forme se NOMME par famille ; l'option --categories (vocabulaire CV-001) a ete RETIREE
+le 2026-09-20 : cette famille n'a pas de dossier de categorie.
+
+Usage: python creer-outil.py <nom-outil> --description "<desc>"
+"""
+
+import sys
+import argparse
+from pathlib import Path
+
+
+TEMPLATE_MAIN = '''#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+{nom} -- {description}
+
+Point d'entree global. Dirige vers la categorie demandee.
+"""
+
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# NOTE (L-017) : dossier a tiret = pas un package -> import direct, jamais "from {nom}.entry import"
+from entry import run as run_{nom_lower}
+
+
+def main():
+    if len(sys.argv) < 2:
+        print(__doc__)
+        print("\\nUsage:")
+        print("  {nom} <commande> [args...]")
+        return 1
+
+    cmd = sys.argv[1]
+    args = sys.argv[2:]
+
+    if cmd == "<commande1>":
+        return run_{nom_lower}("<commande1>", args)
+    elif cmd == "<commande2>":
+        return run_{nom_lower}("<commande2>", args)
+    else:
+        print(f"Commande inconnue: {{cmd}}")
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+'''
+
+TEMPLATE_ENTRY = '''#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+{nom}/entry.py -- Orchestrateur categorie {nom}
+"""
+
+import sys
+import argparse
+from pathlib import Path
+
+# NOTE (L-017) : dossier a tiret = pas un package -> chargement via importlib, jamais "from {nom}..."
+import importlib.util as _ilu
+
+_fonc_path = Path(__file__).parent / "fonctions" / "{nom_lower}.py"
+_spec = _ilu.spec_from_file_location("{nom_lower}_fonc", str(_fonc_path))
+_fonc = _ilu.module_from_spec(_spec)
+_spec.loader.exec_module(_fonc)
+
+init_db = _fonc.init_db
+fonction_exemple = _fonc.fonction_exemple
+
+
+# Racine matrix/ DETECTEE par le marqueur partage (M-076 : matrice/data/commun/racine.py),
+# jamais comptee a la main (L-013).
+BORNES_REMONTEE = 30
+_courant = Path(__file__).resolve().parent
+for _ in range(BORNES_REMONTEE):
+    if (_courant / "matrice" / "data" / "commun" / "racine.py").is_file():
+        break
+    _courant = _courant.parent
+else:
+    raise RuntimeError("Racine matrix/ introuvable en remontant.")
+DB_PATH = _courant / "matrice" / "data" / "{nom_lower}.db"
+
+
+def run(commande, args):
+    init_db(DB_PATH)
+
+    if commande == "<commande1>":
+        return cmd_commande1(args)
+    elif commande == "<commande2>":
+        return cmd_commande2(args)
+    else:
+        print(f"Sous-commande inconnue: {{commande}}")
+        return 1
+
+
+def cmd_commande1(args):
+    parser = argparse.ArgumentParser(description="Description commande1")
+    parser.add_argument("--param", required=True)
+    parsed = parser.parse_args(args)
+
+    resultat = fonction_exemple(DB_PATH, parsed.param)
+    print(f"Resultat: {{resultat}}")
+    return 0
+
+
+def cmd_commande2(args):
+    parser = argparse.ArgumentParser(description="Description commande2")
+    parsed = parser.parse_args(args)
+
+    # ...
+    return 0
+'''
+
+TEMPLATE_FONCTION = '''#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+{nom}/fonctions/{nom_lower}.py -- Fonctions atomiques {nom}
+"""
+
+import sqlite3
+from datetime import datetime
+from pathlib import Path
+from typing import Optional, List, Dict, Any
+
+
+def init_db(db_path: Path):
+    """Initialiser la BDD {nom}"""
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+    with sqlite3.connect(db_path) as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS {nom_lower} (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                date TEXT NOT NULL,
+                param TEXT NOT NULL,
+                resultat TEXT
+            )
+        """)
+        conn.commit()
+
+
+def fonction_exemple(db_path: Path, param: str) -> str:
+    """Fonction d'exemple"""
+    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    with sqlite3.connect(db_path) as conn:
+        cur = conn.execute(
+            "INSERT INTO {nom_lower} (date, param) VALUES (?, ?)",
+            (date, param),
+        )
+        conn.commit()
+        return f"Enregistre ID={{cur.lastrowid}}"
+'''
+
+TEMPLATE_README = '''# {nom}
+
+## Description
+{description}
+
+## Structure
+- main.py : point d'entree global
+- entry.py : orchestrateur
+- fonctions/{nom_lower}.py : fonctions atomiques
+
+## Commandes
+```
+{nom} <commande1> --param <valeur>
+{nom} <commande2>
+```
+'''
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Creer un squelette d'outil")
+    parser.add_argument("nom", help="Nom de l'outil (ex: bdd-nouveau)")
+    parser.add_argument("--description", required=True, help="Description de l'outil")
+    parser.add_argument("--categories", default="", help="Categories separees par virgules (optionnel)")
+    args = parser.parse_args()
+
+    nom = args.nom
+    nom_lower = nom.replace("-", "_")
+    base_path = Path(__file__).parent / nom
+
+    if base_path.exists():
+        print(f"Outil deja existant: {base_path}")
+        return 1
+
+    # Creer les dossiers
+    (base_path / "fonctions").mkdir(parents=True)
+
+    # Ecrire les fichiers
+    (base_path / "main.py").write_text(
+        TEMPLATE_MAIN.format(nom=nom, description=args.description, nom_lower=nom_lower),
+        encoding="utf-8"
+    )
+    (base_path / "entry.py").write_text(
+        TEMPLATE_ENTRY.format(nom=nom, nom_lower=nom_lower),
+        encoding="utf-8"
+    )
+    (base_path / "fonctions" / f"{nom_lower}.py").write_text(
+        TEMPLATE_FONCTION.format(nom=nom, nom_lower=nom_lower),
+        encoding="utf-8"
+    )
+    (base_path / "README.md").write_text(
+        TEMPLATE_README.format(nom=nom, description=args.description, nom_lower=nom_lower),
+        encoding="utf-8"
+    )
+
+    print(f"Outil cree: {base_path}")
+    print("  - main.py")
+    print("  - entry.py")
+    print(f"  - fonctions/{nom_lower}.py")
+    print("  - README.md")
+    print("\\nA completer : adapter les commandes, fonctions, BDD selon besoins.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
