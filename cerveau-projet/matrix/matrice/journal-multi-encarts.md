@@ -35,11 +35,11 @@ Flux : routines/veille-flux/journal-veille.txt -> VUE lecture seule
 
 | Entree | Heure | Date |
 |---|---|---|
-| passe relax demarree | 18:12:20 | 04/10/2026 |
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 18:12:31 | 04/10/2026 |
-| passe relax demarree | 18:17:34 | 04/10/2026 |
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 18:17:44 | 04/10/2026 |
-| passe relax demarree | 18:22:47 | 04/10/2026 |
+| passe relax demarree | 18:38:28 | 04/10/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 18:38:38 | 04/10/2026 |
+| passe relax demarree | 18:43:42 | 04/10/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 18:43:52 | 04/10/2026 |
+| passe relax demarree | 18:48:55 | 04/10/2026 |
 
 ## Encart : alertes
 
@@ -47,11 +47,11 @@ Flux : veille-flux/alertes-emises.json + intercom/matrice/inbox.jsonl -> VUE lec
 
 | Entree | Heure | Date |
 |---|---|---|
-| intercom : signaler | 17:05:35 | 04/10/2026 |
-| intercom : signaler | 17:21:15 | 04/10/2026 |
 | intercom : signaler | 17:36:55 | 04/10/2026 |
 | intercom : signaler | 17:52:37 | 04/10/2026 |
 | intercom : signaler | 18:08:18 | 04/10/2026 |
+| intercom : signaler | 18:23:59 | 04/10/2026 |
+| intercom : signaler | 18:39:40 | 04/10/2026 |
 
 ## Encart : cameleon
 
@@ -71,14 +71,14 @@ Flux : sac-a-dos (chaque outil) -> bdd-usages -> usages-outils-combos.jsonl -> V
 
 | Entree | Heure | Date |
 |---|---|---|
-| suivi-optimus/vue code 0 50ms | 18:19:45 | 04/10/2026 |
-| corriger-ascii/corriger code 0 891ms | 18:19:54 | 04/10/2026 |
-| suivi-optimus/vue code 0 50ms | 18:20:46 | 04/10/2026 |
-| corriger-ascii/corriger code 0 884ms | 18:20:56 | 04/10/2026 |
-| suivi-optimus/vue code 0 49ms | 18:21:46 | 04/10/2026 |
-| corriger-ascii/corriger code 0 918ms | 18:21:57 | 04/10/2026 |
-| suivi-optimus/vue code 0 50ms | 18:22:47 | 04/10/2026 |
-| corriger-ascii/corriger code 0 1000ms | 18:22:48 | 04/10/2026 |
+| suivi-optimus/coherence code 1 23ms | 18:46:42 | 04/10/2026 |
+| suivi-optimus/coherence code 1 24ms | 18:46:42 | 04/10/2026 |
+| suivi-optimus/vue code 0 51ms | 18:46:54 | 04/10/2026 |
+| corriger-ascii/corriger code 0 912ms | 18:47:01 | 04/10/2026 |
+| suivi-optimus/vue code 0 51ms | 18:47:54 | 04/10/2026 |
+| corriger-ascii/corriger code 0 887ms | 18:48:02 | 04/10/2026 |
+| suivi-optimus/vue code 0 50ms | 18:48:55 | 04/10/2026 |
+| corriger-ascii/corriger code 0 992ms | 18:48:56 | 04/10/2026 |
 
 ## Encart : modifications
 
@@ -86,9 +86,9 @@ Flux : notes de mission -> bdd-modifications -> modifications-par-fichier.json -
 
 | Entree | Heure | Date |
 |---|---|---|
-| matrice/data/lecons.json | 18:02:48 | 04/10/2026 |
-| _operateur/optimus-prime/preparation/bilan-mo-580.md | 18:07:16 | 04/10/2026 |
-| _operateur/optimus-prime/pilote/entonnoir-files-optimus.json | 18:13:49 | 04/10/2026 |
+| _operateur/optimus-prime/preparation/mo-581-doublon-eo-559.md | 18:41:36 | 04/10/2026 |
+| _operateur/optimus-prime/preparation/mo-582-presse-papier-windows.md | 18:41:36 | 04/10/2026 |
+| _operateur/optimus-prime/preparation/mo-583-cadrage-cartes-liens.md | 18:41:36 | 04/10/2026 |
 | .gitignore |  |  |
 | x |  |  |
 

@@ -1,11 +1,10 @@
-[17:34:43] service : routeur-maintenance : passee en 69 ms (etat routeur-etat.json, 11012 au total)
-[17:34:43] service : suivi-sync : passee en 351 ms (etat suivi-sync-etat.json, 10990 au total)
-
-17:30:41] service : veille-flux : passee en 10295 ms (journal journal-veille.txt, 2196 au total)
-[17:30:41] service : espion-integrite : passee en 90 ms (journal espion-log.jsonl, 2197 au total)
+[18:49:06] service : routeur-maintenance : passee en 71 ms (etat routeur-etat.json, 11083 au total)
+[18:49:06] service : suivi-sync : passee en 353 ms (etat suivi-sync-etat.json, 11061 au total)
+[18:49:06] service : veille-flux : passee en 10598 ms (journal journal-veille.txt, 2211 au total)
+[18:49:06] service : espion-integrite : passee en 93 ms (journal espion-log.jsonl, 2212 au total)
 e (SIGNAL DEPOTE : [!!] HAUTE
   Outil : vigie-portes
   Description : Service du planning : vigie-portes -- code retour 1
   Erreur : aucun depot (deja-sig)
-[17:21:16] service : vigie-profil : passee en 77 ms (etat vigie-profil-etat-passes.json, 733 au total)
-[16:34:16] service : rotation : 4 allumage par tour -- verifier-liens-cartes attend le tour suivant
+[18:39:40] service : vigie-profil : passee en 85 ms (etat vigie-profil-etat-passes.json, 738 au total)
+[18:39:40] service : rotation : 4 allumage par tour -- verifier-liens-cartes attend le tour suivant

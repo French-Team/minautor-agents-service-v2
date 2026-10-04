@@ -11,7 +11,7 @@ identite:
 > servir, et celles qui sont DECLAREES mais introuvables sur disque -- ces
 > dernieres sont accusees, jamais rayees en silence.
 >
-> Vue DERIVEE, REGENERABLE : 2026-10-04 17:41:00 par
+> Vue DERIVEE, REGENERABLE : 2026-10-04 18:45:38 par
 > `suivi-parties-maitresses.py`. Aucun fait n est ecrit deux fois --
 > la source reste la source (L-055).
 

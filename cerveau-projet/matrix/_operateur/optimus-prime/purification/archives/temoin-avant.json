@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-04 09:48:03",
+  "date": "2026-10-04 18:35:59",
   "elements": [
     {
       "id": "K-003",
@@ -6373,13 +6373,13 @@
     },
     {
       "id": "K-645",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 133,
       "octets": 4919,
-      "origine": "source",
+      "origine": "declaration",
       "sha": "4230d604b6b38c483ba2cfc338feea0fdd447d6739d39502ae1d2a0bcc6122b4",
       "source": "matrice/data/outils/editer-agents-md/commun.py.bak.20260919_120444",
-      "verdict": "conserver"
+      "verdict": "disparu"
     },
     {
       "id": "K-646",
@@ -6823,10 +6823,10 @@
     },
     {
       "id": "K-690",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 201,
       "octets": 6613,
-      "origine": "source",
+      "origine": "purge",
       "sha": "73966f063a0bd4da6fbb0af7a402998f9a92f448ee4e0547e4e10e93d52f3075",
       "source": "matrice/data/outils/chaine-pense-bete/etape/fonctions.py.bak.20260919_133632",
       "verdict": "archiver"
@@ -8533,10 +8533,10 @@
     },
     {
       "id": "K-861",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 159,
       "octets": 7292,
-      "origine": "source",
+      "origine": "purge",
       "sha": "f505ee256b48ab56ef0c612baff08e308b186d77951495be8ca955fc0b636c53",
       "source": "_operateur/optimus-prime/preparation/chaine-suivi-du-pilote-d-optimus.md.bak.20260919_190334",
       "verdict": "archiver"
@@ -11093,10 +11093,10 @@
     },
     {
       "id": "K-1117",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 76,
       "octets": 3490,
-      "origine": "source",
+      "origine": "purge",
       "sha": "c1d123f84c9e9f22b0b5850f16e898365136a05ee5451cc4f9beae429621b458",
       "source": "matrice/data/outils/chaine-pense-bete/constants.py.bak.20260920_053543",
       "verdict": "archiver"
@@ -11843,13 +11843,13 @@
     },
     {
       "id": "K-1192",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 26,
       "octets": 880,
-      "origine": "source",
+      "origine": "declaration",
       "sha": "e4c158ad99600fadb5b63b0721fc7735a5dac483b42227d5d14d1c1719421dc2",
       "source": "matrice/data/outils/editer-agents-md/etat/entry.py.bak.20260920_083523",
-      "verdict": "conserver"
+      "verdict": "disparu"
     },
     {
       "id": "K-1193",
@@ -18503,10 +18503,10 @@
     },
     {
       "id": "K-1860",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 5,
       "octets": 36,
-      "origine": "source",
+      "origine": "purge",
       "sha": "90be597cbb6bc386bbc76c87a47a2e2e1f61aa065420a32e1878609464aeed25",
       "source": "_operateur/optimus-prime/preparation/chaine-compteurs.json.bak.20260923_082916",
       "verdict": "archiver"
@@ -18533,10 +18533,10 @@
     },
     {
       "id": "K-1863",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 16,
       "octets": 610,
-      "origine": "source",
+      "origine": "purge",
       "sha": "f9069c9e4264851cd62509cc75329b81e58b51b4f5f90e4ed2a47743abb6201d",
       "source": "_operateur/optimus-prime/preparation/index-chaine.md.bak.20260923_082916",
       "verdict": "archiver"
@@ -25273,10 +25273,10 @@
     },
     {
       "id": "K-2537",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 34,
       "octets": 1153,
-      "origine": "source",
+      "origine": "purge",
       "sha": "cd8b3361e6674cdd83f62364b8c8b52b9df699be0ddcd2cf0826b485610cb3b2",
       "source": "matrice/data/outils/chaine-pense-bete/main.py.bak.20260925_092822",
       "verdict": "archiver"
@@ -34433,10 +34433,10 @@
     },
     {
       "id": "K-3453",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 235,
       "octets": 8866,
-      "origine": "source",
+      "origine": "purge",
       "sha": "b195897cbd59c1b4d800f9bfc59b8e30f66476d1ad2d90d765c3e040de3943fe",
       "source": "matrice/data/outils/chaine-pense-bete/commun.py.bak.20260928_090631-3",
       "verdict": "archiver"
@@ -35363,10 +35363,10 @@
     },
     {
       "id": "K-3546",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 641,
       "octets": 31572,
-      "origine": "source",
+      "origine": "purge",
       "sha": "97c1b4513acc61e252571ffafbd3eb201dd4f41b0d62b95bb530001105d0a165",
       "source": "_operateur/optimus-prime/pilote/injection/modes_emploi.py.bak.20260928_212737-3",
       "verdict": "archiver"
@@ -43166,10 +43166,10 @@
       "lecture": "disque",
       "lignes": 54,
       "octets": 12681,
-      "origine": "source",
+      "origine": "archive",
       "sha": "bc461929e7f7210c3e292612b449d1bcb5322a8578e7d6de361f1e9cd8290d29",
       "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.jsonl.bak.20261003_084329",
-      "verdict": "conserver"
+      "verdict": "archiver"
     },
     {
       "id": "K-4327",
@@ -46686,10 +46686,10 @@
       "lecture": "disque",
       "lignes": 9193,
       "octets": 517984,
-      "origine": "source",
+      "origine": "archive",
       "sha": "e204a8fd548f4145ac79bc747936a77807531c191b49363ed513031d1f9d0c12",
       "source": "_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py.bak.20261004_083422",
-      "verdict": "conserver"
+      "verdict": "archiver"
     },
     {
       "id": "K-4679",
@@ -46756,7 +46756,7 @@
       "lecture": "disque",
       "lignes": 24,
       "octets": 554,
-      "origine": "source",
+      "origine": "archive",
       "sha": "685e4991de153c0953267041cffab623305fe0d2d4ed6bbe25d80d98606012d0",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_085332",
       "verdict": "archiver"
@@ -46766,7 +46766,7 @@
       "lecture": "disque",
       "lignes": 54,
       "octets": 2836,
-      "origine": "source",
+      "origine": "archive",
       "sha": "e35f3a8f15600297176e9c294dcae3ba48a1fa21e7aac89efc79f10c79039a03",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_085332",
       "verdict": "archiver"
@@ -46776,7 +46776,7 @@
       "lecture": "disque",
       "lignes": 39,
       "octets": 1058,
-      "origine": "source",
+      "origine": "archive",
       "sha": "635aafbcf3585af5f1d149368d62e11131b89ff2b694e300e2879ba12cb97796",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_085333",
       "verdict": "archiver"
@@ -46786,7 +46786,7 @@
       "lecture": "disque",
       "lignes": 35,
       "octets": 1332,
-      "origine": "source",
+      "origine": "archive",
       "sha": "ab52d6a2ee6958c3adac4492b2e5e9c3c40238d205e932b32592f77498353d45",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_085333",
       "verdict": "archiver"
@@ -46796,7 +46796,7 @@
       "lecture": "disque",
       "lignes": 33,
       "octets": 1359,
-      "origine": "source",
+      "origine": "archive",
       "sha": "436663ad5c977fe615f8196b082f1077f57bfa18d3725f5ae8a1f7dbb46645f2",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_085332",
       "verdict": "archiver"
@@ -46856,7 +46856,7 @@
       "lecture": "disque",
       "lignes": 164,
       "octets": 8847,
-      "origine": "source",
+      "origine": "archive",
       "sha": "77c03eb5c89cfbb8e89f20bf78aafa75df09bb7d8e7df4b020be9e6fc73d2769",
       "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_090400",
       "verdict": "archiver"
@@ -46893,10 +46893,10 @@
     },
     {
       "id": "K-4699",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 647,
       "octets": 31962,
-      "origine": "source",
+      "origine": "purge",
       "sha": "aaca25efb42fe8c340aa778a23626ec5102e0c98ee997ec20147eaa4177b3d78",
       "source": "_operateur/optimus-prime/pilote/injection/modes_emploi.py.bak.20261004_093140",
       "verdict": "archiver"
@@ -46913,10 +46913,10 @@
     },
     {
       "id": "K-4701",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 5,
       "octets": 36,
-      "origine": "source",
+      "origine": "purge",
       "sha": "28f7e70d9314205bd02119cac50500a163ae9905da8e3560a1ada51487c49036",
       "source": "_operateur/optimus-prime/preparation/chaine-compteurs.json.bak.20261004_092727",
       "verdict": "archiver"
@@ -46933,10 +46933,10 @@
     },
     {
       "id": "K-4703",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 193,
       "octets": 9701,
-      "origine": "source",
+      "origine": "purge",
       "sha": "d3b1ccc7ff2a15c9bcd6c690595b40ce1213df219cd34983abad93d82c66cb66",
       "source": "_operateur/optimus-prime/preparation/chaine-suivi-du-pilote-d-optimus.md.bak.20261004_092727",
       "verdict": "archiver"
@@ -46946,7 +46946,7 @@
       "lecture": "disque",
       "lignes": 196,
       "octets": 9814,
-      "origine": "source",
+      "origine": "archive",
       "sha": "ae8a99d61c64a0506a158dc3b474b168b46d2b6b745d321f1b0aed94255a6c1a",
       "source": "_operateur/optimus-prime/preparation/chaine-suivi-du-pilote-d-optimus.md.bak.20261004_092850",
       "verdict": "archiver"
@@ -46963,20 +46963,20 @@
     },
     {
       "id": "K-4706",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 16,
       "octets": 610,
-      "origine": "source",
+      "origine": "purge",
       "sha": "4f680e9b9fec9720048fac36fc250c80fce7598262802370b27ad3d61a86de43",
       "source": "_operateur/optimus-prime/preparation/index-chaine.md.bak.20261004_092727",
       "verdict": "archiver"
     },
     {
       "id": "K-4707",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 16,
       "octets": 613,
-      "origine": "source",
+      "origine": "purge",
       "sha": "ec41ffb1066ff7c240d36be9ee51aef83fa56240943d03d76aa3f3856c862308",
       "source": "_operateur/optimus-prime/preparation/index-chaine.md.bak.20261004_092850",
       "verdict": "archiver"
@@ -46996,57 +46996,57 @@
       "lecture": "disque",
       "lignes": 24,
       "octets": 554,
-      "origine": "source",
+      "origine": "archive",
       "sha": "9906d0eef3d2c47e518643c551fc78b4dccf7c8454a9e19a21f6f1b72748552d",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_094151",
-      "verdict": "conserver"
+      "verdict": "archiver"
     },
     {
       "id": "K-4710",
       "lecture": "disque",
       "lignes": 54,
       "octets": 2843,
-      "origine": "source",
+      "origine": "archive",
       "sha": "73a89d95c45ce578068289f35fdaba2572c67482d119b832112413809606d845",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_094151",
-      "verdict": "conserver"
+      "verdict": "archiver"
     },
     {
       "id": "K-4711",
       "lecture": "disque",
       "lignes": 39,
       "octets": 1058,
-      "origine": "source",
+      "origine": "archive",
       "sha": "958e8da5f12d51e79761084ea12dfc3073416e08a11ddb963c8ec7c0210db917",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_094152",
-      "verdict": "conserver"
+      "verdict": "archiver"
     },
     {
       "id": "K-4712",
       "lecture": "disque",
       "lignes": 35,
       "octets": 1332,
-      "origine": "source",
+      "origine": "archive",
       "sha": "834a2d35651c12040cec36c38b934446b6581ad83e38b662f03970f77da49026",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_094152",
-      "verdict": "conserver"
+      "verdict": "archiver"
     },
     {
       "id": "K-4713",
       "lecture": "disque",
       "lignes": 33,
       "octets": 1359,
-      "origine": "source",
+      "origine": "archive",
       "sha": "e850028cf3c9075d5014b52042de30a6c04633d7253e944ec4b849acf0837392",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_094151",
-      "verdict": "conserver"
+      "verdict": "archiver"
     },
     {
       "id": "K-4714",
       "lecture": "disque",
       "lignes": 164,
       "octets": 8847,
-      "origine": "source",
+      "origine": "archive",
       "sha": "14112c317f8912541f77ccc843c9d379b6a4237e82303d3e88340caf7614c4cb",
       "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_090602",
       "verdict": "archiver"
@@ -47056,7 +47056,7 @@
       "lecture": "disque",
       "lignes": 162,
       "octets": 8718,
-      "origine": "source",
+      "origine": "archive",
       "sha": "1a4137257ac65089fb10b965697cd7ea5d15cc23af09c580c33c302292249681",
       "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_094043",
       "verdict": "archiver"
@@ -47066,17 +47066,17 @@
       "lecture": "disque",
       "lignes": 163,
       "octets": 8808,
-      "origine": "source",
+      "origine": "archive",
       "sha": "6d4ddabcccb4762f78521ec65455a0250f2ffb29a91b156a13c757565bb64617",
       "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_094242",
-      "verdict": "conserver"
+      "verdict": "archiver"
     },
     {
       "id": "K-4717",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 234,
       "octets": 8847,
-      "origine": "source",
+      "origine": "purge",
       "sha": "f2637e396fe904c6567d0073a1b2e96e3ea76fba90c80677024fc516c4e99520",
       "source": "matrice/data/outils/chaine-pense-bete/commun.py.bak.20261004_091854",
       "verdict": "archiver"
@@ -47086,17 +47086,17 @@
       "lecture": "disque",
       "lignes": 254,
       "octets": 9710,
-      "origine": "source",
+      "origine": "archive",
       "sha": "112329729821c1964fdb2dc2349bc22b422665ba7bac7d37ba2e2f460fb21d2f",
       "source": "matrice/data/outils/chaine-pense-bete/commun.py.bak.20261004_092002",
       "verdict": "archiver"
     },
     {
       "id": "K-4719",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 261,
       "octets": 10149,
-      "origine": "source",
+      "origine": "purge",
       "sha": "a23e18370c8e8112fa3dc780b3e7c82a6909cce03efa00c49fe7dc8714be85c8",
       "source": "matrice/data/outils/chaine-pense-bete/commun.py.bak.20261004_092826",
       "verdict": "archiver"
@@ -47113,10 +47113,10 @@
     },
     {
       "id": "K-4721",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 78,
       "octets": 3569,
-      "origine": "source",
+      "origine": "purge",
       "sha": "22b4c3740163dba8c67e082f3892548ade151ee9295eda9bef5c5c8a4ee69a01",
       "source": "matrice/data/outils/chaine-pense-bete/constants.py.bak.20261004_091543",
       "verdict": "archiver"
@@ -47126,7 +47126,7 @@
       "lecture": "disque",
       "lignes": 124,
       "octets": 6514,
-      "origine": "source",
+      "origine": "archive",
       "sha": "47f5d7990e7d2385b3d74b605f0890412e9969be97564fe65900bf3b4ca106f4",
       "source": "matrice/data/outils/chaine-pense-bete/constants.py.bak.20261004_092500",
       "verdict": "archiver"
@@ -47153,10 +47153,10 @@
     },
     {
       "id": "K-4725",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 202,
       "octets": 6704,
-      "origine": "source",
+      "origine": "purge",
       "sha": "ffae4bd23457c13ef73b65f03b367f8ce77e45d08b87a517225b95dbafd8ec55",
       "source": "matrice/data/outils/chaine-pense-bete/etape/fonctions.py.bak.20261004_091854",
       "verdict": "archiver"
@@ -47166,7 +47166,7 @@
       "lecture": "disque",
       "lignes": 350,
       "octets": 12812,
-      "origine": "source",
+      "origine": "archive",
       "sha": "00c086b5dbf3d58c5e2630910b300bb4e30958a16237ff745dc84dea12f33ef8",
       "source": "matrice/data/outils/chaine-pense-bete/etape/fonctions.py.bak.20261004_092002",
       "verdict": "archiver"
@@ -47183,10 +47183,10 @@
     },
     {
       "id": "K-4728",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 34,
       "octets": 1153,
-      "origine": "source",
+      "origine": "purge",
       "sha": "cd8b3361e6674cdd83f62364b8c8b52b9df699be0ddcd2cf0826b485610cb3b2",
       "source": "matrice/data/outils/chaine-pense-bete/main.py.bak.20261004_092309",
       "verdict": "archiver"
@@ -47200,9 +47200,1049 @@
       "sha": "6b0a03a7c82a9093712c9a08c671e2e9b8b8fef3dd470ede6dfeb6ea4da5af52",
       "source": "matrice/data/outils/chaine-pense-bete/main.py.bak.20261004_092413",
       "verdict": "conserver"
+    },
+    {
+      "id": "K-4730",
+      "lecture": "disque",
+      "lignes": 151,
+      "octets": 5455,
+      "origine": "archive",
+      "sha": "b9aad0bfd67ae885f0e4c765cbace41da9b477e481465787b6d72034d97cc350",
+      "source": "_operateur/optimus-prime/parcours/conventions/convention-depot-git.md.bak.20261004_131521",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4731",
+      "lecture": "disque",
+      "lignes": 164,
+      "octets": 5922,
+      "origine": "archive",
+      "sha": "f74c65d1549fedfdddc72efa0561359eb1cfa47494be8a76c1fd319e40bebd26",
+      "source": "_operateur/optimus-prime/parcours/conventions/convention-depot-git.md.bak.20261004_140608",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4732",
+      "lecture": "disque",
+      "lignes": 185,
+      "octets": 6832,
+      "origine": "source",
+      "sha": "2ed0aa2713ba2e62309b43a03014db3c49a74475faa2e4e287e9bb3b1916d2f2",
+      "source": "_operateur/optimus-prime/parcours/conventions/convention-depot-git.md.bak.20261004_140633",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4733",
+      "lecture": "disque",
+      "lignes": 279,
+      "octets": 6297,
+      "origine": "source",
+      "sha": "35dc615eae305178d48db2613c005f58f88beacc368867daa46887341eb71d36",
+      "source": "_operateur/optimus-prime/parcours/index-parcours.json.bak.20261004_143004",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4734",
+      "lecture": "disque",
+      "lignes": 325,
+      "octets": 13663,
+      "origine": "source",
+      "sha": "61126e1c4560902e090c56b401c639bd9daf6d18970de84bba2f109fcd92d719",
+      "source": "_operateur/optimus-prime/parcours/themes/index-themes.json.bak.20261004_142956",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4735",
+      "lecture": "disque",
+      "lignes": 61,
+      "octets": 2594,
+      "origine": "source",
+      "sha": "c0ea6afab968406a228c6e549d3ccb4abb0f91899680723eddcc41d961f6c1d5",
+      "source": "_operateur/optimus-prime/preparation/bilan-mo-580.md.bak.20261004_180711",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4736",
+      "lecture": "disque",
+      "lignes": 24,
+      "octets": 554,
+      "origine": "archive",
+      "sha": "f39d8f8a169c39e3ed1d628a0819d414d1f9e5b2146b6ee013096cd24d5865f8",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_104005",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4737",
+      "lecture": "disque",
+      "lignes": 24,
+      "octets": 554,
+      "origine": "archive",
+      "sha": "7f4877b8fd44d872845f4523ca2568cece9b8cafdc3c8b9381249cb6a74a67a3",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_110153",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4738",
+      "lecture": "disque",
+      "lignes": 24,
+      "octets": 554,
+      "origine": "archive",
+      "sha": "aeac6e60d2ea8c03358602c8ca77c79331d4d27eadf8a3184303ba4ba38016a0",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_111822",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4739",
+      "lecture": "disque",
+      "lignes": 24,
+      "octets": 554,
+      "origine": "archive",
+      "sha": "e5973a158123e8fad30e81267d3648540eb556cebd46ebabda12e9ef13a4081b",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_112002",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4740",
+      "lecture": "disque",
+      "lignes": 24,
+      "octets": 554,
+      "origine": "archive",
+      "sha": "8c1373583fc0375cfda1c05b151706765df7162d88cf1a9bfc491bc7e2534c54",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_114310",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4741",
+      "lecture": "disque",
+      "lignes": 24,
+      "octets": 554,
+      "origine": "archive",
+      "sha": "f0001d7e50ea36a0f0090fe845c1abf914fc17baece173957250043afab56d54",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_132358",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4742",
+      "lecture": "disque",
+      "lignes": 24,
+      "octets": 554,
+      "origine": "archive",
+      "sha": "8548dc6b41f6fbc10d2ca632cbcba9a6dff9a8f5aa09d51d9b19eec22fa0dc86",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_141138",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4743",
+      "lecture": "disque",
+      "lignes": 24,
+      "octets": 554,
+      "origine": "archive",
+      "sha": "fbfa99caf3c97338e0b07abccd8f6b7c5e2d344594ab398c722ee7d1347218b6",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_142333",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4744",
+      "lecture": "disque",
+      "lignes": 24,
+      "octets": 554,
+      "origine": "archive",
+      "sha": "172c372296c5ea8b1fa3e86bcc28d1ae3496ea088bb58dc466b302e76db3eb4c",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_143122",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4745",
+      "lecture": "disque",
+      "lignes": 24,
+      "octets": 554,
+      "origine": "archive",
+      "sha": "78fb8059da9e3fb29c094b9ae93cf69d48d1ed10a4f9b158eaafb85439d69c7b",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_145018",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4746",
+      "lecture": "disque",
+      "lignes": 24,
+      "octets": 554,
+      "origine": "source",
+      "sha": "3d18ae9aa9a056da4a1c6dbc8bf78dbd7784f5cda2be20014ae632b4ee260b49",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_174100",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4747",
+      "lecture": "disque",
+      "lignes": 54,
+      "octets": 2847,
+      "origine": "archive",
+      "sha": "4028ccf93da44aaa7b65597c1249cf26306bf5b7415a9fb261d25a31492816ca",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_104005",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4748",
+      "lecture": "disque",
+      "lignes": 54,
+      "octets": 2847,
+      "origine": "archive",
+      "sha": "d18cfecc854acc9f820a4b8104ce65f365c40a82bed07c5206523a15a065a733",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_110153",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4749",
+      "lecture": "disque",
+      "lignes": 54,
+      "octets": 2834,
+      "origine": "archive",
+      "sha": "7b95a70fbf5071eca4837daff2cb7c64e9e188527ec416e37cd500223f9fbc81",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_111822",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4750",
+      "lecture": "disque",
+      "lignes": 54,
+      "octets": 2832,
+      "origine": "archive",
+      "sha": "0561bb35e3d4f1d8dc998674e33d3386ce76e446b09072764b80ab7de88a83d3",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_112001",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4751",
+      "lecture": "disque",
+      "lignes": 54,
+      "octets": 2828,
+      "origine": "archive",
+      "sha": "63441ff3fe463a78abb46d6e2c5750208ebcf46e6caa1ecceb898c8b626dc6d3",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_114310",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4752",
+      "lecture": "disque",
+      "lignes": 54,
+      "octets": 2836,
+      "origine": "archive",
+      "sha": "dfccee5fccb043d522d57b24e7846bb553a51fe7dc8fd51b876080ff1423643f",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_132357",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4753",
+      "lecture": "disque",
+      "lignes": 54,
+      "octets": 2832,
+      "origine": "archive",
+      "sha": "260e8d4efdfca0ae448c2f3bb56201b62a41285ad1ebdcdbbeb2c1dae6a7eaee",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_141138",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4754",
+      "lecture": "disque",
+      "lignes": 54,
+      "octets": 2833,
+      "origine": "archive",
+      "sha": "8e3f876d72d97b6c13b4fefb8f508fcb16a4a6ce99acbd09a9cf320f5870c728",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_142332",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4755",
+      "lecture": "disque",
+      "lignes": 54,
+      "octets": 2838,
+      "origine": "archive",
+      "sha": "64ea051e1d4025c688b8f95da8bf758e1b5f7a60a7f50fef65a5bef5ef418175",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_143121",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4756",
+      "lecture": "disque",
+      "lignes": 54,
+      "octets": 2836,
+      "origine": "archive",
+      "sha": "a71dec382ceaef7e99611c02526f98041a11a00f5ebd8da90f186986c1ef0efa",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_145017",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4757",
+      "lecture": "disque",
+      "lignes": 54,
+      "octets": 2836,
+      "origine": "source",
+      "sha": "9dab4b03d4be61f989c9a27d2e1a1bf1137c1eb017fe495b933cb2d964c7fe33",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_174059",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4758",
+      "lecture": "disque",
+      "lignes": 39,
+      "octets": 1058,
+      "origine": "archive",
+      "sha": "5ece97e7223ef9294458531f36f31c8abfd214b660138317e0e032d43bc7e7ab",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_104005",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4759",
+      "lecture": "disque",
+      "lignes": 39,
+      "octets": 1058,
+      "origine": "archive",
+      "sha": "22fffdb492a4848db17f075d4fd112468b1db88fa9b3b80d48e71f387bac32a9",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_110153",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4760",
+      "lecture": "disque",
+      "lignes": 39,
+      "octets": 1058,
+      "origine": "archive",
+      "sha": "c11ac2772623c70f6acd79bc577f9dd7d5c0576b153d4dd3b774801620efd189",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_111822",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4761",
+      "lecture": "disque",
+      "lignes": 39,
+      "octets": 1058,
+      "origine": "archive",
+      "sha": "67f46f698a6aa5c3cb6fe9b55bea684fcc883a2d858d5972e0736a58071e3295",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_112002",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4762",
+      "lecture": "disque",
+      "lignes": 39,
+      "octets": 1058,
+      "origine": "archive",
+      "sha": "e7f1a38837c774d7b22ac124433ff3b91aafc02bc3dec7ff12d641d3e6d27d47",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_114311",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4763",
+      "lecture": "disque",
+      "lignes": 39,
+      "octets": 1058,
+      "origine": "archive",
+      "sha": "f8196c31ad1d526fc83eca3983c74afa6ab764e61cf5032ca9cbda47fb2ee606",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_132358",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4764",
+      "lecture": "disque",
+      "lignes": 39,
+      "octets": 1058,
+      "origine": "archive",
+      "sha": "6f82e76b74cb364f089dec6f3a8d9e617d7094dc3ff817a6cdb6bacff642ecaa",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_141139",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4765",
+      "lecture": "disque",
+      "lignes": 39,
+      "octets": 1058,
+      "origine": "archive",
+      "sha": "e6dc894573367bc74d1d67fb7f940b25006f34a743c7f930efaae4bca8647613",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_142333",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4766",
+      "lecture": "disque",
+      "lignes": 39,
+      "octets": 1058,
+      "origine": "archive",
+      "sha": "a4408cf2e43bc42e266568590a975f63131a4668ae6385dd49d264d62a08d255",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_143122",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4767",
+      "lecture": "disque",
+      "lignes": 39,
+      "octets": 1058,
+      "origine": "archive",
+      "sha": "a4f34e6ffb908dd9fd23fc777f7af6259f4a9e5848bf7e3a31cae70a6b2c32e0",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_145018",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4768",
+      "lecture": "disque",
+      "lignes": 39,
+      "octets": 1058,
+      "origine": "source",
+      "sha": "1cd2967eeceadf74e44ba9655a82446b0b81ef7b839d5b8b5e451413369ecb31",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_174100",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4769",
+      "lecture": "disque",
+      "lignes": 35,
+      "octets": 1333,
+      "origine": "archive",
+      "sha": "542923f996b0d4d31929b469736164cfb97d44b8b1a16c20415a8228b4d6e2e6",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_104006",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4770",
+      "lecture": "disque",
+      "lignes": 35,
+      "octets": 1331,
+      "origine": "archive",
+      "sha": "e6758a29f8aebedfc2c2190208b183b5cf3e7ffa110715ce35d280264592bc26",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_110154",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4771",
+      "lecture": "disque",
+      "lignes": 35,
+      "octets": 1331,
+      "origine": "archive",
+      "sha": "8b41c4e7f5a45c7a09be20d27b4513daf1811a4b21f24ef26e0ba190c7bab1d9",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_111822",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4772",
+      "lecture": "disque",
+      "lignes": 35,
+      "octets": 1333,
+      "origine": "archive",
+      "sha": "a5d16b07166db8364262eb2fc4cd91a9e5116a8dd36390934d87560c2d52b751",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_112002",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4773",
+      "lecture": "disque",
+      "lignes": 35,
+      "octets": 1331,
+      "origine": "archive",
+      "sha": "cb68562d6eddaa442ca4f76779a0db78bcfee16cbe5d0f59e6207a2dfe3051ee",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_114311",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4774",
+      "lecture": "disque",
+      "lignes": 35,
+      "octets": 1331,
+      "origine": "archive",
+      "sha": "b0a18336036268b4931aee44c4a19a80be931585b0301900815dfa00459b7e1d",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_132358",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4775",
+      "lecture": "disque",
+      "lignes": 35,
+      "octets": 1332,
+      "origine": "archive",
+      "sha": "e9ad6d92b9a6339ebfc3c357f9b7931a548ec064a5db060475286a22ce9dfb3e",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_141139",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4776",
+      "lecture": "disque",
+      "lignes": 35,
+      "octets": 1332,
+      "origine": "archive",
+      "sha": "851af09de18ba9551bb5e166b58b5738c4cad02c72912043b3fd2374a3d3ab8c",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_142333",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4777",
+      "lecture": "disque",
+      "lignes": 35,
+      "octets": 1332,
+      "origine": "archive",
+      "sha": "3f232af6b7ae6ad028ce8e4abcc97bab122f97341781ae96c8b849aa1b65a7ba",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_143122",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4778",
+      "lecture": "disque",
+      "lignes": 35,
+      "octets": 1332,
+      "origine": "archive",
+      "sha": "85df8af9db28c9556bbf59c5945c9d4d2a8a95b55607fff472ca09374b5055aa",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_145018",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4779",
+      "lecture": "disque",
+      "lignes": 35,
+      "octets": 1333,
+      "origine": "source",
+      "sha": "dcf406612d97fcc4d99788bb2705ed7b76cf14bc04c9e4e09feac6b3e5b361f9",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_174100",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4780",
+      "lecture": "disque",
+      "lignes": 33,
+      "octets": 1359,
+      "origine": "archive",
+      "sha": "9b4aef59d5bc602577f7008a54dc984d041032682dbf080ead156b6f182a2abb",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_104005",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4781",
+      "lecture": "disque",
+      "lignes": 33,
+      "octets": 1358,
+      "origine": "archive",
+      "sha": "5d4c1b4a4254d7c424a00cafc01b79006aeacb82ae4eaacaeee02bca467ac841",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_110153",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4782",
+      "lecture": "disque",
+      "lignes": 33,
+      "octets": 1358,
+      "origine": "archive",
+      "sha": "49b23985c4e108d5f360648b5a712b36c1f1293c1b910e38855b0b85e93015bc",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_111822",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4783",
+      "lecture": "disque",
+      "lignes": 33,
+      "octets": 1358,
+      "origine": "archive",
+      "sha": "a105898395a49d635f5e387aef924b8fb5e48f31c0716b2667248822e7d4b207",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_112001",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4784",
+      "lecture": "disque",
+      "lignes": 33,
+      "octets": 1358,
+      "origine": "archive",
+      "sha": "f5b657223466ced86362c1abcdb661b86d4744f7e7adbde5b60fa5bd9a4e5da4",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_114310",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4785",
+      "lecture": "disque",
+      "lignes": 33,
+      "octets": 1358,
+      "origine": "archive",
+      "sha": "13b9dc92bdf4c04ae97fbca0231cf80ec0bcd85177fd423bf39844a3f344784f",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_132358",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4786",
+      "lecture": "disque",
+      "lignes": 33,
+      "octets": 1358,
+      "origine": "archive",
+      "sha": "d7aede3de70a39acc401a03587b1f4734e5b8236dfb57863fe5aa8e45f0be780",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_141138",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4787",
+      "lecture": "disque",
+      "lignes": 33,
+      "octets": 1358,
+      "origine": "archive",
+      "sha": "7f707e67a68b209979cb68f9ee668c9e58abc5f335011f6807505a5c7b34b8a7",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_142332",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4788",
+      "lecture": "disque",
+      "lignes": 33,
+      "octets": 1358,
+      "origine": "archive",
+      "sha": "8067c01f999a232f7d7ef7ff4ee79eec3955778eb59ddd726581e96baf9a9cc5",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_143121",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4789",
+      "lecture": "disque",
+      "lignes": 33,
+      "octets": 1358,
+      "origine": "archive",
+      "sha": "dd4ed11de120448f0ebbd0e667dfba3598ce5bfaedacd0548d9516be4a230a29",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_145017",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4790",
+      "lecture": "disque",
+      "lignes": 33,
+      "octets": 1358,
+      "origine": "source",
+      "sha": "9de7b968a9be321acc6c574da47881531a0a2e84541551eb0cbb7e7e06196dcb",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_174100",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4791",
+      "lecture": "disque",
+      "lignes": 56,
+      "octets": 13229,
+      "origine": "source",
+      "sha": "8e8cc847311db4ba2f8c4f5be64dcf193892df19340cf75aa4fce33ea5b5fc1c",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.jsonl.bak.20261004_181438",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4792",
+      "lecture": "disque",
+      "lignes": 163,
+      "octets": 8808,
+      "origine": "archive",
+      "sha": "294d55ef09cf17d9f22347bf838fc165dd307d26919b2028fc734a7f25a683fe",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_100721",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4793",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8678,
+      "origine": "archive",
+      "sha": "f9b2027a5ce9d62e87e3d39e7ee03019d60e03555e924ac8976a32bc7c63c652",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_100953",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4794",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8678,
+      "origine": "archive",
+      "sha": "a4fd6ec4ebb7a1588c3500a33843bbd1d37b3ee792bf6cd7fce4b476f8bd5023",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_101055",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4795",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8678,
+      "origine": "archive",
+      "sha": "8e6f9bc79fe9434e817b72c261c5e1d43c5b3e37ba8b6e9ee0689b2b8f0cb53a",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_101202",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4796",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8678,
+      "origine": "archive",
+      "sha": "bd052d4c70ead461aaa0be47f2e3a5aa3bedc419f0de56b1f83e73d13606bd56",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_101412",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4797",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8678,
+      "origine": "archive",
+      "sha": "08de463beb0808240277939edca39cf42fcea58f8b36ea24d1da717ce23119b0",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_102604",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4798",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8675,
+      "origine": "archive",
+      "sha": "669cf6506ce2513e1772e1df8de5ad94601a68eaf2c8e916a84453dc07768044",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_103106",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4799",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8675,
+      "origine": "archive",
+      "sha": "8dea2027a2d3b83798a509ca4a850a973d51b29cc40b94e0982cc8c2750cb7ec",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_103928",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4800",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8675,
+      "origine": "archive",
+      "sha": "ac2c6e9f852960d33aa97b5829ede9f74516ccc6f79ac09d8a75edc5b975e34b",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_104046",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4801",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8675,
+      "origine": "archive",
+      "sha": "18f6b9eb0a48e430047300a96e6646ab0c775898463f6916ef0ff6e0bfab94d2",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_104728",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4802",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8675,
+      "origine": "archive",
+      "sha": "081cdfd71c626d6c0428c5108f7f92fb9ddabf629c61b8e027c8ab5565297196",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_110119",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4803",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8675,
+      "origine": "archive",
+      "sha": "f8fbceadf70fa9485d05f91d6afee856adc8b2438d20cff009a94df796a7ade0",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_110234",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4804",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8675,
+      "origine": "archive",
+      "sha": "a6c6a3a3a5312d2afbfbe225531f80f49614b805aa722b378602076ab9fe9557",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_110405",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4805",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8675,
+      "origine": "archive",
+      "sha": "43c56a12a3bd1cca2905d1cc42163fa12a79e120db68a6cc8dc9a9d26cade180",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_110635",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4806",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8675,
+      "origine": "archive",
+      "sha": "b3a897cdbf0b60d39e5c750e26ff48865b028b16ccc7808dfddc79b63c59eb04",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_111903",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4807",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8675,
+      "origine": "archive",
+      "sha": "ee74fa1e96bebd3bb1aeb47b8c166de517cb8d1c4693455633b34f2e6fffd9e4",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_112043",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4808",
+      "lecture": "disque",
+      "lignes": 161,
+      "octets": 8675,
+      "origine": "archive",
+      "sha": "cbb9905998a3d69c4897db1d90b3cc30aa99c6d41dbdeab8e55754d80d9d226d",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_113319",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4809",
+      "lecture": "disque",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "archive",
+      "sha": "033832eaa1e6fb128949e5b6641edfd862c809ae2562dc32e6341e6dc5e27371",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_114230",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4810",
+      "lecture": "disque",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "archive",
+      "sha": "aa89e91806d9535b588b0670700ea1bd34012110ef3ee5e8e358f115f66d17a2",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_114410",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4811",
+      "lecture": "disque",
+      "lignes": 163,
+      "octets": 9021,
+      "origine": "archive",
+      "sha": "3816c45a19651439293b4da0b06252f304747c61687c10a108c1bcb3fe5af778",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_114601",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4812",
+      "lecture": "disque",
+      "lignes": 163,
+      "octets": 9021,
+      "origine": "archive",
+      "sha": "2e4cdb1e50fb16e61724ccc5ddf98b37e8641e2dcbfe506e981ad0a4b9994ba6",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_132058",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4813",
+      "lecture": "disque",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "archive",
+      "sha": "e06593d820b5f30bc7188f8bd821c0175e99143b493e6cf38d2e1952fe15ef0a",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_132457",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4814",
+      "lecture": "disque",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "archive",
+      "sha": "e4db673c2b9ea1e969e052c6717999f4ef4fd27c4a3671c2b71992e49c694363",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_140341",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4815",
+      "lecture": "disque",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "archive",
+      "sha": "57e9b99a3fc0946efff9ec12482cbdc94cabb6ad9ced92172b49e6ba0a3f28de",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_140820",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4816",
+      "lecture": "disque",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "archive",
+      "sha": "6f342fda1b1f9ede4945359dc1f178c74c7a7f595d36f00dde89d5234d31fea1",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_141225",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4817",
+      "lecture": "disque",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "archive",
+      "sha": "e7215d7379534d88d15044e45994a0273f90dc36be2e72ce229ef38f56a81c40",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_141453",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4818",
+      "lecture": "disque",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "archive",
+      "sha": "b33c3f15cb8ffd1ae3d7fdeee290a4eca9070f9ed360ea06b2b6c552e6e84e8e",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_142418",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4819",
+      "lecture": "disque",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "archive",
+      "sha": "68c5ce20dfa63bd55febf4c638c9beebc4ec8801b0dcaf0b673c15a56073c25a",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_143212",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4820",
+      "lecture": "disque",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "archive",
+      "sha": "cabd5f5bd3e31980363d0779dcc655ae11ec3268be7a9a13b165730d2764ff46",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_145106",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4821",
+      "lecture": "registre",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "purge",
+      "sha": "d0d72d109076b611dfee374c7321ab0542ed822f58d2d456a85351950392cdb8",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_173805",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4822",
+      "lecture": "disque",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "archive",
+      "sha": "fde1177301c1d483e25235fec96021adf81a01cdc8aceb8429dd4a0bbd91626f",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_174145",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4823",
+      "lecture": "registre",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "purge",
+      "sha": "1d9bba7090dadb09bd4b39b2e5f424883b310417e355611038bd03c7e403c697",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_174623",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4824",
+      "lecture": "disque",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "archive",
+      "sha": "8ba72aed2af59de1616dea2ba0002b2fd065aaa33288656e60e3807a0f722e5f",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_175101",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4825",
+      "lecture": "registre",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "purge",
+      "sha": "6d0aac658e29faefc9769155c6119df3517b771fe8c85301706686f57aa338c4",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_180335",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4826",
+      "lecture": "disque",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "archive",
+      "sha": "12d678a2f6f2e7e9ab92fac375a0e77a5c9102fa7af57d559462f4aede8d09a1",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_180801",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4827",
+      "lecture": "registre",
+      "lignes": 162,
+      "octets": 8728,
+      "origine": "purge",
+      "sha": "8902b6acb9cf13fe2434815f769096331315af4ecf187d3a0f83d5a3bc5d0d03",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_181438",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4828",
+      "lecture": "disque",
+      "lignes": 153,
+      "octets": 8378,
+      "origine": "source",
+      "sha": "020d31dbba146df8bee7ad14eb0c3fc674be01ae51fcb9e7721f68d637d3f0d8",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_181910",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4829",
+      "lecture": "disque",
+      "lignes": 9207,
+      "octets": 518651,
+      "origine": "archive",
+      "sha": "6c41341093958b67d9e2c104c6c7561659f52ee72d8c583116d1c904d41106bb",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py.bak.20261004_103527",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4830",
+      "lecture": "disque",
+      "lignes": 9317,
+      "octets": 524655,
+      "origine": "archive",
+      "sha": "4e20e54daf977ddbf8266917996e5ee03a38bd02a00515d5c0f40fd92bf232f3",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py.bak.20261004_114104",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4831",
+      "lecture": "disque",
+      "lignes": 9396,
+      "octets": 527998,
+      "origine": "archive",
+      "sha": "0c0d543566e3a52e5c0feef56b79c16cd0c97348c5131286e1c185e5ad114ff3",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py.bak.20261004_144453",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4832",
+      "lecture": "disque",
+      "lignes": 9473,
+      "octets": 532053,
+      "origine": "source",
+      "sha": "1f870cc1baaf0989bff79de3e1525ed40367763655235f998504812f05353185",
+      "source": "_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py.bak.20261004_144857",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4833",
+      "lecture": "disque",
+      "lignes": 433,
+      "octets": 21310,
+      "origine": "source",
+      "sha": "9f857775abc120903a0d430caca1e8ad856310299b6990030a30c5cd80e4dfba",
+      "source": "_operateur/optimus-prime/super-combos/sc-006-lacunes/main.py.bak.20261004_100350",
+      "verdict": "conserver"
     }
   ],
-  "nb": 4720,
+  "nb": 4824,
   "non_mesures": {
     "ids": [
       "K-003",
@@ -47264,7 +48304,7 @@
     ],
     "nb": 56
   },
-  "octets": 142100574,
+  "octets": 144680173,
   "perimetre": {
     "critere": "tag:bak",
     "exclus": [

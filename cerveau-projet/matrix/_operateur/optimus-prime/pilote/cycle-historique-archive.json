@@ -1204,8 +1204,13 @@
       "action": "injection",
       "categorie": "demarrage",
       "timestamp": "2026-10-04T09:07:33.283586"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-04T18:26:56.586261"
     }
   ],
-  "archive_le": "2026-10-04 09:07:33",
+  "archive_le": "2026-10-04 18:26:56",
   "origine": "cycle-state.json archive par MO-110 (EO-119) le 2026-09-15 : l ETAT disparait, l HISTORIQUE est conserve"
 }

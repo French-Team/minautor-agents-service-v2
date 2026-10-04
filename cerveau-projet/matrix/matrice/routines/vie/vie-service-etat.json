@@ -2,27 +2,27 @@
   "routines": {
     "vigie-profil": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 18:23:58",
-      "passe_publiee_le": "2026-10-04 18:23:58",
-      "compteur": 737
+      "dernier_allumage": "2026-10-04 18:39:38",
+      "passe_publiee_le": "2026-10-04 18:39:38",
+      "compteur": 738
     },
     "routeur-maintenance": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 18:23:58",
-      "passe_publiee_le": "2026-10-04 18:23:58",
-      "compteur": 11059
+      "dernier_allumage": "2026-10-04 18:48:55",
+      "passe_publiee_le": "2026-10-04 18:48:55",
+      "compteur": 11083
     },
     "suivi-sync": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 18:23:58",
-      "passe_publiee_le": "2026-10-04 18:23:58",
-      "compteur": 11037
+      "dernier_allumage": "2026-10-04 18:48:55",
+      "passe_publiee_le": "2026-10-04 18:48:55",
+      "compteur": 11061
     },
     "veille-flux": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 18:22:46",
-      "passe_publiee_le": "2026-10-04 18:22:46",
-      "compteur": 2206,
+      "dernier_allumage": "2026-10-04 18:48:55",
+      "passe_publiee_le": "2026-10-04 18:48:55",
+      "compteur": 2211,
       "dernier_echec": {
         "motif": "code retour 1",
         "date": "2026-10-04 11:30:11",
@@ -37,9 +37,9 @@
     },
     "espion-integrite": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 18:22:46",
-      "passe_publiee_le": "2026-10-04 18:22:46",
-      "compteur": 2207,
+      "dernier_allumage": "2026-10-04 18:48:55",
+      "passe_publiee_le": "2026-10-04 18:48:55",
+      "compteur": 2212,
       "dernier_echec": {
         "motif": "code retour 1",
         "date": "2026-10-03 14:31:42",
@@ -54,24 +54,24 @@
     },
     "vigie-portes": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 18:23:58",
+      "dernier_allumage": "2026-10-04 18:39:38",
       "dernier_echec": {
         "motif": "code retour 1",
-        "date": "2026-10-04 18:23:58",
+        "date": "2026-10-04 18:39:38",
         "code": 1
       },
       "anti_spam": {
         "motif": "code retour 1",
-        "date": "2026-10-04 18:23:59",
+        "date": "2026-10-04 18:39:40",
         "niveau": "haute",
         "code": 0
       }
     },
     "verifier-liens-cartes": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 17:37:56",
-      "passe_publiee_le": "2026-10-04 17:37:56",
-      "compteur": 187
+      "dernier_allumage": "2026-10-04 18:40:40",
+      "passe_publiee_le": "2026-10-04 18:40:40",
+      "compteur": 188
     }
   },
   "demarrage_service": "2026-09-26 18:17:04"

@@ -54300,6 +54300,66 @@
         "carte",
         "identite"
       ]
+    },
+    "_operateur/optimus-prime/preparation/mo-581-doublon-eo-559.md": {
+      "modifications": [
+        {
+          "date": "2026-10-04 18:41:36",
+          "action": "cree",
+          "detail": "MO-581 : EO-559 est un doublon de MO-550 (session S-476). Preuve rejouee sur le service reel, fail-clos intact. Aucun code modifie.",
+          "tags": [
+            "mo-581",
+            "doublon",
+            "reparation"
+          ],
+          "empreinte": "e2b6375f6f7f0b5247f1a7ac46eb199a64ba837578399b628374bfe279276c4a"
+        }
+      ],
+      "tags": [
+        "mo-581",
+        "doublon",
+        "reparation"
+      ]
+    },
+    "_operateur/optimus-prime/preparation/mo-582-presse-papier-windows.md": {
+      "modifications": [
+        {
+          "date": "2026-10-04 18:41:36",
+          "action": "cree",
+          "detail": "MO-582 : reponse a la question EO-507. Presse-papier Windows par ctypes, aller-retour prouve (avec restauration du contenu de l operateur).",
+          "tags": [
+            "mo-582",
+            "question",
+            "presse-papier"
+          ],
+          "empreinte": "2a1c63612cdd1a9d5b0ee101fd957b56c6bf17c330b26500800dd115f3283caf"
+        }
+      ],
+      "tags": [
+        "mo-582",
+        "question",
+        "presse-papier"
+      ]
+    },
+    "_operateur/optimus-prime/preparation/mo-583-cadrage-cartes-liens.md": {
+      "modifications": [
+        {
+          "date": "2026-10-04 18:41:36",
+          "action": "corrige",
+          "detail": "MO-583 cadrage liens : outillage complet deja en place, couverture nulle (20/234 cartes). type du front-matter corrige (cadrage -> analyse) : le vocabulaire est ferme.",
+          "tags": [
+            "mo-583",
+            "cadrage",
+            "cartes"
+          ],
+          "empreinte": "7158ebefa6eba6e0083a184495431b341de53368d75e8ad2e14eef6d809322cb"
+        }
+      ],
+      "tags": [
+        "mo-583",
+        "cadrage",
+        "cartes"
+      ]
     }
   },
   "identite": {

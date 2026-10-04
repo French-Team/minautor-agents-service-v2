@@ -11,7 +11,7 @@ identite:
 > lit DANS LE SYSTEME (le PID de l etat court), pas dans la declaration :
 > une cadence declaree ne prouve pas que la routine tourne.
 >
-> Vue DERIVEE, REGENERABLE : 2026-10-04 17:41:00 par
+> Vue DERIVEE, REGENERABLE : 2026-10-04 18:45:38 par
 > `suivi-parties-maitresses.py`. Aucun fait n est ecrit deux fois --
 > la source reste la source (L-055).
 
