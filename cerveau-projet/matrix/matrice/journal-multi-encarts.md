@@ -35,11 +35,11 @@ Flux : routines/veille-flux/journal-veille.txt -> VUE lecture seule
 
 | Entree | Heure | Date |
 |---|---|---|
-| passe relax demarree | 17:20:04 | 04/10/2026 |
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 17:20:14 | 04/10/2026 |
-| passe relax demarree | 17:25:17 | 04/10/2026 |
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 17:25:28 | 04/10/2026 |
 | passe relax demarree | 17:30:30 | 04/10/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 17:30:40 | 04/10/2026 |
+| passe relax demarree | 17:35:43 | 04/10/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 17:35:54 | 04/10/2026 |
+| passe relax demarree | 17:40:58 | 04/10/2026 |
 
 ## Encart : alertes
 
@@ -47,11 +47,11 @@ Flux : veille-flux/alertes-emises.json + intercom/matrice/inbox.jsonl -> VUE lec
 
 | Entree | Heure | Date |
 |---|---|---|
-| intercom : signaler | 16:18:36 | 04/10/2026 |
 | intercom : signaler | 16:34:16 | 04/10/2026 |
 | intercom : signaler | 16:49:55 | 04/10/2026 |
 | intercom : signaler | 17:05:35 | 04/10/2026 |
 | intercom : signaler | 17:21:15 | 04/10/2026 |
+| intercom : signaler | 17:36:55 | 04/10/2026 |
 
 ## Encart : cameleon
 
@@ -71,14 +71,14 @@ Flux : sac-a-dos (chaque outil) -> bdd-usages -> usages-outils-combos.jsonl -> V
 
 | Entree | Heure | Date |
 |---|---|---|
-| corriger-ascii/corriger code 0 905ms | 17:27:47 | 04/10/2026 |
-| suivi-optimus/vue code 0 50ms | 17:28:29 | 04/10/2026 |
-| corriger-ascii/corriger code 0 902ms | 17:28:48 | 04/10/2026 |
-| suivi-optimus/vue code 0 49ms | 17:29:30 | 04/10/2026 |
-| corriger-ascii/corriger code 0 907ms | 17:29:50 | 04/10/2026 |
-| suivi-optimus/vue code 0 49ms | 17:30:30 | 04/10/2026 |
-| corriger-ascii/corriger code 0 908ms | 17:30:31 | 04/10/2026 |
-| corriger-ascii/corriger code 0 989ms | 17:30:31 | 04/10/2026 |
+| corriger-ascii/corriger code 0 914ms | 17:40:05 | 04/10/2026 |
+| suivi-optimus/vue code 0 55ms | 17:40:58 | 04/10/2026 |
+| corriger-ascii/corriger code 0 1023ms | 17:40:59 | 04/10/2026 |
+| ecrire/ecrire code 0 4ms | 17:41:00 | 04/10/2026 |
+| ecrire/ecrire code 0 4ms | 17:41:00 | 04/10/2026 |
+| ecrire/ecrire code 0 4ms | 17:41:00 | 04/10/2026 |
+| ecrire/ecrire code 0 3ms | 17:41:00 | 04/10/2026 |
+| ecrire/ecrire code 0 4ms | 17:41:01 | 04/10/2026 |
 
 ## Encart : modifications
 

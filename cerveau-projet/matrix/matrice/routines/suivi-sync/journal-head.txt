@@ -1362,3 +1362,12 @@
 {"code": 0, "date": "2026-10-04 17:32:42", "duree_ms": 289, "retard_avant_s": 60, "type": "head"}
 {"code": 0, "date": "2026-10-04 17:33:42", "duree_ms": 289, "retard_avant_s": 60, "type": "head"}
 {"code": 0, "date": "2026-10-04 17:34:43", "duree_ms": 274, "retard_avant_s": 60, "type": "head"}
+{"code": 0, "date": "2026-10-04 17:35:43", "duree_ms": 277, "retard_avant_s": 60, "type": "head"}
+{"code": 0, "date": "2026-10-04 17:36:54", "duree_ms": 277, "retard_avant_s": 71, "type": "head"}
+{"code": 0, "date": "2026-10-04 17:37:56", "duree_ms": 276, "retard_avant_s": 61, "type": "head"}
+{"code": 0, "date": "2026-10-04 17:38:57", "duree_ms": 273, "retard_avant_s": 60, "type": "head"}
+{"code": 0, "date": "2026-10-04 17:39:57", "duree_ms": 271, "retard_avant_s": 60, "type": "head"}
+{"code": 0, "date": "2026-10-04 17:40:58", "duree_ms": 311, "retard_avant_s": 60, "type": "head"}
+{"code": 0, "date": "2026-10-04 17:42:09", "duree_ms": 272, "retard_avant_s": 71, "type": "head"}
+{"code": 0, "date": "2026-10-04 17:43:10", "duree_ms": 274, "retard_avant_s": 60, "type": "head"}
+{"code": 0, "date": "2026-10-04 17:44:10", "duree_ms": 273, "retard_avant_s": 60, "type": "head"}
