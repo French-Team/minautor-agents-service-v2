@@ -35,11 +35,11 @@ Flux : routines/veille-flux/journal-veille.txt -> VUE lecture seule
 
 | Entree | Heure | Date |
 |---|---|---|
-| passe relax demarree | 17:30:30 | 04/10/2026 |
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 17:30:40 | 04/10/2026 |
-| passe relax demarree | 17:35:43 | 04/10/2026 |
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 17:35:54 | 04/10/2026 |
 | passe relax demarree | 17:40:58 | 04/10/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 17:41:08 | 04/10/2026 |
+| passe relax demarree | 17:46:11 | 04/10/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 17:46:22 | 04/10/2026 |
+| passe relax demarree | 17:51:25 | 04/10/2026 |
 
 ## Encart : alertes
 
@@ -71,14 +71,14 @@ Flux : sac-a-dos (chaque outil) -> bdd-usages -> usages-outils-combos.jsonl -> V
 
 | Entree | Heure | Date |
 |---|---|---|
-| corriger-ascii/corriger code 0 914ms | 17:40:05 | 04/10/2026 |
-| suivi-optimus/vue code 0 55ms | 17:40:58 | 04/10/2026 |
-| corriger-ascii/corriger code 0 1023ms | 17:40:59 | 04/10/2026 |
-| ecrire/ecrire code 0 4ms | 17:41:00 | 04/10/2026 |
-| ecrire/ecrire code 0 4ms | 17:41:00 | 04/10/2026 |
-| ecrire/ecrire code 0 4ms | 17:41:00 | 04/10/2026 |
-| ecrire/ecrire code 0 3ms | 17:41:00 | 04/10/2026 |
-| ecrire/ecrire code 0 4ms | 17:41:01 | 04/10/2026 |
+| rendre-graphe/mermaid code 0 8ms | 17:51:17 | 04/10/2026 |
+| rendre-graphe/svg code 0 9ms | 17:51:18 | 04/10/2026 |
+| rendre-graphe/verifier code 0 1ms | 17:51:18 | 04/10/2026 |
+| suivi-optimus/coherence code 1 23ms | 17:51:19 | 04/10/2026 |
+| suivi-optimus/coherence code 1 23ms | 17:51:19 | 04/10/2026 |
+| suivi-optimus/vue code 0 49ms | 17:51:25 | 04/10/2026 |
+| corriger-ascii/corriger code 0 991ms | 17:51:26 | 04/10/2026 |
+| corriger-ascii/corriger code 0 907ms | 17:51:26 | 04/10/2026 |
 
 ## Encart : modifications
 
@@ -98,11 +98,11 @@ Flux : lecons gravees -> bdd-lecons -> lecons.json -> VUE (relues a chaque injec
 
 | Entree | Heure | Date |
 |---|---|---|
-| L-235 UN CHEMIN SE VALIDE AU NIVEAU OU IL EXISTE, ET LE NIVEAU EN TROP SE RETIRE -- IL NE S AJOUTE PAS. On | 11:00:25 | 04/10/2026 |
 | L-236 UNE REGLE QUI NE TROUVE PAS REND LA MAIN, ELLE NE DEVINE PAS. Si aucune marche ne designe de fichier | 11:00:25 | 04/10/2026 |
 | L-237 UN TEMOIN QUI NE CONNAIT PAS LE NOUVEAU TIRVOIR CRIE A TORT, ET IL A RAISON DE CRIER. Le solder des  | 11:19:34 | 04/10/2026 |
 | L-238 LE CONTROLE QU ON ECRIT POUR UN AUTRE SE RETOURNE CONTRE SOI. Le nouveau controle d ancrage a accuse | 11:19:34 | 04/10/2026 |
 | L-239 UN GARDE QUI ACCUSE UN ETAT REELLEMENT INTERDIT N EST PAS UNE PANNE DU GARDE : C EST UN ETAT A RAMEN | 14:19:00 | 04/10/2026 |
+| L-240 Reconstruire un depot git : le remote est une donnee, pas une page blanche. Avant tout rm -rf .git,  | 17:45:21 | 04/10/2026 |
 
 ## Encart : variables
 

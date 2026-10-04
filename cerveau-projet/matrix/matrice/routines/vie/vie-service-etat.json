@@ -2,27 +2,27 @@
   "routines": {
     "vigie-profil": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 17:36:54",
-      "passe_publiee_le": "2026-10-04 17:36:54",
-      "compteur": 734
+      "dernier_allumage": "2026-10-04 17:52:35",
+      "passe_publiee_le": "2026-10-04 17:52:35",
+      "compteur": 735
     },
     "routeur-maintenance": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 17:45:10",
-      "passe_publiee_le": "2026-10-04 17:45:10",
-      "compteur": 11022
+      "dernier_allumage": "2026-10-04 17:55:38",
+      "passe_publiee_le": "2026-10-04 17:55:38",
+      "compteur": 11032
     },
     "suivi-sync": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 17:45:10",
-      "passe_publiee_le": "2026-10-04 17:45:10",
-      "compteur": 11000
+      "dernier_allumage": "2026-10-04 17:55:38",
+      "passe_publiee_le": "2026-10-04 17:55:38",
+      "compteur": 11010
     },
     "veille-flux": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 17:40:57",
-      "passe_publiee_le": "2026-10-04 17:40:57",
-      "compteur": 2198,
+      "dernier_allumage": "2026-10-04 17:51:24",
+      "passe_publiee_le": "2026-10-04 17:51:24",
+      "compteur": 2200,
       "dernier_echec": {
         "motif": "code retour 1",
         "date": "2026-10-04 11:30:11",
@@ -37,9 +37,9 @@
     },
     "espion-integrite": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 17:40:57",
-      "passe_publiee_le": "2026-10-04 17:40:57",
-      "compteur": 2199,
+      "dernier_allumage": "2026-10-04 17:51:24",
+      "passe_publiee_le": "2026-10-04 17:51:24",
+      "compteur": 2201,
       "dernier_echec": {
         "motif": "code retour 1",
         "date": "2026-10-03 14:31:42",
@@ -54,15 +54,15 @@
     },
     "vigie-portes": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 17:36:54",
+      "dernier_allumage": "2026-10-04 17:52:35",
       "dernier_echec": {
         "motif": "code retour 1",
-        "date": "2026-10-04 17:36:54",
+        "date": "2026-10-04 17:52:35",
         "code": 1
       },
       "anti_spam": {
         "motif": "code retour 1",
-        "date": "2026-10-04 17:36:56",
+        "date": "2026-10-04 17:52:37",
         "niveau": "haute",
         "code": 0
       }

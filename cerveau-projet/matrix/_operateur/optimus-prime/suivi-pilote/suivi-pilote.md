@@ -12,7 +12,7 @@ identite:
 > dans suivi-optimus, file-missions, entonnoir, cycle-historique, outbox et
 > le journal des pauses -- ici, seulement ce que l instrument a JUGE.
 
-Mesure du 2026-10-04 17:41:44 | pannes declarees : 20 | detecteurs joues : 17.
+Mesure du 2026-10-04 17:51:00 | pannes declarees : 20 | detecteurs joues : 17.
 
 Pannes DECLAREES sans detecteur (couverture dite, jamais muette) :
 - fenetre-d-absorption-plus-courte-que-le-battement : aucun detecteur ecrit pour cette panne declaree
