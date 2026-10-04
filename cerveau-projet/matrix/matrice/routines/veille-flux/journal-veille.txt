@@ -19200,3 +19200,7 @@
 {"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-10-04 18:07:16"}
 {"type": "passe-debut", "mode": "relax", "date": "2026-10-04 18:12:20"}
 {"type": "visuel", "code": 0, "duree_ms": 394, "retard_avant_s": 314, "date": "2026-10-04 18:12:23"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-10-04 18:12:31"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-10-04 18:17:34"}
+{"type": "visuel", "code": 0, "duree_ms": 398, "retard_avant_s": 313, "date": "2026-10-04 18:17:37"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-10-04 18:17:44"}

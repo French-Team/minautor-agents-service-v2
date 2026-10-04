@@ -35,11 +35,11 @@ Flux : routines/veille-flux/journal-veille.txt -> VUE lecture seule
 
 | Entree | Heure | Date |
 |---|---|---|
-| passe relax demarree | 18:01:52 | 04/10/2026 |
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 18:02:03 | 04/10/2026 |
 | passe relax demarree | 18:07:05 | 04/10/2026 |
 | passe relax terminee : 0 detection(s), 0 alerte(s) | 18:07:16 | 04/10/2026 |
 | passe relax demarree | 18:12:20 | 04/10/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 18:12:31 | 04/10/2026 |
+| passe relax demarree | 18:17:34 | 04/10/2026 |
 
 ## Encart : alertes
 
@@ -71,14 +71,14 @@ Flux : sac-a-dos (chaque outil) -> bdd-usages -> usages-outils-combos.jsonl -> V
 
 | Entree | Heure | Date |
 |---|---|---|
-| suivi-optimus/noter code 0 3ms | 18:12:13 | 04/10/2026 |
-| suivi-optimus/noter code 0 3ms | 18:12:13 | 04/10/2026 |
-| bdd-sessions/ajouter code 0 15ms | 18:12:13 | 04/10/2026 |
-| suivi-optimus/vue code 0 50ms | 18:12:13 | 04/10/2026 |
-| bdd-conservation/declarer-disparition code 0 432ms | 18:12:14 | 04/10/2026 |
-| suivi-optimus/vue code 0 52ms | 18:12:20 | 04/10/2026 |
-| corriger-ascii/corriger code 0 933ms | 18:12:21 | 04/10/2026 |
-| corriger-ascii/corriger code 0 1017ms | 18:12:21 | 04/10/2026 |
+| suivi-optimus/coherence code 1 23ms | 18:14:56 | 04/10/2026 |
+| suivi-optimus/coherence code 1 23ms | 18:14:56 | 04/10/2026 |
+| suivi-optimus/vue code 0 49ms | 18:15:33 | 04/10/2026 |
+| corriger-ascii/corriger code 0 897ms | 18:15:48 | 04/10/2026 |
+| suivi-optimus/vue code 0 51ms | 18:16:33 | 04/10/2026 |
+| corriger-ascii/corriger code 0 890ms | 18:16:49 | 04/10/2026 |
+| suivi-optimus/vue code 0 50ms | 18:17:33 | 04/10/2026 |
+| corriger-ascii/corriger code 0 1006ms | 18:17:35 | 04/10/2026 |
 
 ## Encart : modifications
 
@@ -86,9 +86,9 @@ Flux : notes de mission -> bdd-modifications -> modifications-par-fichier.json -
 
 | Entree | Heure | Date |
 |---|---|---|
-| _operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py | 14:50:01 | 04/10/2026 |
 | matrice/data/lecons.json | 18:02:48 | 04/10/2026 |
 | _operateur/optimus-prime/preparation/bilan-mo-580.md | 18:07:16 | 04/10/2026 |
+| _operateur/optimus-prime/pilote/entonnoir-files-optimus.json | 18:13:49 | 04/10/2026 |
 | .gitignore |  |  |
 | x |  |  |
 

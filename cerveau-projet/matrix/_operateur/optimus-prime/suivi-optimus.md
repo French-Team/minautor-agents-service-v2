@@ -10,7 +10,7 @@ identite:
 
 | Derniere mise a jour | Evenements | Missions tracees | Missions finies | Missions ouvertes | File du pilote |
 |---|---|---|---|---|---|
-| 2026-10-04 18:12:13 | 2783 | 526 | 526 | 0 | 0 |
+| 2026-10-04 18:18:24 | 2784 | 526 | 526 | 0 | 0 |
 
 > LES COLONNES NE PARLENT PAS DU MEME LIVRE (audit createur 2026-09-30) :
 >   - tracees / finies / ouvertes : le JOURNAL DE SUIVI, ou chaque mission passe
@@ -35,7 +35,7 @@ Flux : optimus (via l'outil suivi-optimus) -> data/suivi-optimus.jsonl -> VUE le
 
 | Jour | Missions finies | Evenements | Portes | Fichiers | Themes |
 |---|---|---|---|---|---|
-| 2026-10-04 | 9 | 145 | 7 | 114 | REPARATION, CONTRATS, CADRAGE, OUTIL, PILOTE, ROUTINE, CADREUR, BDD, DEPOT-GIT, audit-des-bloquants-du-vrac |
+| 2026-10-04 | 9 | 146 | 7 | 114 | REPARATION, CONTRATS, CADRAGE, OUTIL, PILOTE, ROUTINE, CADREUR, BDD, DEPOT-GIT, audit-des-bloquants-du-vrac |
 | 2026-10-03 | 21 | 179 | 14 | 201 | CONSTRUCTEUR, OUTIL, REPARATION, CONTRATS, CADRAGE, PILOTE, ROUTINE, CADREUR, BDD |
 | 2026-10-02 | 20 | 150 | 17 | 82 | CONSTRUCTEUR, ROUTINE, AUDITEUR, REPARATION, OUTIL, CONTRATS, SUIVI, PILOTE, TABLE-RONDE-ROUND, REVISEUR, SUIVI-OPTIMUS, ANALYSE |
 | 2026-10-01 | 22 | 163 | 7 | 91 | PILOTE, REPARATION, BDD, CONSTRUCTEUR, REDACTEUR, AUDITEUR, REVISEUR, ANALYSE, CADRAGE, CONTRATS |
@@ -55,7 +55,7 @@ Flux : optimus (via l'outil suivi-optimus) -> data/suivi-optimus.jsonl -> VUE le
 
 | Mission | Theme | Debut | Fin | Duree | Ev. | Etat | Portes | Fichiers |
 |---|---|---|---|---|---|---|---|---|
-| MO-580 | audit-des-bloquants-du-vrac | 04/10 18:12 | 04/10 18:12 | inconnue | 4 | finie | - | - |
+| MO-580 | audit-des-bloquants-du-vrac | 04/10 18:12 | 04/10 18:12 | inconnue | 5 | finie | - | - |
 | MO-579 | DEPOT-GIT | 04/10 14:22 | 04/10 14:22 | inconnue | 6 | finie | pilote:purge | _operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py, matrice/data/manuel-outils.md, _operateur/optimus-prime/remorque/inventaire.json, matrice/data/outils/editer-agents-md/commun.py, _operateur/optimus-prime/tmp-optimus/README.md, _operateur/optimus-prime/parcours/themes/th ... (+291 car.) |
 | MO-577 | REPARATION | 04/10 09:07 | 04/10 09:47 | 2422 | 9 | finie | pilote:injecter, pilote:prise, pilote:fin, pilote:rotation-intercom, pilote:purge | matrice/data/lecons.json, matrice/data/outils/chaine-pense-bete/main.py, matrice/data/outils/chaine-pense-bete/constants.py, matrice/data/outils/chaine-pense-bete/commun.py, matrice/data/outils/chaine-pense-bete/etape/entry.py, matrice/data/outils/chaine-pense-bete/etape/fonctions.py, _operateur/opt ... (+382 car.) |
 | MO-576 | REPARATION | 04/10 08:46 | 04/10 09:04 | 1105 | 9 | finie | pilote:injecter, pilote:prise, pilote:fin, pilote:rotation-intercom, pilote:purge | _operateur/optimus-prime/super-combos/combos/outils/controle-attribution.py, _operateur/optimus-prime/super-combos/combos/outils/suivi-parties-maitresses.py, _operateur/optimus-prime/super-combos/combos/outils/attribution-registre.json, _operateur/optimus-prime/preparation/bilan-mo-576.md, mo-579-r- ... (+66 car.) |
@@ -456,6 +456,7 @@ Pourquoi ce sujet, et pas un autre : deux faits du 2026-10-02 le mes | - |
 
 | Heure | Date | Mission | Detail | Portes |
 |---|---|---|---|---|
+| 18:18:24 | 2026-10-04 | MO-580 | Source < si j etais user > servie au moment : l objectif redemande de verifier sur l etat REEL du code si les 10 bloquants sont encore alive (le pilote sert cette source quand un audit doit mesurer le disque et non l enonce, L-155). Trace declaree. | - |
 | 05:06:33 | 2026-10-04 | MO-566 | source si-j-etais-user servie au moment <encore> : moment <encore> : l objectif REDEMANDE un geste (famille < je dois refaire > du proto-13) (mot repere : <encore>) | pilote:injection |
 | 19:53:48 | 2026-10-03 | MO-568 | source si-j-etais-user servie au moment <encore> : moment <encore> : l objectif REDEMANDE un geste (famille < je dois refaire > du proto-13) (mot repere : <encore>) | pilote:injection |
 | 19:48:35 | 2026-10-03 | MO-567 | source si-j-etais-user servie au moment <encore> : moment <encore> : l objectif REDEMANDE un geste (famille < je dois refaire > du proto-13) (mot repere : <refaire>) | pilote:injection |
@@ -480,9 +481,8 @@ Pourquoi ce sujet, et pas un autre : deux faits du 2026-10-02 le mes | - |
 | 10:13:19 | 2026-09-29 | MO-495 | source si-j-etais-user servie au moment <encore> : moment <encore> : l objectif REDEMANDE un geste (famille < je dois refaire > du proto-13) (mot repere : <recopier>) | pilote:injection |
 | 08:23:49 | 2026-09-29 | MO-505 | source si-j-etais-user servie au moment <encore> : moment <encore> : l objectif REDEMANDE un geste (famille < je dois refaire > du proto-13) (mot repere : <refaire>) | pilote:injection |
 | 22:05:09 | 2026-09-28 | MO-488 | source si-j-etais-user servie au moment <encore> : moment <encore> : l objectif REDEMANDE un geste (famille < je dois refaire > du proto-13) (mot repere : <encore>) | pilote:injection |
-| 21:39:09 | 2026-09-28 | MO-488 | source si-j-etais-user servie au moment <encore> : moment <encore> : l objectif REDEMANDE un geste (famille < je dois refaire > du proto-13) (mot repere : <encore>) | pilote:injection |
 
-*14 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
+*15 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
 
 ## Action : regularisation
 

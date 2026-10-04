@@ -8,21 +8,21 @@
     },
     "routeur-maintenance": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 18:12:20",
-      "passe_publiee_le": "2026-10-04 18:12:20",
-      "compteur": 11048
+      "dernier_allumage": "2026-10-04 18:22:46",
+      "passe_publiee_le": "2026-10-04 18:22:46",
+      "compteur": 11058
     },
     "suivi-sync": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 18:12:20",
-      "passe_publiee_le": "2026-10-04 18:12:20",
-      "compteur": 11026
+      "dernier_allumage": "2026-10-04 18:22:46",
+      "passe_publiee_le": "2026-10-04 18:22:46",
+      "compteur": 11036
     },
     "veille-flux": {
-      "allume_le": "2026-10-04 18:12:20",
-      "dernier_allumage": "2026-10-04 18:07:05",
-      "passe_publiee_le": "2026-10-04 18:07:05",
-      "compteur": 2203,
+      "allume_le": "2026-10-04 18:22:46",
+      "dernier_allumage": "2026-10-04 18:17:33",
+      "passe_publiee_le": "2026-10-04 18:17:33",
+      "compteur": 2205,
       "dernier_echec": {
         "motif": "code retour 1",
         "date": "2026-10-04 11:30:11",
@@ -37,9 +37,9 @@
     },
     "espion-integrite": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 18:07:05",
-      "passe_publiee_le": "2026-10-04 18:07:05",
-      "compteur": 2204,
+      "dernier_allumage": "2026-10-04 18:17:33",
+      "passe_publiee_le": "2026-10-04 18:17:33",
+      "compteur": 2206,
       "dernier_echec": {
         "motif": "code retour 1",
         "date": "2026-10-03 14:31:42",

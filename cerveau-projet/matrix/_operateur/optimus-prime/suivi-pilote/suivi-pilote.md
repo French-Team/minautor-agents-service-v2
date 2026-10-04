@@ -12,7 +12,7 @@ identite:
 > dans suivi-optimus, file-missions, entonnoir, cycle-historique, outbox et
 > le journal des pauses -- ici, seulement ce que l instrument a JUGE.
 
-Mesure du 2026-10-04 18:08:00 | pannes declarees : 20 | detecteurs joues : 17.
+Mesure du 2026-10-04 18:19:09 | pannes declarees : 20 | detecteurs joues : 17.
 
 Pannes DECLAREES sans detecteur (couverture dite, jamais muette) :
 - fenetre-d-absorption-plus-courte-que-le-battement : aucun detecteur ecrit pour cette panne declaree
@@ -116,7 +116,6 @@ Colonnes OMISES (constantes, sans verdict) : Urgence (21 lignes).
 
 | Mission close | Fin a | Bilan | Enchainement |
 |---|---|---|---|
-| MO-567 | 2026-10-03 19:52:29 | pose | STOP |
 | MO-568 | 2026-10-03 20:06:36 | pose | STOP |
 | MO-569 | 2026-10-03 21:10:18 | pose | auto |
 | MO-570 | 2026-10-03 21:24:21 | pose | STOP |
@@ -128,30 +127,21 @@ Colonnes OMISES (constantes, sans verdict) : Urgence (21 lignes).
 | MO-576 | 2026-10-04 09:04:36 | pose | STOP |
 | MO-577 | 2026-10-04 09:47:56 | pose | STOP |
 | MO-579 | 2026-10-04 14:22:30 | pose | STOP |
+| MO-580 | 2026-10-04 18:12:13 | pose | STOP |
 
 ## Table 7 -- DEMANDES FILTREES (vrac)
 
 > Panne lue : une demande recue et jamais classee (le vrac ne se vide pas).
 
-| Demande | Recue le | Action posee | Urgence |
-|---|---|---|---|
-| EO-444 | 2026-09-26 09:04:01 | au vrac (non classee) | bloquante |
-| EO-482 | 2026-09-29 08:27:05 | au vrac (non classee) | normale |
-| EO-495 | 2026-09-30 09:26:46 | au vrac (non classee) | bloquante |
-| EO-496 | 2026-09-30 09:26:47 | au vrac (non classee) | bloquante |
-| EO-497 | 2026-09-30 09:26:47 | au vrac (non classee) | bloquante |
-| EO-498 | 2026-09-30 09:26:47 | au vrac (non classee) | bloquante |
-| EO-499 | 2026-09-30 09:26:48 | au vrac (non classee) | bloquante |
-| EO-500 | 2026-09-30 09:26:48 | au vrac (non classee) | bloquante |
-| EO-540 | 2026-10-01 08:08:06 | au vrac (non classee) | bloquante |
-| EO-541 | 2026-10-01 08:08:06 | au vrac (non classee) | bloquante |
-| EO-560 | 2026-10-02 20:56:23 | au vrac (non classee) | normale |
-| EO-561 | 2026-10-02 21:32:03 | au vrac (non classee) | normale |
-| EO-562 | 2026-10-02 22:04:39 | au vrac (non classee) | normale |
-| EO-563 | 2026-10-02 22:10:26 | au vrac (non classee) | normale |
-| EO-578 | 2026-10-04 11:30:25 | au vrac (non classee) | bloquante |
+| Demande | Recue le | Action posee |
+|---|---|---|
+| EO-482 | 2026-09-29 08:27:05 | au vrac (non classee) |
+| EO-560 | 2026-10-02 20:56:23 | au vrac (non classee) |
+| EO-561 | 2026-10-02 21:32:03 | au vrac (non classee) |
+| EO-562 | 2026-10-02 22:04:39 | au vrac (non classee) |
+| EO-563 | 2026-10-02 22:10:26 | au vrac (non classee) |
 
-Colonnes OMISES (constantes, sans verdict) : Porte visee (15 lignes).
+Colonnes OMISES (constantes, sans verdict) : Porte visee (5 lignes) ; Urgence (5 lignes).
 
 ## Table 8 -- GARDES (pause de session, defcon)
 

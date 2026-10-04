@@ -13489,6 +13489,17 @@
             "entonnoir"
           ],
           "empreinte": "dd1748d0202ba9a51989769e1de358d387490a22b20f3aab5a31a58942ee0855"
+        },
+        {
+          "date": "2026-10-04 18:13:49",
+          "action": "modifie",
+          "detail": "MO-580 : 10 items bloquants SOLDES avec preuve (EO-444, EO-578, EO-495..500, EO-540, EO-541). Vrac 15 -> 5, zero bloquant. Solde sans preuve refuse par la porte (MO-423).",
+          "tags": [
+            "entonnoir",
+            "solde",
+            "bloquant"
+          ],
+          "empreinte": "4d9f85b38c76dbe307426e0556bd5fe5274ae3292f6dfc9b429e3cc8c1e6fae8"
         }
       ],
       "tags": [
@@ -13538,7 +13549,9 @@
         "raisonnement",
         "doublon",
         "MO-569",
-        "EO-591"
+        "EO-591",
+        "solde",
+        "bloquant"
       ]
     },
     "_operateur/optimus-prime/pilote/entonnoir-files-legacy-archive.json": {

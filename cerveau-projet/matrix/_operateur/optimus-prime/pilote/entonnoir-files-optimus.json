@@ -1,44 +1,6 @@
 {
   "vrac": [
     {
-      "id": "EO-444",
-      "theme": "reparer espions/espion-tracebacks-optimus.py",
-      "objectif": "traceback : gravite !!! : -  **traceback** [critique] (stderr) : `Traceback (most recent call last):` | ROUTE REPARATION VEILLE (protocole 8, _operateur/optimus-prime/protocoles/proto-8-route-reparation-veille.md) : REPRODUIRE la detection AVANT de reparer (relancer la passe cible a la main et confirmer le meme ecart), diagnostiquer a la RACINE, reparer a la SOURCE (jamais une rustine), prouver le retour vert, et si le perimetre depasse la mission : SIGNALER -- jamais improviser.",
-      "urgence": "bloquante",
-      "source": "veille",
-      "deposee_le": "2026-09-26 09:04:01",
-      "auto_validation": "non",
-      "auto_validation_axes": [
-        {
-          "axe": "perimetre",
-          "vote": "contre",
-          "motif": "zone CRITIQUE nommee : protocole"
-        },
-        {
-          "axe": "reversible",
-          "vote": "pour",
-          "motif": "livrable de code : py"
-        },
-        {
-          "axe": "preuve",
-          "vote": "contre",
-          "motif": "preuve EXIGEE (prouver) mais AUCUN moyen de preuve nomme (N1)"
-        },
-        {
-          "axe": "deja-vu",
-          "vote": "contre",
-          "motif": "source : veille"
-        },
-        {
-          "axe": "serie",
-          "vote": "pour",
-          "motif": "type de la liste declaree au pilote : reparation"
-        }
-      ],
-      "type_propose": "reparation",
-      "type_source": "mot-cle"
-    },
-    {
       "id": "EO-482",
       "theme": "[question] comment avoir un parcours pour optimus pour nettoyer le 'bruit' dans les fichie",
       "objectif": "[question] comment avoir un parcours pour optimus pour nettoyer le 'bruit' dans les fichiers de documentation dans 'matrix/docs/'\npourquoi ? j'utilise un autre llm dans un autre logiciel a qui je pose des questions et j'enregistre la conversation en json (maintenant). \nle but : supprimer le bruit pour clarifier et alleger proprement le fichier qui nous servira par la suite dans le dev de la v3.\n\n[Source : passerelle user-demandes.md, demande des lignes 70 a 76, etat A-FAIRE, crochet [question] -- extraite le 2026-09-29 08:27:05]",
@@ -78,326 +40,6 @@
       "niveau": 5,
       "type_source": "defaut",
       "source_trace": "passerelle user-demandes.md L70"
-    },
-    {
-      "id": "EO-495",
-      "theme": "reparer U+4E0D",
-      "objectif": "ascii-non-convertible : caractere non convertible (decision du createur requise) | ROUTE REPARATION VEILLE (protocole 8, _operateur/optimus-prime/protocoles/proto-8-route-reparation-veille.md) : REPRODUIRE la detection AVANT de reparer (relancer la passe cible a la main et confirmer le meme ecart), diagnostiquer a la RACINE, reparer a la SOURCE (jamais une rustine), prouver le retour vert, et si le perimetre depasse la mission : SIGNALER -- jamais improviser.",
-      "urgence": "bloquante",
-      "source": "veille",
-      "deposee_le": "2026-09-30 09:26:46",
-      "auto_validation": "non",
-      "auto_validation_axes": [
-        {
-          "axe": "perimetre",
-          "vote": "contre",
-          "motif": "zone CRITIQUE nommee : protocole"
-        },
-        {
-          "axe": "reversible",
-          "vote": "contre",
-          "motif": "livrable non identifie comme du code"
-        },
-        {
-          "axe": "preuve",
-          "vote": "contre",
-          "motif": "preuve EXIGEE (prouver) mais AUCUN moyen de preuve nomme (N1)"
-        },
-        {
-          "axe": "deja-vu",
-          "vote": "contre",
-          "motif": "source : veille"
-        },
-        {
-          "axe": "serie",
-          "vote": "pour",
-          "motif": "type de la liste declaree au pilote : reparation"
-        }
-      ],
-      "type_propose": "reparation",
-      "gravite": "normal",
-      "niveau": 5,
-      "type_source": "mot-cle"
-    },
-    {
-      "id": "EO-496",
-      "theme": "reparer U+5BF9",
-      "objectif": "ascii-non-convertible : caractere non convertible (decision du createur requise) | ROUTE REPARATION VEILLE (protocole 8, _operateur/optimus-prime/protocoles/proto-8-route-reparation-veille.md) : REPRODUIRE la detection AVANT de reparer (relancer la passe cible a la main et confirmer le meme ecart), diagnostiquer a la RACINE, reparer a la SOURCE (jamais une rustine), prouver le retour vert, et si le perimetre depasse la mission : SIGNALER -- jamais improviser.",
-      "urgence": "bloquante",
-      "source": "veille",
-      "deposee_le": "2026-09-30 09:26:47",
-      "auto_validation": "non",
-      "auto_validation_axes": [
-        {
-          "axe": "perimetre",
-          "vote": "contre",
-          "motif": "zone CRITIQUE nommee : protocole"
-        },
-        {
-          "axe": "reversible",
-          "vote": "contre",
-          "motif": "livrable non identifie comme du code"
-        },
-        {
-          "axe": "preuve",
-          "vote": "contre",
-          "motif": "preuve EXIGEE (prouver) mais AUCUN moyen de preuve nomme (N1)"
-        },
-        {
-          "axe": "deja-vu",
-          "vote": "contre",
-          "motif": "source : veille"
-        },
-        {
-          "axe": "serie",
-          "vote": "pour",
-          "motif": "type de la liste declaree au pilote : reparation"
-        }
-      ],
-      "type_propose": "reparation",
-      "gravite": "normal",
-      "niveau": 5,
-      "type_source": "mot-cle"
-    },
-    {
-      "id": "EO-497",
-      "theme": "reparer U+5E38",
-      "objectif": "ascii-non-convertible : caractere non convertible (decision du createur requise) | ROUTE REPARATION VEILLE (protocole 8, _operateur/optimus-prime/protocoles/proto-8-route-reparation-veille.md) : REPRODUIRE la detection AVANT de reparer (relancer la passe cible a la main et confirmer le meme ecart), diagnostiquer a la RACINE, reparer a la SOURCE (jamais une rustine), prouver le retour vert, et si le perimetre depasse la mission : SIGNALER -- jamais improviser.",
-      "urgence": "bloquante",
-      "source": "veille",
-      "deposee_le": "2026-09-30 09:26:47",
-      "auto_validation": "non",
-      "auto_validation_axes": [
-        {
-          "axe": "perimetre",
-          "vote": "contre",
-          "motif": "zone CRITIQUE nommee : protocole"
-        },
-        {
-          "axe": "reversible",
-          "vote": "contre",
-          "motif": "livrable non identifie comme du code"
-        },
-        {
-          "axe": "preuve",
-          "vote": "contre",
-          "motif": "preuve EXIGEE (prouver) mais AUCUN moyen de preuve nomme (N1)"
-        },
-        {
-          "axe": "deja-vu",
-          "vote": "contre",
-          "motif": "source : veille"
-        },
-        {
-          "axe": "serie",
-          "vote": "pour",
-          "motif": "type de la liste declaree au pilote : reparation"
-        }
-      ],
-      "type_propose": "reparation",
-      "gravite": "normal",
-      "niveau": 5,
-      "type_source": "mot-cle"
-    },
-    {
-      "id": "EO-498",
-      "theme": "reparer U+7684",
-      "objectif": "ascii-non-convertible : caractere non convertible (decision du createur requise) | ROUTE REPARATION VEILLE (protocole 8, _operateur/optimus-prime/protocoles/proto-8-route-reparation-veille.md) : REPRODUIRE la detection AVANT de reparer (relancer la passe cible a la main et confirmer le meme ecart), diagnostiquer a la RACINE, reparer a la SOURCE (jamais une rustine), prouver le retour vert, et si le perimetre depasse la mission : SIGNALER -- jamais improviser.",
-      "urgence": "bloquante",
-      "source": "veille",
-      "deposee_le": "2026-09-30 09:26:47",
-      "auto_validation": "non",
-      "auto_validation_axes": [
-        {
-          "axe": "perimetre",
-          "vote": "contre",
-          "motif": "zone CRITIQUE nommee : protocole"
-        },
-        {
-          "axe": "reversible",
-          "vote": "contre",
-          "motif": "livrable non identifie comme du code"
-        },
-        {
-          "axe": "preuve",
-          "vote": "contre",
-          "motif": "preuve EXIGEE (prouver) mais AUCUN moyen de preuve nomme (N1)"
-        },
-        {
-          "axe": "deja-vu",
-          "vote": "contre",
-          "motif": "source : veille"
-        },
-        {
-          "axe": "serie",
-          "vote": "pour",
-          "motif": "type de la liste declaree au pilote : reparation"
-        }
-      ],
-      "type_propose": "reparation",
-      "gravite": "normal",
-      "niveau": 5,
-      "type_source": "mot-cle"
-    },
-    {
-      "id": "EO-499",
-      "theme": "reparer U+79F0",
-      "objectif": "ascii-non-convertible : caractere non convertible (decision du createur requise) | ROUTE REPARATION VEILLE (protocole 8, _operateur/optimus-prime/protocoles/proto-8-route-reparation-veille.md) : REPRODUIRE la detection AVANT de reparer (relancer la passe cible a la main et confirmer le meme ecart), diagnostiquer a la RACINE, reparer a la SOURCE (jamais une rustine), prouver le retour vert, et si le perimetre depasse la mission : SIGNALER -- jamais improviser.",
-      "urgence": "bloquante",
-      "source": "veille",
-      "deposee_le": "2026-09-30 09:26:48",
-      "auto_validation": "non",
-      "auto_validation_axes": [
-        {
-          "axe": "perimetre",
-          "vote": "contre",
-          "motif": "zone CRITIQUE nommee : protocole"
-        },
-        {
-          "axe": "reversible",
-          "vote": "contre",
-          "motif": "livrable non identifie comme du code"
-        },
-        {
-          "axe": "preuve",
-          "vote": "contre",
-          "motif": "preuve EXIGEE (prouver) mais AUCUN moyen de preuve nomme (N1)"
-        },
-        {
-          "axe": "deja-vu",
-          "vote": "contre",
-          "motif": "source : veille"
-        },
-        {
-          "axe": "serie",
-          "vote": "pour",
-          "motif": "type de la liste declaree au pilote : reparation"
-        }
-      ],
-      "type_propose": "reparation",
-      "gravite": "normal",
-      "niveau": 5,
-      "type_source": "mot-cle"
-    },
-    {
-      "id": "EO-500",
-      "theme": "reparer U+89C1",
-      "objectif": "ascii-non-convertible : caractere non convertible (decision du createur requise) | ROUTE REPARATION VEILLE (protocole 8, _operateur/optimus-prime/protocoles/proto-8-route-reparation-veille.md) : REPRODUIRE la detection AVANT de reparer (relancer la passe cible a la main et confirmer le meme ecart), diagnostiquer a la RACINE, reparer a la SOURCE (jamais une rustine), prouver le retour vert, et si le perimetre depasse la mission : SIGNALER -- jamais improviser.",
-      "urgence": "bloquante",
-      "source": "veille",
-      "deposee_le": "2026-09-30 09:26:48",
-      "auto_validation": "non",
-      "auto_validation_axes": [
-        {
-          "axe": "perimetre",
-          "vote": "contre",
-          "motif": "zone CRITIQUE nommee : protocole"
-        },
-        {
-          "axe": "reversible",
-          "vote": "contre",
-          "motif": "livrable non identifie comme du code"
-        },
-        {
-          "axe": "preuve",
-          "vote": "contre",
-          "motif": "preuve EXIGEE (prouver) mais AUCUN moyen de preuve nomme (N1)"
-        },
-        {
-          "axe": "deja-vu",
-          "vote": "contre",
-          "motif": "source : veille"
-        },
-        {
-          "axe": "serie",
-          "vote": "pour",
-          "motif": "type de la liste declaree au pilote : reparation"
-        }
-      ],
-      "type_propose": "reparation",
-      "gravite": "normal",
-      "niveau": 5,
-      "type_source": "mot-cle"
-    },
-    {
-      "id": "EO-540",
-      "theme": "reparer U+6162",
-      "objectif": "ascii-non-convertible : caractere non convertible (decision du createur requise) | ROUTE REPARATION VEILLE (protocole 8, _operateur/optimus-prime/protocoles/proto-8-route-reparation-veille.md) : REPRODUIRE la detection AVANT de reparer (relancer la passe cible a la main et confirmer le meme ecart), diagnostiquer a la RACINE, reparer a la SOURCE (jamais une rustine), prouver le retour vert, et si le perimetre depasse la mission : SIGNALER -- jamais improviser.",
-      "urgence": "bloquante",
-      "source": "veille",
-      "deposee_le": "2026-10-01 08:08:06",
-      "auto_validation": "non",
-      "auto_validation_axes": [
-        {
-          "axe": "perimetre",
-          "vote": "contre",
-          "motif": "zone CRITIQUE nommee : protocole"
-        },
-        {
-          "axe": "reversible",
-          "vote": "contre",
-          "motif": "livrable non identifie comme du code"
-        },
-        {
-          "axe": "preuve",
-          "vote": "contre",
-          "motif": "preuve EXIGEE (prouver) mais AUCUN moyen de preuve nomme (N1)"
-        },
-        {
-          "axe": "deja-vu",
-          "vote": "contre",
-          "motif": "source : veille"
-        },
-        {
-          "axe": "serie",
-          "vote": "pour",
-          "motif": "type de la liste declaree au pilote : reparation"
-        }
-      ],
-      "type_propose": "reparation",
-      "gravite": "normal",
-      "niveau": 5,
-      "type_source": "mot-cle"
-    },
-    {
-      "id": "EO-541",
-      "theme": "reparer U+FF0C",
-      "objectif": "ascii-non-convertible : caractere non convertible (decision du createur requise) | ROUTE REPARATION VEILLE (protocole 8, _operateur/optimus-prime/protocoles/proto-8-route-reparation-veille.md) : REPRODUIRE la detection AVANT de reparer (relancer la passe cible a la main et confirmer le meme ecart), diagnostiquer a la RACINE, reparer a la SOURCE (jamais une rustine), prouver le retour vert, et si le perimetre depasse la mission : SIGNALER -- jamais improviser.",
-      "urgence": "bloquante",
-      "source": "veille",
-      "deposee_le": "2026-10-01 08:08:06",
-      "auto_validation": "non",
-      "auto_validation_axes": [
-        {
-          "axe": "perimetre",
-          "vote": "contre",
-          "motif": "zone CRITIQUE nommee : protocole"
-        },
-        {
-          "axe": "reversible",
-          "vote": "contre",
-          "motif": "livrable non identifie comme du code"
-        },
-        {
-          "axe": "preuve",
-          "vote": "contre",
-          "motif": "preuve EXIGEE (prouver) mais AUCUN moyen de preuve nomme (N1)"
-        },
-        {
-          "axe": "deja-vu",
-          "vote": "contre",
-          "motif": "source : veille"
-        },
-        {
-          "axe": "serie",
-          "vote": "pour",
-          "motif": "type de la liste declaree au pilote : reparation"
-        }
-      ],
-      "type_propose": "reparation",
-      "gravite": "normal",
-      "niveau": 5,
-      "type_source": "mot-cle"
     },
     {
       "id": "EO-560",
@@ -578,47 +220,6 @@
           ]
         }
       ]
-    },
-    {
-      "id": "EO-578",
-      "theme": "reparer matrice/data/outils/bdd-conservation/archiver/entry.py",
-      "objectif": "python-compile : ne compile pas (confirme apres re-test) | ROUTE REPARATION VEILLE (protocole 8, _operateur/optimus-prime/protocoles/proto-8-route-reparation-veille.md) : REPRODUIRE la detection AVANT de reparer (relancer la passe cible a la main et confirmer le meme ecart), diagnostiquer a la RACINE, reparer a la SOURCE (jamais une rustine), prouver le retour vert, et si le perimetre depasse la mission : SIGNALER -- jamais improviser.",
-      "urgence": "bloquante",
-      "source": "veille",
-      "deposee_le": "2026-10-04 11:30:25",
-      "auto_validation": "non",
-      "auto_validation_axes": [
-        {
-          "axe": "perimetre",
-          "vote": "contre",
-          "motif": "zone CRITIQUE nommee : protocole"
-        },
-        {
-          "axe": "reversible",
-          "vote": "pour",
-          "motif": "livrable de code : py"
-        },
-        {
-          "axe": "preuve",
-          "vote": "pour",
-          "motif": "preuve tenue : prouver + moyen nomme : test"
-        },
-        {
-          "axe": "deja-vu",
-          "vote": "contre",
-          "motif": "source : veille"
-        },
-        {
-          "axe": "serie",
-          "vote": "pour",
-          "motif": "type de la liste declaree au pilote : reparation"
-        }
-      ],
-      "auto_validation_texte": "b800eca5afb10c9d4a9356e6cb0383cc0faca851f23dad4f8abefeeda34d7dbb",
-      "type_propose": "reparation",
-      "gravite": "normal",
-      "niveau": 5,
-      "type_source": "mot-cle"
     }
   ],
   "files": {
@@ -1801,7 +1402,7 @@
       "role_source": "table",
       "classee_le": "2026-10-02 21:19:35",
       "position_brin": 1,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-507",
@@ -1848,7 +1449,7 @@
       "role_source": "table",
       "classee_le": "2026-09-30 09:43:14",
       "position_brin": 2,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-511",
@@ -1913,7 +1514,7 @@
         }
       ],
       "position_brin": 3,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-529",
@@ -1978,7 +1579,7 @@
         }
       ],
       "position_brin": 4,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-564",
@@ -2026,7 +1627,7 @@
       "role_source": "table",
       "classee_le": "2026-10-03 08:00:08",
       "position_brin": 5,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-510",
@@ -2091,7 +1692,7 @@
         }
       ],
       "position_brin": 6,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-513",
@@ -2156,7 +1757,7 @@
         }
       ],
       "position_brin": 7,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-566",
@@ -2205,7 +1806,7 @@
       "role_source": "table",
       "classee_le": "2026-10-03 09:43:48",
       "position_brin": 8,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-536",
@@ -2270,7 +1871,7 @@
         }
       ],
       "position_brin": 9,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-520",
@@ -2335,7 +1936,7 @@
         }
       ],
       "position_brin": 10,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-570",
@@ -2384,7 +1985,7 @@
       "role_source": "table",
       "classee_le": "2026-10-03 10:15:15",
       "position_brin": 11,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-547",
@@ -2432,7 +2033,7 @@
       "role_source": "table",
       "classee_le": "2026-10-02 08:20:29",
       "position_brin": 12,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-526",
@@ -2479,7 +2080,7 @@
       "role_source": "table",
       "classee_le": "2026-09-30 09:43:19",
       "position_brin": 13,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-572",
@@ -2528,7 +2129,7 @@
       "role_source": "table",
       "classee_le": "2026-10-03 10:15:43",
       "position_brin": 14,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-549",
@@ -2576,7 +2177,7 @@
       "role_source": "table",
       "classee_le": "2026-10-02 08:34:36",
       "position_brin": 15,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-527",
@@ -2623,7 +2224,7 @@
       "role_source": "table",
       "classee_le": "2026-09-30 09:43:19",
       "position_brin": 16,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-574",
@@ -2672,7 +2273,7 @@
       "role_source": "table",
       "classee_le": "2026-10-03 10:24:16",
       "position_brin": 17,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-558",
@@ -2721,7 +2322,7 @@
       "role_source": "table",
       "classee_le": "2026-10-02 19:56:50",
       "position_brin": 18,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-528",
@@ -2781,7 +2382,7 @@
         }
       ],
       "position_brin": 19,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-530",
@@ -2846,7 +2447,7 @@
         }
       ],
       "position_brin": 20,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     },
     {
       "id": "EO-535",
@@ -2911,7 +2512,7 @@
         }
       ],
       "position_brin": 21,
-      "tresse_le": "2026-10-04 11:30:25"
+      "tresse_le": "2026-10-04 18:13:32"
     }
   ],
   "auto_validees": [
@@ -4509,6 +4110,66 @@
       "id": "EO-565",
       "preuve": "matrice/routines/vigie-portes/tour/fonctions.py:usage_par_porte | 34 alertes mal utilisee = 9824 sondes (sc-004 main.py:106 OPTION_BIDON, 118 passes x 2 positions) + 119 sondes lanceur-non-regression.py:2969 contre 117 refus residuels legitimes ; corrige : 0 alertee, contre-temoin inclus (une vraie mauvaise utilisation declenche toujours) ; 0 production modifiee",
       "solde_le": "2026-10-03 09:43:07"
+    },
+    {
+      "id": "EO-578",
+      "preuve": "commun.lancer_py_compile() CODE=0 sur les 674 .py du perimetre veille-flux (MO-580, 2026-10-04) ; py_compile isole sur matrice/data/outils/bdd-conservation/archiver/entry.py code=0. Faux positif de course : item depose 11:30:25, fichier ecrit 11:30:28, PAUSE_REPRISE_SECONDES=2.",
+      "solde_le": "2026-10-04 18:13:10",
+      "motif": "Deja satisfait : le fichier compile. Alerteee pendant la fenetre d ecriture."
+    },
+    {
+      "id": "EO-444",
+      "preuve": "rapport-tracebacks du 2026-10-04 17:56:49 : run_signaux=0, aucune occurrence de 'critique' ; 16 signaux restants tous de type sys-exit / except-all / print-to-stderr, severite moyenne ou info (MO-580).",
+      "solde_le": "2026-10-04 18:13:16",
+      "motif": "Deja satisfait : plus aucun traceback critique. Les 16 signaux restants sont des conventions de code, pas des defauts."
+    },
+    {
+      "id": "EO-495",
+      "preuve": "octet U+4E0D absent des 674 .py du perimetre veille-flux : zero fichier avec un octet >= 128 (commun.lister_fichiers_python(), MO-580, 2026-10-04)",
+      "solde_le": "2026-10-04 18:13:30",
+      "motif": "Deja satisfait : le caractere non convertible a disparu du perimetre de la veille."
+    },
+    {
+      "id": "EO-496",
+      "preuve": "octet U+5BF9 absent des 674 .py du perimetre veille-flux : zero fichier avec un octet >= 128 (commun.lister_fichiers_python(), MO-580, 2026-10-04)",
+      "solde_le": "2026-10-04 18:13:30",
+      "motif": "Deja satisfait : le caractere non convertible a disparu du perimetre de la veille."
+    },
+    {
+      "id": "EO-497",
+      "preuve": "octet U+5E38 absent des 674 .py du perimetre veille-flux : zero fichier avec un octet >= 128 (commun.lister_fichiers_python(), MO-580, 2026-10-04)",
+      "solde_le": "2026-10-04 18:13:31",
+      "motif": "Deja satisfait : le caractere non convertible a disparu du perimetre de la veille."
+    },
+    {
+      "id": "EO-498",
+      "preuve": "octet U+7684 absent des 674 .py du perimetre veille-flux : zero fichier avec un octet >= 128 (commun.lister_fichiers_python(), MO-580, 2026-10-04)",
+      "solde_le": "2026-10-04 18:13:31",
+      "motif": "Deja satisfait : le caractere non convertible a disparu du perimetre de la veille."
+    },
+    {
+      "id": "EO-499",
+      "preuve": "octet U+79F0 absent des 674 .py du perimetre veille-flux : zero fichier avec un octet >= 128 (commun.lister_fichiers_python(), MO-580, 2026-10-04)",
+      "solde_le": "2026-10-04 18:13:31",
+      "motif": "Deja satisfait : le caractere non convertible a disparu du perimetre de la veille."
+    },
+    {
+      "id": "EO-500",
+      "preuve": "octet U+89C1 absent des 674 .py du perimetre veille-flux : zero fichier avec un octet >= 128 (commun.lister_fichiers_python(), MO-580, 2026-10-04)",
+      "solde_le": "2026-10-04 18:13:31",
+      "motif": "Deja satisfait : le caractere non convertible a disparu du perimetre de la veille."
+    },
+    {
+      "id": "EO-540",
+      "preuve": "octet U+6162 absent des 674 .py du perimetre veille-flux : zero fichier avec un octet >= 128 (commun.lister_fichiers_python(), MO-580, 2026-10-04)",
+      "solde_le": "2026-10-04 18:13:32",
+      "motif": "Deja satisfait : le caractere non convertible a disparu du perimetre de la veille."
+    },
+    {
+      "id": "EO-541",
+      "preuve": "octet U+FF0C absent des 674 .py du perimetre veille-flux : zero fichier avec un octet >= 128 (commun.lister_fichiers_python(), MO-580, 2026-10-04)",
+      "solde_le": "2026-10-04 18:13:32",
+      "motif": "Deja satisfait : le caractere non convertible a disparu du perimetre de la veille."
     }
   ]
 }
