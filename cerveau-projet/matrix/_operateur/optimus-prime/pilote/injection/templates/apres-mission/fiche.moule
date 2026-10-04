@@ -1,0 +1,11 @@
+=== FICHE TECHNIQUE DE TRAVAIL -- INJECTION __CATEGORIE__ ===
+Horodatage : __DATE__
+Sources de la phase : __NB_SOURCES__
+
+__SOURCES__
+
+> MOULE a jetons, consomme par la porte injecter.py (verbe `fiche`). La fiche
+> BORNE ce qui est servi : elle DIT les sources de la phase et leur obligation,
+> elle ne REMPLACE jamais leur contenu (qui se demande a sa porte).
+> Doctrine : une source OBLIGATOIRE absente est un REFUS nomme ; une source
+> optionnelle absente est une ALERTE nommee -- jamais de degradation silencieuse.

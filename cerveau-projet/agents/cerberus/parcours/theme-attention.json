@@ -1,0 +1,36 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "ATTENTION",
+    "description": "Placer la demande en file asap (executee juste apres la mission en cours)"
+  },
+  "theme": {
+    "nom": "ATTENTION",
+    "but": "Placer la demande utilisateur en file asap pour execution juste apres la mission en cours",
+    "redirects": [
+      {
+        "besoin": "Placer la demande en file asap (SUIVANTE)",
+        "action": "procedure",
+        "etapes": [
+          "La demande est placee dans la file asap (statut SUIVANTE) - elle sera executee DIRECTEMENT APRES la mission en cours",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter \"<la demande>\" --file asap"
+        ],
+        "regle": "REGLE [attention] : la demande sera executee juste apres la mission en cours. Notifier l utilisateur."
+      },
+      {
+        "besoin": "Notifier l utilisateur",
+        "action": "procedure",
+        "etapes": [
+          "Prevenir l utilisateur que sa demande est en file asap et sera traitee juste apres"
+        ],
+        "regle": "Transparence : informer l utilisateur de l etat de sa demande."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-declencheur"
+  }
+}

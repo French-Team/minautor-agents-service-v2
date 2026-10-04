@@ -1,0 +1,47 @@
+%% FLUX DE PREPARATION ET DE TRANSFORMATION EN MISSION (MO-543 / EO-551)
+%% compose a la main puis rendu par rendre-graphe svg --mermaid
+%% source : _operateur/optimus-prime/pilote/entonnoir/indices.md (echelons 0 a 4)
+%%         + etat mesure de entonnoir-files-optimus.json (2026-10-02)
+%% LES IDS SONT UNIQUES PAR CONSTRUCTION : l outil ne sait pas re-declarer un
+%% noeud deja pose (bug mesure et corrige en MO-543) ; un diagramme du flux
+%% repete ses noeuds par nature, il faut donc les NOMMER une fois.
+flowchart TD
+    USER(["Demande de l'USER<br/>canal user-demandes/"])
+
+    USER --> VRAC
+    VRAC["ECHELON 0 - VRAC<br/>item EO-NNN, non classe<br/>10 en attente<br/>type PROPOSE par mots-cles"]
+    VRAC --> CLASSER
+    CLASSER{"ECHELON 1 et 2 - CLASSER<br/>type + categorie + ROLE<br/>liste FERMEE (listes.py)"}
+    CLASSER -->|refuse : hors liste| VRAC
+    CLASSER --> PREP
+    PREP["ECHELON 3 - PREPARER<br/>--outils : ce que la mission appellera<br/>+ plafond de l'injection"]
+    PREP --> URG
+    URG["URGENCER<br/>bloquante / haute / normale / basse<br/>+ RETIQUETER (repare les etiquettes)"]
+    URG --> FILES
+    FILES["FILES-TYPE (echelons 1 a 3)<br/>10 files par TYPE<br/>question 6 | cadrage 8 | revision 2<br/>reparation 1 | preparer 1"]
+    FILES --> TRESSE
+    TRESSE["ECHELON 4 - TRESSE<br/>tisser (DETERMINISTE)<br/>paliers d'urgence + round-robin"]
+    TRESSE --> BRIN
+    BRIN["BRIN - la file de travail, dans son ordre<br/>18 items | rang 1 = EO-537"]
+    BRIN -->|"file consommer : la TETE part"| MISSION
+    MISSION["ECHELON 5 - PILOTE<br/>MISSION MO-NNN chargee puis INJECTEE<br/>6 en attente | 1 seule a la fois : SERIE STRICTE"]
+    MISSION --> AUTO
+    AUTO{"AUTO-VALIDATION - 5 axes<br/>perimetre, reversible, preuve,<br/>deja-vu, serie<br/>120 items auto-valides sur 138"}
+    AUTO -->|oui : la chaine enchaine| SUIVI
+    AUTO -->|non : STOP| FIN
+    SUIVI(["MO- terminee<br/>file consommer : la tete suivante part"])
+    SUIVI --> PRODUIT
+    PRODUIT["LE TRAVAIL PRODUIT"]
+    PRODUIT --> RS
+    PRODUIT --> LECON
+    PRODUIT --> CV
+    RS["RS- segment de raisonnement<br/>reutilisable et tague<br/>57 actifs"]
+    LECON["L- lecon<br/>226 entrees"]
+    CV["CV- convention<br/>14 entrees"]
+    RS --> REUTILISE
+    LECON --> REUTILISE
+    CV --> REUTILISE
+    REUTILISE["La lecon revient dans l'injection<br/>du round suivant : c'est la boucle"]
+    REUTILISE -.->|au prochain round| MISSION
+    FIN(["MO- terminee<br/>bilan pose, zone purgee"])
+    FIN -.->|la chaine s'arrete| USER

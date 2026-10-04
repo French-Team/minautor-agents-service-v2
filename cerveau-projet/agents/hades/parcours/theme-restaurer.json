@@ -1,0 +1,20 @@
+{
+  "identite": {"type": "theme", "appartient_a": "hades", "nom": "RESTAURER", "description": "Restaurer depuis le git : regle d anciennete, checkout conditionnel"},
+  "theme": {
+    "nom": "RESTAURER",
+    "but": "Restaurer des fichiers depuis le git en appliquant la regle d anciennete : checkout autorise pour les fichiers tres recents, interdit pour les fichiers anciens",
+    "redirects": [
+      {"besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."},
+      {"besoin": "Consulter les lecons (domaine git)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent hades --domaine git"], "regle": "PATTERN 6 : le contexte dynamique."},
+      {"besoin": "CONTEXTE : activite recente des agents", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6 : l historique est DYNAMIQUE."},
+      {"besoin": "Verifier l etat du depot avant operation", "action": "procedure", "etapes": ["git status", "git log --oneline -5"], "regle": "VERIFIER AVANT : toujours connaitre l etat du depot."},
+      {"besoin": "Verifier l age des fichiers (REGLE D ANCIENNETE) (case c3)", "action": "procedure", "etapes": ["Verifier la date des fichiers concernes (git log, stat, date du commit)"], "regle": "REGLE D ANCIENNETE : le git est une SAUVEGARDE DU PASSE. Fichiers tres tres recents (minutes) = checkout autorise. Au-dela = INTERDIT."},
+      {"besoin": "Fichiers tres recents ? (controle c3)", "action": "procedure", "etapes": ["SI OUI (minutes) -> checkout autorise (c4)", "SI NON (dizaines de minutes+) -> checkout INTERDIT (c4b)"], "regle": "CONTROLE : la classe decide si le checkout est permis."},
+      {"besoin": "Checkout autorise sous regle d anciennete (case c4)", "action": "procedure", "etapes": ["git checkout <fiche> ou git restore <fichier>", "Verifier l etat apres operation", "Journaliser l operation"], "regle": "CHECKOUT LIMITE : aux fichiers recents uniquement. Verifier apres."},
+      {"besoin": "Checkout INTERDIT - reparation dans le present (case c4b)", "action": "procedure", "etapes": ["Signaler a Cerberus : les fichiers sont trop anciens pour un checkout", "Cerberus active l agent habilite pour REPARER DANS LE PRESENT (flux INTER-ROUND)"], "regle": "INTERDIT : le git n est pas une source de verite recente. Reparation dans le present."},
+      {"besoin": "Journaliser l operation", "action": "procedure", "etapes": ["Documenter : operation, date, resultats, fichiers concernes, decision (autorise/interdit)"], "regle": "TRACABILITE : chaque operation git est journalisee."},
+      {"besoin": "Ajouter les lecons dans corrections.md", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/hades/corrections.md <lecon>"], "regle": "PROTOCOLE FIN-MISSION."}
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-restaurer"}
+}

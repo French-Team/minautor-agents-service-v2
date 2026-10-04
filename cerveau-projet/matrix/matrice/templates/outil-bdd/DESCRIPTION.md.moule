@@ -1,0 +1,75 @@
+---
+identite:
+  type: outil
+  appartient_a: matrice-data-outils
+  commun: true
+---
+
+# OUTIL -- __NOM_OUTIL__
+
+> Outil Python dedie a la BDD `__NOM_BDD__` (genere depuis le moule
+> templates/outil-bdd par dupliquer-template, modele-mere : bdd-lecons).
+
+## Options
+
+```
+python3 cerveau-projet/matrix/lancer.py __NOM_OUTIL__ ajouter --__CHAMP__ "..." --tags "tag1,tag2" [--source "..."]
+python3 cerveau-projet/matrix/lancer.py __NOM_OUTIL__ lire [--tag <tag>]
+python3 cerveau-projet/matrix/lancer.py __NOM_OUTIL__ corriger --id __PREFIXE_ID__-XXX --tags "a,b" [--motif "..."]
+python3 cerveau-projet/matrix/lancer.py __NOM_OUTIL__ retirer --id __PREFIXE_ID__-XXX [--index N] [--motif "..."]
+python3 cerveau-projet/matrix/lancer.py __NOM_OUTIL__ verifier
+```
+
+- `--__CHAMP__` : __HUMAIN__ (le contenu lui-meme, obligatoire).
+- `--tags` : liste separee par des virgules -- obligatoire : pas d'element orphelin.
+- `--source` : mission, outil ou fichier d'origine (facultatif).
+- `lire --tag X` : filtre les entrees portant le tag X.
+- `corriger --id __PREFIXE_ID__-XXX --tags "a,b"` : corrige les TAGS d UNE entree EN PLACE
+  (id, date, contenu et source CONSERVES) ; les anciens tags sont TRACES (date + motif) et
+  l empreinte est RECALCULEE. Deux REFUS nommes : un id inconnu et des tags identiques.
+- `retirer --id __PREFIXE_ID__-XXX` : RETIRE une entree dont l EXISTENCE est fautive. Elle
+  survit ENTIEREMENT dans le champ `retraits` (date + motif + entree), donc le retrait est
+  REVERSIBLE. Refus nommes : un id inconnu (la BDD dit ce qu elle porte), une id AMBIGUE
+  (`--index` exige), un `--index` hors plage ou illisible. Le compteur n est JAMAIS remis en
+  arriere : un id retire ne revient pas, donc une trace qui le cite ne designera pas un autre.
+
+## DEUX garde-fous que l outil se porte a lui-meme (EO-537)
+
+- **`ajouter` REFUSE LE DOUBLON** : meme contenu ET meme source que l entree active, c est
+  un refus qui NOMME l id deja present. Le refus intervient AVANT le compteur, donc il ne
+  consomme aucun id et ne laisse pas de trou dans la numerotation. Le meme TEXTE sous une
+  source DIFFERENTE reste accepte : deux missions peuvent produire le meme raisonnement,
+  et c est la source qui les distingue, jamais le texte.
+- **`retirer` : UN RETRAIT SANS TEMOIN SERAIT UN EFFACEMENT** : l entree retiree est
+  recopiee entiere, donc rien n est perdu en silence (lecon L-055).
+
+## Format de la BDD
+
+`{"identite": {...}, "__CLE_LISTE__": [{"id", "date", "__CHAMP__", "tags", "source"}, ...]}`
+
+Une entree CORRIGEE porte en plus `corrections`. Une entree RETIREE ne disparait pas : elle
+vit dans `retraits`, a la racine de la BDD.
+
+## Architecture (convention-architecture-outils)
+
+| Piece | Role |
+|---|---|
+| DESCRIPTION.md | la facade (ce fichier) |
+| main.py | point d'entree global : DIRIGE |
+| constants.py | chemins, valeurs |
+| commun.py | fonctions communes : charger, enregistrer (atomique, LF), empreinte, options |
+| ajouter/ | ajouter une __HUMAIN__ taguee (refus du doublon) |
+| corriger/ | corriger les tags d une __HUMAIN__ EN PLACE (anciens tags traces) |
+| retirer/ | retirer une __HUMAIN__ fautive (temoin `retraits`, reversible) |
+| lire/ | lister (tout ou par tag) |
+| verifier/ | integrite SHA-256 (etalon-or) |
+
+## Protections
+
+- Ecriture atomique (tmp + remplacement), fins de ligne LF forcees (determinisme).
+- Empreinte SHA-256 recalculee et enregistree A CHAQUE ecriture.
+- Correction EN PLACE seulement : id, date, contenu et source CONSERVES, anciens tags TRACES.
+- Retrait TRACE et REVERSIBLE : l entree sortie de la liste survit entiere dans `retraits`.
+- Un id inconnu, des tags identiques, un doublon, une id ambigue et un `--index` invalide
+  sont REFUSES sans rien ecrire.
+- Contenu et tags obligatoires : pas d'entree orpheline sans tag.

@@ -1,0 +1,24 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "VERS-USER",
+    "description": "Je reponds a l utilisateur avec le resultat de la coordination (Oracle a lance l agent ou le retour est traite)"
+  },
+  "theme": {
+    "nom": "VERS-USER",
+    "but": "Repondre a l utilisateur avec le resultat de la coordination",
+    "redirects": [
+      {
+        "besoin": "Composer la reponse (bilan clair de la coordination)",
+        "action": "procedure",
+        "etapes": [
+          "Synthetiser : la mission a ete transmise a Oracle / l agent active / le retour traite",
+          "Donner le resultat et la prochaine etape"
+        ],
+        "regle": "Repondre clairement a l utilisateur. Je ne m historise pas : Oracle historise la coordination."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-coordination" }
+}

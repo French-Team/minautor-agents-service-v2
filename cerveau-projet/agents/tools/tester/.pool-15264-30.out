@@ -1,0 +1,23 @@
+=== Garde-fou : relecture Argus obligatoire avant gravure (porte marbre v0.1.3) ===
+  [OK] 1. porte v0.1.3 : est_zone_regles + audit_regles_propre + no-audit
+  [chrono] 1. fonctions relecture                   0.00s
+  [OK] 2. --version affiche v0.1.3
+  [chrono] 2. version                               0.13s
+  [OK] 3. zone regle + autorisation : audit Argus lance (PROPRE = OK)
+  [chrono] 3. audit positif                         0.25s
+  [OK] 4. PREUVE NEGATIVE : doublon IMMUABLE injecte -> porte BLOQUE (rc=1, relecture Argus)
+  [OK] 4b. fichier de regles restaure apres la preuve
+  [chrono] 4. preuve negative                       0.26s
+  [OK] 5. protocole-securite-marbre v0.1.1 : relecture documentee
+  [chrono] 5. protocole                             0.00s
+  [OK] 5b. AJOUT zone REGLE : audit Argus obligatoire lance
+  [OK] 5b2. AJOUT zone NON-regle : pas d audit (defaut)
+  [KO] 5c. nettoyage : zones test retirees du marbre.json (0 restante) -- restantes=['zone-t084-regle', 'zone-t084-nonregle']
+  [chrono] 5b. ajout zones + nettoyage              0.36s
+  [OK] 6. ASCII strict : 0 non-ASCII (porte + doc + protocole + regles + test)
+  [OK] 6b. LF pur : 0 CRLF
+  [chrono] 6. normes                                0.00s
+
+=== CHRONO test (total 1.0s) ===
+
+=== RESULTAT : 10 OK / 1 KO (sur 11 points) ===

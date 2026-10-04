@@ -1,0 +1,111 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "AUTO-TESTING",
+    "description": "Tests automatiques post-modification : py_compile, tests unitaires, verification d'integrite, non-regression. Chaque modification est testee avant validation."
+  },
+  "theme": {
+    "nom": "AUTO-TESTING",
+    "but": "Tester automatiquement apres chaque modification en 5 temps : preparer, executer, evaluer, repondre, consigner",
+    "redirects": [
+      {
+        "besoin": "Preparer les tests",
+        "action": "procedure",
+        "etapes": [
+          "Identifier les fichiers modifies (BDD modifications ou diff)",
+          "Classifier le type : .py (compile+run) | .json (parse+schema) | .md (ASCII+lisible)",
+          "Verifier que les outils de test sont disponibles (py_compile, lanceur-non-regression)"
+        ],
+        "regle": "Ne jamais tester a l'aveugle : savoir QUOI tester AVANT."
+      },
+      {
+        "besoin": "Executer les tests -- Python",
+        "action": "procedure",
+        "etapes": [
+          "py_compile sur CHAQUE fichier .py modifie",
+          "Si outil dedie : executer les tests unitaires (nominal + negatif)",
+          "Si combo : executer le combo en mode dry-run si disponible",
+          "Capturer les codes de sortie et les erreurs"
+        ],
+        "regle": "py_compile = minimum absolu. Tests unitaires si l'outil les possede."
+      },
+      {
+        "besoin": "Executer les tests -- JSON",
+        "action": "procedure",
+        "etapes": [
+          "Parser le JSON (json.load ou json.loads)",
+          "Verifier la structure contre le schema si disponible",
+          "Verifier la coherence avec les dependances (references croisees)"
+        ],
+        "regle": "JSON invalide = erreur bloquante. Toujours parser avant de valider."
+      },
+      {
+        "besoin": "Executer les tests -- Markdown",
+        "action": "procedure",
+        "etapes": [
+          "Verifier ASCII strict (garde-ascii)",
+          "Verifier lisibilite (pas de caracteres echappes casses)",
+          "Verifier les liens internes si applicable"
+        ],
+        "regle": "MD casse = invisible pour l'humain mais cassant pour le LLM."
+      },
+      {
+        "besoin": "Evaluer les resultats",
+        "action": "procedure",
+        "etapes": [
+          "TOUS les tests passent = VALIDER",
+          "Un test echoue = REVERT obligatoire + alerter",
+          "Echec partiel = diagnostiquer avant de decider"
+        ],
+        "regle": "Zero test echoue pour valider. Echec = revert, pas de rustine."
+      },
+      {
+        "besoin": "Repondre -- test OK",
+        "action": "procedure",
+        "etapes": [
+          "Noter succcs en BDD (usages-outils-combos si applicable)",
+          "Mettre a jour le bilan de mission",
+          "Continuer le theme en cours"
+        ],
+        "regle": "Test OK = continuer sans encombre. Pas de celebration inutile."
+      },
+      {
+        "besoin": "Repondre -- test ECHOUE",
+        "action": "procedure",
+        "etapes": [
+          "Revert IMMEDIAT via .bak (revert-fichier.py)",
+          "Noter l'echec en BDD (modifications-par-fichier)",
+          "Si cause non obvious : alerter intercom + mission au vrac",
+          "Si cause obvious : corriger et re-tester (boucle max 3)"
+        ],
+        "regle": "Echec = revert d'abord. Maximum 3 tentatives de correction."
+      },
+      {
+        "besoin": "Non-regression -- verification croisee",
+        "action": "procedure",
+        "etapes": [
+          "Apres correction d'un bug : verifier que la fonctionnalite marche ET que les autres fonctionnalites ne sont pas cassees",
+          "Lancer lanceur-non-regression si disponible",
+          "Comparer les resultats avant/apres modification"
+        ],
+        "regle": "Non-regression = chaque fix ne doit pas casser autre chose. Verifier le VOISINAGE."
+      },
+      {
+        "besoin": "Consigner la lecon de test",
+        "action": "procedure",
+        "etapes": [
+          "Si un test a rate pour une raison inattendue -> BDD lecons",
+          "Taguer : auto-testing, type-echec, cause",
+          "Ameliorer le theme AUTO-TESTING si un cas manque"
+        ],
+        "regle": "Chaque echec de test = lecon. Le systeme de test DOIT grandir."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

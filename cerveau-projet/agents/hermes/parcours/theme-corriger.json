@@ -1,0 +1,127 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "hermes",
+    "nom": "CORRIGER",
+    "description": "Corriger les fautes d orthographe : scan, classer, verifier contexte, corriger, etendre dictionnaire, rescan"
+  },
+  "theme": {
+    "nom": "CORRIGER",
+    "but": "Detecter et corriger les fautes d orthographe avec tracabilite et dictionnaire extensible",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine orthographe)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent hermes --domaine orthographe"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique se lit a chaque activation."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "SCAN OBLIGATOIRE : detecter les fautes du projet (case c2)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/detecter/detecter-fautes-orthographe/detecter-fautes-orthographe.py --tous"
+        ],
+        "regle": "SCAN : le dictionnaire detecte les fautes. Sortie : liste de fautes par fichier."
+      },
+      {
+        "besoin": "Des fautes sont-elles detectees ? (case c3)",
+        "action": "procedure",
+        "etapes": [
+          "SI aucune faute -> aller a Aucune faute (c30)",
+          "SI des fautes -> continuer"
+        ],
+        "regle": "CONTROLE : brancher selon le resultat du scan."
+      },
+      {
+        "besoin": "Classer les fautes par fichier (case c4)",
+        "action": "procedure",
+        "etapes": [
+          "Regrouper les fautes par fichier pour traiter fichier par fichier"
+        ],
+        "regle": "TRI : un fichier a la fois, pas tout d un coup."
+      },
+      {
+        "besoin": "Verifier le contexte de chaque faute (case c5)",
+        "action": "procedure",
+        "etapes": [
+          "Lire la ligne de chaque faute",
+          "Verifier : est-ce un mot anglais legitime ou un vrai positif ?",
+          "SI faux positif -> aller a Faux positif (cH1)",
+          "SI vrai positif -> continuer"
+        ],
+        "regle": "FAUTES PROUVEES : verifier le contexte AVANT de corriger. Un mot anglais legitime n est pas une faute."
+      },
+      {
+        "besoin": "CORRIGER : remplacer fautif par correct avec tracabilite (case c6)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <fichier> <fautif> <correct>"
+        ],
+        "regle": "CORRECTION TRACEE : chaque faute est documentee (fichier, ligne, fautif -> correct)."
+      },
+      {
+        "besoin": "Etendre le dictionnaire de fautes (case c7)",
+        "action": "procedure",
+        "etapes": [
+          "Ajouter l entree (fautif -> correct) dans le dictionnaire FAUTES de detecter-fautes-orthographe"
+        ],
+        "regle": "DICTIONNAIRE EXTENSIBLE : chaque nouvelle faute est ajoutee. Anti-recurrence."
+      },
+      {
+        "besoin": "RESCAN : 0 faute restante ? (case c8)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/detecter/detecter-fautes-orthographe/detecter-fautes-orthographe.py --tous"
+        ],
+        "regle": "RESCAN : prouver 0 faute restante apres correction."
+      },
+      {
+        "besoin": "Documenter la lecon dans corrections.md (case c9)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/hermes/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION : documenter chaque correction."
+      },
+      {
+        "besoin": "Verifier la conformite ASCII des fichiers modifies (case c10)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier>"
+        ],
+        "regle": "ASCII PUR : jamais d accents, jamais de BOM. Verifier chaque fichier modifie."
+      },
+      {
+        "besoin": "Rapport de correction orthographique (case c11)",
+        "action": "procedure",
+        "etapes": [
+          "Synthetiser : nombre de fautes corrigees, fichiers modifies, dictionnaire etendu"
+        ],
+        "regle": "RAPPORT : bilan clair de la mission."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-corriger"
+  }
+}

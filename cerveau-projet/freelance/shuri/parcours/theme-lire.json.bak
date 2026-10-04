@@ -1,0 +1,62 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "shuri",
+    "nom": "LIRE",
+    "description": "Consulter les templates, specs, agents existants"
+  },
+  "theme": {
+    "nom": "LIRE",
+    "but": "Accéder à la connaissance des templates et des agents",
+    "redirects": [
+      {
+        "besoin": "Lire le template agent v2",
+        "action": "redirection",
+        "vers": {
+          "type": "fichier",
+          "chemin": "cerveau-projet/freelance/conventions/conventions.md",
+          "section": "TEMPLATE AGENT V2"
+        }
+      },
+      {
+        "besoin": "Lire la proposition v2",
+        "action": "redirection",
+        "vers": {
+          "type": "fichier",
+          "chemin": "cerveau-projet/freelance/proposition-v2.md"
+        }
+      },
+      {
+        "besoin": "Voir les agents déjà créés",
+        "action": "redirection",
+        "vers": {
+          "type": "commande",
+          "commande": "ls cerveau-projet/freelance/"
+        }
+      },
+      {
+        "besoin": "Lire un agent existant",
+        "action": "procedure",
+        "etapes": [
+          "Demander le nom de l'agent",
+          "Lire freelance/<agent>/<agent>.md",
+          "Lire freelance/<agent>/corrections.md"
+        ]
+      },
+      {
+        "besoin": "Consulter les leçons de construction",
+        "action": "redirection",
+        "vers": {
+          "type": "outil",
+          "commande": "consulter-lecons",
+          "parametres": {"agent": "shuri", "domaine": "construction"}
+        }
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-theme"
+  }
+}

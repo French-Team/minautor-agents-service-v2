@@ -1,0 +1,59 @@
+"""Categorie retirer : orchestre le retrait d'UNE entree, puis laisse la porte
+recalculer l empreinte.
+
+Interface entre main.py et les fonctions simples (retirer/fonctions.py).
+
+LA LOCALISATION EST UN SEUL DOMICILE. `positions_du_id` renvoie les positions qui
+portent l id, donc il rend a la fois la recherche ET la desambiguation : il
+n'y a pas deux endroits qui sachent trouver une entree (une regle recopiee
+derive en silence, M-076 ; L-029). `corriger` garde sa propre recherche par id,
+qui vise le PREMIER et se suffit -- les deux verbes n'ont pas le meme contrat.
+"""
+from commun import charger_bdd, enregistrer_bdd, extraire_options
+from retirer.fonctions import (CHAMP_RETRAITS, choisir_position, positions_du_id,
+                               retirer_entree)
+
+NOMS_OPTIONS = ("id", "index", "motif")
+
+USAGE = 'Usage : python main.py retirer --id __PREFIXE_ID__-XXX [--index N] [--motif "..."]'
+
+
+def executer(arguments):
+    options = extraire_options(arguments, NOMS_OPTIONS)
+    identifiant = (options.get("id") or "").strip()
+    motif = (options.get("motif") or "").strip()
+    if not identifiant:
+        print(USAGE)
+        return 2
+
+    donnees = charger_bdd()
+    positions = positions_du_id(donnees, identifiant)
+    if not positions:
+        # Un id inconnu est REFUSE en nommant ce que la BDD porte : un refus
+        # muet laisserait croire que le retrait a eu lieu alors que RIEN n a bouge.
+        connus = ", ".join(str(lue.get("id", "?")) for lue in donnees.get("__CLE_LISTE__", []))
+        print("REFUS : aucune entree " + identifiant + " dans la BDD -- elle porte : "
+              + (connus if connus else "(rien, elle est VIDE)")
+              + " (un retrait vise une entree EXISTANTE : c est le verbe ajouter qui"
+              " en cree une).")
+        return 2
+    code, position, message = choisir_position(positions, identifiant,
+                                               options.get("index", ""))
+    if code != 0:
+        print(message)
+        return code
+
+    code, message = retirer_entree(donnees, position, motif)
+    if code != 0:
+        print(message)
+        return code
+    # Le retrait change le contenu, donc l empreinte doit etre REPOSEE dans le
+    # meme geste : sinon `verifier` crierait, a juste titre, sur une BDD
+    # modifiee hors de l outil.
+    empreinte = enregistrer_bdd(donnees)
+    print(message)
+    print("BDD : " + str(len(donnees.get("__CLE_LISTE__", []))) + " entree(s) active(s), "
+          + str(len(donnees.get(CHAMP_RETRAITS, [])))
+          + " retrait(s) trace(s) -- empreinte recalculee par la porte : "
+          + empreinte[:16] + "...")
+    return 0

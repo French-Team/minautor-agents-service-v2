@@ -1,0 +1,48 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "morpheus",
+    "nom": "AUTRE",
+    "description": "Mission hors parcours : delegation, outil temporaire"
+  },
+  "theme": {
+    "nom": "AUTRE",
+    "but": "Gerer les missions hors parcours",
+    "redirects": [
+      {
+        "besoin": "Mission hors parcours",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> Activer l agent habilite",
+          "NON -> Signaler le besoin"
+        ],
+        "regle": "ROUTER vers l agent adapte."
+      },
+      {
+        "besoin": "Activer l agent habilite",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>"
+        ],
+        "regle": "Delegation propre."
+      },
+      {
+        "besoin": "Besoin d outil ?",
+        "action": "procedure",
+        "etapes": [
+          "TEMPORAIRE -> creer l outil temporaire"
+        ],
+        "regle": "Script temporaire : 0 residu."
+      },
+      {
+        "besoin": "Signaler le besoin",
+        "action": "procedure",
+        "etapes": [
+          "fin-delegation"
+        ],
+        "regle": "Signaler si hors perimetre."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-delegation" }
+}

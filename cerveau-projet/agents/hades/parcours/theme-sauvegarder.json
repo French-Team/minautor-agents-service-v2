@@ -1,0 +1,19 @@
+{
+  "identite": {"type": "theme", "appartient_a": "hades", "nom": "SAUVEGARDER", "description": "Operations sans risque : status, log, diff, commit, push"},
+  "theme": {
+    "nom": "SAUVEGARDER",
+    "but": "Executer les operations git sans risque (status, log, diff, commit, pull, push) avec journalisation",
+    "redirects": [
+      {"besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."},
+      {"besoin": "Consulter les lecons (domaine git)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent hades --domaine git"], "regle": "PATTERN 6 : le contexte dynamique."},
+      {"besoin": "CONTEXTE : activite recente des agents", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6 : l historique est DYNAMIQUE."},
+      {"besoin": "Verifier l etat du depot avant operation", "action": "procedure", "etapes": ["git status", "git log --oneline -5"], "regle": "VERIFIER AVANT : toujours connaitre l etat du depot avant d agir."},
+      {"besoin": "Executer l operation git demandee (case c2)", "action": "procedure", "etapes": ["git status / git log / git diff / git commit / git pull"], "regle": "OPERATIONS AUTORISEES : status, log, diff, commit, pull."},
+      {"besoin": "Push avec validation utilisateur", "action": "procedure", "etapes": ["Demander validation a l utilisateur avant git push"], "regle": "PUSH : validation utilisateur obligatoire."},
+      {"besoin": "Journaliser l operation", "action": "procedure", "etapes": ["Documenter : operation, date, resultats, fichiers concernes"], "regle": "TRACABILITE : chaque operation git est journalisee."},
+      {"besoin": "Verifier l etat apres operation", "action": "procedure", "etapes": ["git status", "git log --oneline -1"], "regle": "VERIFIER APRES : s assurer que l operation s est bien passee."},
+      {"besoin": "Ajouter les lecons dans corrections.md", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/hades/corrections.md <lecon>"], "regle": "PROTOCOLE FIN-MISSION."}
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-sauvegarder"}
+}

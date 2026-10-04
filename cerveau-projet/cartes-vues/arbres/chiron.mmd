@@ -1,0 +1,133 @@
+%% Arbre de decision de chiron (arbre v0.3.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est la mission d education ?"}
+    RACINE -- "EDUCER" --> THEME-EDUCER
+    THEME-EDUCER["Analyser un agent cible pour detecter les incoherences nuisa"]
+    THEME-EDUCER -- "besoin 1" --> THEME-EDUCER-B0
+    THEME-EDUCER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-EDUCER -- "besoin 2" --> THEME-EDUCER-B1
+    THEME-EDUCER-B1["Consulter les lecons (domaine education)"]
+    THEME-EDUCER -- "besoin 3" --> THEME-EDUCER-B2
+    THEME-EDUCER-B2["CONTEXTE : activite recente des agents"]
+    THEME-EDUCER -- "besoin 4" --> THEME-EDUCER-B3
+    THEME-EDUCER-B3["Recevoir la mission - quel agent analyser (case c1)"]
+    THEME-EDUCER -- "besoin 5" --> THEME-EDUCER-B4
+    THEME-EDUCER-B4["Consulter le protocole education continue"]
+    THEME-EDUCER -- "besoin 6" --> THEME-EDUCER-B5
+    THEME-EDUCER-B5["Lire la fiche de l agent cible (case c2)"]
+    THEME-EDUCER -- "besoin 7" --> THEME-EDUCER-B6
+    THEME-EDUCER-B6["Lire les corrections de l agent cible (case c3)"]
+    THEME-EDUCER -- "besoin 8" --> THEME-EDUCER-B7
+    THEME-EDUCER-B7["Lire les regles de l agent cible (case c4)"]
+    THEME-EDUCER -- "besoin 9" --> THEME-EDUCER-B8
+    THEME-EDUCER-B8["Verifier les mises a jour d outils - bumper (case c5)"]
+    THEME-EDUCER -- "besoin 10" --> THEME-EDUCER-B9
+    THEME-EDUCER-B9["Detecter les incoherences - regles vs actions reelles (case "]
+    THEME-EDUCER -- "besoin 11" --> THEME-EDUCER-B10
+    THEME-EDUCER-B10["Verifier la conformite de la fiche (case c7)"]
+    THEME-EDUCER -- "besoin 12" --> THEME-EDUCER-B11
+    THEME-EDUCER-B11["Verifier ma carte - valider-cartes-decision (arbre v2)"]
+    THEME-EDUCER -- "besoin 13" --> THEME-EDUCER-B12
+    THEME-EDUCER-B12["Synthetiser les incoherences (controle c9)"]
+    THEME-EDUCER -- "besoin 14" --> THEME-EDUCER-B13
+    THEME-EDUCER-B13["Documenter les corrections proposees puis signaler a Buffy ("]
+    THEME-EDUCER -- "besoin 15" --> THEME-EDUCER-B14
+    THEME-EDUCER-B14["Signaler les incoherences complexes a Buffy (case c11)"]
+    THEME-EDUCER -- "besoin 16" --> THEME-EDUCER-B15
+    THEME-EDUCER-B15["Enregistrer mes usages d outils"]
+    THEME-EDUCER -- "besoin 17" --> THEME-EDUCER-B16
+    THEME-EDUCER-B16["Ajouter les lecons dans corrections.md"]
+    FIN-fin-educer(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-EDUCER-B0 --> FIN-fin-educer
+    THEME-EDUCER-B1 --> FIN-fin-educer
+    THEME-EDUCER-B2 --> FIN-fin-educer
+    THEME-EDUCER-B3 --> FIN-fin-educer
+    THEME-EDUCER-B4 --> FIN-fin-educer
+    THEME-EDUCER-B5 --> FIN-fin-educer
+    THEME-EDUCER-B6 --> FIN-fin-educer
+    THEME-EDUCER-B7 --> FIN-fin-educer
+    THEME-EDUCER-B8 --> FIN-fin-educer
+    THEME-EDUCER-B9 --> FIN-fin-educer
+    THEME-EDUCER-B10 --> FIN-fin-educer
+    THEME-EDUCER-B11 --> FIN-fin-educer
+    THEME-EDUCER-B12 --> FIN-fin-educer
+    THEME-EDUCER-B13 --> FIN-fin-educer
+    THEME-EDUCER-B14 --> FIN-fin-educer
+    THEME-EDUCER-B15 --> FIN-fin-educer
+    THEME-EDUCER-B16 --> FIN-fin-educer
+    RACINE -- "AUTO-CORRECTION" --> THEME-AUTO-CORRECTION
+    THEME-AUTO-CORRECTION["Corriger les incoherences de MA propre carte (parcours-chiro"]
+    THEME-AUTO-CORRECTION -- "besoin 1" --> THEME-AUTO-CORRECTION-B0
+    THEME-AUTO-CORRECTION-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AUTO-CORRECTION -- "besoin 2" --> THEME-AUTO-CORRECTION-B1
+    THEME-AUTO-CORRECTION-B1["Consulter les lecons (domaine education)"]
+    THEME-AUTO-CORRECTION -- "besoin 3" --> THEME-AUTO-CORRECTION-B2
+    THEME-AUTO-CORRECTION-B2["CONTEXTE : activite recente des agents"]
+    THEME-AUTO-CORRECTION -- "besoin 4" --> THEME-AUTO-CORRECTION-B3
+    THEME-AUTO-CORRECTION-B3["Auto-correction : les incoherences concernent-elles MA carte"]
+    THEME-AUTO-CORRECTION -- "besoin 5" --> THEME-AUTO-CORRECTION-B4
+    THEME-AUTO-CORRECTION-B4["Se re-eduquer : lire MA carte et documenter MA lecon (case c"]
+    THEME-AUTO-CORRECTION -- "besoin 6" --> THEME-AUTO-CORRECTION-B5
+    THEME-AUTO-CORRECTION-B5["Enregistrer ma lecon dans la BDD"]
+    THEME-AUTO-CORRECTION -- "besoin 7" --> THEME-AUTO-CORRECTION-B6
+    THEME-AUTO-CORRECTION-B6["Corriger les accents du rapport"]
+    THEME-AUTO-CORRECTION -- "besoin 8" --> THEME-AUTO-CORRECTION-B7
+    THEME-AUTO-CORRECTION-B7["Corriger MA carte (mon arbre v2)"]
+    THEME-AUTO-CORRECTION -- "besoin 9" --> THEME-AUTO-CORRECTION-B8
+    THEME-AUTO-CORRECTION-B8["Activer Themis pour verifier ma re-education (case c17)"]
+    THEME-AUTO-CORRECTION -- "besoin 10" --> THEME-AUTO-CORRECTION-B9
+    THEME-AUTO-CORRECTION-B9["Retour de Themis recu ? (controle c18)"]
+    THEME-AUTO-CORRECTION -- "besoin 11" --> THEME-AUTO-CORRECTION-B10
+    THEME-AUTO-CORRECTION-B10["Enregistrer mes usages d outils"]
+    THEME-AUTO-CORRECTION -- "besoin 12" --> THEME-AUTO-CORRECTION-B11
+    THEME-AUTO-CORRECTION-B11["Ajouter les lecons dans corrections.md"]
+    FIN-fin-auto-correction(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTO-CORRECTION-B0 --> FIN-fin-auto-correction
+    THEME-AUTO-CORRECTION-B1 --> FIN-fin-auto-correction
+    THEME-AUTO-CORRECTION-B2 --> FIN-fin-auto-correction
+    THEME-AUTO-CORRECTION-B3 --> FIN-fin-auto-correction
+    THEME-AUTO-CORRECTION-B4 --> FIN-fin-auto-correction
+    THEME-AUTO-CORRECTION-B5 --> FIN-fin-auto-correction
+    THEME-AUTO-CORRECTION-B6 --> FIN-fin-auto-correction
+    THEME-AUTO-CORRECTION-B7 --> FIN-fin-auto-correction
+    THEME-AUTO-CORRECTION-B8 --> FIN-fin-auto-correction
+    THEME-AUTO-CORRECTION-B9 --> FIN-fin-auto-correction
+    THEME-AUTO-CORRECTION-B10 --> FIN-fin-auto-correction
+    THEME-AUTO-CORRECTION-B11 --> FIN-fin-auto-correction
+    RACINE -- "OUTILS" --> THEME-OUTILS
+    THEME-OUTILS["Resoudre un probleme d outil rencontre en cours de mission e"]
+    THEME-OUTILS -- "besoin 1" --> THEME-OUTILS-B0
+    THEME-OUTILS-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-OUTILS -- "besoin 2" --> THEME-OUTILS-B1
+    THEME-OUTILS-B1["Consulter les lecons (domaine education)"]
+    THEME-OUTILS -- "besoin 3" --> THEME-OUTILS-B2
+    THEME-OUTILS-B2["CONTEXTE : activite recente des agents"]
+    THEME-OUTILS -- "besoin 4" --> THEME-OUTILS-B3
+    THEME-OUTILS-B3["Probleme avec un outil ? (question cU1)"]
+    THEME-OUTILS -- "besoin 5" --> THEME-OUTILS-B4
+    THEME-OUTILS-B4["COMPRENDRE L OUTIL - lire le .md (case cU2)"]
+    THEME-OUTILS -- "besoin 6" --> THEME-OUTILS-B5
+    THEME-OUTILS-B5["Verifier si un combo existe pour l action"]
+    THEME-OUTILS -- "besoin 7" --> THEME-OUTILS-B6
+    THEME-OUTILS-B6["Generer la commande exacte"]
+    THEME-OUTILS -- "besoin 8" --> THEME-OUTILS-B7
+    THEME-OUTILS-B7["Reprendre ma mission (case cU3)"]
+    THEME-OUTILS -- "besoin 9" --> THEME-OUTILS-B8
+    THEME-OUTILS-B8["Ajouter les lecons dans corrections.md"]
+    FIN-fin-outils(["FIN - Reprendre ma mission (cU3)"])
+    THEME-OUTILS-B0 --> FIN-fin-outils
+    THEME-OUTILS-B1 --> FIN-fin-outils
+    THEME-OUTILS-B2 --> FIN-fin-outils
+    THEME-OUTILS-B3 --> FIN-fin-outils
+    THEME-OUTILS-B4 --> FIN-fin-outils
+    THEME-OUTILS-B5 --> FIN-fin-outils
+    THEME-OUTILS-B6 --> FIN-fin-outils
+    THEME-OUTILS-B7 --> FIN-fin-outils
+    THEME-OUTILS-B8 --> FIN-fin-outils
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

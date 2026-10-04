@@ -1,0 +1,30 @@
+{
+  "version": "0.1.0",
+  "description": "Messages de rappel anti-dispersion - quand tu corriges quelque part, il y a probablement ailleurs a corriger (D15 : editable sans toucher au code)",
+  "rappels": [
+    {
+      "contexte": "correction-regle",
+      "message": "Une regle corrigee ici existe peut-etre AILLEURS : verifie les autres corrections.md des agents, regles-immuables.md, conventions.md, protocoles.md et les templates/ avant de clore."
+    },
+    {
+      "contexte": "correction-outil",
+      "message": "Un outil corrige a souvent son MIROIR : version .sh (parite), serveur MCP equivalent, tests associes, manifest/index. Verifie-les avant de clore."
+    },
+    {
+      "contexte": "correction-fiche",
+      "message": "Une fiche corrigee implique souvent : son arbre/themes, son corrections.md, la table AGENTS.md et le fichier jarvis-data.json (role/fiche). Verifie-les."
+    },
+    {
+      "contexte": "correction-jarvis",
+      "message": "jarvis.py corrige = jarvis-server.py a verifier (parite), ET les routines de surveillance qui lisent ces fichiers, ET le .md du contrat."
+    },
+    {
+      "contexte": "nouveau-fichier",
+      "message": "Tout nouveau fichier porte <type>-<sujet>-<AAAAMMJJ> (conventions) et doit etre declare dans les index concernes (manifest, AGENTS.md, README)."
+    },
+    {
+      "contexte": "correction-template",
+      "message": "Un template modifie doit etre reporte dans le protocole de creation correspondant ET dans les agents existants construits avec l'ancienne version."
+    }
+  ]
+}

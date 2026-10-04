@@ -1,0 +1,89 @@
+=== test-003 : combos creer-* ===
+
+============================================================
+=== combo-creer-agent ===
+============================================================
+  [OK] combo-creer-agent : version presente
+  [OK] combo-creer-agent : case_depart c1
+  [OK] combo-creer-agent : nom correct
+  [OK] combo-creer-agent : 4 types presents (generateur/outil/controle/fin)
+  [OK] combo-creer-agent : autant de generateur que d outil
+  [OK] combo-creer-agent : au moins 2 generateurs
+  [OK] combo-creer-agent : --liste retourne 0
+  [OK] combo-creer-agent : case_depart c1 listee
+  [OK] combo-creer-agent : controle c3 listee
+  [OK] combo-creer-agent : types affiches (generateur/outil/controle/fin)
+[PROTECTIONS] Attention: erreurs dans stderr (code 1):
+  [ERREUR] Variable non trouvee: {agent} (entrees de la case c1)
+  [OK] combo-creer-agent : variable manquante -> code 1
+  [OK] combo-creer-agent : erreur claire (Variable non trouvee)
+  [OK] combo-creer-agent : chemin OUI code 0
+  [OK] combo-creer-agent : COMBO TERMINE affiche
+  [OK] combo-creer-agent : commande generee valider-nommage.py
+  [OK] combo-creer-agent : commande generee copier-dossier.py
+  [OK] combo-creer-agent : commande generee copier-fichier.py
+  [OK] combo-creer-agent : commande generee creer-fichier.py
+  [OK] combo-creer-agent : chemin NON code 0
+  [OK] combo-creer-agent : COMBO TERMINE affiche (fin atteinte)
+  [OK] combo-creer-agent : aucune commande creer-fichier sur chemin NON
+  [OK] combo-creer-agent : .sh --liste retourne 0
+  [OK] combo-creer-agent : .py et .sh meme liste
+  [OK] combo-creer-agent : .py et .sh meme navigation (OUI)
+  [OK] combo-creer-agent : dry-run retourne 0
+  [OK] combo-creer-agent : aucun fichier cree (cible absente)
+  [OK] combo-creer-agent : nommage definition OK
+  [OK] combo-creer-agent : nommage fichier de test OK
+  [OK] combo-creer-agent : ASCII 0 sur definition-combo.json
+  [OK] combo-creer-agent : ASCII 0 sur combo-creer-agent.md
+
+============================================================
+=== combo-creer-fichier-cerveau ===
+============================================================
+  [OK] combo-creer-fichier-cerveau : version presente
+  [OK] combo-creer-fichier-cerveau : case_depart c1
+  [OK] combo-creer-fichier-cerveau : nom correct
+  [OK] combo-creer-fichier-cerveau : 4 types presents (generateur/outil/controle/fin)
+  [OK] combo-creer-fichier-cerveau : autant de generateur que d outil
+  [OK] combo-creer-fichier-cerveau : au moins 2 generateurs
+  [OK] combo-creer-fichier-cerveau : --liste retourne 0
+  [OK] combo-creer-fichier-cerveau : case_depart c1 listee
+  [OK] combo-creer-fichier-cerveau : controle c7 listee
+  [OK] combo-creer-fichier-cerveau : types affiches (generateur/outil/controle/fin)
+[PROTECTIONS] Attention: erreurs dans stderr (code 1):
+  [ERREUR] Variable non trouvee: {chemin} (entrees de la case c1)
+  [OK] combo-creer-fichier-cerveau : variable manquante -> code 1
+  [OK] combo-creer-fichier-cerveau : erreur claire (Variable non trouvee)
+  [OK] combo-creer-fichier-cerveau : chemin OUI code 0
+  [OK] combo-creer-fichier-cerveau : COMBO TERMINE affiche
+  [OK] combo-creer-fichier-cerveau : commande generee valider-nommage.py
+  [OK] combo-creer-fichier-cerveau : commande generee valider-conventions.py
+  [OK] combo-creer-fichier-cerveau : commande generee rechercher-fichier.py
+  [OK] combo-creer-fichier-cerveau : commande generee creer-fichier.py
+  [OK] combo-creer-fichier-cerveau : chemin NON code 0
+  [OK] combo-creer-fichier-cerveau : COMBO TERMINE affiche (fin atteinte)
+  [OK] combo-creer-fichier-cerveau : aucune commande creer-fichier sur chemin NON
+  [OK] combo-creer-fichier-cerveau : .sh --liste retourne 0
+  [OK] combo-creer-fichier-cerveau : .py et .sh meme liste
+  [OK] combo-creer-fichier-cerveau : .py et .sh meme navigation (OUI)
+  [OK] combo-creer-fichier-cerveau : dry-run retourne 0
+  [OK] combo-creer-fichier-cerveau : aucun fichier cree (cible absente)
+  [OK] combo-creer-fichier-cerveau : nommage definition OK
+  [OK] combo-creer-fichier-cerveau : nommage fichier de test OK
+  [OK] combo-creer-fichier-cerveau : ASCII 0 sur definition-combo.json
+  [OK] combo-creer-fichier-cerveau : ASCII 0 sur combo-creer-fichier-cerveau.md
+
+============================================================
+=== combo-creer-protocole ===
+============================================================
+  [OK] combo-creer-protocole : version presente
+  [OK] combo-creer-protocole : case_depart c1
+  [OK] combo-creer-protocole : nom correct
+  [OK] combo-creer-protocole : 4 types presents (generateur/outil/controle/fin)
+  [OK] combo-creer-protocole : autant de generateur que d outil
+  [OK] combo-creer-protocole : au moins 2 generateurs
+  [OK] combo-creer-protocole : --liste retourne 0
+  [OK] combo-creer-protocole : case_depart c1 listee
+  [OK] combo-creer-protocole : controle c3 listee
+  [OK] combo-creer-protocole : types affiches (generateur/outil/controle/fin)
+[PROTECTIONS] Attention: erreurs dans stderr (code 1):
+  [ERREUR] Variable non trouvee: {chemin} (entrees de la case c1)

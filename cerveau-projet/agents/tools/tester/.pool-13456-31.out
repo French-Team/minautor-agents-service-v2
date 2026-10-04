@@ -1,0 +1,27 @@
+[KO] 1. detecteur initial : AUCUN RESIDUEL
+     rc=0 sortie=============================================================
+DETECTION DES PROCESSUS RESIDUELS (PID)
+===================
+[OK] 2. processus injecte (pid=14000) detecte
+[OK] 2b. justification PROJET presente
+[OK] 3. liste blanche absente de la sortie
+[KO] 4. apres terminaison : AUCUN RESIDUEL
+     ============================================================
+DETECTION DES PROCESSUS RESIDUELS (PID)
+============================================================
+RESIDUELS DETECTES : 1 processus
+-----
+[OK] 5. verrou : hygie OK
+[OK] 5b. verrou : buffy BLOQUE
+[OK] 6. 0 residu de preuve (processus + fichiers)
+
+=== CHRONO test-085 (total 8.0s) ===
+  1. etat initial                          1.80s
+  2. injection+detection                   0.99s
+  3. liste blanche                         0.73s
+  4. retour propre                         4.27s
+  5. verrou                                0.17s
+  6. nettoyage final                       0.04s
+
+RESULTAT : 8 point(s), 6 OK, 2 KO
+VERDICT : KO

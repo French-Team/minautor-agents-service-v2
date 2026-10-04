@@ -1,0 +1,26 @@
+---
+identite:
+  type: <type du document -- voir TYPES_RECONNUS dans matrice/data/commun/carte_identite.py>
+  appartient_a: <nom du proprietaire -- jamais un chemin>
+  commun: false
+  gravite: <tres-urgent|urgent|important|normal|optionnel>
+  niveau: <1-10>
+  version: 1
+  date: AAAA-MM-JJ
+  liens: <chemin canonique>, <chemin canonique>
+---
+
+# <TITRE DU DOCUMENT>
+
+<Ce que ce document dit, et pour qui. Une carte juste commence par un document qui
+dit vraiment quelque chose : la carte ne remplace pas le contenu, elle le rend
+TROUVABLE.>
+
+## Ce qui le connecte (les liens, en clair)
+
+- `<chemin canonique>` -- pourquoi ce document lui est connecte.
+- `<chemin canonique>` -- idem.
+
+## Ce que ce document n est pas
+
+<Le domaine voisin, et le document qui le porte (un lien, pas une explication).>

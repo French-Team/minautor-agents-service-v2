@@ -1,0 +1,55 @@
+%% Arbre de decision de redacteur-v2 (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est ma mission ?"}
+    RACINE -- "SYNTHESE" --> THEME-SYNTHESE
+    THEME-SYNTHESE["Rediger un document de la v2 (proposition, decision, convent"]
+    THEME-SYNTHESE -- "besoin 1" --> THEME-SYNTHESE-B0
+    THEME-SYNTHESE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-SYNTHESE -- "besoin 2" --> THEME-SYNTHESE-B1
+    THEME-SYNTHESE-B1["Consulter les lecons de mon domaine (redaction)"]
+    THEME-SYNTHESE -- "besoin 3" --> THEME-SYNTHESE-B2
+    THEME-SYNTHESE-B2["CONTEXTE : activite recente des agents"]
+    THEME-SYNTHESE -- "besoin 4" --> THEME-SYNTHESE-B3
+    THEME-SYNTHESE-B3["Lire la mission de redaction (docs v2 a rediger)"]
+    THEME-SYNTHESE -- "besoin 5" --> THEME-SYNTHESE-B4
+    THEME-SYNTHESE-B4["Rediger le document v2"]
+    THEME-SYNTHESE -- "besoin 6" --> THEME-SYNTHESE-B5
+    THEME-SYNTHESE-B5["Auto-validation : ASCII/LF et structure"]
+    THEME-SYNTHESE -- "besoin 7" --> THEME-SYNTHESE-B6
+    THEME-SYNTHESE-B6["Auto-validation : impacts et coherence"]
+    THEME-SYNTHESE -- "besoin 8" --> THEME-SYNTHESE-B7
+    THEME-SYNTHESE-B7["RVAV : est-ce que tout est conforme ?"]
+    THEME-SYNTHESE -- "besoin 9" --> THEME-SYNTHESE-B8
+    THEME-SYNTHESE-B8["Ajouter mes lecons et usages"]
+    FIN-fin-synthese(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-SYNTHESE-B0 --> FIN-fin-synthese
+    THEME-SYNTHESE-B1 --> FIN-fin-synthese
+    THEME-SYNTHESE-B2 --> FIN-fin-synthese
+    THEME-SYNTHESE-B3 --> FIN-fin-synthese
+    THEME-SYNTHESE-B4 --> FIN-fin-synthese
+    THEME-SYNTHESE-B5 --> FIN-fin-synthese
+    THEME-SYNTHESE-B6 --> FIN-fin-synthese
+    THEME-SYNTHESE-B7 --> FIN-fin-synthese
+    THEME-SYNTHESE-B8 --> FIN-fin-synthese
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Executer une mission hors des themes standard"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["La mission concerne-t-elle un autre agent ? (delegation)"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["DELEGATION - Signaler au pilote via ORACLE"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["Executer la mission"]
+    FIN-fin-autre(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-autre
+    THEME-AUTRE-B1 --> FIN-fin-autre
+    THEME-AUTRE-B2 --> FIN-fin-autre
+    THEME-AUTRE-B3 --> FIN-fin-autre
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

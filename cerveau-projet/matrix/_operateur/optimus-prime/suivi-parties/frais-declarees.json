@@ -1,0 +1,137 @@
+{
+  "quoi": "Ce que chaque vue de suivi COUTE a rafraichir, et jusqu ou elle peut ",
+  "critere": "Une vue declaree porte une porte qui la regenere, ses sources, et le delai au-dela duquel elle est PERIMEE. Les trois sont DECLAREES ici : l outil ne les devine pas, et il ne juge jamais l urgence -- il donne le fait (le retard) et le prix (le frais), la decision reste au lecteur.",
+  "motif_sceau_defaut": "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}",
+  "note_sceau": "Le sceau d une vue est la PREMIERE date-heure qu elle porte. Les vues n ont pas le meme gabarit (suivi-pilote ecrit 'Mesure du ...', suivi-optimus un tableau de tete) : une convention unique evite un regex par vue, donc une exception par vue qui oublie.",
+  "vues": [
+    {
+      "id": "suivi-optimus",
+      "fichier": "_operateur/optimus-prime/suivi-optimus.md",
+      "porte": "matrice/routines/suivi-sync (main.py -- regenerer_head)",
+      "frais": {
+        "unite": "seconde",
+        "valeur": 0.26,
+        "mesure": "duree_ms mediane sur les 200 dernieres passes head de matrice/routines/suivi-sync/journal-head.txt (2026-10-04)"
+      },
+      "tolerance_secondes": 300,
+      "tolerance_raison": "La routine joue sur une cadence : retard_avant_s mediane 60 s, max 71 s sur 200 passes. 300 s = plus de 4x le pire observe, pour qu un retard ne soit pas accuse sur un simple decalage.",
+      "sources": [
+        "matrice/data/suivi-optimus.jsonl"
+      ]
+    },
+    {
+      "id": "suivi-pilote",
+      "fichier": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md",
+      "porte": "_operateur/optimus-prime/super-combos/combos/outils/suivi-pilote.py",
+      "frais": {
+        "unite": "seconde",
+        "valeur": 1.33,
+        "mesure": "porte jouee et chronometree le 2026-10-04 (code 0)"
+      },
+      "tolerance_secondes": 900,
+      "tolerance_raison": "Cette porte n est pas sur une cadence : elle est jouee a la demande, quand le pilote est consulte. 900 s (15 min) est une tolerance de LECTURE, pas de regeneration -- au-dela, la vue commence a repondre sur des faits perimes.",
+      "sources": [
+        "matrice/data/suivi-optimus.jsonl",
+        "_operateur/optimus-prime/pilote/file-missions-optimus.json",
+        "_operateur/optimus-prime/pilote/entonnoir-files-optimus.json",
+        "_operateur/optimus-prime/pilote/cycle-historique-archive.json",
+        "_operateur/maintenance/pilote/outbox.jsonl",
+        "matrice/data/pauses-session-matrix.jsonl",
+        "_operateur/optimus-prime/suivi-pilote/pannes-declarees.json"
+      ]
+    },
+    {
+      "id": "suivi-matrice",
+      "fichier": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md",
+      "porte": "_operateur/optimus-prime/super-combos/combos/outils/suivi-parties-maitresses.py",
+      "frais": {
+        "unite": "seconde",
+        "valeur": 1.29,
+        "mesure": "porte jouee 3 fois et chronometree le 2026-10-04 : 1,28 / 1,29 / 1,31 s"
+      },
+      "tolerance_secondes": 3600,
+      "tolerance_raison": "La source declaree est le DOSSIER `matrice/data`, et la date d un dossier ne bouge qu a la CREATION ou au RENOMMAGE d une entree -- pas quand un fichier existant est modifie. Le temoin est donc plus faible qu un fichier, et la tolerance est large en consequence : une heure. Une tolerance courte aurait accuse la vue sur un dossier que personne n a touche depuis des heures alors que ses fichiers, eux, ont bouge.",
+      "sources": [
+        "matrice/data"
+      ]
+    },
+    {
+      "id": "suivi-routines",
+      "fichier": "_operateur/optimus-prime/suivi-parties/suivi-routines.md",
+      "porte": "_operateur/optimus-prime/super-combos/combos/outils/suivi-parties-maitresses.py",
+      "frais": {
+        "unite": "seconde",
+        "valeur": 1.29,
+        "mesure": "porte jouee 3 fois et chronometree le 2026-10-04 : 1,28 / 1,29 / 1,31 s"
+      },
+      "tolerance_secondes": 3600,
+      "tolerance_raison": "Meme dossier-source que la vue matrice (`matrice/routines`), meme raison : la date d un dossier ne suit pas la modification de son contenu. 3600 s.",
+      "sources": [
+        "matrice/routines"
+      ]
+    },
+    {
+      "id": "suivi-espions",
+      "fichier": "_operateur/optimus-prime/suivi-parties/suivi-espions.md",
+      "porte": "_operateur/optimus-prime/super-combos/combos/outils/suivi-parties-maitresses.py",
+      "frais": {
+        "unite": "seconde",
+        "valeur": 1.29,
+        "mesure": "porte jouee 3 fois et chronometree le 2026-10-04 : 1,28 / 1,29 / 1,31 s"
+      },
+      "tolerance_secondes": 900,
+      "tolerance_raison": "Source REELLE et unique : le registre des espions, un fichier. L espion pose son registre toutes les 300 s (cadence declaree dans `matrice/routines/vie/planning.json`) : 900 s = trois fois la cadence, large assez pour ne pas crier sur une passe.",
+      "sources": [
+        "_operateur/optimus-prime/espions/registre/registre.json"
+      ]
+    },
+    {
+      "id": "suivi-outils",
+      "fichier": "_operateur/optimus-prime/suivi-parties/suivi-outils.md",
+      "porte": "_operateur/optimus-prime/super-combos/combos/outils/suivi-parties-maitresses.py",
+      "frais": {
+        "unite": "seconde",
+        "valeur": 1.29,
+        "mesure": "porte jouee 3 fois et chronometree le 2026-10-04 : 1,28 / 1,29 / 1,31 s"
+      },
+      "tolerance_secondes": 900,
+      "tolerance_raison": "Source REELLE et unique : `matrice/data/registre-outils.json`. Le registre change quand une brique est ajoutee ou rayee -- c est un evenement rare : 900 s est une tolerance de LECTURE, au-dela la vue commence a decrire un parc qui a change.",
+      "sources": [
+        "matrice/data/registre-outils.json"
+      ]
+    },
+    {
+      "id": "suivi-parties-maitresses",
+      "fichier": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md",
+      "porte": "_operateur/optimus-prime/super-combos/combos/outils/suivi-parties-maitresses.py",
+      "frais": {
+        "unite": "seconde",
+        "valeur": 1.29,
+        "mesure": "porte jouee 3 fois et chronometree le 2026-10-04 : 1,28 / 1,29 / 1,31 s"
+      },
+      "tolerance_secondes": 3600,
+      "tolerance_raison": "L index ne lit aucun fait : il POINTE les six vues et en donne l age. Il n est donc perime que si l une des six est perimee. 3600 s, parce que les vues qu il pointe ont des tolerances plus courtes et que l indice ne les remplace pas.",
+      "sources": [
+        "_operateur/optimus-prime/suivi-parties/suivi-matrice.md",
+        "_operateur/optimus-prime/suivi-parties/suivi-routines.md",
+        "_operateur/optimus-prime/suivi-parties/suivi-espions.md",
+        "_operateur/optimus-prime/suivi-parties/suivi-outils.md",
+        "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md",
+        "matrice/data/suivi-cameleon.md"
+      ]
+    }
+  ],
+  "perimetre": {
+    "critere": "Un VISUEL de suivi se nomme suivi-<vue>.md et se regenere par une porte. Pour etre MESURE, il doit etre DECLARE (porte, sources, tolerance, frais). Ce perimetre est ce qui SUPPRIME l angle mort : tout fichier du perimetre qui n est pas declare est ACCUSE, au lieu d etre ignore en silence.",
+    "racines": [
+      "_operateur/optimus-prime"
+    ],
+    "motif": "^suivi-[a-z0-9-]*\\.md$",
+    "exclus": [
+      {
+        "fichier": "_operateur/optimus-prime/regles-immuables/suivi-optimus-marbre.md",
+        "motif": "MARBRE, pas un visuel : decide_par createur le 2026-09-11, et AUCUNE porte ne le regenere (mesure : aucun code du parc ne le nomme). Son nom commence par `suivi-` par hasard de redaction, pas par convention."
+      }
+    ]
+  }
+}

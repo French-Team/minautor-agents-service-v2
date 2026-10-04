@@ -1,0 +1,37 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "LACUNES-COMPARER",
+    "description": "Constater la repetition -- Phase 2 : une lacune se PROUVE par la repetition -- meme outil casse en boucle, meme remede rejoue, meme garde en echec. Un constat sans cible nomme est refuse."
+  },
+  "theme": {
+    "nom": "LACUNES-COMPARER",
+    "but": "Phase 2 : une lacune se PROUVE par la repetition -- meme outil casse en boucle, meme remede rejoue, meme garde en echec. Un constat sans cible nomme est refuse.",
+    "redirects": [
+      {
+        "besoin": "Choisir la cible",
+        "action": "procedure",
+        "etapes": [
+          "Nommer l outil, le garde ou la phrase qui se repete",
+          "Sans cible, la phase REFUSE : on ne prouve pas une repetition dans le vide"
+        ],
+        "regle": "Sans cible, la phase REFUSE : on ne prouve pas une repetition dans le vide"
+      },
+      {
+        "besoin": "Lire la repetition",
+        "action": "procedure",
+        "etapes": [
+          "Compter les occurrences dans frictions.db et l historique des missions",
+          "Conclure seulement si le compte depasse 1"
+        ],
+        "regle": "Conclure seulement si le compte depasse 1"
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

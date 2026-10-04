@@ -1,0 +1,201 @@
+%% Arbre de decision de vulcain (arbre v0.1.2)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est ma mission ? (construire / creer / modifier / autre / inter-round / lire)"}
+    RACINE -- "CREER" --> THEME-CREER
+    THEME-CREER["Construire un outil v1 conforme (protocole 5 fichiers), vali"]
+    THEME-CREER -- "besoin 1" --> THEME-CREER-B0
+    THEME-CREER-B0["Historiser le DEBUT de mon intervention"]
+    THEME-CREER -- "besoin 2" --> THEME-CREER-B1
+    THEME-CREER-B1["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-CREER -- "besoin 3" --> THEME-CREER-B2
+    THEME-CREER-B2["Lire l'outil a construire (documentation .md ou spec)"]
+    THEME-CREER -- "besoin 4" --> THEME-CREER-B3
+    THEME-CREER-B3["Copier le outil-template (ETAPE 3 OBLIGATOIRE)"]
+    THEME-CREER -- "besoin 5" --> THEME-CREER-B4
+    THEME-CREER-B4["Choisir la technologie"]
+    THEME-CREER -- "besoin 6" --> THEME-CREER-B5
+    THEME-CREER-B5["Developper l'outil"]
+    THEME-CREER -- "besoin 7" --> THEME-CREER-B6
+    THEME-CREER-B6["Bumper l'outil (mettre-a-jour-versions)"]
+    THEME-CREER -- "besoin 8" --> THEME-CREER-B7
+    THEME-CREER-B7["L'outil est-il un COMBO ou le CATALOGUE ?"]
+    THEME-CREER -- "besoin 9" --> THEME-CREER-B8
+    THEME-CREER-B8["Lancer le combo corriger-ascii"]
+    THEME-CREER -- "besoin 10" --> THEME-CREER-B9
+    THEME-CREER-B9["RVAV avant activation"]
+    THEME-CREER -- "besoin 11" --> THEME-CREER-B10
+    THEME-CREER-B10["Deleguer les tests a Morpheus"]
+    THEME-CREER -- "besoin 12" --> THEME-CREER-B11
+    THEME-CREER-B11["Enregistrer mes usages d outils"]
+    THEME-CREER -- "besoin 13" --> THEME-CREER-B12
+    THEME-CREER-B12["Ajouter les lecons dans corrections.md"]
+    THEME-CREER -- "besoin 14" --> THEME-CREER-B13
+    THEME-CREER-B13["Ameliorations possibles de mon fonctionnement ?"]
+    THEME-CREER -- "besoin 15" --> THEME-CREER-B14
+    THEME-CREER-B14["Activer Themis pour auditer ma mission"]
+    THEME-CREER -- "besoin 16" --> THEME-CREER-B15
+    THEME-CREER-B15["Retour de Themis recu ?"]
+    THEME-CREER -- "besoin 17" --> THEME-CREER-B16
+    THEME-CREER-B16["Historiser la FIN de mon intervention"]
+    FIN-fin-construire(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-CREER-B0 --> FIN-fin-construire
+    THEME-CREER-B1 --> FIN-fin-construire
+    THEME-CREER-B2 --> FIN-fin-construire
+    THEME-CREER-B3 --> FIN-fin-construire
+    THEME-CREER-B4 --> FIN-fin-construire
+    THEME-CREER-B5 --> FIN-fin-construire
+    THEME-CREER-B6 --> FIN-fin-construire
+    THEME-CREER-B7 --> FIN-fin-construire
+    THEME-CREER-B8 --> FIN-fin-construire
+    THEME-CREER-B9 --> FIN-fin-construire
+    THEME-CREER-B10 --> FIN-fin-construire
+    THEME-CREER-B11 --> FIN-fin-construire
+    THEME-CREER-B12 --> FIN-fin-construire
+    THEME-CREER-B13 --> FIN-fin-construire
+    THEME-CREER-B14 --> FIN-fin-construire
+    THEME-CREER-B15 --> FIN-fin-construire
+    THEME-CREER-B16 --> FIN-fin-construire
+    RACINE -- "CONSTRUIRE" --> THEME-CONSTRUIRE
+    THEME-CONSTRUIRE["Construire un outil v1 conforme (protocole 5 fichiers), vali"]
+    THEME-CONSTRUIRE -- "besoin 1" --> THEME-CONSTRUIRE-B0
+    THEME-CONSTRUIRE-B0["Historiser le DEBUT de mon intervention"]
+    THEME-CONSTRUIRE -- "besoin 2" --> THEME-CONSTRUIRE-B1
+    THEME-CONSTRUIRE-B1["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-CONSTRUIRE -- "besoin 3" --> THEME-CONSTRUIRE-B2
+    THEME-CONSTRUIRE-B2["Lire l'outil a construire (documentation .md ou spec)"]
+    THEME-CONSTRUIRE -- "besoin 4" --> THEME-CONSTRUIRE-B3
+    THEME-CONSTRUIRE-B3["Copier le outil-template (ETAPE 3 OBLIGATOIRE)"]
+    THEME-CONSTRUIRE -- "besoin 5" --> THEME-CONSTRUIRE-B4
+    THEME-CONSTRUIRE-B4["Choisir la technologie"]
+    THEME-CONSTRUIRE -- "besoin 6" --> THEME-CONSTRUIRE-B5
+    THEME-CONSTRUIRE-B5["Developper l'outil"]
+    THEME-CONSTRUIRE -- "besoin 7" --> THEME-CONSTRUIRE-B6
+    THEME-CONSTRUIRE-B6["Bumper l'outil (mettre-a-jour-versions)"]
+    THEME-CONSTRUIRE -- "besoin 8" --> THEME-CONSTRUIRE-B7
+    THEME-CONSTRUIRE-B7["L'outil est-il un COMBO ou le CATALOGUE ?"]
+    THEME-CONSTRUIRE -- "besoin 9" --> THEME-CONSTRUIRE-B8
+    THEME-CONSTRUIRE-B8["Lancer le combo corriger-ascii"]
+    THEME-CONSTRUIRE -- "besoin 10" --> THEME-CONSTRUIRE-B9
+    THEME-CONSTRUIRE-B9["RVAV avant activation"]
+    THEME-CONSTRUIRE -- "besoin 11" --> THEME-CONSTRUIRE-B10
+    THEME-CONSTRUIRE-B10["Deleguer les tests a Morpheus"]
+    THEME-CONSTRUIRE -- "besoin 12" --> THEME-CONSTRUIRE-B11
+    THEME-CONSTRUIRE-B11["Enregistrer mes usages d outils"]
+    THEME-CONSTRUIRE -- "besoin 13" --> THEME-CONSTRUIRE-B12
+    THEME-CONSTRUIRE-B12["Ajouter les lecons dans corrections.md"]
+    THEME-CONSTRUIRE -- "besoin 14" --> THEME-CONSTRUIRE-B13
+    THEME-CONSTRUIRE-B13["Ameliorations possibles de mon fonctionnement ?"]
+    THEME-CONSTRUIRE -- "besoin 15" --> THEME-CONSTRUIRE-B14
+    THEME-CONSTRUIRE-B14["Activer Themis pour auditer ma mission"]
+    THEME-CONSTRUIRE -- "besoin 16" --> THEME-CONSTRUIRE-B15
+    THEME-CONSTRUIRE-B15["Retour de Themis recu ?"]
+    THEME-CONSTRUIRE -- "besoin 17" --> THEME-CONSTRUIRE-B16
+    THEME-CONSTRUIRE-B16["Historiser la FIN de mon intervention"]
+    THEME-CONSTRUIRE-B0 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B1 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B2 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B3 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B4 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B5 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B6 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B7 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B8 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B9 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B10 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B11 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B12 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B13 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B14 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B15 --> FIN-fin-construire
+    THEME-CONSTRUIRE-B16 --> FIN-fin-construire
+    RACINE -- "MODIFIER" --> THEME-MODIFIER
+    THEME-MODIFIER["Modifier un outil v1 existant, le bumper, le valider (RVAV) "]
+    THEME-MODIFIER -- "besoin 1" --> THEME-MODIFIER-B0
+    THEME-MODIFIER-B0["Historiser le DEBUT de mon intervention"]
+    THEME-MODIFIER -- "besoin 2" --> THEME-MODIFIER-B1
+    THEME-MODIFIER-B1["Verifier le systeme (modification) - ETAPE 1 OBLIGATOIRE"]
+    THEME-MODIFIER -- "besoin 3" --> THEME-MODIFIER-B2
+    THEME-MODIFIER-B2["Lire l'outil existant"]
+    THEME-MODIFIER -- "besoin 4" --> THEME-MODIFIER-B3
+    THEME-MODIFIER-B3["Modifier l'outil"]
+    THEME-MODIFIER -- "besoin 5" --> THEME-MODIFIER-B4
+    THEME-MODIFIER-B4["Bumper l'outil (mettre-a-jour-versions)"]
+    THEME-MODIFIER -- "besoin 6" --> THEME-MODIFIER-B5
+    THEME-MODIFIER-B5["L'outil est-il un COMBO ou le CATALOGUE ?"]
+    THEME-MODIFIER -- "besoin 7" --> THEME-MODIFIER-B6
+    THEME-MODIFIER-B6["Lancer le combo corriger-ascii"]
+    THEME-MODIFIER -- "besoin 8" --> THEME-MODIFIER-B7
+    THEME-MODIFIER-B7["RVAV avant activation"]
+    THEME-MODIFIER -- "besoin 9" --> THEME-MODIFIER-B8
+    THEME-MODIFIER-B8["Deleguer les tests a Morpheus"]
+    THEME-MODIFIER -- "besoin 10" --> THEME-MODIFIER-B9
+    THEME-MODIFIER-B9["Enregistrer mes usages d outils"]
+    THEME-MODIFIER -- "besoin 11" --> THEME-MODIFIER-B10
+    THEME-MODIFIER-B10["Ajouter les lecons dans corrections.md"]
+    THEME-MODIFIER -- "besoin 12" --> THEME-MODIFIER-B11
+    THEME-MODIFIER-B11["Ameliorations possibles de mon fonctionnement ?"]
+    THEME-MODIFIER -- "besoin 13" --> THEME-MODIFIER-B12
+    THEME-MODIFIER-B12["Activer Themis pour auditer ma mission"]
+    THEME-MODIFIER -- "besoin 14" --> THEME-MODIFIER-B13
+    THEME-MODIFIER-B13["Retour de Themis recu ?"]
+    THEME-MODIFIER -- "besoin 15" --> THEME-MODIFIER-B14
+    THEME-MODIFIER-B14["Historiser la FIN de mon intervention"]
+    FIN-fin-modifier(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-MODIFIER-B0 --> FIN-fin-modifier
+    THEME-MODIFIER-B1 --> FIN-fin-modifier
+    THEME-MODIFIER-B2 --> FIN-fin-modifier
+    THEME-MODIFIER-B3 --> FIN-fin-modifier
+    THEME-MODIFIER-B4 --> FIN-fin-modifier
+    THEME-MODIFIER-B5 --> FIN-fin-modifier
+    THEME-MODIFIER-B6 --> FIN-fin-modifier
+    THEME-MODIFIER-B7 --> FIN-fin-modifier
+    THEME-MODIFIER-B8 --> FIN-fin-modifier
+    THEME-MODIFIER-B9 --> FIN-fin-modifier
+    THEME-MODIFIER-B10 --> FIN-fin-modifier
+    THEME-MODIFIER-B11 --> FIN-fin-modifier
+    THEME-MODIFIER-B12 --> FIN-fin-modifier
+    THEME-MODIFIER-B13 --> FIN-fin-modifier
+    THEME-MODIFIER-B14 --> FIN-fin-modifier
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Router une mission hors construction/modification vers le bo"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Mission dans le domaine d'un autre agent ? (delegation)"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["Besoin d'un outil qui n'existe pas ?"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["Documentation / mise a jour de ma fiche"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["Audit (activer Themis)"]
+    FIN-fin-autre(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-autre
+    THEME-AUTRE-B1 --> FIN-fin-autre
+    THEME-AUTRE-B2 --> FIN-fin-autre
+    THEME-AUTRE-B3 --> FIN-fin-autre
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Gerer les activations inter-round : accuser reception d un r"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d'un autre agent"]
+    THEME-INTER-ROUND -- "besoin 2" --> THEME-INTER-ROUND-B1
+    THEME-INTER-ROUND-B1["INTER-ROUND : tests non delegues (blocage a la delegation)"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round
+    THEME-INTER-ROUND-B1 --> FIN-fin-inter-round
+    RACINE -- "LIRE" --> THEME-LIRE
+    THEME-LIRE["Acquerir le contexte obligatoire avant toute mission : relec"]
+    THEME-LIRE -- "besoin 1" --> THEME-LIRE-B0
+    THEME-LIRE-B0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    THEME-LIRE -- "besoin 2" --> THEME-LIRE-B1
+    THEME-LIRE-B1["Consulter les lecons des autres agents (domaine de ma missio"]
+    THEME-LIRE -- "besoin 3" --> THEME-LIRE-B2
+    THEME-LIRE-B2["CONTEXTE : activite recente des agents"]
+    THEME-LIRE -- "besoin 4" --> THEME-LIRE-B3
+    THEME-LIRE-B3["LIRE LA DOCUMENTATION DE L OUTIL avant utilisation"]
+    THEME-LIRE -- "besoin 5" --> THEME-LIRE-B4
+    THEME-LIRE-B4["Probleme avec un outil en cours de mission ? (COMPRENDRE L O"]
+    FIN-fin-lire(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-LIRE-B0 --> FIN-fin-lire
+    THEME-LIRE-B1 --> FIN-fin-lire
+    THEME-LIRE-B2 --> FIN-fin-lire
+    THEME-LIRE-B3 --> FIN-fin-lire
+    THEME-LIRE-B4 --> FIN-fin-lire

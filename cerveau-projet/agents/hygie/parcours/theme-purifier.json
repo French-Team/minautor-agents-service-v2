@@ -1,0 +1,69 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "hygie",
+    "nom": "PURIFIER",
+    "description": "Purifier les fichiers surcharges (RVAV) - archiver les lecons anciennes"
+  },
+  "theme": {
+    "nom": "PURIFIER",
+    "but": "Purger les fichiers corrections.md surcharges en archivant les lecons anciennes (RVAV)",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine nettoyage)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent hygie --domaine nettoyage"],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Detecter les fichiers surcharges (case c9b)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/detecter/detecter-surcharge-fichier/detecter-surcharge-fichier.py cerveau-projet/agents --seuil 500 --recursive"],
+        "regle": "DETECTION : identifier les fichiers depassant le seuil de 500 lignes."
+      },
+      {
+        "besoin": "Purifier en dry-run d abord (case c9b)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/purifier/purifier-rvav/purifier-rvav.py --agent <agent> --dry-run --rapport <rapport>"],
+        "regle": "REGLE RVAV ANTI-PERTE : d abord en mode dry-run pour voir ce qui serait archive."
+      },
+      {
+        "besoin": "Verifier le rapport dry-run",
+        "action": "procedure",
+        "etapes": ["Lire le rapport genere, verifier qu aucune lecon n est perdue"],
+        "regle": "VERIFICATION : jamais de perte - l archive recoit les lecons anciennes."
+      },
+      {
+        "besoin": "Executer la purification reelle",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/purifier/purifier-rvav/purifier-rvav.py --agent <agent> --rapport <rapport>"],
+        "regle": "EXECUTION : apres validation du dry-run."
+      },
+      {
+        "besoin": "Verifier que le fichier principal est intact",
+        "action": "procedure",
+        "etapes": ["Relire le fichier purifie, verifier que les lecons recentes sont presentes"],
+        "regle": "INTEGRITE : le fichier principal ne doit jamais etre endommage."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/hygie/corrections.md <lecon>"],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-purifier"}
+}

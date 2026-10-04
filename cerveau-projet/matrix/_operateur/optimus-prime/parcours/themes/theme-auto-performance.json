@@ -1,0 +1,93 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "AUTO-PERFORMANCE",
+    "description": "Round de performance apres creation : mesurer le temps d'execution, comparer aux seuils, detecter les regressions, valider que le nouveau ne ralentit pas le systeme."
+  },
+  "theme": {
+    "nom": "AUTO-PERFORMANCE",
+    "but": "Verifier les performances apres chaque creation en 5 temps : preparer, mesurer, comparer, decider, consigner",
+    "redirects": [
+      {
+        "besoin": "Preparer le round",
+        "action": "procedure",
+        "etapes": [
+          "Identifier ce qui a ete cree (outil, routine, BDD, fichier)",
+          "Verifier que les outils de mesure sont disponibles (bilan-matrice, benchmark, sac-a-dos)",
+          "Noter l'heure de debut du round"
+        ],
+        "regle": "Round = verification SYSTEMATIQUE apres creation. Pas d'option."
+      },
+      {
+        "besoin": "Mesurer les temps d'execution",
+        "action": "procedure",
+        "etapes": [
+          "Executer le nouveau composant (py_compile + run si outil)",
+          "Mesurer le temps d'execution (ms)",
+          "Mesurer la memoire utilisee si possible",
+          "Verifier les codes de sortie"
+        ],
+        "regle": "Mesure = chiffres reels, pas d'estimation."
+      },
+      {
+        "besoin": "Comparer aux seuils",
+        "action": "procedure",
+        "etapes": [
+          "py_compile < 400ms (seuil cockpit)",
+          "bilan-periode < 500ms",
+          "veille-flux avg < 600ms",
+          "usages-outils < 50k entrees",
+          "Nouveau composant : temps inferieur aux predecesseurs si applicable"
+        ],
+        "regle": "Seuils du cockpit = reference. Depassement = alerte."
+      },
+      {
+        "besoin": "Decider -- performance OK",
+        "action": "procedure",
+        "etapes": [
+          "Noter les chiffres en BDD (usages-outils-combos)",
+          "Taguer : auto-performance, debut, [nom-outil]",
+          "Continuer le theme en cours"
+        ],
+        "regle": "OK = chiffres sous seuil. Pas de celebration, on continue."
+      },
+      {
+        "besoin": "Decider -- performance DEPASSEE",
+        "action": "procedure",
+        "etapes": [
+          "Noter le depassement en BDD (modifications-par-fichier)",
+          "ALERTER si depassement > 2x seuil (critique)",
+          "Declencher AUTO-OPTIMISATION si depassement < 2x seuil",
+          "Ne PAS revert sauf si critique"
+        ],
+        "regle": "Depassement = optimisation, pas revert. Sauf critique (> 2x seuil)."
+      },
+      {
+        "besoin": "Detecter les regressions",
+        "action": "procedure",
+        "etapes": [
+          "Comparer les metriques AVANT creation et APRES creation",
+          "Si regression (> 10% ralentissement) : alerte + mission optimisation",
+          "Si amelioration : noter en BDD comme preuve"
+        ],
+        "regle": "Regression = le systeme est devenu plus lent. A corriger."
+      },
+      {
+        "besoin": "Consigner le bilan",
+        "action": "procedure",
+        "etapes": [
+          "Noter en BDD (activites-recentes section missions)",
+          "Taguer : auto-performance, bilan, [resultat]",
+          "Mettre a jour les seuils si necessaire"
+        ],
+        "regle": "Chaque round = historique. Les seuils peuvent evoluer."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "origine": "moule",
+  "moule": "routine",
+  "nom": "verifier-liens-cartes",
+  "genere_le": "2026-09-23 09:05:26",
+  "role": "Mesure le graphe des liens des cartes d identite : liens morts, liens non reciproques, couverture des liens dans le corpus"
+}

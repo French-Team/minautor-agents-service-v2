@@ -1,0 +1,29 @@
+---
+identite:
+  type: protocole
+  appartient_a: __APPARTIENT_A__
+  commun: false
+  liens: __LIENS__
+---
+
+# PROTOCOLE __NUMERO__ -- __TITRE__
+
+> Un protocole est une SUITE DE GESTES, pas une regle : il dit quoi faire, dans
+> quel ordre, et a quel moment s arreter. On le lit quand la situation
+> correspond -- pas avant, pas apres.
+
+## QUAND L UTILISER (le declencheur, en une ligne)
+
+__QUAND__
+
+## LES GESTES (dans l ordre, jamais en parallele)
+
+__GESTES__
+
+## L ARRET (ou le produit s attend, et ce qu il vaut s il manque)
+
+__ARRET__
+
+## LE RATIOCHEMENT (la regle immuable jumelle, lue avec)
+
+__JUMELLE__

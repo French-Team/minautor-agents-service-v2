@@ -1,0 +1,38 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "TABLE-RONDE-ROUND",
+    "description": "Faire le tour -- Un round = les 5 profils lisant le MEME contenu. Le round N+1 ne s ouvre que sur les 5 analyses du round N. Dans un round, personne ne voit la production de celui qui parle avant lui."
+  },
+  "theme": {
+    "nom": "TABLE-RONDE-ROUND",
+    "but": "Un round = les 5 profils lisant le MEME contenu. Le round N+1 ne s ouvre que sur les 5 analyses du round N. Dans un round, personne ne voit la production de celui qui parle avant lui.",
+    "redirects": [
+      {
+        "besoin": "Deposer une analyse",
+        "action": "procedure",
+        "etapes": [
+          "Lire sa carte de profil (`table-ronde/profils/<profil>.md`) a SON domicile",
+          "Deposer par la porte : `bdd-raisonnement ajouter --tags \"table-ronde,R<n>,<PROFIL>\"`"
+        ],
+        "regle": "Deposer par la porte : `bdd-raisonnement ajouter --tags \"table-ronde,R<n>,<PROFIL>\"`"
+      },
+      {
+        "besoin": "Ce que la porte refuse",
+        "action": "procedure",
+        "etapes": [
+          "Un profil absent du round : le tour nomme qui manque",
+          "Un doublon du MEME profil dans le MEME round : la table ne s exprime pas deux fois de la meme facon",
+          "Le round N+1 avant les 5 analyses du round N : une table a moitie remplie ne fait pas un round"
+        ],
+        "regle": "Le round N+1 avant les 5 analyses du round N : une table a moitie remplie ne fait pas un round"
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

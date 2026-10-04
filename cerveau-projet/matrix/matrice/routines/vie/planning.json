@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "declare_le": "2026-09-26",
+  "decision": "createur D1 (MO-429) : le planning est la SOURCE des cadences et de la rotation d allumage",
+  "routines": [
+    {
+      "nom": "routeur-maintenance",
+      "cadence_secondes": 30,
+      "mode": "passe",
+      "decalage_initial_secondes": 0,
+      "priorite": 95,
+      "tolerance_cadences": 3,
+      "commande_passe": [
+        "routeur.py",
+        "tour"
+      ]
+    },
+    {
+      "nom": "suivi-sync",
+      "cadence_secondes": 60,
+      "mode": "passe",
+      "decalage_initial_secondes": 30,
+      "priorite": 70,
+      "tolerance_cadences": 3,
+      "commande_passe": [
+        "main.py",
+        "--once"
+      ]
+    },
+    {
+      "nom": "veille-flux",
+      "cadence_secondes": 300,
+      "mode": "passe",
+      "decalage_initial_secondes": 60,
+      "priorite": 60,
+      "tolerance_cadences": 3,
+      "commande_passe": [
+        "main.py",
+        "veille"
+      ]
+    },
+    {
+      "nom": "espion-integrite",
+      "cadence_secondes": 300,
+      "mode": "passe",
+      "decalage_initial_secondes": 90,
+      "priorite": 55,
+      "tolerance_cadences": 3,
+      "commande_passe": [
+        "main.py",
+        "tour"
+      ]
+    },
+    {
+      "nom": "vigie-portes",
+      "cadence_secondes": 900,
+      "mode": "passe",
+      "decalage_initial_secondes": 120,
+      "priorite": 50,
+      "tolerance_cadences": 3,
+      "commande_passe": [
+        "main.py",
+        "tour",
+        "--si-due"
+      ]
+    },
+    {
+      "nom": "vigie-profil",
+      "cadence_secondes": 900,
+      "mode": "passe",
+      "decalage_initial_secondes": 150,
+      "priorite": 40,
+      "tolerance_cadences": 3,
+      "commande_passe": [
+        "main.py",
+        "tour"
+      ]
+    },
+    {
+      "nom": "verifier-liens-cartes",
+      "cadence_secondes": 3600,
+      "mode": "passe",
+      "decalage_initial_secondes": 240,
+      "priorite": 10,
+      "tolerance_cadences": 3,
+      "commande_passe": [
+        "main.py",
+        "--once"
+      ]
+    },
+    {
+      "nom": "chien",
+      "cadence_secondes": 20,
+      "mode": "boucle",
+      "decalage_initial_secondes": 10,
+      "priorite": 80,
+      "tolerance_cadences": 3,
+      "commande_passe": [
+        "main.py",
+        "--boucle"
+      ]
+    }
+  ]
+}

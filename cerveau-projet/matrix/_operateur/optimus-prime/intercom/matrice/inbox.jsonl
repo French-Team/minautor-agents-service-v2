@@ -1,0 +1,14 @@
+{"type": "fin-mission", "date": "2026-09-12 15:03:33", "mission": "MO-001", "bilan": "MO-001 faite (serie 1/2)"}
+{"type": "fin-mission", "date": "2026-09-12 15:03:33", "mission": "MO-002", "bilan": "MO-002 faite (serie 2/2, fin auto)"}
+{"type": "fin-mission", "date": "2026-09-12 15:11:26", "mission": "MO-001", "bilan": "MO-001 LIRE livre : read_files ameliore (5000/5000 annonce, SHA optionnel, perimetre matrix/ seul, 2e canal L-009, 0.4ms direct, 0 valeur en dur, ASCII sain)"}
+{"type": "fin-mission", "date": "2026-09-12 15:22:57", "mission": "MO-002", "bilan": "MO-002 ECRIRE livre : write_file+str_replace ameliores (atomique tmp+replace, LF L-001, .bak horodate, SHA avant/apres, py_compile/json auto code1+bak, perimetre matrix/ seul allowlist, occurrence unique, @file anti-heredoc, 6 fichiers + manuel, 0 fuite, py_compile 7/7, BDD 650e0b, 16 preuves dont LF/validation)"}
+{"type": "fin-mission", "date": "2026-09-12 15:24:13", "mission": "MO-003", "bilan": "MO-003 LISTER livre : glob+list_directory ameliores (lister --dossier [--filtre] [--recursif] [--json], 1 porte, tri mtime, L-016 0 fuite, 182 .py, bench matrix/ 464 entrees 174ms, py_compile 5/5, BDD 6fabef, manuel 29)"}
+{"type": "fin-mission", "date": "2026-09-12 16:52:20", "mission": "MO-004", "bilan": "MO-004 RECHERCHER terminee (52ms, moteur unifie)"}
+{"type": "fin-mission", "date": "2026-09-12 16:55:28", "mission": "MO-005", "bilan": "MO-005 EXECUTER terminee (Python seul, 4 preuves OK)"}
+{"type": "fin-mission", "date": "2026-09-12 16:57:01", "mission": "MO-006", "bilan": "MO-006 DIALOGUER terminee (Flux 2, 5/5 py_compile, 4 tests)"}
+{"type": "fin-mission", "date": "2026-09-12 16:59:17", "mission": "MO-007", "bilan": "MO-007 BENCHMARK-COEUR terminee (9/9 epreuves, integration 292/315)"}
+{"type": "fin-mission", "date": "2026-09-12 17:00:04", "mission": "MO-008", "bilan": "MO-008 BENCHMARK-ACTIONS terminee (8/9 actions)"}
+{"type": "fin-mission", "date": "2026-09-12 17:00:04", "mission": "MO-009", "bilan": "MO-009 BENCHMARK-BATCH terminee (200 fichiers, 12 OK)"}
+{"type": "fin-mission", "date": "2026-09-12 17:00:04", "mission": "MO-010", "bilan": "MO-010 BENCHMARK-INTEGRATION terminee (292/315 epreuves, serie complete)"}
+{"type": "fin-mission", "date": "2026-09-12 17:42:18", "mission": "MO-011", "bilan": "MO-011 TRACEBACK terminee : espion tracebacks-optimus.py (scan+run, historique, rapport)"}
+{"type": "fin-mission", "date": "2026-09-12 17:42:29", "mission": "MO-012", "bilan": "MO-012 CORRECTION terminee : dialoguer/commun.py, handler specifique"}

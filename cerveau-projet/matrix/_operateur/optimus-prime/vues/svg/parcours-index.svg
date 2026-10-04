@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Parcours d Optimus - les themes, dans leur ordre | index-parcours.json (theme courant : REPARATION) | genere par rendre-graphe v1.0.0 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1580" height="1072" viewBox="0 0 1580 1072" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="fleche" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1580" height="1072" fill="#ffffff"/>
+    <path d="M 569.8 76.0 V 127.0 H 157.8 V 178.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="338.2" y="117.0" width="51.2" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="363.8" y="129.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 1</text>
+    <path d="M 569.8 76.0 V 127.0 H 362.2 V 178.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="440.4" y="117.0" width="51.2" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="466.0" y="129.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 2</text>
+    <path d="M 569.8 76.0 V 127.0 H 563.4 V 178.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="541.0" y="117.0" width="51.2" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="566.6" y="129.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 3</text>
+    <path d="M 569.8 76.0 V 127.0 H 787.0 V 178.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="652.8" y="117.0" width="51.2" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="678.4" y="129.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 4</text>
+    <path d="M 569.8 76.0 V 127.0 H 1001.0 V 178.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="759.8" y="117.0" width="51.2" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="785.4" y="129.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 5</text>
+    <path d="M 569.8 76.0 V 127.0 H 1205.4 V 178.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="862.0" y="117.0" width="51.2" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="887.6" y="129.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 6</text>
+    <path d="M 569.8 76.0 V 127.0 H 1422.6 V 178.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="970.6" y="117.0" width="51.2" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="996.2" y="129.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 7</text>
+    <path d="M 569.8 76.0 V 190.0 H 215.2 V 304.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="366.9" y="180.0" width="51.2" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="392.5" y="192.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 8</text>
+    <path d="M 569.8 76.0 V 190.0 H 442.0 V 304.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="480.3" y="180.0" width="51.2" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="505.9" y="192.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 9</text>
+    <path d="M 569.8 76.0 V 190.0 H 684.8 V 304.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="598.9" y="180.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="627.3" y="192.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 10</text>
+    <path d="M 569.8 76.0 V 190.0 H 934.0 V 304.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="723.5" y="180.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="751.9" y="192.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 11</text>
+    <path d="M 569.8 76.0 V 190.0 H 1157.6 V 304.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="835.3" y="180.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="863.7" y="192.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 12</text>
+    <path d="M 569.8 76.0 V 190.0 H 1362.0 V 304.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="937.5" y="180.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="965.9" y="192.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 13</text>
+    <path d="M 569.8 76.0 V 253.0 H 154.8 V 430.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="333.9" y="243.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="362.3" y="255.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 14</text>
+    <path d="M 569.8 76.0 V 253.0 H 327.2 V 430.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="420.1" y="243.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="448.5" y="255.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 15</text>
+    <path d="M 569.8 76.0 V 253.0 H 493.2 V 430.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="503.1" y="243.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="531.5" y="255.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 16</text>
+    <path d="M 569.8 76.0 V 253.0 H 672.0 V 430.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="592.5" y="243.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="620.9" y="255.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 17</text>
+    <path d="M 569.8 76.0 V 253.0 H 857.2 V 430.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="685.1" y="243.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="713.5" y="255.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 18</text>
+    <path d="M 569.8 76.0 V 253.0 H 1045.6 V 430.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="779.3" y="243.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="807.7" y="255.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 19</text>
+    <path d="M 569.8 76.0 V 253.0 H 1230.8 V 430.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="871.9" y="243.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="900.3" y="255.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 20</text>
+    <path d="M 569.8 76.0 V 253.0 H 1419.2 V 430.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="966.1" y="243.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="994.5" y="255.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 21</text>
+    <path d="M 569.8 76.0 V 316.0 H 209.0 V 556.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="361.0" y="306.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="389.4" y="318.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 22</text>
+    <path d="M 569.8 76.0 V 316.0 H 410.2 V 556.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="461.6" y="306.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="490.0" y="318.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 23</text>
+    <path d="M 569.8 76.0 V 316.0 H 598.6 V 556.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="555.8" y="306.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="584.2" y="318.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 24</text>
+    <path d="M 569.8 76.0 V 316.0 H 780.6 V 556.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="646.8" y="306.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="675.2" y="318.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 25</text>
+    <path d="M 569.8 76.0 V 316.0 H 972.2 V 556.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="742.6" y="306.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="771.0" y="318.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 26</text>
+    <path d="M 569.8 76.0 V 316.0 H 1163.8 V 556.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="838.4" y="306.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="866.8" y="318.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 27</text>
+    <path d="M 569.8 76.0 V 316.0 H 1365.0 V 556.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="939.0" y="306.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="967.4" y="318.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 28</text>
+    <path d="M 569.8 76.0 V 379.0 H 129.0 V 682.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="321.0" y="369.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="349.4" y="381.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 29</text>
+    <path d="M 569.8 76.0 V 379.0 H 323.8 V 682.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="418.4" y="369.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="446.8" y="381.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 30</text>
+    <path d="M 569.8 76.0 V 379.0 H 515.4 V 682.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="514.2" y="369.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="542.6" y="381.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 31</text>
+    <path d="M 569.8 76.0 V 379.0 H 713.4 V 682.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="613.2" y="369.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="641.6" y="381.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 32</text>
+    <path d="M 569.8 76.0 V 379.0 H 921.0 V 682.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="717.0" y="369.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="745.4" y="381.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 33</text>
+    <path d="M 569.8 76.0 V 379.0 H 1154.2 V 682.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="833.6" y="369.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="862.0" y="381.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 34</text>
+    <path d="M 569.8 76.0 V 379.0 H 1416.2 V 682.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="964.6" y="369.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="993.0" y="381.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 35</text>
+    <path d="M 569.8 76.0 V 442.0 H 678.4 V 808.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="595.7" y="432.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="624.1" y="444.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 36</text>
+    <path d="M 569.8 76.0 V 442.0 H 924.4 V 808.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="718.7" y="432.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="747.1" y="444.0" text-anchor="middle" font-size="10.5" fill="#1e293b">ordre 37</text>
+    <path d="M 742.2 76.0 V 316.0 H 209.0 V 556.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="447.2" y="306.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="475.6" y="318.0" text-anchor="middle" font-size="10.5" fill="#1e293b">en cours</text>
+    <path d="M 1157.6 340.0 V 637.0 H 790.2 V 934.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="939.9" y="627.0" width="68.0" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="973.9" y="639.0" text-anchor="middle" font-size="10.5" fill="#1e293b">INCOHERENT</text>
+    <rect x="494.0" y="40.0" width="151.6" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="569.8" y="62.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="569.8" dy="0">Demande du createur</tspan>
+    </text>
+    <rect x="62.8" y="178.0" width="190.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="157.8" y="200.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="157.8" dy="0">1. REPRISE-MISSION [pret]</tspan>
+    </text>
+    <rect x="292.8" y="178.0" width="138.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="362.2" y="200.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="362.2" dy="0">2. FICHIER [pret]</tspan>
+    </text>
+    <rect x="471.6" y="178.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="563.4" y="200.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="563.4" dy="0">3. AUTO-EVOLUTION [pret]</tspan>
+    </text>
+    <rect x="695.2" y="178.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="787.0" y="200.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="787.0" dy="0">4. CONTRE-ANALYSE [pret]</tspan>
+    </text>
+    <rect x="918.8" y="178.0" width="164.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1001.0" y="200.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1001.0" dy="0">5. PREPARATION [pret]</tspan>
+    </text>
+    <rect x="1123.2" y="178.0" width="164.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1205.4" y="200.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1205.4" dy="0">6. CREER-OUTIL [pret]</tspan>
+    </text>
+    <rect x="1327.6" y="178.0" width="190.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1422.6" y="200.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1422.6" dy="0">7. AUTO-CORRECTION [pret]</tspan>
+    </text>
+    <rect x="129.8" y="304.0" width="170.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="215.2" y="326.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="215.2" dy="0">8. AUTO-TESTING [pret]</tspan>
+    </text>
+    <rect x="340.6" y="304.0" width="202.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="442.0" y="326.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="442.0" dy="0">9. AUTO-OPTIMISATION [pret]</tspan>
+    </text>
+    <rect x="583.4" y="304.0" width="202.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="684.8" y="326.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="684.8" dy="0">10. AUTO-PERFORMANCE [pret]</tspan>
+    </text>
+    <rect x="826.2" y="304.0" width="215.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="934.0" y="326.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="934.0" dy="0">11. AUTO-AUDIT-NEMESIS [pret]</tspan>
+    </text>
+    <rect x="1081.8" y="304.0" width="151.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1157.6" y="326.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1157.6" dy="0">12. AUTO-XXX [pret]</tspan>
+    </text>
+    <rect x="1273.4" y="304.0" width="177.2" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1362.0" y="326.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1362.0" dy="0">13. PURIFICATION [pret]</tspan>
+    </text>
+    <rect x="82.2" y="430.0" width="145.2" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="154.8" y="452.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="154.8" dy="0">14. CADRAGE [pret]</tspan>
+    </text>
+    <rect x="267.4" y="430.0" width="119.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="327.2" y="452.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="327.2" dy="0">15. BDD [pret]</tspan>
+    </text>
+    <rect x="427.0" y="430.0" width="132.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="493.2" y="452.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="493.2" dy="0">16. OUTIL [pret]</tspan>
+    </text>
+    <rect x="599.4" y="430.0" width="145.2" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="672.0" y="452.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="672.0" dy="0">17. ROUTINE [pret]</tspan>
+    </text>
+    <rect x="784.6" y="430.0" width="145.2" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="857.2" y="452.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="857.2" dy="0">18. INDICES [pret]</tspan>
+    </text>
+    <rect x="969.8" y="430.0" width="151.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1045.6" y="452.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1045.6" dy="0">19. CONTRATS [pret]</tspan>
+    </text>
+    <rect x="1161.4" y="430.0" width="138.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1230.8" y="452.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1230.8" dy="0">20. PILOTE [pret]</tspan>
+    </text>
+    <rect x="1340.2" y="430.0" width="158.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1419.2" y="452.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1419.2" dy="0">21. TEMPLATES [pret]</tspan>
+    </text>
+    <path d="M 209.0 556.0 L 291.2 574.0 L 209.0 592.0 L 126.8 574.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+    <text x="209.0" y="578.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="209.0" dy="0">22. REPARATION [pret]</tspan>
+    </text>
+    <rect x="331.2" y="556.0" width="158.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="410.2" y="578.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="410.2" dy="0">23. ENTONNOIR [pret]</tspan>
+    </text>
+    <rect x="529.2" y="556.0" width="138.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="598.6" y="578.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="598.6" dy="0">24. DEFCON [pret]</tspan>
+    </text>
+    <rect x="708.0" y="556.0" width="145.2" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="780.6" y="578.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="780.6" dy="0">25. ANALYSE [pret]</tspan>
+    </text>
+    <rect x="893.2" y="556.0" width="158.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="972.2" y="578.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="972.2" dy="0">26. RECHERCHE [pret]</tspan>
+    </text>
+    <rect x="1091.2" y="556.0" width="145.2" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1163.8" y="578.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1163.8" dy="0">27. RAPPORT [pret]</tspan>
+    </text>
+    <rect x="1276.4" y="556.0" width="177.2" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1365.0" y="578.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1365.0" dy="0">28. CONSTRUCTEUR [pret]</tspan>
+    </text>
+    <rect x="50.0" y="682.0" width="158.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="129.0" y="704.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="129.0" dy="0">29. REDACTEUR [pret]</tspan>
+    </text>
+    <rect x="248.0" y="682.0" width="151.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="323.8" y="704.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="323.8" dy="0">30. AUDITEUR [pret]</tspan>
+    </text>
+    <rect x="439.6" y="682.0" width="151.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="515.4" y="704.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="515.4" dy="0">31. REVISEUR [pret]</tspan>
+    </text>
+    <rect x="631.2" y="682.0" width="164.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="713.4" y="704.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="713.4" dy="0">32. REPARATEUR [pret]</tspan>
+    </text>
+    <rect x="835.6" y="682.0" width="170.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="921.0" y="704.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="921.0" dy="0">33. PERFORMANCE [pret]</tspan>
+    </text>
+    <rect x="1046.4" y="682.0" width="215.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1154.2" y="704.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1154.2" dy="0">34. PERFORMANCE-OUTILS [pret]</tspan>
+    </text>
+    <rect x="1302.0" y="682.0" width="228.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1416.2" y="704.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1416.2" dy="0">35. PERFORMANCE-ROUTINES [pret]</tspan>
+    </text>
+    <rect x="564.2" y="808.0" width="228.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="678.4" y="830.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="678.4" dy="0">36. PERFORMANCE-SERVEURS [pret]</tspan>
+    </text>
+    <rect x="832.6" y="808.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="924.4" y="830.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="924.4" dy="0">37. COMMUNICATION [pret]</tspan>
+    </text>
+    <rect x="685.6" y="40.0" width="113.2" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="742.2" y="62.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="742.2" dy="0">THEME COURANT</tspan>
+    </text>
+    <rect x="666.4" y="934.0" width="247.6" height="48.0" rx="24.0" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.3"/>
+    <text x="790.2" y="955.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="790.2" dy="0">fichier-absent : le theme AUTO-XXX</tspan>
+      <tspan x="790.2" dy="14">(ordre 12) pointe vers...</tspan>
+    </text>
+    <rect x="838.8" y="40.0" width="247.6" height="48.0" rx="24.0" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.3"/>
+    <text x="962.6" y="61.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="962.6" dy="0">theme-orphelin : le theme</tspan>
+      <tspan x="962.6" dy="14">theme-user-profil.json existe s...</tspan>
+    </text>
+</svg>

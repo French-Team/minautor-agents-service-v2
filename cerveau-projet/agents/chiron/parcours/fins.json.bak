@@ -1,0 +1,44 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "chiron",
+    "description": "Fins reelles de Chiron (parcours v0.3.4 : c14, c12, c18, cU3, c11)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-chiron.json"
+    },
+    "fin-educer": {
+      "titre": "FIN - Education terminee (activer Janus)",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin chiron \"<rapport d education>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin chiron lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-auto-correction": {
+      "titre": "FIN - Auto-correction terminee (activer Janus)",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin chiron \"<rapport d auto-correction>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin chiron lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-outils": {
+      "titre": "FIN - Reprendre ma mission (cU3)",
+      "description": "Le probleme d outil est resolu. Reprise de la mission interrompue.",
+      "action": "redirection",
+      "vers": "arbre-chiron.json"
+    },
+    "fin-inter-round": {
+      "titre": "FIN - Inter-round traite (retourner a l appelant)",
+      "description": "Le rapport inter-round est traite. Si mon precedent est un agent qui m a active en inter-round, je REACTIVE cet appelant pour qu il reprenne son round (Pattern 13). Si mission directe venant de Cerberus, je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin chiron \"<rapport du traitement inter-round>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin chiron lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    }
+  }
+}

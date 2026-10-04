@@ -1,0 +1,58 @@
+"""Passe de la routine __NOM_ROUTINE__ -- LE TRAVAIL DE LA ROUTINE SE POSE ICI.
+
+Contrat d'une passe (le meme que suivi-sync et veille-flux) :
+  - `passer()` fait UNE passe et retourne (nombre, messages) :
+      nombre   : ce que la passe a traite (entier >= 0) ;
+      messages : ce qui doit s'afficher (liste de textes, souvent vide).
+  - une passe qui ne peut pas travailler ne LEVE pas : elle rend 0 et un
+    message clair. Un echec se DIT, il ne plante pas la boucle.
+  - `publier_passe(nombre, messages)` ecrit l'ETAT COURT (le temoin de cadence
+    lu par `verifier-cadence`) : ne pas le retirer, ne pas le deplacer.
+"""
+import json
+import os
+from datetime import datetime
+
+from battement import ajouter_passe, lire_anneau
+from constants import (
+    CHEMIN_ETAT,
+    CLE_ANNEAU_PASSES,
+    ENCODAGE_ETAT,
+    FORMAT_HORODATAGE,
+    PASSES_GARDEES_ETAT,
+)
+
+
+def passer():
+    """UNE passe de la routine : retourne (nombre, messages).
+
+    ETAT COURANT : squelette -- la routine ne fait encore rien, et le DIT.
+    Remplacer ce corps par le travail reel, sans changer la signature.
+    """
+    return 0, ["__NOM_ROUTINE__ : passe squelette, travail a implementer"]
+
+
+def publier_passe(nombre, messages):
+    """Ecrit l'ETAT COURT de la passe : ce que la routine a fait, et QUAND.
+
+    Le battement REEL d'une routine est un ETAT, pas une histoire (friction 28,
+    2026-09-14) : il s'ecrit ici, a CHAQUE passe et ECRASE. C'est ce que lit
+    `verifier-cadence`, qui le compare a la cadence DECLAREE.
+
+    Meme contrat que suivi-sync : l'anneau borne vient du moteur PARTAGE
+    `data/commun/battement.py` (L-029 : un moteur recopie diverge).
+    """
+    passe = datetime.now().strftime(FORMAT_HORODATAGE)
+    donnees = {
+        "type": "passe",
+        "date": passe,
+        "traitees": nombre,
+        "messages": len(messages or []),
+        CLE_ANNEAU_PASSES: ajouter_passe(lire_anneau(CHEMIN_ETAT, CLE_ANNEAU_PASSES),
+                                         passe, PASSES_GARDEES_ETAT),
+    }
+    temporaire = CHEMIN_ETAT.with_name(CHEMIN_ETAT.name + ".tmp")
+    with open(str(temporaire), "w", encoding=ENCODAGE_ETAT, newline="\n") as flux:
+        flux.write(json.dumps(donnees, ensure_ascii=True, sort_keys=True) + "\n")
+    os.replace(str(temporaire), str(CHEMIN_ETAT))
+    return CHEMIN_ETAT

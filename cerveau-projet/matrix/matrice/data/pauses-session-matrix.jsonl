@@ -1,0 +1,6 @@
+{"type": "pause", "date": "2026-09-09 07:31:42", "origine": "pause manuelle", "mission": "M-080", "raison": "test M-080 pause manuelle"}
+{"type": "reprise", "date": "2026-09-09 07:32:07", "mission": "M-080"}
+{"type": "pause", "date": "2026-09-09 07:32:53", "origine": "defcon 5", "mission": "M-080", "raison": "defcon 5 automatique"}
+{"type": "reprise", "date": "2026-09-09 07:33:09", "mission": "M-080"}
+{"type": "pause", "date": "2026-09-12 11:07:23", "origine": "pause manuelle", "mission": "DIALOGUE-COMMUNICATION", "raison": "maintenance manuelle demandee par le createur [pause] pendant COMMUNICATION (Flux 1) - cameleon dialogue sans mission pilote active"}
+{"type": "reprise", "date": "2026-09-25 06:50:25", "mission": "DIALOGUE-COMMUNICATION", "regularisation": "regularisation EO-357 : pause du 2026-09-12 orpheline (etat disparu), constat MO-401"}

@@ -1,0 +1,38 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "nemesis",
+    "nom": "AUTRE",
+    "description": "Mission hors parcours : signaler au pilote via ORACLE"
+  },
+  "theme": {
+    "nom": "AUTRE",
+    "but": "Qualifier une mission hors parcours et la signaler au pilote via ORACLE",
+    "redirects": [
+      {
+        "besoin": "Qualifier la mission hors parcours et signaler au pilote",
+        "action": "procedure",
+        "etapes": [
+          "Lire la mission donnee par Cerberus / l agent appelant",
+          "SIGNALER le besoin au PILOTE via ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent <agent_habilite> \"<rapport>\"",
+          "Ne jamais executer une mission hors de mon domaine : le PILOTE choisit et active l agent habilite apres signalement a ORACLE"
+        ],
+        "regle": "HORS PARCOURS : je n execute pas la mission ici ; le PILOTE previent ORACLE, qui choisit et active l agent habilite."
+      },
+      {
+        "besoin": "Ajouter mes lecons et usages",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent nemesis --domaine audit <lecon>",
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent nemesis <outil>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION : toute mission se termine par ma lecon + mes usages."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-autre"
+  }
+}

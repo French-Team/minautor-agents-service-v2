@@ -1,0 +1,46 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "TABLE-RONDE-ARBITRER",
+    "description": "Trancher en gardant le desaccord -- Apres les 3 rounds, ARBITRE synthetise. Sa regle : le desaccord se CONSERVE -- chacun des 5 profils a un verdict (d accord, reserve, opposition). Une synthese unanime sur cinq facons de penser est un signal d alerte, pas une reussite."
+  },
+  "theme": {
+    "nom": "TABLE-RONDE-ARBITRER",
+    "but": "Apres les 3 rounds, ARBITRE synthetise. Sa regle : le desaccord se CONSERVE -- chacun des 5 profils a un verdict (d accord, reserve, opposition). Une synthese unanime sur cinq facons de penser est un signal d alerte, pas une reussite.",
+    "redirects": [
+      {
+        "besoin": "Exiger le desaccord",
+        "action": "procedure",
+        "etapes": [
+          "Nommer les 5 profils dans la synthese : un profil non nomme n a pas ete entendu",
+          "Prononcer au moins deux verdicts differents : une synthese d un seul verdict lisse le desaccord"
+        ],
+        "regle": "Prononcer au moins deux verdicts differents : une synthese d un seul verdict lisse le desaccord"
+      },
+      {
+        "besoin": "Produire la sortie",
+        "action": "procedure",
+        "etapes": [
+          "Une ou plusieurs MISSIONS, chacune avec objectif, emprise et preuve",
+          "Deposees par la porte `entonnoir deposer` -- jamais a la main"
+        ],
+        "regle": "Deposees par la porte `entonnoir deposer` -- jamais a la main"
+      },
+      {
+        "besoin": "Refuser de trancher trop tot",
+        "action": "procedure",
+        "etapes": [
+          "ARBITRE sur une table incomplete : REFUS nomme les profils qui manquent",
+          "Une synthese venue de la memoire de l agent n est pas une piece : elle se lit sur disque"
+        ],
+        "regle": "Une synthese venue de la memoire de l agent n est pas une piece : elle se lit sur disque"
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

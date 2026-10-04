@@ -1,0 +1,16 @@
+
+=== CHRONO test (total 0.0s) ===
+=== test-030 : protections importees + protection STOP ===
+  [OK] 1. tester-protections importable (VERSION=0.2.0)
+  [OK] 2a. Le dossier tests/ contient des tests
+  [OK] 2b. Les 89 tests importent les protections (bloc standard)
+  [OK] 3. Aucun subprocess.run brut restant (executions protegees)
+  [OK] 4. verifier_critique leve ArretProtection sur KO (STOP)
+[STOP] Protection boucles-infinies/blocage : la commande a depasse 3s - arret force de l arbre de processus
+  [OK] 5. boucle infinie arretee par le timeout (3.1s)
+  [OK] 6. Le lanceur supporte --fail-fast (protection STOP suite)
+  [OK] 7. template-test.md impose l import des protections
+  [OK] 8. ASCII strict : 0 non-ASCII (test + module)
+  [OK] 9. LF pur : 0 CRLF (test + module)
+
+=== RESULTAT : 10 OK / 0 KO (sur 10 points) ===

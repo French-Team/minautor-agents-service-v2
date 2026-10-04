@@ -1,0 +1,332 @@
+{
+  "identite": {
+    "type": "index-themes",
+    "appartient_a": "optimus-prime"
+  },
+  "themes": [
+    {
+      "nom": "REPRISE-MISSION",
+      "fichier": "theme-reprise-mission.json",
+      "protocole": "../../protocoles/proto-1-reprise-mission.md",
+      "statut": "pret",
+      "description": "Reprendre ma mission unique au demarrage : relire, mesurer, choisir, executer, rendre la main"
+    },
+    {
+      "nom": "FICHIER",
+      "fichier": "theme-fichier.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Theme fichier executant (imperatifs 66-83) : parcours TOUJOURS le meme -- extension (.py/.json/.md) puis action (ajouter/modifier/corriger) -- chaque case donnant la porte officielle, la preuve a produire et la regle"
+    },
+    {
+      "nom": "AUTO-EVOLUTION",
+      "fichier": "theme-auto-evolution.json",
+      "protocole": "../../protocoles/proto-2-auto-evolution.md",
+      "statut": "pret",
+      "description": "Grandir en travaillant : detecter, qualifier, cibler, modifier, valider -- un changement reversible a la fois"
+    },
+    {
+      "nom": "CONTRE-ANALYSE",
+      "fichier": "theme-contre-analyse.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Part 3 d'une [question] : Nemesis incarnee en THEME -- avis contradictoire sur 3 axes (cas limites, optimisation, securite), lecture seule"
+    },
+    {
+      "nom": "PREPARATION",
+      "fichier": "theme-preparation.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Phase de discussion & preparation hors code : inventorier les natifs, dessiner leurs versions ameliorees non configurables, prioriser la serie, attendre GO avant CREER-OUTIL"
+    },
+    {
+      "nom": "CREER-OUTIL",
+      "fichier": "theme-creer-outil.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Construire un nouvel outil a partir des templates et moules existants"
+    },
+    {
+      "nom": "AUTO-CORRECTION",
+      "fichier": "theme-auto-correction.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Corriger automatiquement les erreurs detectees : ASCII, syntaxe, imports, conventions. Probleme grave = alerte intercom."
+    },
+    {
+      "nom": "AUTO-TESTING",
+      "fichier": "theme-auto-testing.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Tests automatiques post-modification : py_compile, tests unitaires, verification d'integrite, non-regression."
+    },
+    {
+      "nom": "AUTO-OPTIMISATION",
+      "fichier": "theme-auto-optimisation.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Optimiser les performances : mesurer avant, optimiser un seul element, mesurer apres. Jamais sans preuve."
+    },
+    {
+      "nom": "AUTO-PERFORMANCE",
+      "fichier": "theme-auto-performance.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Round de performance apres creation : mesurer, comparer aux seuils, detecter regressions. Systematique apres OUTIL/ROUTINE/BDD."
+    },
+    {
+      "nom": "AUTO-AUDIT-NEMESIS",
+      "fichier": "theme-auto-audit-nemesis.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Avant TOUTE validation : audit 3 axes (cas limites, optimisation, securite). TOUJOURS repondre 'Oui, mais...'. Jamais de validation sans preuve de robustesse."
+    },
+    {
+      "nom": "AUTO-XXX",
+      "fichier": "super-combos/sc-001-auto-xxx/main.py",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Super-combos intelligent qui enchaine PREPARATION -> AUTO-CORRECTION -> AUTO-TESTING -> AUTO-OPTIMISATION -> AUTO-PERFORMANCE -> AUTO-AUDIT-NEMESIS"
+    },
+    {
+      "nom": "PURIFICATION",
+      "fichier": "theme-purification.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Suite [purification] : demande -> cartographie -> classification -> audit -> nemesis -> decision -> execution-par-porte -> verification -> bilan. Controle et purifie toute la Matrice v3 sans suppression ; les anciens correctifs sont classes avant decision. Plan : purification/plan-conservation.md ; analyse : purification/analyse-nemesis.md",
+      "analyse": "../../purification/analyse-nemesis.md"
+    },
+    {
+      "nom": "CADRAGE",
+      "fichier": "theme-cadrage.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Parcours dedie des crochets [???] et [preparer] (MO-317) : CONSTITUER LA CHAINE de missions avant de resoudre -- manques -> memoire -> audit -> nemesis -> chaine -> depot. L'ensemble devient UNE mission contenant plusieurs missions a enchainer ; file NORMALE sauf urgence",
+      "analyse": ""
+    },
+    {
+      "nom": "BDD",
+      "fichier": "theme-bdd.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "construire, raccorder ou reparer une BDD du sac-a-dos (preuves : M-002, M-009 a M-011, M-021)"
+    },
+    {
+      "nom": "OUTIL",
+      "fichier": "theme-outil.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "construire ou reparer un outil dedie (preuves : M-003 a M-005, M-008, M-030, M-031)"
+    },
+    {
+      "nom": "ROUTINE",
+      "fichier": "theme-routine.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "poser ou faire evoluer les routines de la veille-flux (preuves : M-007, M-012, M-020)"
+    },
+    {
+      "nom": "INDICES",
+      "fichier": "theme-indices.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "poser ou mettre a jour les indices d'une zone (preuves : M-006, M-025, M-029)"
+    },
+    {
+      "nom": "CONTRATS",
+      "fichier": "theme-contrats.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "relire et reparer les contrats (readme, DESCRIPTION, manuel) contre l'etat reel (preuves : M-014, M-029)"
+    },
+    {
+      "nom": "PILOTE",
+      "fichier": "theme-pilote.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "faire evoluer le pilote : injection, fin, lot, tresse, checklists (preuves : M-015, M-016, M-022 a M-028, M-036)"
+    },
+    {
+      "nom": "TEMPLATES",
+      "fichier": "theme-templates.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "poser ou faire evoluer les moules et dupliquer-template (preuves : M-030, M-031)"
+    },
+    {
+      "nom": "REPARATION",
+      "fichier": "theme-reparation.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "reparer un ecart detecte par la veille-flux ou l'espion-integrite (preuves : M-008, M-011, M-013, boucle de detection en M-020)"
+    },
+    {
+      "nom": "ENTONNOIR",
+      "fichier": "theme-entonnoir.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Missions sur l'entonnoir : echelons, files-types, tresse, listes fermees"
+    },
+    {
+      "nom": "DEFCON",
+      "fichier": "theme-defcon.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Piloter les periodes de mise en securite de la Matrice : echelle 5 (bloque tout sauf la MAINTENANCE), 4 (suivi de bout en bout), 3 (surveiller puis valider), 2 (normal). Le theme DEFCON est le seul injectable quand defcon=5"
+    },
+    {
+      "nom": "ANALYSE",
+      "fichier": "theme-analyse.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Part 1 d'une [question] : analyser le sujet pose, poser les termes et les hypotheses"
+    },
+    {
+      "nom": "RECHERCHE",
+      "fichier": "theme-recherche.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Part 2 d'une [question] : recherche approfondie (codebase + web si besoin), faits et preuves"
+    },
+    {
+      "nom": "RAPPORT",
+      "fichier": "theme-rapport.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Part 4 d'une [question] : rapport consolide pour/contre, decision rendue au createur"
+    },
+    {
+      "nom": "CONSTRUCTEUR",
+      "fichier": "theme-constructeur.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Executer les missions dev : construire par les portes officielles, un changement a la fois, teste avant livraison (proto-6 + proto-7)"
+    },
+    {
+      "nom": "REDACTEUR",
+      "fichier": "theme-redacteur.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Executer les missions doc : ecrire des contrats qui disent la verite du systeme, chaque phrase verifiee sur disque (proto-6)"
+    },
+    {
+      "nom": "AUDITEUR",
+      "fichier": "theme-auditeur.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Executer les missions audit : constat factuel LECTURE SEULE sur 3 axes - cas limites, optimisation, securite (proto-3 + proto-4)"
+    },
+    {
+      "nom": "REVISEUR",
+      "fichier": "theme-reviseur.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Executer les missions revision : relire un sujet EN ENTIER sur disque et proposer les changements - decision du createur obligatoire (proto-6)"
+    },
+    {
+      "nom": "REPARATEUR",
+      "fichier": "theme-reparateur.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Executer les missions reparation apres alerte : reproduire, diagnostiquer a la racine, reparer un changement minimum, retour vert (proto-8)"
+    },
+    {
+      "nom": "PERFORMANCE",
+      "fichier": "theme-performance.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Theme mere des performances de la Matrice : couvre ses 3 types de cibles (outils, routines, serveurs) via ses 3 sous-themes PERFORMANCE-OUTILS, PERFORMANCE-ROUTINES, PERFORMANCE-SERVEURS. Chaque sous-theme suit le cycle ANALYSER (mesures existantes : sac-a-dos durees/codes, bilan-periode) -> OPTIMISER (cibles chiffrees) -> AMELIORER (livraison mesuree avant/apres). Les metriques afficheront un encart dedie au journal multi-encarts."
+    },
+    {
+      "nom": "PERFORMANCE-OUTILS",
+      "fichier": "theme-performance-outils.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Analyser / optimiser / ameliorer les OUTILS de la Matrice (data/outils/) : durees par verbe (sac-a-dos), codes de sortie, doublons de logique, simplifications. ANALYSER avec les mesures existantes, OPTIMISER sur cibles chiffrees, AMELIORER avec preuve avant/apres."
+    },
+    {
+      "nom": "PERFORMANCE-ROUTINES",
+      "fichier": "theme-performance-routines.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Analyser / optimiser / ameliorer les ROUTINES (veille-flux, espion-integrite, passes automatiques) : intervalles, durees de passe, charge des sous-processus, fenetres. ANALYSER avec journal-veille + bilan-periode, OPTIMISER sur cibles chiffrees, AMELIORER avec preuve avant/apres."
+    },
+    {
+      "nom": "PERFORMANCE-SERVEURS",
+      "fichier": "theme-performance-serveurs.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Analyser / optimiser / ameliorer les SERVEURS et boucles de fond (server-matrice, activateur de vie, serveurs futurs) : cycles de surveillance, latence de relance, consommation. ANALYSER avec les traces du sac-a-dos, OPTIMISER sur cibles chiffrees, AMELIORER avec preuve avant/apres."
+    },
+    {
+      "nom": "COMMUNICATION",
+      "fichier": "theme-communication.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Accueil v3 (Flux 1) : le cameleon se presente une fois, presente la Matrice et dialogue avec l'operateur sans conscience que la Matrice le dirige via le pilote"
+    },
+    {
+      "nom": "LACUNES-RECHERCHER",
+      "fichier": "theme-lacunes-RECHERCHER.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Lire les signaux qui revelent une lacune (frictions, lecons, segments) et nommer le silence quand il depasse le seuil"
+    },
+    {
+      "nom": "LACUNES-COMPARER",
+      "fichier": "theme-lacunes-COMPARER.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Prouver la repetition : meme outil casse en boucle, meme remede rejoue. Sans cible nommee, la phase refuse"
+    },
+    {
+      "nom": "LACUNES-INVESTIGUER",
+      "fichier": "theme-lacunes-INVESTIGUER.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "WHY : que manque-t-il, ou manque-t-il, et pourquoi l erreur est-elle POSSIBLE. Une racine nomme un emplacement"
+    },
+    {
+      "nom": "LACUNES-QQCP",
+      "fichier": "theme-lacunes-QQCP.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "QUI, QUOI, COMMENT, POURQUOI -- quatre cases factuelles, une case vide se DIT vide. Puis AUTO-AUDIT-NEMESIS (3 axes)"
+    },
+    {
+      "nom": "LACUNES-COMBLER",
+      "fichier": "theme-lacunes-COMBLER.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Sortir une DECISION et son emprise ; la PORTE la pose. Jamais de patch depuis un constat"
+    },
+    {
+      "nom": "TABLE-RONDE-OUVRIR",
+      "fichier": "theme-table-ronde-ouvrir.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Nommer le sujet, puis laisser les 5 profils le lire seuls"
+    },
+    {
+      "nom": "TABLE-RONDE-ROUND",
+      "fichier": "theme-table-ronde-round.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Les 5 profils lisent le MEME contenu ; le round N+1 exige les 5 analyses du round N"
+    },
+    {
+      "nom": "TABLE-RONDE-ARBITRER",
+      "fichier": "theme-table-ronde-arbitrer.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "ARBITRE synthetise en conservant le verdict de chacun des 5 profils"
+    },
+    {
+      "nom": "DEPOT-GIT",
+      "fichier": "theme-depot-git.json",
+      "protocole": "",
+      "statut": "pret",
+      "description": "Trancher un commit sans se fier a l habitude : mesurer son INTERET (ce que la sauvegarde protege reellement), ecarter ce qui contamine le depot, et dire le verdict par la porte"
+    }
+  ]
+}

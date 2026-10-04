@@ -1,0 +1,94 @@
+{
+  "identite": {
+    "type": "super-combo",
+    "appartient_a": "oracle",
+    "nom": "purge-p1",
+    "version": "0.1.0",
+    "description": "SUPER-COMBO de purge des P1 non-acquittes du round (mission URGENT issue de la mise au point v1 du 2026-08-30). Chaque case = lire puis acquitter les P1 d un destinataire, du plus charge au plus leger. Ordre : buffy (5), janus (5), cerberus (2), morpheus (2), themis (1), vulcain (1), oracle (1), socrate (1)."
+  },
+  "super-combo": {
+    "nom": "purge-p1",
+    "agent_depart": "buffy",
+    "case_depart": "c1",
+    "regles": {
+      "CHAINAGE": "Chaque case declenche oracle + pilote (couche inferieure) pour diriger l agent.",
+      "NE_PAS_TOUT_CONTROLER": "Le super-pilote orchestre le FLUX inter-agents. Les details de chaque mission sont geres par oracle/pilote/agents deja en place.",
+      "LIRE_AVANT_ACQUITTER": "Chaque agent LIT ses P1 puis les ACQUITTE via oracle.py acquitter <agent> <id> - jamais d acquittement en vrac sans lecture.",
+      "TERMINE": "Le super-combo se termine quand toutes les cases du chemin sont visitees. Critere global : 0 P1 non-acquitte restant."
+    }
+  },
+  "cases": {
+    "c1": {
+      "titre": "buffy - lire puis acquitter ses 5 P1",
+      "agent": "buffy",
+      "type": "agent",
+      "mission": "PURGE P1 : lire puis acquitter tes 5 messages non-acquittes (ids: 705b4ed3, 9792c6e3, verifier-statuts-204006, verifier-statuts-205008, verifier-statuts-205510) via oracle.py acquitter buffy <id> apres lecture. Traite en priorite les 3 INTER-ROUND etat URGENT.",
+      "file": "asap",
+      "suivant": "c2"
+    },
+    "c2": {
+      "titre": "janus - lire puis acquitter ses 5 P1",
+      "agent": "janus",
+      "type": "agent",
+      "mission": "PURGE P1 : lire puis acquitter tes 5 messages non-acquittes (ids: 6fedb0fd, 81063597, e558abe1, verifier-statuts-140847, verifier-statuts-144050) via oracle.py acquitter janus <id> apres lecture. Traite en priorite les 2 INTER-ROUND etat URGENT.",
+      "file": "asap",
+      "suivant": "c3"
+    },
+    "c3": {
+      "titre": "cerberus - lire puis acquitter ses 2 P1",
+      "agent": "cerberus",
+      "type": "agent",
+      "mission": "PURGE P1 : lire puis acquitter tes 2 messages non-acquittes (ids: aed9515a, verifier-statuts-144050) via oracle.py acquitter cerberus <id> apres lecture.",
+      "file": "asap",
+      "suivant": "c4"
+    },
+    "c4": {
+      "titre": "morpheus - lire puis acquitter ses 2 P1",
+      "agent": "morpheus",
+      "type": "agent",
+      "mission": "PURGE P1 : lire puis acquitter tes 2 messages non-acquittes (ids: fd08904c, fd3d1ea8) via oracle.py acquitter morpheus <id> apres lecture.",
+      "file": "asap",
+      "suivant": "c5"
+    },
+    "c5": {
+      "titre": "themis - lire puis acquitter son P1",
+      "agent": "themis",
+      "type": "agent",
+      "mission": "PURGE P1 : lire puis acquitter ton message non-acquitte (id: f1efcfcd) via oracle.py acquitter themis <id> apres lecture.",
+      "file": "asap",
+      "suivant": "c6"
+    },
+    "c6": {
+      "titre": "vulcain - lire puis acquitter son P1",
+      "agent": "vulcain",
+      "type": "agent",
+      "mission": "PURGE P1 : lire puis acquitter ton message non-acquitte (id: f5f72b83) via oracle.py acquitter vulcain <id> apres lecture.",
+      "file": "asap",
+      "suivant": "c7"
+    },
+    "c7": {
+      "titre": "oracle - lire puis acquitter son P1",
+      "agent": "oracle",
+      "type": "agent",
+      "mission": "PURGE P1 : lire puis acquitter ton message non-acquitte (id: ba5d0334) via oracle.py acquitter oracle <id> apres lecture.",
+      "file": "asap",
+      "suivant": "c8"
+    },
+    "c8": {
+      "titre": "socrate - lire puis acquitter son P1",
+      "agent": "socrate",
+      "type": "agent",
+      "mission": "PURGE P1 : lire puis acquitter ton message non-acquitte (id: f832a2d4) via oracle.py acquitter socrate <id> apres lecture.",
+      "file": "asap",
+      "suivant": "fin"
+    }
+  },
+  "fins": {
+    "fichier": "fins-super-combo.json",
+    "fin-super-combo": {
+      "titre": "SUPER-COMBO DE PURGE TERMINE",
+      "description": "Tous les destinataires ont ete traites. Verifier : 0 P1 non-acquitte restant, files asap/attente sous le seuil, DEFCON redescendu.",
+      "action": "procedure"
+    }
+  }
+}

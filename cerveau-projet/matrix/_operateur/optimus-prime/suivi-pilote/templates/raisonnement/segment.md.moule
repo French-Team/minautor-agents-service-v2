@@ -1,0 +1,40 @@
+---
+identite:
+  type: segment
+  appartient_a: __APPARTIENT_A__
+  commun: false
+  version: 1
+  date: __DATE__
+  liens: __LIENS__
+---
+
+# SEGMENT __ID_SEGMENT__ -- __SUJET__
+
+> Un SEGMENT est une PARTIE du raisonnement, jamais le raisonnement entier : il est
+> PROGRESSIF (il a un AVANT -- le segment precedent -- et un APRES -- celui qui le
+> suivra) et TRACE (il vit HORS de la fenetre de contexte, donc il survit a la
+> session). Un raisonnement CONTINU n a pas de segments : il ne laisse rien derriere
+> lui, et ce qu il a trouve se perd avec le contexte qui l a porte.
+
+## La carte du segment (ce que le moteur retrouve)
+
+| Champ | Valeur |
+|---|---|
+| **ID** | __ID_SEGMENT__ |
+| **Mission** | __MISSION__ |
+| **Sujet du raisonnement** | __SUJET__ |
+| **Question posee** | __QUESTION__ |
+| **Segment precedent** | __PRECEDENT__ |
+| **Etat** | __ETAT__ |
+
+## CE QUI EST ETABLI (le gain, CONCIS)
+
+__ETABLI__
+
+## CE QUI RESTE OUVERT (le segment suivant le prendra)
+
+__RESTE__
+
+## PREUVE (la commande qui REJOUE le constat)
+
+__PREUVE__

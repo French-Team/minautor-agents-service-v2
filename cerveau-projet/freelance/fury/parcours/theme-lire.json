@@ -1,0 +1,25 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "fury",
+    "nom": "LIRE",
+    "description": "Consulter l'etat du systeme, les traces, les historiques"
+  },
+  "theme": {
+    "nom": "LIRE",
+    "but": "Observer sans participer - lecture seule",
+    "redirects": [
+      {
+        "besoin": "Consulter des traces",
+        "action": "procedure",
+        "etapes": [
+          "AGENTS.md : blocs session (qui est actif, quand)",
+          "AGENTS-historique-v2.md : activite recente (fichier v2, la session-freelance a SES fichiers depuis la separation 2026-08-26)",
+          "tools-commun/jarvis/inbox/ + outbox/ : messages du round teste",
+          "Tout est LECTURE SEULE - Fury ne modifie jamais ce qu'il observe"
+        ]
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

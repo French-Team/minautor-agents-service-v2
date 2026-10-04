@@ -1,0 +1,208 @@
+%% Arbre de decision de minerve (arbre v0.3.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est la mission todo ?"}
+    RACINE -- "CREER" --> THEME-CREER
+    THEME-CREER["Transformer une spec en todo organise (phases 0 a 9) en suiv"]
+    THEME-CREER -- "besoin 1" --> THEME-CREER-B0
+    THEME-CREER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-CREER -- "besoin 2" --> THEME-CREER-B1
+    THEME-CREER-B1["Consulter les lecons (domaine redaction-todo)"]
+    THEME-CREER -- "besoin 3" --> THEME-CREER-B2
+    THEME-CREER-B2["CONTEXTE : activite recente des agents"]
+    THEME-CREER -- "besoin 4" --> THEME-CREER-B3
+    THEME-CREER-B3["Rechercher les todos existants - ANTI-DOUBLON (case c2)"]
+    THEME-CREER -- "besoin 5" --> THEME-CREER-B4
+    THEME-CREER-B4["Lire la spec source (case c3)"]
+    THEME-CREER -- "besoin 6" --> THEME-CREER-B5
+    THEME-CREER-B5["Generer le squelette du todo (case c4)"]
+    THEME-CREER -- "besoin 7" --> THEME-CREER-B6
+    THEME-CREER-B6["Remplir les phases 0 a 9 (case c5)"]
+    THEME-CREER -- "besoin 8" --> THEME-CREER-B7
+    THEME-CREER-B7["Verifier la conformite ASCII (case c6)"]
+    THEME-CREER -- "besoin 9" --> THEME-CREER-B8
+    THEME-CREER-B8["Valider le fichier todo (case c7)"]
+    THEME-CREER -- "besoin 10" --> THEME-CREER-B9
+    THEME-CREER-B9["Mettre a jour index-todo.md (case c8)"]
+    THEME-CREER -- "besoin 11" --> THEME-CREER-B10
+    THEME-CREER-B10["Lecons et retour (case c9)"]
+    THEME-CREER -- "besoin 12" --> THEME-CREER-B11
+    THEME-CREER-B11["Corriger les accents du rapport"]
+    THEME-CREER -- "besoin 13" --> THEME-CREER-B12
+    THEME-CREER-B12["Enregistrer ma lecon dans la BDD"]
+    THEME-CREER -- "besoin 14" --> THEME-CREER-B13
+    THEME-CREER-B13["Enregistrer mes usages d outils (case c24)"]
+    FIN-fin-creer(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-CREER-B0 --> FIN-fin-creer
+    THEME-CREER-B1 --> FIN-fin-creer
+    THEME-CREER-B2 --> FIN-fin-creer
+    THEME-CREER-B3 --> FIN-fin-creer
+    THEME-CREER-B4 --> FIN-fin-creer
+    THEME-CREER-B5 --> FIN-fin-creer
+    THEME-CREER-B6 --> FIN-fin-creer
+    THEME-CREER-B7 --> FIN-fin-creer
+    THEME-CREER-B8 --> FIN-fin-creer
+    THEME-CREER-B9 --> FIN-fin-creer
+    THEME-CREER-B10 --> FIN-fin-creer
+    THEME-CREER-B11 --> FIN-fin-creer
+    THEME-CREER-B12 --> FIN-fin-creer
+    THEME-CREER-B13 --> FIN-fin-creer
+    RACINE -- "COMPLETER" --> THEME-COMPLETER
+    THEME-COMPLETER["Completer les phases manquantes d un todo existant en respec"]
+    THEME-COMPLETER -- "besoin 1" --> THEME-COMPLETER-B0
+    THEME-COMPLETER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-COMPLETER -- "besoin 2" --> THEME-COMPLETER-B1
+    THEME-COMPLETER-B1["Consulter les lecons (domaine redaction-todo)"]
+    THEME-COMPLETER -- "besoin 3" --> THEME-COMPLETER-B2
+    THEME-COMPLETER-B2["CONTEXTE : activite recente des agents"]
+    THEME-COMPLETER -- "besoin 4" --> THEME-COMPLETER-B3
+    THEME-COMPLETER-B3["Rechercher les todos existants - ANTI-DOUBLON (case c11)"]
+    THEME-COMPLETER -- "besoin 5" --> THEME-COMPLETER-B4
+    THEME-COMPLETER-B4["Lire le todo existant (case c12)"]
+    THEME-COMPLETER -- "besoin 6" --> THEME-COMPLETER-B5
+    THEME-COMPLETER-B5["Verifier les conventions (case c13)"]
+    THEME-COMPLETER -- "besoin 7" --> THEME-COMPLETER-B6
+    THEME-COMPLETER-B6["Completer les phases manquantes (case c14)"]
+    THEME-COMPLETER -- "besoin 8" --> THEME-COMPLETER-B7
+    THEME-COMPLETER-B7["Valider le todo (case c15)"]
+    THEME-COMPLETER -- "besoin 9" --> THEME-COMPLETER-B8
+    THEME-COMPLETER-B8["Verifier la conformite ASCII"]
+    THEME-COMPLETER -- "besoin 10" --> THEME-COMPLETER-B9
+    THEME-COMPLETER-B9["Lecons et retour (case c9)"]
+    THEME-COMPLETER -- "besoin 11" --> THEME-COMPLETER-B10
+    THEME-COMPLETER-B10["Enregistrer mes usages d outils (case c24)"]
+    FIN-fin-completer(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-COMPLETER-B0 --> FIN-fin-completer
+    THEME-COMPLETER-B1 --> FIN-fin-completer
+    THEME-COMPLETER-B2 --> FIN-fin-completer
+    THEME-COMPLETER-B3 --> FIN-fin-completer
+    THEME-COMPLETER-B4 --> FIN-fin-completer
+    THEME-COMPLETER-B5 --> FIN-fin-completer
+    THEME-COMPLETER-B6 --> FIN-fin-completer
+    THEME-COMPLETER-B7 --> FIN-fin-completer
+    THEME-COMPLETER-B8 --> FIN-fin-completer
+    THEME-COMPLETER-B9 --> FIN-fin-completer
+    THEME-COMPLETER-B10 --> FIN-fin-completer
+    RACINE -- "CORRIGER" --> THEME-CORRIGER
+    THEME-CORRIGER["Corriger le livrable concerne par le rapport de Janus, puis "]
+    THEME-CORRIGER -- "besoin 1" --> THEME-CORRIGER-B0
+    THEME-CORRIGER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-CORRIGER -- "besoin 2" --> THEME-CORRIGER-B1
+    THEME-CORRIGER-B1["Consulter les lecons (domaine redaction-todo)"]
+    THEME-CORRIGER -- "besoin 3" --> THEME-CORRIGER-B2
+    THEME-CORRIGER-B2["CONTEXTE : activite recente des agents"]
+    THEME-CORRIGER -- "besoin 4" --> THEME-CORRIGER-B3
+    THEME-CORRIGER-B3["Corriger le livrable selon le rapport Janus (case c9f)"]
+    THEME-CORRIGER -- "besoin 5" --> THEME-CORRIGER-B4
+    THEME-CORRIGER-B4["Corriger les accents du rapport"]
+    THEME-CORRIGER -- "besoin 6" --> THEME-CORRIGER-B5
+    THEME-CORRIGER-B5["Re-valider le todo corrigee"]
+    THEME-CORRIGER -- "besoin 7" --> THEME-CORRIGER-B6
+    THEME-CORRIGER-B6["Verifier la conformite ASCII"]
+    THEME-CORRIGER -- "besoin 8" --> THEME-CORRIGER-B7
+    THEME-CORRIGER-B7["Activer Janus pour re-controle (BOUCLE KO)"]
+    THEME-CORRIGER -- "besoin 9" --> THEME-CORRIGER-B8
+    THEME-CORRIGER-B8["Enregistrer mes usages d outils (case c24)"]
+    FIN-fin-corriger(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-CORRIGER-B0 --> FIN-fin-corriger
+    THEME-CORRIGER-B1 --> FIN-fin-corriger
+    THEME-CORRIGER-B2 --> FIN-fin-corriger
+    THEME-CORRIGER-B3 --> FIN-fin-corriger
+    THEME-CORRIGER-B4 --> FIN-fin-corriger
+    THEME-CORRIGER-B5 --> FIN-fin-corriger
+    THEME-CORRIGER-B6 --> FIN-fin-corriger
+    THEME-CORRIGER-B7 --> FIN-fin-corriger
+    THEME-CORRIGER-B8 --> FIN-fin-corriger
+    RACINE -- "AMELIORER" --> THEME-AMELIORER
+    THEME-AMELIORER["Detecter les ameliorations possibles de son fonctionnement, "]
+    THEME-AMELIORER -- "besoin 1" --> THEME-AMELIORER-B0
+    THEME-AMELIORER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AMELIORER -- "besoin 2" --> THEME-AMELIORER-B1
+    THEME-AMELIORER-B1["Consulter les lecons (domaine redaction-todo)"]
+    THEME-AMELIORER -- "besoin 3" --> THEME-AMELIORER-B2
+    THEME-AMELIORER-B2["CONTEXTE : activite recente des agents"]
+    THEME-AMELIORER -- "besoin 4" --> THEME-AMELIORER-B3
+    THEME-AMELIORER-B3["Ameliorations possibles ? (question c9b)"]
+    THEME-AMELIORER -- "besoin 5" --> THEME-AMELIORER-B4
+    THEME-AMELIORER-B4["Lancer le generateur d amelioration (case c9c)"]
+    THEME-AMELIORER -- "besoin 6" --> THEME-AMELIORER-B5
+    THEME-AMELIORER-B5["Activer l agent habilite pour l amelioration (case c9d)"]
+    THEME-AMELIORER -- "besoin 7" --> THEME-AMELIORER-B6
+    THEME-AMELIORER-B6["Enregistrer mes usages d outils (case c24)"]
+    FIN-fin-ameliorer(["FIN - Amelioration deleguee (reprise)"])
+    THEME-AMELIORER-B0 --> FIN-fin-ameliorer
+    THEME-AMELIORER-B1 --> FIN-fin-ameliorer
+    THEME-AMELIORER-B2 --> FIN-fin-ameliorer
+    THEME-AMELIORER-B3 --> FIN-fin-ameliorer
+    THEME-AMELIORER-B4 --> FIN-fin-ameliorer
+    THEME-AMELIORER-B5 --> FIN-fin-ameliorer
+    THEME-AMELIORER-B6 --> FIN-fin-ameliorer
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Gerer les missions qui sortent du perimetre de redaction de "]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["Consulter les lecons (domaine redaction-todo)"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["CONTEXTE : activite recente des agents"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["La mission concerne-t-elle un autre agent ? (question c18)"]
+    THEME-AUTRE -- "besoin 5" --> THEME-AUTRE-B4
+    THEME-AUTRE-B4["DELEGATION - Signaler au pilote via ORACLE (case c19)"]
+    THEME-AUTRE -- "besoin 6" --> THEME-AUTRE-B5
+    THEME-AUTRE-B5["Besoin d outil temporaire ou durable ? (question c20b)"]
+    THEME-AUTRE -- "besoin 7" --> THEME-AUTRE-B6
+    THEME-AUTRE-B6["Creer l outil temporaire (case c20c)"]
+    THEME-AUTRE -- "besoin 8" --> THEME-AUTRE-B7
+    THEME-AUTRE-B7["Signaler le besoin durable a Cerberus (case c20)"]
+    THEME-AUTRE -- "besoin 9" --> THEME-AUTRE-B8
+    THEME-AUTRE-B8["Signaler au pilote l audit Themis (case c22)"]
+    THEME-AUTRE -- "besoin 10" --> THEME-AUTRE-B9
+    THEME-AUTRE-B9["Enregistrer mes usages d outils (case c24)"]
+    FIN-fin-autre(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-autre
+    THEME-AUTRE-B1 --> FIN-fin-autre
+    THEME-AUTRE-B2 --> FIN-fin-autre
+    THEME-AUTRE-B3 --> FIN-fin-autre
+    THEME-AUTRE-B4 --> FIN-fin-autre
+    THEME-AUTRE-B5 --> FIN-fin-autre
+    THEME-AUTRE-B6 --> FIN-fin-autre
+    THEME-AUTRE-B7 --> FIN-fin-autre
+    THEME-AUTRE-B8 --> FIN-fin-autre
+    THEME-AUTRE-B9 --> FIN-fin-autre
+    RACINE -- "OUTILS" --> THEME-OUTILS
+    THEME-OUTILS["Resoudre un probleme d outil rencontre en cours de mission e"]
+    THEME-OUTILS -- "besoin 1" --> THEME-OUTILS-B0
+    THEME-OUTILS-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-OUTILS -- "besoin 2" --> THEME-OUTILS-B1
+    THEME-OUTILS-B1["Consulter les lecons (domaine redaction-todo)"]
+    THEME-OUTILS -- "besoin 3" --> THEME-OUTILS-B2
+    THEME-OUTILS-B2["CONTEXTE : activite recente des agents"]
+    THEME-OUTILS -- "besoin 4" --> THEME-OUTILS-B3
+    THEME-OUTILS-B3["Probleme avec un outil ? (question cU1)"]
+    THEME-OUTILS -- "besoin 5" --> THEME-OUTILS-B4
+    THEME-OUTILS-B4["COMPRENDRE L OUTIL - lire le .md (case cU2)"]
+    THEME-OUTILS -- "besoin 6" --> THEME-OUTILS-B5
+    THEME-OUTILS-B5["Verifier si un combo existe pour l action"]
+    THEME-OUTILS -- "besoin 7" --> THEME-OUTILS-B6
+    THEME-OUTILS-B6["Generer la commande exacte"]
+    THEME-OUTILS -- "besoin 8" --> THEME-OUTILS-B7
+    THEME-OUTILS-B7["Reprendre ma mission (case cU3)"]
+    THEME-OUTILS -- "besoin 9" --> THEME-OUTILS-B8
+    THEME-OUTILS-B8["Ajouter les lecons dans corrections.md"]
+    FIN-fin-outils(["FIN - Reprendre ma mission (cU3)"])
+    THEME-OUTILS-B0 --> FIN-fin-outils
+    THEME-OUTILS-B1 --> FIN-fin-outils
+    THEME-OUTILS-B2 --> FIN-fin-outils
+    THEME-OUTILS-B3 --> FIN-fin-outils
+    THEME-OUTILS-B4 --> FIN-fin-outils
+    THEME-OUTILS-B5 --> FIN-fin-outils
+    THEME-OUTILS-B6 --> FIN-fin-outils
+    THEME-OUTILS-B7 --> FIN-fin-outils
+    THEME-OUTILS-B8 --> FIN-fin-outils
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

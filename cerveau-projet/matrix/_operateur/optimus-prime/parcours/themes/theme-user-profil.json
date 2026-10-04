@@ -1,0 +1,64 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "USER-PROFIL",
+    "description": "Remplir la fiche profil utilisateur avec l'aide d'Optimus"
+  },
+  "theme": {
+    "nom": "USER-PROFIL",
+    "but": "Remplir la fiche USER-PROFIL.md avec l'utilisateur via un questionnaire amical",
+    "redirects": [
+      {
+        "besoin": "Verifier l'etat de la fiche",
+        "action": "procedure",
+        "etapes": [
+          "Lire matrix/USER-PROFIL.md",
+          "Verifier le statut de chaque champ",
+          "Calculer le pourcentage de remplissage"
+        ],
+        "regle": "Si la fiche est complete a 100%, pas besoin de questionnaire"
+      },
+      {
+        "besoin": "Poser les questions",
+        "action": "procedure",
+        "etapes": [
+          "Demander le pseudo (champ obligatoire)",
+          "Demander l'age (optionnel)",
+          "Demander le fuseau horaire (ex : Europe/Paris)",
+          "Demander le style de conversation (formel/decontracte/mixte)",
+          "Demander les sujets d'interet",
+          "Demander le mode d'apprentissage",
+          "Demander le niveau technique",
+          "Demander les informations de contact (optionnel)"
+        ],
+        "regle": "Poser une seule question a la fois, attendre la reponse"
+      },
+      {
+        "besoin": "Mettre a jour la fiche",
+        "action": "procedure",
+        "etapes": [
+          "Modifier matrix/USER-PROFIL.md avec les reponses",
+          "Mettre a jour le statut de chaque champ",
+          "Calculer le nouveau pourcentage"
+        ],
+        "regle": "Ne jamais ecraser les reponses existantes"
+      },
+      {
+        "besoin": "Valider le remplissage",
+        "action": "procedure",
+        "etapes": [
+          "Afficher le resume de la fiche",
+          "Demander confirmation a l'utilisateur",
+          "Mettre a jour le statut a 'rempli'"
+        ],
+        "regle": "La validation est optionnelle"
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

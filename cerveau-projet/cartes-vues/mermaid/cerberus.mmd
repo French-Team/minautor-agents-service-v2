@@ -1,0 +1,149 @@
+%% Carte de decision de cerberus (parcours v0.5.11)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0d["LIRE LA DOCUMENTATION DE L OUTIL avant utilisation"]
+    c0e["Consulter les lecons des autres agents (domaine de ma mission)"]
+    c0g["GATE BON AGENT : verifier que tu es LE BON AGENT"]
+    c0ga{"GATE : es-tu le bon agent ?"}
+    c0h(["FIN - STOP : pas le bon agent, reactiver Cerberus"])
+    c1{"Mission"}
+    c10["Activer l'agent"]
+    c11["Relire MA fiche et MES corrections"]
+    c12["Lire la raison de la reactivation"]
+    c12a{"Erreurs hors mission signalees ?"}
+    c12b["DEVIATION : activer Buffy pour reparer immediatement"]
+    c12c["REJOINT : retour au flux principal"]
+    c13{"Mission dans la liste definie ?"}
+    c14["Activer Janus (second controle)"]
+    c15{"Traiter le verdict de Janus"}
+    c15b{"Rapport de Janus : problemes a resoudre ?"}
+    c15c["Activer l agent habilite (problemes a resoudre)"]
+    c16{"Fichiers changes ?"}
+    c17["Activer Clio (README)"]
+    c18{"Inventaire / audit ?"}
+    c19["Reprendre la coordination"]
+    c19b{"Ameliorations possibles de mon fonctionnement ?"}
+    c19c["Lancer le generateur d amelioration"]
+    c19d["Activer l'agent habilite pour l'amelioration"]
+    c19e(["FIN - Reprise du parcours apres retour de l'agent habilite"])
+    c1b["Lancer le generateur d amelioration"]
+    c1h["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hb["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hc["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1he["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c1hf["HISTORISER LE DEBUT : tracer le debut de mon intervention"]
+    c2["Ecouter la demande"]
+    c20(["FIN - Coordination terminee"])
+    c20h["HISTORISER LA FIN : tracer la fin de mon intervention"]
+    c21["Activer l'agent d'origine (correction)"]
+    c22["Activer Themis (inventaire/audit)"]
+    c23(["Signaler le besoin"])
+    c24["Enregistrer mes usages d outils"]
+    c3["Lister les agents disponibles"]
+    c45["Activer Socrate pour revision strategique"]
+    c45b{"Socrate actif ?"}
+    c46["Activer Chiron pour eduquer un agent"]
+    c46b{"Chiron actif ?"}
+    c5{"Identifier l'agent habilite"}
+    c6["Activer l'agent habilite"]
+    c7["Annoncer la mission et suivre le cycle"]
+    c8["Verifier l'agent (identification)"]
+    cD1{"DECLENCHEUR DETECTE ?"}
+    cD2{"Quel declencheur ?"}
+    cD2a["[attente] : parker la demande (file plus-tard)"]
+    cD2b["[attention] : placer la demande en file asap (SUIVANTE)"]
+    cD2c["[urgent] : traiter immediatement (priorite absolue)"]
+    cD2d["[question] : phase question/reponse dediee"]
+    cD2e["[creer] : routage de creation par type"]
+    cD2f["[probleme] : routage de resolution par fichier"]
+    cD2g["[stop] : DEFCON 5 (arret total)"]
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre ma mission"])
+    c0 --> c0b
+    c0b -- "OUI" --> c0g
+    c0b -- "NON" --> c0
+    c0c --> c0d
+    c0d --> cU1
+    c0e --> c0c
+    c0g --> c0ga
+    c0ga -- "OUI" --> c0e
+    c0ga -- "NON" --> c0h
+    c1 -- "accueil" --> c1h
+    c1 -- "activation" --> c1hb
+    c1 -- "retour" --> c1hc
+    c1 -- "ameliorer" --> c1b
+    c1 -- "autre" --> c18
+    c1 -- "revision" --> c1he
+    c1 -- "eduquer" --> c1hf
+    c10 --> c7
+    c11 --> c12
+    c12 --> c12a
+    c12a -- "OUI" --> c12b
+    c12a -- "NON" --> c13
+    c12b --> c12c
+    c12c --> c13
+    c13 -- "OUI" --> c14
+    c13 -- "NON" --> c16
+    c14 --> c15
+    c15 -- "OUI" --> c15b
+    c15 -- "NON" --> c21
+    c15b -- "OUI" --> c15c
+    c15b -- "NON" --> c16
+    c15c --> c15b
+    c16 -- "OUI" --> c17
+    c16 -- "NON" --> c19
+    c17 --> c19
+    c18 -- "OUI" --> c22
+    c18 -- "NON" --> c23
+    c19 --> c19b
+    c19b -- "OUI" --> c19c
+    c19b -- "NON" --> c24
+    c19c --> c19d
+    c19d --> c19e
+    c19e --> FIN-APPELANT
+    c1b --> c5
+    c1h --> c2
+    c1hb --> c8
+    c1hc --> c11
+    c1he --> c45
+    c1hf --> c46
+    c2 --> c3
+    c20h --> c20
+    c21 --> c24
+    c22 --> c24
+    c24 --> c20h
+    c3 --> c5
+    c45 --> c45b
+    c45b -- "OUI" --> c24
+    c45b -- "NON" --> c45
+    c46 --> c46b
+    c46b -- "OUI" --> c24
+    c46b -- "NON" --> c46
+    c5 -- "OUI" --> c6
+    c5 -- "NON" --> c5
+    c6 --> c7
+    c7 --> c24
+    c8 --> c10
+    cD1 -- "OUI" --> cD2
+    cD1 -- "NON" --> c1
+    cD2 -- "[attente]" --> cD2a
+    cD2 -- "[attention]" --> cD2b
+    cD2 -- "[urgent]" --> cD2c
+    cD2 -- "[question]" --> cD2d
+    cD2 -- "[creer]" --> cD2e
+    cD2 -- "[probleme]" --> cD2f
+    cD2 -- "[stop]" --> cD2g
+    cD2a --> c20
+    cD2b --> c20
+    cD2c --> c1
+    cD2d --> c20
+    cD2e --> c5
+    cD2f --> c5
+    cD2g --> c20
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> cD1
+    cU2 --> cU3

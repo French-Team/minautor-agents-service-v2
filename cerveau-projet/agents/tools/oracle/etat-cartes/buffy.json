@@ -1,0 +1,14 @@
+{
+ "agent": "buffy",
+ "parcours": "agents/buffy/parcours/arbre-buffy.json",
+ "case_courante": null,
+ "mission_type": "modifier",
+ "mission": "CORRIGER COMMENT-DEMARRER.md + demarrer.md ORDRE 5 (volet 2/3, decision utilisateur 2026-09-05) : supprimer/reformuler 'demarrer un second llm en parallel' (COMMENT-DEMARRER.md) et ajouter dans demarrer.md ORDRE 5 MODE SINGLE-LLM : TRAVAIL EN SERIE OBLIGATOIRE, jamais de relais parallele de 2 missions, un seul agent incarne a la fois. Fichiers cerveau-projet (Buffy). A la fin : suis TA carte (Pattern 13).",
+ "historise_debut": true,
+ "precedent": null,
+ "etape": "fin",
+ "historise_fin": true,
+ "theme_courant": "theme-modifier.json",
+ "redirect_idx": 14,
+ "etape_idx": 0
+}

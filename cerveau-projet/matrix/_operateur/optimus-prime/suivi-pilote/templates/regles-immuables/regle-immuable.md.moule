@@ -1,0 +1,28 @@
+---
+identite:
+  type: regle-immuable
+  appartient_a: __APPARTIENT_A__
+  commun: false
+  liens: __LIENS__
+---
+
+# REGLE IMMUABLE -- __TITRE__
+
+> Une regle immuable est une consigne que l agent pourrait OUBLIER : c est ce qui
+> la distingue d une convention. Sans ecrite, elle se reinvente a chaque mission.
+> Elle ne se contourne pas : quand elle bloque, on la DIT (regle du createur).
+
+## LA REGLE
+
+__REGLE__
+
+## CE QUI LA REND IMMUABLE (et pas seulement une preference)
+
+- SOURCE : __SOURCE__ (la demande ou la lecon qui l a fait naitre ; une regle
+  sans source n est pas une regle, c est un gout).
+- CONTRE-EXEMPLE : __CONTRE_EXEMPLE__ (ce qui se passerait si on ne l appliquait
+  pas -- sans cela, on ne sait pas quand elle s applique).
+- PERIMETRE : __PERIMETRE__ (ce qui est concerne, et ce qui ne l est pas).
+- EXCEPTION : __EXCEPTION__ (une regle sans exception nommee est une regle que
+  le prochain contournera en silence).
+- GARDE : __GARDE__ (qui la verifie : une regle non verifiee derive).

@@ -1,0 +1,113 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "AUTO-OPTIMISATION",
+    "description": "Optimiser les performances de la Matrice : durees d'execution, complexite, memoire. Mesurer avant, optimiser, mesurer apres. Jamais d'optimisation sans preuve."
+  },
+  "theme": {
+    "nom": "AUTO-OPTIMISATION",
+    "but": "Optimiser les performances en 5 temps : mesurer, analyser, cibler, optimiser, valider",
+    "redirects": [
+      {
+        "besoin": "Mesurer l'etat actuel",
+        "action": "procedure",
+        "etapes": [
+          "Lire les metriques existantes (bilan-periode, bilan-matrice, sac-a-dos)",
+          "Executer les benchmarks si disponibles (benchmark --fichier, --dossier)",
+          "Noter les chiffres cles : durees par verbe, nombre de fichiers, taille des BDD"
+        ],
+        "regle": "Pas d'optimisation sans MESURE. Les chiffres avant = reference."
+      },
+      {
+        "besoin": "Analyser les goulots d'etranglement",
+        "action": "procedure",
+        "etapes": [
+          "Identifier les operations les plus lentes (> seuil cockpit)",
+          "Identifier les operations redondantes (doublons de logique)",
+          "Identifier les charges memoire inutiles (pas de nettoyage)"
+        ],
+        "regle": "Cibler le PLUS GROS impact d'abord. Pas de micro-optimisation inutile."
+      },
+      {
+        "besoin": "Cibler l'optimisation",
+        "action": "procedure",
+        "etapes": [
+          "Choisir UNE seule cible (pas de multi-optimisation en parallele)",
+          "Definir le seuil objectif (ex: <200ms, <50 fichiers, etc.)",
+          "Verifier que l'optimisation est REVERSIBLE (point .bak)"
+        ],
+        "regle": "Un seul objectif a la fois. Mesurable et reversible."
+      },
+      {
+        "besoin": "Optimiser -- outil",
+        "action": "procedure",
+        "etapes": [
+          "Relire le code existant EN ENTIER",
+          "Identifier les parties lentes (profilage si possible)",
+          "Appliquer UNE seule optimisation (pas de rewrite massif)",
+          "Tester que ca marche toujours (py_compile + tests existants)"
+        ],
+        "regle": "Optimisation = changement chirurgical. Pas de rewrite."
+      },
+      {
+        "besoin": "Optimiser -- routine",
+        "action": "procedure",
+        "etapes": [
+          "Analyser les intervalles et la charge",
+          "Reduire la charge si possible (moins de scans, moins de fichiers)",
+          "Tester que la routine fonctionne toujours",
+          "Arreter et relancer la routine (L-012 code zombie)"
+        ],
+        "regle": "Routine modifiee = redemarrage OBLIGATOIRE (L-012)."
+      },
+      {
+        "besoin": "Optimiser -- BDD",
+        "action": "procedure",
+        "etapes": [
+          "Verifier la taille et les performances actuelles",
+          "Nettoyer les entrees obsoletes si applicable",
+          "Ajouter des index si les requetes sont lentes",
+          "Tester l'integrite apres modification"
+        ],
+        "regle": "BDD = donnees. Integrity > performance. Ne jamais purger sans verification."
+      },
+      {
+        "besoin": "Valider l'optimisation",
+        "action": "procedure",
+        "etapes": [
+          "Re-executer les memes mesures qu'avant",
+          "Comparer avant/apres : le gain EST-IL reel ?",
+          "Si pas de gain : revert (l'optimisation ne sert a rien)",
+          "Si perte : revert IMMEDIAT (l'optimisation a casse quelque chose)"
+        ],
+        "regle": "Validation = preuve chiffree. Pas d'optimisation 'au feeling'."
+      },
+      {
+        "besoin": "Consigner la lecon d'optimisation",
+        "action": "procedure",
+        "etapes": [
+          "Noter en BDD (modifications-par-fichier + lecons si applicable)",
+          "Taguer : auto-optimisation, type-cible, gain-mesure",
+          "Mettre a jour les seuils si necessaire"
+        ],
+        "regle": "Chaque optimisation reussie = reference pour les futures."
+      },
+      {
+        "besoin": "Non-regression -- ne pas casser",
+        "action": "procedure",
+        "etapes": [
+          "Verifier que les tests existants passent toujours",
+          "Verifier que les routines tournent toujours",
+          "Verifier que les BDD sont toujours coherentes"
+        ],
+        "regle": "Optimisation qui casse = echec. Revert obligatoire."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

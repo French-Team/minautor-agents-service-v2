@@ -1,0 +1,117 @@
+%% Arbre de decision de cerberus (arbre v0.2.2)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Cerberus est un ROUTEUR entre l UTILISATEUR et ORACLE. De/vers qui circulent l information et la mission ?"}
+    RACINE -- "DE-USER" --> THEME-DE-USER
+    THEME-DE-USER["Accueillir une demande utilisateur et la transmettre a Oracl"]
+    THEME-DE-USER -- "besoin 1" --> THEME-DE-USER-B0
+    THEME-DE-USER-B0["Ecouter la demande completement"]
+    THEME-DE-USER -- "besoin 2" --> THEME-DE-USER-B1
+    THEME-DE-USER-B1["Envoyer la mission a Oracle et lui rendre la main"]
+    FIN-fin-activer(["FIN - Agent active"])
+    THEME-DE-USER-B0 --> FIN-fin-activer
+    THEME-DE-USER-B1 --> FIN-fin-activer
+    RACINE -- "VERS-ORACLE" --> THEME-VERS-ORACLE
+    THEME-VERS-ORACLE["Passer la mission a Oracle qui historise le DEBUT de l agent"]
+    THEME-VERS-ORACLE -- "besoin 1" --> THEME-VERS-ORACLE-B0
+    THEME-VERS-ORACLE-B0["Deposer la mission dans la file prioritaire"]
+    THEME-VERS-ORACLE -- "besoin 2" --> THEME-VERS-ORACLE-B1
+    THEME-VERS-ORACLE-B1["Verifier que la mission est bien deposee (sans rien executer"]
+    THEME-VERS-ORACLE-B0 --> FIN-fin-activer
+    THEME-VERS-ORACLE-B1 --> FIN-fin-activer
+    RACINE -- "DE-ORACLE" --> THEME-DE-ORACLE
+    THEME-DE-ORACLE["Recevoir le retour d un agent (via Oracle qui garde la main)"]
+    THEME-DE-ORACLE -- "besoin 1" --> THEME-DE-ORACLE-B0
+    THEME-DE-ORACLE-B0["Lire le retour (bilan et erreurs) arrive via Oracle"]
+    THEME-DE-ORACLE -- "besoin 2" --> THEME-DE-ORACLE-B1
+    THEME-DE-ORACLE-B1["Erreurs hors mission signalees ? (reparer par l agent habili"]
+    FIN-fin-retour(["FIN - Retour traite"])
+    THEME-DE-ORACLE-B0 --> FIN-fin-retour
+    THEME-DE-ORACLE-B1 --> FIN-fin-retour
+    RACINE -- "VERS-USER" --> THEME-VERS-USER
+    THEME-VERS-USER["Repondre a l utilisateur avec le resultat de la coordination"]
+    THEME-VERS-USER -- "besoin 1" --> THEME-VERS-USER-B0
+    THEME-VERS-USER-B0["Composer la reponse (bilan clair de la coordination)"]
+    FIN-fin-coordination(["FIN - Coordination terminee"])
+    THEME-VERS-USER-B0 --> FIN-fin-coordination
+    RACINE -- "ATTENTE" --> THEME-ATTENTE
+    THEME-ATTENTE["Placer la demande utilisateur en file plus-tard pour traitem"]
+    THEME-ATTENTE -- "besoin 1" --> THEME-ATTENTE-B0
+    THEME-ATTENTE-B0["Placer la demande en file plus-tard (EN_ATTENTE)"]
+    THEME-ATTENTE -- "besoin 2" --> THEME-ATTENTE-B1
+    THEME-ATTENTE-B1["Notifier l utilisateur"]
+    FIN-fin-declencheur(["FIN - Declencheur traite"])
+    THEME-ATTENTE-B0 --> FIN-fin-declencheur
+    THEME-ATTENTE-B1 --> FIN-fin-declencheur
+    RACINE -- "ATTENTION" --> THEME-ATTENTION
+    THEME-ATTENTION["Placer la demande utilisateur en file asap pour execution ju"]
+    THEME-ATTENTION -- "besoin 1" --> THEME-ATTENTION-B0
+    THEME-ATTENTION-B0["Placer la demande en file asap (SUIVANTE)"]
+    THEME-ATTENTION -- "besoin 2" --> THEME-ATTENTION-B1
+    THEME-ATTENTION-B1["Notifier l utilisateur"]
+    THEME-ATTENTION-B0 --> FIN-fin-declencheur
+    THEME-ATTENTION-B1 --> FIN-fin-declencheur
+    RACINE -- "URGENT" --> THEME-URGENT
+    THEME-URGENT["Traiter la demande utilisateur immediatement, en priorite ab"]
+    THEME-URGENT -- "besoin 1" --> THEME-URGENT-B0
+    THEME-URGENT-B0["Traiter la demande immediatement"]
+    THEME-URGENT -- "besoin 2" --> THEME-URGENT-B1
+    THEME-URGENT-B1["Router l urgence vers l agent habilite"]
+    THEME-URGENT-B0 --> FIN-fin-declencheur
+    THEME-URGENT-B1 --> FIN-fin-declencheur
+    RACINE -- "QUESTION" --> THEME-QUESTION
+    THEME-QUESTION["Ouvrir une phase dediee question/reponse, sans aucune autre "]
+    THEME-QUESTION -- "besoin 1" --> THEME-QUESTION-B0
+    THEME-QUESTION-B0["Transmettre la question a Oracle (qui active l agent detente"]
+    THEME-QUESTION -- "besoin 2" --> THEME-QUESTION-B1
+    THEME-QUESTION-B1["Transmettre la reponse collectee a l utilisateur"]
+    THEME-QUESTION-B0 --> FIN-fin-declencheur
+    THEME-QUESTION-B1 --> FIN-fin-declencheur
+    RACINE -- "CREER" --> THEME-CREER
+    THEME-CREER["Router une demande de creation vers l agent habilite selon s"]
+    THEME-CREER -- "besoin 1" --> THEME-CREER-B0
+    THEME-CREER-B0["Identifier le type de creation"]
+    THEME-CREER -- "besoin 2" --> THEME-CREER-B1
+    THEME-CREER-B1["Router vers l agent habilite"]
+    THEME-CREER -- "besoin 3" --> THEME-CREER-B2
+    THEME-CREER-B2["Activer l agent habilite"]
+    THEME-CREER-B0 --> FIN-fin-declencheur
+    THEME-CREER-B1 --> FIN-fin-declencheur
+    THEME-CREER-B2 --> FIN-fin-declencheur
+    RACINE -- "PROBLEME" --> THEME-PROBLEME
+    THEME-PROBLEME["Router une demande de resolution de probleme vers l agent ha"]
+    THEME-PROBLEME -- "besoin 1" --> THEME-PROBLEME-B0
+    THEME-PROBLEME-B0["Identifier le type de probleme"]
+    THEME-PROBLEME -- "besoin 2" --> THEME-PROBLEME-B1
+    THEME-PROBLEME-B1["Router vers l agent habilite"]
+    THEME-PROBLEME -- "besoin 3" --> THEME-PROBLEME-B2
+    THEME-PROBLEME-B2["Activer l agent habilite"]
+    THEME-PROBLEME-B0 --> FIN-fin-declencheur
+    THEME-PROBLEME-B1 --> FIN-fin-declencheur
+    THEME-PROBLEME-B2 --> FIN-fin-declencheur
+    RACINE -- "STOP" --> THEME-STOP
+    THEME-STOP["Arret complet du round (DEFCON 5), toute reprise exige la de"]
+    THEME-STOP -- "besoin 1" --> THEME-STOP-B0
+    THEME-STOP-B0["Declarer le DEFCON 5"]
+    THEME-STOP -- "besoin 2" --> THEME-STOP-B1
+    THEME-STOP-B1["Informer l utilisateur"]
+    THEME-STOP-B0 --> FIN-fin-declencheur
+    THEME-STOP-B1 --> FIN-fin-declencheur
+    RACINE -- "SOCRATE" --> THEME-SOCRATE
+    THEME-SOCRATE["Amorcer un super-combo de revision strategique via Socrate ("]
+    THEME-SOCRATE -- "besoin 1" --> THEME-SOCRATE-B0
+    THEME-SOCRATE-B0["Lancer Socrate (debut d un super-combo)"]
+    THEME-SOCRATE -- "besoin 2" --> THEME-SOCRATE-B1
+    THEME-SOCRATE-B1["Confirmer avant de lancer un super-combo"]
+    FIN-fin-revision(["FIN - Revision lancee"])
+    THEME-SOCRATE-B0 --> FIN-fin-revision
+    THEME-SOCRATE-B1 --> FIN-fin-revision
+    RACINE -- "TRIO" --> THEME-TRIO
+    THEME-TRIO["Lancer un round complet de creation via le trio (serviteurs "]
+    THEME-TRIO -- "besoin 1" --> THEME-TRIO-B0
+    THEME-TRIO-B0["Lancer le trio (declencheur [trio])"]
+    THEME-TRIO -- "besoin 2" --> THEME-TRIO-B1
+    THEME-TRIO-B1["Demander l idee a l utilisateur"]
+    FIN-fin-trio(["FIN - Trio lance"])
+    THEME-TRIO-B0 --> FIN-fin-trio
+    THEME-TRIO-B1 --> FIN-fin-trio

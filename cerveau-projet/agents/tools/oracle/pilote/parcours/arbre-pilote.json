@@ -1,0 +1,52 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "pilote",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-pilote",
+    "agent": "pilote",
+    "description": "Arbre de MISSION du PILOTE (modele round aero, spec 2026-08-30, R2) : le pilote est l OUTIL d oracle (l aeroport). Oracle configure SA mission (destination + liste d agents a larguer), puis le lance. Le pilote largue les parachutistes (agents) un a un, attend leur fin, les recupere, continue - et ne revient a oracle qu une fois TOUTE sa mission terminee.",
+    "regles": {
+      "D1": "Je suis l AVION d oracle : je ne decide pas la destination, oracle (l aeroport) la configure. Ma mission = destination + liste d agents a larguer.",
+      "D2": "LARGUER puis RECUPERER : je largue UN agent a la fois, j attends sa fin, je le recupere, puis je passe au suivant. Jamais deux agents en vol simultanement.",
+      "D3": "L agent (parachutiste) execute SA mission et sa fin revient vers ORACLE - pas vers moi, pas vers un autre agent (R1/R3). Je ne connais pas le contenu de son travail, je gere le flux.",
+      "D5": "Les besoins d un theme sont des REDIRECTIONS : je choisis celle qui correspond a ma situation.",
+      "D7": "NE REVENIR A ORACLE QU A LA FIN : ma mission n est terminee que quand TOUS les agents de ma liste ont ete largues ET recuperes.",
+      "D8": "Je ne fais JAMAIS le travail de l agent : je l active, je le recupere, je ne l execute pas."
+    }
+  },
+  "racine": {
+    "titre": "Quelle etape de ma mission de pilote ?",
+    "type": "question",
+    "question": "Je suis le pilote (avion d oracle). Quelle etape de MA mission de pilote ?",
+    "branches": [
+      {
+        "reponse": "MISSION",
+        "description": "Charger ma mission configuree par oracle : destination + liste d agents a larguer (mission_type / mission de l etat de carte)",
+        "vers": "theme-mission.json"
+      },
+      {
+        "reponse": "LARGUER",
+        "description": "Larguer UN agent (parachutiste) : l activer avec sa mission, attendre sa fin",
+        "vers": "theme-larguer.json"
+      },
+      {
+        "reponse": "RECUPERER",
+        "description": "Recuperer un agent largue : traiter son bilan, passer au suivant de ma liste",
+        "vers": "theme-recuperer.json"
+      },
+      {
+        "reponse": "RETOUR",
+        "description": "Ma mission est COMPLETEMENT terminee (tous les agents largues et recuperes) : je reviens a ORACLE (l aeroport)",
+        "vers": "theme-retour.json"
+      }
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles du pilote centralisees"
+  }
+}

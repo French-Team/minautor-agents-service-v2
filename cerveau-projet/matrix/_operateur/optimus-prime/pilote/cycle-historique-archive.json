@@ -1,0 +1,1211 @@
+{
+  "historique": [
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T06:15:02.945764"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T06:15:36.274174"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-13T06:16:39.551521"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "M-TEST",
+        "theme": "TEST",
+        "debut": "2026-09-13T06:15:36.189541",
+        "statut": "terminee",
+        "fin": "2026-09-13T06:16:39.552006",
+        "bilan": "Test termine avec succes"
+      },
+      "timestamp": "2026-09-13T06:16:39.552012"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T06:28:41.973369"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-13T06:29:15.825829"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "M-TEST",
+        "theme": "TEST",
+        "debut": "2026-09-13T06:28:41.892142",
+        "statut": "terminee",
+        "fin": "2026-09-13T06:29:15.826314",
+        "bilan": "Test termine"
+      },
+      "timestamp": "2026-09-13T06:29:15.826322"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T07:40:26.125533"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T07:53:57.426462"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T08:45:46.067621"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T08:55:47.275940"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T09:11:25.462661"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T09:16:13.509978"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T09:18:17.950587"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T09:19:09.928217"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T09:26:49.074654"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T09:30:01.750953"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T09:37:58.859441"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T10:19:35.363596"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T11:53:32.763646"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T11:58:24.551035"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-13T11:58:24.762721"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-051",
+        "theme": "REPARATION",
+        "debut": "2026-09-13T11:58:24.474044",
+        "statut": "terminee",
+        "fin": "2026-09-13T11:58:24.763290",
+        "bilan": "Questionnaire du profil repare et prouve (deplace, chemin par le motif, sans ecrasement) - MO-051"
+      },
+      "timestamp": "2026-09-13T11:58:24.763296"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T14:51:21.567287"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T16:54:11.719645"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T16:57:37.596669"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T17:17:39.915014"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T17:17:40.259373"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T17:33:34.819277"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T17:44:08.688352"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T17:45:05.913007"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T17:47:53.274547"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T18:01:07.196159"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T18:11:22.825134"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T20:04:05.785480"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T20:04:13.288899"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T20:10:58.569631"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T20:22:00.328043"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T20:43:51.646495"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-14T08:28:00.133360"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-14T08:51:18.887643"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-14T10:00:04.072941"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-14T21:33:33.390997"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-14T21:33:37.788089"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-14T21:44:26.743312"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-14T21:45:47.605118"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T08:17:24.576637"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T09:19:15.338364"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T09:35:54.657568"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T19:07:14.734850"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-15T19:10:08.253149"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T19:11:18.949719"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T19:15:34.356514"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T19:21:01.614379"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T19:24:04.147075"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T19:28:31.957716"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T19:35:14.344308"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T21:17:44.491300"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T21:29:39.735025"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-15T21:29:39.735003",
+      "source": "dernier injection (etat archive)"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-16T06:58:28.943546"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-16T07:09:41.130687"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-16T09:25:27.697485"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-16T19:47:59.270708"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T06:55:54.833973"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T06:55:58.424596"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T06:59:51.371079"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T07:08:52.685016"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T07:17:33.501908"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-17T07:31:28.447501"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-151",
+        "theme": "AUDITEUR",
+        "bilan": "MO-151 (AUDITEUR) -- QUALIFIER EO-134 : matrice-readme.md est-il lu par le cameleon ?\n\nVERDICT : FUITE CONFIRMEE (L-016/CV-006) -- ce n'est PAS une mention legitime.\n\nTrois preuves, chacune suffisante :\n1. PERIMETRE. La garde de la porte lire est \"matrix/ seul\" : elle lit\n   matrice/matrice-readme.md pour de vrai (essai reel). Elle refuse _operateur/,\n   donc la garde existe -- mais elle ne couvre que le PERIMETRE, pas\n   l'INVISIBILITE (aucune des quatre portes de lecture ne consultait la liste\n   des zones exclues).\n2. MOTEUR. Le moteur de recherche du cameleon (impose par la regle 11 de sa\n   fiche, commande injectee : rechercher --requete \"...\" --dans tous) rendait\n   matrice-readme.md en HIT n1 pour la phrase \"PAS d'encart\" (mesure reelle).\n3. INTENTION. V-003 `perimetre-cameleon` (classeur-variables.json, statut [OK],\n   pose par la porte pause-session) liste matrice-readme.md PARMI LES ZONES\n   EXCLUES du perimetre cameleon. Par conception, la mention n'est donc pas\n   legitime : c'est une exclusion DECLAREE ET JAMAIS APPLIQUEE.\n\nCorrection de mon propre compte : EO-134 disait \"4 mentions\". Mesure par\nl'outil du projet (audit-invisibilite, une mention par ligne) : 22 lignes\nnommant l invisible (optimus l.34-129, _operateur l.27/51/60, optimus-prime\nl.43/48/57). Un compte annonce n'est pas une mesure (famille L-060/L-109).\n\nETENDUE REELLE mesuree (meme cause, plus grave) : 92 fichiers / 39 218 lignes\nnommant l invisible restaient atteignables, dont des zones DEJA declarees\nexclues : data/manuel-outils.md (20, le manuel des outils du cameleon ecrit\n\"OPTIMUS\" en clair l.426), matrice-readme.md (22), routines/routines-readme.md\n(11), journal-multi-encarts.md (5), intercom/*, plus data/suivi-optimus.jsonl\n(205), suivi-optimus.md (101), espion-log-archive-*.jsonl (35 100),\ndata/modifications-par-fichier.json (531), usages-outils-combos.jsonl (812) et\nles .bak.* servis par le moteur.\n\nCAUSE RACINE (unique, en forme d'etoile) : la liste des zones exclues (V-003,\n23 zones declarees) n'etait lue QUE par pause-session (affichage) -- par AUCUN\noutil de lecture. Le seul filtre reellement applique etait une liste EN DUR de\n3 morceaux de chemin, recopiee dans TROIS fichiers (rechercher/commun.py,\nlister/commun.py, benchmark/commun.py) et divergeante entre eux ; la porte lire\nn'en avait aucune. Une protection declaree et jamais posee est une protection\nabsente (L-037).\n\nCONSEQUENCE : reparation confiee a MO-152 (enforcer le perimetre declare +\nreparer la forme), choisie par l'operateur apres delegation explicite du\ncreateur (\"je te laisse prendre cette decision\").\n\nPREUVES : essais reels sur les quatre portes (lire, rechercher, lister,\nbenchmark) ; cobaye de mesure tmp-optimus/mo151-mesure-EO134.py ; lecture de\nV-003 au classeur ; lecture du filtre et de la commande injectee.",
+        "timestamp": "2026-09-17T07:31:28.448721"
+      },
+      "timestamp": "2026-09-17T07:31:28.448728"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-17T07:31:39.174396"
+    },
+    {
+      "action": "mission_debut",
+      "mission": "MO-152",
+      "theme": "REPARATION",
+      "timestamp": "2026-09-17T07:31:39.175644"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-17T07:32:56.082914"
+    },
+    {
+      "action": "mission_debut",
+      "mission": "MO-152",
+      "theme": "REPARATION",
+      "timestamp": "2026-09-17T07:32:56.084225"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T07:33:20.533551"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-17T07:33:21.344645"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-152",
+        "theme": "REPARATION",
+        "bilan": "MO-152 (REPARATION) -- ENFORCER LE PERIMETRE DECLARE (V-003) + REPARER LA FORME\n\nCe qui etait casse (mesure MO-151) : les 23 zones exclues par le createur (V-003)\nn'etaient appliquees par AUCUN outil de lecture, et le seul filtre reel (3\nmorceaux de chemin, recopie dans 3 fichiers) ratait les zones en forme de\nFICHIER (suivi-optimus.md) : 92 fichiers / 39 218 lignes nommant l'invisible\nrestaient atteignables.\n\nLIVRE (par fichier)\n\n- matrice/data/commun/invisibilite.py (CREE) : DOMICILE du contrat. Plancher\n  (3 zones historiques) + zones DECLAREES (V-003 lue au classeur, 23) = 26 zones.\n  Formes couvertes : dossier declare, chemin declare (fichier ou dossier),\n  FICHIER NOMME comme une zone (defaut de FORME qui faisait rater l'exclusion\n  M-084), plus les derives (.bak, -archive, -old) d'un fichier declare.\n  chemin_relatif traite les trois formes d'entree (absolue, relative racine,\n  relative Matrice) ; refus_invisible rend le message imprime par les portes.\n- matrice/data/outils/rechercher/commun.py : copie du filtre SUPPRIMEE.\n- matrice/data/outils/lister/commun.py : idem (cette copie ignorait meme le\n  filtre de sa jumelle : les trois copies divergeaient deja).\n- matrice/data/outils/benchmark/commun.py : idem.\n- matrice/data/outils/rechercher/rechercher/entry.py : la liste AFFICHEE est la\n  liste APPLIQUEE (aide, sortie machine, message d'ouverture : 26 zones reelles).\n- matrice/data/outils/lire/commun.py : --prive reconnu par extraire_options (il\n  etait AVALE EN SILENCE en dernier argument).\n- matrice/data/outils/lire/lire/entry.py + fonctions.py : garde d'invisibilite\n  ajoutee (cette porte etait la SEULE des quatre sans aucune garde) + --prive.\n- matrice/data/outils/lister/lister/entry.py + fonctions.py : inclure_invisible\n  etait FERME EN DUR a False : la trappe --prive l'ouvre desormais.\n\nPREUVES\n\n- py_compile 9/9.\n- Cobaye du domicile : 27/27 sur des cas REELS (trois formes de chemin, derives,\n  plancher, et la NON-sur-exclusion : outils du cameleon, marbre, routines).\n  Une attente de cobaye etait FAUSSE (tmp-optimus juge non interdit) : corrigee\n  et DITE (L-060).\n- Cobaye de mesure CONSOMMANT le domicile : 92 fichiers / 39 218 lignes AVANT ->\n  61 fichiers / 216 lignes APRES (-99,4 %).\n- Outils REELS : rechercher \"PAS d'encart\" = 0 par defaut (13 avant), 15 avec\n  --prive qui DIT les 26 zones ; lire refuse puis ouvre par --prive ; lister la\n  zone espion = 0 par defaut, 9 fichiers + 3 dossiers avec --prive.\n- Non-regression zone + flux : VERDICT OK (26 maillons). /sante : 13 portes\n  vertes. Integrite Optimus : 110 conformes. File <-> journal : 0 ecart.\n\nDEFAUTS DE MA PROPRE REPARATION, TROUVES PAR LA MESURE : (1) fonction alias au\nlieu de sa valeur -> le moteur plantait sur --prive ; (2) marqueur \"/matrice/\"\napplique aux chemins RELATIFS -> intercom/matrice/inbox.jsonl tronque en\ninbox.jsonl, une zone declaree RATEE ; la correction ne coupe plus que sur la\nforme non ambigue \"/matrix/matrice/\".\n\nRESIDUEL DECLARE (216 lignes) : le CODE des portes doit nommer ce qu'il\ninterdit (constants, le domicile meme -- inevitable) ; data/sessions.json (39)\net data/lecons.json (25) ne sont PAS declares exclus par V-003 (a trancher :\nexclure la BDD ou neutraliser les textes) ; logs de routines ; les 128 .bak.*\nrestent servis hors zones declarees (chantier de la suite de purification).",
+        "timestamp": "2026-09-17T07:33:21.345949"
+      },
+      "timestamp": "2026-09-17T07:33:21.345955"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T07:34:53.495910"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-17T07:41:04.744809"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-153",
+        "theme": "REPARATION",
+        "bilan": "MO-153 (REPARATION) -- TRANCHER LE RESIDUEL : data/sessions.json ET data/lecons.json\n\nDEMANDE DU CREATEUR : exclure ces deux BDD du perimetre cameleon, ou neutraliser\nleurs textes ?\n\nDECISION (mesuree, pas d opinion)\n\n- data/sessions.json -> EXCLURE (pure). Mesures : il n a AUCUN chemin de\n  livraison au cameleon (absent de FICHIER_PAR_SOURCE du moteur, aucun champ\n  d injection ne le porte) ; son contenu est l ETAT DE SESSION de l operateur\n  (99 sessions, dont \"Session du 2026-09-15 OUVERTE (Flux 2, Optimus)\").\n  Le neutraliser serait un faux travail : la trame entiere est interne.\n- data/lecons.json -> EXCLURE le chemin BRUT + FILTRER la LIVRAISON.\n  Mesures : la livraison a l injection etait DEJA propre (90 lecons, 0 mot\n  interdit, filtre L-016 pose par les deux pilotes) ; mais le chemin BRUT\n  (lire/lister) ne peut pas filtrer un fichier, et 20 lecons sur 113 nomment\n  l invisible (dont L-021 doctrine double flux, L-022 \"le cameleon ignore qu il\n  est dirige\"). Le cameleon GARDE ses lecons -- par l INJECTION, qui est le\n  canal prevu (la VUE est \"relue a chaque injection\") -- et jamais par la BDD\n  brute. Neutraliser 20 lecons a la main aurait garde la trame double-flux\n  entiere : mesure, ce n est pas un vrai nettoyage.\n\nTROU DECOUVERT EN CHEMIN (plus grave que le residuel demande) : le chemin BDD\ndu moteur n appliquait AUCUNE des deux moities du contrat -- mesure : 101\nentrees de la BDD suivi-optimus etaient servies au cameleon alors que cette\nzone est DECLAREE exclue depuis M-084, et les lecons arrivaient brutes. Une\nregle appliquee a UN point de livraison n est pas une regle : elle doit l etre a\nTOUS ceux qui delivrent le meme contenu.\n\nLIVRE (par fichier)\n\n- matrice/data/commun/vocabulaire_invisible.py (CREE) : DOMICILE du VOCABULAIRE\n  interdit -- l union des trois listes qui existaient (pilote Flux 1, pilote\n  Flux 2, audit) : AUCUNE ne contenait les trois autres. contient_invisible et\n  contient_invisible_item. Regle : on RETIRE l item qui nomme l invisible, on ne\n  le caviarde jamais (une phrase caviardee laisse deviner un secret).\n- matrice/data/outils/rechercher/commun.py : le chemin BDD du moteur consomme le\n  domicile des zones (une BDD declaree exclue n est JAMAIS servie) ET le domicile\n  du vocabulaire (une entree qui nomme l invisible est retiree a la livraison).\n- matrice/pilote/injection/fonctions.py + _operateur/optimus-prime/pilote/\n  injection/fonctions.py : filtrer_pour_cameleon CONSOMME MOTS_INTERDITS.\n- matrice/data/classeur-variables.json : V-003 reduit PAR SA PORTE\n  (pause-session perimetre --zones) : 26 zones declarees (+ les 3 du plancher =\n  28 appliquees).\n\nPREUVES (mesurees)\n\n- Le moteur ne sert plus l invisible : \"optimus\" et \"suivi-optimus\" dans --dans\n  bdd = 0 ; --dans tous = 0 (contre 101 et 354 au depart).\n- Une BDD NON exclue reste servie (le filtre de vocabulaire ne casse pas la\n  fonction) ; une lecon propre reste servie.\n- Les portes brutes refusent les deux BDD (lire : \"zone invisible L-016\n  (data/lecons.json)\" / \"(data/sessions.json)\"), --prive ouvre pour la Matrice.\n- Les deux pilotes importent le domicile et leur livraison reste propre\n  (Flux 1 : 90 lecons livrees, 0 mot interdit).\n- SURFACE ATTEIGNABLE : 92 fichiers / 39 218 lignes (MO-151) -> 62 fichiers /\n  162 lignes (MO-153), soit -99,6 %. Le residuel n est plus que le CODE DU\n  CONTRAT lui-meme (le domicile du vocabulaire, les constants des portes qui\n  nomment ce qu elles interdisent) : inevitable, et ce n est pas du contenu.\n- py_compile 4/4 ; non-regression zone + flux VERDICT OK (26 maillons) ;\n  /sante 13 portes vertes ; integrite Optimus 110 conformes ; file <-> journal\n  0 ecart.\n\nRESIDUEL DECLARE : les .bak.* servis par le moteur quand ils ne derivent pas\nd une zone declaree (chantier de la suite de purification, MO-146) ; le code des\nportes qui nomme le vocabulaire (par nature).",
+        "timestamp": "2026-09-17T07:41:04.746257"
+      },
+      "timestamp": "2026-09-17T07:41:04.746264"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T07:44:03.139268"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-17T07:52:24.500567"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-154",
+        "theme": "PURIFICATION",
+        "bilan": "MO-154 (PURIFICATION) -- OUVRIR LA SUITE DE PURIFICATION SUR UN PERIMETRE REEL (CASES 1 A 4)\n\nCe qui etait le probleme (MO-146) : la suite etait BATIE, jamais COURUE -- une\nBDD de conservation avec UN seul element (un cobaye), un theme jamais ouvert, un\ndossier sans vue. Le createur ne savait pas ou en etait la suite parce qu'il n'y\navait rien a voir.\n\nCASE 1 DEMANDE -- cadrage trace au marbre (evenement `decision`, journal\nsuivi-optimus, MO-154) : perimetre = les points de restauration .bak.* de matrix/\nENTIER + les archives du pilote + l element cobaye ; objectif = BORNER\nl accumulation SANS RIEN PERDRE (un verdict par element, l acte par une PORTE\ndediee, jamais un rm). Cases 1 a 4 en LECTURE SEULE.\n\nCASE 2 CARTOGRAPHIE -- mesure du 2026-09-17 : 148 fichiers .bak.* (2,10 Mo),\n74 sources distinctes (41 x 1 version, 19 x 2, 5 x 3, 5 x 4, 1 x 5, 1 x 7, 1 x 8,\n1 x 14), du 06/09 16:29 au 17/09 07:12, 0 source disparue. Zones :\n_operateur/optimus-prime/ 93 (1,69 Mo), matrice/data/ 43, matrice/pilote/ 8,\ntmp-cameleon/ 2. Famille la plus lourde : pilote/commun.py (14 versions, 666 Ko).\nCroissance par jour : ... 16/09 : 102 fichiers, 17/09 : 8 -- c est la mesure qui\nmontre que rien ne borne la famille.\n\nCASE 3 CLASSIFICATION -- 153 elements classes PAR LA PORTE (bdd-conservation\nproposer), une entree par element, critere mesure et jamais l age seul :\nSTRUCTUREL 73 (le plus recent de chaque famille -- celui que la porte de revert\nsert encore) ; OBSOLETE 73 (une version plus recente du meme fichier existe) ;\nHORS-PERIMETRE 2 (les deux points de restauration de tmp-cameleon, zone du\ncameleon : SIGNALES, aucune ecriture) ; HISTORIQUE 2 (archives de l ancien\nformat, memoire de la migration) ; VIVANT 2 (archives lues par un flux actif) ;\nORPHELIN 1 (aucun lecteur mesure). BDD de conservation : 1 -> 155 elements,\nverifier OK. Deux cobayes requalifies et DITS (K-001 de MO-095, K-002 cree par\nmon propre test de la porte).\n\nCASE 4 AUDIT (lecture seule) -- 9 ecarts mesures avec preuve, dont deux de\ngravite haute : E1 AUCUNE porte de rotation/archivage pour la famille .bak.*\n(la case 7 est BLOQUEE pour ces 146 elements ; la rotation existe pourtant pour\nune autre BDD et le moteur partage data/commun/rotation_journal.py fournit deja\nla surete) ; E2 l exemption du contrat fondamental est bornee par la FORME\n(horodatage complet), pas par le VOLUME ni l age. Autres : E3 aucun verbe de\nretrait dans la porte de conservation (d ou les cobayes immortels) ; E4 REFERME\n(conservation.json est entre au registre d integrite depuis MO-146) ; E5 le theme\ndeclare 9 redirects sans champ PREUVE ; E6 la DESCRIPTION documente un verbe\n`lire` que la porte N A PAS (piege a agents, L-034) ; E7 CONTRADICTION : la BDD\nporte K-001 verdict `conserver` quand le document d etat propose `archiver` ;\nE8 signalement des 2 baks de Flux 1 ; E9 les .bak sont servis par le moteur\nquand ils ne derivent pas d une zone declaree (lien avec MO-153).\n\nLIVRE : _operateur/optimus-prime/purification/rapport-audit-MO-154.md (le\nrapport d audit, qui porte aussi les preuves des cases 1 a 3 -- la purge de\ncloture emporte les cobayes de tmp-optimus) ; data/conservation.json enrichie\nPAR SA PORTE (153 propositions + 1 requalification).\n\nPROUVES : 153/153 elements classes (0 echec de porte) ; bdd-conservation\nverifier OK ; 0 deplacement, 0 suppression (aucun acte : le point de la mission).\nDefauts de MES cobayes, attrapes et dits : `groupe()` supposait 3 niveaux de\nchemin (il a range 2 fichiers de tmp-cameleon comme une \"zone\") et la table des\narchives perdait les tags de deux entrees (100% attrape par le crash avant toute\necriture de porte).\n\nDETTES DECLAREES (pour la suite, PAS faites ici) : construire la porte de\nrotation sur le moteur partage rotation_journal.py, avec la borne declaree par le\nproprietaire de la famille ; corriger la DESCRIPTION de la porte (E6) ; trancher\nla contradiction E7 ; puis cases 5 (NEMESIS), 6 (decision) et 7 (acte).",
+        "timestamp": "2026-09-17T07:52:24.501839"
+      },
+      "timestamp": "2026-09-17T07:52:24.501845"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T07:54:59.088994"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-17T08:00:03.951959"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-155",
+        "theme": "REPARATION",
+        "bilan": "MO-155 (REPARATION) -- LES DEUX REGRESSIONS DE MO-154, ATTRAPEES PAR LES GARDES\n\nCe qui etait casse (mesure, apres la cloture de MO-154) :\n1. GARDE-ASCII : mon rapport d audit portait 10 caracteres NON-ASCII (U+00B7\n   'middot') dans deux lignes de tableau -- /sante rendait 1 PORTE EN ECHEC sur\n   13 (garde-ascii code 1).\n2. CARTES D IDENTITE : sa carte declarait `type: rapport`, hors du vocabulaire\n   FERME des 17 types reconnus -- la non-regression rendait cartes: [KO]\n   TYPES HORS VOCABULAIRE.\n\nCause de fond, mesuree : le document avait ete ecrit par l OUTIL NATIF, pas par\nla PORTE D ECRITURE (friction 74). La porte, elle, a bien VU l ecart ASCII\n('[ASCII] 10 non-ASCII lignes 35,38') mais elle conclut 'pas de validation pour\n.md' et laisse passer : celui qui ECRIT n applique pas ce que l autre REFUSERA.\n\nREPARATION, PAR LA PORTE (toutes les autres voies sont interdites)\n- `type: rapport` -> `type: analyse` (un des 17 types reconnus).\n- les deux lignes de tableau : U+00B7 -> ' ; ' (snippets extraits du fichier,\n  l ancien portant le caractere fautif -- edits par `ecrire editer`).\n3 editions, toutes '1 occurrence', validation de la porte a l appui.\n\nPREUVES DU RETOUR AU VERT (mesure, pas intention)\n- Non-ASCII : AUCUN (controle octet par octet) ; CRLF : non.\n- garde-ascii matrice/ : code=0 -> /sante OK (13 portes vertes).\n- controle des cartes : OK -> non-regression zone + flux : VERDICT OK.\n- Note : le [KO] 'historique' de la meme passe etait un artefact de CADENCE\n  (la routine n avait pas encore absorbe de passe) : il est revenu a OK seul.\n\nDECLARE (frictions 76 et 77, theme outil)\n- 76 (majeure, recurrente) : deux gardes qui ne sont pas d accord sur le meme\n  fichier -- la porte imprime l ecart ASCII d un .md puis le laisse passer, le\n  garde-ascii le refuse ensuite. Celui qui ECRIT devrait refuser ce que l autre\n  REFUSERA ; sinon une mission entiere est payee pour reparer un octet.\n- 77 (mineure, recurrente) : la porte ecrire attend des chemins RELATIFS A LA\n  RACINE du workspace quand tout l ecosysteme parle en chemins relatifs a\n  matrix/ -- et son refus annonce 'hors perimetre ecriture' alors que la cause\n  est la FORME du chemin (3 essais perdus).\n\nLECON L-116 : deux gardes qui ne sont pas d accord sur le meme fichier font une\nfaille, pas une securite.\n\nA DETTE (pour une mission suivante) : faire refuser a la porte d ecriture, pour\nles .md, ce que le garde-ascii refusera ; et harmoniser le langage des chemins.",
+        "timestamp": "2026-09-17T08:00:03.953323"
+      },
+      "timestamp": "2026-09-17T08:00:03.953330"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T08:01:56.268934"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-17T09:27:00.548330"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T07:11:36.492320"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T07:45:36.707399"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T08:06:10.807599"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T08:35:50.192779"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T08:49:29.213793"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T08:49:53.611352"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T08:55:37.239414"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T19:57:59.395468"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T20:36:14.990121"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T20:43:46.428037"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-18T20:52:41.635346"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T07:04:10.168117"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T07:08:30.503256"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T07:08:59.642540"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T07:14:32.172839"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T07:18:26.956693"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T07:34:18.920721"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T07:47:33.962818"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T08:22:10.621796"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T08:29:41.570093"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T08:38:00.801048"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T08:57:28.407958"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T09:29:48.618931"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T09:35:21.167965"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T09:45:29.511192"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T12:18:21.656404"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T13:09:28.329319"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T13:10:59.910273"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T13:46:04.689328"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T14:37:36.188357"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T17:48:24.569983"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T18:09:39.297231"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T18:47:33.306497"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-19T20:34:02.684552"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-20T04:39:43.809625"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-20T05:29:35.244860"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-20T10:38:09.831978"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-20T13:45:11.305002"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-20T14:22:56.879052"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-20T14:24:15.885929"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-20T14:24:16.525185"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-20T14:49:45.018655"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-20T16:52:35.864258"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-20T18:46:14.404667"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-20T19:17:41.168128"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-20T19:17:47.858132"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-22T06:11:41.832160"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-22T08:36:01.234198"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-22T20:20:21.928703"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-23T07:12:09.470680"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-23T20:38:10.414969"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-24T06:48:20.267242"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-24T08:03:58.063046"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-24T18:44:23.121347"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-24T19:02:57.681917"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-24T20:59:55.602519"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-25T06:43:27.375622"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-25T08:53:13.967808"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-408",
+        "theme": "REPARATION",
+        "bilan": "Reparation LIVREE sous le round MO-407 (8 lancements a nu des boucles ramenes au domicile partage, nettoyage des cadences mortes) ; mission PARQUEE le 2026-09-25 08:32 : cloture de regularisation demandee par le createur.",
+        "timestamp": "2026-09-25T08:53:13.969496"
+      },
+      "timestamp": "2026-09-25T08:53:13.969501"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-09-25T09:01:43.034757"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-408",
+        "theme": "REPARATION",
+        "bilan": "contre-temoin : MO-408 est bien la mission en cours, le --id est honore",
+        "timestamp": "2026-09-25T09:01:43.036555"
+      },
+      "timestamp": "2026-09-25T09:01:43.036561"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-25T20:51:59.402288"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-25T22:24:06.641558"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-26T07:13:20.517353"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-26T07:52:14.313488"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-26T07:52:15.919143"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-26T07:52:36.441001"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-26T07:52:38.027846"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-26T07:53:43.945113"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-26T07:53:45.571399"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-26T07:54:47.926156"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-26T07:57:01.194781"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-26T11:19:30.523257"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-26T16:13:43.800390"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-26T17:14:47.322149"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-27T07:10:57.511135"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-27T11:46:42.756990"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-27T13:53:41.490614"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-28T06:34:12.021300"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-28T09:00:52.488814"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-28T09:04:18.250602"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-28T19:53:29.612315"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-29T06:53:36.351569"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-29T06:57:48.053590"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-29T07:44:03.694152"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-29T07:44:05.071582"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-29T08:03:26.906233"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-29T09:05:33.350253"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-29T20:46:22.578915"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-29T21:14:44.991341"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-01T20:47:19.555565"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-02T07:02:17.105297"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-02T07:48:59.378387"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-02T09:50:03.614193"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-02T09:50:31.544045"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-02T09:51:00.885239"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-02T18:51:47.656200"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-02T18:51:53.152276"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-02T18:51:57.534849"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-02T18:52:03.812947"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-02T19:10:27.215183"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-02T19:49:56.769281"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-02T20:05:35.660526"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-02T21:59:56.853078"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-02T22:06:01.441358"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-10-03T09:28:25.301726"
+    },
+    {
+      "action": "mission_debut",
+      "mission": "MO-535",
+      "theme": "MAINTENANCE",
+      "timestamp": "2026-10-03T09:28:25.303685"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-10-03T09:41:22.511566"
+    },
+    {
+      "action": "mission_debut",
+      "mission": "MO-551",
+      "theme": "MAINTENANCE",
+      "timestamp": "2026-10-03T09:41:22.513480"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-10-03T09:48:56.357404"
+    },
+    {
+      "action": "mission_debut",
+      "mission": "MO-551",
+      "theme": "REPARATION",
+      "timestamp": "2026-10-03T09:48:56.359387"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-10-03T09:50:10.675095"
+    },
+    {
+      "action": "mission_debut",
+      "mission": "MO-551",
+      "theme": "REPARATION",
+      "timestamp": "2026-10-03T09:50:10.677066"
+    },
+    {
+      "action": "mission_debut_retracte",
+      "mission": "MO-535",
+      "motif": "mission close le 2026-10-01 21:32 (source entonnoir:EO-492) : l appel declarait un debut sur une mission terminee depuis deux jours, donc INEXISTANT",
+      "evenements_retires": 1,
+      "premiers_retires": [
+        "2026-10-03T09:28:25.303685"
+      ],
+      "timestamp": "2026-10-03T09:52:24.212309"
+    },
+    {
+      "action": "mission_debut_retracte",
+      "mission": "MO-551",
+      "motif": "MO-551 n existait pas dans la file (compteur reste a 550) : l identifiant avait ete invoque, la mission jamais chargee",
+      "evenements_retires": 1,
+      "premiers_retires": [
+        "2026-10-03T09:41:22.513480"
+      ],
+      "timestamp": "2026-10-03T09:53:25.744573"
+    },
+    {
+      "action": "mission_debut_retracte",
+      "mission": "MO-551",
+      "motif": "MO-551 chargee mais encore en-attente, jamais conduite : le debut a ete declare avant que la mission ne soit courante",
+      "evenements_retires": 1,
+      "premiers_retires": [
+        "2026-10-03T09:48:56.359387"
+      ],
+      "timestamp": "2026-10-03T09:53:25.985937"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-10-03T09:58:22.696094"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-551",
+        "theme": "REPARATION",
+        "bilan": "# MO-551 -- Retirer proprement les traces fausses, interdire le retour\n\n## LE FAUT ET SES TROIS COUPS\n\nTrois traces `mission_debut` fausses ont ete ecrites dans\n`pilote/cycle-historique-archive.json` le 2026-10-03, toutes par moi :\n\n| Trace | Cause reelle |\n|---|---|\n| MO-535 @ 09:28:25 | mission CLOSE depuis le 2026-10-01 21:32 (`entonnoir:EO-492`) |\n| MO-551 @ 09:41:22 | MO-551 n'existait pas : le compteur de la file est reste a 550 |\n| MO-551 @ 09:48:56 | mission chargee mais `en-attente`, jamais conduite |\n\nUne quatrieme trace, elle LEGITIME : MO-551 @ 09:50:10, ecrite apres\n`conduire --id MO-551`. Elle a fait office de contre-temoin : c'est\nexactement parce qu'elle existe qu'un retrait \"de toutes les traces de MO-551\"\naurait retire la bonne.\n\n## LE DEFAUT\n\n`injection/cycle.py::mission_debut` VOYAIT l'ecart, l'AFFICHAIT (`ALERTE :\n... n'est pas la mission EN COURS de la file`), puis archivait quand meme et\nrendait 0. La porte jumelle `mission_fin` refuse depuis EO-356 : une cloture\ndont l'id ne nomme pas la mission en cours sort en code 2, sans rien\narchiver. L'asymetrie debut/fin etait le defaut, et une option connue\n(`--id`) dont la valeur est fausse etait acceptee en silence.\n\n## LA CORRECTION\n\n1. `mission_debut` REFUSE (code 2) quand l'id declare n'est pas la mission en\n   cours, SANS rien archiver et SANS lancer les injections. Le refus nomme\n   l'id donne, l'id de la file, et le remede (`conduire --id`, ou finir la\n   mission courante).\n2. Nouveau verbe `mission --action retracter` : retrait APPEND-ONLY d'une\n   trace de debut fausse, sur le modele du `bilan_retire` que la porte\n   `rouvrir` pose deja pour un bilan fautif. L'evenement d'origine RESTE\n   dans l'archive ; le retrait le nomme, avec son motif.\n3. `--horodatage` pour viser UNE trace, sans quoi le retrait d'une mission\n   portant un melange de traces vraies et fausses supprimerait la vraie.\n\n## PREUVE PAR EXECUTION\n\nCinq cas joues sur la vraie porte :\n\n- `retracter` sans motif -> REFUS, motif vide nomme.\n- `retracter --id MO-999` (inconnue de la file) -> REFUS, remede donne.\n- `retracter` deux fois sur la meme trace -> la seconde ne trouve plus rien a\n  retirer (appariement par horodatage, pas de double retrait).\n- `debut --id MO-535` (mission close) et `debut --id MO-777` (inconnue) ->\n  REFUS code 2, et le nombre d'entrees de l'archive est INCHANGE : 205 avant,\n  205 apres.\n- `debut --id MO-551` apres `conduire` -> accepte, trace normale.\n\nEtat final de l'archive (205 entrees) :\n\n    MO-152 2026-09-17T07:31:39 ACTIVE     (historique, pas moi)\n    MO-152 2026-09-17T07:32:56 ACTIVE     (historique, pas moi)\n    MO-535 2026-10-03T09:28:25 RETIREE\n    MO-551 2026-10-03T09:41:22 RETIREE\n    MO-551 2026-10-03T09:48:56 RETIREE\n    MO-551 2026-10-03T09:50:10 ACTIVE     (legitime)\n\nTrois evenements de retrait nomment chacune des trois traces et son motif.\nAucune trace d'origine n'a ete supprimee.\n\n## LE DEFAUT QUE LA PREUVE A ATTRAPPE DANS MA CORRECTION\n\nLa boucle qui collectait les horodatages deja retires s'appelait\n`horodatage` -- le meme nom que le parametre. Apres la boucle, le parametre\nvalait le dernier horodatage du dernier retrait deja ecrit, et le filtre\ncomparait donc toujours a cette valeur : `--horodatage 1111` etait refuse en\nannon\u00e7ant `2026-10-03T09:28:25`. C'est visible parce que la preuve a ete\njouee ; sans elle, le verbe aurait refuse silencieusement toute trace\nreelle. Corrige (`deja_couvert`), et le refus cite desormais l'horodatage\nrecu.\n\n## DIVERS\n\nLa non-regression a rendu un echec, `head-coherent` : mes gestes de round\najoutaient des evenements a `suivi-optimus.jsonl` sans regenerer la vue (2474\ncontre 2475). `suivi-optimus vue` puis relance : VERTE.\n\nLe bandeau d'usage de la porte nomme desormais les quatre actions\n(`debut`, `pendant`, `fin`, `retracter`).\n\nRien d'autre n'a ete touche : deux fichiers du pilote, notes dans la BDD des\nmodifications, integrity-optimus 178 fichiers conformes, remorque 159\nequipements conforme.\n\n## CE QUE JE N'AI PAS FAIT\n\nJe n'ai pas reecrit l'archive. Une archive est une archive : les trois\nfausses traces y sont toujours, entieres, et c'est un evenement de retrait\nsequent qui les dit fausses. C'est le precedent `bilan_retire`, pas une\nedition discretionnaire.",
+        "timestamp": "2026-10-03T09:58:22.698051"
+      },
+      "timestamp": "2026-10-03T09:58:22.698058"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-10-03T10:13:04.557541"
+    },
+    {
+      "action": "mission_debut",
+      "mission": "MO-552",
+      "theme": "REPARATION",
+      "timestamp": "2026-10-03T10:13:04.559567"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-10-03T10:30:07.952157"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-552",
+        "theme": "REPARATION",
+        "bilan": "# MO-552 -- 30 missions M- orphelines soldees, 2 migrees, un compteur repare\n\n## LA DEMANDE ET SA CORRECTION\n\nLe createur a demande de migrer vers le flux 2 les missions creees dans le flux 1\navant que la convention `MO-xxx` existe. Les mesurer a change le plan deux fois.\n\n**Elles ne sont pas dans le flux 1.** `matrice/pilote/file-missions.json`\ncompte 0 mission (compteur 89). Les 32 sont des lignes `mission-creee`\n`statut: en-attente` dans `matrice/data/historiques-missions.jsonl`, un\nhistorique en AJOUT SEUL. Elles sont donc orphelines : absentes des deux files,\net incapables d etre conduites.\n\n**Etant au nombre de 6, pas de 32.** `bilan-matrice` derive l attente par\nsoustraction d identifiants (`mission-creee` moins `mission-terminee`). Le lot\nAUTO-EVOLUTION du 2026-09-11 a recu M-089 a M-120, or le cameleon avait deja\nutilise M-001 a M-089 : 26 de ces missions sont INVISIBLES, leur identifiant\nportant deja une mission terminee. Seules M-115 a M-120 etaient visibles.\nL identifiant M-089 apparait d ailleurs deux fois avec deux objectifs sans\nrapport.\n\n## LA PREUVE DE LA FAUTE DE PREFIXE\n\n`_operateur/optimus-prime/conventions/convention-nommage-numerote.md`\n(regles CV-009 et CV-011) dit deja que `M-NNN` est le prefixe du cameleon et\n`MO-NNN` celui d'Optimus, et son commentaire nomme l'erreur : < c'est\nexactement la faute de `M-` (une mission d'Optimus portant le prefixe du\ncameleon), corrigee en `MO-` >. Ces 32 lignes sont le residu de cette faute.\n\n## CE QUI A ETE FAIT\n\n1. **5 lignes `mission-terminee` ajoutees** pour les livrees visibles (M-115 a\n   M-120, sauf M-117), chacune avec sa preuve dans `bilan`. M-115 est **sans\n   objet** : `demarrer-optimus-prime.md` n'existe plus.\n2. **25 lignes `mission-terminee` ajoutees** pour les livrees masquees, generees\n   par un script qui resout la preuve AU MOMENT de l ecriture (un outil ou un\n   fichier) : si la preuve n existe pas, la ligne n est pas ecrite. Une premiere\n   version en a ecrit 24 au lieu de 25 parce que deux dictionnaires portaient\n   M-093 et que le second, non resolvable, l'emportait ; M-093 a ete rattache a\n   un fait verifiable (le combo c-007-frictions existe) plutot qu a un nom de\n   brique suppose.\n3. **Deux missions migrees** vers le flux 2, via l'entonnoir : EO-570 (M-090) et\n   EO-572 (M-117), chacune avec l objectif d origine mot pour mot et l etat\n   mesure. Elles ne sont pas conduites dans ce round (serie stricte).\n4. **Une mission dediee** a la collision d identifiants : EO-574.\n\nRien n a ete reecrit. Le journal est passe de 147 a 177 lignes, et aucune n a\nete perdue.\n\n## LE COMPTEUR REPARE (contre-temoin de la decision)\n\nLa vue `suivi-cameleon` comptait les LIGNES du journal : elle affichait 152\nmissions la ou le cameleon n en a fait que 89, et le nombre bougeait a chaque\nligne ajoutee alors que la realite n avait pas change. J aurais donc gonfle la\nvue de 25 lignes en ecrivant les fermetures.\n\nLe comptage passe par `compter_missions(entrees)`, fonction PURE et isolee qui\nrend (identifiants distincts, terminees, creees sans fin) et calcule l attente\ncomme `bilan-matrice`. Deux cobayes ajoutes : une collision d identifiant\ncompte UNE mission terminee et n est PAS en attente ; un id cree sans fin reste\nen attente tandis qu une entree sans identifiant n est pas une mission.\nAuto-test 12/12.\n\nPreuve sur le jeu : le journal est passe de 152 a 177 lignes et la vue lit\n**120 / 119 / 1** avant comme apres. 120 = 89 missions du cameleon + 31\nidentifiants du lot auto-evolution (26 masques et 6 visibles, moins le\nchevauchement M-089).\n\n## L ETAT FINAL, PAR LA PORTE ELLE-MEME\n\n`bilan-matrice` : `terminees=119 en-attente=1`, et le reste est `M-117`, celle\nla meme qui est migree en EO-572. L attente du flux 1 passe de 6 a 1, et cette\n1 est justifiee.\n\n## CE QUE JE N'AI PAS FAIT\n\nJe n'ai pas cree 30 missions MO- : 25 d'entre elles n auraient plus rien a\nfaire, et leurs identifiants restent occupes de toute facon. C'est le doublon\nqu'EO-564 interdit.\n\nJe n'ai pas reecrit l historique : le journal est en ajout seul, les 30 lignes\najoutees portent chacune leur preuve, et les lignes d origine sont intactes.\n\n## DIVERS\n\nNon-regression : verte apres trois echecs qui venaient de moi (tissage de\nl'entonnoir non refait apres mes depots, vue suivi-optimus en retard d un evenement\nde cloture). Integrite-optimus : reference re-enregistree apres la correction\nde `suivi-cameleon.py` (178 empreintes, code 0). Remorque : 159 equipements\nconformes. ASCII : verifie par la porte `corriger-ascii`, qui a d'ailleurs\nattrape un `U+00EA` glisse par moi dans mon propre commentaire.\n\nTrois fautes de ma part dans cette mission, toutes corrigees en route : deux\nitems deposees avec un mot corrompu dans l objectif (`EO-568`, `EO-573`), et un\ndictionnaire de preuves a double cle. Le createur m a fait remarquer que je\ncherchais mes erreurs ASCII a la main alors que j avais `corriger-ascii` : c etait\nune faute de methode, la porte repond en un appel sur 974 fichiers.",
+        "timestamp": "2026-10-03T10:30:07.954265"
+      },
+      "timestamp": "2026-10-03T10:30:07.954271"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-10-03T10:38:59.015133"
+    },
+    {
+      "action": "mission_debut",
+      "mission": "MO-553",
+      "theme": "REPARATION",
+      "timestamp": "2026-10-03T10:38:59.017239"
+    },
+    {
+      "action": "injection",
+      "categorie": "apres-mission",
+      "timestamp": "2026-10-03T10:51:50.724283"
+    },
+    {
+      "action": "mission_terminee",
+      "mission": {
+        "id": "MO-553",
+        "theme": "REPARATION",
+        "bilan": "# MO-553 -- Un processus [question] se termine par une mission\n\n## LE FAUT\n\nLe crochet `[question]` route vers le verbe `lot` avec le type `question`.\nLes 4 parts de la convention des crochets sont 4 missions (ANALYSTEUR,\nRECHERCHEUR, CONTRE-ANALYSE, RAPPORTEUR). Apres la derniere, la chaine\nn emporte rien : le mis en cause que la contre-analyse a designe ne donnait\njamais lieu a une mission. Les themes `AUTO-CORRECTION` et `AUTO-EVOLUTION`\nexistent dans `parcours/themes/`, ils n etaient pas branches.\n\nUne regle ecrite dans `CROCHETS.md` n aurait pas suffi : une regle que rien\nn applique n est pas une regle. Le processus devait produire la mission\nlui-meme.\n\n## LA CORRECTION\n\nPoint d accroche unique : la cloture de la derniere part d un lot de type\n`question`, posee dans `fin/fonctions.py::cloturer_mission` AVANT toute mutation\nde la file, a cote des refus de cloture existante.\n\nLe mis en cause n est pas devine, il est NOMME : le bilan porte une ligne\n`MIS EN CAUSE : <texte>`. Marqueur absent -> la cloture refuse, en nommant le\nmarqueur et le remede. Marqueur present -> l item est depose par\n`entonnoir/vrac/entry.py::executer`, la fonction que la PORTE appelle : un\nseul chemin d ecriture, pas une deuxieme main.\n\nDeux decisions du createur appliquees : la mission nait TOUJOURS (verdict\n\"rien\" compris), et UNE SEULE mission porte a la fois la correction et\nl evolution.\n\nTrois fonctions pures, isolees, eprouvables :\n`mis_en_cause_du_bilan`, `fin_du_processus_question`,\n`decision_fin_question`, plus `args_item_correction` qui rend la forme du\ndepot. La cloture n applique que le verdict.\n\n## LE DEFAUT QUE LE COBAYE A ATTRAPE\n\nLa premiere version demandait \"est-ce qu il ne reste aucune autre part\", en\ncomparant la liste ENTIERE du lot. Or le lot conserve ses parts terminees :\nles trois premieres se croyaient donc chacune en fin de processus, et le\nprocessus aurait produit QUATRE missions au lieu d une. On regarde maintenant\nce qui vient APRES la part courante dans la liste.\n\nSans le contre-temoin \"une part intermediaire ne termine pas\", ce defaut\nserait passe : le cobaye joue les quatre parts, pas seulement la derniere.\n\n## LA PREUVE PAR EXECUTION\n\nCobaye sur structures en MEMOIRE : 15/15. Rien n est ecrit, ni la file ni l\nentonnoir ne sont touches. Les cas joues : marqueur lu, marqueur sans espace\napres les deux-points, marqueur VIDE (contre-temoin : il ne vaut pas un mis en\ncause), pas de marqueur, derniere part qui termine, part intermediaire qui ne\ntermine pas (contre-temoin), question chargee seule qui termine son processus,\nmission de reparation qui n est jamais une question, fin sans marqueur qui\nREFUSE, fin avec marqueur qui depose, depot de type `reparation`, theme et\nobjectif qui nomment le mis en cause et les deux volets, verdict \"rien\" qui\nproduit quand meme une mission, mission ordinaire qui ne declenche rien.\n\nLimite dite : la cloture REELLE n est pas jouee dans le cobaye, car elle ecrit\nla vraie file et l entonnoir reel (le chemin de l entonnoir n est pas\nredirigeable : il se deduit du dossier du pilote). Ce qui est prouve par le\njeu, c est la DECISION ; le depot, c'est la fonction de la porte, deja\nsollicitee tous les jours.\n\n## LE CONTROLE QUI A MORDU, ET LE CHOIX FAIT\n\n`verifier-extraction-ecarts` a accuse `fin/fonctions.py:87` : filtre `:` sans\nproducteur. Il lit la forme `splitlines()` suivi de `startswith(\":\")` comme une\nextraction de sortie. Or ce code ne filtre aucune ligne IMPRIMEE : il cherche\nun libelle dans un texte.\n\nJ aurais pu declarer une exemption pour le caractere deux-points -- la voie de\ndroit du garde. Je ne l ai pas fait : une exemption sur `:` affaiblirait la\ngarde pour un cas REEL (filtrer des lignes de sortie commencant par deux-points,\nce que produisent mermaid et YAML). Le meme decoupage est desormais ecrit au\npremier deux-points, ce qui supprime la forme sans affaiblir le garde.\n\n## UN MANQUEMENT ASSUME\n\n`CROCHETS.md` a ete ecrit par un script, hors de la porte `ecrire`. Le\nchangement est note dans la BDD des modifications et la porte `corriger-ascii`\na relu le fichier apres coup, mais l ecriture n est pas passee par le chemin\nunique. C est un manquement au protocole, pas un detail : je le dis dans la\nnote et ici plutot que de le passer sous silence.\n\n## ETAT\n\nNon-regression VERTE apres trois echecs survenus en route : l'extraction\nci-dessus, la vue `suivi-optimus` en retard d un evenement de cloture, et\nl'attribution qui accusait `fin/fonctions.py` parce que je l avais modifie\nAPRES avoir pose la note (renotee sur le contenu final). Cobaye 15/15,\nASCII verifie par la porte (974 fichiers), integrite-optimus saine,\nremorque conforme.",
+        "timestamp": "2026-10-03T10:51:50.726303"
+      },
+      "timestamp": "2026-10-03T10:51:50.726308"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-04T06:51:32.529800"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-04T06:51:46.996735"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-04T07:00:45.936784"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-04T08:11:52.347266"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-04T08:11:59.112721"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-04T08:46:10.153989"
+    },
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-10-04T09:07:33.283586"
+    }
+  ],
+  "archive_le": "2026-10-04 09:07:33",
+  "origine": "cycle-state.json archive par MO-110 (EO-119) le 2026-09-15 : l ETAT disparait, l HISTORIQUE est conserve"
+}

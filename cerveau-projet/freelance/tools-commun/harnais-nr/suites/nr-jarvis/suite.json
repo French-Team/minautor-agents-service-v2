@@ -1,0 +1,71 @@
+{
+  "nom": "nr-jarvis",
+  "description": "Suite de non-regression JARVIS (pilote phase 2) - commandes non mutantes uniquement : apres la suite, le workspace est identique",
+  "actif": true,
+  "perimetre": ["cerveau-projet/freelance/tools-commun/jarvis"],
+  "tests": [
+    {
+      "nom": "jarvis-repond-a-l-aide",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/jarvis/entry.py --help",
+      "rc_attendu": 0,
+      "sortie_contient": ["usage", "demarrage", "envoyer"]
+    },
+    {
+      "nom": "routines-etat-affiche-le-temps-restant",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/jarvis/entry.py routines-etat",
+      "rc_attendu": 0,
+      "sortie_contient": ["ROUTINES", "declenchement"]
+    },
+    {
+      "nom": "bloques-n-aucun-agent-bloque",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/jarvis/entry.py bloques",
+      "rc_attendu": 0,
+      "sortie_contient": ["aucun agent bloque"]
+    },
+    {
+      "nom": "file-liste-les-files",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/jarvis/entry.py file",
+      "rc_attendu": 0,
+      "sortie_contient": ["file-attente", "file-asap"]
+    },
+    {
+      "nom": "defcon-etat-lisible",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/jarvis/entry.py defcon",
+      "rc_attendu": 0,
+      "sortie_contient": ["DEFCON"]
+    },
+    {
+      "nom": "verifier-coherence-declare-coherent",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/jarvis/entry.py verifier-coherence",
+      "rc_attendu": 0,
+      "sortie_contient": ["COHERENT"]
+    },
+    {
+      "nom": "harnais-jarvis-verifier-sans-ecart",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/harnais-jarvis/entry.py verifier",
+      "rc_attendu": 0,
+      "sortie_contient": ["0 ecart(s) detecte(s)"]
+    },
+    {
+      "nom": "fichiers-structurants-existent",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {"chemin": "cerveau-projet/freelance/tools-commun/jarvis/jarvis.py",
+         "doit_exister": true},
+        {"chemin": "cerveau-projet/freelance/tools-commun/jarvis/entry.py",
+         "doit_exister": true},
+        {"chemin": "cerveau-projet/freelance/tools-commun/jarvis/fonctions/core.py",
+         "doit_exister": true},
+        {"chemin": "cerveau-projet/freelance/tools-commun/jarvis/fonctions/demarrage.py",
+         "doit_exister": true},
+        {"chemin": "cerveau-projet/freelance/tools-commun/jarvis/fonctions/relais.py",
+         "doit_exister": true},
+        {"chemin": "cerveau-projet/freelance/tools-commun/jarvis/jarvis-data.json",
+         "doit_exister": true},
+        {"chemin": "cerveau-projet/freelance/tools-commun/jarvis/historique/historique.db",
+         "doit_exister": true}
+      ]
+    }
+  ]
+}

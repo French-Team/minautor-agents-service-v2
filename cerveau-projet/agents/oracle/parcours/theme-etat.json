@@ -1,0 +1,37 @@
+{
+ "identite": {
+  "type": "theme",
+  "appartient_a": "oracle",
+  "nom": "ETAT",
+  "description": "Etat des serveurs v1, DEFCON, files, agents bloques"
+ },
+ "theme": {
+  "nom": "ETAT",
+  "but": "Afficher l etat de la coordination : serveurs oracle-server + routines-server v1, DEFCON, files, agents bloques",
+  "redirects": [
+   {
+    "besoin": "Afficher l etat des serveurs v1",
+    "action": "procedure",
+    "etapes": [
+     "python3 cerveau-projet/agents/tools/oracle/oracle.py status",
+     "python3 cerveau-projet/agents/tools/oracle/oracle-demarrage.py etat"
+    ],
+    "regle": "ETAT SERVEURS v1 : affiche l etat des serveurs oracle-server + routines-server v1, DEFCON, files, agents bloques."
+   },
+   {
+    "besoin": "Etat sain ou probleme ?",
+    "action": "decision",
+    "etapes": [
+     "Sain -> fin : coordination terminee",
+     "Probleme (serveur mort, DEFCON monte, file bloquee) -> theme-processus (controle) ou signaler a Cerberus"
+    ],
+    "regle": "Un serveur mort ou une file asap EN_ATTENTE non consommee = daemon mort -> theme-processus. Je signale, je ne corrige pas."
+   }
+  ]
+ },
+ "fin": {
+  "type": "lien",
+  "vers": "fins.json",
+  "case": "fin-coordination"
+ }
+}

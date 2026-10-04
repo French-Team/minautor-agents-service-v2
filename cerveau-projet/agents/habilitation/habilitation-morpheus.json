@@ -1,0 +1,37 @@
+{
+ "identite": {
+  "type": "habilitation",
+  "appartient_a": "morpheus",
+  "version": "0.1.0",
+  "commun": false
+ },
+ "agent": "morpheus",
+ "description": "Table d habilitation dediee (migration v1->v2 2026-09-05) : fusion parcours v1 + arbres/themes v2 + P0 partages. Source unique du verrou d habilitation.",
+ "outils": [
+  "activer-agent-principal",
+  "ajouter-contenu-fichier",
+  "combos-moteur",
+  "consulter-combos",
+  "consulter-lecons",
+  "corriger-accents-zones-sensibles",
+  "detecter-decalages-catalogue",
+  "detecter-usage-outils-externes",
+  "enregistrer-lecon",
+  "enregistrer-usage-outil",
+  "executer-script-temporaire",
+  "generateurs-amelioration",
+  "generateurs-commande",
+  "generateurs-outil-temporaire",
+  "guider-arbre",
+  "lire-activite-recente",
+  "lire-fichier",
+  "oracle",
+  "test-092-parite-agents-activation",
+  "test-098-historique-format-garde-fou",
+  "test-102-timestamps-millisecondes",
+  "tester-protection-*",
+  "tester-protections",
+  "valider-conformite-ascii",
+  "verifier-agent-perimetre"
+ ]
+}

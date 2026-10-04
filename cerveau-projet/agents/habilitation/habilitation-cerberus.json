@@ -1,0 +1,27 @@
+{
+ "identite": {
+  "type": "habilitation",
+  "appartient_a": "cerberus",
+  "version": "0.1.0",
+  "commun": false
+ },
+ "agent": "cerberus",
+ "description": "Table d habilitation dediee (migration v1->v2 2026-09-05) : fusion parcours v1 + arbres/themes v2 + P0 partages. Source unique du verrou d habilitation.",
+ "outils": [
+  "activer-agent-principal",
+  "consulter-combos",
+  "consulter-lecons",
+  "corriger-accents-zones-sensibles",
+  "detecter-impacts",
+  "enregistrer-usage-outil",
+  "generateurs-amelioration",
+  "generateurs-commande",
+  "guider-arbre",
+  "lire-activite-recente",
+  "lire-fichier",
+  "lister-agents",
+  "nettoyer-sessions",
+  "oracle",
+  "verifier-agent-perimetre"
+ ]
+}

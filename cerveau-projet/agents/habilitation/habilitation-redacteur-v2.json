@@ -1,0 +1,28 @@
+{
+ "identite": {
+  "type": "habilitation",
+  "appartient_a": "redacteur-v2",
+  "version": "0.1.0",
+  "commun": false
+ },
+ "agent": "redacteur-v2",
+ "description": "Table d habilitation dediee (migration v1->v2 2026-09-05) : fusion parcours v1 + arbres/themes v2 + P0 partages. Source unique du verrou d habilitation.",
+ "outils": [
+  "activer-agent-principal",
+  "combos-moteur",
+  "consulter-combos",
+  "consulter-lecons",
+  "corriger-accents-zones-sensibles",
+  "editer-fichier",
+  "enregistrer-lecon",
+  "enregistrer-usage-outil",
+  "generateurs-commande",
+  "guider-arbre",
+  "lire-activite-recente",
+  "lire-fichier",
+  "rechercher-texte",
+  "valider-conformite-ascii",
+  "verifier-agent-perimetre",
+  "verifier-systeme"
+ ]
+}

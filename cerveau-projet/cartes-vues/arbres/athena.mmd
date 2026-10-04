@@ -1,0 +1,72 @@
+%% Arbre de decision de athena (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est ma mission ?"}
+    RACINE -- "CREER" --> THEME-CREER
+    THEME-CREER["Creer un pense-bete structure conforme au template"]
+    THEME-CREER -- "besoin 1" --> THEME-CREER-B0
+    THEME-CREER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-CREER -- "besoin 2" --> THEME-CREER-B1
+    THEME-CREER-B1["Consulter les lecons"]
+    THEME-CREER -- "besoin 3" --> THEME-CREER-B2
+    THEME-CREER-B2["CONTEXTE : activite recente"]
+    THEME-CREER -- "besoin 4" --> THEME-CREER-B3
+    THEME-CREER-B3["Verifier l absence de doublon (ANTI-DOUBLON)"]
+    THEME-CREER -- "besoin 5" --> THEME-CREER-B4
+    THEME-CREER-B4["Generer le squelette du pense-bete"]
+    THEME-CREER -- "besoin 6" --> THEME-CREER-B5
+    THEME-CREER-B5["Remplir les sections"]
+    THEME-CREER -- "besoin 7" --> THEME-CREER-B6
+    THEME-CREER-B6["Valider le pense-bete (RVAV)"]
+    THEME-CREER -- "besoin 8" --> THEME-CREER-B7
+    THEME-CREER-B7["Ajouter les lecons"]
+    FIN-fin-retour-oracle(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-CREER-B0 --> FIN-fin-retour-oracle
+    THEME-CREER-B1 --> FIN-fin-retour-oracle
+    THEME-CREER-B2 --> FIN-fin-retour-oracle
+    THEME-CREER-B3 --> FIN-fin-retour-oracle
+    THEME-CREER-B4 --> FIN-fin-retour-oracle
+    THEME-CREER-B5 --> FIN-fin-retour-oracle
+    THEME-CREER-B6 --> FIN-fin-retour-oracle
+    THEME-CREER-B7 --> FIN-fin-retour-oracle
+    RACINE -- "COMPLETER" --> THEME-COMPLETER
+    THEME-COMPLETER["Enrichir un pense-bete avec de nouvelles sections"]
+    THEME-COMPLETER -- "besoin 1" --> THEME-COMPLETER-B0
+    THEME-COMPLETER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-COMPLETER -- "besoin 2" --> THEME-COMPLETER-B1
+    THEME-COMPLETER-B1["Lire le pense-bete existant"]
+    THEME-COMPLETER -- "besoin 3" --> THEME-COMPLETER-B2
+    THEME-COMPLETER-B2["Ajouter les sections manquantes"]
+    THEME-COMPLETER -- "besoin 4" --> THEME-COMPLETER-B3
+    THEME-COMPLETER-B3["Valider le pense-bete (RVAV)"]
+    THEME-COMPLETER -- "besoin 5" --> THEME-COMPLETER-B4
+    THEME-COMPLETER-B4["Ajouter les lecons"]
+    THEME-COMPLETER-B0 --> FIN-fin-retour-oracle
+    THEME-COMPLETER-B1 --> FIN-fin-retour-oracle
+    THEME-COMPLETER-B2 --> FIN-fin-retour-oracle
+    THEME-COMPLETER-B3 --> FIN-fin-retour-oracle
+    THEME-COMPLETER-B4 --> FIN-fin-retour-oracle
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Executer une mission hors des themes standard"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["La mission concerne-t-elle un autre agent ? (delegation)"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["DELEGATION - Signaler au pilote via ORACLE"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["Executer la mission"]
+    THEME-AUTRE -- "besoin 5" --> THEME-AUTRE-B4
+    THEME-AUTRE-B4["Ajouter les lecons"]
+    FIN-fin-autre(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-autre
+    THEME-AUTRE-B1 --> FIN-fin-autre
+    THEME-AUTRE-B2 --> FIN-fin-autre
+    THEME-AUTRE-B3 --> FIN-fin-autre
+    THEME-AUTRE-B4 --> FIN-fin-autre
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

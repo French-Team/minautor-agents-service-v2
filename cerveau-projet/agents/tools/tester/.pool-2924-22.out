@@ -1,0 +1,21 @@
+=== test-108 : garde-fou controle processus v1 ===
+  [OK] 1. controle_processus.py existe (verifier, lister, SERVEURS)
+  [OK] 2. FIX: plus d auto-exclusion par pid dans le code
+  [OK] 3. signature v1 routines distincte (chemin oracle/...)
+  [OK] 4. cas normal (serveurs vivants OK)
+  [KO] 5. serveur mort detecte (pid inexistant) -- [Errno 22] Invalid argument: 'Z:\\analyste-in-console\\cerveau-projet\\agents\\tools\\oracle\\oracle-server.pid'
+  [OK] 6. doublon fantome detecte (pid 12345)
+  [OK] 7. CLI oracle.py controle-processus (rc 0/1)
+  [OK] 8. script ASCII (convention v1)
+
+=== CHRONO test (total 3.2s) ===
+  1. module existe                           0.00s
+  2. FIX pas auto-exclusion pid              0.00s
+  3. matcher v1/v2 distinct                  0.00s
+  4. cas normal serveurs vivants             0.55s
+  5. serveur mort detecte                    1.00s
+  6. doublon fantome detecte                 0.82s
+  7. CLI oracle.py controle-processus        0.79s
+  8. ASCII                                   0.00s
+
+=== RESULTAT : 7 OK / 1 KO (sur 8 points) ===

@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "objectif": "Definir les criteres qui mesurent la progression du cerveau-projet jusqu a 100%. Chaque critere porte une source de verite reelle, une cible (valeur qui vaut 100%) et un poids dans la progression globale.",
+  "criteres": [
+    {
+      "id": "outils",
+      "nom": "Outils dans le catalogue",
+      "source": "catalogue",
+      "cible": 200,
+      "poids": 20,
+      "explicatif": "Nombre de commandes dans catalogue-commandes.json (source de verite des outils)"
+    },
+    {
+      "id": "lecons",
+      "nom": "Lecons capitalisees",
+      "source": "lecons",
+      "cible": 150,
+      "poids": 20,
+      "explicatif": "Nombre de lecons dans la BDD lecons.db"
+    },
+    {
+      "id": "tests",
+      "nom": "Tests verts au dernier run",
+      "source": "tests_ok",
+      "cible": 100,
+      "poids": 30,
+      "explicatif": "Pourcentage de tests OK sur le run le plus recent de registre-tests.jsonl"
+    },
+    {
+      "id": "missions",
+      "nom": "Missions terminees",
+      "source": "missions",
+      "cible": 150,
+      "poids": 15,
+      "explicatif": "Nombre d interventions d agents terminees dans traces/chronos.jsonl"
+    },
+    {
+      "id": "agents",
+      "nom": "Agents actifs",
+      "source": "agents",
+      "cible": 16,
+      "poids": 15,
+      "explicatif": "Nombre de fiches agents (type: fiche-agent) dans agents/"
+    }
+  ],
+  "auto_amelioration": {
+    "fenetre_jours": 7,
+    "indicateurs": [
+      {
+        "id": "usages",
+        "nom": "Usages d outils par jour",
+        "source": "usages_par_jour",
+        "poids": 40
+      },
+      {
+        "id": "lecons_jour",
+        "nom": "Lecons enregistrees par jour",
+        "source": "lecons_par_jour",
+        "poids": 30
+      },
+      {
+        "id": "tests_jour",
+        "nom": "Tests lances par jour",
+        "source": "tests_par_jour",
+        "poids": 30
+      }
+    ]
+  }
+}

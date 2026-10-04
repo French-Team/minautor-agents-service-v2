@@ -1,0 +1,32 @@
+{
+  "nom": "inter-round-vision-rogers",
+  "session": "session-llm-2",
+  "maillons": [
+    {
+      "de": "stark",
+      "vers": "jarvis"
+    },
+    {
+      "de": "jarvis",
+      "vers": "vision"
+    },
+    {
+      "de": "vision",
+      "vers": "rogers",
+      "type": "IR"
+    },
+    {
+      "de": "rogers",
+      "vers": "vision",
+      "type": "IR"
+    },
+    {
+      "de": "vision",
+      "vers": "jarvis"
+    },
+    {
+      "de": "jarvis",
+      "vers": "stark"
+    }
+  ]
+}

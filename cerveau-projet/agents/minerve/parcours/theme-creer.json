@@ -1,0 +1,24 @@
+{
+  "identite": {"type": "theme", "appartient_a": "minerve", "nom": "CREER", "description": "Creer un todo depuis une spec source"},
+  "theme": {
+    "nom": "CREER",
+    "but": "Transformer une spec en todo organise (phases 0 a 9) en suivant la boucle RVAV",
+    "redirects": [
+      {"besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."},
+      {"besoin": "Consulter les lecons (domaine redaction-todo)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent minerve --domaine redaction-todo"], "regle": "PATTERN 6 : le contexte dynamique."},
+      {"besoin": "CONTEXTE : activite recente des agents", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6 : l historique est DYNAMIQUE."},
+      {"besoin": "Rechercher les todos existants - ANTI-DOUBLON (case c2)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/rechercher/rechercher-todos/rechercher-todos.py"], "regle": "ANTI-DOUBLON : avant toute creation, verifier qu un todo au theme proche n existe pas deja."},
+      {"besoin": "Lire la spec source (case c3)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/pense-betes/specs/<spec-source>"], "regle": "SPEC SOURCE : je travaille uniquement a partir d une spec source existante."},
+      {"besoin": "Generer le squelette du todo (case c4)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/generateurs/generateurs-squelette-todo/generateurs-squelette-todo.py <spec-source>"], "regle": "SQUELETTE : nommage automatique selon convention-renommage."},
+      {"besoin": "Remplir les phases 0 a 9 (case c5)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/creer/creer-remplir-todo/creer-remplir-todo.py <todo>"], "regle": "REMPLIR : phases 0 a 9 sans ouvrir le fichier."},
+      {"besoin": "Verifier la conformite ASCII (case c6)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <todo>"], "regle": "REGLE ASCII : 100% ASCII, aucun accent."},
+      {"besoin": "Valider le fichier todo (case c7)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/valider/valider-todo/valider-todo.py <todo>"], "regle": "RVAV : pas de validation sans boucle complete."},
+      {"besoin": "Mettre a jour index-todo.md (case c8)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py cerveau-projet/pense-betes/specs/todo/index-todo.md <ancien> <nouveau>"], "regle": "INDEX : ajouter le todo dans l index."},
+      {"besoin": "Lecons et retour (case c9)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/minerve/corrections.md <lecon>"], "regle": "PROTOCOLE FIN-MISSION."},
+      {"besoin": "Corriger les accents du rapport", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/minerve/corrections.md --all"], "regle": "REGLE ASCII."},
+      {"besoin": "Enregistrer ma lecon dans la BDD", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent minerve --domaine <domaine> --titre <titre> --lecon <texte>"], "regle": "BDD : memoire longue."},
+      {"besoin": "Enregistrer mes usages d outils (case c24)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent minerve --outil <outil> --contexte '<contexte>'"], "regle": "BILAN OUTILS : declarer tous les outils utilises."}
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-creer"}
+}

@@ -1,0 +1,136 @@
+"""Categorie corriger : nettoyer EN PLACE une declaration de duree qui MENT.
+
+Interface entre main.py et les fonctions simples (corriger/fonctions.py).
+
+Usage :
+    python main.py corriger [--mission MO-XXX] --motif "..." [--simuler oui] [--racine <matrix>]
+
+Le MOTIF est OBLIGATOIRE : l ancienne valeur doit rester RELISIBLE avec sa
+justification, et une correction sans motif se lit comme une opinion. `--mission`
+limite le nettoyage a UNE mission ; sans lui la porte balaie toute la population
+que le garde `verifier-placeholders` accuse.
+
+`--racine <matrix>` traite le journal d une AUTRE Matrice (cobaye) : le chemin est
+donne RELATIF a cette racine, donc la porte reste PROUVABLE sur un journal jetable
+(lecon L-032 : un controle qu on ne peut pas pieger n est pas un controle). Meme
+option, meme forme que le verbe `archiver`.
+
+ORDRE DE SECURITE (et aucune ecriture avant la fin) : on MESURE (population et
+comptes de lignes), on REFUSE si une ligne du journal serait perdue, on REECRIT
+de facon atomique, on RECALCULE l empreinte EN DERNIER. Tout refus laisse le
+journal INTACT.
+
+POURQUOI LE COMPTE DE LIGNES EST VERIFIE ICI : la reecriture repart des evenements
+LUS, or `lire_evenements` SAUTE une ligne illisible -- ecrire sans comparer
+supprimerait cette ligne EN SILENCE. Meme discipline que le verbe `archiver`
+(journal tronque silencieusement), poussee d un cran : ici rien ne doit sortir,
+donc tout ecart de compte est un REFUS.
+"""
+from pathlib import Path
+
+from archiver.entry import ecrire_empreinte
+from archiver.fonctions import reecrire
+from commun import extraire_options, lire_evenements
+from constants import (
+    CHEMIN_RELATIF_BDD,
+    CHEMIN_RELATIF_EMPREINTE,
+    REPERTOIRE_MATRIX,
+)
+from corriger.fonctions import compter_lignes, corriger_cibles, population
+from vue.fonctions import agreger_par_mission
+
+NOMS_OPTIONS = ("mission", "simuler", "motif", "racine")
+
+USAGE = ("Usage : python main.py corriger [--mission MO-XXX] --motif \"...\""
+         " [--simuler oui] [--racine <matrix>]")
+
+VALEURS_VRAIES = ("oui", "true", "1", "vrai")
+
+MOTIF_DEFAUT_INTERDIT = ("REFUS : --motif est OBLIGATOIRE. L ancienne valeur doit rester"
+                         " relisible AVEC sa justification : une correction sans motif se"
+                         " lit comme une opinion.")
+
+
+def _vrai(valeur):
+    """Une option booleenne tenue pour vraie (jamais devinee : la liste est DITE)."""
+    return str(valeur).strip().lower() in VALEURS_VRAIES
+
+
+def resoudre_racine(valeur):
+    """La racine matrix/ a traiter : celle du depot, ou celle passee en option."""
+    valeur = str(valeur or "").strip()
+    return Path(valeur).resolve() if valeur else REPERTOIRE_MATRIX
+
+
+def executer(arguments):
+    """Corrige les declarations de duree qui contredisent la mesure des bornes."""
+    options = extraire_options(arguments, NOMS_OPTIONS)
+    motif = str(options.get("motif", "") or "").strip()
+    if not motif:
+        print(USAGE)
+        print(MOTIF_DEFAUT_INTERDIT)
+        return 2
+    mission = str(options.get("mission", "") or "").strip()
+    simuler = _vrai(options.get("simuler", ""))
+
+    racine = resoudre_racine(options.get("racine"))
+    journal = racine / CHEMIN_RELATIF_BDD
+    empreinte = racine / CHEMIN_RELATIF_EMPREINTE
+
+    evenements = lire_evenements(journal)
+    if not evenements:
+        print("Journal vide ou introuvable : aucune correction a faire (" + str(journal) + ").")
+        return 0
+
+    print("CORRIGER LES DUREES DECLAREES -- la valeur honnete est VIDE, pas la mesure")
+    print("Journal : " + str(journal))
+    lignes_brutes = compter_lignes(journal)
+    if lignes_brutes is not None and lignes_brutes != len(evenements):
+        print("REFUS : " + str(lignes_brutes) + " ligne(s) non vides au journal pour "
+              + str(len(evenements)) + " evenement(s) LISIBLES -- la reecriture"
+              " supprimerait les lignes illisibles. AUCUNE ECRITURE (une correction ne"
+              " supprime jamais une ligne).")
+        return 1
+
+    cibles, egales, sans_mesure, inconnue = population(
+        evenements, agreger_par_mission(evenements), mission)
+    if inconnue:
+        print("REFUS : mission inconnue du journal : " + mission
+              + " -- AUCUNE ECRITURE (une correction ne devine pas sa cible).")
+        return 1
+
+    print("  evenements du journal : " + str(len(evenements)))
+    print("  declarations a corriger : " + str(len(cibles))
+          + ((" (mission " + mission + ")") if mission else ""))
+    print("  declarations EGALES a la mesure (un FAIT, jamais touchees) : "
+          + str(len(egales)) + ((" -> " + ", ".join(egales)) if egales else ""))
+    print("  missions sans les deux bornes (aucune mesure, aucune correction) : "
+          + str(len(sans_mesure))
+          + ((" -> " + ", ".join(sans_mesure)) if sans_mesure else ""))
+    if not cibles:
+        print("RIEN A CORRIGER : toute declaration verifiable est un FAIT, et un silence"
+              " n est pas une declaration.")
+        return 1
+
+    nombre_corrigees, lignes = corriger_cibles(evenements, cibles, motif)
+    if simuler:
+        print("")
+        print("SIMULATION : aucune ecriture -- le journal reste INTACT.")
+        for ligne in lignes:
+            print(ligne)
+        return 0
+
+    reecrire(journal, evenements)
+    nouvelle = ecrire_empreinte(empreinte, journal)
+    apres = compter_lignes(journal)
+
+    for ligne in lignes:
+        print(ligne)
+    print("")
+    print("Journal : " + str(len(evenements)) + " -> " + str(apres)
+          + " ligne(s) NON VIDES (aucune ligne supprimee, aucune ajoutee)")
+    print("Corrigees : " + str(nombre_corrigees) + " declaration(s) -- l ancienne valeur"
+          " reste relisible dans `corrections`, avec le motif")
+    print("Empreinte recalculee : "
+          + (nouvelle[:16] + "..." if nouvelle else "(aucune)"))
+    return 0

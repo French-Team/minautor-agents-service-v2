@@ -1,0 +1,133 @@
+%% Arbre de decision de socrate (arbre v0.4.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est la mission de revision ?"}
+    RACINE -- "REVISION" --> THEME-REVISION
+    THEME-REVISION["Comprendre les besoins de revision de l'utilisateur, les que"]
+    THEME-REVISION -- "besoin 1" --> THEME-REVISION-B0
+    THEME-REVISION-B0["SE PRESENTER (uniquement a l OUVERTURE du round)"]
+    THEME-REVISION -- "besoin 2" --> THEME-REVISION-B1
+    THEME-REVISION-B1["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-REVISION -- "besoin 3" --> THEME-REVISION-B2
+    THEME-REVISION-B2["Consulter les lecons (domaine revision)"]
+    THEME-REVISION -- "besoin 4" --> THEME-REVISION-B3
+    THEME-REVISION-B3["Lire MES conventions personnelles (methodologie + priorisati"]
+    THEME-REVISION -- "besoin 5" --> THEME-REVISION-B4
+    THEME-REVISION-B4["CONTEXTE : activite recente des agents"]
+    THEME-REVISION -- "besoin 6" --> THEME-REVISION-B5
+    THEME-REVISION-B5["Lire l activite recente (case c1)"]
+    THEME-REVISION -- "besoin 7" --> THEME-REVISION-B6
+    THEME-REVISION-B6["Activite lue ? (controle c1b)"]
+    THEME-REVISION -- "besoin 8" --> THEME-REVISION-B7
+    THEME-REVISION-B7["Sujet de la revision (question c2)"]
+    THEME-REVISION -- "besoin 9" --> THEME-REVISION-B8
+    THEME-REVISION-B8["Description du probleme (question c3)"]
+    THEME-REVISION -- "besoin 10" --> THEME-REVISION-B9
+    THEME-REVISION-B9["Clarification si vague (question c3b)"]
+    THEME-REVISION -- "besoin 11" --> THEME-REVISION-B10
+    THEME-REVISION-B10["Impact du probleme (question c4)"]
+    THEME-REVISION -- "besoin 12" --> THEME-REVISION-B11
+    THEME-REVISION-B11["Agent habilite (question c5)"]
+    THEME-REVISION -- "besoin 13" --> THEME-REVISION-B12
+    THEME-REVISION-B12["Autres problemes ? (question c6)"]
+    THEME-REVISION -- "besoin 14" --> THEME-REVISION-B13
+    THEME-REVISION-B13["Classification du probleme (Phase 3 - convention priorisatio"]
+    THEME-REVISION -- "besoin 15" --> THEME-REVISION-B14
+    THEME-REVISION-B14["Formuler la mission (Phase 4 - convention methodologie)"]
+    THEME-REVISION -- "besoin 16" --> THEME-REVISION-B15
+    THEME-REVISION-B15["Enregistrer mes usages d outils"]
+    FIN-fin-revision(["FIN - Revision terminee, passer a la synthese"])
+    THEME-REVISION-B0 --> FIN-fin-revision
+    THEME-REVISION-B1 --> FIN-fin-revision
+    THEME-REVISION-B2 --> FIN-fin-revision
+    THEME-REVISION-B3 --> FIN-fin-revision
+    THEME-REVISION-B4 --> FIN-fin-revision
+    THEME-REVISION-B5 --> FIN-fin-revision
+    THEME-REVISION-B6 --> FIN-fin-revision
+    THEME-REVISION-B7 --> FIN-fin-revision
+    THEME-REVISION-B8 --> FIN-fin-revision
+    THEME-REVISION-B9 --> FIN-fin-revision
+    THEME-REVISION-B10 --> FIN-fin-revision
+    THEME-REVISION-B11 --> FIN-fin-revision
+    THEME-REVISION-B12 --> FIN-fin-revision
+    THEME-REVISION-B13 --> FIN-fin-revision
+    THEME-REVISION-B14 --> FIN-fin-revision
+    THEME-REVISION-B15 --> FIN-fin-revision
+    RACINE -- "SYNTHESE" --> THEME-SYNTHESE
+    THEME-SYNTHESE["Produire le fichier missions-revision.md avec la liste struc"]
+    THEME-SYNTHESE -- "besoin 1" --> THEME-SYNTHESE-B0
+    THEME-SYNTHESE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-SYNTHESE -- "besoin 2" --> THEME-SYNTHESE-B1
+    THEME-SYNTHESE-B1["Consulter les lecons (domaine revision)"]
+    THEME-SYNTHESE -- "besoin 3" --> THEME-SYNTHESE-B2
+    THEME-SYNTHESE-B2["Lir MES conventions personnelles (format de sortie)"]
+    THEME-SYNTHESE -- "besoin 4" --> THEME-SYNTHESE-B3
+    THEME-SYNTHESE-B3["CONTEXTE : activite recente des agents"]
+    THEME-SYNTHESE -- "besoin 5" --> THEME-SYNTHESE-B4
+    THEME-SYNTHESE-B4["Verifier que tous les problemes ont ete explores (controle p"]
+    THEME-SYNTHESE -- "besoin 6" --> THEME-SYNTHESE-B5
+    THEME-SYNTHESE-B5["Creer le fichier missions-revision.md (case c7)"]
+    THEME-SYNTHESE -- "besoin 7" --> THEME-SYNTHESE-B6
+    THEME-SYNTHESE-B6["Remplir le format structure (template convention)"]
+    THEME-SYNTHESE -- "besoin 8" --> THEME-SYNTHESE-B7
+    THEME-SYNTHESE-B7["Fichier cree ? (controle c7b)"]
+    THEME-SYNTHESE -- "besoin 9" --> THEME-SYNTHESE-B8
+    THEME-SYNTHESE-B8["Relire et verifier la coherence"]
+    THEME-SYNTHESE -- "besoin 10" --> THEME-SYNTHESE-B9
+    THEME-SYNTHESE-B9["Ajouter les lecons dans corrections.md"]
+    FIN-fin-synthese(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-SYNTHESE-B0 --> FIN-fin-synthese
+    THEME-SYNTHESE-B1 --> FIN-fin-synthese
+    THEME-SYNTHESE-B2 --> FIN-fin-synthese
+    THEME-SYNTHESE-B3 --> FIN-fin-synthese
+    THEME-SYNTHESE-B4 --> FIN-fin-synthese
+    THEME-SYNTHESE-B5 --> FIN-fin-synthese
+    THEME-SYNTHESE-B6 --> FIN-fin-synthese
+    THEME-SYNTHESE-B7 --> FIN-fin-synthese
+    THEME-SYNTHESE-B8 --> FIN-fin-synthese
+    THEME-SYNTHESE-B9 --> FIN-fin-synthese
+    RACINE -- "OUTILS" --> THEME-OUTILS
+    THEME-OUTILS["Resoudre un probleme d outil rencontre en cours de mission e"]
+    THEME-OUTILS -- "besoin 1" --> THEME-OUTILS-B0
+    THEME-OUTILS-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-OUTILS -- "besoin 2" --> THEME-OUTILS-B1
+    THEME-OUTILS-B1["Consulter les lecons (domaine revision)"]
+    THEME-OUTILS -- "besoin 3" --> THEME-OUTILS-B2
+    THEME-OUTILS-B2["CONTEXTE : activite recente des agents"]
+    THEME-OUTILS -- "besoin 4" --> THEME-OUTILS-B3
+    THEME-OUTILS-B3["Probleme avec un outil ? (question cU1)"]
+    THEME-OUTILS -- "besoin 5" --> THEME-OUTILS-B4
+    THEME-OUTILS-B4["COMPRENDRE L OUTIL - lire le .md (case cU2)"]
+    THEME-OUTILS -- "besoin 6" --> THEME-OUTILS-B5
+    THEME-OUTILS-B5["Verifier si un combo existe pour l action"]
+    THEME-OUTILS -- "besoin 7" --> THEME-OUTILS-B6
+    THEME-OUTILS-B6["Generer la commande exacte"]
+    THEME-OUTILS -- "besoin 8" --> THEME-OUTILS-B7
+    THEME-OUTILS-B7["Reprendre ma mission (case cU3)"]
+    THEME-OUTILS -- "besoin 9" --> THEME-OUTILS-B8
+    THEME-OUTILS-B8["Ajouter les lecons dans corrections.md"]
+    FIN-fin-outils(["FIN - Reprendre ma mission (cU3)"])
+    THEME-OUTILS-B0 --> FIN-fin-outils
+    THEME-OUTILS-B1 --> FIN-fin-outils
+    THEME-OUTILS-B2 --> FIN-fin-outils
+    THEME-OUTILS-B3 --> FIN-fin-outils
+    THEME-OUTILS-B4 --> FIN-fin-outils
+    THEME-OUTILS-B5 --> FIN-fin-outils
+    THEME-OUTILS-B6 --> FIN-fin-outils
+    THEME-OUTILS-B7 --> FIN-fin-outils
+    THEME-OUTILS-B8 --> FIN-fin-outils
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round
+    RACINE -- "TRIO" --> THEME-TRIO
+    THEME-TRIO["Quand l utilisateur expose une idee, Socrate declenche le tr"]
+    THEME-TRIO -- "besoin 1" --> THEME-TRIO-B0
+    THEME-TRIO-B0["L utilisateur a une idee a faire produire par le trio"]
+    THEME-TRIO -- "besoin 2" --> THEME-TRIO-B1
+    THEME-TRIO-B1["Preciser l idee avant de lancer le trio"]
+    FIN-fin-delegation(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-TRIO-B0 --> FIN-fin-delegation
+    THEME-TRIO-B1 --> FIN-fin-delegation

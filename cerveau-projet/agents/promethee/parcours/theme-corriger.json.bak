@@ -1,0 +1,19 @@
+{
+  "identite": {"type": "theme", "appartient_a": "promethee", "nom": "CORRIGER", "description": "Corriger selon le rapport de Janus - boucle KO"},
+  "theme": {
+    "nom": "CORRIGER",
+    "but": "Corriger le livrable concerne par le rapport de Janus, puis re-valider (boucle KO)",
+    "redirects": [
+      {"besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/activer-agent-principal/activer-agent-principal.py"], "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."},
+      {"besoin": "Consulter les lecons (domaine redaction-spec)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent promethee --domaine redaction-spec"], "regle": "PATTERN 6 : le contexte dynamique."},
+      {"besoin": "CONTEXTE : activite recente des agents", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6 : l historique est DYNAMIQUE."},
+      {"besoin": "Corriger le livrable selon le rapport Janus (case c9f)", "action": "procedure", "etapes": ["Lire le rapport de Janus, identifier les ecarts, corriger UNIQUEMENT le livrable concerne"], "regle": "CREATION LIMITEE : je modifie UNIQUEMENT le livrable concerne par le rapport de Janus."},
+      {"besoin": "Corriger les accents du rapport", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/promethee/corrections.md --all"], "regle": "REGLE ASCII."},
+      {"besoin": "Re-valider la spec corrigee", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/valider/valider-spec/valider-spec.py <spec>"], "regle": "RVAV : re-valider apres correction."},
+      {"besoin": "Verifier la conformite ASCII", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <spec>"], "regle": "REGLE ASCII."},
+      {"besoin": "Activer Janus pour re-controle (BOUCLE KO)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> janus <raison>"], "regle": "BOUCLE KO : apres correction, activer Janus pour revalidation."},
+      {"besoin": "Enregistrer mes usages d outils (case c24)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent promethee --outil <outil> --contexte '<contexte>'"], "regle": "BILAN OUTILS : declarer tous les outils utilises."}
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-corriger"}
+}

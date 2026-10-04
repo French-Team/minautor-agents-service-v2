@@ -1,0 +1,37 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "shuri",
+    "description": "Toutes les fins possibles pour Shuri, centralisées dans un seul fichier"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour à la racine",
+      "description": "Le thème est terminé, retourner à l'arbre pour choisir un nouveau thème",
+      "action": "redirection",
+      "vers": "arbre-shuri.json"
+    },
+    "fin-stark": {
+      "titre": "FIN DE CYCLE - Retour à Stark",
+      "description": "Terminer le round et retourner au coordinateur",
+      "action": "activer",
+      "cible": "stark",
+      "commande": "jarvis.py envoyer --de shuri --vers stark --priorite 2 --objet 'Bilan' --corps '<bilan>'",
+      "regle": "Via JARVIS. Stark est mon coordinateur."
+    },
+    "fin-inter-round": {
+      "titre": "Fin d'inter-round - Réactivation de l'appelant",
+      "description": "L'inter-round est terminé, réactiver l'agent qui a appelé",
+      "action": "activer",
+      "cible": "<agent_appelant>",
+      "commande": "jarvis.py envoyer --de shuri --vers <agent_appelant> --priorite 1 --objet 'Reprise' --corps 'Reprends ton round'",
+      "regle": "Via JARVIS. L'habilite réactive l'appelant qui reprend son round principal."
+    },
+    "fin-arbre": {
+      "titre": "Retour à l'arbre",
+      "description": "Retourner à la racine de l'arbre pour choisir un thème",
+      "action": "redirection",
+      "vers": "arbre-shuri.json"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "nom": "nr-exemple",
+  "description": "Suite EXEMPLE (phase 1) : prouve le moteur NR - a remplacer par les vraies suites (nr-jarvis, nr-agents...) puis purger",
+  "actif": true,
+  "exemple": true,
+  "perimetre": ["cerveau-projet/freelance/tools-commun/harnais-nr"],
+  "tests": [
+    {
+      "nom": "lister-affiche-les-suites",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/harnais-nr/entry.py lister",
+      "rc_attendu": 0,
+      "sortie_contient": ["HARNAIS-NR", "nr-exemple"]
+    },
+    {
+      "nom": "jarvis-repond-a-l-aide",
+      "commande": "python3 {racine}/cerveau-projet/freelance/tools-commun/jarvis/entry.py --help",
+      "rc_attendu": 0,
+      "sortie_contient": ["usage"]
+    },
+    {
+      "nom": "fichier-verifie-existe",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {"chemin": "cerveau-projet/freelance/tools-commun/harnais-nr/harnais-nr-data.json",
+         "doit_exister": true}
+      ]
+    }
+  ]
+}

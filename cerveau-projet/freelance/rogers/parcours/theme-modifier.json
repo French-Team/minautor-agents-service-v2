@@ -1,0 +1,78 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "rogers",
+    "nom": "MODIFIER",
+    "description": "Definir, modifier, ajouter des regles, conventions ou protocoles"
+  },
+  "theme": {
+    "nom": "MODIFIER",
+    "but": "Creer ou faire evoluer les regles",
+    "redirects": [
+      {
+        "besoin": "Ajouter une regle immuable",
+        "action": "redirection",
+        "vers": {
+          "type": "procedure",
+          "etapes": [
+            "Lire regles-immuables.md (theme LIRE)",
+            "Verifier l'absence de doublon (P5 - SSOT)",
+            "Rediger la nouvelle regle dans le format existant",
+            "Valider la coherence avec les regles existantes (VALIDER)",
+            "Enregistrer la lecon (consulter-lecons)"
+          ],
+          "fichier": "cerveau-projet/freelance/regles/regles-immuables.md"
+        }
+      },
+      {
+        "besoin": "Modifier une convention",
+        "action": "redirection",
+        "vers": {
+          "type": "procedure",
+          "etapes": [
+            "Lire conventions.md (theme LIRE)",
+            "Identifier la convention a modifier",
+            "Verifier l'impact sur les autres conventions",
+            "Appliquer la modification",
+            "Valider la coherence (VALIDER)"
+          ],
+          "fichier": "cerveau-projet/freelance/conventions/conventions.md"
+        }
+      },
+      {
+        "besoin": "Ajouter un protocole",
+        "action": "redirection",
+        "vers": {
+          "type": "procedure",
+          "etapes": [
+            "Lire protocoles.md (theme LIRE)",
+            "Verifier l'absence de doublon (P5)",
+            "Rediger le protocole dans le format existant",
+            "Valider la coherence avec le cycle fondamental",
+            "Enregistrer la lecon"
+          ],
+          "fichier": "cerveau-projet/freelance/protocoles/protocoles.md"
+        }
+      },
+      {
+        "besoin": "Corriger une erreur dans une regle",
+        "action": "redirection",
+        "vers": {
+          "type": "procedure",
+          "etapes": [
+            "Identifier la regle erronee",
+            "Lire le contexte de la regle",
+            "Corriger l'erreur",
+            "Verifier que la correction ne casse pas autre chose",
+            "Documenter la correction dans corrections.md"
+          ]
+        }
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-theme"
+  }
+}

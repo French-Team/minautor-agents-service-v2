@@ -1,0 +1,55 @@
+---
+identite:
+  type: outil
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# OUTIL -- __NOM_OUTIL__ (zone INVISIBLE)
+
+> Outil Python dedie a la BDD `__NOM_BDD__`, dans la ZONE INVISIBLE d Optimus
+> (L-016 : le cameleon ne le lit jamais). Genere depuis le moule templates/outil-bdd
+> avec la SURCHARGE PRIVEE templates/outil-bdd-prive (modele-mere : bdd-lecons).
+
+## Options
+
+```
+python3 cerveau-projet/matrix/lancer.py __NOM_OUTIL__ ajouter --__CHAMP__ "..." --tags "tag1,tag2" [--source "..."]
+python3 cerveau-projet/matrix/lancer.py __NOM_OUTIL__ lire [--tag <tag>]
+python3 cerveau-projet/matrix/lancer.py __NOM_OUTIL__ corriger --id __PREFIXE_ID__-XXX --tags "a,b" [--motif "..."]
+python3 cerveau-projet/matrix/lancer.py __NOM_OUTIL__ verifier
+```
+
+- `--__CHAMP__` : __HUMAIN__ (le contenu lui-meme, obligatoire).
+- `--tags` : liste separee par des virgules -- obligatoire : pas d'element orphelin.
+- `--source` : mission, outil ou fichier d'origine (facultatif).
+- `lire --tag X` : filtre les entrees portant le tag X.
+- `corriger --id __PREFIXE_ID__-XXX --tags "a,b"` : corrige les TAGS d UNE entree EN PLACE
+  (id, date, contenu et source CONSERVES) ; les anciens tags sont TRACES (date + motif) et
+  l empreinte est RECALCULEE. Deux REFUS nommes : un id inconnu et des tags identiques.
+
+## Format de la BDD
+
+`{"identite": {...}, "__CLE_LISTE__": [{"id", "date", "__CHAMP__", "tags", "source"}, ...]}`
+
+## Architecture (convention-architecture-outils)
+
+| Piece | Role |
+|---|---|
+| DESCRIPTION.md | la facade (ce fichier) |
+| main.py | point d'entree global : DIRIGE |
+| constants.py | chemins, valeurs (variante PRIVEE) |
+| commun.py | fonctions communes : charger, enregistrer (atomique, LF), empreinte, options |
+| ajouter/ | ajouter une __HUMAIN__ taguee |
+| corriger/ | corriger les tags d une __HUMAIN__ EN PLACE (anciens tags traces) |
+| lire/ | lister (tout ou par tag) |
+| verifier/ | integrite SHA-256 (etalon-or) |
+
+## Protections
+
+- Ecriture atomique (tmp + remplacement), fins de ligne LF forcees (determinisme).
+- Empreinte SHA-256 recalculee et enregistree A CHAQUE ecriture.
+- Correction EN PLACE seulement : id, date, contenu et source CONSERVES, anciens tags TRACES.
+- Un id inconnu et des tags identiques sont REFUSES sans rien ecrire.
+- Contenu et tags obligatoires : pas d'entree orpheline sans tag.
+- ZONE INVISIBLE : jamais servie au flux cameleon (L-016).

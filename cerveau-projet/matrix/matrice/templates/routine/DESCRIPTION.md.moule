@@ -1,0 +1,48 @@
+---
+identite:
+  type: routine
+  appartient_a: matrice-routines
+  commun: true
+---
+
+# __NOM_ROUTINE__
+
+__ROLE_ROUTINE__
+
+## Fonctionnement
+
+- PLANNING (decision du createur D1, MO-429) : la routine a une ENTREE dans
+  `routines/vie/planning.json` -- cadence `__CADENCE_SECONDES__` s,
+  mode (`passe` : allumee a echeance puis eteinte, `boucle` : supervisee en
+  permanence), decalage initial et priorite. C EST LA SOURCE : ses constantes
+  ne portent plus la valeur, elles portent le RENVOI
+  (`INTERVALLE_DECLARE_SECONDES = cadence_planning('__NOM_ROUTINE__')`),
+  publie a chaque passe dans `__NOM_ROUTINE__-etat.json` (le temoin de cadence)
+  et MESUREE par `verifier-cadence` : declarer ne suffit pas.
+- La passe est `passe/fonctions.passer()`. Le squelette genere ne fait rien
+  et le DIT (une routine muette se lit comme une panne).
+- Demarrage : en `boucle`, par le serveur matrice (`vie activer`) ; en `passe`,
+  par le SERVICE du planning (`vie service tour`), qui reallume la routine
+  quand sa cadence est echue -- et elle s eteint d elle-meme en fin de passe.
+- Arret cooperatif : `python3 cerveau-projet/matrix/lancer.py __NOM_ROUTINE__ arret` (drapeau, vu en 2 s).
+  `python3 cerveau-projet/matrix/lancer.py __NOM_ROUTINE__ --once` fait UNE passe et sortit (aucun fichier PID, MO-053).
+
+## Fichiers d'etat
+
+| Fichier | Role |
+|---|---|
+| `__NOM_ROUTINE__.pid` | PID du demon (jamais ecrit par `--once`) |
+| `__NOM_ROUTINE__.arret` | drapeau d'arret cooperatif |
+| `__NOM_ROUTINE__-etat.json` | etat court de la derniere passe (temoin de cadence) |
+| `provenance.json` | marqueur de provenance (origine moule) : il ouvre la porte ECRIRE dans cette routine |
+
+## A faire avant de croire cette routine
+
+1. remplir `passe/fonctions.passer()` ;
+2. l'inscrire au PLANNING (`routines/vie/planning.json`, MO-429) : cadence, mode
+   (`passe` ou `boucle`), decalage initial et priorite -- sans entree, le service
+   refuse de l'allumer et `verifier-cadence` accuse une cadence illisible ;
+3. la declarer dans la liste des routines du serveur (`routines/vie/constants.py`) :
+   une routine non declaree n'est JAMAIS lancee ;
+4. prouver : `python3 cerveau-projet/matrix/lancer.py __NOM_ROUTINE__ --once`, puis
+   un cycle (boucle supervisee ou passe servie) + arret cooperatif.

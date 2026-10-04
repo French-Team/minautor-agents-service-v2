@@ -1,0 +1,1 @@
+{"agent": "buffy", "commentaire": "PERIMETRE D EDITION - fichiers structurels des agents + cartes (pilote 2026-08-22)", "fichiers": ["cerveau-projet/agents/*/corrections.md", "cerveau-projet/agents/*/*.md", "cerveau-projet/agents/*/parcours/*.json", "cerveau-projet/agents/regles-immuables/**", "AGENTS.md", "README.md", "cerveau-projet/readme-dev.md"]}

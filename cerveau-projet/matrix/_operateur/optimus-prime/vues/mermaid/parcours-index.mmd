@@ -1,0 +1,84 @@
+%% Parcours d Optimus -- les themes, dans leur ordre
+%% index-parcours.json (theme courant : REPARATION)
+%% genere par rendre-graphe v1.0.0 -- 41 noeud(s), 39 arete(s)
+flowchart TD
+    START(["Demande du createur"])
+    THEME-REPRISE-MISSION["1. REPRISE-MISSION [pret]"]
+    THEME-FICHIER["2. FICHIER [pret]"]
+    THEME-AUTO-EVOLUTION["3. AUTO-EVOLUTION [pret]"]
+    THEME-CONTRE-ANALYSE["4. CONTRE-ANALYSE [pret]"]
+    THEME-PREPARATION["5. PREPARATION [pret]"]
+    THEME-CREER-OUTIL["6. CREER-OUTIL [pret]"]
+    THEME-AUTO-CORRECTION["7. AUTO-CORRECTION [pret]"]
+    THEME-AUTO-TESTING["8. AUTO-TESTING [pret]"]
+    THEME-AUTO-OPTIMISATION["9. AUTO-OPTIMISATION [pret]"]
+    THEME-AUTO-PERFORMANCE["10. AUTO-PERFORMANCE [pret]"]
+    THEME-AUTO-AUDIT-NEMESIS["11. AUTO-AUDIT-NEMESIS [pret]"]
+    THEME-AUTO-XXX["12. AUTO-XXX [pret]"]
+    THEME-PURIFICATION["13. PURIFICATION [pret]"]
+    THEME-CADRAGE["14. CADRAGE [pret]"]
+    THEME-BDD["15. BDD [pret]"]
+    THEME-OUTIL["16. OUTIL [pret]"]
+    THEME-ROUTINE["17. ROUTINE [pret]"]
+    THEME-INDICES["18. INDICES [pret]"]
+    THEME-CONTRATS["19. CONTRATS [pret]"]
+    THEME-PILOTE["20. PILOTE [pret]"]
+    THEME-TEMPLATES["21. TEMPLATES [pret]"]
+    THEME-REPARATION{"22. REPARATION [pret]"}
+    THEME-ENTONNOIR["23. ENTONNOIR [pret]"]
+    THEME-DEFCON["24. DEFCON [pret]"]
+    THEME-ANALYSE["25. ANALYSE [pret]"]
+    THEME-RECHERCHE["26. RECHERCHE [pret]"]
+    THEME-RAPPORT["27. RAPPORT [pret]"]
+    THEME-CONSTRUCTEUR["28. CONSTRUCTEUR [pret]"]
+    THEME-REDACTEUR["29. REDACTEUR [pret]"]
+    THEME-AUDITEUR["30. AUDITEUR [pret]"]
+    THEME-REVISEUR["31. REVISEUR [pret]"]
+    THEME-REPARATEUR["32. REPARATEUR [pret]"]
+    THEME-PERFORMANCE["33. PERFORMANCE [pret]"]
+    THEME-PERFORMANCE-OUTILS["34. PERFORMANCE-OUTILS [pret]"]
+    THEME-PERFORMANCE-ROUTINES["35. PERFORMANCE-ROUTINES [pret]"]
+    THEME-PERFORMANCE-SERVEURS["36. PERFORMANCE-SERVEURS [pret]"]
+    THEME-COMMUNICATION["37. COMMUNICATION [pret]"]
+    COURANT(["THEME COURANT"])
+    INCOHERENCE-1[["fichier-absent : le theme AUTO-XXX (ordre 12) pointe vers..."]]
+    INCOHERENCE-2[["theme-orphelin : le theme theme-user-profil.json existe s..."]]
+    START -- "ordre 1" --> THEME-REPRISE-MISSION
+    START -- "ordre 2" --> THEME-FICHIER
+    START -- "ordre 3" --> THEME-AUTO-EVOLUTION
+    START -- "ordre 4" --> THEME-CONTRE-ANALYSE
+    START -- "ordre 5" --> THEME-PREPARATION
+    START -- "ordre 6" --> THEME-CREER-OUTIL
+    START -- "ordre 7" --> THEME-AUTO-CORRECTION
+    START -- "ordre 8" --> THEME-AUTO-TESTING
+    START -- "ordre 9" --> THEME-AUTO-OPTIMISATION
+    START -- "ordre 10" --> THEME-AUTO-PERFORMANCE
+    START -- "ordre 11" --> THEME-AUTO-AUDIT-NEMESIS
+    START -- "ordre 12" --> THEME-AUTO-XXX
+    START -- "ordre 13" --> THEME-PURIFICATION
+    START -- "ordre 14" --> THEME-CADRAGE
+    START -- "ordre 15" --> THEME-BDD
+    START -- "ordre 16" --> THEME-OUTIL
+    START -- "ordre 17" --> THEME-ROUTINE
+    START -- "ordre 18" --> THEME-INDICES
+    START -- "ordre 19" --> THEME-CONTRATS
+    START -- "ordre 20" --> THEME-PILOTE
+    START -- "ordre 21" --> THEME-TEMPLATES
+    START -- "ordre 22" --> THEME-REPARATION
+    START -- "ordre 23" --> THEME-ENTONNOIR
+    START -- "ordre 24" --> THEME-DEFCON
+    START -- "ordre 25" --> THEME-ANALYSE
+    START -- "ordre 26" --> THEME-RECHERCHE
+    START -- "ordre 27" --> THEME-RAPPORT
+    START -- "ordre 28" --> THEME-CONSTRUCTEUR
+    START -- "ordre 29" --> THEME-REDACTEUR
+    START -- "ordre 30" --> THEME-AUDITEUR
+    START -- "ordre 31" --> THEME-REVISEUR
+    START -- "ordre 32" --> THEME-REPARATEUR
+    START -- "ordre 33" --> THEME-PERFORMANCE
+    START -- "ordre 34" --> THEME-PERFORMANCE-OUTILS
+    START -- "ordre 35" --> THEME-PERFORMANCE-ROUTINES
+    START -- "ordre 36" --> THEME-PERFORMANCE-SERVEURS
+    START -- "ordre 37" --> THEME-COMMUNICATION
+    COURANT -- "en cours" --> THEME-REPARATION
+    THEME-AUTO-XXX -- "INCOHERENT" --> INCOHERENCE-1

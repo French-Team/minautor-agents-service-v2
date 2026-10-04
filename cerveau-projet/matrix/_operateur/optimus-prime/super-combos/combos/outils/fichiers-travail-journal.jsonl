@@ -1,0 +1,294 @@
+{"action": "cree", "resultat": "pose", "nom": "mo-374-preuve.txt", "mission": "mo-374", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-374-preuve.txt", "date": "2026-09-24 07:15:51"}
+{"action": "purge", "nom": "mo-374-preuve.txt", "mission": "mo-374", "par": "optimus-prime", "solde": 0, "date": "2026-09-24 07:15:58"}
+{"action": "purge", "nom": "residu-pose-a-la-main.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-24 07:15:58"}
+{"action": "cree", "resultat": "pose", "nom": "mo-374-montre.txt", "mission": "mo-374", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-374-montre.txt", "date": "2026-09-24 07:16:04"}
+{"action": "purge", "nom": "mo-374-montre.txt", "mission": "mo-374", "par": "optimus-prime", "solde": 0, "date": "2026-09-24 07:16:04"}
+{"action": "purge", "nom": "mo-374-montre.txt.bak.20260924_071604", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-24 07:16:04"}
+{"action": "cree", "resultat": "pose", "nom": "mo-377-bilan.txt", "mission": "mo-377", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-377-bilan.txt", "date": "2026-09-24 18:57:34"}
+{"action": "purge", "nom": "bilan-mo416.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-25 21:15:46"}
+{"action": "purge", "nom": "moules-main.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-25 21:15:46"}
+{"action": "purge", "nom": "routine-desc.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-25 21:15:46"}
+{"action": "purge", "nom": "theme-desc.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-25 21:15:46"}
+{"action": "cree", "resultat": "pose", "nom": "mo-409-bilan.txt", "mission": "mo-409", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-409-bilan.txt", "date": "2026-09-25 21:16:03"}
+{"action": "purge", "nom": "mo-409-bilan.txt", "mission": "mo-409", "par": "optimus-prime", "solde": 0, "date": "2026-09-25 21:16:47"}
+{"action": "purge", "nom": "mo-409-bilan.txt.bak.20260925_211625", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-25 21:16:47"}
+{"action": "cree", "resultat": "deja-pose", "nom": "mo-409-bilan.txt", "mission": "mo-409", "par": "optimus-prime", "date": "2026-09-25 21:21:08"}
+{"action": "cree", "resultat": "pose", "nom": "mo-416-bilan.txt", "mission": "mo-416", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-416-bilan.txt", "date": "2026-09-25 22:10:31"}
+{"action": "cree", "resultat": "pose", "nom": "mo-417-bilan.txt", "mission": "mo-417", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-417-bilan.txt", "date": "2026-09-25 22:22:46"}
+{"action": "cree", "resultat": "pose", "nom": "mo-469-cobaye.txt", "mission": "mo-469", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-469-cobaye.txt", "date": "2026-09-25 22:28:55"}
+{"action": "cree", "resultat": "pose", "nom": "mo-469-bilan.txt", "mission": "mo-469", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-469-bilan.txt", "date": "2026-09-25 22:30:45"}
+{"action": "purge", "nom": "mo-430-banque-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-banque-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-carte-import-tete-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-carte-import-tete-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-carte-valider-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-carte-valider-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-corpus-base-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-corpus-base.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-creer-imports-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-creer-imports-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-fiches-manuel.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r1-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r1-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r10-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r10-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r2-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r2-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r3-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r3-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r4-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r4-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r5-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r5-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r6-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r6-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r7-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r7-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r8-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r8-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r9-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r9-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-sujet-entry.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-sujet-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-template-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-template-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-valider-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-valider-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-comparer-autotest.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-comparer-commun.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-comparer-constants.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-comparer-description.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-comparer-entry.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-comparer-fonctions.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-comparer-main.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-creer-autotest.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-creer-commun.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-creer-constants.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-creer-description.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-creer-entry.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-creer-fonctions.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-creer-main.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-editer-autotest.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-editer-commun.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-editer-constants.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-editer-description.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-editer-entry.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-editer-fonctions.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-editer-main.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-modifier-autotest.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-modifier-commun.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-modifier-constants.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-modifier-description.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-modifier-entry.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-modifier-fonctions.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo430-modifier-main.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:28:52"}
+{"action": "purge", "nom": "mo-430-r11-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:42:14"}
+{"action": "purge", "nom": "mo-430-r11-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:42:14"}
+{"action": "purge", "nom": "mo-430-r12-ancien.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:42:14"}
+{"action": "purge", "nom": "mo-430-r12-nouveau.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:42:14"}
+{"action": "cree", "resultat": "pose", "nom": "mo-430-recit.txt", "mission": "mo-430", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-430-recit.txt", "date": "2026-09-26 20:42:14"}
+{"action": "purge", "nom": "mo-430-recit-source.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:45:44"}
+{"action": "purge", "nom": "mo-430-recit.txt", "mission": "mo-430", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:45:44"}
+{"action": "purge", "nom": "mo-430-recit.txt.bak.20260926_204415", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 20:45:44"}
+{"action": "cree", "resultat": "pose", "nom": "mo-430-bilan.txt", "mission": "mo-430", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-430-bilan.txt", "date": "2026-09-26 20:45:44"}
+{"action": "purge", "nom": "mo-431-c1-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c1-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c10-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c10-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c11-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c11-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c12-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c12-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c13-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c13-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c14-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c14-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c15-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c15-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c16-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c16-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c17-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c17-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c18-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c18-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c19-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c19-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c2-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c2-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c20-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c20-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c21-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c21-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c22-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c22-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c3-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c3-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c4-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c4-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c5-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c5-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c6-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c6-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c7-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c7-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c8-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c8-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c9-ancien.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-c9-nouveau.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:14:06"}
+{"action": "cree", "resultat": "pose", "nom": "mo-431-recit.txt", "mission": "mo-431", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-431-recit.txt", "date": "2026-09-26 21:14:06"}
+{"action": "purge", "nom": "mo-431-recit-source.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:16:09"}
+{"action": "purge", "nom": "mo-431-recit.txt", "mission": "mo-431", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:16:09"}
+{"action": "purge", "nom": "mo-431-recit.txt.bak.20260926_211559", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:16:09"}
+{"action": "cree", "resultat": "pose", "nom": "mo-431-bilan.txt", "mission": "mo-431", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-431-bilan.txt", "date": "2026-09-26 21:16:09"}
+{"action": "purge", "nom": "mo-432-ancien.txt", "mission": "mo-432", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:31:29"}
+{"action": "purge", "nom": "mo-432-nouveau.txt", "mission": "mo-432", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:31:29"}
+{"action": "cree", "resultat": "pose", "nom": "mo-432-recit.txt", "mission": "mo-432", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-432-recit.txt", "date": "2026-09-26 21:31:29"}
+{"action": "purge", "nom": "mo-432-recit.txt", "mission": "mo-432", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 21:33:27"}
+{"action": "cree", "resultat": "pose", "nom": "mo-432-bilan.txt", "mission": "mo-432", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-432-bilan.txt", "date": "2026-09-26 21:33:27"}
+{"action": "purge", "nom": "mo-434-a1.txt", "mission": "mo-434", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 22:12:26"}
+{"action": "purge", "nom": "mo-434-a2.txt", "mission": "mo-434", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 22:12:26"}
+{"action": "purge", "nom": "mo-434-b1.txt", "mission": "mo-434", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 22:12:26"}
+{"action": "purge", "nom": "mo-434-b2.txt", "mission": "mo-434", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 22:12:26"}
+{"action": "purge", "nom": "mo-434-c1.txt", "mission": "mo-434", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 22:12:26"}
+{"action": "purge", "nom": "mo-434-c2.txt", "mission": "mo-434", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 22:12:26"}
+{"action": "purge", "nom": "mo-434-d1.txt", "mission": "mo-434", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 22:12:26"}
+{"action": "purge", "nom": "mo-434-d2.txt", "mission": "mo-434", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 22:12:26"}
+{"action": "purge", "nom": "mo-434-e1.txt", "mission": "mo-434", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 22:12:26"}
+{"action": "purge", "nom": "mo-434-e2.txt", "mission": "mo-434", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 22:12:26"}
+{"action": "purge", "nom": "mo-434-f1.txt", "mission": "mo-434", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 22:12:26"}
+{"action": "purge", "nom": "mo-434-f2.txt", "mission": "mo-434", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 22:12:26"}
+{"action": "purge", "nom": "mo-434-lancer.txt", "mission": "mo-434", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 22:12:26"}
+{"action": "cree", "resultat": "pose", "nom": "mo-434-recit.txt", "mission": "mo-434", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-434-recit.txt", "date": "2026-09-26 22:12:27"}
+{"action": "purge", "nom": "mo-434-recit.txt", "mission": "mo-434", "par": "optimus-prime", "solde": 0, "date": "2026-09-26 22:16:02"}
+{"action": "cree", "resultat": "pose", "nom": "mo-434-bilan.txt", "mission": "mo-434", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-434-bilan.txt", "date": "2026-09-26 22:16:02"}
+{"action": "purge", "nom": "cobaye-mo435-epargne.json", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-27 07:26:20"}
+{"action": "purge", "nom": "cobaye-mo435-mord.json", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-27 07:26:20"}
+{"action": "purge", "nom": "mo-435-a1.txt", "mission": "mo-435", "par": "optimus-prime", "solde": 0, "date": "2026-09-27 07:26:20"}
+{"action": "purge", "nom": "mo-435-a2.txt", "mission": "mo-435", "par": "optimus-prime", "solde": 0, "date": "2026-09-27 07:26:20"}
+{"action": "purge", "nom": "mo-435-b1.txt", "mission": "mo-435", "par": "optimus-prime", "solde": 0, "date": "2026-09-27 07:26:20"}
+{"action": "purge", "nom": "mo-435-b2.txt", "mission": "mo-435", "par": "optimus-prime", "solde": 0, "date": "2026-09-27 07:26:20"}
+{"action": "cree", "resultat": "pose", "nom": "mo-435-bilan.txt", "mission": "mo-435", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-435-bilan.txt", "date": "2026-09-27 07:28:20"}
+{"action": "cree", "resultat": "pose", "nom": "mo-437-bilan.txt", "mission": "mo-437", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-437-bilan.txt", "date": "2026-09-27 07:44:06"}
+{"action": "cree", "resultat": "pose", "nom": "mo-438-bilan.txt", "mission": "mo-438", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-438-bilan.txt", "date": "2026-09-27 07:57:39"}
+{"action": "cree", "resultat": "pose", "nom": "mo-463-bilan.txt", "mission": "mo-463", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-463-bilan.txt", "date": "2026-09-27 09:45:35"}
+{"action": "cree", "resultat": "pose", "nom": "mo-441-cobaye-boite.txt", "mission": "mo-441", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-441-cobaye-boite.txt", "date": "2026-09-27 10:52:12"}
+{"action": "cree", "resultat": "pose", "nom": "mo-441-bilan.txt", "mission": "mo-441", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-441-bilan.txt", "date": "2026-09-27 10:54:05"}
+{"action": "cree", "resultat": "pose", "nom": "mo-480-bilan.txt", "mission": "mo-480", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-480-bilan.txt", "date": "2026-09-27 11:04:43"}
+{"action": "purge", "nom": "c1-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "c1-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "dec-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "dec-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "e1-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "e1-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "e2-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "e2-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "e3-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "e3-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "e4-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "e4-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "f1-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "f1-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "f2-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "f2-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "f3-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "f3-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "f4-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "f4-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "f5-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "f5-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "f6-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "f6-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "fiche42.md", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "g1-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "g1-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "g2-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "g2-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "m1-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "m1-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "m2-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "m2-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "m3-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "m3-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "m3b-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "m3b-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "m4-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "m4-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "tpl-constants.moule", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "tpl-description.md", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "z1-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "z1-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:29:45"}
+{"action": "purge", "nom": "bilan-mo483.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:33:21"}
+{"action": "purge", "nom": "readme-raisonnement-cameleon.md", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:40:08"}
+{"action": "purge", "nom": "rd-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:42:15"}
+{"action": "purge", "nom": "rd-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:42:15"}
+{"action": "purge", "nom": "rr-new.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:48:21"}
+{"action": "purge", "nom": "rr-old.txt", "mission": "", "par": "optimus", "solde": 0, "date": "2026-09-27 13:48:21"}
+{"action": "cree", "resultat": "pose", "nom": "mo-500-bilan.txt", "mission": "mo-500", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-500-bilan.txt", "date": "2026-09-28 19:59:36"}
+{"action": "purge", "nom": "bilan-mo500.txt", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-61-ancien.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-61-nouveau.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-61b-ancien.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-61b-nouveau.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-bilan.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-cobaye-maillon.py", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-commun-ancien.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-commun-fonctions.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-commun-nouveau.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-constantes-neuf.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-enr-depot-avec-ancre.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-enr-usage-ancien.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-enr-usage-neuf.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-entry-neuf.py", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-fin-depot-avec-ancre.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-fin-depot.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-loi-a-ancien.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-loi-a-nouveau.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-loi-ancien.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-loi-b-ancien.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-loi-b-nouveau.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-loi-c-ancien.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-loi-c-nouveau.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-loi-d-ancien.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-loi-d-nouveau.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-loi-nouveau.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-maillon61-fonctions.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-maillon61-main.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-proto12-neuf.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-segment.jsonl", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:00:31"}
+{"action": "cree", "resultat": "pose", "nom": "mo-500-bilan.txt", "mission": "mo-500", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-500-bilan.txt", "date": "2026-09-28 20:00:31"}
+{"action": "purge", "nom": "mo-500-bilan.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:02:24"}
+{"action": "purge", "nom": "mo-500-bilan.txt.bak.20260928_200043", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:02:24"}
+{"action": "purge", "nom": "mo-500-segment.jsonl", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:02:24"}
+{"action": "cree", "resultat": "pose", "nom": "mo-500-bilan.txt", "mission": "mo-500", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-500-bilan.txt", "date": "2026-09-28 20:02:24"}
+{"action": "purge", "nom": "mo-500-bilan.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:02:49"}
+{"action": "purge", "nom": "mo-500-ext-ancien.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:02:49"}
+{"action": "purge", "nom": "mo-500-ext-nouveau.txt", "mission": "mo-500", "par": "optimus-prime", "solde": 0, "date": "2026-09-28 20:02:49"}
+{"action": "cree", "resultat": "pose", "nom": "mo-500-bilan.txt", "mission": "mo-500", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-500-bilan.txt", "date": "2026-09-28 20:02:49"}
+{"action": "cree", "resultat": "pose", "nom": "mo-500-segment.jsonl", "mission": "mo-500", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-500-segment.jsonl", "date": "2026-09-28 20:02:49"}
+{"action": "cree", "resultat": "pose", "nom": "mo-467-dec-ancien.txt", "mission": "mo-467", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-467-dec-ancien.txt", "date": "2026-09-28 20:11:12"}
+{"action": "cree", "resultat": "pose", "nom": "mo-467-bilan.txt", "mission": "mo-467", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-467-bilan.txt", "date": "2026-09-28 20:13:12"}
+{"action": "cree", "resultat": "pose", "nom": "mo-467-segment.jsonl", "mission": "mo-467", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-467-segment.jsonl", "date": "2026-09-28 20:13:12"}
+{"action": "cree", "resultat": "pose", "nom": "mo-468-bilan.txt", "mission": "mo-468", "par": "operateur", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-468-bilan.txt", "date": "2026-09-28 21:31:11"}
+{"action": "cree", "resultat": "pose", "nom": "mo-468-segment.jsonl", "mission": "mo-468", "par": "operateur", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-468-segment.jsonl", "date": "2026-09-28 21:31:11"}
+{"action": "cree", "resultat": "pose", "nom": "mo-502-bilan.txt", "mission": "mo-502", "par": "operateur", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-502-bilan.txt", "date": "2026-09-28 21:38:08"}
+{"action": "cree", "resultat": "pose", "nom": "mo-502-segment.jsonl", "mission": "mo-502", "par": "operateur", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-502-segment.jsonl", "date": "2026-09-28 21:38:08"}
+{"action": "cree", "resultat": "pose", "nom": "mo-503-bilan.txt", "mission": "mo-503", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-503-bilan.txt", "date": "2026-09-28 22:03:29"}
+{"action": "cree", "resultat": "pose", "nom": "mo-503-segment.jsonl", "mission": "mo-503", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-503-segment.jsonl", "date": "2026-09-28 22:03:29"}
+{"action": "cree", "resultat": "pose", "nom": "mo-488-pattern.md", "mission": "mo-488", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-488-pattern.md", "date": "2026-09-29 06:44:36"}
+{"action": "cree", "resultat": "pose", "nom": "mo-488-bilan.txt", "mission": "mo-488", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-488-bilan.txt", "date": "2026-09-29 06:44:36"}
+{"action": "cree", "resultat": "pose", "nom": "mo-489-bilan.txt", "mission": "mo-489", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-489-bilan.txt", "date": "2026-09-29 07:22:56"}
+{"action": "cree", "resultat": "pose", "nom": "mo-489-segment.jsonl", "mission": "mo-489", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-489-segment.jsonl", "date": "2026-09-29 07:22:57"}
+{"action": "cree", "resultat": "pose", "nom": "mo-490-bilan.txt", "mission": "mo-490", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-490-bilan.txt", "date": "2026-09-29 07:28:16"}
+{"action": "cree", "resultat": "pose", "nom": "mo-490-segment.jsonl", "mission": "mo-490", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-490-segment.jsonl", "date": "2026-09-29 07:28:16"}
+{"action": "cree", "resultat": "pose", "nom": "mo-491-bilan.txt", "mission": "mo-491", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-491-bilan.txt", "date": "2026-09-29 07:56:29"}
+{"action": "cree", "resultat": "pose", "nom": "mo-491-segment.jsonl", "mission": "mo-491", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-491-segment.jsonl", "date": "2026-09-29 07:56:29"}
+{"action": "cree", "resultat": "pose", "nom": "mo-492-bilan.txt", "mission": "mo-492", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-492-bilan.txt", "date": "2026-09-29 08:13:00"}
+{"action": "cree", "resultat": "pose", "nom": "mo-492-segment.jsonl", "mission": "mo-492", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-492-segment.jsonl", "date": "2026-09-29 08:13:01"}
+{"action": "cree", "resultat": "pose", "nom": "mo-504-bilan.txt", "mission": "mo-504", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-504-bilan.txt", "date": "2026-09-29 08:20:30"}
+{"action": "cree", "resultat": "pose", "nom": "mo-504-segment.jsonl", "mission": "mo-504", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-504-segment.jsonl", "date": "2026-09-29 08:20:30"}
+{"action": "cree", "resultat": "pose", "nom": "mo-508-bilan.txt", "mission": "mo-508", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-508-bilan.txt", "date": "2026-09-30 21:18:36"}
+{"action": "cree", "resultat": "pose", "nom": "mo-508-segment.jsonl", "mission": "mo-508", "par": "optimus-prime", "chemin": "_operateur/optimus-prime/tmp-optimus/mo-508-segment.jsonl", "date": "2026-09-30 21:19:38"}
+{"action": "purge", "nom": "mo-508-bilan.txt", "mission": "mo-508", "par": "optimus-prime", "solde": 0, "date": "2026-09-30 21:26:02"}
+{"action": "purge", "nom": "mo-508-bilan.txt.bak.20260930_212003", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-30 21:26:02"}
+{"action": "purge", "nom": "mo-508-segment.jsonl", "mission": "mo-508", "par": "optimus-prime", "solde": 0, "date": "2026-09-30 21:26:02"}
+{"action": "purge", "nom": "mo-508-segment.jsonl.bak.20260930_212008", "mission": "", "par": "optimus-prime", "solde": 0, "date": "2026-09-30 21:26:02"}

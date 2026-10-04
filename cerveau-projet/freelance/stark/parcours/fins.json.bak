@@ -1,0 +1,29 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "stark",
+    "description": "Toutes les fins possibles pour Stark"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour à la racine",
+      "action": "redirection",
+      "vers": "arbre-stark.json"
+    },
+    "fin-cerberus": {
+      "titre": "FIN DE CYCLE - Réactiver Cerberus",
+      "description": "Terminer le round et retourner au principal de session",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py reactiver <session> '<bilan>' stark",
+      "regle": "REACTIVER (pas ACTIVER). ACTIVER va vers un agent spécifique. REACTIVER va vers Cerberus (le principal de session)."
+    },
+    "fin-inter-round": {
+      "titre": "Fin d'inter-round",
+      "action": "activer",
+      "cible": "<agent_appelant>",
+      "commande": "jarvis.py envoyer --de stark --vers <agent_appelant> --priorite 1 --objet 'Reprise' --corps 'Reprends ton round'",
+      "regle": "Via JARVIS, pas activer-agent-principal."
+    }
+  }
+}

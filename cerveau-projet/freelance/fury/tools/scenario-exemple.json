@@ -1,0 +1,14 @@
+{
+  "nom": "mini-round-exemple",
+  "session": "session-llm-2",
+  "maillons": [
+    {
+      "de": "stark",
+      "vers": "jarvis"
+    },
+    {
+      "de": "jarvis",
+      "vers": "stark"
+    }
+  ]
+}

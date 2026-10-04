@@ -1,0 +1,157 @@
+%% Arbre de decision de atlas (arbre v0.2.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est ma mission ?"}
+    RACINE -- "EXPLORER" --> THEME-EXPLORER
+    THEME-EXPLORER["Explorer un dossier du projet et produire un rapport complet"]
+    THEME-EXPLORER -- "besoin 1" --> THEME-EXPLORER-B0
+    THEME-EXPLORER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-EXPLORER -- "besoin 2" --> THEME-EXPLORER-B1
+    THEME-EXPLORER-B1["Consulter les lecons (domaine exploration)"]
+    THEME-EXPLORER -- "besoin 3" --> THEME-EXPLORER-B2
+    THEME-EXPLORER-B2["CONTEXTE : activite recente des agents"]
+    THEME-EXPLORER -- "besoin 4" --> THEME-EXPLORER-B3
+    THEME-EXPLORER-B3["Creer le dossier dedie de l exploration (METHODE RIGOUREUSE)"]
+    THEME-EXPLORER -- "besoin 5" --> THEME-EXPLORER-B4
+    THEME-EXPLORER-B4["Lister les dossiers et fichiers de la cible"]
+    THEME-EXPLORER -- "besoin 6" --> THEME-EXPLORER-B5
+    THEME-EXPLORER-B5["Analyser UN dossier a la fois (pas tout d un coup)"]
+    THEME-EXPLORER -- "besoin 7" --> THEME-EXPLORER-B6
+    THEME-EXPLORER-B6["Documenter chaque dossier (UN .md PAR DOSSIER dans le dossie"]
+    THEME-EXPLORER -- "besoin 8" --> THEME-EXPLORER-B7
+    THEME-EXPLORER-B7["Ecrire le rapport complet (DOUBLON DE LA STRUCTURE)"]
+    THEME-EXPLORER -- "besoin 9" --> THEME-EXPLORER-B8
+    THEME-EXPLORER-B8["Verifier la conformite ASCII"]
+    THEME-EXPLORER -- "besoin 10" --> THEME-EXPLORER-B9
+    THEME-EXPLORER-B9["Ajouter les lecons dans corrections.md"]
+    FIN-fin-explorer(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-EXPLORER-B0 --> FIN-fin-explorer
+    THEME-EXPLORER-B1 --> FIN-fin-explorer
+    THEME-EXPLORER-B2 --> FIN-fin-explorer
+    THEME-EXPLORER-B3 --> FIN-fin-explorer
+    THEME-EXPLORER-B4 --> FIN-fin-explorer
+    THEME-EXPLORER-B5 --> FIN-fin-explorer
+    THEME-EXPLORER-B6 --> FIN-fin-explorer
+    THEME-EXPLORER-B7 --> FIN-fin-explorer
+    THEME-EXPLORER-B8 --> FIN-fin-explorer
+    THEME-EXPLORER-B9 --> FIN-fin-explorer
+    RACINE -- "RECHERCHER" --> THEME-RECHERCHER
+    THEME-RECHERCHER["Rechercher de l information via le web ou les documents"]
+    THEME-RECHERCHER -- "besoin 1" --> THEME-RECHERCHER-B0
+    THEME-RECHERCHER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-RECHERCHER -- "besoin 2" --> THEME-RECHERCHER-B1
+    THEME-RECHERCHER-B1["Consulter les lecons (domaine recherche)"]
+    THEME-RECHERCHER -- "besoin 3" --> THEME-RECHERCHER-B2
+    THEME-RECHERCHER-B2["CONTEXTE : activite recente des agents"]
+    THEME-RECHERCHER -- "besoin 4" --> THEME-RECHERCHER-B3
+    THEME-RECHERCHER-B3["Formuler la requete (protocole-recherches-web)"]
+    THEME-RECHERCHER -- "besoin 5" --> THEME-RECHERCHER-B4
+    THEME-RECHERCHER-B4["Executer la recherche"]
+    THEME-RECHERCHER -- "besoin 6" --> THEME-RECHERCHER-B5
+    THEME-RECHERCHER-B5["Documenter la source trouvee"]
+    THEME-RECHERCHER -- "besoin 7" --> THEME-RECHERCHER-B6
+    THEME-RECHERCHER-B6["Verifier la conformite ASCII"]
+    THEME-RECHERCHER -- "besoin 8" --> THEME-RECHERCHER-B7
+    THEME-RECHERCHER-B7["Ajouter les lecons dans corrections.md"]
+    FIN-fin-rechercher(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-RECHERCHER-B0 --> FIN-fin-rechercher
+    THEME-RECHERCHER-B1 --> FIN-fin-rechercher
+    THEME-RECHERCHER-B2 --> FIN-fin-rechercher
+    THEME-RECHERCHER-B3 --> FIN-fin-rechercher
+    THEME-RECHERCHER-B4 --> FIN-fin-rechercher
+    THEME-RECHERCHER-B5 --> FIN-fin-rechercher
+    THEME-RECHERCHER-B6 --> FIN-fin-rechercher
+    THEME-RECHERCHER-B7 --> FIN-fin-rechercher
+    RACINE -- "DOCUMENTER" --> THEME-DOCUMENTER
+    THEME-DOCUMENTER["Produire une documentation technique complete et fiable"]
+    THEME-DOCUMENTER -- "besoin 1" --> THEME-DOCUMENTER-B0
+    THEME-DOCUMENTER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-DOCUMENTER -- "besoin 2" --> THEME-DOCUMENTER-B1
+    THEME-DOCUMENTER-B1["Consulter les lecons (domaine documentation)"]
+    THEME-DOCUMENTER -- "besoin 3" --> THEME-DOCUMENTER-B2
+    THEME-DOCUMENTER-B2["CONTEXTE : activite recente des agents"]
+    THEME-DOCUMENTER -- "besoin 4" --> THEME-DOCUMENTER-B3
+    THEME-DOCUMENTER-B3["Identifier le public cible"]
+    THEME-DOCUMENTER -- "besoin 5" --> THEME-DOCUMENTER-B4
+    THEME-DOCUMENTER-B4["Lister les fichiers existants"]
+    THEME-DOCUMENTER -- "besoin 6" --> THEME-DOCUMENTER-B5
+    THEME-DOCUMENTER-B5["Analyser et decomposer la structure"]
+    THEME-DOCUMENTER -- "besoin 7" --> THEME-DOCUMENTER-B6
+    THEME-DOCUMENTER-B6["Creer la structure de documentation"]
+    THEME-DOCUMENTER -- "besoin 8" --> THEME-DOCUMENTER-B7
+    THEME-DOCUMENTER-B7["Rediger le contenu"]
+    THEME-DOCUMENTER -- "besoin 9" --> THEME-DOCUMENTER-B8
+    THEME-DOCUMENTER-B8["Passer la boucle RVAV"]
+    THEME-DOCUMENTER -- "besoin 10" --> THEME-DOCUMENTER-B9
+    THEME-DOCUMENTER-B9["Verifier la conformite ASCII"]
+    THEME-DOCUMENTER -- "besoin 11" --> THEME-DOCUMENTER-B10
+    THEME-DOCUMENTER-B10["Ajouter les lecons dans corrections.md"]
+    FIN-fin-documenter(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-DOCUMENTER-B0 --> FIN-fin-documenter
+    THEME-DOCUMENTER-B1 --> FIN-fin-documenter
+    THEME-DOCUMENTER-B2 --> FIN-fin-documenter
+    THEME-DOCUMENTER-B3 --> FIN-fin-documenter
+    THEME-DOCUMENTER-B4 --> FIN-fin-documenter
+    THEME-DOCUMENTER-B5 --> FIN-fin-documenter
+    THEME-DOCUMENTER-B6 --> FIN-fin-documenter
+    THEME-DOCUMENTER-B7 --> FIN-fin-documenter
+    THEME-DOCUMENTER-B8 --> FIN-fin-documenter
+    THEME-DOCUMENTER-B9 --> FIN-fin-documenter
+    THEME-DOCUMENTER-B10 --> FIN-fin-documenter
+    RACINE -- "CARTOGRAPHIER" --> THEME-CARTOGRAPHIER
+    THEME-CARTOGRAPHIER["Analyser les dependances et produire une cartographie du cod"]
+    THEME-CARTOGRAPHIER -- "besoin 1" --> THEME-CARTOGRAPHIER-B0
+    THEME-CARTOGRAPHIER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-CARTOGRAPHIER -- "besoin 2" --> THEME-CARTOGRAPHIER-B1
+    THEME-CARTOGRAPHIER-B1["Consulter les lecons (domaine cartographie)"]
+    THEME-CARTOGRAPHIER -- "besoin 3" --> THEME-CARTOGRAPHIER-B2
+    THEME-CARTOGRAPHIER-B2["CONTEXTE : activite recente des agents"]
+    THEME-CARTOGRAPHIER -- "besoin 4" --> THEME-CARTOGRAPHIER-B3
+    THEME-CARTOGRAPHIER-B3["Lister les fichiers a cartographier"]
+    THEME-CARTOGRAPHIER -- "besoin 5" --> THEME-CARTOGRAPHIER-B4
+    THEME-CARTOGRAPHIER-B4["Lire le contenu des fichiers cles"]
+    THEME-CARTOGRAPHIER -- "besoin 6" --> THEME-CARTOGRAPHIER-B5
+    THEME-CARTOGRAPHIER-B5["Analyser la structure et les dependances"]
+    THEME-CARTOGRAPHIER -- "besoin 7" --> THEME-CARTOGRAPHIER-B6
+    THEME-CARTOGRAPHIER-B6["Creer la cartographie"]
+    THEME-CARTOGRAPHIER -- "besoin 8" --> THEME-CARTOGRAPHIER-B7
+    THEME-CARTOGRAPHIER-B7["Verifier la conformite ASCII"]
+    THEME-CARTOGRAPHIER -- "besoin 9" --> THEME-CARTOGRAPHIER-B8
+    THEME-CARTOGRAPHIER-B8["Ajouter les lecons dans corrections.md"]
+    FIN-fin-cartographier(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-CARTOGRAPHIER-B0 --> FIN-fin-cartographier
+    THEME-CARTOGRAPHIER-B1 --> FIN-fin-cartographier
+    THEME-CARTOGRAPHIER-B2 --> FIN-fin-cartographier
+    THEME-CARTOGRAPHIER-B3 --> FIN-fin-cartographier
+    THEME-CARTOGRAPHIER-B4 --> FIN-fin-cartographier
+    THEME-CARTOGRAPHIER-B5 --> FIN-fin-cartographier
+    THEME-CARTOGRAPHIER-B6 --> FIN-fin-cartographier
+    THEME-CARTOGRAPHIER-B7 --> FIN-fin-cartographier
+    THEME-CARTOGRAPHIER-B8 --> FIN-fin-cartographier
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Executer une mission hors des themes standard"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["Verifier si la mission est hors perimetre"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["La mission concerne-t-elle un autre agent ? (delegation)"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["DELEGATION - Signaler au pilote via ORACLE"]
+    THEME-AUTRE -- "besoin 5" --> THEME-AUTRE-B4
+    THEME-AUTRE-B4["Executer la mission"]
+    THEME-AUTRE -- "besoin 6" --> THEME-AUTRE-B5
+    THEME-AUTRE-B5["Ajouter les lecons dans corrections.md"]
+    FIN-fin-autre(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-autre
+    THEME-AUTRE-B1 --> FIN-fin-autre
+    THEME-AUTRE-B2 --> FIN-fin-autre
+    THEME-AUTRE-B3 --> FIN-fin-autre
+    THEME-AUTRE-B4 --> FIN-fin-autre
+    THEME-AUTRE-B5 --> FIN-fin-autre
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

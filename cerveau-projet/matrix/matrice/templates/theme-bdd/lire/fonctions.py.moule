@@ -1,0 +1,24 @@
+"""Fonctions simples de la categorie lire : une seule tache chacune."""
+
+
+def filtrer(donnees, nom=None):
+    """Retourne les themes (tous, ou celui dont le nom casse-ignoree correspond)."""
+    themes = donnees.get("themes", [])
+    if not nom:
+        return themes
+    nom_bas = nom.lower()
+    return [theme for theme in themes if theme.get("nom", "").lower() == nom_bas]
+
+
+def afficher(themes):
+    """Affiche les themes (affichage console = le seul effet de bord assume)."""
+    if not themes:
+        print("Aucun theme trouve.")
+        return
+    for theme in themes:
+        print(
+            theme["id"]
+            + " [" + theme["date"] + "] "
+            + theme["nom"] + " -- " + theme["but"]
+            + (" (" + theme["description"] + ")" if theme.get("description") else "")
+        )

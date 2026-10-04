@@ -1,0 +1,11 @@
+{
+ "version": "0.1.0",
+ "cpu_count": 16,
+ "ram_totale_mo": 49072,
+ "ram_disponible_mo": 32897,
+ "disque_libre_go": 44.1,
+ "charge_cpu": 12.5,
+ "workers_recommandes": 16,
+ "timeout_test_recommande": 180,
+ "date": "2026-08-17 19:31:40"
+}

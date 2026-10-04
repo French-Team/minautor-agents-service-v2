@@ -1,0 +1,79 @@
+{
+  "version": "0.1.0",
+  "description": "Sources de donnees a mesurer - tokens sortie (resultats d'outils)",
+  "chars_par_token": 4.0,
+  "sources": [
+    {
+      "chemin": "cerveau-projet/freelance/tools-commun/jarvis/outbox/stark.jsonl",
+      "label": "Outbox Stark",
+      "categorie": "outbox",
+      "type": "jsonl"
+    },
+    {
+      "chemin": "cerveau-projet/freelance/tools-commun/jarvis/outbox/jarvis.jsonl",
+      "label": "Outbox JARVIS",
+      "categorie": "outbox",
+      "type": "jsonl"
+    },
+    {
+      "chemin": "cerveau-projet/freelance/tools-commun/jarvis/outbox/vision.jsonl",
+      "label": "Outbox Vision",
+      "categorie": "outbox",
+      "type": "jsonl"
+    },
+    {
+      "chemin": "cerveau-projet/freelance/tools-commun/jarvis/outbox/forge.jsonl",
+      "label": "Outbox Forge",
+      "categorie": "outbox",
+      "type": "jsonl"
+    },
+    {
+      "chemin": "cerveau-projet/freelance/tools-commun/jarvis/outbox/shuri.jsonl",
+      "label": "Outbox Shuri",
+      "categorie": "outbox",
+      "type": "jsonl"
+    },
+    {
+      "chemin": "cerveau-projet/freelance/tools-commun/jarvis/outbox/rogers.jsonl",
+      "label": "Outbox Rogers",
+      "categorie": "outbox",
+      "type": "jsonl"
+    },
+    {
+      "chemin": "cerveau-projet/freelance/tools-commun/jarvis/outbox/parker.jsonl",
+      "label": "Outbox Parker",
+      "categorie": "outbox",
+      "type": "jsonl"
+    },
+    {
+      "chemin": "cerveau-projet/freelance/tools-commun/jarvis/outbox/fury.jsonl",
+      "label": "Outbox Fury",
+      "categorie": "outbox",
+      "type": "jsonl"
+    },
+    {
+      "chemin": "cerveau-projet/freelance/tools-commun/jarvis/outbox/edith.jsonl",
+      "label": "Outbox EDITH",
+      "categorie": "outbox",
+      "type": "jsonl"
+    },
+    {
+      "chemin": "cerveau-projet/freelance/tools-commun/harnais-jarvis/alertes-jarvis.jsonl",
+      "label": "Alertes harnais",
+      "categorie": "alertes",
+      "type": "jsonl"
+    },
+    {
+      "chemin": "cerveau-projet/freelance/tools-commun/jarvis/historique.db",
+      "label": "Historique BDD",
+      "categorie": "historique",
+      "type": "fichier"
+    },
+    {
+      "chemin": "cerveau-projet/freelance/edith/rapports",
+      "label": "Rapports EDITH",
+      "categorie": "rapports",
+      "type": "repertoire"
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "chiron",
+    "nom": "AUTO-CORRECTION",
+    "description": "Corriger MA carte : relire, documenter, editer-parcours, Themis verifie, reprendre"
+  },
+  "theme": {
+    "nom": "AUTO-CORRECTION",
+    "but": "Corriger les incoherences de MA propre carte (parcours-chiron.json) via le cycle pilote : detecter -> se re-eduquer -> corriger -> Themis verifie -> reprendre",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine education)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent chiron --domaine education"],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Auto-correction : les incoherences concernent-elles MA carte ? (controle c11b)",
+        "action": "procedure",
+        "etapes": [
+          "SI OUI (MA carte) -> se re-eduquer (c15)",
+          "SI NON (autre agent/outil) -> documenter et finir (c12)"
+        ],
+        "regle": "EXCEPTION PILOTE : SEUL Chiron corrige SA carte. Toute autre cible = Buffy."
+      },
+      {
+        "besoin": "Se re-eduquer : lire MA carte et documenter MA lecon (case c15)",
+        "action": "procedure",
+        "etapes": [
+          "Relire MA carte (parcours-chiron.json)",
+          "Identifier les cases erronees/obsoletes",
+          "Documenter MA lecon : CONTEXTE, LECON, PREUVES"
+        ],
+        "regle": "RE-EDUCATION : relire, identifier, documenter. Je ne corrige QUE MA carte."
+      },
+      {
+        "besoin": "Enregistrer ma lecon dans la BDD",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent chiron --domaine <domaine> --titre <titre> --lecon <texte>"],
+        "regle": "BDD : enregistrer dans la memoire longue."
+      },
+      {
+        "besoin": "Corriger les accents du rapport",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/chiron/corrections.md --all"],
+        "regle": "REGLE ASCII : 100% ASCII, aucun accent."
+      },
+      {
+        "besoin": "Corriger MA carte via editer-parcours (case c16)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/editer/editer-parcours/editer-parcours.py cerveau-projet/agents/chiron/parcours/parcours-chiron.json"],
+        "regle": "VERROU PILOTE : editer-parcours m autorise UNIQUEMENT parcours-chiron.json. Autre cible = BLOQUEE -> Buffy."
+      },
+      {
+        "besoin": "Activer Themis pour verifier ma re-education (case c17)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis <raison>"],
+        "regle": "THEMIS : elle audite ma carte + mes lecons puis me reactive avec son verdict."
+      },
+      {
+        "besoin": "Retour de Themis recu ? (controle c18)",
+        "action": "procedure",
+        "etapes": [
+          "SI OUI (Themis CONFORME) -> reprendre (c12)",
+          "SI A REVOIR -> retour corriger (c15)",
+          "SI NON (pas revenue) -> attendre (c18, re-essai legitime)"
+        ],
+        "regle": "REPRISE : Themis CONFORME -> c12, A REVOIR -> c15, NON -> c18 (attente documentee)."
+      },
+      {
+        "besoin": "Enregistrer mes usages d outils",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent chiron --outil <outil> --contexte '<contexte>'"],
+        "regle": "BILAN OUTILS : declarer tous les outils utilises."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/chiron/corrections.md <lecon>"],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-auto-correction"}
+}

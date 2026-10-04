@@ -1,0 +1,96 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "redacteur-v2",
+    "nom": "SYNTHESE",
+    "description": "Rediger les documents de la v2 de maniere autonome (round SOLO)"
+  },
+  "theme": {
+    "nom": "SYNTHESE",
+    "but": "Rediger un document de la v2 (proposition, decision, convention, protocole) en un round SOLO",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir."
+      },
+      {
+        "besoin": "Consulter les lecons de mon domaine (redaction)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent redacteur-v2 --domaine redaction"
+        ],
+        "regle": "PATTERN 6 : je consulte les lecons de mon domaine pour ne pas re-inventer."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE - sa lecture est OBLIGATOIRE."
+      },
+      {
+        "besoin": "Lire la mission de redaction (docs v2 a rediger)",
+        "action": "procedure",
+        "etapes": [
+          "Lire la mission donnee par Cerberus (raison d activation + docs v2 a rediger)",
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/freelance/proposition-v2.md"
+        ],
+        "regle": "REDACTION : ma mission vient de Cerberus et des docs v2 a rediger."
+      },
+      {
+        "besoin": "Rediger le document v2",
+        "action": "procedure",
+        "etapes": [
+          "REDACTION PRO : je redige le doc de la v2 (structure, clarte, fidelite aux transmissions)",
+          "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <chemin> <ancien> <nouveau>"
+        ],
+        "regle": "PATTERN 2 : ASCII obligatoire (ASCII/LF purs). Round SOLO : personne d autre ne verifie, je suis rigoureux."
+      },
+      {
+        "besoin": "Auto-validation : ASCII/LF et structure",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier>",
+          "python3 cerveau-projet/agents/tools/rechercher/rechercher-texte/rechercher-texte.py <pattern> <chemin>"
+        ],
+        "regle": "AUTO-VALIDATION rigoureuse (round SOLO) : ASCII/LF purs, structure coherente, nommage conforme."
+      },
+      {
+        "besoin": "Auto-validation : impacts et coherence",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/combos/combos-moteur/combos-moteur.py cerveau-projet/agents/tools/combos/combo-controle-modification/combo-controle-modification.py <chemin>"
+        ],
+        "regle": "AUTO-VALIDATION : je verifie les impacts (fichiers lies au doc modifie) et la coherence du contenu."
+      },
+      {
+        "besoin": "RVAV : est-ce que tout est conforme ?",
+        "action": "question",
+        "etapes": [
+          "Si NON conforme : corriger et revenir a la redaction",
+          "Si OUI conforme : passer aux lecons"
+        ],
+        "regle": "RVAV : je ne passe a la suite que si tout est conforme."
+      },
+      {
+        "besoin": "Ajouter mes lecons et usages",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent redacteur-v2 --domaine redaction <lecon>",
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent redacteur-v2 <outil>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION : toute mission se termine par ma lecon + mes usages."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-synthese"
+  }
+}

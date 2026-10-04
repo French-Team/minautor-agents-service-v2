@@ -1,0 +1,62 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "hades",
+    "description": "Fins reelles de Hades (parcours v0.1.1 : c5, c4b)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-hades.json"
+    },
+    "fin-sauvegarder": {
+      "titre": "FIN - Operation git terminee (reactiver Cerberus)",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hades \"<rapport de sauvegarde>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hades lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-restaurer": {
+      "titre": "FIN - Checkout autorise, operation terminee (reactiver Cerberus)",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hades \"<rapport de restauration>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hades lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-checkout-interdit": {
+      "titre": "FIN - Checkout INTERDIT, reparation dans le present",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hades \"<alerte checkout interdit>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hades lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-delegation": {
+      "titre": "FIN - Delegation terminee",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hades \"<rapport de delegation>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hades lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-autre": {
+      "titre": "FIN - Mission terminee",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hades \"<bilan de autre>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hades lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-inter-round": {
+      "titre": "FIN - Inter-round traite (retourner a l appelant)",
+      "description": "Le rapport inter-round est traite. Si mon precedent est un agent qui m a active en inter-round, je REACTIVE cet appelant pour qu il reprenne son round (Pattern 13). Si mission directe venant de Cerberus, je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hades \"<rapport du traitement inter-round>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hades lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    }
+  }
+}

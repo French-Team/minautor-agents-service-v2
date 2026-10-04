@@ -1,0 +1,21 @@
+{
+  "objet": "DECLARATION D UN SUIVI -- moule a jetons (gabarits invisibles du pilote, T3 de PB-003/SP-003/TD-003)",
+  "nature": "moule",
+  "principe": "Une panne n existe que si elle est DECLAREE ici : le fait ATTENDU, la source qui la porte, le seuil de silence, la gravite, qui la voit, et la porte qui la repare. La porte du suivi lit ce fichier ; elle ne recopie aucun seuil en dur.",
+  "suivi": "__NOM_SUIVI__",
+  "partie": "__PARTIE__",
+  "pannes": [
+    {
+      "id": "__ID_PANNE__",
+      "regle": {"detecteur": "__DETECTEUR__", "seuil_minutes": __SEUIL_MINUTES__},
+      "partie": "__PARTIE__",
+      "fait_attendu": "__FAIT_ATTENDU__",
+      "source": "__SOURCE__",
+      "seuil": "__SEUIL_DECLARE__",
+      "gravite": "__GRAVITE__",
+      "vu_par": "__VU_PAR__",
+      "porte_qui_repare": "__PORTE_QUI_REPARE__"
+    }
+  ],
+  "verdict_T1": "__VERDICT__"
+}

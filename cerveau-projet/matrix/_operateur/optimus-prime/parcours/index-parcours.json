@@ -1,0 +1,285 @@
+{
+  "identite": {
+    "type": "index-parcours",
+    "appartient_a": "optimus-prime"
+  },
+  "theme_courant": "REPARATION",
+  "parcours": [
+    {
+      "ordre": 1,
+      "theme": "REPRISE-MISSION",
+      "fichier": "themes/theme-reprise-mission.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 2,
+      "theme": "FICHIER",
+      "fichier": "themes/theme-fichier.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 3,
+      "theme": "AUTO-EVOLUTION",
+      "fichier": "themes/theme-auto-evolution.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 4,
+      "theme": "CONTRE-ANALYSE",
+      "fichier": "themes/theme-contre-analyse.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 5,
+      "theme": "PREPARATION",
+      "fichier": "themes/theme-preparation.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 6,
+      "theme": "CREER-OUTIL",
+      "fichier": "themes/theme-creer-outil.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 7,
+      "theme": "AUTO-CORRECTION",
+      "fichier": "themes/theme-auto-correction.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 8,
+      "theme": "AUTO-TESTING",
+      "fichier": "themes/theme-auto-testing.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 9,
+      "theme": "AUTO-OPTIMISATION",
+      "fichier": "themes/theme-auto-optimisation.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 10,
+      "theme": "AUTO-PERFORMANCE",
+      "fichier": "themes/theme-auto-performance.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 11,
+      "theme": "AUTO-AUDIT-NEMESIS",
+      "fichier": "themes/theme-auto-audit-nemesis.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 12,
+      "theme": "AUTO-XXX",
+      "fichier": "super-combos/sc-001-auto-xxx/main.py",
+      "statut": "pret"
+    },
+    {
+      "ordre": 13,
+      "theme": "PURIFICATION",
+      "fichier": "themes/theme-purification.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 14,
+      "theme": "CADRAGE",
+      "fichier": "themes/theme-cadrage.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 15,
+      "theme": "BDD",
+      "fichier": "themes/theme-bdd.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 16,
+      "theme": "OUTIL",
+      "fichier": "themes/theme-outil.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 17,
+      "theme": "ROUTINE",
+      "fichier": "themes/theme-routine.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 18,
+      "theme": "INDICES",
+      "fichier": "themes/theme-indices.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 19,
+      "theme": "CONTRATS",
+      "fichier": "themes/theme-contrats.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 20,
+      "theme": "PILOTE",
+      "fichier": "themes/theme-pilote.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 21,
+      "theme": "TEMPLATES",
+      "fichier": "themes/theme-templates.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 22,
+      "theme": "REPARATION",
+      "fichier": "themes/theme-reparation.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 23,
+      "theme": "ENTONNOIR",
+      "fichier": "themes/theme-entonnoir.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 24,
+      "theme": "DEFCON",
+      "fichier": "themes/theme-defcon.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 25,
+      "theme": "ANALYSE",
+      "fichier": "themes/theme-analyse.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 26,
+      "theme": "RECHERCHE",
+      "fichier": "themes/theme-recherche.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 27,
+      "theme": "RAPPORT",
+      "fichier": "themes/theme-rapport.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 28,
+      "theme": "CONSTRUCTEUR",
+      "fichier": "themes/theme-constructeur.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 29,
+      "theme": "REDACTEUR",
+      "fichier": "themes/theme-redacteur.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 30,
+      "theme": "AUDITEUR",
+      "fichier": "themes/theme-auditeur.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 31,
+      "theme": "REVISEUR",
+      "fichier": "themes/theme-reviseur.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 32,
+      "theme": "REPARATEUR",
+      "fichier": "themes/theme-reparateur.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 33,
+      "theme": "PERFORMANCE",
+      "fichier": "themes/theme-performance.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 34,
+      "theme": "PERFORMANCE-OUTILS",
+      "fichier": "themes/theme-performance-outils.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 35,
+      "theme": "PERFORMANCE-ROUTINES",
+      "fichier": "themes/theme-performance-routines.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 36,
+      "theme": "PERFORMANCE-SERVEURS",
+      "fichier": "themes/theme-performance-serveurs.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 37,
+      "theme": "COMMUNICATION",
+      "fichier": "themes/theme-communication.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 38,
+      "theme": "LACUNES-RECHERCHER",
+      "fichier": "themes/theme-lacunes-RECHERCHER.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 39,
+      "theme": "LACUNES-COMPARER",
+      "fichier": "themes/theme-lacunes-COMPARER.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 40,
+      "theme": "LACUNES-INVESTIGUER",
+      "fichier": "themes/theme-lacunes-INVESTIGUER.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 41,
+      "theme": "LACUNES-QQCP",
+      "fichier": "themes/theme-lacunes-QQCP.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 42,
+      "theme": "LACUNES-COMBLER",
+      "fichier": "themes/theme-lacunes-COMBLER.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 43,
+      "theme": "TABLE-RONDE-OUVRIR",
+      "fichier": "themes/theme-table-ronde-ouvrir.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 44,
+      "theme": "TABLE-RONDE-ROUND",
+      "fichier": "themes/theme-table-ronde-round.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 45,
+      "theme": "TABLE-RONDE-ARBITRER",
+      "fichier": "themes/theme-table-ronde-arbitrer.json",
+      "statut": "pret"
+    },
+    {
+      "ordre": 46,
+      "theme": "DEPOT-GIT",
+      "fichier": "themes/theme-depot-git.json",
+      "statut": "pret"
+    }
+  ]
+}

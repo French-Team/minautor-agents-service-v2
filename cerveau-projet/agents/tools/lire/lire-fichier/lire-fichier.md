@@ -1,0 +1,87 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+  combos:
+    - combo-controle-buffy
+    - combos-maj-readme-massive
+---
+# lire-fichier
+
+**Version :** 0.4.2
+**Statut :** prepare
+**Categorie :** Lire
+**Chemin :** `agents/tools/lire/lire-fichier/`
+**Proprietaire :** outil partage
+
+## Description
+
+Lire le contenu complet (ou partiel) d'un fichier. Cet outil remplace l'utilisation de `cat` ou des outils tiers pour la lecture de fichiers.
+
+## Utilisation
+
+```bash
+# Lire un fichier complet
+lire-fichier.sh fichier.md
+
+# Version Python (recommandee)
+python3 lire-fichier.py fichier.md
+
+# Lire les 10 premieres lignes
+lire-fichier.sh --lignes 10 fichier.md
+
+# Lire de la ligne 5 a 15
+lire-fichier.sh --debut 5 --fin 15 fichier.md
+
+# Lire a partir de la ligne 20
+lire-fichier.sh --debut 20 fichier.md
+```
+
+## Options
+
+| Option | Description | Defaut |
+|---|---|---|
+| `--debut N` | Lire a partir de la ligne N | 1 |
+| `--fin N` | Lire jusqu'a la ligne N | fin du fichier |
+| `--lignes N` | Lire les N premieres lignes | tout |
+| `--verbose` | Afficher le nombre de lignes | false |
+| `--help` | Afficher l'aide | - |
+
+## Ce que l'outil fait
+
+1. Verifie que le fichier existe
+2. Applique les filtres de lignes si specifies
+3. Affiche le contenu
+
+## Quand l'utiliser
+
+| Situation | Utilisation |
+|---|---|
+| Lire un fichier complet | `lire-fichier.sh fichier.md` |
+| Voir le debut d'un fichier | `lire-fichier.sh --lignes 20 fichier.md` |
+| Extraire un extrait | `lire-fichier.sh --debut 10 --fin 30 fichier.md` |
+
+## Relation avec les autres outils
+
+| Outil | Complement |
+|---|---|
+| `lister-fichiers` | Trouver le fichier, puis le lire |
+| `rechercher-texte` | Trouver une ligne, puis lire le contexte |
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0-beta | 2026-08-05 | Creation initiale |
+| 0.2.0 | 2026-08-06 | Passage V2 : tests reels (lecture complete, --lignes, --debut/--fin, fichier inexistant), categorie corrigee (Explorer -> Lire), promotion prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (--debut/--fin/--lignes, --version) |
+| 0.3.0 | 2026-08-12 | Qualite pro : version coherente py/sh (0.3.0), promotion prepare |
+| 0.4.0 | 2026-08-12 | PERFORMANCE (round 2) : lecture paresseuse - --lignes N et --debut/--fin ne chargent plus le fichier entier en memoire (iteration + arret precoce) |
+| 0.4.1 | 2026-08-12 | SECURITE (round 3) : plus aucun crash d'encodage (BOM nettoye via utf-8-sig, fallback latin-1, stdout force en UTF-8) + refus explicite si octet nul dans le chemin |\n| 0.4.2 | 2026-08-12 | ROBUSTESSE (round 4) : plage invalide refusee explicitement (--debut > --fin, ou borne < 1) avec message clair - fin du 0 silencieux avec sortie vide |
+
+## Notes de creation
+
+- [x] L'outil est conforme ASCII
+- [x] L'outil est reference dans index-tools.md
+- [x] Le statut est passe de `ebauche` a `prepare`

@@ -1,0 +1,20 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "edith",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "FIN - Theme termine",
+      "description": "Theme traite ; si des observations ont ete analysees, passer par RAPPORTER.",
+      "action": "Bilan presente puis message a JARVIS."
+    },
+    "fin-test-passe": {
+      "titre": "FIN - Rapport envoye",
+      "description": "Rapport d'observation livre a JARVIS avec lien.",
+      "action": "EDITH retourne dormir. FIN DE CYCLE."
+    }
+  }
+}

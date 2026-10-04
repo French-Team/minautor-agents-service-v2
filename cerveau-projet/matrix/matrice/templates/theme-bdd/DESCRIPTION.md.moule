@@ -1,0 +1,45 @@
+---
+identite:
+  type: outil
+  appartient_a: matrice-data-outils
+  commun: true
+---
+
+# OUTIL -- __NOM_OUTIL__
+
+> Registre de THEMES de mission (genere depuis le moule templates/theme-bdd
+> par dupliquer-template). Modele-mere semantique : les themes de
+> l'operateur (nom, but, redirects, fin).
+
+## Options
+
+```
+python3 cerveau-projet/matrix/lancer.py __NOM_OUTIL__ ajouter --nom "NOM DU THEME" --but "..." [--description "..."]
+python3 cerveau-projet/matrix/lancer.py __NOM_OUTIL__ lire [--nom "NOM"]
+python3 cerveau-projet/matrix/lancer.py __NOM_OUTIL__ retirer --id "__PREFIXE_ID__-XXX" (ou --nom "NOM DU THEME")
+python3 cerveau-projet/matrix/lancer.py __NOM_OUTIL__ verifier
+```
+
+- `--nom` : nom du theme (obligatoire, stocke en MAJUSCULES, unicite casse-ignoree).
+- `--but` : le but du theme en une phrase (obligatoire).
+- `--description` : detail facultatif.
+- `retirer` : sortie du registre par id exact ou par nom (casse ignoree).
+
+## Garanties
+
+- UNICITE du nom : un doublon (casse ignoree) est refuse, code 2.
+- Registre JSON empreinte : `{"identite", "themes": [{"id", "date", "nom", "nom_affiche", "but", "description"}]}`.
+- Integrite SHA-256 (etalon-or), ecriture atomique LF.
+
+## Architecture (convention-architecture-outils)
+
+| Piece | Role |
+|---|---|
+| DESCRIPTION.md | la facade (ce fichier) |
+| main.py | point d'entree global : DIRIGE |
+| constants.py | chemins, valeurs |
+| commun.py | charger, enregistrer (atomique, LF), empreinte, options |
+| ajouter/ | ajouter un theme (unicite du nom) |
+| lire/ | lister (tout ou par nom) |
+| retirer/ | sortie du registre (par id ou nom) |
+| verifier/ | integrite SHA-256 |

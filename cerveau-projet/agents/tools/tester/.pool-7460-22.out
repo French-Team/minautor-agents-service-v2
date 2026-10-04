@@ -1,0 +1,13 @@
+=== Garde-fou : --all mode par defaut de corriger-accents-zones-sensibles v0.2.3 ===
+  [OK] 1. --version = 0.2.3-py
+  [OK] 2. option --zones-seules presente dans --aide
+  [OK] 3. sans option = purge totale (6 accents -> 0)
+  [OK] 4. --zones-seules = corps conserve (6 restants)
+  [OK] 5. --all explicite = purge totale (compat)
+  [OK] 6. --dry-run = fichier inchange
+  [OK] 7. fichier temp SUPPRIME en fin de test (0 trace)
+  [OK] 8. normes : 0 non-ASCII (test + outil py/sh/md)
+  [OK] 8b. normes : 0 CRLF (test + outil py/sh/md)
+
+=== RESULTAT : 9 OK / 0 KO (sur 9 points) ===
+=== VERDICT : PROPRE (--all par defaut verrouille) ===

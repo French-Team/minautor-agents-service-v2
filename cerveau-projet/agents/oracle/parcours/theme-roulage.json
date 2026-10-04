@@ -1,0 +1,35 @@
+{
+ "identite": {
+  "type": "theme",
+  "appartient_a": "oracle",
+  "nom": "ROULAGE",
+  "description": "Rouler les messages du hub vers leurs destinataires (relais)"
+ },
+ "theme": {
+  "nom": "ROULAGE",
+  "but": "Router les messages non-lus vers leur destinataire, depister les doublons, signaler les messages orphelins",
+  "redirects": [
+   {
+    "besoin": "Rouler les messages du hub",
+    "action": "procedure",
+    "etapes": [
+     "python3 cerveau-projet/agents/tools/oracle/oracle.py relais"
+    ],
+    "regle": "ROULAGE : je route les messages non-lus vers leur destinataire en depistant les doublons et en signalant les messages orphelins."
+   },
+   {
+    "besoin": "Verifier la coherence inbox/outbox apres le roulage",
+    "action": "procedure",
+    "etapes": [
+     "python3 cerveau-projet/agents/tools/oracle/oracle.py verifier"
+    ],
+    "regle": "La coherence inbox/outbox doit etre saine. Un ecart est signale (theme-processus si serveur suspect)."
+   }
+  ]
+ },
+ "fin": {
+  "type": "lien",
+  "vers": "fins.json",
+  "case": "fin-coordination"
+ }
+}

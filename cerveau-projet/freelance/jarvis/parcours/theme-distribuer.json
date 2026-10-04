@@ -1,0 +1,71 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "jarvis",
+    "nom": "DISTRIBUER",
+    "description": "Envoyer les missions aux agents"
+  },
+  "theme": {
+    "nom": "DISTRIBUER",
+    "but": "Envoyer la mission au bon agent au bon moment",
+    "regle": "LE LLM EST L'AGENT (2026-08-26) : envoyer une mission = la placer EN ATTENTE dans l'inbox de l'agent. Personne ne travaille en arriere-plan apres l'envoi. Je confirme a Stark l'envoi, je ne dis JAMAIS 'les agents travaillent, j'attends leurs retours' : j'enchaime sur la suite de mon round ou je rends la main pour que le LLM s'incarne l'agent active.",
+    "redirects": [
+      {
+        "besoin": "Envoyer une mission a Shuri",
+        "action": "procedure",
+        "description": "Creer un agent",
+        "etapes": [
+          "Preparer le message avec la mission detaillee",
+          "Envoyer via jarvis.py envoyer --vers shuri --priorite 1",
+          "Confirmer a Stark : 'Mission envoyee a Shuri'",
+          "Enregistrer dans l'historique"
+        ]
+      },
+      {
+        "besoin": "Envoyer une mission a Forge",
+        "action": "procedure",
+        "description": "Creer un outil",
+        "etapes": [
+          "Preparer le message avec la mission detaillee",
+          "Envoyer via jarvis.py envoyer --vers forge --priorite 1",
+          "Confirmer a Stark : 'Mission envoyee a Forge'",
+          "Enregistrer dans l'historique"
+        ]
+      },
+      {
+        "besoin": "Envoyer une mission a Rogers",
+        "action": "procedure",
+        "description": "Verifier/creer des regles",
+        "etapes": [
+          "Preparer le message avec la mission detaillee",
+          "Envoyer via jarvis.py envoyer --vers rogers --priorite 1",
+          "Confirmer a Stark : 'Mission envoyee a Rogers'",
+          "Enregistrer dans l'historique"
+        ]
+      },
+      {
+        "besoin": "Envoyer une mission a Parker",
+        "action": "procedure",
+        "description": "Explorer/diagnostiquer",
+        "etapes": [
+          "Preparer le message avec la mission detaillee",
+          "Envoyer via jarvis.py envoyer --vers parker --priorite 1",
+          "Confirmer a Stark : 'Mission envoyee a Parker'",
+          "Enregistrer dans l'historique"
+        ]
+      },
+      {
+        "besoin": "Relayer un message inter-agents",
+        "action": "procedure",
+        "description": "Un agent envoie un message a un autre",
+        "etapes": [
+          "Lire le message source",
+          "Identifier le destinataire",
+          "Router le message",
+          "Confirmer l'envoi"
+        ]
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

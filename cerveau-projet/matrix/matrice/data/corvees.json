@@ -1,0 +1,141 @@
+{
+  "identite": {
+    "type": "corvees.json",
+    "version": 1
+  },
+  "corvees": [
+    {
+      "id": "C-001",
+      "date": "2026-09-25 09:42:00",
+      "corvee": "CORVEE : retisser le brin apres chaque depot d item. COUT MESURE : 2 refus de la suite le 2026-09-25 (brin-perime, MAILLON 5 entonnoir perime), et un geste manuel a chaque pose. AUTOMATISATION : le depot tisse lui-meme le brin, ou la vigie le joue sans attendre. PREUVE ATTENDUE : deposer un item puis lancer la suite -- aucun brin-perime.",
+      "tags": [
+        "pilote",
+        "depot"
+      ],
+      "source": "mesure 2026-09-25"
+    },
+    {
+      "id": "C-002",
+      "date": "2026-09-25 09:42:00",
+      "corvee": "CORVEE : reposer les empreintes d integrite avant de relancer la suite. COUT MESURE : le PRE-VOL a REFUSE la suite (friction 29 : lancer d abord oblige a corriger et relancer, on paie deux fois). AUTOMATISATION : le fil de preuve repose lui-meme ce qu il vient de deplacer. PREUVE ATTENDUE : modifier un fichier, lancer la suite -- elle tourne sans refus de PRE-VOL.",
+      "tags": [
+        "suite",
+        "integrite"
+      ],
+      "source": "friction 29"
+    },
+    {
+      "id": "C-003",
+      "date": "2026-09-25 09:42:01",
+      "corvee": "CORVEE : charger et clore une mission pour que les fichiers modifies soient attribues. COUT MESURE : attribution rouge toute la journee du 2026-09-25 (lanceur-non-regression.py modifie sans mission chargee). AUTOMATISATION : le round ouvre et clot sa mission avec son item, sans geste. PREUVE ATTENDUE : un round mene sans charger de mission ne peut plus ecrire de fichier (refus nomme).",
+      "tags": [
+        "pilote",
+        "attribution"
+      ],
+      "source": "mesure 2026-09-25"
+    },
+    {
+      "id": "C-004",
+      "date": "2026-09-25 09:42:01",
+      "corvee": "CORVEE : lutter contre le quoting du shell pour deposer un texte. COUT MESURE : un mot entre backticks dans --objectif a ete EXECUTE par le shell et a DISPARU du texte depose (vecu et repare par corriger le 2026-09-25). AUTOMATISATION : la porte deposer accepte une source @fichier, comme la porte ecrire. PREUVE ATTENDUE : deposer un objectif contenant des backticks par @fichier -- le texte arrive BIT A BIT.",
+      "tags": [
+        "pilote",
+        "shell"
+      ],
+      "source": "mesure 2026-09-25"
+    },
+    {
+      "id": "C-005",
+      "date": "2026-09-25 09:42:01",
+      "corvee": "CORVEE : repeter la meme reparation mecanique fichier par fichier. COUT MESURE : 139 lancements a nu repartis sur six vagues et une soixantaine de fichiers, pour une seule forme de defaut. AUTOMATISATION : le lot est DETECTE par la mesure, REPARE par une vague, et PROUVE par le run. PREUVE ATTENDUE : une vague traitee d un seul geste, avec son compteur avant/apres.",
+      "tags": [
+        "reparation",
+        "lot"
+      ],
+      "source": "lot EO-430"
+    },
+    {
+      "id": "C-006",
+      "date": "2026-09-25 09:42:01",
+      "corvee": "CORVEE : decouvrir les manques a la main, par le createur. COUT MESURE : 16 briques servies avec un BUT et aucun USAGE (dont 7 portes de la Matrice), trouvees parce que le createur les a vues -- aucun garde ne les nommait. AUTOMATISATION : le controle permanent les NOMME (contrat des modes d emploi, avec cobaye qui mord). PREUVE ATTENDUE : une brique posee sans usage fait crier la suite.",
+      "tags": [
+        "controle",
+        "modes-emploi"
+      ],
+      "source": "chantier 2026-09-25"
+    },
+    {
+      "id": "C-007",
+      "date": "2026-09-25 09:42:02",
+      "corvee": "CORVEE : verifier a la main une declaration sans consommateur. COUT MESURE : mesure du 2026-09-23 -- aucun lecteur de la cle commune dans le code, la verification restait MANUELLE. AUTOMATISATION : un point de controle qui exige un CONSOMMATEUR pour toute declaration. PREUVE ATTENDUE : une cle declaree sans lecteur est accusee par la suite.",
+      "tags": [
+        "controle",
+        "declaration"
+      ],
+      "source": "item EO-432 / trace"
+    },
+    {
+      "id": "C-008",
+      "date": "2026-09-25 09:42:02",
+      "corvee": "CORVEE : relancer deux fois la meme suite (corriger puis relancer). COUT MESURE : motifs de la trace -- recopier 102 textes, rejouer 96, a la main 80, reposer 63, manuel 45, deux fois 37. AUTOMATISATION : la mise a jour de ce que la suite lit se fait AVANT son lancement (regle deja gravee en proto-12, appliquee a la main). PREUVE ATTENDUE : la suite ne refuse plus par PRE-VOL.",
+      "tags": [
+        "suite",
+        "pre-vol"
+      ],
+      "source": "sondage trace 2026-09-25"
+    },
+    {
+      "id": "C-009",
+      "date": "2026-09-25 09:45:17",
+      "corvee": "CORVEE : reparer a la main un clone neuf qui echoue les gardes du projet. COUT MESURE : le clone bdd-corvees genere le 2026-09-25 par dupliquer-template a fait crier TROIS controles de la suite (prefixe en dur C- dans ajouter/fonctions.py, DESCRIPTION.md sans carte d identite, trois commandes non ancrees) -- chaque prochaine BDD paiera les trois memes. AUTOMATISATION : le moule outil-bdd pose la carte d identite, lit son prefixe aux constantes et ancre ses commandes ; le generateur l exige AVANT d ecrire. PREUVE ATTENDUE : generer une BDD neuve puis lancer la suite -- aucun ecart de prefixes, cartes ni commandes.",
+      "tags": [
+        "moule",
+        "generateur"
+      ],
+      "source": "mesure 2026-09-25"
+    },
+    {
+      "id": "C-010",
+      "date": "2026-09-25 09:46:31",
+      "corvee": "CORVEE : charger une mission depuis un item pour que les fichiers du round soient attribues. COUT MESURE (2026-09-25) : deux formes essayees -- pilote charger --item EO-432 (l option est refusee : usage sans item) et pilote file charger --item EO-432 (a AFFICHE la liste des missions au lieu de charger) ; consequence : l attribution reste rouge pour tous les fichiers du round, et le createur doit reposer les sources a la main. AUTOMATISATION : UNE SEULE fabrique de mission depuis un item (le pont de l entonnoir, deja decrit par un item depose) et un round qui ouvre sa mission lui-meme. PREUVE ATTENDUE : charger --item produit la mission, et la suite ne voit plus de source neuve absente de la pose.",
+      "tags": [
+        "pilote",
+        "attribution"
+      ],
+      "source": "mesure 2026-09-25"
+    },
+    {
+      "id": "C-011",
+      "date": "2026-09-25 09:49:31",
+      "corvee": "FAIT (C-009) : le moule outil-bdd ne produit plus un clone a reparer. REPARATION : constants.py.moule declare PREFIXE_ID et ajouter/fonctions.py.moule le LIT (plus de prefixe en dur) ; DESCRIPTION.md.moule porte la carte d identite et des commandes ANCREES sur le lanceur. PREUVE MESUREE (2026-09-25) : un clone neuf cobaye genere depuis le moule passe les TROIS gardes -- prefixes 0 ecart, cartes VERDICT OK, commandes ancrees lues dans le clone. Le cobaye a ete RANGE en zone jetable, jamais supprime.",
+      "tags": [
+        "moule",
+        "fait"
+      ],
+      "source": "mesure 2026-09-25"
+    },
+    {
+      "id": "C-012",
+      "date": "2026-09-25 09:54:16",
+      "corvee": "FAIT (C-010) : les DEUX fabriques item -> mission sont UNE. REPARATION : file/entry.py normalise le prefixe file (mesure : file charger --item tombait dans l AFFICHAGE, aucun branche ne matchait) ; file/fonctions.py construit la mission par le PONT mission_depuis_item des que --item est donne, et REFUSE en le NOMMANT (item introuvable / sans TYPE / sans ROLE). PREUVE MESUREE (2026-09-25) : MO-416 chargee depuis EO-432 porte un TITRE et une SOURCE a trois etages identique au pont ; deux contre-temoins mordent (item absent refuse, sans option : usage et non la liste).",
+      "tags": [
+        "pilote",
+        "fait"
+      ],
+      "source": "mesure 2026-09-25"
+    },
+    {
+      "id": "C-013",
+      "date": "2026-09-25 22:21:54",
+      "corvee": "CORVEE REPAYEE (C-004) : le texte depose par la porte entonnoir est MUTILE par le shell. COUT MESURE (2026-09-25, 22:19) : l objectif de EO-437 portait des passages entre backticks ; le shell les a EXECUTES (il a imprime les erreurs de file: cannot open ...) et ils ont DISPARU du texte depose -- l item est ne avec un objectif troue, corrige ensuite par le verbe corriger (id conserve, motif trace). C est la DEUXIEME fois le meme jour : la porte deposer n accepte toujours pas @fichier pour --objectif, alors que la porte ecrire le fait depuis longtemps. AUTOMATISATION (proposee en C-004, toujours attendue) : deposer --objectif @fichier, comme ecrire --contenu @fichier. PREUVE ATTENDUE : deposer un objectif contenant des backticks par @fichier et recevoir le texte BIT A BIT.",
+      "tags": [
+        "pilote",
+        "shell",
+        "deposer",
+        "corvee-repayee"
+      ],
+      "source": "MO-417"
+    }
+  ],
+  "compteur": 13
+}

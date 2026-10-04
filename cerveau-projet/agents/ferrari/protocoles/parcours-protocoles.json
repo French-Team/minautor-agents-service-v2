@@ -1,0 +1,479 @@
+{
+  "identite": {
+    "type": "parcours",
+    "appartient_a": "mecano",
+    "commun": false
+  },
+  "parcours": {
+    "nom": "parcours-protocoles",
+    "agent": "mecano",
+    "version": "0.1.0",
+    "case_depart": "c0",
+    "description": "v0.2.0 : mode persistant + 13 protocoles + 6 combos harnais. Script temporaire obligatoire via combo."
+  },
+  "cases": {
+    "c0": {
+      "titre": "PROTOCOLE 12 : Initialisation complete",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE : je lis le PROTOCOLE 12 (transversal) AVANT toute intervention. Il couvre : existence, canaux, historisation, perimetre, coordination, cahier."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-12-transversal.md"
+        }
+      ],
+      "suivant": "c0b"
+    },
+    "c1": {
+      "titre": "Lire le cahier de dev",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE -- CAHIER : je lis le cahier de dev AVANT chaque intervention pour me souvenir de ce qui a deja ete fait et eviter les regressions."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/cahier-dev.md"
+        }
+      ],
+      "suivant": "c2"
+    },
+    "c2": {
+      "titre": "Identifier le type de fichier",
+      "type": "question",
+      "question": "Quel type de fichier dois-je modifier dans freelance/ ?",
+      "branches": [
+        {
+          "reponse": "agent-v2",
+          "vers": "c3",
+          "description": "Fiche ou corrections d'un agent v2 (proto 1)"
+        },
+        {
+          "reponse": "jarvis",
+          "vers": "c4",
+          "description": "jarvis.py ou jarvis-server.py (proto 2)"
+        },
+        {
+          "reponse": "routines",
+          "vers": "c5",
+          "description": "Fichiers de routines (proto 3)"
+        },
+        {
+          "reponse": "arbre-decision",
+          "vers": "c6",
+          "description": "Arbre de decisions v2 (proto 4)"
+        },
+        {
+          "reponse": "outils-combos",
+          "vers": "c7",
+          "description": "Outils ou combos v2 (proto 5)"
+        },
+        {
+          "reponse": "protocoles",
+          "vers": "c8",
+          "description": "Protocoles freelance (proto 6)"
+        },
+        {
+          "reponse": "regles",
+          "vers": "c9",
+          "description": "Regles-immuables freelance (proto 7)"
+        },
+        {
+          "reponse": "marbre",
+          "vers": "c10",
+          "description": "Marbre (LIRE UNIQUEMENT, proto 8)"
+        },
+        {
+          "reponse": "harnais",
+          "vers": "c11",
+          "description": "Harnais de securite (proto 9, specification)"
+        },
+        {
+          "reponse": "script-temporaire",
+          "vers": "c16",
+          "description": "Creer/executer un script temporaire (proto 13)"
+        }
+      ],
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "GARDE-FOU : identifier le BON protocole. Chaque type de fichier a SON protocole. JE NE SAUTE PAS d'etape."
+        }
+      ]
+    },
+    "c3": {
+      "titre": "PROTOCOLE 1 : Lire + Appliquer (agent v2)",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : je lis proto-1-agent-v2.md, puis le fichier cible, puis j'applique."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-1-agent-v2.md"
+        }
+      ],
+      "suivant": "c20"
+    },
+    "c4": {
+      "titre": "PROTOCOLE 2 : Lire + Appliquer (JARVIS)",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : je lis proto-2-jarvis.md, puis jarvis.py, puis j'applique."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-2-jarvis.md"
+        }
+      ],
+      "suivant": "c20"
+    },
+    "c5": {
+      "titre": "PROTOCOLE 3 : Lire + Appliquer (routines)",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : je lis proto-3-routines.md, puis les routines concernees, puis j'applique."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-3-routines.md"
+        }
+      ],
+      "suivant": "c20"
+    },
+    "c6": {
+      "titre": "PROTOCOLE 4 : Lire + Appliquer (arbre vs carte)",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : je lis proto-4-arbre-vs-carte.md, puis l'arbre cible, puis j'applique. JAMAIS convertir arbre en carte."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-4-arbre-vs-carte.md"
+        }
+      ],
+      "suivant": "c20"
+    },
+    "c7": {
+      "titre": "PROTOCOLE 5 : Lire + Appliquer (outils/combos)",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : je lis proto-5-outils-combos.md, puis l'outil cible, puis j'applique. D15 obligatoire."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-5-outils-combos.md"
+        }
+      ],
+      "suivant": "c20"
+    },
+    "c8": {
+      "titre": "PROTOCOLE 6 : Lire + Appliquer (protocoles)",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : je lis proto-6-protocoles.md, puis le protocole cible, puis j'applique."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-6-protocoles.md"
+        }
+      ],
+      "suivant": "c20"
+    },
+    "c9": {
+      "titre": "PROTOCOLE 7 : Lire + Appliquer (regles-immuables)",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : je lis proto-7-regles-immuables.md, puis les regles cibles, puis j'applique. Verifier le marbre."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-7-regles-immuables.md"
+        }
+      ],
+      "suivant": "c20"
+    },
+    "c10": {
+      "titre": "PROTOCOLE 8 : Lire UNIQUEMENT (marbre)",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE : je lis proto-8-marbre.md puis le marbre. JE NE MODIFIE JAMAIS le marbre. Si probleme, signaler a Cerberus."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-8-marbre.md"
+        }
+      ],
+      "suivant": "c20"
+    },
+    "c11": {
+      "titre": "PROTOCOLE 9 : Harnais (specification future)",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : le harnais n'est PAS ENCORE OPERATIONNEL. Je lis proto-9-harnais.md pour comprendre la specification. Si je dois l'utiliser, je signale a Cerberus."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-9-harnais.md"
+        }
+      ],
+      "suivant": "c20"
+    },
+    "c20": {
+      "titre": "PROTOCOLE 10 : Non-regression AVANT modification",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE : je lis proto-10-non-regression.md et j'applique la checklist AVANT de modifier quoi que ce soit."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-10-non-regression.md"
+        }
+      ],
+      "suivant": "c21"
+    },
+    "c21": {
+      "titre": "Appliquer la correction",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : j'applique la correction en suivant le protocole lu. J'utilise editer-fichier (outil v1)."
+        },
+        {
+          "type": "outil",
+          "nom": "editer-fichier",
+          "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <chemin-fichier>"
+        }
+      ],
+      "suivant": "c22"
+    },
+    "c22": {
+      "titre": "PROTOCOLE 10 : Non-regression APRES modification",
+      "type": "question",
+      "question": "La modification est-elle conforme ? Aucune regression detectee ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c23"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c24"
+        }
+      ],
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "GARDE-FOU : relire le fichier modifie, verifier les dependances, comparer AVANT/APRES."
+        }
+      ]
+    },
+    "c23": {
+      "titre": "Mettre a jour le cahier de dev",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : je mets a jour le cahier de dev avec les details de cette intervention (fichier, avant/apres, version, statut)."
+        },
+        {
+          "type": "outil",
+          "nom": "editer-fichier",
+          "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py cerveau-projet/agents/ferrari/cahier-dev.md"
+        }
+      ],
+      "suivant": "c25"
+    },
+    "c24": {
+      "titre": "ROLLBACK",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE : en cas de regression, je ROLLBACK immediatement (restaurer le fichier AVANT modification), puis je documente dans le cahier de dev."
+        }
+      ],
+      "suivant": "c25"
+    },
+    "c25": {
+      "titre": "Verifier les canaux de communication",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : je verifie que les canaux de communication (USER-DEMANDES.md, jarvis.py) sont toujours operationnels."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py USER-DEMANDES.md"
+        }
+      ],
+      "suivant": "c26"
+    },
+    "c26": {
+      "titre": "Intervention terminee. Nouvelle mission ?",
+      "type": "question",
+      "question": "L'utilisateur a-t-il demande 'fin de cycle' ?",
+      "branches": [
+        {
+          "reponse": "OUI",
+          "vers": "c27"
+        },
+        {
+          "reponse": "NON",
+          "vers": "c28"
+        }
+      ],
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "GARDE-FOU : je reste actif jusqu'a 'fin de cycle'. Si NON, retour a c2 pour la prochaine mission."
+        }
+      ]
+    },
+    "c27": {
+      "titre": "FIN DE CYCLE -> reactive Cerberus",
+      "type": "fin",
+      "message": "FIN DE CYCLE. Bilan complet des interventions. Cahier de dev a jour. Je reactive Cerberus avec le bilan consolide."
+    },
+    "c28": {
+      "titre": "Nouvelle mission",
+      "type": "question",
+      "question": "Quelle est la prochaine correction dans freelance/ ?",
+      "branches": [
+        {
+          "reponse": "agent-v2",
+          "vers": "c3"
+        },
+        {
+          "reponse": "jarvis",
+          "vers": "c4"
+        },
+        {
+          "reponse": "routines",
+          "vers": "c5"
+        },
+        {
+          "reponse": "arbre-decision",
+          "vers": "c6"
+        },
+        {
+          "reponse": "outils-combos",
+          "vers": "c7"
+        },
+        {
+          "reponse": "protocoles",
+          "vers": "c8"
+        },
+        {
+          "reponse": "regles",
+          "vers": "c9"
+        },
+        {
+          "reponse": "marbre",
+          "vers": "c10"
+        },
+        {
+          "reponse": "harnais",
+          "vers": "c11"
+        },
+        {
+          "reponse": "autre",
+          "vers": "c2"
+        }
+      ],
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "GARDE-FOU : je ne peux CORRIGER que dans freelance/. Si hors perimetre, signaler a Cerberus."
+        }
+      ]
+    },
+    "c16": {
+      "titre": "PROTOCOLE 13 : Lire le protocole scripts temporaires",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE ABSOLUE : je lis le PROTOCOLE 13 (scripts temporaires) AVANT de creer un script. Le combo harnais-script-temporaire est OBLIGATOIRE."
+        },
+        {
+          "type": "outil",
+          "nom": "lire-fichier",
+          "chemin": "cerveau-projet/agents/tools/lire/lire-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/protocoles/proto-13-scripts-temporaires.md"
+        }
+      ],
+      "suivant": "c16b"
+    },
+    "c16b": {
+      "titre": "Creer le script avec le combo harnais",
+      "type": "indice",
+      "indices": [
+        {
+          "type": "regle",
+          "texte": "REGLE : je cree le script dans /tmp/mecano-<nom>/ en suivant le combo harnais-script-temporaire (ISOLATION -> ECRITURE -> LANCEMENT -> VALIDATION -> SUPPRESSION)."
+        },
+        {
+          "type": "outil",
+          "nom": "editer-fichier",
+          "chemin": "cerveau-projet/agents/tools/editer/editer-fichier/",
+          "commande": "python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py /tmp/mecano-<nom>/<script>.py"
+        }
+      ],
+      "suivant": "c20"
+    }
+  }
+}

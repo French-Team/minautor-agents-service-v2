@@ -1,0 +1,22 @@
+=== Garde-fou : aucune ecriture hors workspace (/tmp systeme) ===
+  [OK] 1. scan parcourt .py/.sh + combos (hors tests/)
+  [OK] 2. motifs >/tmp, "/tmp, :-/tmp detectes (commentaire ignore)
+  [OK] 3. PREUVE NEGATIVE A : .py avec > /tmp detecte
+  [OK] 4. PREUVE NEGATIVE B : .sh avec :-/tmp detecte
+  [OK] 5. PREUVE NEGATIVE C : tests/ exclu (legacy ignore)
+  [OK] 6. code de production ACTUEL propre (0 violation)
+  [OK] 7. scan effectif (fichiers .py + .sh hors tests/)
+  [OK] 8. normes ASCII + LF (test)
+  [OK] 9. dossier temp supprime (0 trace)
+
+
+=== CHRONO test-082 (total 0.3s) ===
+  [chrono] 1. scan structure                   0.20s
+  [chrono] 2. motifs                           0.00s
+  [chrono] 3. preuve A                         0.00s
+  [chrono] 4. preuve B                         0.00s
+  [chrono] 5. preuve C                         0.00s
+  [chrono] 6. production propre                0.00s
+  [chrono] 7. volume scanne                    0.11s
+  [chrono] 8. normes                           0.00s
+=== RESULTAT : 9 OK / 0 KO (sur 9 points) ===

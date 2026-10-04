@@ -1,0 +1,26 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "vision",
+    "nom": "EXPLORER",
+    "description": "Diagnostiquer un problème de communication"
+  },
+  "theme": {
+    "nom": "EXPLORER",
+    "but": "Trouver la cause racine d'un dysfonctionnement de JARVIS",
+    "redirects": [
+      {
+        "besoin": "Diagnostiquer",
+        "action": "procedure",
+        "etapes": [
+          "Reproduire le symptôme (commande jarvis.py en échec ? inbox illisible ?)",
+          "Inspecter les JSONL (inbox/outbox) : structure {de, vers, priorite, date, objet, corps, lu, accuse}",
+          "Vérifier la cohérence py/sh si un des deux scripts est en cause",
+          "Documenter la cause racine dans le bilan pour Stark",
+          "Si correction nécessaire -> thème MODIFIER"
+        ]
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

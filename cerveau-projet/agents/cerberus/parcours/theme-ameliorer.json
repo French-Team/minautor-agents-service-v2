@@ -1,0 +1,39 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "AMELIORER",
+    "description": "Ameliorer le fonctionnement : generateur d amelioration, identifier l agent habilite, activer"
+  },
+  "theme": {
+    "nom": "AMELIORER",
+    "but": "Lancer le processus d amelioration du fonctionnement",
+    "redirects": [
+      {
+        "besoin": "Lancer le generateur d amelioration",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/generateurs/generateurs-amelioration/generateurs-amelioration.py"
+        ],
+        "regle": "PATTERN 17 : GENERATEUR D'ABORD."
+      },
+      {
+        "besoin": "Identifier l agent habilite",
+        "action": "procedure",
+        "etapes": [
+          "Consulter les themes-amelioration.json pour l agent habilite"
+        ],
+        "regle": "Le generateur determine l agent habilite."
+      },
+      {
+        "besoin": "Activer l agent habilite",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>"
+        ],
+        "regle": "Activer l agent identifie."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-coordination" }
+}

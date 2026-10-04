@@ -1,0 +1,181 @@
+{
+  "super-combos": [
+    {
+      "id": "sc-001",
+      "numero": 1,
+      "slug": "auto-xxx",
+      "nom": "sc-001-auto-xxx",
+      "fichier": "sc-001-auto-xxx/main.py",
+      "description": "Enchainement intelligent des themes AUTO-XXX",
+      "phases": [
+        "PREPARATION",
+        "AUTO-CORRECTION",
+        "AUTO-TESTING",
+        "AUTO-OPTIMISATION",
+        "AUTO-PERFORMANCE",
+        "AUTO-AUDIT-NEMESIS"
+      ],
+      "usage": "python main.py <executer|executer-complet|pilote|status|auto-test> [--fichier <fichier>] [--mission <id>]",
+      "verbe": "executer",
+      "verbes": [
+        "executer",
+        "executer-complet",
+        "pilote",
+        "status",
+        "auto-test"
+      ],
+      "cree_le": ""
+    },
+    {
+      "id": "sc-002",
+      "numero": 2,
+      "slug": "auto-evolution",
+      "nom": "sc-002-auto-evolution",
+      "fichier": "sc-002-auto-evolution/main.py",
+      "description": "Orchestration du cycle complet d'auto-evolution : detecter -> qualifier -> cibler -> modifier -> valider",
+      "phases": [
+        "DETECTER",
+        "QUALIFIER",
+        "CIBLER",
+        "MODIFIER",
+        "VALIDER"
+      ],
+      "usage": "python main.py <detecter|qualifier|cibler|modifier-avant|modifier-apres|valider|stats|auto-test> [args]",
+      "verbe": "",
+      "verbes": [
+        "detecter",
+        "qualifier",
+        "cibler",
+        "modifier-avant",
+        "modifier-apres",
+        "valider",
+        "stats",
+        "auto-test"
+      ],
+      "cree_le": ""
+    },
+    {
+      "id": "sc-003",
+      "numero": 3,
+      "slug": "auto-suivi",
+      "nom": "sc-003-auto-suivi",
+      "fichier": "sc-003-auto-suivi/main.py",
+      "description": "Entretien de la trace d'Optimus : coherence -> verifier -> vue (+ rapport)",
+      "phases": [
+        "COHERENCE",
+        "VERIFIER",
+        "VUE",
+        "RAPPORT"
+      ],
+      "usage": "python main.py <executer|rapide|status|auto-test>",
+      "verbe": "executer",
+      "verbes": [
+        "executer",
+        "rapide",
+        "status",
+        "auto-test"
+      ],
+      "cree_le": "2026-09-16"
+    },
+    {
+      "id": "sc-004",
+      "numero": 4,
+      "slug": "auto-diagnostic",
+      "nom": "sc-004-auto-diagnostic",
+      "fichier": "sc-004-auto-diagnostic/main.py",
+      "description": "Auto-diagnostic des outils : agreger les defauts DECLARES (R5) et sonder chaque outil, puis PREPARER les missions de reparation",
+      "phases": [
+        "diagnostic",
+        "inspection",
+        "preparer"
+      ],
+      "usage": "python main.py diagnostic [--fichier <fichier>]",
+      "verbe": "diagnostic",
+      "verbes": [
+        "diagnostic",
+        "inspection",
+        "preparer",
+        "status",
+        "auto-test"
+      ],
+      "cree_le": "2026-09-19 18:00:30"
+    },
+    {
+      "id": "sc-005",
+      "numero": 5,
+      "slug": "moules",
+      "nom": "sc-005-moules",
+      "fichier": "sc-005-moules/main.py",
+      "description": "Garde des MOULES : prouver que chaque moule de matrice/templates/ produit encore un clone conforme aux gardes du projet (carte d identite, commandes ancrees, prefixe non en dur). Un moule qui derive contamine TOUS les clones a venir -- ce super-combo rend la derive impossible a ignorer.",
+      "phases": [
+        "inventaire",
+        "verifier"
+      ],
+      "usage": "python main.py verifier [--fichier <fichier>]",
+      "verbe": "verifier",
+      "verbes": [
+        "inventaire",
+        "verifier",
+        "status",
+        "auto-test"
+      ],
+      "cree_le": "2026-09-25 10:11:41"
+    },
+    {
+      "id": "sc-006",
+      "numero": 6,
+      "slug": "lacunes",
+      "nom": "sc-006-lacunes",
+      "fichier": "sc-006-lacunes/main.py",
+      "description": "Retrouver une lacune (signal qui dort, repetition, racine) puis la combler par une porte",
+      "phases": [
+        "RECHERCHER",
+        "COMPARER",
+        "INVESTIGUER",
+        "QQCP",
+        "COMBLER"
+      ],
+      "usage": "python main.py <rechercher|comparer|investiguer|analyser|combler|status|auto-test> [cible] [--prive]",
+      "verbe": "rechercher",
+      "verbes": [
+        "rechercher",
+        "comparer",
+        "investiguer",
+        "analyser",
+        "combler",
+        "status",
+        "auto-test"
+      ],
+      "cree_le": "2026-10-02"
+    },
+    {
+      "id": "sc-007",
+      "numero": 7,
+      "slug": "table-ronde",
+      "nom": "sc-007-table-ronde",
+      "fichier": "sc-007-table-ronde/main.py",
+      "description": "La table ronde : 5 facons de penser, 3 rounds sur le contenu de la table, puis ARBITRE synthetise en conservant le desaccord",
+      "phases": [
+        "BESOIN",
+        "VIVANT",
+        "DUREE",
+        "KARPATHY",
+        "NEMESIS",
+        "ARBITRE"
+      ],
+      "usage": "python main.py <etat|tour|arbitrer|status|auto-test> --table <slug> [fichier]",
+      "verbe": "etat",
+      "verbes": [
+        "etat",
+        "tour",
+        "arbitrer",
+        "status",
+        "auto-test"
+      ],
+      "cree_le": "2026-10-02"
+    }
+  ],
+  "compteurs": {
+    "sc": 5
+  }
+}

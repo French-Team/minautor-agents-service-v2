@@ -1,0 +1,28 @@
+{
+ "version": "0.1.8",
+ "description": "Manifest des routines v1 (session-admin) : chaque routine active possede un intervalle fixe distinct, sans jitter aleatoire.",
+ "intervalle_boucle_secondes": 30,
+ "routines_surveillance": [
+  {"nom":"top3-urgences","script":"top3-urgences.py","actif":true,"intervalles_secondes":30,"temporaire":false,"note":"Surveille les 3 premieres lignes et previent Oracle en P1 lorsque leur contenu critique change."},
+  {"nom":"citations","script":"citations.py","actif":true,"intervalles_secondes":300,"temporaire":true,"note":"Routine temporaire de repere visuel."},
+  {"nom":"vigie-round","script":"vigie-round.py","actif":true,"intervalles_secondes":360,"temporaire":false,"note":"Detecte les rounds casses et alerte Oracle."},
+  {"nom":"flux","script":"flux.py","actif":true,"intervalles_secondes":480,"temporaire":false,"note":"Surveille les P1 non acquittees et alerte Oracle lors d un changement."},
+  {"nom":"sante","script":"sante.py","actif":true,"intervalles_secondes":600,"temporaire":false,"note":"Verifie l etat global des daemons, DEFCON, encart et historique."},
+  {"nom":"live","script":"live.py","actif":true,"intervalles_secondes":720,"temporaire":false,"note":"Surveille l agent actif et les anomalies de session."},
+  {"nom":"encart","script":"encart.py","actif":true,"intervalles_secondes":840,"temporaire":false,"note":"Verifie l integrite de l encart v1."},
+  {"nom":"notation","script":"notation.py","actif":true,"intervalles_secondes":960,"temporaire":false,"note":"Depose les demandes d evaluation periodique avec anti-inondation."},
+  {"nom":"compter-entree","script":"compter-entree.py","actif":true,"intervalles_secondes":1080,"temporaire":false,"note":"Mesure les tokens ENTREE."},
+  {"nom":"compter-sortie","script":"compter-sortie.py","actif":true,"intervalles_secondes":1200,"temporaire":false,"note":"Mesure les tokens SORTIE."},
+  {"nom":"vigie-perimetre","script":"vigie-perimetre.py","actif":true,"intervalles_secondes":1320,"temporaire":false,"note":"Surveille le perimetre Oracle et alerte Oracle lors d une modification."},
+  {"nom":"verifier-agent-perimetre","script":"verifier-agent-perimetre.py","actif":false,"intervalles_secondes":0,"temporaire":false,"note":"Gate pre-vol, jamais executee comme routine planifiee."},
+  {"nom":"verifier-statuts","script":"verifier-statuts.py","actif":true,"intervalles_secondes":1440,"temporaire":false,"note":"Analyse les etats URGENT de l encart et informe Oracle avec anti-inondation."}
+ ],
+ "perimetre_surveille": [
+  "cerveau-projet/agents/tools/oracle/routines/",
+  "cerveau-projet/agents/tools/oracle/oracle-server.py",
+  "cerveau-projet/agents/tools/oracle/oracle-demarrage.py",
+  "cerveau-projet/agents/tools/oracle/routines-server.py",
+  "cerveau-projet/agents/tools/oracle/oracle.py",
+  "AGENTS-activite-recente.md"
+ ]
+}

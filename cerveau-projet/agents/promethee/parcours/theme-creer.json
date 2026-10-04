@@ -1,0 +1,24 @@
+{
+  "identite": {"type": "theme", "appartient_a": "promethee", "nom": "CREER", "description": "Creer une spec depuis un pense-bete source"},
+  "theme": {
+    "nom": "CREER",
+    "but": "Transformer un pense-bete en specification technique complete (source de verite) en suivant la boucle RVAV",
+    "redirects": [
+      {"besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."},
+      {"besoin": "Consulter les lecons (domaine redaction-spec)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent promethee --domaine redaction-spec"], "regle": "PATTERN 6 : le contexte dynamique."},
+      {"besoin": "CONTEXTE : activite recente des agents", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6 : l historique est DYNAMIQUE."},
+      {"besoin": "Rechercher les specs existantes - ANTI-DOUBLON (case c2)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/rechercher/rechercher-specs/rechercher-specs.py"], "regle": "ANTI-DOUBLON : avant toute creation, verifier qu une spec au theme proche n existe pas deja."},
+      {"besoin": "Lire le pense-bete source (case c3)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/pense-betes/<pense-bete-source>"], "regle": "PENSE-BETE SOURCE : je ne cree pas de spec sans un pense-bete source."},
+      {"besoin": "Generer le squelette de la spec (case c4)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/generateurs/generateurs-squelette-spec/generateurs-squelette-spec.py <pense-bete-source>"], "regle": "SQUELETTE : nommage automatique selon convention-renommage."},
+      {"besoin": "Remplir les sections de la spec (case c5)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/creer/creer-remplir-spec/creer-remplir-spec.py <spec>"], "regle": "REMPLIR : sections sans ouvrir le fichier."},
+      {"besoin": "Verifier la conformite ASCII (case c6)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <spec>"], "regle": "REGLE ASCII : 100% ASCII, aucun accent."},
+      {"besoin": "Valider le fichier spec (case c7)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/valider/valider-spec/valider-spec.py <spec>"], "regle": "RVAV : pas de validation sans boucle complete."},
+      {"besoin": "Mettre a jour index-spec.md (case c8)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py cerveau-projet/pense-betes/specs/index-spec.md <ancien> <nouveau>"], "regle": "INDEX : ajouter la spec dans l index."},
+      {"besoin": "Lecons et retour (case c9)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/promethee/corrections.md <lecon>"], "regle": "PROTOCOLE FIN-MISSION."},
+      {"besoin": "Corriger les accents du rapport", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/corriger/corriger-accents-zones-sensibles/corriger-accents-zones-sensibles.py cerveau-projet/agents/promethee/corrections.md --all"], "regle": "REGLE ASCII."},
+      {"besoin": "Enregistrer ma lecon dans la BDD", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-lecon/enregistrer-lecon.py --agent promethee --domaine <domaine> --titre <titre> --lecon <texte>"], "regle": "BDD : memoire longue."},
+      {"besoin": "Enregistrer mes usages d outils (case c24)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent promethee --outil <outil> --contexte '<contexte>'"], "regle": "BILAN OUTILS : declarer tous les outils utilises."}
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-creer"}
+}

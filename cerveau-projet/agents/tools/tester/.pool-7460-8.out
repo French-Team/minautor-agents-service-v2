@@ -1,0 +1,21 @@
+  [OK] 1. generateurs-outil-temporaire v0.2.3 (--version)
+  [OK] 2. template : point_actif + chrono_etape + bilan_chrono + verifier_nommage
+  [OK] 3. template : options --isoler/--desactiver/--no-chrono/--dry-run
+  [OK] 4. script genere : triplet embarque (preuve reelle)
+  [OK] 5. script genere : execution + bilan chrono
+  [OK] 6. script genere : --dry-run (aucune action)
+  [OK] 7. script genere : --no-chrono (chrono coupe)
+  [OK] 8. protocole-creation-scripts-temporaires : REGLE TRIPLET (v0.2.6)
+  [OK] 9. doc generateur : v0.2.3 + TRIPLET documente
+  [OK] 10. ASCII strict : 0 non-ASCII (test + generateurs + protocole)
+  [OK] 11. LF pur : 0 CRLF (test + generateurs + protocole)
+  [OK] 12. parite .sh : v0.2.3 + triplet dans le template bash
+  [OK] 13. parite reelle : script genere .sh == script genere .py (hors date)
+  [OK] 14. squelette .py : bloc DECLARATION USAGES
+  [OK] 15. parite .sh : bloc DECLARATION USAGES dans le template bash
+  [OK] 16. protocole v0.2.7 : declaration usages imposee
+  [OK] 17. registre REEL exempt de preuves tmp-t050-preuve (redirection)
+  [OK] 18. registre TEMP contient les preuves (redirection effective)
+  [chrono] test-050 triplet outils temporaires      1.51s
+
+=== RESULTAT : 18 OK / 0 KO (sur 18 points) ===

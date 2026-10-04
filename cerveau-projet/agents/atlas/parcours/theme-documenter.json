@@ -1,0 +1,108 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "atlas",
+    "nom": "DOCUMENTER",
+    "description": "Documentation technique : lister, lire, analyser, creer structure, rediger, RVAV (cases c16-c20)"
+  },
+  "theme": {
+    "nom": "DOCUMENTER",
+    "but": "Produire une documentation technique complete et fiable",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine documentation)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent atlas --domaine documentation"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique se lit a chaque activation."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Identifier le public cible",
+        "action": "procedure",
+        "etapes": [
+          "Determiner qui lira la documentation (dev, utilisateur, admin)"
+        ],
+        "regle": "Adapter le niveau au public."
+      },
+      {
+        "besoin": "Lister les fichiers existants",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lister/lister-fichiers/lister-fichiers.py <chemin>"
+        ],
+        "regle": "Inventorier avant de documenter."
+      },
+      {
+        "besoin": "Analyser et decomposer la structure",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/analyser/analyser-structure/analyser-structure.py <chemin>",
+          "python3 cerveau-projet/agents/tools/analyser/decomposer-fichier/decomposer-fichier.py <fichier>"
+        ],
+        "regle": "Analyser la structure avant de rediger."
+      },
+      {
+        "besoin": "Creer la structure de documentation",
+        "action": "procedure",
+        "etapes": [
+          "Definir les sections, creer les fichiers vides"
+        ],
+        "regle": "Structurer avant de remplir."
+      },
+      {
+        "besoin": "Rediger le contenu",
+        "action": "procedure",
+        "etapes": [
+          "Remplir chaque section avec le contenu"
+        ],
+        "regle": "Rediger clairement et concisement."
+      },
+      {
+        "besoin": "Passer la boucle RVAV",
+        "action": "procedure",
+        "etapes": [
+          "Rechercher les sources, Verifier l exactitude, Analyser la coherence, Valider le resultat"
+        ],
+        "regle": "RVAV OBLIGATOIRE avant de valider."
+      },
+      {
+        "besoin": "Verifier la conformite ASCII",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier>"
+        ],
+        "regle": "ASCII strict + LF pur."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/atlas/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-documenter"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "janus",
+    "nom": "INTER-ROUND",
+    "description": "Reception inter-round : rapport KO recu d un autre agent"
+  },
+  "theme": {
+    "nom": "INTER-ROUND",
+    "but": "Accuser reception d un rapport KO et relancer l agent appelant",
+    "redirects": [
+      {
+        "besoin": "RECEPTION inter-round : rapport KO recu d un autre agent",
+        "action": "procedure",
+        "etapes": [
+          "PERIMETRE REDUIT (modele aero) : 1) Lire le rapport KO transmis, 2) Confirmer reception (message console), 3) NE PAS activer d autre agent : ma fin reactiver-fin --cible oracle ramene a ORACLE, et le pilote (qui connait le precedent via l etat de carte) reactive l appelant pour qu il reprenne son round",
+          "MA FIN : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin janus \"<rapport du traitement inter-round>\" --cible oracle",
+          "CASCADE autorisee entre habilites (le pilote decide du maillon suivant, R3)"
+        ],
+        "regle": "REGLE INTER-ROUND (R2) RECEPTION MODELE AERO : je n execute PAS une nouvelle mission. J accuse reception, ma fin va vers ORACLE (jamais cerberus, jamais un autre agent) et le pilote reactive l appelant qui reprend son round."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-inter-round"
+  }
+}

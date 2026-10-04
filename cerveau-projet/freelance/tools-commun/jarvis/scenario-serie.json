@@ -1,0 +1,15 @@
+{
+  "nom": "test-serie",
+  "session": "session-llm-2",
+  "mode": "serie",
+  "missions": [
+    {
+      "agent": "stark",
+      "mission": "TEST serie maillon 1"
+    },
+    {
+      "agent": "stark",
+      "mission": "TEST serie maillon 2"
+    }
+  ]
+}

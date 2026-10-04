@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Le vivier - les themes par categorie | le domicile du vivier (M-076) : Z:\analyste-in-console\cerveau-projet\matrix\matrice\data\vivier-themes.json | genere par rendre-graphe v1.0.0 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="982" viewBox="0 0 1440 982" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="fleche" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1440" height="982" fill="#ffffff"/>
+    <path d="M 720.2 76.0 L 516.0 166.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 L 177.0 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 L 451.8 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 L 720.2 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 L 998.2 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 L 1273.0 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 V 316.0 H 170.6 V 430.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 V 316.0 H 455.0 V 430.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 V 316.0 H 733.0 V 430.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 V 316.0 H 1004.6 V 430.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 720.2 76.0 L 643.6 166.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 643.6 202.0 V 316.0 H 1276.2 V 430.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 720.2 76.0 L 774.4 166.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 774.4 202.0 V 385.0 H 183.4 V 568.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 774.4 202.0 V 385.0 H 451.8 V 568.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 774.4 202.0 V 385.0 H 723.4 V 568.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 774.4 202.0 V 385.0 H 988.6 V 568.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 720.2 76.0 L 908.4 166.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 908.4 202.0 V 385.0 H 1253.8 V 568.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 908.4 202.0 V 454.0 H 173.8 V 706.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 908.4 202.0 V 454.0 H 445.4 V 706.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 908.4 202.0 V 454.0 H 713.8 V 706.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 908.4 202.0 V 454.0 H 988.6 V 706.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 V 454.0 H 1266.6 V 706.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 V 523.0 H 180.2 V 844.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 V 523.0 H 445.4 V 844.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 V 523.0 H 707.4 V 844.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 V 523.0 H 982.2 V 844.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 516.0 202.0 V 523.0 H 1260.2 V 844.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="686.0" y="40.0" width="68.4" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="720.2" y="62.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="720.2" dy="0">Vivier</tspan>
+    </text>
+    <path d="M 516.0 166.0 L 553.4 184.0 L 516.0 202.0 L 478.6 184.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+    <text x="516.0" y="188.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="516.0" dy="0">SYSTEME</tspan>
+    </text>
+    <rect x="53.2" y="292.0" width="247.6" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="177.0" y="313.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="177.0" dy="0">TH-002 BDD -- construire,</tspan>
+      <tspan x="177.0" dy="14">raccorder ou reparer une BDD du...</tspan>
+    </text>
+    <rect x="340.8" y="292.0" width="222.0" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="451.8" y="313.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="451.8" dy="0">TH-003 OUTIL -- construire ou</tspan>
+      <tspan x="451.8" dy="14">reparer un outil dedie (pre...</tspan>
+    </text>
+    <rect x="602.8" y="292.0" width="234.8" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="720.2" y="313.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="720.2" dy="0">TH-004 ROUTINE -- poser ou faire</tspan>
+      <tspan x="720.2" dy="14">evoluer les routines de ...</tspan>
+    </text>
+    <rect x="877.6" y="292.0" width="241.2" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="998.2" y="313.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="998.2" dy="0">TH-005 INDICES -- poser ou mettre</tspan>
+      <tspan x="998.2" dy="14">a jour les indices d&apos;un...</tspan>
+    </text>
+    <rect x="1158.8" y="292.0" width="228.4" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1273.0" y="313.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1273.0" dy="0">TH-006 CONTRATS -- relire et</tspan>
+      <tspan x="1273.0" dy="14">reparer les contrats (readme...</tspan>
+    </text>
+    <rect x="50.0" y="430.0" width="241.2" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="170.6" y="451.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="170.6" dy="0">TH-007 PILOTE -- faire evoluer le</tspan>
+      <tspan x="170.6" dy="14">pilote : injection, fin...</tspan>
+    </text>
+    <rect x="331.2" y="430.0" width="247.6" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="455.0" y="451.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="455.0" dy="0">TH-008 TEMPLATES -- poser ou faire</tspan>
+      <tspan x="455.0" dy="14">evoluer les moules et ...</tspan>
+    </text>
+    <rect x="618.8" y="430.0" width="228.4" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="733.0" y="451.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="733.0" dy="0">TH-009 REPARATION -- reparer un</tspan>
+      <tspan x="733.0" dy="14">ecart detecte par la veil...</tspan>
+    </text>
+    <rect x="887.2" y="430.0" width="234.8" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1004.6" y="451.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1004.6" dy="0">TH-011 ENTONNOIR -- Missions sur</tspan>
+      <tspan x="1004.6" dy="14">l&apos;entonnoir : echelons, ...</tspan>
+    </text>
+    <path d="M 643.6 166.0 L 693.8 184.0 L 643.6 202.0 L 593.4 184.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+    <text x="643.6" y="188.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="643.6" dy="0">GOUVERNANCE</tspan>
+    </text>
+    <rect x="1162.0" y="430.0" width="228.4" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1276.2" y="451.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1276.2" dy="0">TH-012 DEFCON -- Piloter les</tspan>
+      <tspan x="1276.2" dy="14">periodes de mise en securite...</tspan>
+    </text>
+    <path d="M 774.4 166.0 L 815.0 184.0 L 774.4 202.0 L 733.8 184.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+    <text x="774.4" y="188.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="774.4" dy="0">QUESTION</tspan>
+    </text>
+    <rect x="72.4" y="568.0" width="222.0" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="183.4" y="589.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="183.4" dy="0">TH-013 ANALYSE -- Part 1 d&apos;une</tspan>
+      <tspan x="183.4" dy="14">[question] : analyser le s...</tspan>
+    </text>
+    <rect x="334.4" y="568.0" width="234.8" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="451.8" y="589.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="451.8" dy="0">TH-014 RECHERCHE -- Part 2 d&apos;une</tspan>
+      <tspan x="451.8" dy="14">[question] : recherche a...</tspan>
+    </text>
+    <rect x="609.2" y="568.0" width="228.4" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="723.4" y="589.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="723.4" dy="0">TH-015 CONTRE-ANALYSE -- Part 3</tspan>
+      <tspan x="723.4" dy="14">d&apos;une [question] : avis c...</tspan>
+    </text>
+    <rect x="877.6" y="568.0" width="222.0" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="988.6" y="589.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="988.6" dy="0">TH-016 RAPPORT -- Part 4 d&apos;une</tspan>
+      <tspan x="988.6" dy="14">[question] : rapport conso...</tspan>
+    </text>
+    <path d="M 908.4 166.0 L 961.8 184.0 L 908.4 202.0 L 855.0 184.0 Z" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+    <text x="908.4" y="188.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="908.4" dy="0">PERSONNALITE</tspan>
+    </text>
+    <rect x="1139.6" y="568.0" width="228.4" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1253.8" y="589.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1253.8" dy="0">TH-017 CONSTRUCTEUR -- Executer</tspan>
+      <tspan x="1253.8" dy="14">les missions dev : constr...</tspan>
+    </text>
+    <rect x="56.4" y="706.0" width="234.8" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="173.8" y="727.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="173.8" dy="0">TH-018 REDACTEUR -- Executer les</tspan>
+      <tspan x="173.8" dy="14">missions doc : ecrire de...</tspan>
+    </text>
+    <rect x="331.2" y="706.0" width="228.4" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="445.4" y="727.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="445.4" dy="0">TH-019 AUDITEUR -- Executer les</tspan>
+      <tspan x="445.4" dy="14">missions audit : constat ...</tspan>
+    </text>
+    <rect x="599.6" y="706.0" width="228.4" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="713.8" y="727.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="713.8" dy="0">TH-020 REVISEUR -- Executer les</tspan>
+      <tspan x="713.8" dy="14">missions revision : relir...</tspan>
+    </text>
+    <rect x="868.0" y="706.0" width="241.2" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="988.6" y="727.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="988.6" dy="0">TH-021 REPARATEUR -- Executer les</tspan>
+      <tspan x="988.6" dy="14">missions reparation apr...</tspan>
+    </text>
+    <rect x="1149.2" y="706.0" width="234.8" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1266.6" y="727.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1266.6" dy="0">TH-022 PERFORMANCE -- Theme mere</tspan>
+      <tspan x="1266.6" dy="14">des performances de la M...</tspan>
+    </text>
+    <rect x="66.0" y="844.0" width="228.4" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="180.2" y="865.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="180.2" dy="0">TH-023 PERFORMANCE-OUTILS --</tspan>
+      <tspan x="180.2" dy="14">Analyser / optimiser / ameli...</tspan>
+    </text>
+    <rect x="334.4" y="844.0" width="222.0" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="445.4" y="865.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="445.4" dy="0">TH-024 PERFORMANCE-ROUTINES --</tspan>
+      <tspan x="445.4" dy="14">Analyser / optimiser / ame...</tspan>
+    </text>
+    <rect x="596.4" y="844.0" width="222.0" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="707.4" y="865.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="707.4" dy="0">TH-025 PERFORMANCE-SERVEURS --</tspan>
+      <tspan x="707.4" dy="14">Analyser / optimiser / ame...</tspan>
+    </text>
+    <rect x="858.4" y="844.0" width="247.6" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="982.2" y="865.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="982.2" dy="0">TH-026 COMMUNICATION -- Accueil v3</tspan>
+      <tspan x="982.2" dy="14">(Flux 1) : le cameleon...</tspan>
+    </text>
+    <rect x="1146.0" y="844.0" width="228.4" height="48.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1260.2" y="865.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1260.2" dy="0">TH-027 CADRAGE -- Constituer la</tspan>
+      <tspan x="1260.2" dy="14">CHAINE de missions avant ...</tspan>
+    </text>
+</svg>

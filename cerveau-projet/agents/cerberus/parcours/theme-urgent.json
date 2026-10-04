@@ -1,0 +1,38 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "URGENT",
+    "description": "Traiter la demande IMMEDIATEMENT (priorite absolue)"
+  },
+  "theme": {
+    "nom": "URGENT",
+    "but": "Traiter la demande utilisateur immediatement, en priorite absolue",
+    "redirects": [
+      {
+        "besoin": "Traiter la demande immediatement",
+        "action": "procedure",
+        "etapes": [
+          "La demande est traitee IMMEDIATEMENT - priorite absolue",
+          "Mettre la mission en cours eventuelle dans la file asap avec statut PRIORITAIRE (reprise apres l urgence)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter \"<mission en cours>\" --file asap"
+        ],
+        "regle": "REGLE [urgent] : priorite absolue. La mission en cours est mise en attente (file asap PRIORITAIRE). Je commence l urgence maintenant."
+      },
+      {
+        "besoin": "Router l urgence vers l agent habilite",
+        "action": "procedure",
+        "etapes": [
+          "Identifier l agent habilite et l activer immediatement",
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> \"<la demande urgente>\""
+        ],
+        "regle": "URGENT : activer l agent habilite AU PLUS VITE, sans attendre la fin de la mission en cours."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-declencheur"
+  }
+}

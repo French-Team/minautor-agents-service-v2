@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "titre": "templates d injection",
+  "demande": "obtenir une fiche technique de travail (alleger et optimal sans perte) et reduire le bruit",
+  "source": "createur",
+  "maillons": [
+    {
+      "ordre": 1,
+      "case": "manques",
+      "type": "audit",
+      "preuve": "la liste des manques nommes, chacun avec sa MESURE et la commande qui la REJOUE (a rejouer telle quelle) ; s'il n'y a aucun manque nommable, la chaine s'arrete la et le DIT",
+      "objectif": "[MANQUES] Nommer CE QUI MANQUE dans la demande, en le MESURANT dans le depot : ce qui est deja ecrit (dans les fichiers, les OUTILS, les BDD) est lu, ce qui est absent est nomme. Aucune question au createur : un manque se mesure ou se declare, jamais il ne se demande.\n\nDEMANDE DU CREATEUR : templates d injection\n\nobtenir une fiche technique de travail (alleger et optimal sans perte) et reduire le bruit"
+    },
+    {
+      "ordre": 2,
+      "case": "memoire",
+      "type": "audit",
+      "preuve": "les reponses trouvees, citees par leur chemin, la commande de recherche REJOUEE telle quelle, et les manques REELLEMENT absents apres ce TEST",
+      "objectif": "[MEMOIRE] Reprendre ce que le projet SAIT DEJA sur le sujet, avec le MOTEUR DE RECHERCHE du projet (cartes d'identite, BDD, fichiers) : chaque manque qui y est deja ecrit est une faute de recherche, pas un manque.\n\nDEMANDE DU CREATEUR : templates d injection\n\nobtenir une fiche technique de travail (alleger et optimal sans perte) et reduire le bruit"
+    },
+    {
+      "ordre": 3,
+      "case": "audit",
+      "type": "audit",
+      "preuve": "l'etat constate, et pour chaque point la commande qui le VERIFIE (a REJOUER) avec l'EMPREINTE SHA du fichier lu",
+      "objectif": "[AUDIT] Constater l'etat REEL du perimetre (lecture seule) : ce que le disque dit des fichiers py/json et des BDD du perimetre, jamais ce qu'on croit savoir.\n\nDEMANDE DU CREATEUR : templates d injection\n\nobtenir une fiche technique de travail (alleger et optimal sans perte) et reduire le bruit"
+    },
+    {
+      "ordre": 4,
+      "case": "nemesis",
+      "type": "audit",
+      "preuve": "les objections, celles qui ont change la liste (et comment), celles qui n'ont rien change (dites telles quelles), chacune tranchee par un TEST ou un CONTRE-TEMOIN",
+      "objectif": "[NEMESIS] Avis CONTRADICTOIRE sur la chaine envisagee : attaquer les maillons, les cas limites et ce que la liste ne couvre pas, en nommant pour chaque objection l'OUTIL ou le GARDE du projet qui la tranche. Si l'attaque ne retire rien, le DIRE (un avis qui ne change rien et se tait fait croire qu'il a servi).\n\nDEMANDE DU CREATEUR : templates d injection\n\nobtenir une fiche technique de travail (alleger et optimal sans perte) et reduire le bruit"
+    },
+    {
+      "ordre": 5,
+      "case": "chaine",
+      "type": "doc",
+      "preuve": "la liste ecrite, ordonnee, chaque maillon type et prouvable, a VERIFIER par le garde des maillons (type + preuve nommes), avec sa derniere ligne (la mission)",
+      "objectif": "[CHAINE] CONSTITUER LA LISTE : la suite ordonnee des missions, chacune avec son TYPE declare et sa PREUVE attendue, terminee par LA MISSION reelle -- la liste devient un fichier de pilotage (json) ecrit par un OUTIL, jamais un texte libre.\n\nDEMANDE DU CREATEUR : templates d injection\n\nobtenir une fiche technique de travail (alleger et optimal sans perte) et reduire le bruit"
+    },
+    {
+      "ordre": 6,
+      "case": "depot",
+      "type": "audit",
+      "preuve": "le versement VERIFIE : une ligne par maillon avec l'id rendu par la porte, et l'ensemble injecte comme un bloc",
+      "objectif": "[DEPOT] Verifier que la chaine est versee ET injectee comme UN seul ensemble : aucun maillon contourne la porte, aucun n'est orphelin, et l'ensemble se lit d'un bloc DANS L'ORDRE de la chaine (mesures du 2026-09-21 : le LOT existe -- EO-148 verse le brin entier d'un geste -- mais le brin est TISSE par urgence puis round-robin entre les files, donc il NE PORTE PAS l'ordre des maillons ; l'ordre doit etre porte par la chaine elle-meme, jamais suppose).\n\nDEMANDE DU CREATEUR : templates d injection\n\nobtenir une fiche technique de travail (alleger et optimal sans perte) et reduire le bruit"
+    },
+    {
+      "ordre": 7,
+      "case": "mission",
+      "type": "reparation",
+      "preuve": "le resultat demande, prouve : mesure avant/apres, et un COBAYE pour le cas nouveau ; la non-regression a VERIFIER par le lanceur de non-regression",
+      "objectif": "[MISSION] templates d injection\n\nLA MISSION REELLE, a mener apres les maillons : a determiner par les maillons precedents (chaque maillon les reduit) -- le CODE ou l'OUTIL a reparer est celui que les maillons precedents ont nomme.\n\nobtenir une fiche technique de travail (alleger et optimal sans perte) et reduire le bruit"
+    }
+  ]
+}

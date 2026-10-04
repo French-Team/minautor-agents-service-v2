@@ -1,0 +1,41 @@
+---\identite:
+  type: segment
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# SEGMENT DE RAISONNEMENT -- carte d identite (MO-__MISSION__)
+
+> MOULE a jetons, le template d un segment. Il DECRIT ce qu est un segment
+> (sa carte d identite) et sert de gabarit quand on en cree un. Il ne remplace
+> pas la porte `bdd-raisonnement ajouter` : c est elle qui attribue l id
+> (RS-xxx) et qui refuse le doublon. Un id n est JAMAIS ecrit a la main (CV-010).
+
+Identite : RS-XXX (attribue par la porte, jamais invente)
+Date : __DATE__
+Source : __MISSION__ (la mission qui l a produit)
+Tags : __TAGS__ (recherche par theme, pour le retrouver)
+
+## LE SEGMENT (le raisonnement, en un seul bloc)
+
+__SEGMENT__
+
+## CE QUE LE SEGMENT DOIT ETRE (la regle de forme)
+
+- PROGRESSIF, pas continu : un segment condense ce qui precede pour aller plus
+  loin. Il ne recapitule pas la conversation, il la fait avancer.
+- REUTILISABLE : il doit servir a un raisonnement ULTERIEUR sur le meme sujet.
+  S il ne sert qu a la mission qui l a produit, c est un compte rendu, pas un
+  segment.
+- CONCIS et CONCRET : plus concret et plus court que ce qui le precede, parce
+  qu il doit tenir dans une fenetre de contexte et servir plus loin.
+- TAGGABLE : les tags sont ce qui le rend retrouvable par le moteur de
+  recherche.
+
+## POURQUOI UN TEMPLATE (le manque que ce segment comble)
+
+Mesure MO-518 / EO-518 : la BDD de raisonnement recevait des segments (43 a la
+mesure) mais chaque segment etait un texte libre, sans carte d identite
+structuree, et surtout SANS etre injecte ni recherche. Ce moule fixe la forme
+d un segment (identite, source, tags, regle de forme) pour que le segment soit
+une entree de premier ordre, pas une note en prose.

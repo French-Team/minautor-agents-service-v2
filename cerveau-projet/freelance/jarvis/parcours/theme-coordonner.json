@@ -1,0 +1,62 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "jarvis",
+    "nom": "COORDONNER",
+    "description": "Gerer les communications inter-agents"
+  },
+  "theme": {
+    "nom": "COORDONNER",
+    "but": "Assurer que les communications fluident",
+    "redirects": [
+      {
+        "besoin": "Traiter un message d'agent",
+        "action": "procedure",
+        "description": "Un agent envoie un retour de mission",
+        "etapes": [
+          "Lire le message",
+          "Identifier l'agent source",
+          "Identifier le type (bilan, demande, alerte)",
+          "Si bilan -> notifier Stark",
+          "Si demande -> router vers l'agent competent",
+          "Si alerte -> escalader a Stark"
+        ]
+      },
+      {
+        "besoin": "Detecter un blocage",
+        "action": "procedure",
+        "description": "Un agent est bloque",
+        "etapes": [
+          "Verifier jarvis.py bloques",
+          "Identifier la cause (message P1 non lu ? erreur ?)",
+          "Si message P1 non lu -> alerter l'agent",
+          "Si erreur -> activer l'agent habilite (inter-round)",
+          "Notifier Stark si necessaire"
+        ]
+      },
+      {
+        "besoin": "Gerer un inter-round",
+        "action": "procedure",
+        "description": "Un agent a detecte une erreur hors-perimetre",
+        "etapes": [
+          "Recevoir le rapport d'erreur",
+          "Identifier l'agent habilite",
+          "Envoyer le rapport a l'habilite",
+          "Suivre la resolution",
+          "Notifier l'appelant quand c'est termine"
+        ]
+      },
+      {
+        "besoin": "Notifier Stark d'un evenement",
+        "action": "procedure",
+        "description": "Stark doit savoir ce qui se passe",
+        "etapes": [
+          "Formuler la notification clairement",
+          "Envoyer via jarvis.py envoyer --vers stark --priorite 2",
+          "Inclure le contexte et les prochaines etapes"
+        ]
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

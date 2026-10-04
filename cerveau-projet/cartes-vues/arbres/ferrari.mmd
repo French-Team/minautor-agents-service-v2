@@ -1,0 +1,318 @@
+%% Arbre de decision de ferrari (arbre v0.3.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle correction dois-tu effectuer dans le dossier freelance/ ?"}
+    RACINE -- "FICHE-AGENT" --> THEME-FICHE-AGENT
+    THEME-FICHE-AGENT["Corriger une fiche d agent v2 en appliquant le proto 1 et le"]
+    THEME-FICHE-AGENT -- "besoin 1" --> THEME-FICHE-AGENT-B0
+    THEME-FICHE-AGENT-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-FICHE-AGENT -- "besoin 2" --> THEME-FICHE-AGENT-B1
+    THEME-FICHE-AGENT-B1["Consulter les lecons (domaine freelance)"]
+    THEME-FICHE-AGENT -- "besoin 3" --> THEME-FICHE-AGENT-B2
+    THEME-FICHE-AGENT-B2["CONTEXTE : activite recente des agents"]
+    THEME-FICHE-AGENT -- "besoin 4" --> THEME-FICHE-AGENT-B3
+    THEME-FICHE-AGENT-B3["Lire le cahier de dev AVANT intervention"]
+    THEME-FICHE-AGENT -- "besoin 5" --> THEME-FICHE-AGENT-B4
+    THEME-FICHE-AGENT-B4["Lire le PROTOCOLE 1 (agent v2) (case c2)"]
+    THEME-FICHE-AGENT -- "besoin 6" --> THEME-FICHE-AGENT-B5
+    THEME-FICHE-AGENT-B5["Lire la fiche a corriger (case c2b)"]
+    THEME-FICHE-AGENT -- "besoin 7" --> THEME-FICHE-AGENT-B6
+    THEME-FICHE-AGENT-B6["Verifier les conventions v2"]
+    THEME-FICHE-AGENT -- "besoin 8" --> THEME-FICHE-AGENT-B7
+    THEME-FICHE-AGENT-B7["Appliquer la correction (conventions v2) (case c7)"]
+    THEME-FICHE-AGENT -- "besoin 9" --> THEME-FICHE-AGENT-B8
+    THEME-FICHE-AGENT-B8["Verifier la correction (controle c8)"]
+    THEME-FICHE-AGENT -- "besoin 10" --> THEME-FICHE-AGENT-B9
+    THEME-FICHE-AGENT-B9["Produire le rapport de correction (case c9)"]
+    THEME-FICHE-AGENT -- "besoin 11" --> THEME-FICHE-AGENT-B10
+    THEME-FICHE-AGENT-B10["Historiser l intervention (case c10)"]
+    THEME-FICHE-AGENT -- "besoin 12" --> THEME-FICHE-AGENT-B11
+    THEME-FICHE-AGENT-B11["Mettre a jour le cahier de dev"]
+    THEME-FICHE-AGENT -- "besoin 13" --> THEME-FICHE-AGENT-B12
+    THEME-FICHE-AGENT-B12["Ajouter les lecons dans corrections.md"]
+    FIN-fin-correction(["FIN - Correction terminee (mode persistant)"])
+    THEME-FICHE-AGENT-B0 --> FIN-fin-correction
+    THEME-FICHE-AGENT-B1 --> FIN-fin-correction
+    THEME-FICHE-AGENT-B2 --> FIN-fin-correction
+    THEME-FICHE-AGENT-B3 --> FIN-fin-correction
+    THEME-FICHE-AGENT-B4 --> FIN-fin-correction
+    THEME-FICHE-AGENT-B5 --> FIN-fin-correction
+    THEME-FICHE-AGENT-B6 --> FIN-fin-correction
+    THEME-FICHE-AGENT-B7 --> FIN-fin-correction
+    THEME-FICHE-AGENT-B8 --> FIN-fin-correction
+    THEME-FICHE-AGENT-B9 --> FIN-fin-correction
+    THEME-FICHE-AGENT-B10 --> FIN-fin-correction
+    THEME-FICHE-AGENT-B11 --> FIN-fin-correction
+    THEME-FICHE-AGENT-B12 --> FIN-fin-correction
+    RACINE -- "ARBRE-DECISION" --> THEME-ARBRE-DECISION
+    THEME-ARBRE-DECISION["Corriger un arbre de decision v2 en appliquant le proto 4 et"]
+    THEME-ARBRE-DECISION -- "besoin 1" --> THEME-ARBRE-DECISION-B0
+    THEME-ARBRE-DECISION-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-ARBRE-DECISION -- "besoin 2" --> THEME-ARBRE-DECISION-B1
+    THEME-ARBRE-DECISION-B1["Consulter les lecons (domaine freelance)"]
+    THEME-ARBRE-DECISION -- "besoin 3" --> THEME-ARBRE-DECISION-B2
+    THEME-ARBRE-DECISION-B2["CONTEXTE : activite recente"]
+    THEME-ARBRE-DECISION -- "besoin 4" --> THEME-ARBRE-DECISION-B3
+    THEME-ARBRE-DECISION-B3["Lire le cahier de dev"]
+    THEME-ARBRE-DECISION -- "besoin 5" --> THEME-ARBRE-DECISION-B4
+    THEME-ARBRE-DECISION-B4["Lire le PROTOCOLE 4 (arbre vs carte) (case c3)"]
+    THEME-ARBRE-DECISION -- "besoin 6" --> THEME-ARBRE-DECISION-B5
+    THEME-ARBRE-DECISION-B5["Lire l arbre a corriger (case c3b)"]
+    THEME-ARBRE-DECISION -- "besoin 7" --> THEME-ARBRE-DECISION-B6
+    THEME-ARBRE-DECISION-B6["Appliquer la correction"]
+    THEME-ARBRE-DECISION -- "besoin 8" --> THEME-ARBRE-DECISION-B7
+    THEME-ARBRE-DECISION-B7["Verifier la correction"]
+    THEME-ARBRE-DECISION -- "besoin 9" --> THEME-ARBRE-DECISION-B8
+    THEME-ARBRE-DECISION-B8["Produire le rapport"]
+    THEME-ARBRE-DECISION -- "besoin 10" --> THEME-ARBRE-DECISION-B9
+    THEME-ARBRE-DECISION-B9["Historiser l intervention"]
+    THEME-ARBRE-DECISION -- "besoin 11" --> THEME-ARBRE-DECISION-B10
+    THEME-ARBRE-DECISION-B10["Mettre a jour le cahier de dev"]
+    THEME-ARBRE-DECISION -- "besoin 12" --> THEME-ARBRE-DECISION-B11
+    THEME-ARBRE-DECISION-B11["Ajouter les lecons"]
+    THEME-ARBRE-DECISION-B0 --> FIN-fin-correction
+    THEME-ARBRE-DECISION-B1 --> FIN-fin-correction
+    THEME-ARBRE-DECISION-B2 --> FIN-fin-correction
+    THEME-ARBRE-DECISION-B3 --> FIN-fin-correction
+    THEME-ARBRE-DECISION-B4 --> FIN-fin-correction
+    THEME-ARBRE-DECISION-B5 --> FIN-fin-correction
+    THEME-ARBRE-DECISION-B6 --> FIN-fin-correction
+    THEME-ARBRE-DECISION-B7 --> FIN-fin-correction
+    THEME-ARBRE-DECISION-B8 --> FIN-fin-correction
+    THEME-ARBRE-DECISION-B9 --> FIN-fin-correction
+    THEME-ARBRE-DECISION-B10 --> FIN-fin-correction
+    THEME-ARBRE-DECISION-B11 --> FIN-fin-correction
+    RACINE -- "JARVIS" --> THEME-JARVIS
+    THEME-JARVIS["Corriger jarvis.py ou jarvis-server.py en appliquant le prot"]
+    THEME-JARVIS -- "besoin 1" --> THEME-JARVIS-B0
+    THEME-JARVIS-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-JARVIS -- "besoin 2" --> THEME-JARVIS-B1
+    THEME-JARVIS-B1["Consulter les lecons (domaine freelance)"]
+    THEME-JARVIS -- "besoin 3" --> THEME-JARVIS-B2
+    THEME-JARVIS-B2["CONTEXTE : activite recente"]
+    THEME-JARVIS -- "besoin 4" --> THEME-JARVIS-B3
+    THEME-JARVIS-B3["Lire le cahier de dev"]
+    THEME-JARVIS -- "besoin 5" --> THEME-JARVIS-B4
+    THEME-JARVIS-B4["Lire le PROTOCOLE 2 (JARVIS) (case c5)"]
+    THEME-JARVIS -- "besoin 6" --> THEME-JARVIS-B5
+    THEME-JARVIS-B5["Lire JARVIS a corriger (case c5b)"]
+    THEME-JARVIS -- "besoin 7" --> THEME-JARVIS-B6
+    THEME-JARVIS-B6["Appliquer la correction"]
+    THEME-JARVIS -- "besoin 8" --> THEME-JARVIS-B7
+    THEME-JARVIS-B7["Verifier la correction"]
+    THEME-JARVIS -- "besoin 9" --> THEME-JARVIS-B8
+    THEME-JARVIS-B8["Produire le rapport"]
+    THEME-JARVIS -- "besoin 10" --> THEME-JARVIS-B9
+    THEME-JARVIS-B9["Historiser l intervention"]
+    THEME-JARVIS -- "besoin 11" --> THEME-JARVIS-B10
+    THEME-JARVIS-B10["Mettre a jour le cahier de dev"]
+    THEME-JARVIS -- "besoin 12" --> THEME-JARVIS-B11
+    THEME-JARVIS-B11["Ajouter les lecons"]
+    THEME-JARVIS-B0 --> FIN-fin-correction
+    THEME-JARVIS-B1 --> FIN-fin-correction
+    THEME-JARVIS-B2 --> FIN-fin-correction
+    THEME-JARVIS-B3 --> FIN-fin-correction
+    THEME-JARVIS-B4 --> FIN-fin-correction
+    THEME-JARVIS-B5 --> FIN-fin-correction
+    THEME-JARVIS-B6 --> FIN-fin-correction
+    THEME-JARVIS-B7 --> FIN-fin-correction
+    THEME-JARVIS-B8 --> FIN-fin-correction
+    THEME-JARVIS-B9 --> FIN-fin-correction
+    THEME-JARVIS-B10 --> FIN-fin-correction
+    THEME-JARVIS-B11 --> FIN-fin-correction
+    RACINE -- "OUTILS-COMBOS" --> THEME-OUTILS-COMBOS
+    THEME-OUTILS-COMBOS["Corriger un outil ou combo v2 en appliquant le proto 5"]
+    THEME-OUTILS-COMBOS -- "besoin 1" --> THEME-OUTILS-COMBOS-B0
+    THEME-OUTILS-COMBOS-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-OUTILS-COMBOS -- "besoin 2" --> THEME-OUTILS-COMBOS-B1
+    THEME-OUTILS-COMBOS-B1["Consulter les lecons (domaine freelance)"]
+    THEME-OUTILS-COMBOS -- "besoin 3" --> THEME-OUTILS-COMBOS-B2
+    THEME-OUTILS-COMBOS-B2["CONTEXTE : activite recente"]
+    THEME-OUTILS-COMBOS -- "besoin 4" --> THEME-OUTILS-COMBOS-B3
+    THEME-OUTILS-COMBOS-B3["Lire le cahier de dev"]
+    THEME-OUTILS-COMBOS -- "besoin 5" --> THEME-OUTILS-COMBOS-B4
+    THEME-OUTILS-COMBOS-B4["Lire le PROTOCOLE 5 (outils/combos) (case c6)"]
+    THEME-OUTILS-COMBOS -- "besoin 6" --> THEME-OUTILS-COMBOS-B5
+    THEME-OUTILS-COMBOS-B5["Lire l outil a corriger (case c6b)"]
+    THEME-OUTILS-COMBOS -- "besoin 7" --> THEME-OUTILS-COMBOS-B6
+    THEME-OUTILS-COMBOS-B6["Appliquer la correction"]
+    THEME-OUTILS-COMBOS -- "besoin 8" --> THEME-OUTILS-COMBOS-B7
+    THEME-OUTILS-COMBOS-B7["Verifier la correction"]
+    THEME-OUTILS-COMBOS -- "besoin 9" --> THEME-OUTILS-COMBOS-B8
+    THEME-OUTILS-COMBOS-B8["Produire le rapport"]
+    THEME-OUTILS-COMBOS -- "besoin 10" --> THEME-OUTILS-COMBOS-B9
+    THEME-OUTILS-COMBOS-B9["Historiser l intervention"]
+    THEME-OUTILS-COMBOS -- "besoin 11" --> THEME-OUTILS-COMBOS-B10
+    THEME-OUTILS-COMBOS-B10["Mettre a jour le cahier de dev"]
+    THEME-OUTILS-COMBOS -- "besoin 12" --> THEME-OUTILS-COMBOS-B11
+    THEME-OUTILS-COMBOS-B11["Ajouter les lecons"]
+    THEME-OUTILS-COMBOS-B0 --> FIN-fin-correction
+    THEME-OUTILS-COMBOS-B1 --> FIN-fin-correction
+    THEME-OUTILS-COMBOS-B2 --> FIN-fin-correction
+    THEME-OUTILS-COMBOS-B3 --> FIN-fin-correction
+    THEME-OUTILS-COMBOS-B4 --> FIN-fin-correction
+    THEME-OUTILS-COMBOS-B5 --> FIN-fin-correction
+    THEME-OUTILS-COMBOS-B6 --> FIN-fin-correction
+    THEME-OUTILS-COMBOS-B7 --> FIN-fin-correction
+    THEME-OUTILS-COMBOS-B8 --> FIN-fin-correction
+    THEME-OUTILS-COMBOS-B9 --> FIN-fin-correction
+    THEME-OUTILS-COMBOS-B10 --> FIN-fin-correction
+    THEME-OUTILS-COMBOS-B11 --> FIN-fin-correction
+    RACINE -- "ROUTINES" --> THEME-ROUTINES
+    THEME-ROUTINES["Corriger les routines v2 en appliquant le proto 3"]
+    THEME-ROUTINES -- "besoin 1" --> THEME-ROUTINES-B0
+    THEME-ROUTINES-B0["Verifier le systeme"]
+    THEME-ROUTINES -- "besoin 2" --> THEME-ROUTINES-B1
+    THEME-ROUTINES-B1["Consulter les lecons"]
+    THEME-ROUTINES -- "besoin 3" --> THEME-ROUTINES-B2
+    THEME-ROUTINES-B2["CONTEXTE : activite recente"]
+    THEME-ROUTINES -- "besoin 4" --> THEME-ROUTINES-B3
+    THEME-ROUTINES-B3["Lire le cahier de dev"]
+    THEME-ROUTINES -- "besoin 5" --> THEME-ROUTINES-B4
+    THEME-ROUTINES-B4["Lire le PROTOCOLE 3 (routines) (case c7b)"]
+    THEME-ROUTINES -- "besoin 6" --> THEME-ROUTINES-B5
+    THEME-ROUTINES-B5["Lire les routines a corriger (case c7c)"]
+    THEME-ROUTINES -- "besoin 7" --> THEME-ROUTINES-B6
+    THEME-ROUTINES-B6["Appliquer la correction"]
+    THEME-ROUTINES -- "besoin 8" --> THEME-ROUTINES-B7
+    THEME-ROUTINES-B7["Verifier la correction"]
+    THEME-ROUTINES -- "besoin 9" --> THEME-ROUTINES-B8
+    THEME-ROUTINES-B8["Produire le rapport"]
+    THEME-ROUTINES -- "besoin 10" --> THEME-ROUTINES-B9
+    THEME-ROUTINES-B9["Historiser l intervention"]
+    THEME-ROUTINES -- "besoin 11" --> THEME-ROUTINES-B10
+    THEME-ROUTINES-B10["Mettre a jour le cahier de dev"]
+    THEME-ROUTINES -- "besoin 12" --> THEME-ROUTINES-B11
+    THEME-ROUTINES-B11["Ajouter les lecons"]
+    THEME-ROUTINES-B0 --> FIN-fin-correction
+    THEME-ROUTINES-B1 --> FIN-fin-correction
+    THEME-ROUTINES-B2 --> FIN-fin-correction
+    THEME-ROUTINES-B3 --> FIN-fin-correction
+    THEME-ROUTINES-B4 --> FIN-fin-correction
+    THEME-ROUTINES-B5 --> FIN-fin-correction
+    THEME-ROUTINES-B6 --> FIN-fin-correction
+    THEME-ROUTINES-B7 --> FIN-fin-correction
+    THEME-ROUTINES-B8 --> FIN-fin-correction
+    THEME-ROUTINES-B9 --> FIN-fin-correction
+    THEME-ROUTINES-B10 --> FIN-fin-correction
+    THEME-ROUTINES-B11 --> FIN-fin-correction
+    RACINE -- "PROTOCOLES" --> THEME-PROTOCOLES
+    THEME-PROTOCOLES["Corriger un protocole v2 en appliquant le proto 6"]
+    THEME-PROTOCOLES -- "besoin 1" --> THEME-PROTOCOLES-B0
+    THEME-PROTOCOLES-B0["Verifier le systeme"]
+    THEME-PROTOCOLES -- "besoin 2" --> THEME-PROTOCOLES-B1
+    THEME-PROTOCOLES-B1["Consulter les lecons"]
+    THEME-PROTOCOLES -- "besoin 3" --> THEME-PROTOCOLES-B2
+    THEME-PROTOCOLES-B2["CONTEXTE : activite recente"]
+    THEME-PROTOCOLES -- "besoin 4" --> THEME-PROTOCOLES-B3
+    THEME-PROTOCOLES-B3["Lire le cahier de dev"]
+    THEME-PROTOCOLES -- "besoin 5" --> THEME-PROTOCOLES-B4
+    THEME-PROTOCOLES-B4["Lire le PROTOCOLE 6 (protocoles) (case c14)"]
+    THEME-PROTOCOLES -- "besoin 6" --> THEME-PROTOCOLES-B5
+    THEME-PROTOCOLES-B5["Lire le protocole a corriger (case c14b)"]
+    THEME-PROTOCOLES -- "besoin 7" --> THEME-PROTOCOLES-B6
+    THEME-PROTOCOLES-B6["Appliquer la correction"]
+    THEME-PROTOCOLES -- "besoin 8" --> THEME-PROTOCOLES-B7
+    THEME-PROTOCOLES-B7["Verifier la correction"]
+    THEME-PROTOCOLES -- "besoin 9" --> THEME-PROTOCOLES-B8
+    THEME-PROTOCOLES-B8["Produire le rapport"]
+    THEME-PROTOCOLES -- "besoin 10" --> THEME-PROTOCOLES-B9
+    THEME-PROTOCOLES-B9["Historiser l intervention"]
+    THEME-PROTOCOLES -- "besoin 11" --> THEME-PROTOCOLES-B10
+    THEME-PROTOCOLES-B10["Mettre a jour le cahier de dev"]
+    THEME-PROTOCOLES -- "besoin 12" --> THEME-PROTOCOLES-B11
+    THEME-PROTOCOLES-B11["Ajouter les lecons"]
+    THEME-PROTOCOLES-B0 --> FIN-fin-correction
+    THEME-PROTOCOLES-B1 --> FIN-fin-correction
+    THEME-PROTOCOLES-B2 --> FIN-fin-correction
+    THEME-PROTOCOLES-B3 --> FIN-fin-correction
+    THEME-PROTOCOLES-B4 --> FIN-fin-correction
+    THEME-PROTOCOLES-B5 --> FIN-fin-correction
+    THEME-PROTOCOLES-B6 --> FIN-fin-correction
+    THEME-PROTOCOLES-B7 --> FIN-fin-correction
+    THEME-PROTOCOLES-B8 --> FIN-fin-correction
+    THEME-PROTOCOLES-B9 --> FIN-fin-correction
+    THEME-PROTOCOLES-B10 --> FIN-fin-correction
+    THEME-PROTOCOLES-B11 --> FIN-fin-correction
+    RACINE -- "REGLES" --> THEME-REGLES
+    THEME-REGLES["Corriger les regles-immuables v2 en appliquant le proto 7"]
+    THEME-REGLES -- "besoin 1" --> THEME-REGLES-B0
+    THEME-REGLES-B0["Verifier le systeme"]
+    THEME-REGLES -- "besoin 2" --> THEME-REGLES-B1
+    THEME-REGLES-B1["Consulter les lecons"]
+    THEME-REGLES -- "besoin 3" --> THEME-REGLES-B2
+    THEME-REGLES-B2["CONTEXTE : activite recente"]
+    THEME-REGLES -- "besoin 4" --> THEME-REGLES-B3
+    THEME-REGLES-B3["Lire le cahier de dev"]
+    THEME-REGLES -- "besoin 5" --> THEME-REGLES-B4
+    THEME-REGLES-B4["Lire le PROTOCOLE 7 (regles-immuables) (case c15)"]
+    THEME-REGLES -- "besoin 6" --> THEME-REGLES-B5
+    THEME-REGLES-B5["Lire les regles a corriger (case c15b)"]
+    THEME-REGLES -- "besoin 7" --> THEME-REGLES-B6
+    THEME-REGLES-B6["Appliquer la correction"]
+    THEME-REGLES -- "besoin 8" --> THEME-REGLES-B7
+    THEME-REGLES-B7["Verifier la correction"]
+    THEME-REGLES -- "besoin 9" --> THEME-REGLES-B8
+    THEME-REGLES-B8["Produire le rapport"]
+    THEME-REGLES -- "besoin 10" --> THEME-REGLES-B9
+    THEME-REGLES-B9["Historiser l intervention"]
+    THEME-REGLES -- "besoin 11" --> THEME-REGLES-B10
+    THEME-REGLES-B10["Mettre a jour le cahier de dev"]
+    THEME-REGLES -- "besoin 12" --> THEME-REGLES-B11
+    THEME-REGLES-B11["Ajouter les lecons"]
+    THEME-REGLES-B0 --> FIN-fin-correction
+    THEME-REGLES-B1 --> FIN-fin-correction
+    THEME-REGLES-B2 --> FIN-fin-correction
+    THEME-REGLES-B3 --> FIN-fin-correction
+    THEME-REGLES-B4 --> FIN-fin-correction
+    THEME-REGLES-B5 --> FIN-fin-correction
+    THEME-REGLES-B6 --> FIN-fin-correction
+    THEME-REGLES-B7 --> FIN-fin-correction
+    THEME-REGLES-B8 --> FIN-fin-correction
+    THEME-REGLES-B9 --> FIN-fin-correction
+    THEME-REGLES-B10 --> FIN-fin-correction
+    THEME-REGLES-B11 --> FIN-fin-correction
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Effectuer une correction non classifiee dans le dossier free"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Verifier le systeme"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["Consulter les lecons"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["CONTEXTE : activite recente"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["Lire le cahier de dev"]
+    THEME-AUTRE -- "besoin 5" --> THEME-AUTRE-B4
+    THEME-AUTRE-B4["Lire le fichier a corriger (case c8)"]
+    THEME-AUTRE -- "besoin 6" --> THEME-AUTRE-B5
+    THEME-AUTRE-B5["Verifier que le fichier est dans freelance/"]
+    THEME-AUTRE -- "besoin 7" --> THEME-AUTRE-B6
+    THEME-AUTRE-B6["Appliquer la correction"]
+    THEME-AUTRE -- "besoin 8" --> THEME-AUTRE-B7
+    THEME-AUTRE-B7["Verifier la correction"]
+    THEME-AUTRE -- "besoin 9" --> THEME-AUTRE-B8
+    THEME-AUTRE-B8["Produire le rapport"]
+    THEME-AUTRE -- "besoin 10" --> THEME-AUTRE-B9
+    THEME-AUTRE-B9["Historiser l intervention"]
+    THEME-AUTRE -- "besoin 11" --> THEME-AUTRE-B10
+    THEME-AUTRE-B10["Mettre a jour le cahier de dev"]
+    THEME-AUTRE -- "besoin 12" --> THEME-AUTRE-B11
+    THEME-AUTRE-B11["Ajouter les lecons"]
+    THEME-AUTRE-B0 --> FIN-fin-correction
+    THEME-AUTRE-B1 --> FIN-fin-correction
+    THEME-AUTRE-B2 --> FIN-fin-correction
+    THEME-AUTRE-B3 --> FIN-fin-correction
+    THEME-AUTRE-B4 --> FIN-fin-correction
+    THEME-AUTRE-B5 --> FIN-fin-correction
+    THEME-AUTRE-B6 --> FIN-fin-correction
+    THEME-AUTRE-B7 --> FIN-fin-correction
+    THEME-AUTRE-B8 --> FIN-fin-correction
+    THEME-AUTRE-B9 --> FIN-fin-correction
+    THEME-AUTRE-B10 --> FIN-fin-correction
+    THEME-AUTRE-B11 --> FIN-fin-correction
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

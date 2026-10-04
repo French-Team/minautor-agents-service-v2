@@ -1,0 +1,22 @@
+=== Garde-fou : fichiers compagnons du bumper (mettre-a-jour-versions) ===
+  [OK] 1. bumper present
+  [OK] 1b. compilation OK
+  [OK] 1c. --version v0.1.5
+  [OK] 2. motif md present dans le code
+  [OK] 2b. motif md couvre les 2 formats de doc
+  [OK] 3. bump dry-run lanceur : section compagnons affichee
+  [OK] 3b. au moins 1 test compagnon liste (pince la version)
+  [OK] 3c. verdict KO (compagnons a adapter)
+  [OK] 4. option --nouvelle fonctionne (0.6.2 -> 0.6.3 dry-run)
+  [OK] 5. ASCII strict : 0 non-ASCII (outil + test)
+  [OK] 5b. LF pur : 0 CRLF (outil + test)
+
+=== CHRONO test-066 (total 2.1s) ===
+  [chrono] 1. outil                            0.28s
+  [chrono] 2. motif md                         0.02s
+  [chrono] 3. preuve compagnons                0.84s
+  [chrono] 4. --nouvelle                       0.99s
+  [chrono] 5. normes                           0.00s
+
+=== RESULTAT : 11 OK / 0 KO (sur 11 points) ===
+=== VERDICT : PROPRE (compagnons signales) ===

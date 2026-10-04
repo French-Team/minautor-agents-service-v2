@@ -1,0 +1,19 @@
+=== Garde-fou : detecter-troncatures v0.2.0 (elements tronques / illisibles) ===
+  [OK] 1. --version = 0.2.0
+  [OK] 2. --aide liste --tous, --seuil-lignes et --exclure
+  [OK] 3. fichier sain -> PROPRE (0 probleme)
+  [OK] 4. fichier 10 lignes (seuil 5) -> FICHIER_TROUQUE
+  [OK] 5. JSON invalide -> BLOC_NON_FERME
+  [OK] 6. marqueur [tronque] -> MARQUEUR_TRONCATURE
+  [OK] 6b. binaire (octets NUL) -> PROPRE (v0.2.0)
+  [OK] 6c. marqueur cite dans une docstring -> NON detecte
+  [OK] 7. preuve negative : sans marqueur PROPRE, avec marqueur detecte
+  [OK] 8. --rapport ecrit le rapport markdown
+  [OK] 7b. --exclure exclut reellement la cible (detecte sans, PROPRE avec)
+  [OK] 9. parite .sh : --version = 0.2.0
+  [OK] 10. dossier temp SUPPRIME en fin de test (0 trace)
+  [OK] 11. normes : 0 non-ASCII (test + outil py/sh/md)
+  [OK] 11b. normes : 0 CRLF (test + outil py/sh/md)
+
+=== RESULTAT : 15 OK / 0 KO (sur 15 points) ===
+=== VERDICT : PROPRE (detecter-troncatures verrouille) ===

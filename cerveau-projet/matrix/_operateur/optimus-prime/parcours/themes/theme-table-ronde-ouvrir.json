@@ -1,0 +1,37 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "TABLE-RONDE-OUVRIR",
+    "description": "Ouvrir la table -- Ouvrir une table ronde : nommer le SUJET, puis laisser les 5 profils le lire seuls. Aucun profil n est force de parler d un sujet qui ne le concerne pas."
+  },
+  "theme": {
+    "nom": "TABLE-RONDE-OUVRIR",
+    "but": "Ouvrir une table ronde : nommer le SUJET, puis laisser les 5 profils le lire seuls. Aucun profil n est force de parler d un sujet qui ne le concerne pas.",
+    "redirects": [
+      {
+        "besoin": "Ouvrir le sujet",
+        "action": "procedure",
+        "etapes": [
+          "Donner le slug de la table (`--table <slug>`) : sans nom, deux tables se confondent",
+          "Ecrire le SUJET en une phrase, et nommer ce que la table doit produire a la fin"
+        ],
+        "regle": "Ecrire le SUJET en une phrase, et nommer ce que la table doit produire a la fin"
+      },
+      {
+        "besoin": "Ne pas preparer les analyses",
+        "action": "procedure",
+        "etapes": [
+          "Le combo ne REDIGE pas les analyses : il donne le tour de table",
+          "Une analyse ecrite d avance par l agent n est plus celle d un profil"
+        ],
+        "regle": "Une analyse ecrite d avance par l agent n est plus celle d un profil"
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

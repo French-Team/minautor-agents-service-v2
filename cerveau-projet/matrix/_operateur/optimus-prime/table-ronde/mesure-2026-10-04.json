@@ -1,0 +1,5271 @@
+{
+  "bases_de_resolution": [
+    "",
+    "matrice",
+    "_operateur/optimus-prime",
+    "_operateur/optimus-prime/super-combos/combos/outils",
+    "_operateur/optimus-prime/super-combos/combos",
+    "_operateur/optimus-prime/super-combos"
+  ],
+  "blames": [
+    {
+      "ce_que_ca_dit": "a nommer, pas a sanctionner",
+      "famille": "CONDITION TOUJOURS VRAIE",
+      "ou": [
+        "Z:\\analyste-in-console\\cerveau-projet\\matrix\\_operateur\\optimus-prime\\super-combos\\sc-006-lacunes\\main.py:339"
+      ],
+      "pourquoi": "un `or True`, un `and False` ou une comparaison d un operande pur a lui-meme : la condition ne depend plus de ses entrees, donc le controle passe toujours et lit le fichier pour rien",
+      "trouve": 1
+    },
+    {
+      "ce_que_ca_dit": "rien a corriger pour cette famille",
+      "famille": "BOUCLE VIDE",
+      "ou": [],
+      "pourquoi": "un corps de boucle qui ne contient que `pass` : la boucle existe pour une raison qu elle ne dit plus",
+      "trouve": 0
+    },
+    {
+      "ce_que_ca_dit": "rien a corriger pour cette famille",
+      "famille": "FORMAT DE DATE LITTERAL",
+      "ou": [],
+      "pourquoi": "un `strftime` ou `strptime` dont le format ne contient aucun `%` (constante ou nom resolu) : il rend la chaine qu on lui a donnee, donc une vue publie une date fausse",
+      "trouve": 0
+    }
+  ],
+  "etat": "A_REPRENDRE",
+  "livrables_indeterminables": [
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-536",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-cameleon.md",
+      "mission": "MO-030",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-030",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-031",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/main.py",
+      "mission": "MO-035",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/retirer/entry.py",
+      "mission": "MO-035",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/retirer/fonctions.py",
+      "mission": "MO-035",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/routines/veille-flux/commun.py",
+      "mission": "MO-035",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/routines/veille-flux/constants.py",
+      "mission": "MO-035",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/routines/veille-flux/passe/fonctions.py",
+      "mission": "MO-035",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/espions/registre/registre.json",
+      "mission": "MO-036",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/remorque/inventaire.json",
+      "mission": "MO-036",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "matrix/matrice/intercom/matrice/inbox.jsonl (RACINE",
+      "mission": "MO-037",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "parasite -- SUPPRIME)",
+      "mission": "MO-037",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "tmp-cameleon/_cobaye-injection-catalogue.py",
+      "mission": "MO-041",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "super-combos/combos/lancer-super-combos.py",
+      "mission": "MO-043",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "super-combos/combos/lancer-super-combos.py",
+      "mission": "MO-045",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/profil/questionnaire.py",
+      "mission": "MO-051",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/questionnaire.py",
+      "mission": "MO-051",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/commun/fiche_profil.py",
+      "mission": "MO-051",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/suivi-optimus/archiver/entry.py",
+      "mission": "MO-052",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/suivi-optimus/archiver/fonctions.py",
+      "mission": "MO-052",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/routines/suivi-sync/commun.py",
+      "mission": "MO-052",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/routines/suivi-sync/main.py",
+      "mission": "MO-053",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "tmp-cameleon/_cobaye-injection-catalogue.py",
+      "mission": "MO-068",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/commun.py",
+      "mission": "MO-092",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-observations-non-redondantes.py",
+      "mission": "MO-092",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-sessions/ajouter/fonctions.py",
+      "mission": "MO-092",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "preparation/inventaire-types-a-valider.md",
+      "mission": "MO-113",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "preparation/inventaire-types-a-valider.md",
+      "mission": "MO-114",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "tmp-cameleon/README.md",
+      "mission": "MO-136",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "tmp-cameleon/README.md",
+      "mission": "MO-147",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-150",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/manuel-outils.md",
+      "mission": "MO-169",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/ecrire/DESCRIPTION.md",
+      "mission": "MO-169",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/ecrire/commun.py",
+      "mission": "MO-169",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/ecrire/constants.py",
+      "mission": "MO-169",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/ecrire/ecrire/entry.py",
+      "mission": "MO-169",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/ecrire/editer/entry.py",
+      "mission": "MO-169",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/revert-fichier.py",
+      "mission": "MO-170",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/manuel-outils.md",
+      "mission": "MO-170",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/ecrire/DESCRIPTION.md",
+      "mission": "MO-170",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/ecrire/commun.py",
+      "mission": "MO-170",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/checklist/entry.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/classer/entry.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/retiqueter/entry.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/retirer/entry.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/urgencer/entry.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/vrac/entry.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/commun/options.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-activites/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conventions-matrice/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-historique/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-lecons/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-modifications/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-protocoles-matrice/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-regles-matrice/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-sessions/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-usages/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-variables/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/benchmark/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/dialoguer/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/dupliquer-template/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/ecrire/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/ecrire/constants.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/editer-agents-md/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/executer/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/lire/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/lister/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/machine-defcon/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/maintenir/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/pause-session/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/rechercher/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/signaler/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/suivi-optimus/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/theme-vivier/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/pilote/checklist/entry.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/pilote/commun.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/pilote/entonnoir/classer/entry.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/pilote/entonnoir/retirer/entry.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/pilote/entonnoir/urgencer/entry.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/pilote/entonnoir/vrac/entry.py",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/templates/outil-bdd/commun.py.moule",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/templates/theme-bdd/commun.py.moule",
+      "mission": "MO-171",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/audits/audit-pilote-erreurs-travail.md",
+      "mission": "MO-174",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/commun.py",
+      "mission": "MO-174",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/constants.py",
+      "mission": "MO-174",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/fin/entry.py",
+      "mission": "MO-174",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/fin/fonctions.py",
+      "mission": "MO-174",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/injection/fonctions.py",
+      "mission": "MO-174",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py",
+      "mission": "MO-174",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-contrat-fondamental.py",
+      "mission": "MO-174",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/constants.py",
+      "mission": "MO-175",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/vrac/entry.py",
+      "mission": "MO-175",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/fin/fonctions.py",
+      "mission": "MO-175",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/injection/fonctions.py",
+      "mission": "MO-175",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py",
+      "mission": "MO-175",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-contrat-fondamental.py",
+      "mission": "MO-175",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/creer-combo.py",
+      "mission": "MO-202",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/registry.json",
+      "mission": "MO-202",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-004-auto-diagnostic/README.md",
+      "mission": "MO-202",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-004-auto-diagnostic/main.py",
+      "mission": "MO-202",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py",
+      "mission": "MO-215",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-004-auto-diagnostic/main.py",
+      "mission": "MO-215",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/commun/sac_a_dos.py",
+      "mission": "MO-215",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/inventaire-systeme/main.py",
+      "mission": "MO-215",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/registre-outils/main.py",
+      "mission": "MO-215",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "AGENTS.md",
+      "mission": "MO-216",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/main.py",
+      "mission": "MO-216",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/editer-agents-md/commun.py",
+      "mission": "MO-216",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/selecteur-flux/main.py",
+      "mission": "MO-216",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-216",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "AGENTS.md",
+      "mission": "MO-217",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/cockpit/cockpit-matrice.py",
+      "mission": "MO-217",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/docs/heritage-v1-v2-AGENTS.md",
+      "mission": "MO-217",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-cartes-identite.py",
+      "mission": "MO-218",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/vrac/fonctions.py",
+      "mission": "MO-220",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/preparation/README.md",
+      "mission": "MO-220",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/preparation/spec-chaine-pense-bete.md",
+      "mission": "MO-220",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/preparation/spec-chaine-pense-bete.md",
+      "mission": "MO-221",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/routines/vigie-portes/constants.py",
+      "mission": "MO-222",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/routines/vigie-portes/tour/fonctions.py",
+      "mission": "MO-222",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/ecrire/commun.py",
+      "mission": "MO-223",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/ecrire/constants.py",
+      "mission": "MO-223",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-004-auto-diagnostic/main.py",
+      "mission": "MO-237",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-004-auto-diagnostic/main.py",
+      "mission": "MO-238",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/maintenir/maintenir/entry.py",
+      "mission": "MO-239",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-cartes-identite.py",
+      "mission": "MO-241",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/audits/audit-defcon-declenchement.md",
+      "mission": "MO-242",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir/vrac/fonctions.py",
+      "mission": "MO-243",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/signaler/constants.py",
+      "mission": "MO-244",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/signaler/main.py",
+      "mission": "MO-244",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-chaines.py",
+      "mission": "MO-246",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-chaines.py",
+      "mission": "MO-247",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/conventions-matrice.json",
+      "mission": "MO-247",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py",
+      "mission": "MO-248",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/CROCHETS.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/audits/audit-pilote-erreurs-travail.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/cockpit/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/conventions/convention-chemins-liens-noms-flags.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/conventions/convention-nommage-numerote.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/conventions/convention-py-compile.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/espions/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/MOTS-CLES.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/README-cycle.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/README-profil.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/indices.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/injection/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/preparation/inventaire-types.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/preparation/journal-preparation.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/protocoles/proto-2-auto-evolution.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/protocoles/proto-6-route-mission.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/remorque/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/remorque/remorque-optimus.py",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-001-lecons/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-002-variables/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-003-historique/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-004-modifications/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-005-usages/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-006-activites/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/c-007-frictions/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/combos-readme.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/outils-readme.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-commandes.py",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-001-auto-xxx/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-002-auto-evolution/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-003-auto-suivi/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-004-auto-diagnostic/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/super-combos-readme.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/lancer.py",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/manuel-outils.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conventions-matrice/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-lecons/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-modifications/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-protocoles-matrice/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-regles-matrice/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-sessions/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/chaine-pense-bete/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/domicilier/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/dupliquer-template/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/ecrire/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/lire/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/lister/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/suivi-optimus/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/theme-vivier/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/pilote/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/pilote/indices.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/pilote/injection/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/routines/espion-integrite/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/routines/routeur-maintenance/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/routines/routines-readme.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/routines/veille-flux/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/routines/vie/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/routines/vigie-portes/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/routines/vigie-profil/DESCRIPTION.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/templates/outil-bdd/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/templates/theme-bdd/README.md",
+      "mission": "MO-249",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-250",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/ecrire/DESCRIPTION.md",
+      "mission": "MO-286",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/ecrire/main.py",
+      "mission": "MO-286",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/file-missions-optimus.json",
+      "mission": "MO-287",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/audits/audit-priorite-marbre.md",
+      "mission": "MO-288",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-289",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/suivi-optimus/main.py",
+      "mission": "MO-290",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/suivi-optimus.jsonl",
+      "mission": "MO-290",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/remorque/README.md",
+      "mission": "MO-291",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/remorque/remorque-optimus.py",
+      "mission": "MO-291",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-commandes.py",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/lancer.py",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/commun/resolution_outils.py",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/manuel-outils.md",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/chaine-pense-bete/commun.py",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/chaine-pense-bete/constants.py",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/dialoguer/commun.py",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/dialoguer/constants.py",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/domicilier/commun.py",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/domicilier/constants.py",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/machine-defcon/constants.py",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/machine-defcon/monter/entry.py",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/machine-defcon/surveiller/entry.py",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/pause-session/constants.py",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/pause-session/perimetre/fonctions.py",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/tmp-cobaye-commandes.md",
+      "mission": "MO-292",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/remorque/inventaire.json",
+      "mission": "MO-293",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py",
+      "mission": "MO-293",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/outils-readme.md",
+      "mission": "MO-293",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-resolution.py",
+      "mission": "MO-293",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/pause-session/constants.py",
+      "mission": "MO-293",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py",
+      "mission": "MO-294",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/outils-readme.md",
+      "mission": "MO-294",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-resolution.py",
+      "mission": "MO-294",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/domicilier/cobaye-appelant-eo289.py",
+      "mission": "MO-294",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/commun/resolution_outils.py",
+      "mission": "MO-295",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-295",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/audits/audit-missions-accumulees.md",
+      "mission": "MO-296",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/audits/audit-missions-accumulees.md",
+      "mission": "MO-297",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/entonnoir-files-optimus.json",
+      "mission": "MO-297",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/file-missions-optimus.json",
+      "mission": "MO-297",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/CROCHETS.md",
+      "mission": "MO-298",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/preparation/chaine-reparation-de-masse-des-32-refus-muets.md",
+      "mission": "MO-299",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/balayer/entry.py",
+      "mission": "MO-306",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/constants.py",
+      "mission": "MO-306",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/balayer/entry.py",
+      "mission": "MO-307",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/constants.py",
+      "mission": "MO-307",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/DESCRIPTION.md",
+      "mission": "MO-308",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/archiver/entry.py",
+      "mission": "MO-308",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/archiver/fonctions.py",
+      "mission": "MO-308",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/archiver/purge.py",
+      "mission": "MO-308",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/constants.py",
+      "mission": "MO-308",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/main.py",
+      "mission": "MO-308",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/commun.py",
+      "mission": "MO-309",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/constants.py",
+      "mission": "MO-309",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/fin/fonctions.py",
+      "mission": "MO-309",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/DESCRIPTION.md",
+      "mission": "MO-309",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/borne/entry.py",
+      "mission": "MO-309",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/borne/fonctions.py",
+      "mission": "MO-309",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/constants.py",
+      "mission": "MO-309",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/main.py",
+      "mission": "MO-309",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/verifier/entry.py",
+      "mission": "MO-309",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/verifier/plafond.py",
+      "mission": "MO-309",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "docs/conversation-unslot-gemma-4.md",
+      "mission": "MO-320",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "remorque-README.md",
+      "mission": "MO-330",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/balayer/entry.py",
+      "mission": "MO-344",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/bdd-conservation/constants.py",
+      "mission": "MO-344",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/suivi-pilote/README.md",
+      "mission": "MO-347",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/suivi-pilote/pannes-declarees.json",
+      "mission": "MO-347",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/suivi-pilote/suivi-pilote.jsonl",
+      "mission": "MO-347",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/suivi-pilote/suivi-pilote.md",
+      "mission": "MO-347",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/suivi-pilote/templates/README.md",
+      "mission": "MO-347",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/suivi-pilote/templates/suivi-bdd/declaration.json.moule",
+      "mission": "MO-347",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/suivi-pilote/templates/suivi-bdd/suivi.md.moule",
+      "mission": "MO-347",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py",
+      "mission": "MO-347",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/outils-readme.md",
+      "mission": "MO-347",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/poser-template-pilote.py",
+      "mission": "MO-347",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/suivi-pilote.py",
+      "mission": "MO-347",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-363",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-364",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/audits/zz-mo385-cobaye-muet.py",
+      "mission": "MO-385",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-extraction-ecarts.py",
+      "mission": "MO-385",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/zz-mo385-cobaye-muet.py",
+      "mission": "MO-385",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/lecons.json",
+      "mission": "MO-385",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/conventions/convention-credibilite-mission-ancienne.md",
+      "mission": "MO-386",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/conventions/conventions-readme.md",
+      "mission": "MO-386",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/credibilite/credibilite-verdicts.jsonl",
+      "mission": "MO-386",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/outils-readme.md",
+      "mission": "MO-386",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-credibilite-missions.py",
+      "mission": "MO-386",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-386",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/conventions/convention-credibilite-mission-ancienne.md",
+      "mission": "MO-387",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/commun.py",
+      "mission": "MO-387",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/constants.py",
+      "mission": "MO-387",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/injection/cycle.py",
+      "mission": "MO-387",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/outils-readme.md",
+      "mission": "MO-387",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/verifier-credibilite-missions.py",
+      "mission": "MO-387",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-387",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/pilote/file/fonctions.py",
+      "mission": "MO-388",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/suivi-pilote/README.md",
+      "mission": "MO-388",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/suivi-pilote/pannes-declarees.json",
+      "mission": "MO-388",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/suivi-pilote.py",
+      "mission": "MO-388",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "cerveau-projet/matrix/matrice/data/outils/suivi-optimus/constants.py",
+      "mission": "MO-388",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-389",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-391",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-393",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-410",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-411",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": ".freebuff/project-id",
+      "mission": "MO-463",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-cameleon.md",
+      "mission": "MO-463",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    },
+    {
+      "fichier": "demarrer-optimus-prime.md",
+      "mission": "MO-463",
+      "motif": "chemin sans base durable, non resolu ni accuse"
+    }
+  ],
+  "livrables_introuvables": [
+    {
+      "fichier": "_operateur/optimus-prime/parcours/themes/theme-crochet.json",
+      "mission": "MO-560"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/outils/DESCRIPTION.md",
+      "mission": "MO-566"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/table-ronde/tables/post-vol-agent-autonote.md",
+      "mission": "MO-569"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/table-ronde/tables/post-vol-agent-autonote.md",
+      "mission": "MO-570"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/auto-evolution/README.md",
+      "mission": "MO-030"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-activites/README.md",
+      "mission": "MO-041"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-activites/main.py",
+      "mission": "MO-041"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-frictions/README.md",
+      "mission": "MO-041"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-frictions/main.py",
+      "mission": "MO-041"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-historique/README.md",
+      "mission": "MO-041"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-historique/main.py",
+      "mission": "MO-041"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-lecons/README.md",
+      "mission": "MO-041"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-lecons/main.py",
+      "mission": "MO-041"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-modifications/README.md",
+      "mission": "MO-041"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-modifications/main.py",
+      "mission": "MO-041"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-usages/README.md",
+      "mission": "MO-041"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-usages/main.py",
+      "mission": "MO-041"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-variables/README.md",
+      "mission": "MO-041"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-variables/main.py",
+      "mission": "MO-041"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-activites/main.py",
+      "mission": "MO-042"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-frictions/main.py",
+      "mission": "MO-042"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-historique/main.py",
+      "mission": "MO-042"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-lecons/main.py",
+      "mission": "MO-042"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-modifications/main.py",
+      "mission": "MO-042"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-usages/main.py",
+      "mission": "MO-042"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/combo-variables/main.py",
+      "mission": "MO-042"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/activites/README.md",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/activites/main.py",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/auto-evolution/README.md",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/auto-evolution/main.py",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/auto-xxx/README.md",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/auto-xxx/main.py",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/frictions/README.md",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/frictions/main.py",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/historique/README.md",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/historique/main.py",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/lecons/README.md",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/lecons/main.py",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/modifications/README.md",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/modifications/main.py",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/usages/README.md",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/usages/main.py",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/variables/README.md",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/variables/main.py",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "matrice/data/commun/profil.py",
+      "mission": "MO-043"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/pilote/pilote/cycle-state.json",
+      "mission": "MO-057"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/sc-001-auto-xxx/main.py",
+      "mission": "MO-067"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/sc-002-auto-evolution/main.py",
+      "mission": "MO-067"
+    },
+    {
+      "fichier": "matrice/routines/espion-integrite/rotation/fonctions.py",
+      "mission": "MO-077"
+    },
+    {
+      "fichier": "matrice/routines/routeur-maintenance/routeur-archive-20260914.jsonl",
+      "mission": "MO-079"
+    },
+    {
+      "fichier": "matrice/_operateur/optimus-prime/pilote/commun.py",
+      "mission": "MO-091"
+    },
+    {
+      "fichier": "matrice/data/usages-outils-combos-archive-20260915.jsonl",
+      "mission": "MO-093"
+    },
+    {
+      "fichier": "matrice/matrice/routines/espion-integrite/constants.py",
+      "mission": "MO-095"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/pilote/cycle-state.json",
+      "mission": "MO-110"
+    },
+    {
+      "fichier": "matrice/pilote/cycle-state.json",
+      "mission": "MO-118"
+    },
+    {
+      "fichier": "matrice/_operateur/optimus-prime/pilote/commun.py",
+      "mission": "MO-120"
+    },
+    {
+      "fichier": "matrice/_operateur/optimus-prime/pilote/file/fonctions.py",
+      "mission": "MO-120"
+    },
+    {
+      "fichier": "matrice/_operateur/optimus-prime/pilote/fin/fonctions.py",
+      "mission": "MO-120"
+    },
+    {
+      "fichier": "matrice/_operateur/optimus-prime/pilote/commun.py",
+      "mission": "MO-121"
+    },
+    {
+      "fichier": "matrice/_operateur/optimus-prime/pilote/injection/cycle.py",
+      "mission": "MO-121"
+    },
+    {
+      "fichier": "matrice/tmp-optimus",
+      "mission": "MO-125"
+    },
+    {
+      "fichier": "matrice/tmp-optimus",
+      "mission": "MO-126"
+    },
+    {
+      "fichier": "matrice/tmp-optimus",
+      "mission": "MO-128"
+    },
+    {
+      "fichier": "matrice/tmp-optimus",
+      "mission": "MO-180"
+    },
+    {
+      "fichier": "matrice/tmp-cameleon/README.md",
+      "mission": "MO-189"
+    },
+    {
+      "fichier": "matrice/data/modifications.db",
+      "mission": "MO-191"
+    },
+    {
+      "fichier": "matrice/data/tmp-cobaye-commandes.md",
+      "mission": "MO-292"
+    },
+    {
+      "fichier": "matrice/data/outils/domicilier/cobaye-appelant-eo289.py",
+      "mission": "MO-294"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/audits/zz-mo385-cobaye-muet.py",
+      "mission": "MO-385"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/super-combos/combos/outils/zz-mo385-cobaye-muet.py",
+      "mission": "MO-385"
+    },
+    {
+      "fichier": "_operateur/optimus-prime/pilote/ontonnoir-files-optimus.json",
+      "mission": "MO-508"
+    }
+  ],
+  "livrables_renommes": [
+    {
+      "existe_aussi_sous": [
+        "_operateur\\optimus-prime\\super-combos\\lancer-super-combos.py"
+      ],
+      "fichier": "_operateur/optimus-prime/super-combos/combos/lancer-super-combos.py",
+      "mission": "MO-043",
+      "motif": "renommage : le nom de base existe ailleurs dans le parc"
+    },
+    {
+      "existe_aussi_sous": [
+        "_operateur\\optimus-prime\\super-combos\\lancer-super-combos.py"
+      ],
+      "fichier": "_operateur/optimus-prime/super-combos/combos/lancer-super-combos.py",
+      "mission": "MO-045",
+      "motif": "renommage : le nom de base existe ailleurs dans le parc"
+    },
+    {
+      "existe_aussi_sous": [
+        "_operateur\\optimus-prime\\conventions\\convention-nommage-numerote.md"
+      ],
+      "fichier": "matrice/_operateur/optimus-prime/conventions/convention-nommage-numerote.md",
+      "mission": "MO-046",
+      "motif": "renommage : le nom de base existe ailleurs dans le parc"
+    },
+    {
+      "existe_aussi_sous": [
+        "_operateur\\optimus-prime\\super-combos\\combos\\outils\\verifier-contrat-fondamental.py"
+      ],
+      "fichier": "matrice/_operateur/optimus-prime/super-combos/combos/outils/verifier-contrat-fondamental.py",
+      "mission": "MO-046",
+      "motif": "renommage : le nom de base existe ailleurs dans le parc"
+    },
+    {
+      "existe_aussi_sous": [
+        "_operateur\\optimus-prime\\super-combos\\combos\\outils\\lanceur-non-regression-flux.py"
+      ],
+      "fichier": "matrice/_operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression-flux.py",
+      "mission": "MO-048",
+      "motif": "renommage : le nom de base existe ailleurs dans le parc"
+    },
+    {
+      "existe_aussi_sous": [
+        "_operateur\\optimus-prime\\pilote\\profil\\questionnaire.py"
+      ],
+      "fichier": "_operateur/optimus-prime/pilote/questionnaire.py",
+      "mission": "MO-051",
+      "motif": "renommage : le nom de base existe ailleurs dans le parc"
+    },
+    {
+      "existe_aussi_sous": [
+        "_operateur\\optimus-prime\\super-combos\\lancer-super-combos.py"
+      ],
+      "fichier": "_operateur/optimus-prime/super-combos/combos/lancer-super-combos.py",
+      "mission": "MO-067",
+      "motif": "renommage : le nom de base existe ailleurs dans le parc"
+    },
+    {
+      "existe_aussi_sous": [
+        "_operateur\\optimus-prime\\pilote\\file-missions-optimus-archive.json"
+      ],
+      "fichier": "matrice/_operateur/optimus-prime/pilote/file-missions-optimus-archive.json",
+      "mission": "MO-091",
+      "motif": "renommage : le nom de base existe ailleurs dans le parc"
+    },
+    {
+      "existe_aussi_sous": [
+        "matrice\\data\\data-readme.md"
+      ],
+      "fichier": "matrice/data/outils/data-readme.md",
+      "mission": "MO-095",
+      "motif": "renommage : le nom de base existe ailleurs dans le parc"
+    },
+    {
+      "existe_aussi_sous": [
+        "matrice\\data\\data-readme.md"
+      ],
+      "fichier": "matrice/matrice/data/data-readme.md",
+      "mission": "MO-095",
+      "motif": "renommage : le nom de base existe ailleurs dans le parc"
+    },
+    {
+      "existe_aussi_sous": [
+        "matrice\\data\\manuel-outils.md"
+      ],
+      "fichier": "matrice/matrice/data/manuel-outils.md",
+      "mission": "MO-095",
+      "motif": "renommage : le nom de base existe ailleurs dans le parc"
+    }
+  ],
+  "mesure_le": "2026-10-04 06:39:46",
+  "missions_jouees": [
+    {
+      "bilan": true,
+      "id": "MO-523",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-524",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-525",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-526",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-527",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-528",
+      "statut": "terminee",
+      "theme": "ROUTINE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-529",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-530",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-531",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-532",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-533",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-534",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-535",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-536",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-537",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-538",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-539",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-540",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-541",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-542",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-543",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-544",
+      "statut": "terminee",
+      "theme": "REVISEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-545",
+      "statut": "terminee",
+      "theme": "ANALYSE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-546",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-547",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-548",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-549",
+      "statut": "terminee",
+      "theme": "TABLE-RONDE-ROUND"
+    },
+    {
+      "bilan": true,
+      "id": "MO-550",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-551",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-552",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-553",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-554",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-555",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-556",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-557",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-558",
+      "statut": "terminee",
+      "theme": "CADRAGE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-559",
+      "statut": "terminee",
+      "theme": "CADRAGE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-560",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-561",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-562",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-563",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-564",
+      "statut": "terminee",
+      "theme": "ROUTINE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-565",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-566",
+      "statut": "terminee",
+      "theme": "CADREUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-567",
+      "statut": "terminee",
+      "theme": "CADRAGE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-568",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-569",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-570",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-571",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-572",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-001",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-002",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-003",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-004",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-005",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-006",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-007",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-008",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-009",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-010",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-011",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-012",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-013",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-014",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-015",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-016",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-017",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-018",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-019",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-020",
+      "statut": "terminee",
+      "theme": "AUDIT-NEMESIS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-021",
+      "statut": "terminee",
+      "theme": "AUDIT-NEMESIS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-022",
+      "statut": "terminee",
+      "theme": "AUDIT-NEMESIS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-023",
+      "statut": "terminee",
+      "theme": "AUDIT-NEMESIS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-024",
+      "statut": "terminee",
+      "theme": "AUDIT-NEMESIS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-025",
+      "statut": "terminee",
+      "theme": "AUDIT-NEMESIS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-026",
+      "statut": "terminee",
+      "theme": "AUDIT-NEMESIS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-027",
+      "statut": "terminee",
+      "theme": "AUDIT-NEMESIS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-028",
+      "statut": "terminee",
+      "theme": "AUDIT-NEMESIS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-029",
+      "statut": "terminee",
+      "theme": "AUDIT-NEMESIS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-030",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-031",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-032",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-033",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-034",
+      "statut": "terminee",
+      "theme": "AUDIT-NEMESIS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-035",
+      "statut": "terminee",
+      "theme": "AUDIT-NEMESIS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-036",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-037",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-038",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-039",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-040",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-041",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-042",
+      "statut": "terminee",
+      "theme": "REDACTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-043",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-044",
+      "statut": "terminee",
+      "theme": "USER-PROFIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-045",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-046",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-047",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-048",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-049",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-050",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-051",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-052",
+      "statut": "terminee",
+      "theme": "ROUTINE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-053",
+      "statut": "terminee",
+      "theme": "ROUTINE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-054",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-055",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-056",
+      "statut": "terminee",
+      "theme": "ROUTINE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-057",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-058",
+      "statut": "terminee",
+      "theme": "ENTONNOIR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-059",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-060",
+      "statut": "terminee",
+      "theme": "ENTONNOIR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-061",
+      "statut": "terminee",
+      "theme": "auto-correction"
+    },
+    {
+      "bilan": true,
+      "id": "MO-062",
+      "statut": "terminee",
+      "theme": "ROUTINE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-063",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-064",
+      "statut": "terminee",
+      "theme": "ROUTINE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-065",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-066",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-067",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-068",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-069",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-070",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-071",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-072",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-073",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-074",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-075",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-076",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-077",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-078",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-079",
+      "statut": "terminee",
+      "theme": "ROUTINE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-080",
+      "statut": "terminee",
+      "theme": "ROUTINE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-081",
+      "statut": "terminee",
+      "theme": "ROUTINE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-082",
+      "statut": "terminee",
+      "theme": "ROUTINE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-083",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-084",
+      "statut": "terminee",
+      "theme": "ROUTINE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-085",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-086",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-087",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-088",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-089",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-090",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-091",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-092",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-093",
+      "statut": "terminee",
+      "theme": "PURIFICATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-094",
+      "statut": "terminee",
+      "theme": "PREPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-095",
+      "statut": "terminee",
+      "theme": "CREER-OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-096",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-097",
+      "statut": "terminee",
+      "theme": "PERFORMANCE-ROUTINES"
+    },
+    {
+      "bilan": true,
+      "id": "MO-098",
+      "statut": "terminee",
+      "theme": "PERFORMANCE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-099",
+      "statut": "terminee",
+      "theme": "PERFORMANCE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-100",
+      "statut": "terminee",
+      "theme": "PERFORMANCE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-101",
+      "statut": "terminee",
+      "theme": "PERFORMANCE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-102",
+      "statut": "terminee",
+      "theme": "PERFORMANCE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-103",
+      "statut": "terminee",
+      "theme": "PERFORMANCE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-104",
+      "statut": "terminee",
+      "theme": "MATRICE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-105",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-106",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-107",
+      "statut": "terminee",
+      "theme": "REPARATEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-108",
+      "statut": "terminee",
+      "theme": "REPARATEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-109",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-110",
+      "statut": "terminee",
+      "theme": "REPARATEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-111",
+      "statut": "terminee",
+      "theme": "REPARATEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-112",
+      "statut": "terminee",
+      "theme": "REPARATEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-113",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-114",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-115",
+      "statut": "terminee",
+      "theme": "REPARATEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-116",
+      "statut": "terminee",
+      "theme": "REPARATEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-117",
+      "statut": "terminee",
+      "theme": "REPARATEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-118",
+      "statut": "terminee",
+      "theme": "REPARATEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-119",
+      "statut": "terminee",
+      "theme": "REPARATEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-120",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-121",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-122",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-123",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-124",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-125",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-126",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-127",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-128",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-129",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-130",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-131",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-132",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-133",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-134",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-135",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-136",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-137",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-138",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-139",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-140",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-141",
+      "statut": "terminee",
+      "theme": "RECHERCHE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-142",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-143",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-144",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-145",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-146",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-147",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-148",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-149",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-150",
+      "statut": "terminee",
+      "theme": "AUTO-EVOLUTION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-151",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-152",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-153",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-154",
+      "statut": "terminee",
+      "theme": "PURIFICATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-155",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-156",
+      "statut": "terminee",
+      "theme": "PURIFICATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-157",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-158",
+      "statut": "terminee",
+      "theme": "GOUVERNANCE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-159",
+      "statut": "terminee",
+      "theme": "GOUVERNANCE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-160",
+      "statut": "terminee",
+      "theme": "PURIFICATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-161",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-162",
+      "statut": "terminee",
+      "theme": "PURIFICATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-163",
+      "statut": "terminee",
+      "theme": "PURIFICATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-164",
+      "statut": "terminee",
+      "theme": "PURIFICATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-165",
+      "statut": "terminee",
+      "theme": "PURIFICATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-166",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-167",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-168",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-169",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-170",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-171",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-172",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-173",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-174",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-175",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-176",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-177",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-178",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-179",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-180",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-181",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-182",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-183",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-184",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-185",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-186",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-187",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-188",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-189",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-190",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-191",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-192",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-193",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-194",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-195",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-196",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-197",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-198",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-199",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-200",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-201",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-202",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-203",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-204",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-205",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-206",
+      "statut": "terminee",
+      "theme": "REDACTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-207",
+      "statut": "terminee",
+      "theme": "ENTONNOIR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-208",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-209",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-210",
+      "statut": "terminee",
+      "theme": "REVISEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-211",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-212",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-213",
+      "statut": "terminee",
+      "theme": "ENTONNOIR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-214",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-215",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-216",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-217",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-218",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-219",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-220",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-221",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-222",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-223",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-224",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-225",
+      "statut": "terminee",
+      "theme": "PREPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-226",
+      "statut": "terminee",
+      "theme": "ENTONNOIR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-227",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-228",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-229",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-230",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-231",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-232",
+      "statut": "terminee",
+      "theme": "AUTO-TESTING"
+    },
+    {
+      "bilan": true,
+      "id": "MO-233",
+      "statut": "terminee",
+      "theme": "AUTO-TESTING"
+    },
+    {
+      "bilan": true,
+      "id": "MO-234",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-235",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-236",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-237",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-238",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-239",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-240",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-241",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-242",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-243",
+      "statut": "terminee",
+      "theme": "ENTONNOIR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-244",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-245",
+      "statut": "terminee",
+      "theme": "ENTONNOIR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-246",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-247",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-248",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-249",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-250",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-251",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-284",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-285",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-286",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-287",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-288",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-289",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-290",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-291",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-292",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-293",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-294",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-295",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-296",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-297",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-298",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-299",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-300",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-301",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-302",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-303",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-304",
+      "statut": "terminee",
+      "theme": "REVISEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-305",
+      "statut": "terminee",
+      "theme": "REVISEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-306",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-307",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-308",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-309",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-310",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-311",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-312",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-313",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-314",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-315",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-316",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-317",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-318",
+      "statut": "terminee",
+      "theme": "ROUTINE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-319",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-320",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-321",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-322",
+      "statut": "terminee",
+      "theme": "COMMUNICATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-323",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-324",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-325",
+      "statut": "terminee",
+      "theme": "PURIFICATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-326",
+      "statut": "terminee",
+      "theme": "PURIFICATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-327",
+      "statut": "terminee",
+      "theme": "PURIFICATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-328",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-329",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-330",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-331",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-332",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-333",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-334",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-335",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-336",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-337",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-338",
+      "statut": "terminee",
+      "theme": "CADRAGE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-339",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-340",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-341",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-342",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-343",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-344",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-345",
+      "statut": "terminee",
+      "theme": "REDACTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-346",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-347",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-348",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-349",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-350",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-351",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-352",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-353",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-354",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-355",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-356",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-357",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-358",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-360",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-361",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-362",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-363",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-364",
+      "statut": "terminee",
+      "theme": "REDACTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-365",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-366",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-367",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-368",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-369",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-370",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-371",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-372",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-373",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-374",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-375",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-376",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-377",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-378",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-379",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-380",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-381",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-382",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-383",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-384",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-385",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-386",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-387",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-388",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-389",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-390",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-391",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-392",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-393",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-394",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-395",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-396",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-397",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-398",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-399",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-400",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-401",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-402",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-403",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-404",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-405",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-406",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-407",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-408",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-409",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-410",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-411",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-412",
+      "statut": "terminee",
+      "theme": "ROUTINE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-413",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-414",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-415",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-416",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-417",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-418",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-419",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-420",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-421",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-422",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-423",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-424",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-425",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-426",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-427",
+      "statut": "terminee",
+      "theme": "REDACTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-428",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-429",
+      "statut": "terminee",
+      "theme": "REVISEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-430",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-431",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-432",
+      "statut": "terminee",
+      "theme": "REDACTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-433",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-434",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-435",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-436",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-437",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-438",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-439",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-440",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-441",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-442",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-443",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-444",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-445",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-446",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-447",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-448",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-449",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-450",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-451",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-452",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-453",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-454",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-455",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-456",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-457",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-458",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-459",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-460",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-461",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-462",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-463",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-464",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-466",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-467",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-468",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-469",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-470",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-471",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-472",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-473",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-474",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-475",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-476",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-477",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-478",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-479",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-480",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-481",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-482",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-483",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-484",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-485",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-486",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-487",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-488",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-489",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-490",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-491",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-492",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-493",
+      "statut": "terminee",
+      "theme": "OUTIL"
+    },
+    {
+      "bilan": true,
+      "id": "MO-494",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-495",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-496",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-497",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-498",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-499",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-500",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-501",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-502",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-503",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-504",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-505",
+      "statut": "terminee",
+      "theme": "ENTONNOIR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-506",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-507",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-508",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-509",
+      "statut": "terminee",
+      "theme": "PILOTE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-510",
+      "statut": "terminee",
+      "theme": "BDD"
+    },
+    {
+      "bilan": true,
+      "id": "MO-511",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-512",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-513",
+      "statut": "terminee",
+      "theme": "REDACTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-514",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-515",
+      "statut": "terminee",
+      "theme": "REVISEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-516",
+      "statut": "terminee",
+      "theme": "ANALYSE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-517",
+      "statut": "terminee",
+      "theme": "CADRAGE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-518",
+      "statut": "terminee",
+      "theme": "CONTRATS"
+    },
+    {
+      "bilan": true,
+      "id": "MO-519",
+      "statut": "terminee",
+      "theme": "CADRAGE"
+    },
+    {
+      "bilan": true,
+      "id": "MO-520",
+      "statut": "terminee",
+      "theme": "CONSTRUCTEUR"
+    },
+    {
+      "bilan": true,
+      "id": "MO-521",
+      "statut": "terminee",
+      "theme": "REPARATION"
+    },
+    {
+      "bilan": true,
+      "id": "MO-522",
+      "statut": "terminee",
+      "theme": "AUDITEUR"
+    }
+  ],
+  "missions_lues_par_conteneur": {
+    "_operateur/optimus-prime/pilote/file-missions-optimus-archive.json": 488,
+    "_operateur/optimus-prime/pilote/file-missions-optimus.json": 50
+  },
+  "nonsens_fichiers_illisibles": [],
+  "nonsens_fichiers_lus": 659,
+  "nonsens_publies": [
+    {
+      "extrait": "controler(\"le silence du signal est nomme\", \"ALERTE NOMMEE\" in sortie or True,",
+      "famille": "CONDITION TOUJOURS VRAIE",
+      "fichier": "Z:\\analyste-in-console\\cerveau-projet\\matrix\\_operateur\\optimus-prime\\super-combos\\sc-006-lacunes\\main.py",
+      "ligne": 339
+    }
+  ],
+  "portes_appels_lus": 43546,
+  "portes_jouees": [
+    "bdd-activites",
+    "bdd-conservation",
+    "bdd-conventions-matrice",
+    "bdd-corvees",
+    "bdd-historique",
+    "bdd-lecons",
+    "bdd-modifications",
+    "bdd-protocoles-matrice",
+    "bdd-raisonnement",
+    "bdd-regles-matrice",
+    "bdd-sessions",
+    "bdd-usages",
+    "bdd-variables",
+    "benchmark",
+    "bilan-periode",
+    "carte-comparer",
+    "carte-creer",
+    "carte-editer",
+    "carte-modifier",
+    "chaine-pense-bete",
+    "corriger-ascii",
+    "dialoguer",
+    "domicilier",
+    "dupliquer-template",
+    "ecrire",
+    "editer-agents-md",
+    "executer",
+    "fichiers-travail-cameleon",
+    "inventaire-systeme",
+    "journal-multi-encarts",
+    "lire",
+    "lister",
+    "machine-defcon",
+    "maintenir",
+    "passerelle-demandes",
+    "pause-session",
+    "rechercher",
+    "registre-outils",
+    "rendre-graphe",
+    "selecteur-flux",
+    "signaler",
+    "suivi-optimus",
+    "theme-vivier",
+    "veille-flux",
+    "verifier-conventions",
+    "verifier-protocoles",
+    "verifier-regles"
+  ],
+  "purges_ignorees": 393,
+  "round": "MO-567 a MO-572"
+}

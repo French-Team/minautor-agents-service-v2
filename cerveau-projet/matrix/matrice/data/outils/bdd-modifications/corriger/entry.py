@@ -1,0 +1,69 @@
+"""Categorie corriger : reattribuer UNE entree, puis laisser la porte recalculer.
+
+Interface entre main.py et les fonctions simples (corriger/fonctions.py).
+"""
+from commun import canoniser_cle, charger_bdd, enregistrer_bdd, extraire_options
+from corriger.fonctions import (choisir_position, corriger_entree,
+                                positions_correspondantes, reattribuer_tags_fiche,
+                                trouver_fiche)
+
+# CONTRAT DE TRANSPORT des listes (frictions 72 et 73) : le separateur vit dans
+# son DOMICILE partage (data/commun/transport_listes.py) -- cette porte le
+# CONSOMME au lieu de le recopier (M-076 ; L-100/L-102).
+from transport_listes import decouper_liste  # noqa: E402
+from constants import ACTIONS_PERMISES  # noqa: E402
+from noter.fonctions import valider_action  # noqa: E402
+
+NOMS_OPTIONS = ("fichier", "extrait", "tags", "motif", "index", "action", "detail")
+
+USAGE = ('Usage : python main.py corriger --fichier <chemin> '
+         '--extrait "<texte du detail>" [--tags "a,b" | --action <a> | --detail "..."] '
+         '[--motif "..."] [--index N]')
+
+
+def executer(arguments):
+    options = extraire_options(arguments, NOMS_OPTIONS)
+    chemin_fichier = options.get("fichier", "")
+    extrait = options.get("extrait", "")
+    tags = decouper_liste(options.get("tags", ""))
+    action = options.get("action", "")
+    detail = options.get("detail", "")
+    if not chemin_fichier or not extrait or not (tags or action or detail):
+        print(USAGE)
+        return 2
+    if action and not valider_action(action, ACTIONS_PERMISES):
+        print("Action inconnue : " + action + " (permises : "
+              + ", ".join(ACTIONS_PERMISES) + ")")
+        return 2
+
+    # EO-363 : la MEME cle canonique qu a l ecriture -- sinon on chercherait la
+    # fiche sous une forme que la porte n ecrit plus (un seul domicile de cle).
+    chemin_fichier = canoniser_cle(chemin_fichier)
+    donnees = charger_bdd()
+    fiche = trouver_fiche(donnees, chemin_fichier)
+    if fiche is None:
+        print("Fichier inconnu de la BDD : " + chemin_fichier)
+        return 1
+
+    positions = positions_correspondantes(fiche, extrait)
+    code, position, message = choisir_position(positions, extrait, options.get("index", ""))
+    if code != 0:
+        print(message)
+        return code
+
+    code, message = corriger_entree(fiche, position, tags, options.get("motif", ""), action, detail)
+    if code != 0:
+        print(message)
+        return code
+
+    ajoutes, retires = reattribuer_tags_fiche(fiche)
+    # enregistrer_bdd recalcule ET ecrit l'empreinte : c'est le SECOND defaut
+    # d'EO-155 ferme ici -- reparee par la porte generique, l'empreinte cassait
+    # et le verifier criait, a juste titre (il ne pouvait pas deviner l'intention).
+    empreinte = enregistrer_bdd(donnees)
+    print(message)
+    print("Tags de la fiche recalcules : "
+          + ("ajout " + ", ".join(ajoutes) if ajoutes else "aucun ajout")
+          + " ; " + ("retrait " + ", ".join(retires) if retires else "aucun retrait") + ".")
+    print("Empreinte recalculee par la porte : " + empreinte[:16] + "...")
+    return 0

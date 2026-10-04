@@ -1,0 +1,243 @@
+%% Arbre de decision de buffy (arbre v0.1.1)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est ma mission ?"}
+    RACINE -- "CREER" --> THEME-CREER
+    THEME-CREER["Creer un fichier conforme (protocole 5 fichiers), valide (RV"]
+    THEME-CREER -- "besoin 1" --> THEME-CREER-B0
+    THEME-CREER-B0["Historiser le DEBUT de mon intervention"]
+    THEME-CREER -- "besoin 2" --> THEME-CREER-B1
+    THEME-CREER-B1["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-CREER -- "besoin 3" --> THEME-CREER-B2
+    THEME-CREER-B2["Consulter les lecons des autres agents (domaine de ma missio"]
+    THEME-CREER -- "besoin 4" --> THEME-CREER-B3
+    THEME-CREER-B3["CONTEXTE : activite recente des agents"]
+    THEME-CREER -- "besoin 5" --> THEME-CREER-B4
+    THEME-CREER-B4["LIRE LA DOCUMENTATION DE L OUTIL avant utilisation"]
+    THEME-CREER -- "besoin 6" --> THEME-CREER-B5
+    THEME-CREER-B5["Verifier les dependances"]
+    THEME-CREER -- "besoin 7" --> THEME-CREER-B6
+    THEME-CREER-B6["Verifier la structure du nouveau fichier"]
+    THEME-CREER -- "besoin 8" --> THEME-CREER-B7
+    THEME-CREER-B7["Lancer le combo corriger-fichier"]
+    THEME-CREER -- "besoin 9" --> THEME-CREER-B8
+    THEME-CREER-B8["Lancer le combo controle-impacts"]
+    THEME-CREER -- "besoin 10" --> THEME-CREER-B9
+    THEME-CREER-B9["Erreurs hors mission detectees ?"]
+    THEME-CREER -- "besoin 11" --> THEME-CREER-B10
+    THEME-CREER-B10["Valider le resultat (RVAV)"]
+    THEME-CREER -- "besoin 12" --> THEME-CREER-B11
+    THEME-CREER-B11["Ajouter les lecons dans corrections.md"]
+    THEME-CREER -- "besoin 13" --> THEME-CREER-B12
+    THEME-CREER-B12["Ameliorations possibles de mon fonctionnement ?"]
+    THEME-CREER -- "besoin 14" --> THEME-CREER-B13
+    THEME-CREER-B13["Faire tester mon fichier cree par Morpheus (inter-round)"]
+    THEME-CREER -- "besoin 15" --> THEME-CREER-B14
+    THEME-CREER-B14["Retour de Morpheus (test) recu ?"]
+    THEME-CREER -- "besoin 16" --> THEME-CREER-B15
+    THEME-CREER-B15["Activer Themis pour auditer ma mission"]
+    THEME-CREER -- "besoin 17" --> THEME-CREER-B16
+    THEME-CREER-B16["Retour de Themis recu ?"]
+    FIN-fin-creer(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-CREER-B0 --> FIN-fin-creer
+    THEME-CREER-B1 --> FIN-fin-creer
+    THEME-CREER-B2 --> FIN-fin-creer
+    THEME-CREER-B3 --> FIN-fin-creer
+    THEME-CREER-B4 --> FIN-fin-creer
+    THEME-CREER-B5 --> FIN-fin-creer
+    THEME-CREER-B6 --> FIN-fin-creer
+    THEME-CREER-B7 --> FIN-fin-creer
+    THEME-CREER-B8 --> FIN-fin-creer
+    THEME-CREER-B9 --> FIN-fin-creer
+    THEME-CREER-B10 --> FIN-fin-creer
+    THEME-CREER-B11 --> FIN-fin-creer
+    THEME-CREER-B12 --> FIN-fin-creer
+    THEME-CREER-B13 --> FIN-fin-creer
+    THEME-CREER-B14 --> FIN-fin-creer
+    THEME-CREER-B15 --> FIN-fin-creer
+    THEME-CREER-B16 --> FIN-fin-creer
+    RACINE -- "MODIFIER" --> THEME-MODIFIER
+    THEME-MODIFIER["Modifier un fichier conforme, valide (RVAV) et controle (Jan"]
+    THEME-MODIFIER -- "besoin 1" --> THEME-MODIFIER-B0
+    THEME-MODIFIER-B0["Historiser le DEBUT de mon intervention"]
+    THEME-MODIFIER -- "besoin 2" --> THEME-MODIFIER-B1
+    THEME-MODIFIER-B1["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-MODIFIER -- "besoin 3" --> THEME-MODIFIER-B2
+    THEME-MODIFIER-B2["Lire le protocole identification"]
+    THEME-MODIFIER -- "besoin 4" --> THEME-MODIFIER-B3
+    THEME-MODIFIER-B3["Lire le fichier a modifier"]
+    THEME-MODIFIER -- "besoin 5" --> THEME-MODIFIER-B4
+    THEME-MODIFIER-B4["Verifier les dependances"]
+    THEME-MODIFIER -- "besoin 6" --> THEME-MODIFIER-B5
+    THEME-MODIFIER-B5["Le fichier est-il une structure v2 (arbre/theme/fins) ?"]
+    THEME-MODIFIER -- "besoin 7" --> THEME-MODIFIER-B6
+    THEME-MODIFIER-B6["Lire le protocole boucles dynamiques"]
+    THEME-MODIFIER -- "besoin 8" --> THEME-MODIFIER-B7
+    THEME-MODIFIER-B7["Lancer le combo corriger-fichier"]
+    THEME-MODIFIER -- "besoin 9" --> THEME-MODIFIER-B8
+    THEME-MODIFIER-B8["Lancer le combo controle-impacts"]
+    THEME-MODIFIER -- "besoin 10" --> THEME-MODIFIER-B9
+    THEME-MODIFIER-B9["Erreurs hors mission detectees ?"]
+    THEME-MODIFIER -- "besoin 11" --> THEME-MODIFIER-B10
+    THEME-MODIFIER-B10["Valider le resultat (RVAV)"]
+    THEME-MODIFIER -- "besoin 12" --> THEME-MODIFIER-B11
+    THEME-MODIFIER-B11["Ajouter les lecons dans corrections.md"]
+    THEME-MODIFIER -- "besoin 13" --> THEME-MODIFIER-B12
+    THEME-MODIFIER-B12["Ameliorations possibles de mon fonctionnement ?"]
+    THEME-MODIFIER -- "besoin 14" --> THEME-MODIFIER-B13
+    THEME-MODIFIER-B13["Faire tester ma modification par Morpheus (inter-round)"]
+    THEME-MODIFIER -- "besoin 15" --> THEME-MODIFIER-B14
+    THEME-MODIFIER-B14["Retour de Morpheus (test) recu ?"]
+    THEME-MODIFIER -- "besoin 16" --> THEME-MODIFIER-B15
+    THEME-MODIFIER-B15["Activer Themis pour auditer ma mission"]
+    THEME-MODIFIER -- "besoin 17" --> THEME-MODIFIER-B16
+    THEME-MODIFIER-B16["Retour de Themis recu ?"]
+    FIN-fin-modifier(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-MODIFIER-B0 --> FIN-fin-modifier
+    THEME-MODIFIER-B1 --> FIN-fin-modifier
+    THEME-MODIFIER-B2 --> FIN-fin-modifier
+    THEME-MODIFIER-B3 --> FIN-fin-modifier
+    THEME-MODIFIER-B4 --> FIN-fin-modifier
+    THEME-MODIFIER-B5 --> FIN-fin-modifier
+    THEME-MODIFIER-B6 --> FIN-fin-modifier
+    THEME-MODIFIER-B7 --> FIN-fin-modifier
+    THEME-MODIFIER-B8 --> FIN-fin-modifier
+    THEME-MODIFIER-B9 --> FIN-fin-modifier
+    THEME-MODIFIER-B10 --> FIN-fin-modifier
+    THEME-MODIFIER-B11 --> FIN-fin-modifier
+    THEME-MODIFIER-B12 --> FIN-fin-modifier
+    THEME-MODIFIER-B13 --> FIN-fin-modifier
+    THEME-MODIFIER-B14 --> FIN-fin-modifier
+    THEME-MODIFIER-B15 --> FIN-fin-modifier
+    THEME-MODIFIER-B16 --> FIN-fin-modifier
+    RACINE -- "AGENT" --> THEME-AGENT
+    THEME-AGENT["Creer un agent conforme (dossier, fiche, corrections, AGENTS"]
+    THEME-AGENT -- "besoin 1" --> THEME-AGENT-B0
+    THEME-AGENT-B0["Historiser le DEBUT de mon intervention"]
+    THEME-AGENT -- "besoin 2" --> THEME-AGENT-B1
+    THEME-AGENT-B1["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AGENT -- "besoin 3" --> THEME-AGENT-B2
+    THEME-AGENT-B2["Verifier le nom de l agent"]
+    THEME-AGENT -- "besoin 4" --> THEME-AGENT-B3
+    THEME-AGENT-B3["Creer le dossier de l agent"]
+    THEME-AGENT -- "besoin 5" --> THEME-AGENT-B4
+    THEME-AGENT-B4["Copier le template + creer corrections.md"]
+    THEME-AGENT -- "besoin 6" --> THEME-AGENT-B5
+    THEME-AGENT-B5["Mettre a jour AGENTS.md"]
+    THEME-AGENT -- "besoin 7" --> THEME-AGENT-B6
+    THEME-AGENT-B6["Enregistrer mes usages d outils"]
+    THEME-AGENT -- "besoin 8" --> THEME-AGENT-B7
+    THEME-AGENT-B7["Activer Themis pour auditer ma mission"]
+    THEME-AGENT -- "besoin 9" --> THEME-AGENT-B8
+    THEME-AGENT-B8["Retour de Themis recu ?"]
+    FIN-fin-agent(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AGENT-B0 --> FIN-fin-agent
+    THEME-AGENT-B1 --> FIN-fin-agent
+    THEME-AGENT-B2 --> FIN-fin-agent
+    THEME-AGENT-B3 --> FIN-fin-agent
+    THEME-AGENT-B4 --> FIN-fin-agent
+    THEME-AGENT-B5 --> FIN-fin-agent
+    THEME-AGENT-B6 --> FIN-fin-agent
+    THEME-AGENT-B7 --> FIN-fin-agent
+    THEME-AGENT-B8 --> FIN-fin-agent
+    RACINE -- "PROTOCOLE" --> THEME-PROTOCOLE
+    THEME-PROTOCOLE["Creer un protocole conforme et valide"]
+    THEME-PROTOCOLE -- "besoin 1" --> THEME-PROTOCOLE-B0
+    THEME-PROTOCOLE-B0["Historiser le DEBUT de mon intervention"]
+    THEME-PROTOCOLE -- "besoin 2" --> THEME-PROTOCOLE-B1
+    THEME-PROTOCOLE-B1["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-PROTOCOLE -- "besoin 3" --> THEME-PROTOCOLE-B2
+    THEME-PROTOCOLE-B2["Verifier la convention des protocoles"]
+    THEME-PROTOCOLE -- "besoin 4" --> THEME-PROTOCOLE-B3
+    THEME-PROTOCOLE-B3["Creer le dossier du protocole"]
+    THEME-PROTOCOLE -- "besoin 5" --> THEME-PROTOCOLE-B4
+    THEME-PROTOCOLE-B4["Creer le protocole"]
+    THEME-PROTOCOLE -- "besoin 6" --> THEME-PROTOCOLE-B5
+    THEME-PROTOCOLE-B5["Valider le protocole (RVAV)"]
+    THEME-PROTOCOLE -- "besoin 7" --> THEME-PROTOCOLE-B6
+    THEME-PROTOCOLE-B6["Activer Themis pour auditer ma mission"]
+    THEME-PROTOCOLE -- "besoin 8" --> THEME-PROTOCOLE-B7
+    THEME-PROTOCOLE-B7["Retour de Themis recu ?"]
+    FIN-fin-protocole(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-PROTOCOLE-B0 --> FIN-fin-protocole
+    THEME-PROTOCOLE-B1 --> FIN-fin-protocole
+    THEME-PROTOCOLE-B2 --> FIN-fin-protocole
+    THEME-PROTOCOLE-B3 --> FIN-fin-protocole
+    THEME-PROTOCOLE-B4 --> FIN-fin-protocole
+    THEME-PROTOCOLE-B5 --> FIN-fin-protocole
+    THEME-PROTOCOLE-B6 --> FIN-fin-protocole
+    THEME-PROTOCOLE-B7 --> FIN-fin-protocole
+    RACINE -- "CONTROLER" --> THEME-CONTROLER
+    THEME-CONTROLER["Verifier l etat des tableaux et des structures, signaler les"]
+    THEME-CONTROLER -- "besoin 1" --> THEME-CONTROLER-B0
+    THEME-CONTROLER-B0["Historiser le DEBUT de mon intervention"]
+    THEME-CONTROLER -- "besoin 2" --> THEME-CONTROLER-B1
+    THEME-CONTROLER-B1["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-CONTROLER -- "besoin 3" --> THEME-CONTROLER-B2
+    THEME-CONTROLER-B2["Lancer le combo sante-tableaux"]
+    THEME-CONTROLER -- "besoin 4" --> THEME-CONTROLER-B3
+    THEME-CONTROLER-B3["Activer Themis pour auditer"]
+    THEME-CONTROLER -- "besoin 5" --> THEME-CONTROLER-B4
+    THEME-CONTROLER-B4["Retour de Themis recu ?"]
+    FIN-fin-controler(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-CONTROLER-B0 --> FIN-fin-controler
+    THEME-CONTROLER-B1 --> FIN-fin-controler
+    THEME-CONTROLER-B2 --> FIN-fin-controler
+    THEME-CONTROLER-B3 --> FIN-fin-controler
+    THEME-CONTROLER-B4 --> FIN-fin-controler
+    RACINE -- "TESTER" --> THEME-TESTER
+    THEME-TESTER["Confier le test de mes modifications a Morpheus (inter-round"]
+    THEME-TESTER -- "besoin 1" --> THEME-TESTER-B0
+    THEME-TESTER-B0["Historiser le DEBUT de mon intervention"]
+    THEME-TESTER -- "besoin 2" --> THEME-TESTER-B1
+    THEME-TESTER-B1["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-TESTER -- "besoin 3" --> THEME-TESTER-B2
+    THEME-TESTER-B2["Identifier le testeur pro : Morpheus, JAMAIS moi"]
+    THEME-TESTER -- "besoin 4" --> THEME-TESTER-B3
+    THEME-TESTER-B3["Decrire les modifications a tester"]
+    THEME-TESTER -- "besoin 5" --> THEME-TESTER-B4
+    THEME-TESTER-B4["Activer Morpheus pour tester (inter-round)"]
+    THEME-TESTER -- "besoin 6" --> THEME-TESTER-B5
+    THEME-TESTER-B5["Retour de Morpheus recu ?"]
+    FIN-fin-test(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-TESTER-B0 --> FIN-fin-test
+    THEME-TESTER-B1 --> FIN-fin-test
+    THEME-TESTER-B2 --> FIN-fin-test
+    THEME-TESTER-B3 --> FIN-fin-test
+    THEME-TESTER-B4 --> FIN-fin-test
+    THEME-TESTER-B5 --> FIN-fin-test
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Gerer les missions qui ne rentrent pas dans les themes speci"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Mission dans le domaine d un autre agent ? (delegation)"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["Signaler au pilote via ORACLE"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["Besoin d outil qui n existe pas ?"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["Creer l outil temporaire"]
+    THEME-AUTRE -- "besoin 5" --> THEME-AUTRE-B4
+    THEME-AUTRE-B4["Enregistrer l usage"]
+    THEME-AUTRE -- "besoin 6" --> THEME-AUTRE-B5
+    THEME-AUTRE-B5["Signaler le besoin"]
+    FIN-fin-delegation(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-delegation
+    THEME-AUTRE-B1 --> FIN-fin-delegation
+    THEME-AUTRE-B2 --> FIN-fin-delegation
+    THEME-AUTRE-B3 --> FIN-fin-delegation
+    THEME-AUTRE-B4 --> FIN-fin-delegation
+    THEME-AUTRE-B5 --> FIN-fin-delegation
+    RACINE -- "EDUQUER" --> THEME-EDUQUER
+    THEME-EDUQUER["Rediriger la mission d education vers Chiron (agent habilite"]
+    THEME-EDUQUER -- "besoin 1" --> THEME-EDUQUER-B0
+    THEME-EDUQUER-B0["La mission releve de l education (re-education de moi-meme o"]
+    THEME-EDUQUER -- "besoin 2" --> THEME-EDUQUER-B1
+    THEME-EDUQUER-B1["Rediriger vers Chiron (delegation propre, modele aero R3)"]
+    THEME-EDUQUER-B0 --> FIN-fin-delegation
+    THEME-EDUQUER-B1 --> FIN-fin-delegation
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

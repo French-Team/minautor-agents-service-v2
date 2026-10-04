@@ -1,0 +1,169 @@
+%% Arbre de decision de gardien (arbre v0.3.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est la mission du marbre ?"}
+    RACINE -- "VERIFIER" --> THEME-VERIFIER
+    THEME-VERIFIER["Verifier l integrite de toutes les zones protegees du marbre"]
+    THEME-VERIFIER -- "besoin 1" --> THEME-VERIFIER-B0
+    THEME-VERIFIER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-VERIFIER -- "besoin 2" --> THEME-VERIFIER-B1
+    THEME-VERIFIER-B1["Consulter les lecons (domaine securite-marbre)"]
+    THEME-VERIFIER -- "besoin 3" --> THEME-VERIFIER-B2
+    THEME-VERIFIER-B2["CONTEXTE : activite recente des agents"]
+    THEME-VERIFIER -- "besoin 4" --> THEME-VERIFIER-B3
+    THEME-VERIFIER-B3["Verifier l integrite du marbre - VERROU (case c2)"]
+    THEME-VERIFIER -- "besoin 5" --> THEME-VERIFIER-B4
+    THEME-VERIFIER-B4["Le marbre est-il intact ? (controle c2a)"]
+    THEME-VERIFIER -- "besoin 6" --> THEME-VERIFIER-B5
+    THEME-VERIFIER-B5["Consulter le journal marbre-log.jsonl"]
+    THEME-VERIFIER -- "besoin 7" --> THEME-VERIFIER-B6
+    THEME-VERIFIER-B6["Verifier les empreintes par zone"]
+    THEME-VERIFIER -- "besoin 8" --> THEME-VERIFIER-B7
+    THEME-VERIFIER-B7["Ajouter les lecons dans corrections.md"]
+    FIN-fin-verifier(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-VERIFIER-B0 --> FIN-fin-verifier
+    THEME-VERIFIER-B1 --> FIN-fin-verifier
+    THEME-VERIFIER-B2 --> FIN-fin-verifier
+    THEME-VERIFIER-B3 --> FIN-fin-verifier
+    THEME-VERIFIER-B4 --> FIN-fin-verifier
+    THEME-VERIFIER-B5 --> FIN-fin-verifier
+    THEME-VERIFIER-B6 --> FIN-fin-verifier
+    THEME-VERIFIER-B7 --> FIN-fin-verifier
+    RACINE -- "PROPOSER" --> THEME-PROPOSER
+    THEME-PROPOSER["Documenter et executer une modification legitime d une zone "]
+    THEME-PROPOSER -- "besoin 1" --> THEME-PROPOSER-B0
+    THEME-PROPOSER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-PROPOSER -- "besoin 2" --> THEME-PROPOSER-B1
+    THEME-PROPOSER-B1["Consulter les lecons (domaine securite-marbre)"]
+    THEME-PROPOSER -- "besoin 3" --> THEME-PROPOSER-B2
+    THEME-PROPOSER-B2["CONTEXTE : activite recente des agents"]
+    THEME-PROPOSER -- "besoin 4" --> THEME-PROPOSER-B3
+    THEME-PROPOSER-B3["Verifier l integrite AVANT modification (VERROU)"]
+    THEME-PROPOSER -- "besoin 5" --> THEME-PROPOSER-B4
+    THEME-PROPOSER-B4["LIRE MA RAISON dans AGENTS.md (case c3)"]
+    THEME-PROPOSER -- "besoin 6" --> THEME-PROPOSER-B5
+    THEME-PROPOSER-B5["Verifier la zone concernee dans marbre.json"]
+    THEME-PROPOSER -- "besoin 7" --> THEME-PROPOSER-B6
+    THEME-PROPOSER-B6["PROPOSER la modification (zone + raison + impact) (case c4)"]
+    THEME-PROPOSER -- "besoin 8" --> THEME-PROPOSER-B7
+    THEME-PROPOSER-B7["Validation utilisateur ? (controle c5)"]
+    THEME-PROPOSER -- "besoin 9" --> THEME-PROPOSER-B8
+    THEME-PROPOSER-B8["EXECUTER proteger-modifier-marbre (case c6)"]
+    THEME-PROPOSER -- "besoin 10" --> THEME-PROPOSER-B9
+    THEME-PROPOSER-B9["Re-verifier l integrite APRES modification (VERROU)"]
+    THEME-PROPOSER -- "besoin 11" --> THEME-PROPOSER-B10
+    THEME-PROPOSER-B10["Verifier conformite ASCII du fichier modifie"]
+    THEME-PROPOSER -- "besoin 12" --> THEME-PROPOSER-B11
+    THEME-PROPOSER-B11["Consulter le journal marbre-log.jsonl"]
+    THEME-PROPOSER -- "besoin 13" --> THEME-PROPOSER-B12
+    THEME-PROPOSER-B12["Ajouter les lecons dans corrections.md (case c7)"]
+    THEME-PROPOSER -- "besoin 14" --> THEME-PROPOSER-B13
+    THEME-PROPOSER-B13["Enregistrer mes usages d outils (case c8)"]
+    FIN-fin-proposer(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-PROPOSER-B0 --> FIN-fin-proposer
+    THEME-PROPOSER-B1 --> FIN-fin-proposer
+    THEME-PROPOSER-B2 --> FIN-fin-proposer
+    THEME-PROPOSER-B3 --> FIN-fin-proposer
+    THEME-PROPOSER-B4 --> FIN-fin-proposer
+    THEME-PROPOSER-B5 --> FIN-fin-proposer
+    THEME-PROPOSER-B6 --> FIN-fin-proposer
+    THEME-PROPOSER-B7 --> FIN-fin-proposer
+    THEME-PROPOSER-B8 --> FIN-fin-proposer
+    THEME-PROPOSER-B9 --> FIN-fin-proposer
+    THEME-PROPOSER-B10 --> FIN-fin-proposer
+    THEME-PROPOSER-B11 --> FIN-fin-proposer
+    THEME-PROPOSER-B12 --> FIN-fin-proposer
+    THEME-PROPOSER-B13 --> FIN-fin-proposer
+    RACINE -- "SIGNALER" --> THEME-SIGNALER
+    THEME-SIGNALER["Documenter une violation du marbre (zone modifiee sans proto"]
+    THEME-SIGNALER -- "besoin 1" --> THEME-SIGNALER-B0
+    THEME-SIGNALER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-SIGNALER -- "besoin 2" --> THEME-SIGNALER-B1
+    THEME-SIGNALER-B1["Consulter les lecons (domaine securite-marbre)"]
+    THEME-SIGNALER -- "besoin 3" --> THEME-SIGNALER-B2
+    THEME-SIGNALER-B2["CONTEXTE : activite recente des agents"]
+    THEME-SIGNALER -- "besoin 4" --> THEME-SIGNALER-B3
+    THEME-SIGNALER-B3["Documenter la violation (zone + divergence + agent)"]
+    THEME-SIGNALER -- "besoin 5" --> THEME-SIGNALER-B4
+    THEME-SIGNALER-B4["Corriger les accents du rapport de violation"]
+    THEME-SIGNALER -- "besoin 6" --> THEME-SIGNALER-B5
+    THEME-SIGNALER-B5["Activer l agent responsable pour reparation"]
+    THEME-SIGNALER -- "besoin 7" --> THEME-SIGNALER-B6
+    THEME-SIGNALER-B6["Ajouter les lecons dans corrections.md"]
+    THEME-SIGNALER -- "besoin 8" --> THEME-SIGNALER-B7
+    THEME-SIGNALER-B7["Enregistrer mes usages d outils"]
+    FIN-fin-signaler(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-SIGNALER-B0 --> FIN-fin-signaler
+    THEME-SIGNALER-B1 --> FIN-fin-signaler
+    THEME-SIGNALER-B2 --> FIN-fin-signaler
+    THEME-SIGNALER-B3 --> FIN-fin-signaler
+    THEME-SIGNALER-B4 --> FIN-fin-signaler
+    THEME-SIGNALER-B5 --> FIN-fin-signaler
+    THEME-SIGNALER-B6 --> FIN-fin-signaler
+    THEME-SIGNALER-B7 --> FIN-fin-signaler
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Gerer les missions qui sortent du perimetre de securite du m"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["Consulter les lecons (domaine securite-marbre)"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["CONTEXTE : activite recente des agents"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["La mission concerne-t-elle un autre agent ? (question c29)"]
+    THEME-AUTRE -- "besoin 5" --> THEME-AUTRE-B4
+    THEME-AUTRE-B4["DELEGATION - Signaler au pilote via ORACLE (case c29a)"]
+    THEME-AUTRE -- "besoin 6" --> THEME-AUTRE-B5
+    THEME-AUTRE-B5["Besoin d un outil temporaire ou durable ? (question c29b)"]
+    THEME-AUTRE -- "besoin 7" --> THEME-AUTRE-B6
+    THEME-AUTRE-B6["Creer l outil temporaire (case c29c)"]
+    THEME-AUTRE -- "besoin 8" --> THEME-AUTRE-B7
+    THEME-AUTRE-B7["Signaler le besoin durable a Cerberus (case c29e)"]
+    THEME-AUTRE -- "besoin 9" --> THEME-AUTRE-B8
+    THEME-AUTRE-B8["Ajouter les lecons dans corrections.md"]
+    FIN-fin-delegation(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-delegation
+    THEME-AUTRE-B1 --> FIN-fin-delegation
+    THEME-AUTRE-B2 --> FIN-fin-delegation
+    THEME-AUTRE-B3 --> FIN-fin-delegation
+    THEME-AUTRE-B4 --> FIN-fin-delegation
+    THEME-AUTRE-B5 --> FIN-fin-delegation
+    THEME-AUTRE-B6 --> FIN-fin-delegation
+    THEME-AUTRE-B7 --> FIN-fin-delegation
+    THEME-AUTRE-B8 --> FIN-fin-delegation
+    RACINE -- "OUTILS" --> THEME-OUTILS
+    THEME-OUTILS["Resoudre un probleme d outil rencontre en cours de mission e"]
+    THEME-OUTILS -- "besoin 1" --> THEME-OUTILS-B0
+    THEME-OUTILS-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-OUTILS -- "besoin 2" --> THEME-OUTILS-B1
+    THEME-OUTILS-B1["Consulter les lecons (domaine securite-marbre)"]
+    THEME-OUTILS -- "besoin 3" --> THEME-OUTILS-B2
+    THEME-OUTILS-B2["CONTEXTE : activite recente des agents"]
+    THEME-OUTILS -- "besoin 4" --> THEME-OUTILS-B3
+    THEME-OUTILS-B3["Probleme avec un outil ? (question cU1)"]
+    THEME-OUTILS -- "besoin 5" --> THEME-OUTILS-B4
+    THEME-OUTILS-B4["COMPRENDRE L OUTIL - lire le .md (case cU2)"]
+    THEME-OUTILS -- "besoin 6" --> THEME-OUTILS-B5
+    THEME-OUTILS-B5["Verifier si un combo existe pour l action"]
+    THEME-OUTILS -- "besoin 7" --> THEME-OUTILS-B6
+    THEME-OUTILS-B6["Generer la commande exacte"]
+    THEME-OUTILS -- "besoin 8" --> THEME-OUTILS-B7
+    THEME-OUTILS-B7["Reprendre ma mission (case cU3)"]
+    THEME-OUTILS -- "besoin 9" --> THEME-OUTILS-B8
+    THEME-OUTILS-B8["Ajouter les lecons dans corrections.md"]
+    FIN-fin-outils(["FIN - Reprendre ma mission (cU3)"])
+    THEME-OUTILS-B0 --> FIN-fin-outils
+    THEME-OUTILS-B1 --> FIN-fin-outils
+    THEME-OUTILS-B2 --> FIN-fin-outils
+    THEME-OUTILS-B3 --> FIN-fin-outils
+    THEME-OUTILS-B4 --> FIN-fin-outils
+    THEME-OUTILS-B5 --> FIN-fin-outils
+    THEME-OUTILS-B6 --> FIN-fin-outils
+    THEME-OUTILS-B7 --> FIN-fin-outils
+    THEME-OUTILS-B8 --> FIN-fin-outils
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

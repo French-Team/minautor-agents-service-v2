@@ -1,0 +1,397 @@
+"""Porte de ROTATION de la famille des points de restauration (cases 7 et 8).
+
+Trois verbes, un seul contrat : ce qui sort de sa place y laisse une PREUVE.
+
+    python main.py archiver --id K-XXX [--simuler oui]
+    python main.py archiver --lot oui [--simuler oui]
+    python main.py restaurer --id K-XXX [--simuler oui]
+    python main.py purger --id K-XXX [--simuler oui]
+    python main.py purger --lot oui [--simuler oui]
+    python main.py purger-archive --balayer oui [--simuler oui] [--mission MO-XXX]
+    python main.py purger-archive --archive <chemin>[,<chemin>...] [--simuler oui] [--mission MO-XXX]
+    python main.py declarer-disparition --id K-XXX --raison "<motif>" --mission MO-XXX
+    python main.py declarer-disparition --lot oui --raison "<motif>" --mission MO-XXX
+    python main.py controler-archives
+
+L'acte ne se decide pas ici : la porte ne traite que les entrees deja DECIDEES
+(statut `decide`, verdict `archiver`). Un element sans decision est SIGNALE,
+jamais deplace.
+
+Le verbe `purger-archive` (regle createur du 2026-09-20) applique la MEME
+politique de preuve aux archives qui n ont PAS d entree au registre : celles de la
+rotation des journaux et des boites intercom. Le CRITERE de reconnaissance est la
+CONVENTION DE NOM de la rotation (`<prefixe>-archive-<AAAAMMJJ>.jsonl`) ; la preuve
+est la meme (le contenu vit dans un blob engage) ; une archive NON ENGAGEE RESTE et
+la porte le DIT.
+
+Le verbe `declarer-disparition` (EO-276) ne deplace RIEN et ne supprime RIEN : il
+enregistre un FAIT -- le point a quitte le disque sans passer par une porte -- avec
+sa date, sa raison, sa mission, sa preuve (le temoin qui l'a vu) et la derniere
+mesure connue. Le module `archiver/disparition.py` porte les cinq regles.
+"""
+from pathlib import Path
+
+from archiver.disparition import declarer_lot, declarer_un
+from archiver.fonctions import (
+    ajouter_manifeste, archiver_un, chemin_archive, ecrire_temoin, inventaire,
+    ligne_abandon, points_sans_decision, restaurer_un, trouver, verifier_archives,
+)
+from archiver.purge import (
+    REFUS_PURGE_SANS_PREUVE, purger_archives_datees, purger_un,
+)
+from cible import resoudre_dans_matrice
+from commun import charger_bdd, enregistrer_bdd, extraire_options
+
+NOMS_OPTIONS = ("id", "lot", "simuler", "raison", "mission", "archive", "balayer")
+DEPART = Path(__file__).resolve().parent
+
+
+def _vrai(valeur):
+    return str(valeur).strip().lower() in ("oui", "true", "1", "vrai")
+
+
+def _archiver_un_element(donnees, identifiant, chemin_manifeste, simuler):
+    entree = trouver(donnees, identifiant)
+    if entree is None:
+        print("Refus : element inconnu : " + identifiant)
+        return 2
+    code, message = archiver_un(entree, donnees, DEPART, chemin_manifeste, simuler)
+    print("[" + identifiant + "] " + message)
+    if code:
+        return 1
+    if not simuler:
+        enregistrer_bdd(donnees)
+    return 0
+
+
+def _archiver_lot(donnees, chemin_manifeste, chemin_temoin, simuler):
+    """Archive TOUS les elements decides `archiver`, apres avoir pose l'ORIGINE."""
+    temoin = inventaire(donnees, DEPART)
+    if simuler:
+        print("SIMULATION -- origine mesuree : " + str(temoin["nb"]) + " point(s), "
+              + str(temoin["octets"]) + " octet(s)")
+    else:
+        abandonnes = ecrire_temoin(chemin_temoin, temoin)
+        print("Origine posee (temoin) : " + str(temoin["nb"]) + " point(s), "
+              + str(temoin["octets"]) + " octet(s)")
+        # LE TEMOIN NE SE REPOSE PAS SANS DIRE CE QU'IL ABANDONNE (EO-276) : ce que
+        # le precedent portait et que celui-ci ne mesure plus (ni disque, ni
+        # registre) est NOMME, puis TRACE au manifeste -- append-only, donc la
+        # trace survit au temoin qu'elle remplace.
+        print("ABANDONNES par le nouveau temoin : " + str(len(abandonnes))
+              + " element(s) dont la mesure ne survit pas a la substitution")
+        for element in abandonnes:
+            print("  " + str(element.get("id")) + " : " + str(element.get("source"))
+                  + " (" + str(element.get("octets")) + " octet(s) perdus du temoin)")
+        if abandonnes:
+            ajouter_manifeste(chemin_manifeste, ligne_abandon(abandonnes))
+        if temoin.get("non_mesures", {}).get("nb"):
+            print("NON MESURES (ni disque, ni registre -- le temoin le DIT) : "
+                  + str(temoin["non_mesures"]["nb"]) + " element(s)")
+
+    cibles = [entree for entree in donnees.get("elements", [])
+              if entree.get("statut") == "decide" and entree.get("verdict") == "archiver"]
+    archives = 0
+    refuses = []
+    for entree in cibles:
+        code, message = archiver_un(entree, donnees, DEPART, chemin_manifeste, simuler)
+        if code == 0:
+            archives += 1
+            if not simuler:
+                enregistrer_bdd(donnees)
+        else:
+            refuses.append((entree.get("id", ""), message))
+            print("  [" + entree.get("id", "") + "] " + message)
+
+    sans_decision = points_sans_decision(donnees, DEPART)
+    print()
+    print("ARRIVEE : " + str(archives) + " / " + str(len(cibles)) + " archive(s)"
+          + (" (SIMULATION)" if simuler else ""))
+    if refuses:
+        print("REFUSES : " + str(len(refuses)))
+        for identifiant, message in refuses:
+            print("  " + identifiant + " : " + message)
+    if sans_decision:
+        print("SIGNALES (presents sur le disque, AUCUNE decision -- l'acte n'y touche pas) : "
+              + str(len(sans_decision)))
+        for chemin in sans_decision:
+            print("  " + chemin)
+    return 0 if not refuses else 1
+
+
+def _restaurer(donnees, identifiant, simuler):
+    entree = trouver(donnees, identifiant)
+    if entree is None:
+        print("Refus : element inconnu : " + identifiant)
+        return 2
+    code, message = restaurer_un(entree, DEPART, simuler)
+    print("[" + identifiant + "] " + message)
+    if code:
+        return 1
+    if not simuler:
+        enregistrer_bdd(donnees)
+    return 0
+
+
+def _purger_un_element(donnees, identifiant, chemin_manifeste, simuler):
+    entree = trouver(donnees, identifiant)
+    if entree is None:
+        print("Refus : element inconnu : " + identifiant)
+        return 2
+    code, message = purger_un(entree, donnees, DEPART, chemin_manifeste, simuler)
+    print("[" + identifiant + "] " + message)
+    if code:
+        return 1
+    if not simuler:
+        enregistrer_bdd(donnees)
+    return 0
+
+
+def _purger_lot(donnees, chemin_manifeste, simuler):
+    """Purge TOUTES les archives dont la recouvrabilite est PROUVEE.
+
+    Le refus d un element n arrete pas le lot : il est NOMME et compte. Un lot qui
+    s arrete au premier refus serait inexploitable -- la mesure du 2026-09-20 trouve
+    750 contenus recouvrables sur 898 : l archive n est pas un bloc, c est un TRI.
+    Deux sortes de refus, et elles ne disent pas la meme chose : une PREUVE QUI
+    MANQUE est la politique qui travaille (l element RESTE) ; une ANOMALIE (archive
+    introuvable, contenu change) est un ecart a corriger, et elle rend le lot KO.
+
+    RE-PURGE (MO-578) : le lot prend aussi les elements `supprime` dont l archive
+    est ENCORE la. Ce ne sont pas des archives a purger mais des archives RESUSCITEE
+    -- la purge avait ete tracee, pas achevee. Les traiter dans le meme lot evite
+    98 commandes, et surtout evite qu on en oublie une. La liste reste DERIVEE du
+    disque (`is_file()`) : un `supprime` deja purge ne se rejoue pas, et un `archive`
+    absent ne se invente pas.
+    """
+    def _sur_le_disque(entree):
+        chemin, _ = resoudre_dans_matrice(str(entree.get("archive", "") or ""), DEPART)
+        return chemin is not None and chemin.is_file()
+
+    cibles = [entree for entree in donnees.get("elements", [])
+              if entree.get("statut") in ("archive", "supprime")
+              and str(entree.get("archive", "") or "") != "" and _sur_le_disque(entree)]
+    purgees = 0
+    refuses = []
+    anomalies = []
+    for entree in cibles:
+        code, message = purger_un(entree, donnees, DEPART, chemin_manifeste, simuler)
+        if code == 0:
+            purgees += 1
+            if not simuler:
+                enregistrer_bdd(donnees)
+        else:
+            refuses.append((entree.get("id", ""), message))
+            if not message.startswith(REFUS_PURGE_SANS_PREUVE):
+                anomalies.append((entree.get("id", ""), message))
+    print()
+    print("ARRIVEE : " + str(purgees) + " / " + str(len(cibles)) + " archive(s) purgee(s)"
+          + (" (SIMULATION)" if simuler else ""))
+    if refuses:
+        print("RESTEES (une preuve manque -- elles RESTENT) : " + str(len(refuses)))
+        for identifiant, message in refuses:
+            print("  " + identifiant + " : " + message)
+    if anomalies:
+        print("ANOMALIES (a corriger -- elles ne sont pas une politique) : "
+              + str(len(anomalies)))
+    return 1 if anomalies else 0
+
+
+def _declarer_un_element(donnees, identifiant, chemin_manifeste, chemin_temoin, raison, mission,
+                         simuler):
+    """Declare la disparition d UN element (EO-276). Rend le code de la porte."""
+    entree = trouver(donnees, identifiant)
+    if entree is None:
+        print("Refus : element inconnu : " + identifiant)
+        return 2
+    code, message = declarer_un(entree, donnees, DEPART, chemin_manifeste, chemin_temoin,
+                                raison, mission, simuler)
+    print("[" + identifiant + "] " + message)
+    if code:
+        return 1
+    if not simuler:
+        enregistrer_bdd(donnees)
+    return 0
+
+
+def _declarer_lot(donnees, chemin_manifeste, chemin_temoin, raison, mission, simuler):
+    """Declare TOUTES les disparitions PROUVEES de la famille (EO-276)."""
+    code = declarer_lot(donnees, DEPART, chemin_manifeste, chemin_temoin, raison, mission,
+                        simuler)
+    if code == 0 and not simuler:
+        enregistrer_bdd(donnees)
+    return code
+
+
+def _controler_archives(donnees, chemin_temoin):
+    ecarts, mesure = verifier_archives(donnees, DEPART, chemin_temoin)
+    if mesure:
+        print("origine : " + str(mesure["origine_nb"]) + " point(s), "
+              + str(mesure["origine_octets"]) + " octet(s)")
+        print("archive : " + str(mesure["archive_nb"]) + " point(s), "
+              + str(mesure["archive_octets"]) + " octet(s)")
+        print("actif   : " + str(mesure["actif_nb"]) + " point(s), "
+              + str(mesure["actif_octets"]) + " octet(s)")
+        print("purge   : " + str(mesure["purge_nb"]) + " point(s), "
+              + str(mesure["purge_octets"]) + " octet(s) (contenu PROUVE recouvrable)")
+        details_disparu = []
+        if mesure.get("non_mesures_nb"):
+            details_disparu.append(str(mesure["non_mesures_nb"]) + " jamais mesure(s)")
+        if mesure.get("legacy_nb"):
+            details_disparu.append(str(mesure["legacy_nb"]) + " legacy (declarees sans pesee)")
+        print("disparu : " + str(mesure["disparu_nb"]) + " point(s), "
+              + str(mesure["disparu_octets"]) + " octet(s) (disparition DECLAREE, EO-276)"
+              + (" -- dont " + ", ".join(details_disparu) if details_disparu else ""))
+        total = (mesure["archive_octets"] + mesure["actif_octets"] + mesure["purge_octets"]
+                 + mesure["disparu_octets"])
+        print("archive + actif + purge + disparu = " + str(total) + " | origine = "
+              + str(mesure["origine_octets"]))
+        if mesure.get("non_mesures"):
+            print("JAMAIS MESUREES (declarees disparues sans aucune trace pesee, NON"
+                  " MARQUEES -- remede : marquer-legacy --motif) : "
+                  + ", ".join(mesure["non_mesures"]))
+        if mesure.get("legacy_nb"):
+            # UNE SEULE LIGNE, CALME ET COMPTABLE (MO-431) : la liste de 25 ids
+            # criait a chaque passe un etat qui n a plus de remede, et un cri
+            # permanent finit par etre ignores -- le motif de CHAQUE entree reste
+            # lisible au registre (`lire --id K-XXX`), le compte, lui, tient lieu
+            # de rapport.
+            print("LEGACY (declarees sans pesee : la preuve n existait pas a leur date"
+                  " -- ni ecart ni zero, motif conserve par entree, verbe"
+                  " marquer-legacy) : " + str(mesure["legacy_nb"]) + " element(s)")
+        # LE PERIMETRE EST PUBLIE (MO-311, EO-309) : la population du registre qui
+        # n'est PAS de la famille est une POPULATION -- elle a un nom et un compte,
+        # et elle se distingue de ce qui n'est NI mesure NI declare (un TROU, qui
+        # part en ECART avec son remede).
+        if not mesure.get("perimetre_declare"):
+            print("PERIMETRE : NON DECLARE par le temoin (pose avant MO-311) -- "
+                  + str(mesure.get("hors_temoin_nb", 0))
+                  + " entree(s) du registre hors temoin, sans juge jusqu'ici")
+        else:
+            print("hors perimetre declare (critere de la famille = "
+                  + str(mesure.get("critere_famille", "")) + " absent des tags) : "
+                  + str(mesure.get("hors_temoin_declares_nb", 0))
+                  + " entree(s) du registre, ni mesuree(s) ni comptee(s) dans l'origine")
+        if mesure.get("hors_temoin_en_attente_nb"):
+            print("EN ATTENTE (nee(s) apres le temoin, de la famille -- le prochain acte les"
+                  " mesurera) : " + str(mesure["hors_temoin_en_attente_nb"]) + " -- "
+                  + ", ".join(mesure.get("hors_temoin_en_attente", [])))
+        if mesure.get("hors_temoin_reclassees_nb"):
+            print("RECLASSEES EN FAMILLE apres le temoin (declaration perimee, prochain acte) : "
+                  + str(mesure["hors_temoin_reclassees_nb"]) + " -- "
+                  + ", ".join(mesure.get("hors_temoin_reclassees", [])))
+        if mesure.get("hors_temoin_retirees_nb"):
+            print("RETIREES DU TEMOIN (de la famille, elles EXISTAIENT quand il a ete pose : un"
+                  " ACCUSE MANQUE, pas une naissance) : "
+                  + str(mesure["hors_temoin_retirees_nb"]) + " -- "
+                  + ", ".join(mesure.get("hors_temoin_retirees", [])))
+        if mesure.get("hors_temoin_trous_nb"):
+            print("HORS TEMOIN ET NON DECLAREES (le trou : aucun temoin futur ne les mesurera) : "
+                  + str(mesure["hors_temoin_trous_nb"]) + " -- "
+                  + ", ".join(mesure.get("hors_temoin_trous", [])))
+    if ecarts:
+        print("ECARTS : " + str(len(ecarts)))
+        for ecart in ecarts:
+            print("  " + ecart)
+        return 1
+    print("VERDICT : archive + actif + purge + disparu = origine (aucun octet perdu, aucune"
+          " duplication)")
+    return 0
+
+
+def _purger_archives_datees(options, chemin_manifeste, simuler):
+    """Purge les archives DATEES sur preuve (archive de journal / de boite).
+
+    Deux facons de NOMMER les cibles : `--archive` (un chemin, ou une liste separee
+    par des virgules) respecte un choix explicite ; `--balayer oui` applique la
+    convention de nom. Un chemin NOMME qui ne se resout pas est une ANOMALIE : la
+    porte refuse le geste entier plutot que de purger les autres en silence.
+    """
+    brut = options.get("archive", "")
+    cibles = None
+    if brut.strip():
+        cibles = []
+        for morceau in brut.split(","):
+            morceau = morceau.strip()
+            if not morceau:
+                continue
+            chemin, motif = resoudre_dans_matrice(morceau, DEPART)
+            if chemin is None:
+                print("Refus : " + str(motif))
+                return 2
+            cibles.append(chemin)
+        if not cibles:
+            print("Usage : purger-archive --archive <chemin>[,<chemin>...] | --balayer oui")
+            return 2
+    elif not (options.get("balayer") and _vrai(options.get("balayer"))):
+        print("Usage : purger-archive --archive <chemin>[,<chemin>...] | --balayer oui"
+              " [--simuler oui] [--mission MO-XXX]")
+        return 2
+    code, lignes, mesure = purger_archives_datees(
+        DEPART, chemin_manifeste, options.get("mission", ""), cibles=cibles,
+        simuler=simuler,
+    )
+    for ligne in lignes:
+        print(ligne)
+    if mesure["purgees"] and not simuler:
+        print("manifeste : " + str(mesure["purgees"]) + " ligne(s) de purge ajoutee(s)"
+              + " (" + str(mesure["octets"]) + " octet(s))")
+    return code
+
+
+def executer(arguments):
+    verbe = arguments[0] if arguments else ""
+    options = extraire_options(arguments[1:], NOMS_OPTIONS)
+    donnees = charger_bdd()
+    _, chemin_manifeste, chemin_temoin = chemin_archive(DEPART)
+    simuler = _vrai(options.get("simuler", ""))
+
+    if verbe == "archiver":
+        if options.get("lot") and _vrai(options["lot"]):
+            return _archiver_lot(donnees, chemin_manifeste, chemin_temoin, simuler)
+        identifiant = options.get("id", "")
+        if not identifiant:
+            print("Usage : archiver --id K-XXX [--simuler oui] | archiver --lot oui")
+            return 2
+        return _archiver_un_element(donnees, identifiant, chemin_manifeste, simuler)
+
+    if verbe == "restaurer":
+        identifiant = options.get("id", "")
+        if not identifiant:
+            print("Usage : restaurer --id K-XXX [--simuler oui]")
+            return 2
+        return _restaurer(donnees, identifiant, simuler)
+
+    if verbe == "purger":
+        if options.get("lot") and _vrai(options["lot"]):
+            return _purger_lot(donnees, chemin_manifeste, simuler)
+        identifiant = options.get("id", "")
+        if not identifiant:
+            print("Usage : purger --id K-XXX [--simuler oui] | purger --lot oui")
+            return 2
+        return _purger_un_element(donnees, identifiant, chemin_manifeste, simuler)
+
+    if verbe == "purger-archive":
+        return _purger_archives_datees(options, chemin_manifeste, simuler)
+
+    if verbe == "declarer-disparition":
+        raison = options.get("raison", "")
+        mission = options.get("mission", "")
+        if options.get("lot") and _vrai(options["lot"]):
+            return _declarer_lot(donnees, chemin_manifeste, chemin_temoin, raison, mission,
+                                 simuler)
+        identifiant = options.get("id", "")
+        if not identifiant:
+            print("Usage : declarer-disparition --id K-XXX --raison \"<motif>\" --mission"
+                  " MO-XXX [--simuler oui] | declarer-disparition --lot oui --raison"
+                  " \"<motif>\" --mission MO-XXX")
+            return 2
+        return _declarer_un_element(donnees, identifiant, chemin_manifeste, chemin_temoin,
+                                    raison, mission, simuler)
+
+    if verbe == "controler-archives":
+        return _controler_archives(donnees, chemin_temoin)
+
+    print("Usage : archiver | restaurer | purger | purger-archive | declarer-disparition"
+          " | controler-archives")
+    return 2

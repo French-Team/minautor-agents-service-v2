@@ -1,0 +1,25 @@
+{
+  "present": true,
+  "pourcentage": 100,
+  "attendus_vides": [],
+  "optionnels_vides": [
+    "Email",
+    "Discord",
+    "Autre",
+    "Commentaires",
+    "Suggestions"
+  ],
+  "date": "2026-10-04 17:21:16",
+  "motif": "profil-complet",
+  "mode": "absorbee",
+  "signature": "{\"attendus_vides\": [], \"optionnels_vides\": [\"Email\", \"Discord\", \"Autre\", \"Commentaires\", \"Suggestions\"], \"pourcentage\": 100, \"present\": true}",
+  "passes_absorbes": 1843,
+  "derniere_ecriture": "2026-09-14 06:55:28",
+  "dernieres_passes": [
+    "2026-10-04 16:18:36",
+    "2026-10-04 16:34:16",
+    "2026-10-04 16:49:56",
+    "2026-10-04 17:05:36",
+    "2026-10-04 17:21:16"
+  ]
+}

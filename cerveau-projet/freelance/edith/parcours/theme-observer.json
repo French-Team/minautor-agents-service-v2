@@ -1,0 +1,26 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "edith",
+    "nom": "OBSERVER",
+    "description": "Analyser les observations accumulees par le serveur"
+  },
+  "theme": {
+    "nom": "OBSERVER",
+    "but": "Transformer les observations brutes en conclusions a 4 W",
+    "redirects": [
+      {
+        "besoin": "Analyser depuis mon reveil ou ma derniere passe",
+        "action": "procedure",
+        "etapes": [
+          "Lire tools-commun/routines-server/observations/ (toutes les entrees depuis ma derniere analyse)",
+          "Separer FAITS (traces, empreintes, horodatages) et INTERPRETATION (clairement marquee)",
+          "Construire la reponse aux 4 W : QUI / QUOI / COMMENT / QUAND",
+          "Rediriger vers theme RAPPORTER"
+        ],
+        "regle": "V1-V4 : un fait non prouve par une trace reste une hypothese marquee."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

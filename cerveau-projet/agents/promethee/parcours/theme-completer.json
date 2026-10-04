@@ -1,0 +1,21 @@
+{
+  "identite": {"type": "theme", "appartient_a": "promethee", "nom": "COMPLETER", "description": "Completer une spec existante avec les sections manquantes"},
+  "theme": {
+    "nom": "COMPLETER",
+    "but": "Completer les sections manquantes d une spec existante en respectant les conventions et le template",
+    "redirects": [
+      {"besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."},
+      {"besoin": "Consulter les lecons (domaine redaction-spec)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent promethee --domaine redaction-spec"], "regle": "PATTERN 6 : le contexte dynamique."},
+      {"besoin": "CONTEXTE : activite recente des agents", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6 : l historique est DYNAMIQUE."},
+      {"besoin": "Rechercher les specs existantes - ANTI-DOUBLON (case c11)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/rechercher/rechercher-specs/rechercher-specs.py"], "regle": "ANTI-DOUBLON : avant de completer, verifier qu une spec au theme proche n existe pas deja."},
+      {"besoin": "Lire la spec existante (case c12)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <spec-existante>"], "regle": "LIRE la spec pour comprendre ce qui manque."},
+      {"besoin": "Verifier les conventions (case c13)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/conventions/renommage/convention-renommage.md"], "regle": "CONVENTIONS : verifier le nommage et les regles."},
+      {"besoin": "Completer les sections manquantes (case c14)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/creer/creer-remplir-spec/creer-remplir-spec.py <spec>"], "regle": "COMPLETER : sections manquantes selon le spec-template."},
+      {"besoin": "Valider la spec (case c15)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/valider/valider-spec/valider-spec.py <spec>"], "regle": "RVAV : pas de validation sans boucle complete."},
+      {"besoin": "Verifier la conformite ASCII", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <spec>"], "regle": "REGLE ASCII : 100% ASCII."},
+      {"besoin": "Lecons et retour (case c9)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/promethee/corrections.md <lecon>"], "regle": "PROTOCOLE FIN-MISSION."},
+      {"besoin": "Enregistrer mes usages d outils (case c24)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent promethee --outil <outil> --contexte '<contexte>'"], "regle": "BILAN OUTILS : declarer tous les outils utilises."}
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-completer"}
+}

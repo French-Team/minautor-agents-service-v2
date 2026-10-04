@@ -1,0 +1,96 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "buffy",
+    "nom": "AGENT",
+    "description": "Creer un nouvel agent (dossier, fiche, corrections, AGENTS.md) : verifier nommage, creer dossier, copier template, mettre a jour AGENTS.md, enregistrer usages, Themis audit, Janus controle"
+  },
+  "theme": {
+    "nom": "AGENT",
+    "but": "Creer un agent conforme (dossier, fiche, corrections, AGENTS.md) et valide",
+    "redirects": [
+      {
+        "besoin": "Historiser le DEBUT de mon intervention",
+        "action": "procedure",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"DEBUT: <ma mission>\""
+        ],
+        "regle": "REGLE HISTORISATION."
+      },
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Verifier le nom de l agent",
+        "action": "procedure",
+        "etapes": [
+          "Verifier la convention de nommage des agents",
+          "Verifier que le nom n existe pas deja"
+        ],
+        "regle": "Nommage conforme aux conventions."
+      },
+      {
+        "besoin": "Creer le dossier de l agent",
+        "action": "procedure",
+        "etapes": [
+          "Creer cerveau-projet/agents/<nom>/",
+          "Creer les sous-dossiers necessaires"
+        ],
+        "regle": "Structure conforme au protocole."
+      },
+      {
+        "besoin": "Copier le template + creer corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "Copier le template de fiche agent",
+          "Creer corrections.md"
+        ],
+        "regle": "Template obligatoire."
+      },
+      {
+        "besoin": "Mettre a jour AGENTS.md",
+        "action": "procedure",
+        "etapes": [
+          "Ajouter l agent dans AGENTS.md (table des agents)"
+        ],
+        "regle": "AGENTS.md est la source de verite des agents."
+      },
+      {
+        "besoin": "Enregistrer mes usages d outils",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py"
+        ],
+        "regle": "REGLE REGISTRE."
+      },
+      {
+        "besoin": "Activer Themis pour auditer ma mission",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'"
+        ],
+        "regle": "THEMIS AVANT JANUS."
+      },
+      {
+        "besoin": "Retour de Themis recu ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> fin-agent",
+          "NON -> re-essai"
+        ],
+        "regle": "PATTERN RE-ESSAI."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-agent"
+  }
+}

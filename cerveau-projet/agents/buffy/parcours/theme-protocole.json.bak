@@ -1,0 +1,85 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "buffy",
+    "nom": "PROTOCOLE",
+    "description": "Creer un nouveau protocole (dossier, convention, creation limitee)"
+  },
+  "theme": {
+    "nom": "PROTOCOLE",
+    "but": "Creer un protocole conforme et valide",
+    "redirects": [
+      {
+        "besoin": "Historiser le DEBUT de mon intervention",
+        "action": "procedure",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"DEBUT: <ma mission>\""
+        ],
+        "regle": "REGLE HISTORISATION."
+      },
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Verifier la convention des protocoles",
+        "action": "procedure",
+        "etapes": [
+          "Lire les conventions existantes dans cerveau-projet/agents/regles-immuables/"
+        ],
+        "regle": "Convention conforme aux protocoles existants."
+      },
+      {
+        "besoin": "Creer le dossier du protocole",
+        "action": "procedure",
+        "etapes": [
+          "Creer le dossier cerveau-projet/agents/regles-immuables/<categorie>/<nom-protocole>/"
+        ],
+        "regle": "Structure conforme."
+      },
+      {
+        "besoin": "Creer le protocole",
+        "action": "procedure",
+        "etapes": [
+          "Creer le fichier .md du protocole"
+        ],
+        "regle": "Protocole conforme au format existant."
+      },
+      {
+        "besoin": "Valider le protocole (RVAV)",
+        "action": "procedure",
+        "etapes": [
+          "Lire : cerveau-projet/agents/regles-immuables/general/rvav-workflow.md"
+        ],
+        "regle": "REGLE IMMUABLE RVAV."
+      },
+      {
+        "besoin": "Activer Themis pour auditer ma mission",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> themis '<raison>'"
+        ],
+        "regle": "THEMIS AVANT JANUS."
+      },
+      {
+        "besoin": "Retour de Themis recu ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> fin-protocole",
+          "NON -> re-essai"
+        ],
+        "regle": "PATTERN RE-ESSAI."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-protocole"
+  }
+}

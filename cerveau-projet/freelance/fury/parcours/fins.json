@@ -1,0 +1,30 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "fury",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "FIN - Theme termine",
+      "description": "Le theme est traite ; si un test a ete lance, passer par RAPPORTER.",
+      "action": "Bilan presente, puis message a JARVIS si un rapport existe."
+    },
+    "fin-test-passe": {
+      "titre": "FIN - Test PASSE",
+      "description": "Le scenario a suivi tous les maillons attendus.",
+      "action": "Rapport ecrit, lien envoye a JARVIS, FIN DE CYCLE."
+    },
+    "fin-test-echoue": {
+      "titre": "FIN - Test ECHOUE",
+      "description": "Un ou plusieurs maillons attendus n ont pas ete observes.",
+      "action": "Rapport avec preuves du point de rupture, lien envoye a JARVIS (P2), FIN DE CYCLE."
+    },
+    "fin-test-bloque": {
+      "titre": "FIN - Test BLOQUE",
+      "description": "Le scenario ne peut pas etre execute (combo manquant, prerequis absent).",
+      "action": "Rapport expliquant le blocage, lien envoye a JARVIS, FIN DE CYCLE."
+    }
+  }
+}

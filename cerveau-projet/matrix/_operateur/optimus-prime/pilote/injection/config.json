@@ -1,0 +1,175 @@
+{
+  "injections": {
+    "demarrage": [
+      {
+        "id": "fiche",
+        "description": "Fiche d'identite d'Optimus",
+        "source": "../optimus-prime.md",
+        "type": "fichier",
+        "obligatoire": true
+      },
+      {
+        "id": "theme-reprise",
+        "description": "Theme de reprise",
+        "source": "../parcours/themes/theme-reprise-mission.json",
+        "type": "json",
+        "obligatoire": true
+      },
+      {
+        "id": "protocole-reprise",
+        "description": "Protocole de reprise",
+        "source": "../protocoles/proto-1-reprise-mission.md",
+        "type": "fichier",
+        "obligatoire": true
+      },
+      {
+        "id": "conventions-disponibles",
+        "description": "INDEX DES CONVENTIONS (nom + ce qu'elle regit). Mesure du 2026-09-21 : convention-architecture-outils, convention-integrite-sha256, convention-auto-correction et convention-zero-valeurs-en-dur n'etaient nommes par AUCUNE injection. Servi AU DEMARRAGE (une fois par session) et NON a chaque mission : trois de ces quatre-la sont DEJA gardees ou mises en oeuvre ailleurs -- zero-valeurs-en-dur par l'etape 20 de la non-regression (scan-valeurs-en-dur), integrite-sha256 par l'espion d'integrite et le PRE-VOL, architecture-outils par verifier-contrat-fondamental pour ses parties imports/resolution/chemins. Un garde qui refuse en NOMMANT le remede vaut mieux qu'un rappel repete : la carte sert de reference de forme, chargee une fois.",
+        "source": "../conventions/conventions-readme.md",
+        "type": "fichier",
+        "obligatoire": true
+      },
+      {
+        "id": "regle-evolution",
+        "description": "REGLE IMMUABLE < toute evolution significative ou obligatoire est DECIDEE puis EXECUTEE > (demande createur 2026-09-24). Servie AU DEMARRAGE : la doctrine se LIT a l allumage, jamais retenue par coeur -- une consigne que l agent pourrait oublier est une discipline, pas un process (L-165). Source OBLIGATOIRE : son absence est un REFUS nomme a chaque demarrage (injecter.py, doctrine aucune degradation silencieuse), et la fiche technique compte ses sources et leur obligation.",
+        "source": "../regles-immuables/evolution-decidee.md",
+        "type": "fichier",
+        "obligatoire": true
+      },
+      {
+        "id": "pattern-maintenance",
+        "description": "PATTERN DE MAINTENANCE (demande createur 2026-09-26, EO-446) : la v3 evolue en PERMANENCE, donc la maintenance travaille un monde en TRANSITION -- missions anciennes, fichiers pas encore conformes, artefacts de transition et dettes declarees ne sont PAS une panne : ni a masquer, ni a casser. Lu a CHAQUE demarrage, par le SEUL agent de la maintenance (jamais dans le flux de l autre : coherence d invisibilite).",
+        "source": "injection/pattern-maintenance.md",
+        "type": "fichier",
+        "obligatoire": true
+      },
+      {
+        "id": "processus-super-combos",
+        "description": "PROCESSUS DES SUPER-COMBOS (demande createur 2026-09-26, EO-447). Mesure du 2026-09-29 : la Matrice possedait les super-combos et l agent savait quand les employer (leurs modes d emploi voyagent avec la mission), mais RIEN ne forcait leur passage quand un round corrige, ameliore ou modifie des fichiers et des flux -- une consigne qu on peut oublier est une discipline, pas un process (L-165). Le processus NOMME les combos, donne la commande de passage, et dit la PREUVE : chaque passage est NOTE dans le registre unique des usages par le lanceur lui-meme, et se JUGE par lancer-super-combos.py --preuves <MO-XXX> --combos ... (code 1 = accuse et nomme les combos demandes sans passage). Lu a CHAQUE demarrage, par le SEUL agent de la maintenance (jamais dans le flux de l autre : coherence d invisibilite).",
+        "source": "injection/processus-super-combos.md",
+        "type": "fichier",
+        "obligatoire": true
+      }
+    ],
+    "avant-mission": [
+      {
+        "id": "role",
+        "description": "Role d'Optimus pour cette mission (postures du vivier : QUI conduit)",
+        "source": "../../../matrice/data/vivier-themes.json",
+        "type": "json",
+        "obligatoire": true,
+        "categorie": "PERSONNALITE"
+      },
+      {
+        "id": "fiche-rappel",
+        "description": "Rappel des regles absolues",
+        "source": "../optimus-prime.md",
+        "type": "fichier",
+        "obligatoire": true,
+        "section": "REGLES ABSOLUES"
+      },
+      {
+        "id": "theme-actif",
+        "description": "Theme de la mission",
+        "source": "../parcours/themes/index-themes.json",
+        "type": "json",
+        "obligatoire": true
+      },
+      {
+        "id": "modes-emploi-outils",
+        "description": "MODE D EMPLOI DES OUTILS du pilote (but + usage, extrait de chaque brique -- jamais une liste de noms)",
+        "source": "../super-combos/combos/outils",
+        "type": "modes-emploi",
+        "obligatoire": true
+      },
+      {
+        "id": "modes-emploi-combos",
+        "description": "MODE D EMPLOI DES COMBOS (but + usage, extrait de chaque combo)",
+        "source": "../super-combos/combos",
+        "type": "modes-emploi",
+        "obligatoire": true
+      },
+      {
+        "id": "modes-emploi-super-combos",
+        "description": "MODE D EMPLOI DES SUPER-COMBOS (but + usage, extrait de chaque super-combo)",
+        "source": "../super-combos",
+        "type": "modes-emploi",
+        "obligatoire": true
+      },
+      {
+        "id": "modes-emploi-matrice",
+        "description": "MODE D EMPLOI DES OUTILS DE LA MATRICE (but + usage, extrait de chaque main.py)",
+        "source": "../../../matrice/data/outils",
+        "type": "modes-emploi",
+        "obligatoire": true
+      },
+      {
+        "id": "garde-perimetre",
+        "description": "Garde du perimetre",
+        "source": "../super-combos/combos/outils/garde-perimetre-write.py",
+        "type": "outil",
+        "obligatoire": true
+      },
+      {
+        "id": "garde-flux2",
+        "description": "Garde du flux 2",
+        "source": "../super-combos/combos/outils/garde-flux2.py",
+        "type": "outil",
+        "obligatoire": true
+      },
+      {
+        "id": "protocoles-disponibles",
+        "description": "INDEX DES PROTOCOLES (nom + QUAND L'UTILISER). Mesure du 2026-09-21 : proto-3-debug-dag, proto-4-auto-audit-3-axes, proto-5-auto-amelioration et proto-8-route-reparation-veille n'etaient nommes par AUCUNE injection (0 occurrence dans le catalogue ET dans le sac-a-dos des 6 injections reelles) : des protocoles existaient, aucun n'atteignait l'agent. Servi EN MISSION et non au demarrage, parce que le declencheur de trois de ces quatre survient PENDANT le travail (un probleme apparait, un outil natif fait galerer, une livraison se prepare) et que la troisieme colonne de ce registre EST ce declencheur. Le registre vit chez sa famille (M-076) : il n'est pas recopie.",
+        "source": "../protocoles/protocoles-readme.md",
+        "type": "fichier",
+        "obligatoire": true
+      },
+      {
+        "id": "contexte-machine",
+        "description": "CONTEXTE MACHINE : la section courte (OS, capacites, outils, reseau) de la fiche systeme-machine.md, tenue a jour par la porte inventaire-systeme (MO-251)",
+        "source": "../../../matrice/data/systeme-machine.md",
+        "type": "fichier",
+        "obligatoire": false,
+        "section": "RESUME MACHINE"
+      }
+    ],
+    "pendant-mission": [
+      {
+        "id": "suivi-optimus",
+        "description": "Outil de suivi",
+        "source": "../../../matrice/data/outils/suivi-optimus",
+        "type": "outil",
+        "obligatoire": true
+      },
+      {
+        "id": "bdd-modifications",
+        "description": "BDD des modifications",
+        "source": "../../../matrice/data/modifications-par-fichier.json",
+        "type": "bdd",
+        "obligatoire": false
+      }
+    ],
+    "apres-mission": [
+      {
+        "id": "rituel-fin",
+        "description": "Protocole de fin de mission",
+        "source": "../protocoles/proto-2-auto-evolution.md",
+        "type": "fichier",
+        "obligatoire": true
+      },
+      {
+        "id": "metriques",
+        "description": "Cockpit metriques",
+        "source": "../cockpit/cockpit-matrice.py",
+        "type": "outil",
+        "obligatoire": false
+      },
+      {
+        "id": "profil-utilisateur",
+        "description": "PROFIL DE L UTILISATEUR (pseudo, style) -- EN DERNIER, pour le compte-rendu de fin",
+        "type": "profil",
+        "obligatoire": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "optimus-prime"
+  },
+  "fins": [
+    {
+      "case": "fin-persistant",
+      "nom": "FIN - Retour au pilote (mode persistant)",
+      "but": "Mission terminee : rendre la main au pilote qui revient a la Matrice. En session single-llm avec le createur : presenter le bilan et attendre la prochaine demande.",
+      "action": "bilan",
+      "etapes": [
+        "Resumer : fait / reste a faire / blocages",
+        "Mettre a jour parcours/index-parcours.json si le theme courant change",
+        "Attendre la prochaine demande (pas de fin de cycle sans le mot explicite du createur)"
+      ],
+      "regle": "Ma fin ne va JAMAIS vers un agent v1/v2 : toujours pilote -> Matrice. En session avec le createur, la fin de mission n est PAS une fin de cycle."
+    }
+  ]
+}

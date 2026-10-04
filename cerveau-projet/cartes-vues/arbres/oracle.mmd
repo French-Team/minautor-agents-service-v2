@@ -1,0 +1,74 @@
+%% Arbre de decision de oracle (arbre v0.1.1)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Oracle recoit une mission de Cerberus ou une alerte de coordination. Quel est le type de ma mission ?"}
+    RACINE -- "coordination" --> THEME-coordination
+    THEME-coordination["Prendre la mission de Cerberus, historiser le DEBUT de l age"]
+    THEME-coordination -- "besoin 1" --> THEME-coordination-B0
+    THEME-coordination-B0["Lire la mission recue de Cerberus (inbox)"]
+    THEME-coordination -- "besoin 2" --> THEME-coordination-B1
+    THEME-coordination-B1["Identifier l agent habilite pour la mission (matrice, NE PAS"]
+    THEME-coordination -- "besoin 3" --> THEME-coordination-B2
+    THEME-coordination-B2["Historiser le DEBUT de l agent a sa place (Oracle est le SEU"]
+    THEME-coordination -- "besoin 4" --> THEME-coordination-B3
+    THEME-coordination-B3["Deposer la mission asap ciblant l agent habilite (la file as"]
+    THEME-coordination -- "besoin 5" --> THEME-coordination-B4
+    THEME-coordination-B4["Verifier que la mission est bien deposee et consommee (sans "]
+    FIN-fin-coordination(["FIN - Retour a Cerberus (fin de round)"])
+    THEME-coordination-B0 --> FIN-fin-coordination
+    THEME-coordination-B1 --> FIN-fin-coordination
+    THEME-coordination-B2 --> FIN-fin-coordination
+    THEME-coordination-B3 --> FIN-fin-coordination
+    THEME-coordination-B4 --> FIN-fin-coordination
+    RACINE -- "processus" --> THEME-processus
+    THEME-processus["Verifier qu une seule instance tourne par serveur (oracle-se"]
+    THEME-processus -- "besoin 1" --> THEME-processus-B0
+    THEME-processus-B0["Lancer le controle des processus (fantomes / serveurs morts)"]
+    THEME-processus -- "besoin 2" --> THEME-processus-B1
+    THEME-processus-B1["Probleme detecte ?"]
+    THEME-processus -- "besoin 3" --> THEME-processus-B2
+    THEME-processus-B2["Signaler le probleme processus a Cerberus"]
+    THEME-processus-B0 --> FIN-fin-coordination
+    THEME-processus-B1 --> FIN-fin-coordination
+    THEME-processus-B2 --> FIN-fin-coordination
+    RACINE -- "roulage" --> THEME-roulage
+    THEME-roulage["Router les messages non-lus vers leur destinataire, depister"]
+    THEME-roulage -- "besoin 1" --> THEME-roulage-B0
+    THEME-roulage-B0["Rouler les messages du hub"]
+    THEME-roulage -- "besoin 2" --> THEME-roulage-B1
+    THEME-roulage-B1["Verifier la coherence inbox/outbox apres le roulage"]
+    THEME-roulage-B0 --> FIN-fin-coordination
+    THEME-roulage-B1 --> FIN-fin-coordination
+    RACINE -- "etat" --> THEME-etat
+    THEME-etat["Afficher l etat de la coordination : serveurs oracle-server "]
+    THEME-etat -- "besoin 1" --> THEME-etat-B0
+    THEME-etat-B0["Afficher l etat des serveurs v1"]
+    THEME-etat -- "besoin 2" --> THEME-etat-B1
+    THEME-etat-B1["Etat sain ou probleme ?"]
+    THEME-etat-B0 --> FIN-fin-coordination
+    THEME-etat-B1 --> FIN-fin-coordination
+    RACINE -- "delegation" --> THEME-delegation
+    THEME-delegation["Detecter une mission hors perimetre de coordination (outil, "]
+    THEME-delegation -- "besoin 1" --> THEME-delegation-B0
+    THEME-delegation-B0["Identifier la mission comme hors perimetre"]
+    THEME-delegation -- "besoin 2" --> THEME-delegation-B1
+    THEME-delegation-B1["Deposer la mission asap vers l agent habilite"]
+    THEME-delegation -- "besoin 3" --> THEME-delegation-B2
+    THEME-delegation-B2["Signaler la redirection a Cerberus"]
+    THEME-delegation-B0 --> FIN-fin-coordination
+    THEME-delegation-B1 --> FIN-fin-coordination
+    THEME-delegation-B2 --> FIN-fin-coordination
+    RACINE -- "autre" --> THEME-autre
+    THEME-autre["Traiter une situation de coordination non couverte : analyse"]
+    THEME-autre -- "besoin 1" --> THEME-autre-B0
+    THEME-autre-B0["Analyser la situation non couverte"]
+    THEME-autre -- "besoin 2" --> THEME-autre-B1
+    THEME-autre-B1["Router ou signaler"]
+    THEME-autre-B0 --> FIN-fin-coordination
+    THEME-autre-B1 --> FIN-fin-coordination
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

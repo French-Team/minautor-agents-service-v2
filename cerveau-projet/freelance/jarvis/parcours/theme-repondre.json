@@ -1,0 +1,28 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "jarvis",
+    "nom": "REPONDRE",
+    "description": "Repondre directement a Stark via MES combos (exclusifs, sans deleguer)"
+  },
+  "theme": {
+    "nom": "REPONDRE",
+    "but": "Stark pose une question, mes combos travaillent, je reponds. Je ne code pas, je ne cherche pas moi-meme.",
+    "redirects": [
+      {
+        "besoin": "Repondre a une question de Stark",
+        "action": "procedure",
+        "etapes": [
+          "Lire le message de Stark (objet: 'JARVIS <COMMANDE> [args]') et acquitter",
+          "Temps 1 : lancer le combo qui correspond - python3 cerveau-projet/freelance/tools-commun/jarvis/combos/entry.py <COMBO> [besoin]",
+          "Temps 2 : le combo travaille pour moi (v0.1.0 = PLACEHOLDER)",
+          "Temps 3 : formuler ma reponse a partir de la sortie du combo",
+          "Envoyer la reponse : jarvis.py envoyer --de jarvis --vers stark --activer --session <session>",
+          "Protocole complet: cerveau-projet/freelance/tools-commun/jarvis/combos/protocole-placeholder.md"
+        ],
+        "regle": "EXCLUSIF : ces combos sont a moi seul. Toute modification = Vision."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

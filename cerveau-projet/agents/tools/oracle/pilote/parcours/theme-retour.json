@@ -1,0 +1,37 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "pilote",
+    "nom": "RETOUR",
+    "description": "Ma mission est COMPLETEMENT terminee (tous les agents largues et recuperes) : je reviens a ORACLE (l aeroport)"
+  },
+  "theme": {
+    "nom": "RETOUR",
+    "but": "Cloturer ma mission de pilote et revenir a oracle (l aeroport) avec le bilan consolide",
+    "redirects": [
+      {
+        "besoin": "Consolider le bilan de ma mission complete",
+        "action": "procedure",
+        "etapes": [
+          "Synthetiser : destination, agents largues/recuperes, bilans collectes",
+          "Noter le resultat global : mission accomplie ? blocages rencontres ?"
+        ],
+        "regle": "BILAN CONSOLIDE : le pilote ne revient a l aeroport qu avec le bilan de TOUTE sa mission."
+      },
+      {
+        "besoin": "Revenir a ORACLE (l aeroport)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin pilote \"<bilan consolide de ma mission>\"",
+          "ORACLE me recupere : il decide de la suite (nouvelle mission, fin du round, signalement)"
+        ],
+        "regle": "R1 : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un agent."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-retour-oracle"
+  }
+}

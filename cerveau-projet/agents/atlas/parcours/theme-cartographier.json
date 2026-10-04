@@ -1,0 +1,94 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "atlas",
+    "nom": "CARTOGRAPHIER",
+    "description": "Analyse de dependances et cartographie : lister, lire, analyser, creer cartographie (cases c21-c25)"
+  },
+  "theme": {
+    "nom": "CARTOGRAPHIER",
+    "but": "Analyser les dependances et produire une cartographie du code",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine cartographie)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent atlas --domaine cartographie"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique se lit a chaque activation."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Lister les fichiers a cartographier",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lister/lister-fichiers/lister-fichiers.py <chemin>",
+          "python3 cerveau-projet/agents/tools/lister/lister-fonctions/lister-fonctions.py <fichier>",
+          "python3 cerveau-projet/agents/tools/lister/lister-appels/lister-appels.py <fichier>"
+        ],
+        "regle": "Inventorier les fichiers, fonctions et appels."
+      },
+      {
+        "besoin": "Lire le contenu des fichiers cles",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <fichier>"
+        ],
+        "regle": "Lire les fichiers cles pour comprendre les liens."
+      },
+      {
+        "besoin": "Analyser la structure et les dependances",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/analyser/analyser-structure/analyser-structure.py <chemin>",
+          "python3 cerveau-projet/agents/tools/analyser/analyser-dependances/analyser-dependances.py <chemin>"
+        ],
+        "regle": "Analyser structure + dependances."
+      },
+      {
+        "besoin": "Creer la cartographie",
+        "action": "procedure",
+        "etapes": [
+          "Produire la carte des dependances (liens entre fichiers, modules, outils)"
+        ],
+        "regle": "Synthetiser en une carte lisible."
+      },
+      {
+        "besoin": "Verifier la conformite ASCII",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/valider/valider-conformite-ascii/valider-conformite-ascii.py <fichier>"
+        ],
+        "regle": "ASCII strict + LF pur."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/atlas/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-cartographier"
+  }
+}

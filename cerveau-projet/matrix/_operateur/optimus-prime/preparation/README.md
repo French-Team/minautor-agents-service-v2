@@ -1,0 +1,68 @@
+---
+identite:
+  type: readme
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# PREPARATION -- Espace de discussion & preparation
+
+> **Doctrine** : avant de coder des outils natifs ameliores, on discute et on prepare.
+> `PREPARATION` est un parcours d'Optimus **hors code** : il inventorie, dessine, priorise.
+> Le code n'arrive qu'apres le `GO` createur, via des `[mission]` au vrac en serie.
+
+## Statut
+
+| Champ | Valeur |
+|---|---|
+| Parcours | `_operateur/optimus-prime/parcours/themes/theme-preparation.json` (5 phases) |
+| Crochet | `[preparation]` (convention-crochets.md) |
+| Flux | Flux 2 MAINTENANCE (Optimus + createur, hors pilote, hors cameleon) |
+| Perimetre ecriture | `preparation/` + `suivi-optimus` uniquement pendant la phase |
+
+## Pourquoi un espace dedie ?
+
+Les outils natifs LLM (read_files, write_file, bash...) ne sont pas bons (L-007 :
+`L'OUTIL NATIF PRODUIT, LA MATRICE POSSEDE ET VERIFIE`). Optimus doit recevoir
+des **versions ameliorees, non configurables, meilleures que les natifs** (porte
+unique, atomique, SHA, ASCII, perimetre, lecture seule quand requis).
+
+Mais on ne code pas a l'aveugle : on **discute d'abord** (quels outils ? quelles
+limites ? quel ordre ? quelles preuves ?). Cet espace garde la discussion tracee
+et separee du code.
+
+## Les 5 phases (theme PREPARATION)
+
+1. **Ouvrir** : poser l'intention, creer `journal-preparation.md`, `debut` suivi-optimus, annoncer `Mode PREPARATION`.
+2. **Inventorier** : lister les natifs, leurs limites reelles (avec exemples), frictions en BDD.
+3. **Dessiner** : pour chaque natif prioritaire, fiche cible (nom, 1 phrase, verbes 1-3, garanties, pourquoi meilleur).
+4. **Prioriser** : ordonner la serie (1 outil a la fois, serie stricte, critere GO chiffre).
+5. **Clore** : presenter au createur (10 lignes max), attendre `GO`, verser les `[mission]` au vrac dans l'ordre.
+
+## Fichiers
+
+| Fichier | Role |
+|---|---|
+| `README.md` | ce fichier (doctrine) |
+| `journal-preparation.md` | discussion brute datee (INVENTAIRE / CIBLES / SERIE) -- jamais de code |
+| `spec-chaine-pense-bete.md` | SPEC de la chaine pense-bete -> spec -> todo-list (EO-200 / MO-220) : proposition, aucun code avant GO |
+| `chaine-*.md` | les OBJETS de la chaine (EO-215 / MO-224) : un document a NOM STABLE, son ETAPE dans sa carte, pose par la porte `chaine-pense-bete` |
+| `index-chaine.md` | INDEX du domicile : une ligne par objet (id, etape, titre, fichier) -- tenu a jour par la porte, jamais a la main |
+| `chaine-compteurs.json` | compteurs des trois familles d'ids (PB / SP / TD) |
+| `proposition-correction-imperatif.md` | PROPOSITION de texte pour le createur sur `docs/IMPERATIF.md` (MO-547 / EO-550) : la Matrice ne peut pas ecrire dans `docs/`, elle livre donc le texte pret a appliquer |
+| `../parcours/themes/theme-preparation.json` | parcours officiel (5 cases, fin-persistant) |
+
+## Regles
+
+- PREPARATION = discussion seule : aucun fichier matrice modifie hors `preparation/` + `suivi-optimus`.
+- Le journal est la TRACE : toute idee qui n'y est pas est perdue.
+- Pas de code avant `GO` createur : la sortie de PREPARATION = des missions au vrac, pas des fichiers.
+- Relations : `REPRISE-MISSION` -> `PREPARATION` -> `CREER-OUTIL` xN (un theme par outil).
+
+## Demarrage
+
+```
+[preparation] on veut des outils natifs ameliores pour Optimus
+-> Optimus ouvre journal, pose debut, discute (phases 1-4), presente, attend GO
+-> GO -> fin, missions au vrac, puis chaque outil via CREER-OUTIL
+```

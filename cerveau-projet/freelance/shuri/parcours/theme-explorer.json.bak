@@ -1,0 +1,48 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "shuri",
+    "nom": "EXPLORER",
+    "description": "Diagnostiquer un problème de construction"
+  },
+  "theme": {
+    "nom": "EXPLORER",
+    "but": "Comprendre pourquoi un agent ne fonctionne pas",
+    "redirects": [
+      {
+        "besoin": "Diagnostiquer un agent défaillant",
+        "action": "procedure",
+        "etapes": [
+          "Lire la fiche de l'agent",
+          "Lire son arbre de décision",
+          "Vérifier que l'arbre est valide (fichiers existants, fins correctes)",
+          "Vérifier que l'agent a un arbre (arbre-*.json)",
+          "Identifier le problème"
+        ]
+      },
+      {
+        "besoin": "Comprendre pourquoi un nom MARVEL est rejeté",
+        "action": "procedure",
+        "etapes": [
+          "Vérifier la liste des noms autorisés (proposition-v2.md)",
+          "Vérifier le format (majuscule initiale, anglais, sans accent)",
+          "Proposer un nom alternatif"
+        ]
+      },
+      {
+        "besoin": "Consulter les leçons de construction",
+        "action": "redirection",
+        "vers": {
+          "type": "outil",
+          "commande": "consulter-lecons",
+          "parametres": {"agent": "shuri", "domaine": "construction"}
+        }
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-theme"
+  }
+}

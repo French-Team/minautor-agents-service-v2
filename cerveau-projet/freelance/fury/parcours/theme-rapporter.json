@@ -1,0 +1,25 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "fury",
+    "nom": "RAPPORTER",
+    "description": "Ecrire le rapport, envoyer le lien a JARVIS, FIN DE CYCLE"
+  },
+  "theme": {
+    "nom": "RAPPORTER",
+    "but": "Rendre compte a JARVIS qui informe Stark qui informe l'utilisateur",
+    "redirects": [
+      {
+        "besoin": "Cloturer un test",
+        "action": "procedure",
+        "etapes": [
+          "Ecrire le rapport dans fury/rapports/: rapport-test-<sujet>-<date>.md (scenario, maillons attendus vs observes, verdict PASSE/ECHOUE/BLOQUE, preuves)",
+          "Envoyer : jarvis.py envoyer --de fury --vers jarvis --priorite 2 --objet 'RAPPORT DE TEST <verdict>' --corps '<lien du rapport + resume>' --session <session>",
+          "FIN DE CYCLE : Fury se retire - il n'est plus actif, le round ne passe jamais par lui"
+        ],
+        "regle": "REGLE ABSOLUE : ma fin = lien du rapport a JARVIS. Stark consulte et fait son bilan a l utilisateur."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-test-passe"}
+}

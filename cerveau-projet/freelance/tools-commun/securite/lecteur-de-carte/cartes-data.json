@@ -1,0 +1,40 @@
+{
+  "identite": {
+    "type": "donnees",
+    "appartient_a": "lecteur-de-carte",
+    "version": "0.1.0",
+    "commun": true,
+    "description": "Cartes d'habilitation des agents v2 - editable sans toucher au code (D15)"
+  },
+  "politique_defaut": "refuser",
+  "agents": {
+    "stark": {
+      "outils": ["jarvis", "lecteur-de-carte", "verrou-outils"],
+      "combos": ["*"]
+    },
+    "shuri": {
+      "outils": ["jarvis", "lecteur-de-carte", "verrou-outils"],
+      "combos": ["creer-agent", "*lire*", "*valider*"]
+    },
+    "forge": {
+      "outils": ["jarvis", "lecteur-de-carte", "verrou-outils"],
+      "combos": ["creer-outil", "modifier-jarvis", "*lire*", "*valider*"]
+    },
+    "rogers": {
+      "outils": ["jarvis", "lecteur-de-carte", "verrou-outils"],
+      "combos": ["*lire*", "*valider*", "verifier-regles"]
+    },
+    "parker": {
+      "outils": ["jarvis", "lecteur-de-carte", "verrou-outils"],
+      "combos": ["*lire*", "*explorer*", "*diagnostiquer*"]
+    },
+    "jarvis": {
+      "outils": ["jarvis", "lecteur-de-carte", "verrou-outils"],
+      "combos": ["*"]
+    },
+    "vision": {
+      "outils": ["jarvis", "lecteur-de-carte", "verrou-outils"],
+      "combos": ["*"]
+    }
+  }
+}

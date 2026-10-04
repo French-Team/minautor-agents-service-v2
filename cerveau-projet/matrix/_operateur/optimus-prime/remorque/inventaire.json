@@ -1,0 +1,836 @@
+{
+  "date": "2026-10-04 14:50:18",
+  "total": 166,
+  "equipements": [
+    {
+      "nom": "theme-analyse",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-analyse.json"
+    },
+    {
+      "nom": "theme-auditeur",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-auditeur.json"
+    },
+    {
+      "nom": "theme-auto-audit-nemesis",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-auto-audit-nemesis.json"
+    },
+    {
+      "nom": "theme-auto-correction",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-auto-correction.json"
+    },
+    {
+      "nom": "theme-auto-evolution",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-auto-evolution.json"
+    },
+    {
+      "nom": "theme-auto-optimisation",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-auto-optimisation.json"
+    },
+    {
+      "nom": "theme-auto-performance",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-auto-performance.json"
+    },
+    {
+      "nom": "theme-auto-testing",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-auto-testing.json"
+    },
+    {
+      "nom": "theme-bdd",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-bdd.json"
+    },
+    {
+      "nom": "theme-cadrage",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-cadrage.json"
+    },
+    {
+      "nom": "theme-communication",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-communication.json"
+    },
+    {
+      "nom": "theme-constructeur",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-constructeur.json"
+    },
+    {
+      "nom": "theme-contrats",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-contrats.json"
+    },
+    {
+      "nom": "theme-contre-analyse",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-contre-analyse.json"
+    },
+    {
+      "nom": "theme-creer-outil",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-creer-outil.json"
+    },
+    {
+      "nom": "theme-defcon",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-defcon.json"
+    },
+    {
+      "nom": "theme-depot-git",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-depot-git.json"
+    },
+    {
+      "nom": "theme-entonnoir",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-entonnoir.json"
+    },
+    {
+      "nom": "theme-fichier",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-fichier.json"
+    },
+    {
+      "nom": "theme-indices",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-indices.json"
+    },
+    {
+      "nom": "theme-lacunes-COMBLER",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-lacunes-COMBLER.json"
+    },
+    {
+      "nom": "theme-lacunes-COMPARER",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-lacunes-COMPARER.json"
+    },
+    {
+      "nom": "theme-lacunes-INVESTIGUER",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-lacunes-INVESTIGUER.json"
+    },
+    {
+      "nom": "theme-lacunes-QQCP",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-lacunes-QQCP.json"
+    },
+    {
+      "nom": "theme-lacunes-RECHERCHER",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-lacunes-RECHERCHER.json"
+    },
+    {
+      "nom": "theme-outil",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-outil.json"
+    },
+    {
+      "nom": "theme-performance-outils",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-performance-outils.json"
+    },
+    {
+      "nom": "theme-performance-routines",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-performance-routines.json"
+    },
+    {
+      "nom": "theme-performance-serveurs",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-performance-serveurs.json"
+    },
+    {
+      "nom": "theme-performance",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-performance.json"
+    },
+    {
+      "nom": "theme-pilote",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-pilote.json"
+    },
+    {
+      "nom": "theme-preparation",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-preparation.json"
+    },
+    {
+      "nom": "theme-purification",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-purification.json"
+    },
+    {
+      "nom": "theme-rapport",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-rapport.json"
+    },
+    {
+      "nom": "theme-recherche",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-recherche.json"
+    },
+    {
+      "nom": "theme-redacteur",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-redacteur.json"
+    },
+    {
+      "nom": "theme-reparateur",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-reparateur.json"
+    },
+    {
+      "nom": "theme-reparation",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-reparation.json"
+    },
+    {
+      "nom": "theme-reprise-mission",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-reprise-mission.json"
+    },
+    {
+      "nom": "theme-reviseur",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-reviseur.json"
+    },
+    {
+      "nom": "theme-routine",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-routine.json"
+    },
+    {
+      "nom": "theme-table-ronde-arbitrer",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-table-ronde-arbitrer.json"
+    },
+    {
+      "nom": "theme-table-ronde-ouvrir",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-table-ronde-ouvrir.json"
+    },
+    {
+      "nom": "theme-table-ronde-round",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-table-ronde-round.json"
+    },
+    {
+      "nom": "theme-templates",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-templates.json"
+    },
+    {
+      "nom": "theme-user-profil",
+      "type": "theme",
+      "chemin": "parcours\\themes\\theme-user-profil.json"
+    },
+    {
+      "nom": "proto-1-reprise-mission",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-1-reprise-mission.md"
+    },
+    {
+      "nom": "proto-10-route-outil-defaillant",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-10-route-outil-defaillant.md"
+    },
+    {
+      "nom": "proto-11-raisonnement-progressif",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-11-raisonnement-progressif.md"
+    },
+    {
+      "nom": "proto-12-loi-du-round",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-12-loi-du-round.md"
+    },
+    {
+      "nom": "proto-13-si-j-etais-user",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-13-si-j-etais-user.md"
+    },
+    {
+      "nom": "proto-14-evolution-decidee",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-14-evolution-decidee.md"
+    },
+    {
+      "nom": "proto-2-auto-evolution",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-2-auto-evolution.md"
+    },
+    {
+      "nom": "proto-3-debug-dag",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-3-debug-dag.md"
+    },
+    {
+      "nom": "proto-4-auto-audit-3-axes",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-4-auto-audit-3-axes.md"
+    },
+    {
+      "nom": "proto-5-auto-amelioration",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-5-auto-amelioration.md"
+    },
+    {
+      "nom": "proto-6-route-mission",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-6-route-mission.md"
+    },
+    {
+      "nom": "proto-7-route-bdd",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-7-route-bdd.md"
+    },
+    {
+      "nom": "proto-8-route-reparation-veille",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-8-route-reparation-veille.md"
+    },
+    {
+      "nom": "proto-9-mini-missions-inter-round",
+      "type": "protocole",
+      "chemin": "protocoles\\proto-9-mini-missions-inter-round.md"
+    },
+    {
+      "nom": "convention-architecture-outils",
+      "type": "convention",
+      "chemin": "conventions\\convention-architecture-outils.md"
+    },
+    {
+      "nom": "convention-auto-correction",
+      "type": "convention",
+      "chemin": "conventions\\convention-auto-correction.md"
+    },
+    {
+      "nom": "convention-chemins-liens-noms-flags",
+      "type": "convention",
+      "chemin": "conventions\\convention-chemins-liens-noms-flags.md"
+    },
+    {
+      "nom": "convention-credibilite-mission-ancienne",
+      "type": "convention",
+      "chemin": "conventions\\convention-credibilite-mission-ancienne.md"
+    },
+    {
+      "nom": "convention-crochets",
+      "type": "convention",
+      "chemin": "conventions\\convention-crochets.md"
+    },
+    {
+      "nom": "convention-indices",
+      "type": "convention",
+      "chemin": "conventions\\convention-indices.md"
+    },
+    {
+      "nom": "convention-integrite-sha256",
+      "type": "convention",
+      "chemin": "conventions\\convention-integrite-sha256.md"
+    },
+    {
+      "nom": "convention-karpathy",
+      "type": "convention",
+      "chemin": "conventions\\convention-karpathy.md"
+    },
+    {
+      "nom": "convention-nommage-numerote",
+      "type": "convention",
+      "chemin": "conventions\\convention-nommage-numerote.md"
+    },
+    {
+      "nom": "convention-py-compile",
+      "type": "convention",
+      "chemin": "conventions\\convention-py-compile.md"
+    },
+    {
+      "nom": "convention-separation-cameleon-optimus",
+      "type": "convention",
+      "chemin": "conventions\\convention-separation-cameleon-optimus.md"
+    },
+    {
+      "nom": "convention-tmp-optimus-cameleon",
+      "type": "convention",
+      "chemin": "conventions\\convention-tmp-optimus-cameleon.md"
+    },
+    {
+      "nom": "convention-zero-valeurs-en-dur",
+      "type": "convention",
+      "chemin": "conventions\\convention-zero-valeurs-en-dur.md"
+    },
+    {
+      "nom": "ajouter-case-theme.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\ajouter-case-theme.py"
+    },
+    {
+      "nom": "ajouter-redirect-theme.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\ajouter-redirect-theme.py"
+    },
+    {
+      "nom": "attribution-registre.json",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\attribution-registre.json"
+    },
+    {
+      "nom": "audit-invisibilite.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\audit-invisibilite.py"
+    },
+    {
+      "nom": "banque-combos-bdd.json",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\banque-combos-bdd.json"
+    },
+    {
+      "nom": "bdd-frictions",
+      "type": "outil-dossier",
+      "chemin": "super-combos\\combos\\outils\\bdd-frictions"
+    },
+    {
+      "nom": "bdd-lecons-matrice",
+      "type": "outil-dossier",
+      "chemin": "super-combos\\combos\\outils\\bdd-lecons-matrice"
+    },
+    {
+      "nom": "bdd-modifs",
+      "type": "outil-dossier",
+      "chemin": "super-combos\\combos\\outils\\bdd-modifs"
+    },
+    {
+      "nom": "bilan-matrice.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\bilan-matrice.py"
+    },
+    {
+      "nom": "calculer-hash.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\calculer-hash.py"
+    },
+    {
+      "nom": "cartographe-matrice.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\cartographe-matrice.py"
+    },
+    {
+      "nom": "conformite-demande.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\conformite-demande.py"
+    },
+    {
+      "nom": "controle-attribution.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\controle-attribution.py"
+    },
+    {
+      "nom": "corriger-zone-tmp.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\corriger-zone-tmp.py"
+    },
+    {
+      "nom": "creer-combo.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\creer-combo.py"
+    },
+    {
+      "nom": "creer-outil.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\creer-outil.py"
+    },
+    {
+      "nom": "demarrer-watchdog.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\demarrer-watchdog.py"
+    },
+    {
+      "nom": "dry-run.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\dry-run.py"
+    },
+    {
+      "nom": "evaluer-auto-validation.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\evaluer-auto-validation.py"
+    },
+    {
+      "nom": "fichiers-travail.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\fichiers-travail.py"
+    },
+    {
+      "nom": "fraicheur-vues.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\fraicheur-vues.py"
+    },
+    {
+      "nom": "garde-ascii.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\garde-ascii.py"
+    },
+    {
+      "nom": "garde-flux2.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\garde-flux2.py"
+    },
+    {
+      "nom": "garde-perimetre-write.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\garde-perimetre-write.py"
+    },
+    {
+      "nom": "garde-residus-zone.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\garde-residus-zone.py"
+    },
+    {
+      "nom": "garde-segment.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\garde-segment.py"
+    },
+    {
+      "nom": "garde-tmp.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\garde-tmp.py"
+    },
+    {
+      "nom": "garde-versions-registre.json",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\garde-versions-registre.json"
+    },
+    {
+      "nom": "garde-versions.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\garde-versions.py"
+    },
+    {
+      "nom": "lanceur-non-regression-flux.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\lanceur-non-regression-flux.py"
+    },
+    {
+      "nom": "lanceur-non-regression.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\lanceur-non-regression.py"
+    },
+    {
+      "nom": "legende-crochets.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\legende-crochets.py"
+    },
+    {
+      "nom": "lire-fichier-complet.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\lire-fichier-complet.py"
+    },
+    {
+      "nom": "mesurer-lecons.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\mesurer-lecons.py"
+    },
+    {
+      "nom": "outils-readme.md",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\outils-readme.md"
+    },
+    {
+      "nom": "poser-template-pilote.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\poser-template-pilote.py"
+    },
+    {
+      "nom": "purge-points-restoration.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\purge-points-restoration.py"
+    },
+    {
+      "nom": "revert-fichier.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\revert-fichier.py"
+    },
+    {
+      "nom": "revert-periode.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\revert-periode.py"
+    },
+    {
+      "nom": "scan-valeurs-en-dur.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\scan-valeurs-en-dur.py"
+    },
+    {
+      "nom": "suivi-cameleon.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\suivi-cameleon.py"
+    },
+    {
+      "nom": "suivi-parties-maitresses.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\suivi-parties-maitresses.py"
+    },
+    {
+      "nom": "suivi-pilote.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\suivi-pilote.py"
+    },
+    {
+      "nom": "table-ronde.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\table-ronde.py"
+    },
+    {
+      "nom": "test-reel.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\test-reel.py"
+    },
+    {
+      "nom": "tester-theme.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\tester-theme.py"
+    },
+    {
+      "nom": "verifier-anti-spam-missions.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-anti-spam-missions.py"
+    },
+    {
+      "nom": "verifier-cadence.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-cadence.py"
+    },
+    {
+      "nom": "verifier-cartes-identite.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-cartes-identite.py"
+    },
+    {
+      "nom": "verifier-chaines.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-chaines.py"
+    },
+    {
+      "nom": "verifier-chapitres-espion.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-chapitres-espion.py"
+    },
+    {
+      "nom": "verifier-commandes.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-commandes.py"
+    },
+    {
+      "nom": "verifier-contrat-fondamental.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-contrat-fondamental.py"
+    },
+    {
+      "nom": "verifier-contrats-outils.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-contrats-outils.py"
+    },
+    {
+      "nom": "verifier-credibilite-missions.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-credibilite-missions.py"
+    },
+    {
+      "nom": "verifier-enchainement.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-enchainement.py"
+    },
+    {
+      "nom": "verifier-exemptions-visibles.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-exemptions-visibles.py"
+    },
+    {
+      "nom": "verifier-extraction-ecarts.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-extraction-ecarts.py"
+    },
+    {
+      "nom": "verifier-fiche.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-fiche.py"
+    },
+    {
+      "nom": "verifier-historique-non-redondant.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-historique-non-redondant.py"
+    },
+    {
+      "nom": "verifier-maillons.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-maillons.py"
+    },
+    {
+      "nom": "verifier-marbre.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-marbre.py"
+    },
+    {
+      "nom": "verifier-observations-non-redondantes.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-observations-non-redondantes.py"
+    },
+    {
+      "nom": "verifier-parcours.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-parcours.py"
+    },
+    {
+      "nom": "verifier-passes-non-redondantes.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-passes-non-redondantes.py"
+    },
+    {
+      "nom": "verifier-placeholders.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-placeholders.py"
+    },
+    {
+      "nom": "verifier-profil-injection.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-profil-injection.py"
+    },
+    {
+      "nom": "verifier-rattrapage.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-rattrapage.py"
+    },
+    {
+      "nom": "verifier-recherche.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-recherche.py"
+    },
+    {
+      "nom": "verifier-resolution.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-resolution.py"
+    },
+    {
+      "nom": "verifier-roles.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-roles.py"
+    },
+    {
+      "nom": "verifier-rotation-journal.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-rotation-journal.py"
+    },
+    {
+      "nom": "verifier-sans-attendre.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-sans-attendre.py"
+    },
+    {
+      "nom": "verifier-source-item.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-source-item.py"
+    },
+    {
+      "nom": "verifier-titre-item.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-titre-item.py"
+    },
+    {
+      "nom": "verifier-vocabulaire-etat.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\verifier-vocabulaire-etat.py"
+    },
+    {
+      "nom": "watchdog-flux2-bg.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\watchdog-flux2-bg.py"
+    },
+    {
+      "nom": "watchdog-flux2.py",
+      "type": "outil",
+      "chemin": "super-combos\\combos\\outils\\watchdog-flux2.py"
+    },
+    {
+      "nom": "c-001-lecons",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-001-lecons"
+    },
+    {
+      "nom": "c-002-variables",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-002-variables"
+    },
+    {
+      "nom": "c-003-historique",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-003-historique"
+    },
+    {
+      "nom": "c-004-modifications",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-004-modifications"
+    },
+    {
+      "nom": "c-005-usages",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-005-usages"
+    },
+    {
+      "nom": "c-006-activites",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-006-activites"
+    },
+    {
+      "nom": "c-007-frictions",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-007-frictions"
+    },
+    {
+      "nom": "c-008-cartes",
+      "type": "combo",
+      "chemin": "super-combos\\combos\\c-008-cartes"
+    },
+    {
+      "nom": "sc-001-auto-xxx",
+      "type": "super-combo",
+      "chemin": "super-combos\\sc-001-auto-xxx"
+    },
+    {
+      "nom": "sc-002-auto-evolution",
+      "type": "super-combo",
+      "chemin": "super-combos\\sc-002-auto-evolution"
+    },
+    {
+      "nom": "sc-003-auto-suivi",
+      "type": "super-combo",
+      "chemin": "super-combos\\sc-003-auto-suivi"
+    },
+    {
+      "nom": "sc-004-auto-diagnostic",
+      "type": "super-combo",
+      "chemin": "super-combos\\sc-004-auto-diagnostic"
+    },
+    {
+      "nom": "sc-005-moules",
+      "type": "super-combo",
+      "chemin": "super-combos\\sc-005-moules"
+    },
+    {
+      "nom": "sc-006-lacunes",
+      "type": "super-combo",
+      "chemin": "super-combos\\sc-006-lacunes"
+    },
+    {
+      "nom": "sc-007-table-ronde",
+      "type": "super-combo",
+      "chemin": "super-combos\\sc-007-table-ronde"
+    }
+  ]
+}

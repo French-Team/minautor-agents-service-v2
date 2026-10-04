@@ -1,0 +1,154 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+  combos:
+    - combo-maj-readme
+    - combos-maj-readme-massive
+---
+# mettre-a-jour-readme
+
+**Version :** 0.4.8
+**Statut :** prepare
+**Categorie :** mettre-a-jour
+**Chemin :** `agents/tools/mettre-a-jour/mettre-a-jour-readme/`
+**Proprietaire :** Clio (agent dedie au README)
+
+## Description
+
+Corriger le README pour qu'il reflete l'etat reel du projet, et inserer un logo et des badges en tete.
+
+> **PHILOSOPHIE -- LE README EST LE LIVRE DU PROJET** : le README est la voix du projet, pas un carnet de suivi. Quand on ajoute, modifie ou supprime quelque chose (agent, outil, fonction), le **texte existant du README doit etre corrige** pour parler de la realite. L'outil ne fait JAMAIS d'ajout de lignes d'historique ou de chronologie.
+
+## Utilisation
+
+Version Python (recommandee) :
+
+```bash
+# Verifier les ecarts entre l'etat reel et le README (dry-run)
+python3 mettre-a-jour-readme.py --verifier
+
+# Corriger le texte du README (tables, compteurs)
+python3 mettre-a-jour-readme.py --maj
+
+# Inserer une image (logo) en tete du README, apres le titre H1
+python3 mettre-a-jour-readme.py --logo <chemin-image>
+
+# Inserer des badges statiques Shields en tete (label=message:couleur;...)
+python3 mettre-a-jour-readme.py --badges "Plateforme=Windows:blue;Statut=stable:brightgreen"
+
+# Consulter les interventions recentes pour savoir CE QUI A CHANGE (diagnostic)
+python3 mettre-a-jour-readme.py --journal
+
+# Compter les agents reels
+python3 mettre-a-jour-readme.py --agents
+
+# Compter les outils reels par categorie
+python3 mettre-a-jour-readme.py --outils
+```
+
+Version bash equivalente : `mettre-a-jour-readme.sh` (meme logique).
+
+## Options
+
+| Option | Description | Defaut |
+|---|---|---|
+| `--verifier` | Comparer l'etat reel au README, lister les ecarts sans modifier | - |
+| `--dry-run` | Preview AVANT/APRES sans ecrire (obligatoire avant --maj) | - |
+| `--maj` | Corriger le texte du README (agents, outils, compteurs) | - |
+| `--logo CHEMIN` | Inserer une image (logo) en tete du README, apres le titre H1 (idempotent) | - |
+| `--badges SPEC` | Inserer des badges statiques Shields en tete (format `label=message:couleur;...`), apres le titre H1 (idempotent) | - |
+| `--journal [N]` | Consulter les N dernieres interventions (diagnostic, NON inscrit au README) | 10 |
+| `--agents` | Afficher le compte reel des agents | - |
+| `--outils` | Afficher le compte reel des outils par categorie | - |
+| `--help` | Afficher l'aide | - |
+
+## Ce que l'outil fait
+
+1. **Consulte** - Les interventions de `AGENTS-historique.md` pour savoir CE QUI A CHANGE
+2. **Compare** - L'etat reel (agents, outils par categorie) avec le contenu du README
+3. **Corrige** - Le texte existant du README :
+   - Table des agents : ajoute les agents manquants
+   - Boite a outils : corrige les compteurs par categorie et le total
+   - Liste des outils : ajoute les outils manquants dans leur categorie
+4. **Logo** - Insere une image (`--logo`) juste apres le titre H1 du README, au format
+   d'une image Markdown (texte alternatif "Logo" + chemin fourni a l'option,
+   chemin et texte alternatif en ASCII, regle immuable). Idempotent :
+   si le chemin est deja present, rien n'est insere.
+5. **Badges** - Insere des badges statiques Shields (`--badges`) juste apres le titre H1,
+   au format `label=message:couleur` separes par `;`. Chaque badge est une image
+   Markdown liee (clic) vers `img.shields.io/badge/...?style=flat`. ASCII strict
+   (label, message, couleur), idempotent (aucun doublon), absence de H1 et spec
+   invalide geres (exit 1).
+6. **Rapporte** - Les ecarts detectes et les corrections appliquees
+
+## Ce que l'outil ne fait JAMAIS
+
+- Il n'ajoute AUCUNE section de chronologie ou d'historique au README
+- Il n'empile PAS de lignes d'interventions
+- Il ne touche pas aux descriptions redigees (la voix du livre est preservee)
+
+## Sources de verite
+
+| Source | Utilisation |
+|---|---|
+| `agents/` | Agents reels et leurs roles (lus dans les fiches) |
+| `agents/tools/[categorie]/` | Outils reels par categorie |
+| `AGENTS-historique.md` | Diagnostic : ce qui a change (jamais affiche dans le README) |
+
+## Exemples de sortie
+
+```bash
+$ mettre-a-jour-readme.sh --verifier
+
+=== ETAT REEL DU PROJET ===
+
+Agents reels : 10
+
+Outils par categorie :
+  explorer      : 12
+  ...
+  TOTAL         : 52
+
+=== ECARTS AVEC LE README ===
+
+  [OK] Tous les agents sont dans la table
+  [OBSOLETE] Titre : 'La boite a outils (51 outils)' -> devrait etre 52
+  [OBSOLETE] Corriger : README dit 9, reel = 10
+  ...
+
+Utilisez --maj pour corriger le texte du README.
+```
+
+## Quand l'utiliser
+
+| Situation | Utilisation |
+|---|---|
+| **Apres chaque mission** | Clio lance `--verifier`, puis `--dry-run`, puis `--maj` apres chaque retour d'agent |
+| **Ajout/modification du projet** | Nouvel agent, nouvel outil, nouvelle structure |
+| **Avant une session** | Verifier que le README reflete l'etat reel |
+
+## Relation avec les autres outils
+
+| Outil | Complement |
+|---|---|
+| `activer-agent-principal` | Met a jour AGENTS-historique.md (source de diagnostic) |
+| `lister-agents` | Verifier les agents listes |
+| `lister-outils` | Verifier les outils listes |
+| `rechercher-*` | Verifier les documents par type |
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.4.8 | 2026-09-05 | FIX TABLE AGENTS DU README PUBLIC : la presence des agents etait verifiee dans tout le fichier -- une mention narrative ('**Oracle**' dans 'Mon pilote') ou des lignes orphelines en fin de fichier masquaient des agents absents de la table (Ferrari/Nemesis/Oracle manquaient, des doublons 3 colonnes trainaient en fin de Vocabulaire). v0.4.8 : verification restreinte a la table 'Mes agents' (region entre le titre et le titre suivant), insertion des manquants en fin de table au format 2 colonnes de cette table (avant : ancre obsolete '### Le cycle fondamental' + format 3 colonnes). Verifier + dry-run + maj corriges (python et bash, parite). Version bash : compteurs calcules une seule fois par invocation (cache) + boucles sans sous-processus par dossier (lenteur msys). |
+| 0.4.7 | 2026-09-05 | MAJ COMPLETE : --maj corrige desormais CE QUE --verifier signale. (1) Badges du header README (Outils-N, Agents-N) alignes affichage + href (lecon Clio/Janus : les badges en dur n etaient pas corriges). (2) Tableau readme-dev section 6 reconstruit : comptes reels par categorie, categories obsoletes (compte 0, ex Coordination/Cartographier) retirees, manquantes (ex Oracle/Presenter) ajoutees, ligne de synthese section 1 mise a jour (anti-recurrence bug Clio 132 vs 134 : on corrige au lieu de verifier). (3) Exclusion des dossiers techniques `__pycache__` du compte d outils (alignement sur combos-analyse-projet : un dossier de compilation n est pas un outil). (4) verifier() controle aussi le badge Agents. (5) Version bash : migration agents v1 (parcours-<nom>.json) -> v2 (arbre-<nom>.json) + README_DEV + memes correctifs. |
+| 0.2.0-beta | 2026-08-06 | Version precedente (beta) |
+| 0.2.0 | 2026-08-07 | Promotion prepare : passage v2 final |
+| 0.2.0-py | 2026-08-07 | Version Python creee (mettre-a-jour-readme.py), basee sur outil-template.py. Portage fidele : verifier/maj/journal/agents/outils, cas speciaux tester/combos/templates, reconstruction des lignes outils en 3 colonnes |
+| 0.3.0 | 2026-08-07 | Ajout option `--logo CHEMIN` : inserer une image (logo) en tete du README, apres le titre H1. Idempotent (aucun doublon), fichier manquant et absence de H1 geres (exit 1). Ajoute dans les versions Python (0.3.0-py) et bash (0.3.0) |
+| 0.4.4 | 2026-08-20 | Ajout option `--dry-run` : preview AVANT/APRES sans ecrire (obligatoire avant --maj, regle Clio). Affiche les changements qui seraient faits (titres, compteurs, agents, outils manquants). |
+| 0.4.2 | 2026-08-15 | ANTI-RECURRENCE compteurs (bug Clio 132 vs 134) : verifier_somme_comptes() verifie que la SOMME des compteurs du tableau readme-dev (section 6) = le total reel calcule + chaque ligne vs le reel par categorie. Branche dans --verifier et --maj (controle final). |
+| 0.4.1 | 2026-08-14 | Filtre agents : seul un dossier avec parcours JSON (agents/<nom>/parcours/parcours-<nom>.json) est un agent d action. Les dossiers concepts (classeur-variables, conventions, philosophie, regles-immuables, traces) ne sont plus listes ni ajoutes a la table des agents du README. |
+| 0.4.0 | 2026-08-07 | Ajout option `--badges SPEC` : inserer des badges statiques Shields en tete du README (format `label=message:couleur;...`), apres le titre H1. Images Markdown liees (clic) `img.shields.io/badge/...?style=flat`. Encodage espace/tiret, validation ASCII stricte (label, message, couleur), idempotent, spec invalide et absence de H1 geres (exit 1). Base : recherche Atlas (recherches-web/badges-github-shields/). Versions Python (0.4.0-py) et bash (0.4.0) |

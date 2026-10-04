@@ -1,0 +1,46 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "LACUNES-INVESTIGUER",
+    "description": "Ramener a la racine -- Phase 3 : WHY -- que manque-t-il, ou manque-t-il, et pourquoi l erreur est-elle POSSIBLE. Une racine qui ne nomme pas un emplacement n est pas une racine."
+  },
+  "theme": {
+    "nom": "LACUNES-INVESTIGUER",
+    "but": "Phase 3 : WHY -- que manque-t-il, ou manque-t-il, et pourquoi l erreur est-elle POSSIBLE. Une racine qui ne nomme pas un emplacement n est pas une racine.",
+    "redirects": [
+      {
+        "besoin": "Nommer le manquant",
+        "action": "procedure",
+        "etapes": [
+          "Ecrire le manque en UNE phrase : pas le symptome",
+          "Si on ne peut pas l ecrire, la lacune n est pas encore comprise"
+        ],
+        "regle": "Si on ne peut pas l ecrire, la lacune n est pas encore comprise"
+      },
+      {
+        "besoin": "Nommer l endroit",
+        "action": "procedure",
+        "etapes": [
+          "Donner un CHEMIN, pas une direction",
+          "Le fichier, la porte, la regle -- ce qu on peut ouvrir"
+        ],
+        "regle": "Le fichier, la porte, la regle -- ce qu on peut ouvrir"
+      },
+      {
+        "besoin": "Nommer la cause",
+        "action": "procedure",
+        "etapes": [
+          "Pourquoi l erreur est possible ET NON CONTINGENTE",
+          "Une cause qui ne rend pas l erreur impossible se traite, elle ne se comble pas"
+        ],
+        "regle": "Une cause qui ne rend pas l erreur impossible se traite, elle ne se comble pas"
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

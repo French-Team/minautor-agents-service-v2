@@ -1,0 +1,69 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "buffy",
+    "nom": "AUTRE",
+    "description": "Mission hors parcours : sous-mission, delegation, outil temporaire"
+  },
+  "theme": {
+    "nom": "AUTRE",
+    "but": "Gerer les missions qui ne rentrent pas dans les themes specifiques",
+    "redirects": [
+      {
+        "besoin": "Mission dans le domaine d un autre agent ? (delegation)",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> Activer l agent habilite",
+          "NON -> Verifier si outil temporaire necessaire"
+        ],
+        "regle": "REGLE ABSOLUE : je n execute JAMAIS une mission qui ne releve pas de mon domaine."
+      },
+      {
+        "besoin": "Activer l agent habilite",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>"
+        ],
+        "regle": "Delegation propre : activer l agent, pas executer soi-meme."
+      },
+      {
+        "besoin": "Besoin d outil qui n existe pas ?",
+        "action": "procedure",
+        "etapes": [
+          "TEMPORAIRE -> creer l outil temporaire",
+          "DURABLE -> activer Vulcain (je suis Buffy, pas Vulcain)"
+        ],
+        "regle": "REGLE ANTI-SCRIPTS : DECLARER au registre."
+      },
+      {
+        "besoin": "Creer l outil temporaire",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/executer/executer-script-temporaire/executer-script-temporaire.py"
+        ],
+        "regle": "Script temporaire : 0 residu en fin de mission."
+      },
+      {
+        "besoin": "Enregistrer l usage",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --mode script-temporaire"
+        ],
+        "regle": "DECLARATION au registre obligatoire."
+      },
+      {
+        "besoin": "Signaler le besoin",
+        "action": "procedure",
+        "etapes": [
+          "fin-delegation"
+        ],
+        "regle": "Signaler a Cerberus si le besoin depasse mon perimetre."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-delegation"
+  }
+}

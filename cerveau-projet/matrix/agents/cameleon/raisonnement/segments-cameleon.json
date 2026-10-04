@@ -1,0 +1,21 @@
+{
+  "identite": {
+    "type": "segments-cameleon.json",
+    "version": 1
+  },
+  "segments": [
+    {
+      "id": "RC-001",
+      "date": "2026-09-27 13:25:55",
+      "segment": "RC-001 : raisonnement par segments (cote CAMELEON) -- un raisonnement progressif, trace et reutilisable ; un segment est un DOCUMENT a carte, jamais une entree de JSONL ; cette BDD est PARTAGEE dans la Matrice (decision createur 2026-09-27), distincte de la BDD de raisonnement qui vit, elle, dans la zone invisible",
+      "tags": [
+        "raisonnement",
+        "segment",
+        "RC-001",
+        "fondation"
+      ],
+      "source": "MO-483"
+    }
+  ],
+  "compteur": 1
+}

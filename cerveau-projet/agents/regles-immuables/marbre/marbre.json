@@ -1,0 +1,32 @@
+{
+ "version": "0.1.0",
+ "description": "Manifeste du marbre : zones protegees du noyau. Toute modification d une zone sans passer par proteger-modifier-marbre (autorisation utilisateur) est une violation (verrou avant + garde-fou test-057 apres).",
+ "zones": {
+  "constitution": {
+   "fichier": "AGENTS.md",
+   "type": "marqueurs",
+   "marqueur_debut": "<!-- MARBRE:DEBUT constitution -->",
+   "marqueur_fin": "<!-- MARBRE:FIN constitution -->",
+   "raison": "Constitution du cerveau-projet : Configuration Active + cycle fondamental (regles immuables du comportement de Cerberus)",
+   "empreinte": "6ab8ecf98a4edc83a67d7f6bae33270c5c39683be4eae47824d67c2d2d4a6968",
+   "modifie_le": "2026-09-05 19:53:38",
+   "raison_modification": "Ajout regle 3 TRAVAIL EN SERIE OBLIGATOIRE en mode single-llm (decision utilisateur 2026-09-05, proposition Gardien validee par l utilisateur)"
+  },
+  "regles-groupes-agents": {
+   "fichier": "cerveau-projet/agents/regles-immuables/general/regles-groupes-agents.md",
+   "type": "fichier",
+   "raison": "Regle immuable des groupes d agents et des domaines separes",
+   "empreinte": "bf816aa5fd3062be348ed8fd14882afc384f093df594949d7a127c994c68b01a",
+   "modifie_le": "2026-08-28 22:09:25",
+   "raison_modification": "test-084 preuve positive audit"
+  },
+  "regles-general-global": {
+   "fichier": "cerveau-projet/agents/regles-immuables/general/regles-general-global.md",
+   "type": "fichier",
+   "raison": "REGLE D OR anti-valeurs-magiques gravee dans les regles globales (decision utilisateur 2026-08-16)",
+   "empreinte": "cb42422907fa8e05acf8042e82185c25442ad33481d39a98a62e3557b6d0770e",
+   "modifie_le": "2026-08-31 09:14:54",
+   "raison_modification": "Renforcer les regles v1 contre les boucles d annonces, les transitions implicites et la negligence du classeur de variables"
+  }
+ }
+}

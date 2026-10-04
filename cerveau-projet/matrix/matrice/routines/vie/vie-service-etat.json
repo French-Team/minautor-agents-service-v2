@@ -1,0 +1,78 @@
+{
+  "routines": {
+    "vigie-profil": {
+      "allume_le": null,
+      "dernier_allumage": "2026-10-04 17:21:14",
+      "passe_publiee_le": "2026-10-04 17:21:14",
+      "compteur": 733
+    },
+    "routeur-maintenance": {
+      "allume_le": null,
+      "dernier_allumage": "2026-10-04 17:34:42",
+      "passe_publiee_le": "2026-10-04 17:34:42",
+      "compteur": 11012
+    },
+    "suivi-sync": {
+      "allume_le": null,
+      "dernier_allumage": "2026-10-04 17:34:42",
+      "passe_publiee_le": "2026-10-04 17:34:42",
+      "compteur": 10990
+    },
+    "veille-flux": {
+      "allume_le": null,
+      "dernier_allumage": "2026-10-04 17:30:30",
+      "passe_publiee_le": "2026-10-04 17:30:30",
+      "compteur": 2196,
+      "dernier_echec": {
+        "motif": "code retour 1",
+        "date": "2026-10-04 11:30:11",
+        "code": 1
+      },
+      "anti_spam": {
+        "motif": "code retour 1",
+        "date": "2026-10-04 11:30:26",
+        "niveau": "haute",
+        "code": 0
+      }
+    },
+    "espion-integrite": {
+      "allume_le": null,
+      "dernier_allumage": "2026-10-04 17:30:30",
+      "passe_publiee_le": "2026-10-04 17:30:30",
+      "compteur": 2197,
+      "dernier_echec": {
+        "motif": "code retour 1",
+        "date": "2026-10-03 14:31:42",
+        "code": 1
+      },
+      "anti_spam": {
+        "motif": "code retour 1",
+        "date": "2026-10-03 14:21:29",
+        "niveau": "haute",
+        "code": 0
+      }
+    },
+    "vigie-portes": {
+      "allume_le": null,
+      "dernier_allumage": "2026-10-04 17:21:14",
+      "dernier_echec": {
+        "motif": "code retour 1",
+        "date": "2026-10-04 17:21:14",
+        "code": 1
+      },
+      "anti_spam": {
+        "motif": "code retour 1",
+        "date": "2026-10-04 17:21:15",
+        "niveau": "haute",
+        "code": 0
+      }
+    },
+    "verifier-liens-cartes": {
+      "allume_le": null,
+      "dernier_allumage": "2026-10-04 16:35:16",
+      "passe_publiee_le": "2026-10-04 16:35:16",
+      "compteur": 186
+    }
+  },
+  "demarrage_service": "2026-09-26 18:17:04"
+}

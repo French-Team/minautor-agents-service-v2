@@ -1,0 +1,24 @@
+{
+ "identite": {
+  "type": "habilitation",
+  "appartient_a": "socrate",
+  "version": "0.1.0",
+  "commun": false
+ },
+ "agent": "socrate",
+ "description": "Table d habilitation dediee (migration v1->v2 2026-09-05) : fusion parcours v1 + arbres/themes v2 + P0 partages. Source unique du verrou d habilitation.",
+ "outils": [
+  "activer-agent-principal",
+  "ajouter-contenu-fichier",
+  "consulter-combos",
+  "consulter-lecons",
+  "creer-fichier",
+  "enregistrer-usage-outil",
+  "generateurs-commande",
+  "guider-arbre",
+  "lire-activite-recente",
+  "lire-fichier",
+  "verifier-agent-perimetre",
+  "verifier-systeme"
+ ]
+}

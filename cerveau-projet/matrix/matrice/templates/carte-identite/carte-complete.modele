@@ -1,0 +1,63 @@
+---
+identite:
+  # ---- LES TROIS CLES OBLIGATOIRES (le garde refuse une carte qui les omet) ----
+  # `type` : vocabulaire FERME -- la liste vit dans le DOMICILE
+  #          (matrice/data/commun/carte_identite.py, TYPES_RECONNUS : 18 valeurs).
+  #          Un type neuf se DECLARE la-bas, il ne s invente pas ici.
+  type: fiche
+  # `appartient_a` : un NOM, jamais un chemin (ni / ni \). Il dit A QUI le
+  #                  document appartient : matrice, matrice-routines, optimus-prime ...
+  appartient_a: matrice
+  # `commun` : true si le document sert les DEUX sessions, false sinon.
+  #            Mesure du 2026-09-23 : 6 cartes sur 14 l OMETTENT -- une cle
+  #            obligatoire absente est un HORS CONTRAT, pas un detail.
+  commun: false
+
+  # ---- L IMPORTANCE (EO-457, demande createur 2026-09-27) --------------------
+  # Deux cles de plus, qui disent le DEGRE D IMPORTANCE du document et servent a
+  # DECIDER quel travail passe DEVANT : GRAVITE d abord (la bande), puis NIVEAU (le
+  # raffinement dans la bande). Valeurs FERMEES, jugees par le domicile.
+  gravite: normal               # tres-urgent, urgent, important, normal, optionnel
+  niveau: 5                     # entier de 1 a 10 ; PLUS HAUT = PLUS IMPORTANT
+
+  # ---- LES CLES LIBRES QUI ONT FAIT LEURS PREUVES (mesure du 2026-09-23) ----
+  version: 1                    # 13 cartes sur 14 la portent
+  date: AAAA-MM-JJ              # 6 cartes sur 14
+  statut: a-jour                # en clair : a-jour, en-cours, gele, obsolete
+  tags: mot-cle, mot-cle        # se cherche par --champ "tags=..." (valeur ENTIERE)
+
+  # ---- LA CLE DES VOISINS : `liens` ------------------------------------------
+  # Elle rend un fichier CONNECTE retrouvable, dans les deux sens de lecture :
+  #   --lien <chemin>  ->  qui pointe vers ce fichier ?
+  # REGLES (les memes que le garde et la routine `verifier-liens-cartes`) :
+  #   1. un CHEMIN CANONIQUE depuis la racine des documents
+  #      (ex. matrice/data/commun/cible.py) -- jamais un nom seul, jamais un
+  #      chemin absolu, jamais un < voir aussi > perdu dans la prose ;
+  #   2. jamais un lien vers SOI-MEME (le garde le nomme : egocentrique) ;
+  #   3. la cible doit EXISTER (le garde le nomme : lien mort) ;
+  #   4. le lien se DECLARE DES DEUX COTES : si A nomme B, B nomme A -- c est le
+  #      RETOUR, que la routine mesure (le garde, lui, juge forme, mort et
+  #      egocentrisme : EO-347) ;
+  #   5. sous six liens, la ligne reste lisible ; au-dela, preferer un `index`.
+  liens: matrice/data/commun/carte_identite.py, matrice/data/manuel-outils.md
+---
+
+# <TITRE DU DOCUMENT>
+
+<Ce que ce document dit, et pour qui. Une carte juste commence par un document qui
+dit vraiment quelque chose : la carte ne remplace pas le contenu, elle le rend
+TROUVABLE -- et un document muet avec une belle carte reste un document muet.>
+
+## Ce qui le connecte
+
+- `matrice/data/commun/carte_identite.py` -- la grammaire que cette carte respecte.
+- `matrice/data/manuel-outils.md` -- le manuel qui documente l outil voisin.
+
+## Ce que ce document n est pas
+
+<Le domaine voisin, et le document qui le porte : un LIEN, pas une explication.>
+
+## Pour le retrouver
+
+- par sa carte : `--champ "type=fiche;appartient_a=matrice"`
+- depuis un voisin : `--lien matrice/data/commun/carte_identite.py`

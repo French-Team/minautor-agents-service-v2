@@ -1,0 +1,124 @@
+"""Constantes du pilote : chemins et valeurs.
+
+Convention zero-valeur-en-dur : la logique CONSOMME ces valeurs, elle ne les contient pas.
+"""
+from pathlib import Path
+
+REPERTOIRE_PILOTE = Path(__file__).resolve().parent
+REPERTOIRE_MATRICE = REPERTOIRE_PILOTE.parent
+if REPERTOIRE_MATRICE.name != "matrice":
+    raise RuntimeError(
+        "Structure inattendue : " + str(REPERTOIRE_MATRICE) + " n'est pas le dossier matrice/"
+    )
+
+REPERTOIRE_DATA = REPERTOIRE_MATRICE / "data"
+REPERTOIRE_INTERCOM = REPERTOIRE_MATRICE / "intercom"
+
+# data/commun (motif unique M-076) : le dossier PARTAGE est installe dans
+# sys.path. tokens.py y vit : l'espion de POIDS des injections (E-097,
+# imperatif 56) et le sac-a-dos. Garde-fou L-006 : le dossier cible est
+# verifie avant d'etre installe (jamais un chemin devine).
+import sys as _sys
+
+REPERTOIRE_COMMUN = REPERTOIRE_DATA / "commun"
+if REPERTOIRE_COMMUN.name == "commun" and (REPERTOIRE_COMMUN / "tokens.py").is_file():
+    _sys.path.insert(0, str(REPERTOIRE_COMMUN))
+
+# Prefixe des missions de CE pilote (regle CV-009 : une famille = un prefixe,
+# attribue depuis ses constantes, jamais recopie). M- = missions du CAMELEON
+# (Flux 1) ; les missions d'Optimus (Flux 2) sont MO- et vivent dans
+# _operateur/optimus-prime/pilote/constants.py PREFIXE_ID.
+# Historique : c'est ce "M-" code en dur qui a produit la fuite du 2026-09-13
+# (des missions d'Optimus declarees M- et donc rangees du mauvais cote) --
+# la constante existait chez Optimus, pas ici.
+PREFIXE_ID = "M-"
+
+NOM_FILE = "file-missions.json"
+CHEMIN_FILE = REPERTOIRE_PILOTE / NOM_FILE
+
+# Entonnoir (echelon 4) : la tresse de la file principale (doit rester
+# synchronise avec entonnoir/listes.py NOM_ENTONNOIR).
+NOM_ENTONNOIR = "entonnoir-files.json"
+CHEMIN_ENTONNOIR = REPERTOIRE_PILOTE / NOM_ENTONNOIR
+NOM_HISTORIQUE = "historiques-missions.jsonl"
+CHEMIN_HISTORIQUE = REPERTOIRE_DATA / NOM_HISTORIQUE
+
+# Registre des THEMES de mission (genere depuis le moule theme-bdd).
+# Consomme par charger_themes_utiles (doctrine lecons_utiles) : jamais bloquant.
+NOM_THEMES = "vivier-themes.json"
+CHEMIN_THEMES = REPERTOIRE_DATA / NOM_THEMES
+
+# Mise en securite defcon (variable tenue par l'outil machine-defcon).
+CLE_DEFCON = "defcon"
+NIVEAU_DEFCON_MAX = 5
+THEME_DEFCON = "DEFCON"
+CHEMIN_CLASSEUR_VARIABLES = REPERTOIRE_DATA / "classeur-variables.json"
+
+# Protocole de pause session-matrix (M-080) : l'etat serialise pose par
+# l'outil pause-session au niveau data/. S'il existe, la session est EN PAUSE.
+NOM_ETAT_PAUSE = "session-matrix-etat.json"
+CHEMIN_ETAT_PAUSE = REPERTOIRE_DATA / NOM_ETAT_PAUSE
+
+# ZONE DES FICHIERS JETABLES du cameleon (regle immuable perimetre-tmp) : le
+# PILOTE la VIDE a la cloture (MO-136), comme le pilote Optimus, et par le MEME
+# moteur (data/commun/zone_tmp.py) -- point 1 de la regle : chaque zone a SON
+# domicile, donc seule la zone change d'un flux a l'autre.
+# Nom et DOMICILE de la zone jetable viennent du moteur PARTAGE
+# (data/commun/zone_tmp.py) : une valeur, une maison (M-076). Regle R-005
+# (MO-189) : la zone d'un flux vit dans SON PERIMETRE D'ECRITURE -- celui du
+# cameleon est workspace/, donc sa zone n'est plus matrix/tmp-cameleon mais
+# <racine>/workspace/tmp-cameleon. La racine se DETECTE (motif partage racine.py).
+from racine import detecter_racine  # noqa: E402
+from zone_tmp import NOM_ZONE_CAMELEON, chemin_zone_cameleon  # noqa: E402
+
+RACINE_WORKSPACE = detecter_racine(REPERTOIRE_PILOTE)
+NOM_ZONE_TMP = NOM_ZONE_CAMELEON
+REPERTOIRE_ZONE_TMP = chemin_zone_cameleon(RACINE_WORKSPACE)
+NOM_README_ZONE_TMP = 'README.md'
+
+# Porte de la VUE du journal (M-079) : le pilote la regenere a la cloture, comme
+# le pilote Optimus regenere `suivi-optimus.md` (MO-136). La vue est une
+# PROJECTION derivee des BDD : la rafraichir ne cree jamais de doublon. Le
+# chemin est declare UNE fois ici (zero-valeur-en-dur), jamais recopie.
+CHEMIN_PORTE_JOURNAL = REPERTOIRE_DATA / "outils" / "journal-multi-encarts" / "main.py"
+
+# MOTEUR DE RECHERCHE (EO-131) : meme doctrine que le pilote Optimus -- le pilote
+# fournit la QUESTION au moment ou elle sert (le sujet de la mission) au lieu de
+# laisser l'agent y penser. Un seul module PARTAGE derive la question
+# (data/commun/recherche_mission.py) ; ici, le gabarit du FLUX 1 : il ne porte
+# AUCUNE option qui ouvrirait une zone interne (L-016) -- la recherche du
+# cameleon reste dans son perimetre, comme sa fiche le lui interdit.
+CHEMIN_MOTEUR_RECHERCHE = REPERTOIRE_DATA / "outils" / "rechercher" / "main.py"
+OPTIONS_MOTEUR_RECHERCHE = "--dans tous"
+GABARIT_COMMANDE_RECHERCHE = (
+    "python3 " + str(CHEMIN_MOTEUR_RECHERCHE)
+    + " rechercher --requete \"{question}\" " + OPTIONS_MOTEUR_RECHERCHE
+)
+
+BOITE_PILOTE_OUT = REPERTOIRE_INTERCOM / "pilote" / "outbox.jsonl"
+BOITE_MATRICE_IN = REPERTOIRE_INTERCOM / "matrice" / "inbox.jsonl"
+
+# NATURE DE LA BOITE DE SORTIE (MO-441, ecart EC4 de l audit MO-365) : mesure du
+# 2026-09-27 -- le contenu depose ici n a AUCUN lecteur de contenu pour le Flux 1
+# (les seuls lecteurs sont un affichage de TAILLE, le cockpit, et la LISIBILITE
+# des boites, maillon 6 de la non-regression). Les ORDRES du cameleon ont un
+# autre canal, mesure lui aussi : la FILE, imprimee par main.py statut
+# (identifiant, theme, objectif, checklist) ; ses SOURCES viennent du CATALOGUE,
+# servi par main.py injecter (ORDRE 2 de demarrer-cameleon.md). Le porteur BORNE
+# de Flux 2 (la fiche technique, MO-471 a MO-477) vit en zone INVISIBLE : le
+# cameleon ne peut pas le consommer (L-016), et le recopier serait une 2e copie
+# d une regle (M-076) -- d ou la declaration : la boite est une TRACE, jamais un
+# canal. Elle est PORTEE par la porte qui depose (injection/fonctions.py), qui la
+# CONSOMME ici, jamais recopiee.
+NATURE_BOITE_PILOTE_OUT = "trace"
+DECLARATION_BOITE_PILOTE_OUT = (
+    "TRACE (aucun porteur jusqu a l agent) : les ordres se lisent par"
+    " main.py statut (la FILE), les sources par main.py injecter."
+)
+
+STATUT_EN_ATTENTE = "en-attente"
+STATUT_EN_COURS = "en-cours"
+STATUT_TERMINEE = "terminee"
+
+ENCODAGE = "utf-8"
+INDENTATION_JSON = 2

@@ -1,0 +1,303 @@
+{
+  "vrac": [
+    {
+      "id": "E-094",
+      "theme": "MATRICE",
+      "objectif": "Corriger demarrer-optimus-prime.md (3 frictions : porte bdd-lecons morte, flux cameleon, validation createur perimee) [origine : M-115, journal cameleon du 2026-09-11 23:40 - mal routee]",
+      "urgence": "normale",
+      "source": "createur",
+      "deposee_le": "2026-09-13 09:18:26"
+    },
+    {
+      "id": "E-095",
+      "theme": "MATRICE",
+      "objectif": "Suite non-regression du FLUX (Matrice demarre ? pilote fonctionne ? fantomes ? file bloquee ?) - imperatif 62 [origine : M-116, journal cameleon du 2026-09-11 23:40 - mal routee]",
+      "urgence": "normale",
+      "source": "createur",
+      "deposee_le": "2026-09-13 09:18:27"
+    },
+    {
+      "id": "E-096",
+      "theme": "MATRICE",
+      "objectif": "Theme fichier executant (.py/.json/.md -> ajouter/modifier/corriger) - imperatif 66-83 [origine : M-117, journal cameleon du 2026-09-11 23:40 - mal routee]",
+      "urgence": "normale",
+      "source": "createur",
+      "deposee_le": "2026-09-13 09:18:27"
+    },
+    {
+      "id": "E-097",
+      "theme": "MATRICE",
+      "objectif": "Tokens avant/apres dans sac-a-dos - imperatif 56 [origine : M-118, journal cameleon du 2026-09-11 23:40 - mal routee]",
+      "urgence": "normale",
+      "source": "createur",
+      "deposee_le": "2026-09-13 09:18:27"
+    },
+    {
+      "id": "E-098",
+      "theme": "MATRICE",
+      "objectif": "Generateur de combos (pendant creer-outil) - imperatif 46 [origine : M-119, journal cameleon du 2026-09-11 23:40 - mal routee]",
+      "urgence": "normale",
+      "source": "createur",
+      "deposee_le": "2026-09-13 09:18:27"
+    },
+    {
+      "id": "E-099",
+      "theme": "MATRICE",
+      "objectif": "Convention chemins/flags (problemes fondamentaux imperatif 24) [origine : M-120, journal cameleon du 2026-09-11 23:40 - mal routee]",
+      "urgence": "normale",
+      "source": "createur",
+      "deposee_le": "2026-09-13 09:18:27"
+    }
+  ],
+  "files": {
+    "dev": [],
+    "reparation": [],
+    "doc": [],
+    "audit": [
+      {
+        "id": "E-084",
+        "theme": "AUDIT-NEMESIS",
+        "objectif": "Corriger le compteur desynchronise de suivi-optimus.md : affiche 6 missions en attente alors que l'entonnoir est a 0",
+        "urgence": "bloquante",
+        "source": "audit-nemesis",
+        "deposee_le": "2026-09-12 20:13:32",
+        "type": "audit",
+        "categorie": "marbre",
+        "classee_le": "2026-09-12 20:14:54"
+      },
+      {
+        "id": "E-085",
+        "theme": "AUDIT-NEMESIS",
+        "objectif": "Corriger les 4 fichiers avec violations ASCII : suivi-optimus.md (ligne 71), tracebacks-historique.jsonl (lignes 1-5), inbox.jsonl maintenance (ligne 9), inbox.jsonl matrice (ligne 109)",
+        "urgence": "bloquante",
+        "source": "audit-nemesis",
+        "deposee_le": "2026-09-12 20:13:41",
+        "type": "audit",
+        "categorie": "marbre",
+        "classee_le": "2026-09-12 20:15:02"
+      },
+      {
+        "id": "E-086",
+        "theme": "AUDIT-NEMESIS",
+        "objectif": "Decider du sort des routines arretees : veille-flux, espion-integrite, suivi-sync sont en ARRET. La Matrice dort. Relancer ou confirmer l'arret intentionnel",
+        "urgence": "haute",
+        "source": "audit-nemesis",
+        "deposee_le": "2026-09-12 20:13:48",
+        "type": "audit",
+        "categorie": "flux",
+        "classee_le": "2026-09-12 20:15:08"
+      },
+      {
+        "id": "E-087",
+        "theme": "AUDIT-NEMESIS",
+        "objectif": "Archiver ou supprimer les 89 fins sans debut dans suivi-optimus (legacy avant marbre 2026-09-11 19:00:00)",
+        "urgence": "haute",
+        "source": "audit-nemesis",
+        "deposee_le": "2026-09-12 20:13:58",
+        "type": "audit",
+        "categorie": "file",
+        "classee_le": "2026-09-12 20:15:18"
+      },
+      {
+        "id": "E-088",
+        "theme": "AUDIT-NEMESIS",
+        "objectif": "Corriger le garde-perimetre : signale 172 fichiers 'hors matrix/' alors qu'ils sont dans matrix/_operateur/. Faux positif = garde inutile",
+        "urgence": "haute",
+        "source": "audit-nemesis",
+        "deposee_le": "2026-09-12 20:14:05",
+        "type": "audit",
+        "categorie": "marbre",
+        "classee_le": "2026-09-12 20:15:24"
+      },
+      {
+        "id": "E-089",
+        "theme": "AUDIT-NEMESIS",
+        "objectif": "Verifier et corriger vivier-themes.json : espion-integrite a detecte un ecart sur cette BDD",
+        "urgence": "haute",
+        "source": "audit-nemesis",
+        "deposee_le": "2026-09-12 20:14:13",
+        "type": "audit",
+        "categorie": "marbre",
+        "classee_le": "2026-09-12 20:15:31"
+      },
+      {
+        "id": "E-090",
+        "theme": "AUDIT-NEMESIS",
+        "objectif": "Purger outil.jsonl (634 KB, 263 lignes) : trop gros, pas de purge des anciens messages",
+        "urgence": "normale",
+        "source": "audit-nemesis",
+        "deposee_le": "2026-09-12 20:14:21",
+        "type": "audit",
+        "categorie": "autre",
+        "classee_le": "2026-09-12 20:15:38"
+      },
+      {
+        "id": "E-091",
+        "theme": "AUDIT-NEMESIS",
+        "objectif": "Archiver les 89 missions terminees dans file-missions.json : fichier qui grossit sans limite",
+        "urgence": "normale",
+        "source": "audit-nemesis",
+        "deposee_le": "2026-09-12 20:14:28",
+        "type": "audit",
+        "categorie": "file",
+        "classee_le": "2026-09-12 20:15:48"
+      },
+      {
+        "id": "E-092",
+        "theme": "AUDIT-NEMESIS",
+        "objectif": "Implementer rotation pour suivi-optimus.jsonl (243 evenements, pas de limite)",
+        "urgence": "basse",
+        "source": "audit-nemesis",
+        "deposee_le": "2026-09-12 20:14:35",
+        "type": "audit",
+        "categorie": "autre",
+        "classee_le": "2026-09-12 20:15:55"
+      },
+      {
+        "id": "E-093",
+        "theme": "AUDIT-NEMESIS",
+        "objectif": "Monitorer les PIDs regulierement : suivi-sync PID 15272 nettoye, processus zombie detecte",
+        "urgence": "normale",
+        "source": "audit-nemesis",
+        "deposee_le": "2026-09-12 20:14:41",
+        "type": "audit",
+        "categorie": "flux",
+        "classee_le": "2026-09-12 20:16:01"
+      }
+    ],
+    "revision": []
+  },
+  "compteur": 99,
+  "brin": [
+    {
+      "id": "E-084",
+      "theme": "AUDIT-NEMESIS",
+      "objectif": "Corriger le compteur desynchronise de suivi-optimus.md : affiche 6 missions en attente alors que l'entonnoir est a 0",
+      "urgence": "bloquante",
+      "source": "audit-nemesis",
+      "deposee_le": "2026-09-12 20:13:32",
+      "type": "audit",
+      "categorie": "marbre",
+      "classee_le": "2026-09-12 20:14:54",
+      "position_brin": 1,
+      "tresse_le": "2026-09-13 09:17:50"
+    },
+    {
+      "id": "E-085",
+      "theme": "AUDIT-NEMESIS",
+      "objectif": "Corriger les 4 fichiers avec violations ASCII : suivi-optimus.md (ligne 71), tracebacks-historique.jsonl (lignes 1-5), inbox.jsonl maintenance (ligne 9), inbox.jsonl matrice (ligne 109)",
+      "urgence": "bloquante",
+      "source": "audit-nemesis",
+      "deposee_le": "2026-09-12 20:13:41",
+      "type": "audit",
+      "categorie": "marbre",
+      "classee_le": "2026-09-12 20:15:02",
+      "position_brin": 2,
+      "tresse_le": "2026-09-13 09:17:50"
+    },
+    {
+      "id": "E-086",
+      "theme": "AUDIT-NEMESIS",
+      "objectif": "Decider du sort des routines arretees : veille-flux, espion-integrite, suivi-sync sont en ARRET. La Matrice dort. Relancer ou confirmer l'arret intentionnel",
+      "urgence": "haute",
+      "source": "audit-nemesis",
+      "deposee_le": "2026-09-12 20:13:48",
+      "type": "audit",
+      "categorie": "flux",
+      "classee_le": "2026-09-12 20:15:08",
+      "position_brin": 3,
+      "tresse_le": "2026-09-13 09:17:50"
+    },
+    {
+      "id": "E-087",
+      "theme": "AUDIT-NEMESIS",
+      "objectif": "Archiver ou supprimer les 89 fins sans debut dans suivi-optimus (legacy avant marbre 2026-09-11 19:00:00)",
+      "urgence": "haute",
+      "source": "audit-nemesis",
+      "deposee_le": "2026-09-12 20:13:58",
+      "type": "audit",
+      "categorie": "file",
+      "classee_le": "2026-09-12 20:15:18",
+      "position_brin": 4,
+      "tresse_le": "2026-09-13 09:17:50"
+    },
+    {
+      "id": "E-088",
+      "theme": "AUDIT-NEMESIS",
+      "objectif": "Corriger le garde-perimetre : signale 172 fichiers 'hors matrix/' alors qu'ils sont dans matrix/_operateur/. Faux positif = garde inutile",
+      "urgence": "haute",
+      "source": "audit-nemesis",
+      "deposee_le": "2026-09-12 20:14:05",
+      "type": "audit",
+      "categorie": "marbre",
+      "classee_le": "2026-09-12 20:15:24",
+      "position_brin": 5,
+      "tresse_le": "2026-09-13 09:17:50"
+    },
+    {
+      "id": "E-089",
+      "theme": "AUDIT-NEMESIS",
+      "objectif": "Verifier et corriger vivier-themes.json : espion-integrite a detecte un ecart sur cette BDD",
+      "urgence": "haute",
+      "source": "audit-nemesis",
+      "deposee_le": "2026-09-12 20:14:13",
+      "type": "audit",
+      "categorie": "marbre",
+      "classee_le": "2026-09-12 20:15:31",
+      "position_brin": 6,
+      "tresse_le": "2026-09-13 09:17:50"
+    },
+    {
+      "id": "E-090",
+      "theme": "AUDIT-NEMESIS",
+      "objectif": "Purger outil.jsonl (634 KB, 263 lignes) : trop gros, pas de purge des anciens messages",
+      "urgence": "normale",
+      "source": "audit-nemesis",
+      "deposee_le": "2026-09-12 20:14:21",
+      "type": "audit",
+      "categorie": "autre",
+      "classee_le": "2026-09-12 20:15:38",
+      "position_brin": 7,
+      "tresse_le": "2026-09-13 09:17:50"
+    },
+    {
+      "id": "E-091",
+      "theme": "AUDIT-NEMESIS",
+      "objectif": "Archiver les 89 missions terminees dans file-missions.json : fichier qui grossit sans limite",
+      "urgence": "normale",
+      "source": "audit-nemesis",
+      "deposee_le": "2026-09-12 20:14:28",
+      "type": "audit",
+      "categorie": "file",
+      "classee_le": "2026-09-12 20:15:48",
+      "position_brin": 8,
+      "tresse_le": "2026-09-13 09:17:50"
+    },
+    {
+      "id": "E-093",
+      "theme": "AUDIT-NEMESIS",
+      "objectif": "Monitorer les PIDs regulierement : suivi-sync PID 15272 nettoye, processus zombie detecte",
+      "urgence": "normale",
+      "source": "audit-nemesis",
+      "deposee_le": "2026-09-12 20:14:41",
+      "type": "audit",
+      "categorie": "flux",
+      "classee_le": "2026-09-12 20:16:01",
+      "position_brin": 9,
+      "tresse_le": "2026-09-13 09:17:50"
+    },
+    {
+      "id": "E-092",
+      "theme": "AUDIT-NEMESIS",
+      "objectif": "Implementer rotation pour suivi-optimus.jsonl (243 evenements, pas de limite)",
+      "urgence": "basse",
+      "source": "audit-nemesis",
+      "deposee_le": "2026-09-12 20:14:35",
+      "type": "audit",
+      "categorie": "autre",
+      "classee_le": "2026-09-12 20:15:55",
+      "position_brin": 10,
+      "tresse_le": "2026-09-13 09:17:50"
+    }
+  ]
+}

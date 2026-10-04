@@ -1,0 +1,92 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "hygie",
+    "description": "Fins reelles d'Hygie (parcours v0.2.4 : c13, cH3, cS2, c9b, cU3, c29a, c29d, c29e)"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-hygie.json"
+    },
+    "fin-nettoyer": {
+      "titre": "FIN - Nettoyage termine (activer Janus)",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hygie \"<rapport de nettoyage>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hygie lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-honnetete": {
+      "titre": "FIN - Honnetete non prouvee",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hygie \"<preuve d honnetete>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hygie lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-snapshots": {
+      "titre": "FIN - Snapshot cree et rotation verifiee",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hygie \"<rapport snapshots>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hygie lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-purifier": {
+      "titre": "FIN - Purification terminee (activer Janus)",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hygie \"<rapport de purification>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hygie lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-outils": {
+      "titre": "FIN - Reprendre ma mission (cU3)",
+      "description": "Le probleme d outil est resolu. Reprise de la mission interrompue.",
+      "action": "redirection",
+      "vers": "arbre-hygie.json"
+    },
+    "fin-delegation": {
+      "titre": "FIN - Delegation terminee",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hygie \"<rapport de delegation>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hygie lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-outil-temp": {
+      "titre": "FIN - Outil temporaire cree",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hygie \"<rapport outil temporaire>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hygie lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-signaler": {
+      "titre": "FIN - Besoin signale",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hygie \"<besoin signale>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hygie lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-autre": {
+      "titre": "FIN - Mission terminee",
+      "description": "Mission terminee. Si je suis en inter-round (mon precedent est un agent qui m a active), je REACTIVE cet appelant avec mon bilan. Sinon (mission directe venant de Cerberus), je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hygie \"<bilan de autre>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hygie lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    },
+    "fin-inter-round": {
+      "titre": "FIN - Inter-round traite (retourner a l appelant)",
+      "description": "Le rapport inter-round est traite. Si mon precedent est un agent qui m a active en inter-round, je REACTIVE cet appelant pour qu il reprenne son round (Pattern 13). Si mission directe venant de Cerberus, je reactive Cerberus.",
+      "action": "reactiver",
+      "cible": "cerberus",
+      "commande": "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin hygie \"<rapport du traitement inter-round>\"",
+      "regle": "REGLE INTER-ROUND FIN : reactiver-fin hygie lit mon precedent et reactive L APPELANT (l agent qui m a active) s il existe, sinon Cerberus. Seul le DERNIER maillon de la chaine reactive Cerberus."
+    }
+  }
+}

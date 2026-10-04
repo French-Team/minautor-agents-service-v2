@@ -1,0 +1,41 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "REVISION",
+    "description": "Revision strategique via Socrate : historiser, activer Socrate, verifier etat"
+  },
+  "theme": {
+    "nom": "REVISION",
+    "but": "Lancer une revision strategique via Socrate",
+    "redirects": [
+      {
+        "besoin": "Historiser le DEBUT de mon intervention",
+        "action": "procedure",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser cerberus \"DEBUT: <ma mission>\""
+        ],
+        "regle": "REGLE HISTORISATION."
+      },
+      {
+        "besoin": "Activer Socrate pour revision strategique",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> socrate \"REVISION STRATEGIQUE ...\""
+        ],
+        "regle": "Socrate est le conversateur de revision strategique."
+      },
+      {
+        "besoin": "Socrate actif ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> fin-revision",
+          "NON -> relancer Socrate"
+        ],
+        "regle": "Verifier que Socrate a bien ete active."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "fins.json", "case": "fin-revision" }
+}

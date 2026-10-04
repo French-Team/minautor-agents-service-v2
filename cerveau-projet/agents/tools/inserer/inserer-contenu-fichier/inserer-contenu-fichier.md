@@ -1,0 +1,105 @@
+---
+identite:
+  type: outil
+  appartient_a: commun
+  commun: true
+---
+# inserer-contenu-fichier
+
+**Version :** 0.3.1
+**Statut :** prepare
+**Categorie :** inserer
+**Chemin :** `agents/tools/inserer/inserer-contenu-fichier/`
+**Proprietaire :** Buffy (outil partage)
+
+## Description
+
+Inserer du contenu a une position precise dans un fichier (apres un numero de ligne OU apres une ligne contenant un motif). Complement de `editer-fichier` (remplacement) et `ajouter-contenu-fichier` (fin de fichier) pour les insertions au milieu.
+
+**Vision utilisateur** : l'agent fournit le QUOI (le motif du contexte), l'outil fait le COMMENT (il localise la ligne, gere l'indentation, et refuse si le motif est introuvable - echec explicite, jamais 0 silencieux).
+
+## Utilisation
+
+```bash
+# Inserer une ligne apres la ligne 5 (par numero)
+python3 inserer-contenu-fichier.py fichier.md 5 "Contenu a inserer"
+
+# Inserer apres la ligne contenant un motif (ciblage par contenu, recommande)
+python3 inserer-contenu-fichier.py --apres "cle: valeur" fichier.yml "nouvelle: entree"
+
+# Inserer avec indentation automatique (alignee sur la ligne cible)
+python3 inserer-contenu-fichier.py --apres "section A" --indent fichier.yml "  sous: bloc"
+
+# Inserer le contenu d'un fichier source apres la ligne 10
+python3 inserer-contenu-fichier.py fichier.md 10 --fichier bloc.md
+
+# Simuler sans modifier
+python3 inserer-contenu-fichier.py --dry-run fichier.md 5 "contenu"
+```
+
+## Options
+
+| Option | Description | Defaut |
+|---|---|---|
+| `--apres <motif>` | Inserer apres la premiere ligne contenant le motif | - |
+| `--indent` | Aligner le bloc sur l'indentation de la ligne cible | false |
+| `--fichier <src>` | Inserer le contenu d'un fichier source | - |
+| `--backup` | Creer une sauvegarde .bak avant | false |
+| `--dry-run` | Simuler sans modifier | false |
+| `--verbose` | Afficher les details | false |
+| `--help` | Afficher l'aide | - |
+
+## Ce que l'outil fait
+
+1. Verifie que le fichier existe et que le numero de ligne est valide
+2. Determine la source du contenu (chaine ou fichier)
+3. Insere le contenu apres la ligne indiquee (sans la supprimer)
+4. Rapporte la position d'insertion
+
+## Exemples de sortie
+
+```bash
+$ inserer-contenu-fichier.sh fichier.md 5 "Nouvelle section"
+
+=== inserer-contenu-fichier ===
+[OK] Contenu insere apres la ligne 5 de fichier.md
+
+=== Resume ===
+Fichier : fichier.md
+Position : apres la ligne 5
+```
+
+## Quand l'utiliser
+
+| Situation | Utilisation |
+|---|---|
+| Ajouter une section au milieu d'un document | `inserer-contenu-fichier.sh doc.md 12 "## Section"` |
+| Inserer un bloc apres un marqueur connu | Trouver le numero via `rechercher-texte`, puis inserer |
+
+## Relation avec les autres outils
+
+| Outil | Complement |
+|---|---|
+| `editer-fichier` | Remplacer une chaine par une autre |
+| `ajouter-contenu-fichier` | Ajouter a la fin d'un fichier |
+| `rechercher-texte` | Trouver le numero de ligne d'insertion |
+
+## Notes de creation
+
+- [ ] L'outil a ete teste en `--dry-run` avant application
+- [ ] L'outil est conforme ASCII (aucun accent, aucun emoji)
+- [ ] L'outil est reference dans `index-tools.md`
+- [ ] Le statut est passe de `ebauche` a `prepare` apres validation RVAV
+
+---
+
+## Versionning
+
+| Version | Date | Changements |
+|---|---|---|
+| 0.1.0 | 2026-08-06 | Creation initiale |
+| 0.2.0 | 2026-08-07 | Passage v2 : frontmatter, VERSION 0.2.0, statut prepare |
+| 0.2.0-py | 2026-08-07 | Version Python creee (insertion ligne N / debut, --fichier source, --dry-run, --version) |
+| 0.3.0 | 2026-08-12 | Qualite pro : ciblage par contenu `--apres <motif>`, indentation automatique `--indent`, echec explicite si motif introuvable, option --backup |\n| 0.3.1 | 2026-08-12 | SECURITE (round 3) : refus de modifier a travers un lien symbolique (fichier et source), refus octet nul, lecture robuste utf-8-sig + fallback latin-1 |
+
+---

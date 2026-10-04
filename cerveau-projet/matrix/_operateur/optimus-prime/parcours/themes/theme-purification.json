@@ -1,0 +1,129 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "PURIFICATION",
+    "description": "Suite de parcours [purification] : demande -> cartographie -> classification -> audit -> nemesis -> decision -> execution-par-porte -> verification -> bilan. Controle et purifie toute la Matrice v3 sans suppression. Analyse et plan : purification/analyse-nemesis.md et purification/plan-conservation.md"
+  },
+  "theme": {
+    "nom": "PURIFICATION",
+    "but": "Rendre controlable et purifiable toute la Matrice v3 par une chaine ORDONNEE : demande, cartographie, classification, audit, nemesis, decision, execution par porte, verification et bilan -- sans suppression",
+    "redirects": [
+      {
+        "besoin": "[demande] -- recevoir et cadrer la demande de purification",
+        "action": "procedure",
+        "etapes": [
+          "Lire l analyse prealable purification/analyse-nemesis.md et le plan purification/plan-conservation.md",
+          "Formuler la demande en 1 phrase avec le PERIMETRE exact",
+          "Verifier le perimetre : toute la Matrice v3 est lisible ; Flux 1 et cameleon restent proteges et non ecrits",
+          "Ecrire l objectif chiffre : ecarts classes, gardes verts, octets conserves et aucune perte",
+          "Noter debut suivi-optimus --theme PURIFICATION et ouvrir la session BDD"
+        ],
+        "regle": "Pas de demande sans perimetre et objectif chiffre. Aucune suppression dans la serie."
+      },
+      {
+        "besoin": "[cartographie] -- inventorier le perimetre avant tout classement",
+        "action": "procedure",
+        "etapes": [
+          "Inventorier toute la Matrice v3 : fichiers, BDD, journaux, registres, index, archives et empreintes",
+          "Recenser pour chaque element les lecteurs, ecrivains, portes, dependances et flux concernes",
+          "Distinguer Flux 2, composants communs, Flux 1 et cameleon ; Flux 1 et cameleon restent en lecture et protection",
+          "Produire une cartographie datee sans deplacement, reecriture ni suppression"
+        ],
+        "regle": "Aucun classement ni archivage sans cartographie mesuree des lecteurs, ecrivains et dependances."
+      },
+      {
+        "besoin": "[classification] -- classer avant de decider",
+        "action": "procedure",
+        "etapes": [
+          "Attribuer une categorie unique : VIVANT, STRUCTUREL, GENERE, HISTORIQUE, OBSOLETE, COBAYE, ORPHELIN ou HORS-PERIMETRE",
+          "Attribuer le statut propose ou classe dans la BDD conservation des qu elle existe",
+          "Refuser de classer OBSOLETE ou ORPHELIN sur le seul age ou l absence d une recherche complete",
+          "Conserver la preuve, le chemin canonique, les lecteurs et la raison de chaque classement"
+        ],
+        "regle": "Un ancien correctif est classe avant toute decision ; ancien ne signifie pas inutile."
+      },
+      {
+        "besoin": "[audit] -- auditer et produire la liste des ecarts (aucune ecriture)",
+        "action": "procedure",
+        "etapes": [
+          "Inventorier ce qui existe dans le perimetre demande : fichiers, BDD, journaux, registres et index",
+          "Passer les gardes existants en lecture seule : contrat-fondamental, garde-ascii, cadence, passes, observations, historique, rotation, exemptions, scan-valeurs-en-dur, garde-tmp, espion-activite et verificateurs BDD",
+          "Recenser les doublons, index morts, routes mortes et fichiers non declares",
+          "Ecrire la liste des ecarts : fichier:ligne, garde, gravite et preuve ; aucune correction a ce stade"
+        ],
+        "regle": "L audit est lecture seule. Un ecart sans preuve mesuree n entre pas dans la liste."
+      },
+      {
+        "besoin": "[nemesis] -- avis contradictoire avant de toucher quoi que ce soit",
+        "action": "redirect",
+        "vers": {
+          "type": "theme",
+          "fichier": "parcours/themes/theme-contre-analyse.json"
+        },
+        "etapes": [
+          "Incarner le theme CONTRE-ANALYSE, jamais un agent",
+          "Attaquer la liste des ecarts sur les cas limites, l optimisation et la securite",
+          "Verifier pour chaque retrait ce qui le lit et ce qui le surveille",
+          "Conclure par Oui, mais avec POUR, CONTRE ou A VALIDER AVEC RESERVE"
+        ],
+        "regle": "Un mais sans preuve ou scenario concret est rejete."
+      },
+      {
+        "besoin": "[decision] -- trancher chaque ecart",
+        "action": "procedure",
+        "etapes": [
+          "Pour chaque ecart de la liste, rendre un verdict unique",
+          "CONSERVER : l element reste a son emplacement canonique avec sa preuve",
+          "ARCHIVER : la porte bdd-conservation deplace avec manifeste et SHA",
+          "REPARER : la porte du fichier s applique et le garde repasse au vert",
+          "DECLARER DETTE : l ecart est inscrit en BDD frictions avec cause et prochaine action",
+          "SIGNALER : hors perimetre ou action non autorisee, sans ecriture",
+          "Noter chaque decision dans bdd-modifications et bdd-conservation quand elle existe"
+        ],
+        "regle": "La decision est obligatoire et bloquante. Aucun ecart ne reste sans verdict."
+      },
+      {
+        "besoin": "[execution-par-porte] -- executer uniquement le verdict decide",
+        "action": "procedure",
+        "etapes": [
+          "Si CONSERVER ou SIGNALER : ne rien ecrire et conserver la preuve",
+          "Si ARCHIVER : utiliser la porte bdd-conservation, produire le manifeste et verifier la destination",
+          "Si REPARER : rediriger vers le theme FICHIER et son action CORRIGER",
+          "Si DECLARER DETTE : utiliser la porte bdd-frictions avec cause, gravite, frequence et prochaine action",
+          "Refuser toute ecriture manuelle de BDD, journal, registre ou archive"
+        ],
+        "regle": "L execution ne fait que ce que le verdict exige ; une porte absente bloque l action."
+      },
+      {
+        "besoin": "[verification] -- prouver la conservation et la non-regression",
+        "action": "procedure",
+        "etapes": [
+          "Verifier les schemas, identifiants, doublons, empreintes et index des BDD concernees",
+          "Verifier les journaux, archives, manifestes, lecteurs et ecrivains",
+          "Verifier la restauration d un cobaye avant toute operation equivalente sur le reel",
+          "Relancer les gardes, le flux Matrice et le Flux 2",
+          "Prouver que Flux 1 et cameleon n ont pas ete ecrits"
+        ],
+        "regle": "Aucune operation n est validee sans preuve avant/apres et preuve de reversibilite."
+      },
+      {
+        "besoin": "[bilan] -- rendre un bilan recuperable",
+        "action": "procedure",
+        "etapes": [
+          "Resumer les elements classes, les verdicts, les operations et les preuves",
+          "Tracer le bilan dans bdd-conservation, bdd-modifications, bdd-historique, suivi-optimus et bdd-sessions",
+          "Lister explicitement les restes, dettes, blocages et decisions encore necessaires",
+          "Regenerer la vue et fermer la session proprement",
+          "Proposer la mission suivante en serie stricte"
+        ],
+        "regle": "Le bilan doit permettre a la prochaine session de reprendre sans memoire implicite."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

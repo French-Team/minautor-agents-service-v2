@@ -1,0 +1,49 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "LACUNES-QQCP",
+    "description": "QQCP -- Phase 4 : QUI, QUOI, COMMENT, POURQUOI. Quatre cases, quatre reponses FACTUELLES. Une case vide se DIT vide : elle ne se devine pas. Le livrable passe ensuite par AUTO-AUDIT-NEMESIS (processus v3, 3 axes) -- on l APPELLE a son domicile, on ne le recopie pas."
+  },
+  "theme": {
+    "nom": "LACUNES-QQCP",
+    "but": "Phase 4 : QUI, QUOI, COMMENT, POURQUOI. Quatre cases, quatre reponses FACTUELLES. Une case vide se DIT vide : elle ne se devine pas. Le livrable passe ensuite par AUTO-AUDIT-NEMESIS (processus v3, 3 axes) -- on l APPELLE a son domicile, on ne le recopie pas.",
+    "redirects": [
+      {
+        "besoin": "Remplir les quatre cases",
+        "action": "procedure",
+        "etapes": [
+          "QUI : qui a echoue et qui decide du remede",
+          "QUOI : le manque nomme",
+          "COMMENT : par quel geste et quelle porte",
+          "POURQUOI : la regle qui rendra l erreur irrepetable -- puis la faire auditer (AUTO-AUDIT-NEMESIS)"
+        ],
+        "regle": "POURQUOI : la regle qui rendra l erreur irrepetable"
+      },
+      {
+        "besoin": "Faire attaquer (AUTO-AUDIT-NEMESIS)",
+        "action": "procedure",
+        "etapes": [
+          "Avancier le livrable dans le processus v3 AUTO-AUDIT-NEMESIS -- 3 axes : cas limites, optimisation, securite/integrite",
+          "Le lire a SON domicile (parcours/themes/theme-auto-audit-nemesis.json) ; il APPELLE, il ne se recopie pas",
+          "Un ecart CRITIQUE bloque la validation entiere : on ne valide pas avec une reserve critique"
+        ],
+        "regle": "Le 'mais' de l audit EST la valeur : jamais de validation sans preuve de robustesse."
+      },
+      {
+        "besoin": "Dire les cases vides",
+        "action": "procedure",
+        "etapes": [
+          "Une case non remplie s ECRIT vide",
+          "Ne jamais combler une case par une opinion"
+        ],
+        "regle": "Ne jamais combler une case par une opinion"
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

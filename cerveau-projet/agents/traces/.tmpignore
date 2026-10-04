@@ -1,0 +1,16 @@
+# .tmpignore - derrogation ciblee des dossiers temporaires de mission
+#
+# Ce fichier liste les dossiers temporaires EXACTS autorises a rester a la
+# racine du projet sans etre signales comme residus TEMP par les outils de
+# detection (detecter-residus, garde-fou test-024).
+#
+# Format :
+#   - un nom de dossier EXACT par ligne (ex: tmp-buffy)
+#   - les commentaires commencent par #
+#   - ASCII strict, pas d accents, LF
+#   - la derrogation est CIBLEE : un dossier temporaire NON liste reste un
+#     residu detecte (KO) - la protection anti-residus reste forte
+#
+# A usage de la mission COURANTE uniquement : en fin de mission, chaque agent
+# supprime son dossier tmp-<agent> (regle workspace) et retire son nom du
+# .tmpignore si la derrogation n est plus necessaire.

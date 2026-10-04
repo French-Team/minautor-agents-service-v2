@@ -1,0 +1,39 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "stark",
+    "nom": "JARVIS",
+    "description": "Demander à JARVIS de traiter une demande (OBLIGATOIRE pour toute mission)"
+  },
+  "theme": {
+    "nom": "JARVIS",
+    "but": "Envoyer la demande à JARVIS qui traite, distribue aux agents, et fait le bilan",
+    "redirects": [
+      {
+        "besoin": "Confier une mission (distribution a un agent)",
+        "action": "procedure",
+        "description": "Stark envoie sa demande A JARVIS. SEUL JARVIS active les agents.",
+        "etapes": [
+          "Formuler la demande clairement (mission, contraintes, fin de cycle attendue)",
+          "Envoyer la demande A JARVIS : jarvis.py envoyer --de stark --vers jarvis --priorite N --objet '...' --corps '...' (SANS --activer : ce flag n'activerait QUE JARVIS, jamais l'agent final - piege lecon 2026-08-25)",
+          "INCARNER JARVIS pour traiter : jarvis.py lire (inbox jarvis) puis acquitter la demande",
+          "JARVIS (incarne) choisit l'agent habilite et DECLENCHE le round : jarvis.py activer --agent <X> --session <Y> --mission '...'",
+          "INTERDIT pour Stark : jarvis.py activer EN TANT QUE STARK, envoyer --vers <agent-direct>, lire l inbox d un autre agent",
+          "L agent active lit sa fiche + ses corrections, execute, puis renvoie son bilan a JARVIS",
+          "JARVIS fait le bilan et l envoie a Stark (--vers stark)",
+          "Stark reprend le controle"
+        ],
+        "regle": "REGLE ABSOLUE : Stark n appelle JAMAIS jarvis.py activer. SEUL JARVIS distribue."
+      },
+      {
+        "besoin": "Consulter l'etat de l'equipe (status, bloques)",
+        "action": "procedure",
+        "etapes": [
+          "jarvis.py lister --agent stark --tous (mes messages)",
+          "jarvis.py bloques (lecture globale autorisee : diagnostic de coordination)"
+        ]
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

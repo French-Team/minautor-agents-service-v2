@@ -1,0 +1,890 @@
+{
+  "identite": {
+    "type": "bdd-activites",
+    "version": 1
+  },
+  "sections": {
+    "missions": [
+      {
+        "date": "2026-10-04 14:43:03",
+        "detail": "FICHE MO-578 PERDUE SECHE (2026-10-04, MO-579) : la fiche de mission de MO-578 (re-purge des 98 archives PURGE ressuscitees, EO-529) a disparu de file-missions-optimus.json lors d un `git checkout --` de l agent. AUCUNE reconstitution possible : ni le bilan (absent de sessions.json), ni l enonce (absent de l entonnoir et de user-demandes.md) -- seule trace : les notes bdd-modifications qui decrivent le travail. LE LIVRABLE EST INTACT : purge.py/entry.py/constants.py modifies, 98 archives purgues, conservation VERTE (bdd-conservation controler-archives). Ce qui manque est la trace administrative, pas le travail. Les quatre autres fiches perdues (MO-575/576/577/579) ont ete reconstituees depuis sessions.json et le disent.",
+        "tags": [
+          "mo-578",
+          "mo-579",
+          "perte-seche",
+          "restitution"
+        ]
+      },
+      {
+        "date": "2026-09-17 09:51:17",
+        "detail": "MO-162 (theme PURIFICATION, cases 7-8 reprises) : LES POINTS DE RESTAURATION SANS DECISION SONT CLASSES ET L ACTE EST EXECUTE. Mesure d entree : la BDD portait 155 points tous juges (82 decide, 73 archive), mais 29 fichiers .bak etaient sur le DISQUE sans aucune entree -- 20 signales par MO-160, plus 9 nes des ecritures du meme jour. Regle appliquee, APPRISE de la BDD et non inventee : STRUCTUREL -> conserver (73 points deja juges ainsi), OBSOLETE -> archiver (73), et 73 sur 73 des archives gardent un PLUS RECENT en place. Les 29 orphelins (puis 2 de plus nes de la reparation) ont passe les TROIS portes (propose -> classe -> decide) : 31 points classes, 19 conserver et 12 archiver, ZERO echec. L acte par la porte (archiver --lot oui, simule AVANT) : 12 / 12 archives, manifeste a jour. La verification du disque : les 12 sources ont disparu, les 12 destinations existent, sha_avant et sha_apres presents, restaurable vrai. ET LA CASE 8 A ETE TROUVEE FAUSSE : elle rendait 74 ecarts (dont 73 sha differents) alors que les 73 archives etaient intactes -- l inventaire du temoin mesurait la SOURCE d un point deja archive, donc sha=None, donc accusation ; et le continue sortait ces 73 du comptage, faisant tomber le second invariant. Reparee a la cause (le temoin mesure chaque point a son domicile du moment et DIT d ou il a lu ; le controle dit NON MESURABLE au lieu d accuser). Mesure apres : 0 ecart, archive + actif = origine (179 points, 2530800 octets), la ou l origine ne couvrait que 104 points avant.",
+        "tags": [
+          "MO-162",
+          "purification",
+          "cases7-8",
+          "rotation",
+          "archive"
+        ]
+      },
+      {
+        "date": "2026-09-17 09:43:34",
+        "detail": "MO-161 (theme PILOTE) : surveillance suivi-optimus.md -- REPARATION DE LA COLLECTE des colonnes Portes/Fichiers. La chaine etait prete de bout en bout (la porte noter accepte --portes/--fichiers depuis sa naissance, le transport est cable par MO-139, la vue les lit) et TROIS appelants ne les passaient pas : declarer_borne_marbre n acceptait MEME PAS de parametre portes (debut 24/142, fin 35/141), purger_zone_temporaire DETIENT la liste de ses suppressions et n en passait AUCUNE (21 evenements purge, 0 fichier), crier_mission_muette n en passait aucune. Les 3 sont repares. Preuves : cobaye dynamique 10/10 (deux collaborateurs remplaces par des espions, ZERO ecriture au marbre), cobaye statique 10/10 (AST sur les 3 sites d appel -- un correctif juste ecrit dans la mauvaise fonction ne se voit pas autrement), et une preuve BOUT EN BOUT REELLE : purge de la zone tmp-optimus, 19 fichiers, evenement au journal avec portes=[pilote:purge] et les 19 noms, vue regeneree qui les AFFICHE (ligne 185). Controles : py_compile x3 OK, garde-ascii 671 fichiers 0 violation, sc-003 executer code 0, coherence file-journal 0 ecart.",
+        "tags": [
+          "MO-161",
+          "suivi-optimus",
+          "collecte",
+          "pilote",
+          "reparation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:33:45",
+        "detail": "M-015 en cours : bdd-activites construite et testee (rotation prouvee)",
+        "tags": [
+          "m-015",
+          "bdd"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:29",
+        "detail": "activite de rotation 52",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:29",
+        "detail": "activite de rotation 51",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:29",
+        "detail": "activite de rotation 50",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:29",
+        "detail": "activite de rotation 49",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:29",
+        "detail": "activite de rotation 48",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:29",
+        "detail": "activite de rotation 47",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:29",
+        "detail": "activite de rotation 46",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 45",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 44",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 43",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 42",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 41",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 40",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 39",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 38",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:28",
+        "detail": "activite de rotation 37",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 36",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 35",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 34",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 33",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 32",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 31",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 30",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 29",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:27",
+        "detail": "activite de rotation 28",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 27",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 26",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 25",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 24",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 23",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 22",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 21",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 20",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:26",
+        "detail": "activite de rotation 19",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 18",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 17",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 16",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 15",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 14",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 13",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 12",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 11",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:25",
+        "detail": "activite de rotation 10",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:24",
+        "detail": "activite de rotation 9",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:24",
+        "detail": "activite de rotation 8",
+        "tags": [
+          "test-rotation"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:32:24",
+        "detail": "activite de rotation 7",
+        "tags": [
+          "test-rotation"
+        ]
+      }
+    ],
+    "alertes": [],
+    "passes": [
+      {
+        "date": "2026-10-04 17:30:40",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 17:25:28",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 17:20:14",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 17:15:01",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 17:09:48",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 17:04:34",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 16:59:21",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 16:54:08",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 16:48:54",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 16:43:41",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 16:38:28",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 16:33:14",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 16:28:01",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 16:22:48",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 16:17:34",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 16:12:22",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 16:07:09",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 16:01:55",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 15:56:43",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 15:51:30",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 15:46:16",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 15:41:03",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 15:35:51",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 15:30:37",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 15:25:24",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 15:20:11",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 15:14:57",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 15:09:45",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 15:04:32",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 14:59:18",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 14:54:05",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 14:48:52",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 14:43:38",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 14:38:26",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 14:33:12",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 14:27:58",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 14:22:44",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 14:17:31",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 14:12:17",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 14:07:03",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 14:01:50",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 13:56:36",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 13:51:23",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 13:46:10",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 13:40:56",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 13:35:43",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 13:30:30",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 13:25:16",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 13:20:03",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      },
+      {
+        "date": "2026-10-04 13:14:50",
+        "detail": "Passe relax : 0 detection(s), 0 nouvelle(s) alerte(s)",
+        "tags": [
+          "veille-flux",
+          "passe",
+          "auto"
+        ]
+      }
+    ],
+    "decisions": [
+      {
+        "date": "2026-09-17 09:51:07",
+        "detail": "MO-162 (cases 7-8) : LA REGLE DE CLASSEMENT A ETE APPRISE DE LA BDD, PAS INVENTEE -- mesure sur les 184 points deja juges : STRUCTUREL -> conserver (73), OBSOLETE -> archiver (73), et 73 sur 73 des archives gardent un PLUS RECENT en place. Applied aux points SANS decision : un point de restauration REMPLACE (un plus recent existe pour le meme fichier) est OBSOLETE ; le PLUS RECENT de son fichier est STRUCTUREL. 31 points classes par les trois portes (propose -> classe -> decide), 19 conserver et 12 archiver. Second point tranche : case 8 etait FAUSSE (74 ecarts fabriques par le temoin) -- reparee a la cause, et l origine couvre desormais l ensemble de la famille au lieu de ce que la mesure avait su lire.",
+        "tags": [
+          "MO-162",
+          "purification",
+          "decision",
+          "case8"
+        ]
+      },
+      {
+        "date": "2026-09-17 09:43:17",
+        "detail": "MO-161 : les colonnes Portes/Fichiers de suivi-optimus.md -- OPTION 1 (reparer la collecte) RETENUE, option 2 (retirer les colonnes) ECARTEE. La mesure qui tranche : chacun des 3 appelants fautifs DETIENT la donnee au moment ou il ecrit (le pilote vient d injecter ou de clore, le purgeur tient la liste de ce qu il vient de supprimer). Retirer une colonne parce que l appelant oublie de la remplir, ce serait supprimer la surveillance au lieu de brancher celui qui devait l alimenter. Second point tranche : le PASSE reste en tiret (aucune source ne relie une mission ancienne a ses portes -- 0 tag-mission sur 5359 usages), et c est un FAIT, pas un trou ; le FUTUR se remplit des la prochaine borne.",
+        "tags": [
+          "MO-161",
+          "suivi-optimus",
+          "decision",
+          "collecte"
+        ]
+      },
+      {
+        "date": "2026-09-09 09:35:26",
+        "detail": "M-082 : marbre Matrice domicile en 3 BDD separees (regles/conventions/protocoles), ecriture optimus seul, lecture Matrice + cameleon",
+        "tags": [
+          "marbre",
+          "gouvernance"
+        ]
+      },
+      {
+        "date": "2026-09-06 19:55:17",
+        "detail": "Doctrine appliquee aux clones de preuve : ce qui ne sert plus est purge (bdd-remarques, regenerable par le moule), ce qui devient infrastructure est garde (theme-vivier, futur registre de themes du pilote).",
+        "tags": [
+          "doctrine",
+          "decision",
+          "clones"
+        ]
+      },
+      {
+        "date": "2026-09-06 18:33:51",
+        "detail": "Raccord fin->injection (demande createur) depose au vrac comme E-008 (urgence haute) : toute demande vit desormais son cycle par l'entonnoir, y compris celle qui a fait naitre le bilan.",
+        "tags": [
+          "entonnoir",
+          "decision",
+          "boucle"
+        ]
+      },
+      {
+        "date": "2026-09-06 18:12:14",
+        "detail": "M-022 close sur verification : la mission-r\u00e9paration E-006 a traverse le cycle complet (classer -> tisser -> consommer -> injecter -> fin) sans reparation requise, l'incident etant deja resolu par le menage M-020. La preuve M-019 (sortie de file-type a la consommation) est desormais courue en reel.",
+        "tags": [
+          "tresse",
+          "cycle-complet",
+          "decision"
+        ]
+      },
+      {
+        "date": "2026-09-06 16:31:02",
+        "detail": "sections pre-declarees refusees hors liste",
+        "tags": [
+          "m-015",
+          "decision"
+        ]
+      }
+    ]
+  }
+}

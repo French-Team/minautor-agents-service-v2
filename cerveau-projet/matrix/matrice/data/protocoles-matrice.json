@@ -1,0 +1,65 @@
+{
+  "identite": {
+    "type": "protocoles-matrice.json",
+    "version": 1
+  },
+  "protocoles": [
+    {
+      "id": "P-001",
+      "date": "2026-09-09 09:30:07",
+      "protocole": "PROTO-6 ROUTE MISSION (route du cameleon pour missions dev/doc/audit/revision/reparation) : au chargement, cameleon lit SA fiche + SA personnalite (vivier) + l'injection du pilote ; il execute UN changement a la fois par les portes officielles, teste avant de poursuivre ; relecture = auto-audit sur disque ; fin = bilan substantiel au pilote (realisations + preuves + incidents assumes)",
+      "tags": [
+        "routes",
+        "cameleon"
+      ],
+      "source": "proto-6 M-067"
+    },
+    {
+      "id": "P-002",
+      "date": "2026-09-09 09:30:07",
+      "protocole": "PROTO-7 ROUTE BDD (toute ecriture passe par l'outil dedie) : jamais d'ecriture directe de fichier de donnees ; porte unique par BDD (ajouter/lire/verifier), empreinte maintenue, tags obligatoires (pas d'entree orpheline) ; le cameleon consomme via lire, n'ecrit jamais le marbre",
+      "tags": [
+        "routes",
+        "bdd"
+      ],
+      "source": "proto-7 M-067"
+    },
+    {
+      "id": "P-003",
+      "date": "2026-09-09 09:30:07",
+      "protocole": "PROTO-8 ROUTE REPARATION (apres alerte veille/espion) : reproduire AVANT de reparer (pas a l'aveugle), diagnostiquer a la racine, reparer un changement minimum, retour vert prouve (test avant/apres) ; jamais supprimer pour faire taire ; arret cooperatif des boucles (L-012 : jamais de kill) ; hors perimetre -> signaler la Matrice",
+      "tags": [
+        "routes",
+        "reparation"
+      ],
+      "source": "proto-8 M-073"
+    },
+    {
+      "id": "P-004",
+      "date": "2026-09-25 10:29:38",
+      "protocole": "MISE A JOUR D UN MOULE (quand une regle du projet change) : (1) reperer le moule concerne sous matrice/templates/ ; (2) appliquer au MOULE le meme changement qu aux vivants qu il produit -- carte d identite, ancrage des commandes (cerveau-projet/matrix/lancer.py), prefixe dans les constantes ; (3) PROUVER par sc-005-moules verifier (le garde MORD sur un moule perime, EPARGNE un moule conforme) ; (4) preuve de bout en bout : generer un clone COBAYE dans une zone jetable, lancer verifier-cartes-identite et verifier-commandes, puis PURGER le clone. Un moule repare sans clone cobaye n est PAS prouve (la preuve d un cobaye est son run, jamais une promesse).",
+      "tags": [
+        "moule",
+        "template",
+        "mise-a-jour",
+        "preuve",
+        "sc-005",
+        "protocole"
+      ],
+      "source": "createur 2026-09-25"
+    },
+    {
+      "id": "P-005",
+      "date": "2026-09-27 13:47:29",
+      "protocole": "ROUTE RAISONNEMENT (le cameleon raisonne en SEGMENTS, jamais d un trait) : quand un sujet DURE (plus d un tour, plus d une session, ou un sujet sur lequel un raisonnement futur reviendra), ecrire un SEGMENT dans SA BDD de raisonnement -- outil bdd-raisonnement-cameleon (appel par CHEMIN ancre : l outil n est pas sous data/outils/), --segment CONCIS disant ce qui est ETABLI et ce qui RESTE ouvert, --tags obligatoires, --source = la mission ; id RC-XXX. Le RETROUVER par LE MOTEUR (source partagee segments-cameleon, servie SANS --prive) et par la question de recherche injectee. Le segment et la lecon se consomment ENSEMBLE : le segment dit OU on en est, la lecon CE QU on en a appris. L-016 a la livraison : une entree partagee ne nomme AUCUN acteur invisible. Un raisonnement court qui rend un resultat directement utilisable se note au BILAN de la mission, il ne fabrique pas un segment de ceremonie.",
+      "tags": [
+        "routes",
+        "cameleon",
+        "raisonnement",
+        "segments"
+      ],
+      "source": "createur 2026-09-27"
+    }
+  ],
+  "compteur": 5
+}

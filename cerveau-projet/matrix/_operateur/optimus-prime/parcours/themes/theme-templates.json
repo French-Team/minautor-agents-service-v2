@@ -1,0 +1,28 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "TEMPLATES",
+    "description": "Ancrage de parcours du theme du vivier TH-008 -- sa definition vit dans matrice/data/vivier-themes.json (un domicile, pas de recopie)."
+  },
+  "theme": {
+    "nom": "TEMPLATES",
+    "but": "Router le theme du vivier TH-008 -- definition dans matrice/data/vivier-themes.json.",
+    "redirects": [
+      {
+        "besoin": "Definition du theme (banque du vivier)",
+        "action": "procedure",
+        "etapes": [
+          "Lire TH-008 dans matrice/data/vivier-themes.json (but, categorie, description)",
+          "Ce fichier est son ANCRAGE de parcours : il existe pour que le catalogue pointe sur un fichier dedie, plus sur la banque partagee"
+        ],
+        "regle": "Un theme du vivier se DECLARE ici et se LIT dans la banque (M-076 : un domicile, pas de recopie)."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

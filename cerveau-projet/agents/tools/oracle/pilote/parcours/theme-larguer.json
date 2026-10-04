@@ -1,0 +1,46 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "pilote",
+    "nom": "LARGUER",
+    "description": "Larguer UN agent (parachutiste) : l activer avec sa mission, attendre sa fin"
+  },
+  "theme": {
+    "nom": "LARGUER",
+    "but": "Larguer le prochain agent de ma liste : l activer avec sa mission et attendre son message de fin",
+    "redirects": [
+      {
+        "besoin": "Identifier le prochain agent a larguer",
+        "action": "procedure",
+        "etapes": [
+          "Prendre le prochain agent de ma liste (l ordre configure par oracle)",
+          "Formuler SA mission : ce que l agent doit accomplir (destination partielle qui lui revient)"
+        ],
+        "regle": "UN SEUL AGENT EN VOL (D2) : je ne largue le suivant qu apres avoir recupere le precedent."
+      },
+      {
+        "besoin": "Larguer l agent (l activer avec sa mission)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-admin <agent> <ma mission>",
+          "La mission est deposee : l agent la lit, execute, et sa fin revient vers ORACLE (reactiver-fin)"
+        ],
+        "regle": "LARGAGE = ACTIVATION : l agent est largue avec SA mission. Je n execute pas son travail (D8)."
+      },
+      {
+        "besoin": "Attendre la fin de l agent (vol en cours)",
+        "action": "procedure",
+        "etapes": [
+          "Attendre le message de fin de mission de l agent (sa fin revient vers oracle via reactiver-fin)",
+          "Verifier l etat de carte de l agent : etape=fin OU historique FIN pose"
+        ],
+        "regle": "LE PARACHUTISTE SAUTE ET ME RAPPELLE : je ne reprends ma mission qu apres son message de fin."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-agent-largue"
+  }
+}

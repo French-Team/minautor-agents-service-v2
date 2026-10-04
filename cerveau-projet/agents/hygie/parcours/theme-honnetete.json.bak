@@ -1,0 +1,66 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "hygie",
+    "nom": "HONNETETE",
+    "description": "Verifier l honnetete d un residu suspect : activer agent habilite, verifier rapport, cloturer"
+  },
+  "theme": {
+    "nom": "HONNETETE",
+    "but": "Prouver l honnetete des changements ou fichiers suspects par delegation a un agent habilite",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine nettoyage)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent hygie --domaine nettoyage"],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "RELAIS - Activer l agent habilite (preuve d honnetete) (case cH1)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> <raison>"],
+        "regle": "PREUVE D HONNETETE : j active l agent habilite (janus / proprietaire) pour prouver l honnetete des changements."
+      },
+      {
+        "besoin": "RETOUR - Verifier le rapport (case cH2)",
+        "action": "procedure",
+        "etapes": ["Lire le rapport de l agent habilite a la reactivation"],
+        "regle": "REGLE ABSOLUE : si la preuve manque, je ne supprime PAS."
+      },
+      {
+        "besoin": "Honnetete prouvee ? (controle cH2)",
+        "action": "procedure",
+        "etapes": [
+          "SI OUI (honnetete prouvee) -> aller a Supprimer avec tracabilite (NETTOYER c9)",
+          "SI NON (honnetete non prouvee) -> aller a Signaler (cH3)"
+        ],
+        "regle": "CONTROLE : brancher selon le resultat de la verification."
+      },
+      {
+        "besoin": "Consulter le snapshot precedent",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py consulter"],
+        "regle": "Le snapshot reste la preuve de l etat verifie meme si honnetete non prouvee."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/hygie/corrections.md <lecon>"],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-honnetete"}
+}

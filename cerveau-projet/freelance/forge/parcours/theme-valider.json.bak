@@ -1,0 +1,37 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "forge",
+    "nom": "VALIDER",
+    "description": "Vérifier la conformité d'un outil créé"
+  },
+  "theme": {
+    "nom": "VALIDER",
+    "but": "Assurer que l'outil est conforme au template",
+    "redirects": [
+      {
+        "besoin": "Valider un outil créé",
+        "action": "procedure",
+        "etapes": [
+          "Vérifier l'existence des 3 fichiers (.md, .py, -data.json)",
+          "Vérifier le frontmatter du .md (D17)",
+          "Vérifier que le .py n'a pas de valeur en dur (D15)",
+          "Vérifier que le -data.json est valide",
+          "Vérifier que le formulaire est déclaratif (D7)",
+          "Donner le verdict (CONFORME / A REVOIR)"
+        ]
+      },
+      {
+        "besoin": "Vérifier la séparation code/données",
+        "action": "procedure",
+        "etapes": [
+          "Lire le .py",
+          "Vérifier qu'il n'y a pas de liste, seuil, message en dur",
+          "Vérifier qu'il lit le -data.json",
+          "Vérifier que le -data.json contient les données"
+        ]
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

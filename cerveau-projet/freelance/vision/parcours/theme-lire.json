@@ -1,0 +1,26 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "vision",
+    "nom": "LIRE",
+    "description": "Consulter l'état de JARVIS, les inboxes, l'historique"
+  },
+  "theme": {
+    "nom": "LIRE",
+    "but": "Consulter l'etat de JARVIS sans rien modifier",
+    "redirects": [
+      {
+        "besoin": "Consulter un etat",
+        "action": "procedure",
+        "etapes": [
+          "Lire mon inbox : python3 cerveau-projet/freelance/tools-commun/jarvis/jarvis.py lire --agent vision",
+          "Lister les messages/activations : python3 .../jarvis.py lister --agent vision",
+          "Consulter l'historique des activites (AGENTS-activite-recente-v2.md, encart session-freelance, 50 entrees max - fichier v2 separe depuis 2026-08-26)",
+          "LIRE SEULE : aucune modification, aucun acquittement sans traitement"
+        ],
+        "regle": "LECTURE SEULE : je ne modifie rien dans ce theme. Si une lecture revele un ecart -> theme MODIFIER ou EXPLORER."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

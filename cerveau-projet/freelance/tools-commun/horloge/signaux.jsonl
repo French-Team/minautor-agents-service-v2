@@ -1,0 +1,6 @@
+{"date": "2026-08-24T19:23:12", "tic": "horloge-surveiller-flux-jarvis", "evenement": "demarrage", "detail": "intervalle=600s decalage=0s"}
+{"date": "2026-08-24T19:23:12", "tic": "horloge-surveiller-modifications", "evenement": "demarrage", "detail": "intervalle=60s decalage=15s"}
+{"date": "2026-08-24T19:23:12", "tic": "horloge-evaluer-agents", "evenement": "demarrage", "detail": "intervalle=600s decalage=30s"}
+{"date": "2026-08-24T19:37:06", "tic": "horloge-surveiller-flux-jarvis", "evenement": "demarrage", "detail": "intervalle=600s decalage=0s"}
+{"date": "2026-08-24T19:37:06", "tic": "horloge-surveiller-modifications", "evenement": "demarrage", "detail": "intervalle=60s decalage=15s"}
+{"date": "2026-08-24T19:37:06", "tic": "horloge-evaluer-agents", "evenement": "demarrage", "detail": "intervalle=600s decalage=30s"}

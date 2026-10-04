@@ -1,0 +1,39 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "LACUNES-COMBLER",
+    "description": "Combler par une porte -- Phase 5 : la lacune ne se corrige pas depuis un constat. Le combo sort une DECISION et son emprise -- regle, correction d outil, parcours ou lecon -- et la PORTE la pose. Jamais de patch."
+  },
+  "theme": {
+    "nom": "LACUNES-COMBLER",
+    "but": "Phase 5 : la lacune ne se corrige pas depuis un constat. Le combo sort une DECISION et son emprise -- regle, correction d outil, parcours ou lecon -- et la PORTE la pose. Jamais de patch.",
+    "redirects": [
+      {
+        "besoin": "Choisir l emprise",
+        "action": "procedure",
+        "etapes": [
+          "Regle immuable -> la porte `ecrire`",
+          "Correction d outil -> la mission de reparation",
+          "Parcours -> le theme du vivier",
+          "Lecon -> la porte `bdd-lecons ajouter`"
+        ],
+        "regle": "Lecon -> la porte `bdd-lecons ajouter`"
+      },
+      {
+        "besoin": "Nommer la preuve",
+        "action": "procedure",
+        "etapes": [
+          "Quel CHANGEMENT de statut rendurait l erreur impossible a repetition",
+          "Sans preuve nommee, la lacune n est pas comblee, elle est d\u00e9placee"
+        ],
+        "regle": "Sans preuve nommee, la lacune n est pas comblee, elle est d\u00e9placee"
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

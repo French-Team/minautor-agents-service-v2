@@ -1,0 +1,14 @@
+{
+ "agent": "oracle",
+ "parcours": "agents/oracle/parcours/arbre-oracle.json",
+ "case_courante": null,
+ "mission_type": "coordination",
+ "mission": "RETOUR ORACLE : Bilan consolide round optimisation optimus-prime: audit Themis CONDITIONNEL puis corrections Buffy E1-E3 verifiees (liens fins resolus, ASCII+JSON OK). File asap videe.",
+ "historise_debut": true,
+ "precedent": "oracle",
+ "etape": "debut",
+ "historise_fin": false,
+ "theme_courant": null,
+ "redirect_idx": 0,
+ "etape_idx": 0
+}

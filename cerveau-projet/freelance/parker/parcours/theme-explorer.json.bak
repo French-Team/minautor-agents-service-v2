@@ -1,0 +1,53 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "parker",
+    "nom": "EXPLORER",
+    "description": "Explorer, chercher, comprendre"
+  },
+  "theme": {
+    "nom": "EXPLORER",
+    "but": "Aller chercher l'information la où elle se cache",
+    "redirects": [
+      {
+        "besoin": "Explorer un dossier",
+        "action": "procedure",
+        "etapes": [
+          "Lister les fichiers du dossier",
+          "Identifier les fichiers pertinents",
+          "Lire les fichiers cles",
+          "Synthétiser les découvertes"
+        ]
+      },
+      {
+        "besoin": "Chercher un mot-clé",
+        "action": "redirection",
+        "vers": {
+          "type": "outil",
+          "commande": "rechercher-texte"
+        }
+      },
+      {
+        "besoin": "Comprendre un fichier",
+        "action": "redirection",
+        "vers": {
+          "type": "outil",
+          "commande": "lire-fichier"
+        }
+      },
+      {
+        "besoin": "Voir l'activité récente",
+        "action": "redirection",
+        "vers": {
+          "type": "outil",
+          "commande": "lire-activite-recente"
+        }
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-theme"
+  }
+}

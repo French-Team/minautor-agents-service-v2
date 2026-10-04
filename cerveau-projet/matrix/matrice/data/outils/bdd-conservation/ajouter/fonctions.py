@@ -1,0 +1,288 @@
+"""Fonctions metier du registre de conservation."""
+from datetime import datetime
+
+from constants import (
+    CATEGORIES, CLE_LEGACY, CLE_LEGACY_LE, CLE_MISSION_LEGACY, CLE_MOTIF_LEGACY,
+    PREFIXE_ID, STATUTS, STATUT_DISPARU, VERDICTS,
+)
+
+
+def prochain_id(donnees):
+    maximum = 0
+    for entree in donnees.get("elements", []):
+        identifiant = str(entree.get("id") or "")
+        if identifiant.startswith(PREFIXE_ID):
+            suffixe = identifiant[len(PREFIXE_ID):]
+            if suffixe.isdigit():
+                maximum = max(maximum, int(suffixe))
+    return PREFIXE_ID + str(maximum + 1).zfill(3)
+
+
+# CONTRAT DE TRANSPORT des listes (frictions 72 et 73) : la forme vit dans son
+# DOMICILE (data/commun/transport_listes.py) et cette porte la CONSOMME (M-076).
+from transport_listes import decouper_liste  # noqa: E402
+
+
+def separer_liste(texte):
+    """Transforme "a, b" en ["a", "b"] -- le separateur vient de son domicile."""
+    return decouper_liste(texte)
+
+
+def trouver(donnees, identifiant):
+    for entree in donnees.get("elements", []):
+        if entree.get("id") == identifiant:
+            return entree
+    return None
+
+
+def creer_entree(donnees, options):
+    categorie = options.get("categorie", "")
+    if categorie and categorie not in CATEGORIES:
+        return None, "Categorie inconnue : " + categorie
+    entree = {
+        "id": prochain_id(donnees),
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "mission": options.get("mission", ""),
+        "source": options.get("source", ""),
+        "destination": options.get("destination", ""),
+        "categorie": categorie or "HISTORIQUE",
+        "statut": "propose",
+        "verdict": "",
+        "raison": options.get("raison", ""),
+        "lecteurs": separer_liste(options.get("lecteurs", "")),
+        "ecrivains": separer_liste(options.get("ecrivains", "")),
+        "index": separer_liste(options.get("index", "")),
+        "sha_avant": options.get("sha-avant", ""),
+        "sha_apres": options.get("sha-apres", ""),
+        "octets_avant": options.get("octets-avant", ""),
+        "octets_apres": options.get("octets-apres", ""),
+        "lignes_avant": options.get("lignes-avant", ""),
+        "lignes_apres": options.get("lignes-apres", ""),
+        "restaurable": options.get("restaurable", "false").lower() == "true",
+        "operation": "proposer",
+        "archive": options.get("archive", ""),
+        "preuve": options.get("preuve", ""),
+        "tags": separer_liste(options.get("tags", "")),
+    }
+    if not entree["source"] or not entree["raison"] or not entree["tags"]:
+        return None, "source, raison et tags sont obligatoires"
+    donnees["compteur"] = max(donnees.get("compteur", 0), int(entree["id"][len(PREFIXE_ID):]))
+    donnees.setdefault("elements", []).append(entree)
+    return entree, ""
+
+
+def classer_entree(donnees, identifiant, categorie, raison):
+    entree = trouver(donnees, identifiant)
+    if entree is None:
+        return None, "Element inconnu : " + identifiant
+    if categorie not in CATEGORIES:
+        return None, "Categorie inconnue : " + categorie
+    if entree.get("statut") not in ("propose", "classe"):
+        return None, "Transition refusee depuis le statut " + str(entree.get("statut"))
+    if not raison:
+        return None, "Raison obligatoire"
+    entree["categorie"] = categorie
+    entree["raison"] = raison
+    entree["statut"] = "classe"
+    entree["operation"] = "classer"
+    entree["date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return entree, ""
+
+
+def decider_entree(donnees, identifiant, verdict, destination, preuve):
+    entree = trouver(donnees, identifiant)
+    if entree is None:
+        return None, "Element inconnu : " + identifiant
+    if verdict not in VERDICTS:
+        return None, "Verdict inconnu : " + verdict
+    if entree.get("statut") != "classe":
+        return None, "Decision refusee : statut attendu classe"
+    if not preuve:
+        return None, "Preuve obligatoire"
+    if verdict == "archiver" and not destination:
+        return None, "Destination obligatoire pour archiver"
+    entree["verdict"] = verdict
+    entree["destination"] = destination
+    entree["preuve"] = preuve
+    entree["statut"] = "decide"
+    entree["operation"] = "decider"
+    entree["date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return entree, ""
+
+
+def rejuger_entree(donnees, identifiant, raison):
+    """RE-OUVRE un element DECIDE, pour un re-jugement par la regle du jour.
+
+    EO-152 (mission MO-165). Mesure MO-164 : 16 points `STRUCTUREL` en trop dans
+    10 familles sur 88 -- et le compte GRANDIT a chaque ecriture, parce que
+    chaque point neuf devenait `STRUCTUREL` sans que l'ancien soit re-juge.
+    Le controle qui devait le voir rendait "EN ORDRE".
+    La cause n'etait pas la REGLE mais la MACHINE : le balayage ne traitait que
+    le point NEUF et le classement INACHEVE, jamais le point DEJA DECIDE
+    `STRUCTUREL` qu'un point plus recent vient de REMPLACER. Or la regle du
+    domicile couvre ce cas ("tout point REMPLACE est OBSOLETE") : un STRUCTUREL
+    DEPASSE est remplace. Il manquait la TRANSITION.
+
+    Cette transition est DECLAREE ici, chez le proprietaire des transitions
+    (meme fichier que `classer_entree` et `decider_entree`) : le balayage
+    l'ORCHESTRE, il ne la redecide pas.
+
+    Trois choix, tous mesures :
+
+      - elle refuse tout ce qui n'est pas `decide` -- on ne "re-juge" pas un
+        element qui n'a jamais ete juge (celui-la prend le chemin `propose`) ;
+      - elle VIDE le verdict et la destination : un element ne porte jamais deux
+        verites, et une destination sans verdict ferait archiver un point que
+        personne n'a decide d'archiver ;
+      - elle ramene a `classe`, c'est-a-dire dans un statut que `classer_entree`
+        et `decider_entree` acceptent. Si le re-jugement est INTERROMPU, l'element
+        retombe donc dans la population INACHEVE du balayage : le travail ne peut
+        pas se perdre en chemin (c'est le trou ferme par EO-147).
+
+    Elle ne decide RIEN : le verdict vient apres, par `decider_entree`. Une
+    transition qui decide serait une porte qui fait deux metiers.
+    """
+    entree = trouver(donnees, identifiant)
+    if entree is None:
+        return None, "Element inconnu : " + identifiant
+    if entree.get("statut") != "decide":
+        return None, "Re-jugement refuse : statut attendu decide"
+    if not raison:
+        return None, "Raison obligatoire"
+    entree["statut"] = "classe"
+    entree["verdict"] = ""
+    entree["destination"] = ""
+    entree["raison"] = raison
+    entree["operation"] = "rejuger"
+    entree["date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return entree, ""
+
+
+def preciser_entree(donnees, identifiant, preuve, raison):
+    """CORRIGE la preuve (et la raison) d une decision deja rendue.
+
+    Ajout MO-156 : une porte qui ferme une decision sans permettre de corriger
+    sa preuve oblige a porter une PREUVE FAUSSE ou a ecrire le JSON a la main
+    (contournement interdit par le plan). La correction est donc un verbe de la
+    porte. Elle ne touche NI la categorie, NI le statut, NI le verdict : elle
+    REMPLACE la preuve, trace l operation et la date. Refus si la preuve est
+    vide, si l element n est pas decide, ou si rien ne change (pas d ecriture
+    inutile).
+    """
+    entree = trouver(donnees, identifiant)
+    if entree is None:
+        return None, "Element inconnu : " + identifiant
+    if entree.get("statut") != "decide":
+        return None, "Precision refusee : statut attendu decide"
+    if not preuve:
+        return None, "Preuve obligatoire"
+    if preuve == entree.get("preuve") and (not raison or raison == entree.get("raison")):
+        return None, "Precision refusee : aucun changement"
+    entree["preuve"] = preuve
+    if raison:
+        entree["raison"] = raison
+    entree["operation"] = "preciser"
+    entree["date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return entree, ""
+
+
+def recenser_entrees(donnees, famille, lecteurs, ecrivains, index, motif):
+    """ECRIT le recensement (lecteurs/ecrivains/index) sur une FAMILLE de points.
+
+    Mesure MO-192 (friction 88) : ces trois champs existaient et AUCUNE porte ne
+    les ecrivait apres la proposition -- un recensement MESURE restait hors du
+    domicile, et une colonne vide se lisait comme un fait. Ce verbe EST cette
+    porte : il applique un recensement a TOUTE une famille d'un coup (famille =
+    les points dont la source CONTIENT le motif), sans toucher au statut, au
+    verdict, ni a la categorie. Il ne REMPLACE jamais un champ deja rempli par
+    autre chose (il n'ecrit que ce qui change), et REFUSE une famille vide ou un
+    recensement vide (aucune ecriture inutile). Le motif est ajoute UNE fois a la
+    preuve (idempotent : relancer ne duplique pas la trace).
+    """
+    if not famille:
+        return 0, "famille obligatoire (motif cherche dans la source)"
+    if not (lecteurs or ecrivains or index):
+        return 0, "aucun champ a ecrire (lecteurs/ecrivains/index)"
+    touches = 0
+    for entree in donnees.get("elements", []):
+        if famille not in str(entree.get("source") or ""):
+            continue
+        change = False
+        for nom, valeur in (("lecteurs", lecteurs), ("ecrivains", ecrivains),
+                            ("index", index)):
+            if valeur and entree.get(nom) != list(valeur):
+                entree[nom] = list(valeur)
+                change = True
+        if not change:
+            continue
+        entree["operation"] = "recenser"
+        entree["date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if motif and motif not in str(entree.get("preuve") or ""):
+            entree["preuve"] = (entree.get("preuve") or "") + " | RECENSEMENT : " + motif
+        touches += 1
+    if not touches:
+        return 0, "aucun point de la famille n'a change (rien a ecrire)"
+    return touches, ""
+
+
+def marquer_legacy(donnees, identifiants, motif, mission):
+    """DECLARE qu une disparition a ete posee SANS pesee -- le LEGACY (MO-431).
+
+    LA QUESTION : 25 points declares `disparu` le 2026-09-20 n ont AUCUN poids
+    nulle part -- le registre, le temoin, le manifeste et les sauvegardes sont
+    muets (mesure MO-431 : 0 source sur 25 encore sur le disque, 0 poids dans les
+    5 versions sauvegardes du registre, `octets_avant: null` dans les lignes de
+    manifeste) -- et `controler-archives` en relisait la liste a CHAQUE passe.
+    Or rien, desormais, ne peut plus naitre : le fichier est parti, la mesure
+    aussi. Un cri permanent sur un etat sans remede finit par rendre le controle
+    muet, et le controle muet ne voit plus rien (lecon MO-431).
+
+    CE QUE LE VERBE FAIT : il pose une DECISION MOTIVEE sur une carence REELLE.
+    Motif et mission sont obligatoires, la date de l acte est posee, et l entree
+    garde tout ce qu elle etait.
+
+    CE QU IL NE FAIT PAS, jamais :
+      - il ne PESSE PAS : `octets_avant` reste VIDE -- un legacy n est pas un
+        zero, et compter pour zero un poids inconnu serait un fait qui ment
+        (L-055, mesuree sur le temoin qui lisait 799 purges pour 0 octet) ;
+      - il ne change NI le statut, NI le verdict, NI la categorie, NI la source ;
+      - il ne marque QUE les carences : un element dont la mesure EXISTE est
+        refuse (il n y a rien a exonerer), et une entree qui n est pas
+        `disparu` aussi.
+    Une carence NON marquee reste NOMMEE par le controle : la porte ferme la
+    bouche a qui a DECIDE, pas a qui oublie (test negatif MO-431).
+    """
+    if not identifiants:
+        return 0, "id obligatoire (liste separee par des virgules)"
+    if not motif:
+        return 0, "motif obligatoire : une exemption muette est un angle mort"
+    if not mission:
+        return 0, "mission obligatoire : une exemption sans auteur n est pas une trace"
+    touches = 0
+    refuses = []
+    horodatage = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    for identifiant in identifiants:
+        entree = trouver(donnees, identifiant)
+        if entree is None:
+            refuses.append(identifiant + " : element inconnu")
+            continue
+        if entree.get("statut") != STATUT_DISPARU:
+            refuses.append(identifiant + " : statut " + str(entree.get("statut"))
+                           + " (legacy = une disparition DECLAREE)")
+            continue
+        if entree.get(CLE_LEGACY):
+            refuses.append(identifiant + " : deja legacy (idempotent, rien n est reecrit)")
+            continue
+        if entree.get("octets_avant") not in ("", None):
+            refuses.append(identifiant + " : la mesure EXISTE (pas de legacy sans carence)")
+            continue
+        entree[CLE_LEGACY] = True
+        entree[CLE_MOTIF_LEGACY] = motif
+        entree[CLE_LEGACY_LE] = horodatage
+        entree[CLE_MISSION_LEGACY] = mission
+        entree["operation"] = "marquer-legacy"
+        entree["date"] = horodatage
+        touches += 1
+    if not touches:
+        return 0, "; ".join(refuses)
+    return touches, ("partiel (non marques) : " + "; ".join(refuses)) if refuses else ""

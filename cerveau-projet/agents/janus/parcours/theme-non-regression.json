@@ -1,0 +1,77 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "janus",
+    "nom": "NON-REGRESSION",
+    "description": "Lancer la suite de non-regression complete (barrieres A a E)"
+  },
+  "theme": {
+    "nom": "NON-REGRESSION",
+    "but": "Lancer la non-regression et donner le verdict",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d agir."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine tests)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent janus --domaine tests"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique se lit a chaque activation."
+      },
+      {
+        "besoin": "Verifier l etat des tests KO",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/tester/tester-lancer-non-regression/tester-lancer-non-regression.py --agent janus --etat-ko"
+        ],
+        "regle": "Verifier les KO existants AVANT de lancer."
+      },
+      {
+        "besoin": "Lancer la non-regression",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/tester/tester-lancer-non-regression/tester-lancer-non-regression.py --agent janus"
+        ],
+        "regle": "LANCER : barrieres A a E, mode par defaut BARRIERES."
+      },
+      {
+        "besoin": "Analyser les resultats",
+        "action": "procedure",
+        "etapes": [
+          "Lire le rapport de non-regression",
+          "Identifier les KO et les tests les plus lents"
+        ],
+        "regle": "ANALYSER : comprendre les KO avant de donner le verdict."
+      },
+      {
+        "besoin": "Donner le verdict",
+        "action": "procedure",
+        "etapes": [
+          "Si toutes les barrieres vertes : VALIDE",
+          "Si KO : REJETE (signaler a Cerberus pour corriger)"
+        ],
+        "regle": "VERDICT : VALIDE ou REJETE. Je ne corrige JAMAIS, je signale."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/janus/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION : toute mission se termine par ma lecon + mon verdict."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-non-regression"
+  }
+}

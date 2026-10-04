@@ -1,0 +1,19 @@
+Z:\analyste-in-console\cerveau-projet\agents\tools\tester\tests\test-102-timestamps-millisecondes\test-102-timestamps-millisecondes.py:27: SyntaxWarning: "\." is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\."? A raw string is also an option.
+  avec 6 chiffres apres le point (\.[0-9]{6}) = regression microsecondes.
+=== test-102 : timestamps a 3 chiffres (millisecondes) dans activer-agent-principal ===
+  [OK] 1. .py : 0 strftime %f sans troncature [:-3]
+  [OK] 2. .sh : get_timestamp en %3N (pas %N nu)
+  [OK] 3. .py : timestamp a 3 chiffres (millisecondes)
+  [OK] 4. .sh : timestamp a 3 chiffres (millisecondes)
+  [OK] 5. .py : 0 occurrence de %3f (format invalide en Python)
+  [OK] 6. normes : ASCII strict + LF pur
+
+
+=== CHRONO test (total 3.4s) ===
+  1. .py sans %f nu                    0.00s
+  2. .sh en %3N                        0.00s
+  3. execution .py                     0.18s
+  4. execution .sh                     3.20s
+  5. pas de %3f                        0.00s
+  6. normes                            0.00s
+=== RESULTAT : 6 OK / 0 KO (sur 6 points) ===

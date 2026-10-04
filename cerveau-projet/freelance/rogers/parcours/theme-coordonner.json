@@ -1,0 +1,52 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "rogers",
+    "nom": "COORDONNER",
+    "description": "Inter-round, activer Stark, relais"
+  },
+  "theme": {
+    "nom": "COORDONNER",
+    "but": "Gerer les transitions et communications",
+    "redirects": [
+      {
+        "besoin": "Reception inter-round",
+        "action": "procedure",
+        "description": "Un agent m'a active en inter-round avec un rapport KO",
+        "etapes": [
+          "Lire le rapport de l'agent appelant",
+          "Accuser reception",
+          "Diagnostic rapide du probleme",
+          "Si dans mon perimetre -> corriger",
+          "Si hors perimetre -> signaler l'agent habilite",
+          "Reactiver l'appelant (activer, pas reactiver)"
+        ]
+      },
+      {
+        "besoin": "Signaler une violation de regle",
+        "action": "redirection",
+        "vers": {
+          "type": "procedure",
+          "etapes": [
+            "Identifier la regle violee",
+            "Identifier l'auteur de la violation",
+            "Documenter la violation (qui, quand, quoi)",
+            "Si corrigeable -> corriger immediatement",
+            "Si structurel -> proposer une modification de regle (MODIFIER)"
+          ]
+        }
+      },
+      {
+        "besoin": "Retour a Stark (FIN DE CYCLE)",
+        "action": "fin",
+        "vers": "fins.json",
+        "case": "fin-stark"
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-theme"
+  }
+}

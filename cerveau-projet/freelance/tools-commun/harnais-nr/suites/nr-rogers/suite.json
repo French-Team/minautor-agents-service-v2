@@ -1,0 +1,40 @@
+{
+  "nom": "nr-rogers",
+  "description": "Suite de non-regression de l'agent rogers - fichiers d'identite + outils communs (non mutant)",
+  "actif": true,
+  "perimetre": [
+    "cerveau-projet/freelance/rogers"
+  ],
+  "tests": [
+    {
+      "nom": "fiche-rogers-existe-et-non-vide",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {
+          "chemin": "cerveau-projet/freelance/rogers/rogers.md",
+          "doit_exister": true
+        }
+      ]
+    },
+    {
+      "nom": "corrections-rogers-present",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {
+          "chemin": "cerveau-projet/freelance/rogers/corrections.md",
+          "doit_exister": true
+        }
+      ]
+    },
+    {
+      "nom": "arbre-rogers-json-valide",
+      "commande": "python3 -c \"import json,sys; a=json.load(open(r'{racine}/cerveau-projet/freelance/rogers/parcours/arbre-rogers.json', encoding='utf-8')); assert a['racine']['branches']; print('ARBRE OK')\"",
+      "rc_attendu": 0,
+      "sortie_contient": [
+        "ARBRE OK"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "LACUNES-RECHERCHER",
+    "description": "Ou l agent se trompe -- Phase 1 de sc-006-lacunes : lire les signaux qui revelent une lacune (frictions, lecons, segments) et nommer le silence quand il depasse le seuil. Ne pas conclure : une LECTURE n est pas une preuve."
+  },
+  "theme": {
+    "nom": "LACUNES-RECHERCHER",
+    "but": "Phase 1 de sc-006-lacunes : lire les signaux qui revelent une lacune (frictions, lecons, segments) et nommer le silence quand il depasse le seuil. Ne pas conclure : une LECTURE n est pas une preuve.",
+    "redirects": [
+      {
+        "besoin": "Nommer les lectures",
+        "action": "procedure",
+        "etapes": [
+          "Lancer `sc-006-lacunes rechercher --prive` : les 3 sources (frictions, lecons, segments) sont en zone PRIVEE ; sans --prive la porte REFUSE",
+          "Lire le compte reel de chaque source : un volume, jamais une impression",
+          "Si le signal dort (au-dela du seuil), l ALARTE est nommee : ne pas l archiver en silence"
+        ],
+        "regle": "Une lecture qui ne dit pas sa portee laisse croire a un constat portant sur la zone entiere : nommer --prive, ou refuser."
+      },
+      {
+        "besoin": "Ne pas confondre une entree et une repetition",
+        "action": "procedure",
+        "etapes": [
+          "Une friction unique n est pas une lacune",
+          "Une repetition EST la preuve : c est la phase comparer qui la constate"
+        ],
+        "regle": "Une repetition EST la preuve : c est la phase comparer qui la constate"
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

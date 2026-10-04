@@ -1,0 +1,20 @@
+{
+  "identite": {"type": "theme", "appartient_a": "socrate", "nom": "SYNTHESE", "description": "Creer le fichier missions-revision.md avec la liste structuree des missions"},
+  "theme": {
+    "nom": "SYNTHESE",
+    "but": "Produire le fichier missions-revision.md avec la liste structuree et priorisee de toutes les missions identifiees lors de la revision",
+    "redirects": [
+      {"besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."},
+      {"besoin": "Consulter les lecons (domaine revision)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent socrate --domaine revision"], "regle": "PATTERN 6 : le contexte dynamique."},
+      {"besoin": "Lir MES conventions personnelles (format de sortie)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/socrate/conventions/convention-format-sortie.md"], "regle": "CONVENTIONS PERSONNELLES : je lis MON format de sortie AVANT de creer le fichier. UN SEUL fichier, template structure, regles de contenu."},
+      {"besoin": "CONTEXTE : activite recente des agents", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6 : l historique est DYNAMIQUE."},
+      {"besoin": "Verifier que tous les problemes ont ete explores (controle pre-synthese)", "action": "procedure", "etapes": ["Relire la liste des problemes identifies. Chacun a-t-il ete questionne (3+ questions), classe et forme en mission ?"], "regle": "COMPLETUDE : chaque probleme doit avoir ete explore avant la synthese."},
+      {"besoin": "Creer le fichier missions-revision.md (case c7)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/creer/creer-fichier/creer-fichier.py cerveau-projet/agents/socrate/missions-revision.md"], "regle": "UN SEUL FICHIER : missions-revision.md (convention-format-sortie)."},
+      {"besoin": "Remplir le format structure (template convention)", "action": "procedure", "etapes": ["Resume : tableau Niveau | Nombre (URGENT/IMPORTANT/MOYEN/BAS)", "Pour chaque mission : NIVEAU, Titre, Agent habilite, Description, Raison, Dependances, Critere de succes"], "regle": "FORMAT (convention-format-sortie) : strictement conforme au template. Toute mission a un niveau, un agent, un critere de succes."},
+      {"besoin": "Fichier cree ? (controle c7b)", "action": "procedure", "etapes": ["SI OUI -> FIN (c8)", "SI NON -> recreer (c7)"], "regle": "GARDE-FOU : si le fichier n existe pas, reboucler."},
+      {"besoin": "Relire et verifier la coherence", "action": "procedure", "etapes": ["Relire le fichier complet", "Verifier que chaque mission a : niveau, agent, description, raison, dependances, critere", "Verifier que le resume correspond au detail"], "regle": "COHERENCE : le resume doit correspondre aux missions detaillees."},
+      {"besoin": "Ajouter les lecons dans corrections.md", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/socrate/corrections.md <lecon>"], "regle": "PROTOCOLE FIN-MISSION."}
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-synthese"}
+}

@@ -1,0 +1,73 @@
+%% Arbre de decision de clio (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quelle est ma mission ?"}
+    RACINE -- "MAJ" --> THEME-MAJ
+    THEME-MAJ["Mettre a jour le README pour qu il reflete l etat reel du pr"]
+    THEME-MAJ -- "besoin 1" --> THEME-MAJ-B0
+    THEME-MAJ-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-MAJ -- "besoin 2" --> THEME-MAJ-B1
+    THEME-MAJ-B1["Consulter les lecons (mettre-a-jour-readme)"]
+    THEME-MAJ -- "besoin 3" --> THEME-MAJ-B2
+    THEME-MAJ-B2["CONTEXTE : activite recente des agents"]
+    THEME-MAJ -- "besoin 4" --> THEME-MAJ-B3
+    THEME-MAJ-B3["Lire les interventions pour savoir ce qui a change"]
+    THEME-MAJ -- "besoin 5" --> THEME-MAJ-B4
+    THEME-MAJ-B4["Verifier les ecarts entre etat reel et README"]
+    THEME-MAJ -- "besoin 6" --> THEME-MAJ-B5
+    THEME-MAJ-B5["Mettre a jour les compteurs et badges"]
+    THEME-MAJ -- "besoin 7" --> THEME-MAJ-B6
+    THEME-MAJ-B6["Corriger le texte du README (sections narratives)"]
+    THEME-MAJ -- "besoin 8" --> THEME-MAJ-B7
+    THEME-MAJ-B7["Verifier la conformite ASCII"]
+    THEME-MAJ -- "besoin 9" --> THEME-MAJ-B8
+    THEME-MAJ-B8["Ajouter les lecons dans corrections.md"]
+    FIN-fin-maj(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-MAJ-B0 --> FIN-fin-maj
+    THEME-MAJ-B1 --> FIN-fin-maj
+    THEME-MAJ-B2 --> FIN-fin-maj
+    THEME-MAJ-B3 --> FIN-fin-maj
+    THEME-MAJ-B4 --> FIN-fin-maj
+    THEME-MAJ-B5 --> FIN-fin-maj
+    THEME-MAJ-B6 --> FIN-fin-maj
+    THEME-MAJ-B7 --> FIN-fin-maj
+    THEME-MAJ-B8 --> FIN-fin-maj
+    RACINE -- "VERIFIER" --> THEME-VERIFIER
+    THEME-VERIFIER["Verifier que le README reflete l etat reel du projet"]
+    THEME-VERIFIER -- "besoin 1" --> THEME-VERIFIER-B0
+    THEME-VERIFIER-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-VERIFIER -- "besoin 2" --> THEME-VERIFIER-B1
+    THEME-VERIFIER-B1["Lire le README actuel"]
+    THEME-VERIFIER -- "besoin 3" --> THEME-VERIFIER-B2
+    THEME-VERIFIER-B2["Verifier les ecarts (compteurs + texte)"]
+    THEME-VERIFIER -- "besoin 4" --> THEME-VERIFIER-B3
+    THEME-VERIFIER-B3["Rapporter le verdict"]
+    FIN-fin-verifier(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-VERIFIER-B0 --> FIN-fin-verifier
+    THEME-VERIFIER-B1 --> FIN-fin-verifier
+    THEME-VERIFIER-B2 --> FIN-fin-verifier
+    THEME-VERIFIER-B3 --> FIN-fin-verifier
+    RACINE -- "AUTRE" --> THEME-AUTRE
+    THEME-AUTRE["Executer une mission hors des themes standard"]
+    THEME-AUTRE -- "besoin 1" --> THEME-AUTRE-B0
+    THEME-AUTRE-B0["Verifier le systeme (ETAPE 1 OBLIGATOIRE)"]
+    THEME-AUTRE -- "besoin 2" --> THEME-AUTRE-B1
+    THEME-AUTRE-B1["La mission concerne-t-elle un autre agent ? (delegation)"]
+    THEME-AUTRE -- "besoin 3" --> THEME-AUTRE-B2
+    THEME-AUTRE-B2["DELEGATION - Signaler au pilote via ORACLE"]
+    THEME-AUTRE -- "besoin 4" --> THEME-AUTRE-B3
+    THEME-AUTRE-B3["Executer la mission"]
+    THEME-AUTRE -- "besoin 5" --> THEME-AUTRE-B4
+    THEME-AUTRE-B4["Ajouter les lecons dans corrections.md"]
+    FIN-fin-autre(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-AUTRE-B0 --> FIN-fin-autre
+    THEME-AUTRE-B1 --> FIN-fin-autre
+    THEME-AUTRE-B2 --> FIN-fin-autre
+    THEME-AUTRE-B3 --> FIN-fin-autre
+    THEME-AUTRE-B4 --> FIN-fin-autre
+    RACINE -- "INTER-ROUND" --> THEME-INTER-ROUND
+    THEME-INTER-ROUND["Accuser reception d un rapport KO et relancer l agent appela"]
+    THEME-INTER-ROUND -- "besoin 1" --> THEME-INTER-ROUND-B0
+    THEME-INTER-ROUND-B0["RECEPTION inter-round : rapport KO recu d un autre agent"]
+    FIN-fin-inter-round(["FIN - Retour a ORACLE (l aeroport)"])
+    THEME-INTER-ROUND-B0 --> FIN-fin-inter-round

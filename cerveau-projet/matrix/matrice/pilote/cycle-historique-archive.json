@@ -1,0 +1,44 @@
+{
+  "historique": [
+    {
+      "action": "injection",
+      "categorie": "demarrage",
+      "timestamp": "2026-09-13T06:17:16.340138"
+    },
+    {
+      "action": "injection",
+      "categorie": "avant-mission",
+      "timestamp": "2026-09-13T06:30:20.954466"
+    },
+    {
+      "action": "etat_archive",
+      "timestamp": "2026-09-15T22:05:33.872628",
+      "detail": "Etat du cycle du cameleon (Flux 1) archive avant suppression : l'etat disparait, l'historique est conserve (meme doctrine que le Flux 2 / EO-119 le 2026-09-15).",
+      "ce_que_l_etat_affirmait": {
+        "phase": "mission",
+        "mission_courante": {
+          "id": "M-CAM",
+          "theme": "COMMUNICATION",
+          "debut": "2026-09-13T06:30:20.870767",
+          "statut": "en cours"
+        },
+        "dernier_injection": {
+          "categorie": "avant-mission",
+          "timestamp": "2026-09-13T06:30:20.954453"
+        },
+        "historique_entrees": 2
+      },
+      "verite_mesuree": {
+        "missions_dans_la_file_du_cameleon": 0,
+        "compteur_de_la_file": 89,
+        "id_annonce_par_l_etat": "M-CAM",
+        "cet_id_dans_la_file": false,
+        "cet_id_dans_le_journal_du_cameleon": false,
+        "lignes_du_journal_du_cameleon": 147,
+        "gele_depuis": "2026-09-13T06:30:20.870767"
+      }
+    }
+  ],
+  "archive_le": "2026-09-15T22:05:33.872628",
+  "origine": "cycle-state.json du cameleon (Flux 1) archive le 2026-09-15 : l ETAT disparait, l HISTORIQUE est conserve"
+}

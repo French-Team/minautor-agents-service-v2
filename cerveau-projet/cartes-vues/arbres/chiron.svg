@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Carte de decision de chiron (parcours v0.3.0) - genere par convertir-carte-mermaid v0.3.0 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="7315" height="682" viewBox="0 0 7315 682" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="fleche" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="7315" height="682" fill="#ffffff"/>
+    <path d="M 3657.4 76.0 L 3657.4 166.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 3657.4 202.0 L 3392.4 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="3502.1" y="237.0" width="45.6" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="3524.9" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">EDUCER</text>
+    <path d="M 3392.4 328.0 L 113.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="1724.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="1752.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 1</text>
+    <path d="M 3392.4 328.0 L 279.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="1807.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="1835.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 2</text>
+    <path d="M 3392.4 328.0 L 445.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="1890.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="1918.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 3</text>
+    <path d="M 3392.4 328.0 L 611.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="1973.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="2001.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 4</text>
+    <path d="M 3392.4 328.0 L 777.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="2056.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="2084.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 5</text>
+    <path d="M 3392.4 328.0 L 943.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="2139.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="2167.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 6</text>
+    <path d="M 3392.4 328.0 L 1109.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="2222.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="2250.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 7</text>
+    <path d="M 3392.4 328.0 L 1275.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="2305.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="2333.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 8</text>
+    <path d="M 3392.4 328.0 L 1441.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="2388.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="2416.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 9</text>
+    <path d="M 3392.4 328.0 L 1607.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="2468.5" y="363.0" width="62.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="2499.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 10</text>
+    <path d="M 3392.4 328.0 L 1776.2 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="2553.1" y="363.0" width="62.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="2584.3" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 11</text>
+    <path d="M 3392.4 328.0 L 1948.6 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="2639.3" y="363.0" width="62.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="2670.5" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 12</text>
+    <path d="M 3392.4 328.0 L 2121.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="2725.5" y="363.0" width="62.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="2756.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 13</text>
+    <path d="M 3392.4 328.0 L 2293.4 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="2811.7" y="363.0" width="62.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="2842.9" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 14</text>
+    <path d="M 3392.4 328.0 L 2465.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="2897.9" y="363.0" width="62.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="2929.1" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 15</text>
+    <path d="M 3392.4 328.0 L 2638.2 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="2984.1" y="363.0" width="62.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="3015.3" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 16</text>
+    <path d="M 3392.4 328.0 L 2810.6 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="3070.3" y="363.0" width="62.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="3101.5" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 17</text>
+    <path d="M 113.0 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 279.0 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 445.0 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 611.0 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 777.0 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 943.0 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 1109.0 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 1275.0 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 1441.0 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 1607.0 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 1776.2 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 1948.6 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 2121.0 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 2293.4 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 2465.8 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 2638.2 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 2810.6 454.0 L 3315.6 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 3657.4 202.0 L 3568.0 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="3564.7" y="237.0" width="96.0" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="3612.7" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">AUTO-CORRECTION</text>
+    <path d="M 3568.0 328.0 L 3008.6 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="3259.9" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="3288.3" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 1</text>
+    <path d="M 3568.0 328.0 L 3232.2 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="3371.7" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="3400.1" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 2</text>
+    <path d="M 3568.0 328.0 L 3455.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="3483.5" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="3511.9" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 3</text>
+    <path d="M 3568.0 328.0 L 3679.4 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="3595.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="3623.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 4</text>
+    <path d="M 3568.0 328.0 L 3903.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="3707.1" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="3735.5" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 5</text>
+    <path d="M 3568.0 328.0 L 4126.6 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="3818.9" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="3847.3" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 6</text>
+    <path d="M 3568.0 328.0 L 4350.2 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="3930.7" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="3959.1" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 7</text>
+    <path d="M 3568.0 328.0 L 4573.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="4042.5" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="4070.9" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 8</text>
+    <path d="M 3568.0 328.0 L 4797.4 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="4154.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="4182.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 9</text>
+    <path d="M 3568.0 328.0 L 5021.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="4263.3" y="363.0" width="62.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="4294.5" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 10</text>
+    <path d="M 3568.0 328.0 L 5247.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="4376.7" y="363.0" width="62.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="4407.9" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 11</text>
+    <path d="M 3568.0 328.0 L 5477.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="4491.7" y="363.0" width="62.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="4522.9" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 12</text>
+    <path d="M 3008.6 454.0 L 3539.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 3232.2 454.0 L 3539.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 3455.8 454.0 L 3539.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 3679.4 454.0 L 3539.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 3903.0 454.0 L 3539.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 4126.6 454.0 L 3539.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 4350.2 454.0 L 3539.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 4573.8 454.0 L 3539.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 4797.4 454.0 L 3539.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 5021.0 454.0 L 3539.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 5247.8 454.0 L 3539.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 5477.8 454.0 L 3539.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 3657.4 202.0 L 3743.6 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="3677.7" y="237.0" width="45.6" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="3700.5" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">OUTILS</text>
+    <path d="M 3743.6 328.0 L 5675.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="4681.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="4709.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 1</text>
+    <path d="M 3743.6 328.0 L 5841.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="4764.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="4792.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 2</text>
+    <path d="M 3743.6 328.0 L 6007.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="4847.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="4875.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 3</text>
+    <path d="M 3743.6 328.0 L 6173.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="4930.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="4958.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 4</text>
+    <path d="M 3743.6 328.0 L 6339.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="5013.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="5041.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 5</text>
+    <path d="M 3743.6 328.0 L 6505.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="5096.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="5124.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 6</text>
+    <path d="M 3743.6 328.0 L 6671.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="5179.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="5207.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 7</text>
+    <path d="M 3743.6 328.0 L 6837.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="5262.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="5290.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 8</text>
+    <path d="M 3743.6 328.0 L 7003.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="5345.3" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="5373.7" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 9</text>
+    <path d="M 5675.8 454.0 L 3769.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 5841.8 454.0 L 3769.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 6007.8 454.0 L 3769.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 6173.8 454.0 L 3769.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 6339.8 454.0 L 3769.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 6505.8 454.0 L 3769.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 6671.8 454.0 L 3769.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 6837.8 454.0 L 3769.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 7003.8 454.0 L 3769.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 3657.4 202.0 L 3906.4 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="3745.1" y="237.0" width="73.6" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="3781.9" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">INTER-ROUND</text>
+    <path d="M 3906.4 328.0 L 7185.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="5517.7" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="5546.1" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 1</text>
+    <path d="M 7185.8 454.0 L 3999.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="3623.2" y="40.0" width="68.4" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="3657.4" y="62.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3657.4" dy="0">Debut&quot;</tspan>
+    </text>
+    <rect x="3623.2" y="166.0" width="68.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="3657.4" y="188.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3657.4" dy="0">RACINE</tspan>
+    </text>
+    <rect x="3339.0" y="292.0" width="106.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="3392.4" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3392.4" dy="0">THEME-EDUCER</tspan>
+    </text>
+    <rect x="50.0" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="113.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="113.0" dy="0">THEME-EDUCER-B0</tspan>
+    </text>
+    <rect x="216.0" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="279.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="279.0" dy="0">THEME-EDUCER-B1</tspan>
+    </text>
+    <rect x="382.0" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="445.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="445.0" dy="0">THEME-EDUCER-B2</tspan>
+    </text>
+    <rect x="548.0" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="611.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="611.0" dy="0">THEME-EDUCER-B3</tspan>
+    </text>
+    <rect x="714.0" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="777.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="777.0" dy="0">THEME-EDUCER-B4</tspan>
+    </text>
+    <rect x="880.0" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="943.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="943.0" dy="0">THEME-EDUCER-B5</tspan>
+    </text>
+    <rect x="1046.0" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1109.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1109.0" dy="0">THEME-EDUCER-B6</tspan>
+    </text>
+    <rect x="1212.0" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1275.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1275.0" dy="0">THEME-EDUCER-B7</tspan>
+    </text>
+    <rect x="1378.0" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1441.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1441.0" dy="0">THEME-EDUCER-B8</tspan>
+    </text>
+    <rect x="1544.0" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1607.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1607.0" dy="0">THEME-EDUCER-B9</tspan>
+    </text>
+    <rect x="1710.0" y="418.0" width="132.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1776.2" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1776.2" dy="0">THEME-EDUCER-B10</tspan>
+    </text>
+    <rect x="1882.4" y="418.0" width="132.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="1948.6" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="1948.6" dy="0">THEME-EDUCER-B11</tspan>
+    </text>
+    <rect x="2054.8" y="418.0" width="132.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="2121.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="2121.0" dy="0">THEME-EDUCER-B12</tspan>
+    </text>
+    <rect x="2227.2" y="418.0" width="132.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="2293.4" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="2293.4" dy="0">THEME-EDUCER-B13</tspan>
+    </text>
+    <rect x="2399.6" y="418.0" width="132.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="2465.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="2465.8" dy="0">THEME-EDUCER-B14</tspan>
+    </text>
+    <rect x="2572.0" y="418.0" width="132.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="2638.2" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="2638.2" dy="0">THEME-EDUCER-B15</tspan>
+    </text>
+    <rect x="2744.4" y="418.0" width="132.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="2810.6" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="2810.6" dy="0">THEME-EDUCER-B16</tspan>
+    </text>
+    <rect x="3223.8" y="544.0" width="183.6" height="48.0" rx="24.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="3315.6" y="565.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3315.6" dy="0">FIN - Retour a ORACLE (l</tspan>
+      <tspan x="3315.6" dy="14">aeroport)&quot;</tspan>
+    </text>
+    <rect x="3485.8" y="292.0" width="164.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="3568.0" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3568.0" dy="0">THEME-AUTO-CORRECTION</tspan>
+    </text>
+    <rect x="2916.8" y="418.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="3008.6" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3008.6" dy="0">THEME-AUTO-CORRECTION-B0</tspan>
+    </text>
+    <rect x="3140.4" y="418.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="3232.2" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3232.2" dy="0">THEME-AUTO-CORRECTION-B1</tspan>
+    </text>
+    <rect x="3364.0" y="418.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="3455.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3455.8" dy="0">THEME-AUTO-CORRECTION-B2</tspan>
+    </text>
+    <rect x="3587.6" y="418.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="3679.4" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3679.4" dy="0">THEME-AUTO-CORRECTION-B3</tspan>
+    </text>
+    <rect x="3811.2" y="418.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="3903.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3903.0" dy="0">THEME-AUTO-CORRECTION-B4</tspan>
+    </text>
+    <rect x="4034.8" y="418.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="4126.6" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="4126.6" dy="0">THEME-AUTO-CORRECTION-B5</tspan>
+    </text>
+    <rect x="4258.4" y="418.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="4350.2" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="4350.2" dy="0">THEME-AUTO-CORRECTION-B6</tspan>
+    </text>
+    <rect x="4482.0" y="418.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="4573.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="4573.8" dy="0">THEME-AUTO-CORRECTION-B7</tspan>
+    </text>
+    <rect x="4705.6" y="418.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="4797.4" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="4797.4" dy="0">THEME-AUTO-CORRECTION-B8</tspan>
+    </text>
+    <rect x="4929.2" y="418.0" width="183.6" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="5021.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="5021.0" dy="0">THEME-AUTO-CORRECTION-B9</tspan>
+    </text>
+    <rect x="5152.8" y="418.0" width="190.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="5247.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="5247.8" dy="0">THEME-AUTO-CORRECTION-B10</tspan>
+    </text>
+    <rect x="5382.8" y="418.0" width="190.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="5477.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="5477.8" dy="0">THEME-AUTO-CORRECTION-B11</tspan>
+    </text>
+    <rect x="3447.4" y="544.0" width="183.6" height="48.0" rx="24.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="3539.2" y="565.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3539.2" dy="0">FIN - Retour a ORACLE (l</tspan>
+      <tspan x="3539.2" dy="14">aeroport)&quot;</tspan>
+    </text>
+    <rect x="3690.2" y="292.0" width="106.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="3743.6" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3743.6" dy="0">THEME-OUTILS</tspan>
+    </text>
+    <rect x="5612.8" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="5675.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="5675.8" dy="0">THEME-OUTILS-B0</tspan>
+    </text>
+    <rect x="5778.8" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="5841.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="5841.8" dy="0">THEME-OUTILS-B1</tspan>
+    </text>
+    <rect x="5944.8" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="6007.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="6007.8" dy="0">THEME-OUTILS-B2</tspan>
+    </text>
+    <rect x="6110.8" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="6173.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="6173.8" dy="0">THEME-OUTILS-B3</tspan>
+    </text>
+    <rect x="6276.8" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="6339.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="6339.8" dy="0">THEME-OUTILS-B4</tspan>
+    </text>
+    <rect x="6442.8" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="6505.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="6505.8" dy="0">THEME-OUTILS-B5</tspan>
+    </text>
+    <rect x="6608.8" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="6671.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="6671.8" dy="0">THEME-OUTILS-B6</tspan>
+    </text>
+    <rect x="6774.8" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="6837.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="6837.8" dy="0">THEME-OUTILS-B7</tspan>
+    </text>
+    <rect x="6940.8" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="7003.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="7003.8" dy="0">THEME-OUTILS-B8</tspan>
+    </text>
+    <rect x="3671.0" y="544.0" width="196.4" height="48.0" rx="24.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="3769.2" y="565.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3769.2" dy="0">FIN - Reprendre ma mission</tspan>
+      <tspan x="3769.2" dy="14">(cU3)&quot;</tspan>
+    </text>
+    <rect x="3837.0" y="292.0" width="138.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="3906.4" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3906.4" dy="0">THEME-INTER-ROUND</tspan>
+    </text>
+    <rect x="7106.8" y="418.0" width="158.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="7185.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="7185.8" dy="0">THEME-INTER-ROUND-B0</tspan>
+    </text>
+    <rect x="3907.4" y="544.0" width="183.6" height="48.0" rx="24.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="3999.2" y="565.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="3999.2" dy="0">FIN - Retour a ORACLE (l</tspan>
+      <tspan x="3999.2" dy="14">aeroport)&quot;</tspan>
+    </text>
+</svg>

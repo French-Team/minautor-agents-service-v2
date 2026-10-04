@@ -1,0 +1,819 @@
+"""Fonctions simples de la categorie file : une seule tache chacune."""
+import json
+
+from constants import CHAMPS_SOURCE, OPTION_SEGMENT
+from commun import (
+    CHEMIN_FILE,
+    NOM_FILE,
+    armer_lot,
+    consommer_item,
+    controler_raisonnement_mission,
+    crier_controle_conservation,
+    crier_mission_muette,
+    declarer_disparitions_conservation,
+    declarer_borne_marbre,
+    defcon_bloque_theme,
+    deposer_segments_raisonnement,
+    enregistrer_file,
+    fichiers_de_la_mission,
+    horodater,
+    ids_en_lot,
+    item_du_entonnoir,
+    item_id_de_la_source,
+    lire_bilan,
+    lire_segments,
+    memoire_de_la_source,
+    mission_depuis_item,
+    mission_en_cours,
+    refus_parquage_en_attente,
+    refus_serie_stricte,
+    prochaine_du_lot,
+    resume_mission,
+    noter_journal,
+    noter_prise_round,
+    noter_session,
+    numero_id,
+    prochain_id,
+    purger_zone_temporaire,
+    rafraichir_vue_suivi,
+    source_de_l_item,
+    extraire_options,
+    outils_de_l_item,
+    titre_de_l_item,
+    trace_de_l_item,
+    valider_theme,
+)
+
+
+def _source_de_l_item(item_id):
+    """La SOURCE d'une mission nee d'un item : la RENDRE, et DIRE d'ou elle vient.
+
+    MO-333/MO-334 : la composition ET la resolution vivent dans UN SEUL domicile
+    (`commun.source_de_l_item`), qui distingue TROIS provenances et ne devine
+    jamais. Ici aucun calcul : on appelle, on DIT, on rend.
+      - l'item est VIVANT -- il fait foi ;
+      - il est CONSOMME -- sa TOMBE (memoire de naissance) rend la forme longue, et
+        on DIT que c'est la memoire qui parle (elle est datee, pas inventee) ;
+      - sa tombe est INCOMPLETE, ou il n'a jamais ete vu -- forme COURTE, et ce qui
+        manque est NOMME (on n'INVENTE ni type, ni categorie, ni urgence).
+    """
+    source, provenance, manquants = source_de_l_item(item_id)
+    if provenance == SOURCE_MEMOIRE:
+        print("Memoire de naissance (MO-334) : item " + str(item_id) + " consomme --"
+              " source rendue par sa TOMBE : " + source)
+    elif provenance == SOURCE_MEMOIRE_INCOMPLETE:
+        print("ALERTE source (MO-334) : la tombe de l'item " + str(item_id) + " est"
+              " INCOMPLETE (" + ", ".join(manquants) + " manquant(s)) -- source laissee"
+              " COURTE (" + source + ") : jamais devine.")
+    elif provenance != SOURCE_VIVANTE:
+        print("ALERTE source (MO-333) : item " + str(item_id) + " INTROUVABLE dans"
+              " l'entonnoir et SANS tombe -- source laissee COURTE (" + source + ") :"
+              " type, categorie et urgence INDISPONIBLES (jamais devines).")
+    return source
+
+
+def _consommer_item_lie(item_id):
+    """CONSOMME l'item d'une mission declaree A LA MAIN (EO-153, friction 83).
+
+    Le pont automatique consommait ; la declaration manuelle, NON -- EO-136 a servi
+    a declarer MO-160 sans quitter le brin, puis le pont l'a RE-SERVI (MO-161, meme
+    objectif). Une consommation impossible (item inconnu) n'est PAS bloquante -- la
+    declaration reste liee par `source`, donc l'idempotence la rattrapera -- mais
+    elle est DITE.
+    """
+    code, message = consommer_item(item_id)
+    print(("Consommation (EO-153) : " if code == 0 else "ALERTE consommation (EO-153) : ")
+          + message)
+from constants import (CHAMP_TITRE_MISSION, PREFIXE_ID, SOURCE_MEMOIRE,
+                       SOURCE_MEMOIRE_INCOMPLETE, SOURCE_VIVANTE, STATUT_EN_ATTENTE,
+                       STATUT_TERMINEE)
+
+# CONTRAT DE TRANSPORT des listes (frictions 72 et 73) : les listes du LOT (--theme
+# "t1,t2" et --type "dev,reparation") sont coupees par le MEME domicile que la
+# liste de fichiers du pilote, au lieu de recopier la virgule (M-076).
+from transport_listes import decouper_liste  # noqa: E402
+
+# Les TYPES de mission sont une liste FERMEE de l'entonnoir (EO-118) : le lot les
+# EXIGE au lieu de faire naitre des missions sans type, donc sans posture. Une
+# seule source : le module des listes fermees, jamais une copie (L-029/L-035).
+from entonnoir.listes import CHAMP_OUTILS, CHAMP_SOURCE_TRACE, TYPES as TYPES_MISSION
+
+# LONGUEUR_MIN_NUMERO et numero_id ont UN SEUL domicile : commun.py (L-029),
+# aux cotes de PREFIXE_ID et de prochain_id qui parlent du meme identifiant.
+
+
+def valider_type_ferme(type_cible):
+    """Porte du champ TYPE ferme (EO-120) : UN SEUL domicile pour les deux charges.
+
+    Le `lot` l'exigeait depuis EO-118/MO-106, la charge SIMPLE ne l'offrait meme
+    pas : mesure du 2026-09-15 -- MO-109 chargee avec `--theme AUDITEUR` est nee
+    avec `type = None`, l'injection a crie `ECART : sans type ferme (checklist
+    REDUITE aux garde-fous communs)` et `ALERTE : POSTURE ABSENTE`.
+    Le theme ne suffit JAMAIS : un THEME MERE (PERFORMANCE) decrit un CHANTIER,
+    il ne dit pas la NATURE de la mission.
+
+    Retourne (code, message) : 0 = admis. Un seul texte de refus, donc, pour les
+    deux portes -- deux copies d'une meme regle finissent toujours par diverger.
+    """
+    if type_cible not in TYPES_MISSION:
+        return 2, ("REFUS : type inconnu " + repr(type_cible) + " -- types admis : "
+                   + ", ".join(TYPES_MISSION))
+    return 0, ""
+
+
+def charger_mission(arguments, charger_file, afficher_file):
+    """Ajoute une mission a la file (theme FERME + TYPE ferme + objectif obligatoires).
+
+    EO-120 : le TYPE est exige, comme pour un lot (EO-118). Sans lui la mission
+    nait SANS posture et sa checklist perd le specifique de son type.
+    """
+    options = extraire_options(arguments, ("theme", "objectif", "type", "item",
+                                           "conduire"),
+                               drapeaux=("conduire",))
+    theme = options.get("theme", "")
+    objectif = options.get("objectif", "")
+    type_cible = (options.get("type") or "").strip().lower()
+    # UNE SEULE FABRIQUE (C-010) : une mission nee d un ITEM se construit par le PONT
+    # -- le MEME que celui du versement du brin (mission_depuis_item). Mesure du
+    # 2026-09-25 : `file charger --item EO-432` affichait la file, et il fallait
+    # recopier A LA MAIN le theme, l objectif et le type que l item PORTE deja :
+    # deux fabriques, et la seconde ignorait ce que la premiere savait lire.
+    item_du_chargement = (options.get("item") or "").strip()
+    if item_du_chargement and not (theme or objectif or type_cible):
+        item_lu = item_du_entonnoir(item_du_chargement)
+        if not item_lu:
+            print("REFUS : item " + item_du_chargement + " INTROUVABLE dans l entonnoir"
+                  " -- une mission ne se fabrique pas sur un item absent.")
+            return 2
+        type_item = str(item_lu.get("type") or "").strip().lower()
+        if not type_item:
+            print("REFUS : l item " + item_du_chargement + " n a pas de TYPE -- une mission"
+                  " ne nait pas sans posture. Geste qui le classe :"
+                  " python main.py entonnoir classer --id " + item_du_chargement
+                  + " --type <" + "/".join(TYPES_MISSION) + ">")
+            return 2
+        role_item = str(item_lu.get("role") or "").strip()
+        if not role_item:
+            print("REFUS : l item " + item_du_chargement + " n a pas de ROLE (theme du"
+                  " vivier) -- geste qui le classe : python main.py entonnoir classer"
+                  " --id " + item_du_chargement + " --type " + type_item
+                  + " --role <THEME>")
+            return 2
+        theme = role_item
+        objectif = str(item_lu.get("objectif") or "")
+        type_cible = type_item
+    if not theme or not objectif or not type_cible:
+        print('Usage : python main.py charger --theme <nom> --type <' + "/".join(TYPES_MISSION)
+              + '> --objectif "..." (Optimus : MO-001)'
+              ' | --item <EO-XXX> (la mission se fabrique DEPUIS l item)')
+        return 2
+    code, theme = valider_theme(theme)
+    if code != 0:
+        return code
+    code, message = valider_type_ferme(type_cible)
+    if code != 0:
+        print(message)
+        return code
+    code, message = defcon_bloque_theme(theme)
+    if code != 0:
+        print(message)
+        return code
+    file_missions = charger_file()
+    # SERIE STRICTE (MO-341) : ouvrir un travail NEUF pendant qu une mission attend
+    # etait le SEUL chemin sans garde -- la chaine mourait donc en silence, alors que
+    # le refus existait deja pour l injection et pour un lot. Le refus est le MEME
+    # (une seule forme, son domicile) et il tombe AVANT toute creation.
+    refus = refus_serie_stricte(file_missions)
+    if refus:
+        print(refus)
+        return 1
+    # L INTERRUPTION (EO-436, MO-464) : `--conduire` est le geste qui SERT la
+    # mission dans le MEME geste -- c est LUI qui a le droit de forger pendant qu un
+    # round parque attend sa reprise. Sans lui, forger laisserait DEUX missions
+    # ouvertes (le jugement vit a son domicile : data/commun/interruption.py).
+    conduire_maintenant = bool(options.get("conduire"))
+    if not conduire_maintenant:
+        refus = refus_parquage_en_attente(file_missions)
+        if refus:
+            print(refus)
+            return 1
+    if item_du_chargement:
+        # Le PONT compose la mission -- theme (role du vivier), titre, objectif, type,
+        # source a trois etages et outils prepares : plus une seule copie a la main.
+        mission = mission_depuis_item(file_missions, item_du_entonnoir(item_du_chargement),
+                                      theme)
+    else:
+        mission = {
+            "id": prochain_id(file_missions),
+            "theme": theme,
+            "type": type_cible,
+            "objectif": objectif,
+            "statut": STATUT_EN_ATTENTE,
+            "chargee_le": horodater(),
+        }
+    # EO-153 : une mission DECLAREE avec son item est LIEE a lui (`source`) ET le
+    # CONSOMME -- c'est le chemin qui manquait (friction 83 : EO-136 a servi a
+    # declarer MO-160 sans quitter le brin, puis le pont l'a re-servi).
+    item = item_du_chargement
+    if item and not item_du_chargement:
+        mission["source"] = _source_de_l_item(item)
+        # MO-373 : le TITRE vient du MEME domicile que celui du pont -- une seule
+        # fabrique pour une mission nee d'un item. Lu AVANT la consommation (comme
+        # les outils) : apres, l'item n'est plus la pour le dire.
+        titre = titre_de_l_item(item)
+        if titre:
+            mission[CHAMP_TITRE_MISSION] = titre
+    file_missions.setdefault("missions", []).append(mission)
+    enregistrer_file(file_missions)
+    if item:
+        # EO-313 : la LISTE DES OUTILS PREPAREE sur l item est recopiee dans la
+        # mission AVANT la consommation -- apres, l item n est plus la pour la dire.
+        # Elle l est DEJA quand la mission vient du pont : on ne recopie pas deux fois.
+        if not item_du_chargement:
+            outils = outils_de_l_item(item)
+            if outils:
+                mission[CHAMP_OUTILS] = outils
+                enregistrer_file(file_missions)
+            # MO-421 : la TRACE de provenance (la place du maillon) survit a la
+            # naissance elle aussi -- lue AVANT la consommation, comme les outils.
+            trace = trace_de_l_item(item)
+            if trace:
+                mission[CHAMP_SOURCE_TRACE] = trace
+                enregistrer_file(file_missions)
+        _consommer_item_lie(item)
+    # L ACTE DE CHARGER LAISSE UNE TRACE (demande du createur, 2026-09-22). La file
+    # portait deja `chargee_le`, mais un LOT ENTIER partage cet horodatage : < chargee
+    # seule > et < chargee avec d autres > etaient donc INDISCERNABLES, et la CLOTURE
+    # FAUSSE payee en MO-387 (deux missions closes qui n avaient pas eu lieu, avec une
+    # coherence file <-> journal PARFAITE) n etait detectable par AUCUN garde. Le
+    # detail ne nomme AUCUN lot : c est ce qui distingue une charge INDIVIDUELLE (que
+    # le suivi du pilote exige de voir CONDUITE) d une mission qui attend son tour.
+    code, sortie = noter_journal(mission["id"], theme, "charge",
+                                 "mission forgee par charger (charge INDIVIDUELLE) : "
+                                 + resume_mission(mission))
+    if code != 0:
+        # Une trace muette se DIT : la charge reussit, l absence de trace aussi.
+        print("AVERTISSEMENT : la trace de CHARGE n a pas ete posee -- " + sortie[:120])
+    # BRANCHE (a) DE MO-370 (MO-447) : une mission chargee SANS `conduire` n avait
+    # AUCUNE borne de debut -- c est la FIN qui la fabriquait (garde anti-fin-orpheline),
+    # donc debut == fin et la duree restait INCONNUE a vie (61 missions mesurees le
+    # 2026-09-23). Le CHARGE pose desormais la borne DEBUT, en mode IDEMPOTENT : la
+    # porte n ecrit que si l evenement manque, donc l injection (meme porte) ne la
+    # double JAMAIS. Une mission se SAIT commencee des son chargement.
+    declarer_borne_marbre(
+        mission,
+        "debut",
+        "debut declare par charger (charge INDIVIDUELLE) : " + resume_mission(mission),
+        portes=["pilote:charger"],
+    )
+    print("Mission " + mission["id"] + " chargee (theme : " + theme
+          + ", type : " + type_cible + ").")
+    if not conduire_maintenant:
+        return 0
+    # L INTERRUPTION NE LAISSE AUCUNE MISSION FORGEE SANS ROUND : elle nait AVEC son
+    # round, dans UN SEUL geste. Un seul chemin de service (preparer_injection) et une
+    # prise TRACEE, comme `conduire` (EO-185) -- la porte de la file n a pas sa propre
+    # injection (M-076). Une mission fraichement forgee est HORS lot par construction
+    # (son id est neuf) : le refus du lot de `conduire` ne s applique donc pas ici.
+    from injection.fonctions import preparer_injection
+    code = preparer_injection(charger_file, mission_forcee=mission["id"])
+    noter_prise_round(charger_file)
+    return code
+
+
+def transformer_mission(arguments, charger_file):
+    """Re-etiquette une mission EN ATTENTE (theme + objectif) avant injection.
+
+    Serie stricte : une mission en cours ou terminee ne se transforme plus.
+    """
+    options = extraire_options(arguments, ("id", "theme", "objectif"))
+    identifiant = options.get("id", "")
+    theme = options.get("theme", "")
+    objectif = options.get("objectif", "")
+    if not identifiant or not theme or not objectif:
+        print('Usage : python main.py transformer --id MO-00X --theme <nom> --objectif "..."')
+        return 2
+    code, theme = valider_theme(theme)
+    if code != 0:
+        return code
+    code, message = defcon_bloque_theme(theme)
+    if code != 0:
+        print(message)
+        return code
+    file_missions = charger_file()
+    for mission in file_missions.get("missions", []):
+        if mission.get("id") == identifiant:
+            if mission.get("statut") != STATUT_EN_ATTENTE:
+                print("REFUS : " + identifiant + " n'est plus en attente (statut : " + mission["statut"] + ").")
+                return 1
+            mission["theme"] = theme
+            mission["objectif"] = objectif
+            mission["transformee_le"] = horodater()
+            enregistrer_file(file_missions)
+            print("Mission " + identifiant + " transformee (theme : " + theme + ").")
+            return 0
+    print("Mission inconnue : " + identifiant)
+    return 1
+
+
+def retiqueter_mission(arguments, charger_file):
+    """Corrige le THEME et/ou le TYPE d'une mission, QUEL QUE SOIT son statut.
+
+    Le TYPE a ete ajoute ici (EO-120) : mesure du 2026-09-15 -- 43 missions sur
+    52 n'ont pas de type. Aucune n'est INJECTABLE (toutes terminees : le mal est
+    passee, la prevention de `charger` couvre la suite) ; ce qui reste est leur
+    FICHE, qui ne dit pas leur nature. `transformer` ne peut pas les reparer (il
+    refuse tout ce qui n'est plus EN ATTENTE) ; cette porte-ci est faite pour ca,
+    et elle TRACE (type_avant + motif) : on ne reecrit jamais l'histoire en
+    silence, et on ne l'invente pas non plus -- un type se declare.
+
+    *Corrige le THEME d'une mission, QUEL QUE SOIT son statut (porte de correction).
+
+    Pourquoi une porte distincte de `transformer` : `transformer` re-etiquette une
+    mission AVANT injection et refuse des qu'elle n'est plus en attente (serie
+    stricte). Or une mission deja terminee peut porter un theme hors vivier
+    (erreurs passees : 'MATRICE', entre par l'entonnoir avant que le theme ne
+    soit garde a l'injection) -- il faut pouvoir la corriger SANS la rejouer.
+    La trace est conservee (theme_avant + retiquete_le + motif) : on ne reecrit
+    jamais l'histoire en silence.
+
+    Refus (aucune ecriture) : identifiant inconnu, theme hors vivier,
+    theme identique (il n'y a rien a corriger).
+    """
+    options = extraire_options(arguments, ("id", "theme", "motif", "type"))
+    identifiant = (options.get("id") or "").strip().upper()
+    theme = " ".join(options.get("theme", "").split())
+    type_cible = (options.get("type") or "").strip().lower()
+    motif = options.get("motif", "")
+    if not identifiant or (not theme and not type_cible):
+        print('Usage : python main.py retiqueter --id MO-00X [--theme <nom>] [--type <t>] '
+              '[--motif "..."]')
+        return 2
+    if numero_id(identifiant) is None:
+        print("REFUS : identifiant mal forme (attendu " + PREFIXE_ID + "NNN) : " + repr(identifiant))
+        return 2
+    if theme:
+        code, theme = valider_theme(theme)
+        if code != 0:
+            return code
+    if type_cible:
+        code, message = valider_type_ferme(type_cible)
+        if code != 0:
+            print(message)
+            return code
+    file_missions = charger_file()
+    for mission in file_missions.get("missions", []):
+        if mission.get("id") == identifiant:
+            ancien_theme = mission.get("theme", "")
+            ancien_type = mission.get("type")
+            change_theme = bool(theme) and ancien_theme != theme
+            change_type = bool(type_cible) and ancien_type != type_cible
+            if not change_theme and not change_type:
+                if theme and not type_cible:
+                    print("REFUS : " + identifiant + " porte deja le theme " + theme + ".")
+                else:
+                    print("REFUS : " + identifiant + " porte deja ces valeurs (rien a corriger).")
+                return 1
+            if change_theme:
+                mission["theme_avant"] = ancien_theme
+                mission["theme"] = theme
+            if change_type:
+                mission["type_avant"] = ancien_type
+                mission["type"] = type_cible
+            mission["retiquete_le"] = horodater()
+            if motif:
+                mission["motif_retiquetage"] = motif
+            enregistrer_file(file_missions)
+            print("Mission " + identifiant + " retiquetee : theme "
+                  + (ancien_theme + " -> " + theme if change_theme else "inchange")
+                  + ", type " + (str(ancien_type) + " -> " + type_cible
+                                 if change_type else "inchange") + ".")
+            return 0
+    print("Mission inconnue : " + identifiant)
+    return 1
+
+
+def enregistrer_mission(arguments, charger_file):
+    """Enregistre une mission DEJA TERMINEE, menee HORS file du pilote.
+
+    Cas reel (2026-09-13) : MO-045 et MO-046 ont ete menees directement par
+    Optimus, sans passer par la file. Les enregistrer remet la file d'aplomb
+    avec le journal (suivi-optimus) ET fait AVANCER le compteur -- sans quoi la
+    prochaine mission chargee reprendrait un identifiant deja pris (MO-045),
+    c'est-a-dire un id reutilise.
+
+    Le theme est enregistre TEL QUEL, sans passage au vivier : c'est un FAIT
+    historique (la mission a eu lieu sous ce theme), pas une nouvelle charge.
+    Le champ ferme du vivier protege `charger`, il ne juge pas l'histoire
+    (sinon un theme retire du vivier plus tard rendrait sa mission inenregistrable).
+
+    DECISION EO-122 (2026-09-15) : le TYPE est ACCEPTE EN OPTION -- JAMAIS exige.
+    Trois raisons, dans l'ordre :
+      1. une porte de REPARATION ne doit jamais pouvoir REFUSER de reparer : sa
+         raison d'etre est de remettre la file d'aplomb avec le journal. Un champ
+         exige rendrait inenregistrable une mission dont la nature est perdue --
+         donc CREERAIT l'ecart meme qu'elle existe pour fermer ;
+      2. c'est le raisonnement deja tenu ici pour le THEME : un fait historique ne
+         se juge pas (le champ ferme protege `charger`, il ne juge pas l'histoire).
+         Un type DECLARE est du meme ordre : un fait, pas une nouvelle charge ;
+      3. MAIS un fait ne se nomme pas n'importe comment : quand il est donne, il
+         vient du VOCABULAIRE FERME (la meme porte que `charger`). On declare, on
+         n'invente pas -- et on ne se TAIT pas : sans type, la porte le DIT et
+         nomme la reparation (`retiqueter --type`, EO-120).
+    Mesure qui a ouvert ce point : MO-111, MO-112, MO-113 et MO-114 sont nees
+    sans type par cette porte -- leur fiche ne dit pas leur nature.
+
+    Refus (aucune ecriture) : identifiant mal forme, identifiant deja present,
+    champ obligatoire manquant, type HORS vocabulaire (s'il est donne).
+    """
+    options = extraire_options(
+        arguments, ("id", "theme", "objectif", "bilan", "bilan-fichier", "type", "item",
+                 OPTION_SEGMENT))
+    identifiant = (options.get("id") or "").strip().upper()
+    theme = options.get("theme", "")
+    objectif = options.get("objectif", "")
+    # Meme lecture que `fin` (EO-132) : le recit long peut venir d'un FICHIER,
+    # pour qu'aucun accent grave traverse par le shell ne le troue.
+    code_bilan, bilan, message_bilan = lire_bilan(options)
+    if code_bilan != 0:
+        print("REFUS : " + message_bilan)
+        return 2
+    # LA DEMANDE DE SEGMENT (MO-500) : lue AVANT la cloture, comme le bilan --
+    # un fichier mal forme est REFUSE avant toute mutation, et l ABSENCE n est pas
+    # une erreur : c est le cas NON, que la cloture DIT.
+    code_segments, segments, message_segments = lire_segments(
+        (options.get(OPTION_SEGMENT) or "").strip())
+    if code_segments != 0:
+        print("REFUS : " + message_segments)
+        return 2
+    type_cible = (options.get("type") or "").strip().lower()
+    if not identifiant or not theme or not objectif or not bilan:
+        print('Usage : python main.py enregistrer --id MO-00X --theme <nom> '
+              '[--type <t>] --objectif "..." --bilan "..." | --bilan-fichier <chemin>')
+        print("        [--segment-fichier <chemin.jsonl>]  (segment de raisonnement :"
+              " la cloture le DEPOSE, ou le DIT -- MO-500)")
+        return 2
+    numero = numero_id(identifiant)
+    if numero is None:
+        print("REFUS : identifiant mal forme (attendu " + PREFIXE_ID + "NNN) : " + repr(identifiant))
+        return 2
+    theme = " ".join(theme.split())
+    if type_cible:
+        code, message = valider_type_ferme(type_cible)
+        if code != 0:
+            print(message)
+            return code
+    file_missions = charger_file()
+    for mission in file_missions.get("missions", []):
+        if mission.get("id") == identifiant:
+            print("REFUS : " + identifiant + " est deja dans la file (statut : "
+                  + str(mission.get("statut")) + ").")
+            return 1
+    mission = {
+        "id": identifiant,
+        "theme": theme,
+        "objectif": objectif,
+        "statut": STATUT_TERMINEE,
+        "chargee_le": horodater(),
+        "injectee_le": horodater(),
+        "terminee_le": horodater(),
+        "bilan": bilan,
+        "hors_file": True,
+    }
+    # LA DEMANDE DE SEGMENT DE RAISONNEMENT (MO-500, option C de l audit MO-499) :
+    # la DEUXIEME cloture repond du MEME geste que `fin` -- une seule des deux
+    # laisserait la moitie des missions muettes sur leur raisonnement, exactement le
+    # trou que la trace muette (EO-130) a ferme. Meme ordre : DEPOT d abord (un
+    # segment declare qui ne rentre pas REFUSE la cloture), MESURE ensuite.
+    code_depot, message_depot = deposer_segments_raisonnement(
+        {"id": identifiant, "theme": theme}, segments)
+    if code_depot != 0:
+        print("REFUS : " + message_depot)
+        return 2
+    if message_depot:
+        print(message_depot)
+
+    # EO-153 : meme lien que `charger` -- declarer avec son item le LIE (`source`)
+    # et le CONSOMME, pour qu'il ne reparte pas (friction 83).
+    item = (options.get("item") or "").strip()
+    if item:
+        mission["source"] = _source_de_l_item(item)
+        # MO-373 : MEME fabrique du titre que charger et que le pont (un domicile).
+        titre = titre_de_l_item(item)
+        if titre:
+            mission[CHAMP_TITRE_MISSION] = titre
+    # Le type n'est ecrit QUE s'il est declare : une cle absente dit "nature
+    # inconnue", une cle vide dirait "nature vide" -- ce n'est pas la meme chose.
+    if type_cible:
+        mission["type"] = type_cible
+    file_missions.setdefault("missions", []).append(mission)
+    if numero > int(file_missions.get("compteur", 0)):
+        file_missions["compteur"] = numero
+    enregistrer_file(file_missions)
+    if item:
+        _consommer_item_lie(item)
+
+    # UN SEUL evenement a ecrire : la FIN. Le DEBUT n'est pas note ici, et ce
+    # n'est pas un oubli -- c'est la correction du doublon MO-061.
+    #
+    # Le 2026-09-13, ce verbe notait "debut" PUIS "fin" sans regarder le
+    # journal. Or la porte `noter` a un garde anti-fin-orpheline : une fin sans
+    # debut cree le debut manquant. Resultat : quand un debut EXISTAIT deja, le
+    # notre en ajoutait un SECOND, et la fin pareil -- MO-061 s'est retrouvee
+    # avec 2 debuts et 2 fins, ce que le controle `verifier` remonte en ECART.
+    #
+    # En ne notant QUE la fin, les deux cas sont justes, par construction :
+    #   - aucun debut au journal  -> la porte le cree (debut implicite) ;
+    #   - un debut existe deja    -> la porte n'y touche pas ; on n'ecrit rien de plus.
+    # Aucun doublon FABRIQUE, et la porte reste libre d'accepter une reprise
+    # declaree (verifier se charge du jugement de la trace).
+    #
+    # TROU RESTANT (MO-111, mesure du 2026-09-15) : le raisonnement ne couvrait
+    # que le DEBUT. Si une FIN existe deja -- mission declaree par l'agent avant
+    # d'etre enregistree, exactement le cas de MO-108 -- l'ecriture ajoutait un
+    # SECOND fin (classe MO-061). La porte `noter` est donc appelee en mode
+    # `--si-absent oui` : elle n'ecrit la fin QUE si elle manque. Le drapeau
+    # protege aussi le debut implicite (le garde anti-fin-orpheline ne se
+    # declenche que s'il manque vraiment). Zero doublon, dans les DEUX sens.
+    fichiers_mission = fichiers_de_la_mission(identifiant)
+    notes = [
+        noter_journal(identifiant, theme, "fin", bilan, si_absent=True,
+                      fichiers=fichiers_mission),
+    ]
+    # Trace MUETTE (EO-130) : les DEUX clotures crient -- `fin` ET `enregistrer`.
+    # Une seule des deux laisserait la moitie des missions muettes en silence,
+    # exactement le trou qu'on ferme (friction 69, mesure MO-135/MO-138).
+    _code_muet, message_muet = crier_mission_muette(
+        {"id": identifiant, "theme": theme}, fichiers_mission)
+    if message_muet:
+        print(message_muet)
+    # LA DEMANDE DE SEGMENT, MESUREE (MO-500) : la DEUXIEME cloture repond du MEME
+    # geste que `fin` -- une seule des deux laisserait la moitie des missions muettes
+    # sur leur raisonnement, exactement le trou que la trace muette (EO-130) a ferme.
+    _code_raisonnement, message_raisonnement = controler_raisonnement_mission(
+        {"id": identifiant, "theme": theme})
+    if message_raisonnement:
+        print(message_raisonnement)
+    # BDD sessions (MO-092) : la trace persistante entre sessions LLM.
+    # Un fait = mission finie + theme : la reprise de la PROCHAINE session
+    # relit cette entree au lieu de deviner ce qui a ete fait. Non bloquant.
+    code_session, sortie_session = noter_session(
+        "travail",
+        "Mission " + identifiant + " terminee hors file (theme " + theme + ") : " + bilan,
+        mission=identifiant,
+    )
+    if code_session != 0:
+        print("ALERTE BDD sessions : fait non trace (" + sortie_session[:120] + ").")
+
+    rafraichir_vue_suivi()
+    # Zone jetable (MO-136) : le pilote VIDE la zone et le NOTE au marbre, sur ce
+    # chemin comme sur `fin` -- les DEUX clotures purgent (une seule suffirait a
+    # laisser une zone pleine quand la mission est menee hors file).
+    _code_purge, message_purge = purger_zone_temporaire({"id": identifiant, "theme": theme})
+    print("[PURGE] " + message_purge)
+    # LES DISPARITIONS QUE LA PURGE VIENT DE CAUSER (V5, MO-304) : ce chemin
+    # purge la zone jetable comme `fin`, donc il cree les MEMES disparitions de
+    # points de restauration. Les declarer ICI aussi evite qu'un enregistrement
+    # hors file laisse un ecart que seul `controler-archives` verrait -- les DEUX
+    # clotures repondent du meme geste (meme doctrine que la purge de la zone).
+    _code_disparition, message_disparition = declarer_disparitions_conservation(
+        {"id": identifiant, "theme": theme})
+    if message_disparition:
+        print(crier_controle_conservation(
+            {"id": identifiant, "theme": theme}, _code_disparition, message_disparition))
+    print("Mission " + identifiant + " enregistree (terminee, hors file) -- compteur : "
+          + str(file_missions["compteur"]) + ".")
+    if not type_cible:
+        # Jamais de silence (decision EO-122, point 3) : une fiche sans nature est
+        # un fait DIS, pas un oubli cache.
+        print("SANS TYPE : la fiche de " + identifiant + " ne dira pas sa NATURE (aucune"
+              " posture, checklist non derivable). Donne-la quand tu la connais :"
+              " python main.py retiqueter --id " + identifiant + " --type <"
+              + "/".join(TYPES_MISSION) + ">")
+    echecs = [(code, sortie) for code, sortie in notes if code != 0]
+    deja_presente = any("SI-ABSENT" in (sortie or "")
+                        for code, sortie in notes if code == 0)
+    if echecs:
+        print("ALERTE journal : trace INCOMPLETE (la file a ete ecrite, le journal non)."
+              " Le controle de coherence file <-> journal le montrera.")
+        for code, sortie in echecs:
+            print("  code " + str(code) + " : " + (sortie[:200] if sortie else "(sans message)"))
+    elif deja_presente:
+        print("Journal suivi-optimus : fin DEJA presente pour " + identifiant
+              + " -- RIEN ecrit (mode --si-absent : le trou se comble, rien ne se double).")
+    else:
+        print("Journal suivi-optimus : trace complete pour " + identifiant
+              + " (fin notee ; le debut, s'il manquait, a ete cree par le garde"
+              " anti-fin-orpheline de la porte `noter`).")
+    return 0
+
+
+def charger_lot(arguments, charger_file):
+    """Charge PLUSIEURS missions d'un coup, dans l'ordre fourni, et ARME le lot.
+
+    Format : --theme a=x,b=y --type dev,reparation --objectif "o1|o2" --lot "nom"
+    Un lot = plusieurs rounds dans la meme boucle : le pilote enchainra les
+    missions dans l'ordre, avec DEBUT/FIN annonces pour chacune.
+
+    EO-118 : le lot EXIGE un TYPE ferme par mission. Sans lui, chaque mission
+    naissait SANS posture -- l'injection le criait (ECART sans type ferme,
+    ALERTE posture ABSENTE) et la checklist retombait aux garde-fous communs.
+    Le theme ne suffit JAMAIS : un THEME MERE (PERFORMANCE) decrit un CHANTIER,
+    il ne dit pas la NATURE de la mission.
+    """
+    options = extraire_options(arguments, ("theme", "objectif", "lot", "type"))
+    nom_lot = options.get("lot", "")
+    themes = decouper_liste(options.get("theme", ""))
+    types = [t.lower() for t in decouper_liste(options.get("type", ""))]
+    objectifs = [o.strip() for o in options.get("objectif", "").split("|") if o.strip()]
+    if not nom_lot or not themes or not objectifs or len(themes) != len(objectifs):
+        print('Usage : python main.py charger --lot "nom" --theme "t1,t2" '
+              '--type "dev,reparation" --objectif "o1|o2"')
+        return 2
+    if len(types) != len(themes):
+        print("REFUS : un TYPE ferme par mission est exige (" + str(len(themes))
+              + " mission(s), " + str(len(types)) + " type(s)) -- types admis : "
+              + ", ".join(TYPES_MISSION))
+        return 2
+    for type_cible in types:
+        code, message = valider_type_ferme(type_cible)
+        if code != 0:
+            print(message)
+            return code
+    themes_canoniques = []
+    for theme in themes:
+        code, theme = valider_theme(theme)
+        if code != 0:
+            return code
+        themes_canoniques.append(theme)
+    file_missions = charger_file()
+    # EO-150 / MO-205 : LA SERIE STRICTE NE TENAIT PAS SUR CE CHEMIN. Mesure MO-160 :
+    # armer un deuxieme lot REMPLACAIT les ids du lot courant (MO-160/MO-161 -> MO-162)
+    # et la mission en cours perdait sa PORTEE (0/0) ; lu dans fin/fonctions.py, le
+    # RETOUR CONSOLIDE du lot precedent se perdait EN SILENCE. Les DEUX gardes qui
+    # suivent sont celles de verser_tresse, le refus est NOMME, et il tombe AVANT
+    # toute creation : une seule forme de refus pour les deux chemins d injection.
+    refus = refus_serie_stricte(file_missions)
+    if refus:
+        print(refus)
+        return 1
+    # L INTERRUPTION (EO-436, MO-464) : un LOT est un travail NEUF qui n a pas de
+    # round ouvert -- il ne peut donc PAS etre le remede de l interruption (le
+    # remede, c est `charger --conduire`), et il tombe sous le MEME refus que la
+    # mission simple (une seule forme de la regle, a son domicile partage).
+    refus = refus_parquage_en_attente(file_missions)
+    if refus:
+        print(refus)
+        return 1
+    if ids_en_lot(file_missions) and prochaine_du_lot(file_missions) is not None:
+        print("REFUS : un lot est deja arme et en attente -- termine-le avant d en charger"
+              " un autre (le remplacer perdrait sa portee et son retour consolide).")
+        return 1
+    ids = []
+    for theme, type_cible, objectif in zip(themes_canoniques, types, objectifs):
+        mission = {
+            "id": prochain_id(file_missions),
+            "theme": theme,
+            "type": type_cible,
+            "objectif": objectif,
+            "statut": STATUT_EN_ATTENTE,
+            "chargee_le": horodater(),
+            "lot": nom_lot,
+        }
+        file_missions.setdefault("missions", []).append(mission)
+        ids.append(mission["id"])
+    armer_lot(file_missions, ids)
+    enregistrer_file(file_missions)
+    # L ACTE DE CHARGER LAISSE UNE TRACE, POUR CHAQUE MISSION FORGEE (demande du
+    # createur, 2026-09-22) : le detail NOMME LE LOT, et c est ce nom qui dit a la
+    # porte du suivi que la mission ATTEND SON TOUR -- une mission de lot n est donc
+    # JAMAIS accuse de < chargee sans conduite >, alors qu une charge INDIVIDUELLE
+    # (aucun lot nomme) l est si elle ne recoit aucun debut dans la fenetre.
+    # Cout mesure : une porte noter vaut ~0,28 s ; armer un lot de 36 missions coute
+    # donc ~10 s, une fois, pour une trace que RIEN d autre ne portait.
+    for mission_id in ids:
+        mission = next((m for m in file_missions["missions"] if m.get("id") == mission_id), {})
+        code, sortie = noter_journal(mission_id, mission.get("theme", ""), "charge",
+                                     "mission forgee par charger (LOT " + nom_lot + ") : "
+                                     + resume_mission(mission))
+        if code != 0:
+            print("AVERTISSEMENT : la trace de CHARGE de " + mission_id
+                  + " n a pas ete posee -- " + sortie[:120])
+    print("Lot " + nom_lot + " arme : " + str(len(ids)) + " missions (" + ", ".join(ids) + ").")
+    return 0
+
+
+def afficher_file(file_missions):
+    """Affiche la file : en cours d'abord, puis les en attente."""
+    missions = file_missions.get("missions", [])
+    if not missions:
+        print("File vide : aucune mission chargee.")
+        return 0
+    for mission in missions:
+        print(
+            mission["id"]
+            + " [" + mission["statut"] + "] "
+            + "theme : " + mission["theme"]
+            + " -- " + mission["objectif"]
+        )
+    return 0
+
+
+# L ARCHIVE de la file : le record d une mission DEPLACEE y survit (MO-457).
+NOM_FILE_ARCHIVE = NOM_FILE.replace(".json", "-archive.json")
+
+
+def records_de_l_archive(chemin=None):
+    """Les records de la file ARCHIVEE, par id -- la MEMOIRE qui survit au deplacement.
+
+    POURQUOI (MO-457) : `archiver_anciennes_missions` DEPLACE une mission terminee de
+    la file ACTIVE vers l archive. Un lot ARME peut encore la nommer : son record
+    n est plus dans la file, mais il EXISTE. La porte du lot ne lisait QUE la file et
+    affichait < INTROUVABLE > -- un rouge FAUX, et un rouge sans remede (aucun verbe
+    ne remonte un record archive). Le record se lit donc AUSSI dans l archive, et
+    l ORIGINE est DITE -- meme regle que MO-422 (un temoin lu ailleurs se DIT).
+
+    Rend {} quand l archive est absente ou illisible : l appelant le DIT, il ne
+    suppose pas une absence de divergence.
+    """
+    cible = chemin if chemin is not None else CHEMIN_FILE.with_name(NOM_FILE_ARCHIVE)
+    if not cible.is_file():
+        return {}
+    try:
+        with open(cible, "r", encoding="utf-8") as flux:
+            donnees = json.load(flux)
+    except (OSError, ValueError):
+        return {}
+    return {m.get("id"): m for m in donnees.get("missions", []) if m.get("id")}
+
+
+def afficher_lot(file_missions, archive=None):
+    """Affiche le LOT ARME : rang k/n, item d'origine, type, urgence, statut (MO-380).
+
+    POURQUOI (demande du createur, 2026-09-21) : la REPRISE DU RETARD -- 37 missions
+    versees d'un seul geste -- n'etait lisible qu'en ouvrant le JSON a la main. Un lot
+    qu'on ne voit pas est un lot qu'on ne suit pas ; et le rang k/n est ce que le lot
+    sert (une reprise se lit DANS L ORDRE).
+
+    La memoire de naissance de chaque maillon est LUE chez son domicile
+    (`commun.memoire_de_la_source`), jamais redecoupee ici.
+
+    Rend 0 quand chaque maillon porte sa memoire, 1 quand au moins un ne la porte pas :
+    sans elle le verdict d'origine du maillon n'est plus atteignable (panne MO-339,
+    mesuree) -- les fautifs sont NOMMES, jamais fondus dans un total.
+    """
+    ids = ids_en_lot(file_missions)
+    if not ids:
+        print("Aucun lot arme : la file sert mission par mission (rien a afficher).")
+        return 0
+    par_id = {m.get("id"): m for m in file_missions.get("missions", [])}
+    # MO-457 : la file d abord ; l ARCHIVE ensuite. Un maillon archive reste
+    # NOMME (son record survit), et son origine est DITE -- jamais fondue.
+    par_id_archive = records_de_l_archive() if archive is None else dict(archive)
+    nom = next((str(par_id[i].get("lot") or "") for i in ids
+                if par_id.get(i, {}).get("lot")), "?")
+    tete = prochaine_du_lot(file_missions)
+    print("LOT " + nom + " : " + str(len(ids)) + " maillon(s), servis dans cet ordre"
+          + " | tete = " + (str(tete.get("id")) if tete else "aucune")
+          + " | en attente = " + str(sum(
+              1 for i in ids if par_id.get(i, {}).get("statut") == "en-attente")))
+    print("  rang  mission  item     type         categorie   urgence   statut       titre")
+    sans_memoire = []
+    lus_dans_archive = []
+    for rang, mission_id in enumerate(ids, start=1):
+        mission = par_id.get(mission_id)
+        if mission is None:
+            # MO-457 : le record a peut-etre ete ARCHIVE (terminee au-dela du
+            # plafond) alors que le lot le nomme encore. Il EXISTE : on le lit,
+            # et on DIT d ou il vient. Un record present NULLE PART reste
+            # INTROUVABLE -- le mordant est conserve.
+            mission = par_id_archive.get(mission_id)
+            if mission is not None:
+                lus_dans_archive.append(mission_id)
+        if mission is None:
+            sans_memoire.append(mission_id + " (hors file)")
+            print("  " + str(rang) + "/" + str(len(ids)) + "  " + mission_id
+                  + "  INTROUVABLE dans la file : le lot et la file ne disent pas la meme chose")
+            continue
+        source = mission.get("source")
+        memoire = memoire_de_la_source(source)
+        item = item_id_de_la_source(source) or "?"
+        if not memoire:
+            sans_memoire.append(mission_id)
+        print("  %-5s %-8s %-8s %-12s %-11s %-9s %-12s %s" % (
+            str(rang) + "/" + str(len(ids)), mission_id, item,
+            memoire.get(CHAMPS_SOURCE[0], "?"), memoire.get(CHAMPS_SOURCE[1], "?"),
+            memoire.get(CHAMPS_SOURCE[2], "?"), mission.get("statut", "?"),
+            str(mission.get("titre") or mission.get("objectif") or "")[:44].replace("\n", " ")))
+    if lus_dans_archive:
+        print("  ARCHIVE (MO-457) : " + str(len(lus_dans_archive)) + " maillon(s) lus dans"
+              " l archive -- leur record survit au deplacement : "
+              + ", ".join(lus_dans_archive))
+    if sans_memoire:
+        print("  ACCUSE : " + str(len(sans_memoire)) + " maillon(s) SANS memoire de naissance"
+              + " (source courte ou illisible) : " + ", ".join(sans_memoire)
+              + " -- leur verdict d'origine n'est plus atteignable.")
+        return 1
+    print("  memoire : les " + str(len(ids)) + " maillons portent leur item, leur type,"
+          " leur categorie et leur urgence")
+    return 0

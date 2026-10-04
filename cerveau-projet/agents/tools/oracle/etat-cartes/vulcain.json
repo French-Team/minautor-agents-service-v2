@@ -1,0 +1,14 @@
+{
+ "agent": "vulcain",
+ "parcours": "agents/vulcain/parcours/arbre-vulcain.json",
+ "case_courante": null,
+ "mission_type": "modifier",
+ "mission": "INTER-ROUND (Buffy 666bec53) : defaut d'interface combo-corriger-fichier (deja note corrections.md l.277 avant gel, JAMAIS traite) : la case c1 lance corriger-nommage SANS --type alors que l'outil exige --type {protocole,agent,outil,convention} -> echec code 2 sur TOUT fichier (JSON de parcours comme .md). Corriger le combo (transmettre --type ou rendre le type optionnel selon le fichier). A la fin : fin vers ORACLE.\n=== OUTILS A UTILISER (injectes par le pilote) ===\n[OUTIL] corriger-nommage -- Corriger le nommage des fichiers selon les conventions\n  Flags : type (texte, optionnel)\n  Pour etre guide : python3 cerveau-projet/agents/tools/executer/executer-formulaire/executer-formulaire.py --outil corriger-nommage --schema",
+ "historise_debut": true,
+ "precedent": null,
+ "etape": "fin",
+ "historise_fin": true,
+ "theme_courant": "theme-modifier.json",
+ "redirect_idx": 11,
+ "etape_idx": 0
+}

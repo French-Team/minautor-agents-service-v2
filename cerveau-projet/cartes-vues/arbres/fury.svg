@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Carte de decision de fury (parcours v0.1.0) - genere par convertir-carte-mermaid v0.3.0 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="564" height="670" viewBox="0 0 564 670" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="fleche" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="564" height="670" fill="#ffffff"/>
+    <path d="M 282.2 76.0 L 282.2 166.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 282.2 202.0 L 132.2 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="184.4" y="237.0" width="45.6" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="207.2" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">TESTER</text>
+    <path d="M 132.2 328.0 L 113.0 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="94.2" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="122.6" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 1</text>
+    <path d="M 113.0 454.0 L 192.8 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 282.2 202.0 L 272.6 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="260.2" y="237.0" width="34.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="277.4" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">LIRE</text>
+    <path d="M 272.6 328.0 L 272.6 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="244.2" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="272.6" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 1</text>
+    <path d="M 272.6 454.0 L 192.8 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <path d="M 282.2 202.0 L 422.6 292.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="321.2" y="237.0" width="62.4" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="352.4" y="249.0" text-anchor="middle" font-size="10.5" fill="#1e293b">RAPPORTER</text>
+    <path d="M 422.6 328.0 L 441.8 418.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="403.8" y="363.0" width="56.8" height="15" rx="3" fill="#ffffff" stroke="none"/>
+    <text x="432.2" y="375.0" text-anchor="middle" font-size="10.5" fill="#1e293b">besoin 1</text>
+    <path d="M 441.8 454.0 L 381.2 544.0" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#fleche)"/>
+    <rect x="248.0" y="40.0" width="68.4" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="282.2" y="62.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="282.2" dy="0">Debut&quot;</tspan>
+    </text>
+    <rect x="248.0" y="166.0" width="68.4" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="282.2" y="188.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="282.2" dy="0">RACINE</tspan>
+    </text>
+    <rect x="78.8" y="292.0" width="106.8" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="132.2" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="132.2" dy="0">THEME-TESTER</tspan>
+    </text>
+    <rect x="50.0" y="418.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="113.0" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="113.0" dy="0">THEME-TESTER-B0</tspan>
+    </text>
+    <rect x="113.8" y="544.0" width="158.0" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="192.8" y="566.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="192.8" dy="0">FIN - Theme termine&quot;</tspan>
+    </text>
+    <rect x="225.6" y="292.0" width="94.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="272.6" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="272.6" dy="0">THEME-LIRE</tspan>
+    </text>
+    <rect x="216.0" y="418.0" width="113.2" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="272.6" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="272.6" dy="0">THEME-LIRE-B0</tspan>
+    </text>
+    <rect x="359.6" y="292.0" width="126.0" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="422.6" y="314.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="422.6" dy="0">THEME-RAPPORTER</tspan>
+    </text>
+    <rect x="369.2" y="418.0" width="145.2" height="36.0" rx="6.0" fill="#f8fafc" stroke="#334155" stroke-width="1.3"/>
+    <text x="441.8" y="440.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="441.8" dy="0">THEME-RAPPORTER-B0</tspan>
+    </text>
+    <rect x="311.8" y="544.0" width="138.8" height="36.0" rx="18.0" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="1.3"/>
+    <text x="381.2" y="566.0" text-anchor="middle" font-size="11.5" fill="#0f172a">
+      <tspan x="381.2" dy="0">FIN - Test PASSE&quot;</tspan>
+    </text>
+</svg>

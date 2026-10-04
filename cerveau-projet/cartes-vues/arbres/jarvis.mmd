@@ -1,0 +1,72 @@
+%% Arbre de decision de jarvis (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quel theme ?"}
+    RACINE -- "REPONDRE" --> THEME-REPONDRE
+    THEME-REPONDRE["Stark pose une question, mes combos travaillent, je reponds."]
+    THEME-REPONDRE -- "besoin 1" --> THEME-REPONDRE-B0
+    THEME-REPONDRE-B0["Repondre a une question de Stark"]
+    FIN-fin-theme(["Retour a la racine"])
+    THEME-REPONDRE-B0 --> FIN-fin-theme
+    RACINE -- "TRAITER" --> THEME-TRAITER
+    THEME-TRAITER["Comprendre ce que Stark veut et creer une mission detaillee"]
+    THEME-TRAITER -- "besoin 1" --> THEME-TRAITER-B0
+    THEME-TRAITER-B0["Recevoir une demande de Stark"]
+    THEME-TRAITER -- "besoin 2" --> THEME-TRAITER-B1
+    THEME-TRAITER-B1["Formaliser une mission"]
+    THEME-TRAITER -- "besoin 3" --> THEME-TRAITER-B2
+    THEME-TRAITER-B2["Valider la mission avec Stark"]
+    THEME-TRAITER-B0 --> FIN-fin-theme
+    THEME-TRAITER-B1 --> FIN-fin-theme
+    THEME-TRAITER-B2 --> FIN-fin-theme
+    RACINE -- "DISTRIBUER" --> THEME-DISTRIBUER
+    THEME-DISTRIBUER["Envoyer la mission au bon agent au bon moment"]
+    THEME-DISTRIBUER -- "besoin 1" --> THEME-DISTRIBUER-B0
+    THEME-DISTRIBUER-B0["Envoyer une mission a Shuri"]
+    THEME-DISTRIBUER -- "besoin 2" --> THEME-DISTRIBUER-B1
+    THEME-DISTRIBUER-B1["Envoyer une mission a Forge"]
+    THEME-DISTRIBUER -- "besoin 3" --> THEME-DISTRIBUER-B2
+    THEME-DISTRIBUER-B2["Envoyer une mission a Rogers"]
+    THEME-DISTRIBUER -- "besoin 4" --> THEME-DISTRIBUER-B3
+    THEME-DISTRIBUER-B3["Envoyer une mission a Parker"]
+    THEME-DISTRIBUER -- "besoin 5" --> THEME-DISTRIBUER-B4
+    THEME-DISTRIBUER-B4["Relayer un message inter-agents"]
+    THEME-DISTRIBUER-B0 --> FIN-fin-theme
+    THEME-DISTRIBUER-B1 --> FIN-fin-theme
+    THEME-DISTRIBUER-B2 --> FIN-fin-theme
+    THEME-DISTRIBUER-B3 --> FIN-fin-theme
+    THEME-DISTRIBUER-B4 --> FIN-fin-theme
+    RACINE -- "SUIVRE" --> THEME-SUIVRE
+    THEME-SUIVRE["Savoir exactement ou en est l'equipe"]
+    THEME-SUIVRE -- "besoin 1" --> THEME-SUIVRE-B0
+    THEME-SUIVRE-B0["Voir le status de l'equipe"]
+    THEME-SUIVRE -- "besoin 2" --> THEME-SUIVRE-B1
+    THEME-SUIVRE-B1["Voir qui est bloque"]
+    THEME-SUIVRE -- "besoin 3" --> THEME-SUIVRE-B2
+    THEME-SUIVRE-B2["Voir les messages en attente"]
+    THEME-SUIVRE -- "besoin 4" --> THEME-SUIVRE-B3
+    THEME-SUIVRE-B3["Verifier l'activite recente"]
+    THEME-SUIVRE -- "besoin 5" --> THEME-SUIVRE-B4
+    THEME-SUIVRE-B4["Verifier si une mission est en cours"]
+    THEME-SUIVRE -- "besoin 6" --> THEME-SUIVRE-B5
+    THEME-SUIVRE-B5["Verifier qu'un agent a termine"]
+    THEME-SUIVRE-B0 --> FIN-fin-theme
+    THEME-SUIVRE-B1 --> FIN-fin-theme
+    THEME-SUIVRE-B2 --> FIN-fin-theme
+    THEME-SUIVRE-B3 --> FIN-fin-theme
+    THEME-SUIVRE-B4 --> FIN-fin-theme
+    THEME-SUIVRE-B5 --> FIN-fin-theme
+    RACINE -- "COORDONNER" --> THEME-COORDONNER
+    THEME-COORDONNER["Assurer que les communications fluident"]
+    THEME-COORDONNER -- "besoin 1" --> THEME-COORDONNER-B0
+    THEME-COORDONNER-B0["Traiter un message d'agent"]
+    THEME-COORDONNER -- "besoin 2" --> THEME-COORDONNER-B1
+    THEME-COORDONNER-B1["Detecter un blocage"]
+    THEME-COORDONNER -- "besoin 3" --> THEME-COORDONNER-B2
+    THEME-COORDONNER-B2["Gerer un inter-round"]
+    THEME-COORDONNER -- "besoin 4" --> THEME-COORDONNER-B3
+    THEME-COORDONNER-B3["Notifier Stark d'un evenement"]
+    THEME-COORDONNER-B0 --> FIN-fin-theme
+    THEME-COORDONNER-B1 --> FIN-fin-theme
+    THEME-COORDONNER-B2 --> FIN-fin-theme
+    THEME-COORDONNER-B3 --> FIN-fin-theme

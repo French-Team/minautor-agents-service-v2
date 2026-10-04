@@ -1,0 +1,98 @@
+"""Fonctions de la categorie corriger : une seule tache chacune."""
+from commun import (
+    classer_fichiers_cibles,
+    convertir_texte,
+    ecrire_texte_atomique,
+    lire_texte,
+    scanner_texte,
+    zones_hors_champ,
+)
+
+
+def collecter_ecarts():
+    """Scanne les cibles. Retourne [(chemin, ecarts)], fichiers touches seulement."""
+    resultats = []
+    cibles, _ = classer_fichiers_cibles()
+    for chemin in cibles:
+        ecarts = scanner_texte(lire_texte(chemin))
+        if ecarts:
+            resultats.append((chemin, ecarts))
+    return resultats
+
+
+def resumer_exemptions():
+    """Retourne les lignes du rapport des EXEMPTIONS (visibles, jamais touchees).
+
+    Le rapport ne cite AUCUN point de code Unicode : il dit seulement QUELS
+    fichiers sont hors du champ de reecriture et POURQUOI. La raison est mesurable
+    -- un exempte est un angle mort : le taire, c'est laisser croire que le scan
+    couvre tout (540 fichiers scannes contre 569 pour garde-ascii, EO-103).
+    """
+    cibles, exemptes = classer_fichiers_cibles()
+    lignes = [
+        "Fichiers examines : " + str(len(cibles)) + " reecrivables, "
+        + str(len(exemptes)) + " exemptes de reecriture (jamais touches)."
+    ]
+    hors_champ = zones_hors_champ()
+    if hors_champ:
+        lignes.append("Zones HORS CHAMP (jamais scannees, jamais reecrites) :")
+        for chemin, motif in hors_champ:
+            lignes.append("  HORS CHAMP [" + motif + "] " + chemin)
+    if not exemptes:
+        lignes.append("Aucun fichier exempte : le scan couvre tout le perimetre.")
+        return lignes
+    motifs = []
+    for _, motif in exemptes:
+        if motif not in motifs:
+            motifs.append(motif)
+    for motif in motifs:
+        du_motif = [chemin for chemin, m in exemptes if m == motif]
+        lignes.append("  EXEMPTE [" + motif + "] " + str(len(du_motif)) + " fichier(s) :")
+        for chemin in du_motif:
+            lignes.append("    " + chemin)
+    return lignes
+
+
+def supprimer_sans_equivalent(texte):
+    """Le texte SANS les caracteres non-ASCII que la carte ne sait pas convertir.
+
+    DOCTRINE CREATEUR (2026-10-03, arbitrage MO-559) : sur un caractere sans
+    equivalent ASCII, on SUPPRIME. `corriger-ascii` preservait et renvoyait 1
+    ("decision du createur"), pendant que `corriger-zone-tmp` supprimait : deux
+    instruments, deux doctrines, pour le meme caractere. Le createur a tranche :
+    toujours supprimer. La ligne, elle, reste -- c est le caractere exotique qui
+    part, jamais la phrase qui le portait.
+
+    PURE. La carte reste la source de verite : elle dit ce qu elle sait
+    convertir, et cet outil ne DEVINE rien. Le convertisseur n est PAS modifie :
+    la porte `ecrire` s en sert pour REFUSER un caractere hors carte, et une
+    ecriture ne perd pas de donnees en silence. La suppression est une decision
+    de MAINTENANCE, elle vit ici.
+    """
+    gardes = []
+    perdus = set()
+    for caractere in texte:
+        if ord(caractere) <= 127:
+            gardes.append(caractere)
+            continue
+        _converti, non_convertis = convertir_texte(caractere)
+        if non_convertis:
+            perdus.add(caractere)
+        else:
+            gardes.append(caractere)
+    return "".join(gardes), sorted(perdus)
+
+
+def corriger_fichier(chemin):
+    """Applique la conversion ET la suppression sur UN fichier.
+
+    Retourne (convertis, supprimes). Les deux sont des comptes de caracteres
+    traites, jamais des listes d echecs : avec la doctrine en vigueur, un
+    caractere sans equivalent n est plus un probleme a remonter, c est une
+    correction a appliquer et a dire.
+    """
+    texte = lire_texte(chemin)
+    converti, _non_convertis = convertir_texte(texte)
+    sans_exotique, supprimes = supprimer_sans_equivalent(converti)
+    ecrire_texte_atomique(chemin, sans_exotique)
+    return len(supprimes), supprimes

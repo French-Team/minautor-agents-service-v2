@@ -1,0 +1,51 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "shuri",
+    "nom": "VALIDER",
+    "description": "Verifier la conformite d'un agent cree"
+  },
+  "theme": {
+    "nom": "VALIDER",
+    "but": "Assurer que l'agent est conforme au template",
+    "redirects": [
+      {
+        "besoin": "Valider un agent cree",
+        "action": "procedure",
+        "etapes": [
+          "Verifier l'existence des 4 fichiers (fiche, corrections, arbre, fins)",
+          "Verifier le frontmatter (D17) : tous les champs presents",
+          "Verifier que le nom respecte le theme MARVEL (D14)",
+          "Verifier que l'arbre a des themes et des fins",
+          "Verifier la coherence fiche <-> arbre <-> corrections",
+          "Donner le verdict (CONFORME / A REVOIR)"
+        ]
+      },
+      {
+        "besoin": "Verifier la conformite du frontmatter",
+        "action": "procedure",
+        "etapes": [
+          "Lire le frontmatter de la fiche",
+          "Verifier : nom, version, cree, statut, grade, medaille, notation, mot-cles",
+          "Verifier que le grade est coherent avec le role",
+          "Verifier que les mot-cles sont pertinents"
+        ]
+      },
+      {
+        "besoin": "Verifier la coherence arbre <-> fiche",
+        "action": "procedure",
+        "etapes": [
+          "Lire la fiche de l'agent",
+          "Lire l'arbre de decision",
+          "Verifier que les themes de l'arbre correspondent au role de la fiche",
+          "Verifier que les fins sont correctes (fin-stark ou fin-cerberus)"
+        ]
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-theme"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "DEPOT-GIT",
+    "description": "Doctrine du depot git (EO-529, demande createur 2026-09-30). Le depot n est pas un journal : c est une SAUVEGARDE VIVANTE PARTAGEE, et elle n est une source de verite que si le travail en cours est MORT. On ne sauvegarde donc pas une mission terminee et non verifiee -- on la CONTAMINE. La regle tient en une question : le retour en arriere doit-il etre possible ET le depot doit-il rester digne d etre une reference ? Si l un des deux est rompu, on ne commit pas."
+  },
+  "theme": {
+    "nom": "DEPOT-GIT",
+    "but": "Trancher un commit sans se fier a l habitude : mesurer son INTERET (ce que la sauvegarde protege reellement), ecarter ce qui contamine le depot, et dire le verdict par la porte",
+    "redirects": [
+      {
+        "besoin": "Evaluer l INTERET de sauvegarder maintenant",
+        "action": "procedure",
+        "etapes": [
+          "Poser la question unique : le prochain geste est-il CRITIQUE (il peut casser le travail en cours) ou COURANT ?",
+          "CRITIQUE = la mission qui touche un fichier partage, une BDD, une convention, une porte d attribution, ou qui supprime des octets",
+          "COURANT = une note, un bilan, une mesure, un rapport, un fichier de travail jetable",
+          "Repondre par un FAIRE-OU-FAIRE : une mission qui ne peut pas casser rien ne justifie pas un commit",
+          "Ecrire le motif en une ligne -- un commit sans motif est un commit qui ne sera pas lu"
+        ],
+        "regle": "L interet se MESURE par le risque qu il couvre, jamais par le nombre de fichiers. Cent fichiers de mesure ne valent pas un fichier de convention."
+      },
+      {
+        "besoin": "Preparer le commit -- le moment EST le bon",
+        "action": "procedure",
+        "etapes": [
+          "Une mission CRITIQUE commence : c est le SEUL moment ou l on commit par defaut",
+          "Capturer l arbre AVANT la mission (`git status --porcelain` lu et DIT, pas devine)",
+          "La sauvegarde doit etre UN etat VERIFIE : non-regression verte, attributaire pose, aucune zone jetable",
+          "Si une seule de ces trois conditions manque : le depot n est pas une source de verite, donc on ne commit pas",
+          "Ne JAMAIS commiter en fin de mission non verifiee : c est la contamination que EO-529 nomme"
+        ],
+        "regle": "Sauvegarder AVANT un risque, jamais APRES un doute. Un depot contamine ne se rattrape pas : il perd son sens."
+      },
+      {
+        "besoin": "Preparer le commit -- ecarter ce qui contamine",
+        "action": "procedure",
+        "etapes": [
+          "Lister les candidats au commit et les NOMMER un par un, jamais en bloc",
+          "ECARTER : les points de restauration `.bak.*` (ils doublent l historique sans le servir)",
+          "ECARTER : les fichiers de travail jetables (`tmp-*/`, zone jetable du round)",
+          "ECARTER : les traces de RUNTIME qui changent a chaque tour (journaux, boites d intercom, registres d espions)",
+          "ECARTER : tout fichier que le maillon `residus` signale comme residuel (`__pycache__`)",
+          "GARDER : le code livre, les BDD a sens, les conventions, les docs de preuve",
+          "Dire le compte : X ecarte(s), Y garde(s), avec le motif de chaque exclusion"
+        ],
+        "regle": "Ce qui n est pas nomme n est pas decide. Un `git add -A` est un aveu qu on n a pas lu."
+      },
+      {
+        "besoin": "Decider -- le commit est JUSTIFIE",
+        "action": "procedure",
+        "etapes": [
+          "Verifier que le depot PASSERAIT le test du retour : `git status` propre apres commit",
+          "Verifier que le commit est UTILE : le diff contient-il un changement qu on voudrait retrouver demain ?",
+          "Ecrire le message en une phrase sur le POURQUOI (pas le quoi : le quoi est dans le diff)",
+          "Signer le commit (le pied de page d identite du projet)",
+          "Relire `git log -1` : le message dit-il pourquoi, en relisant dans six mois ?"
+        ],
+        "regle": "Le message dit le POURQUOI. Un message qui recite le diff a waste un voyage au depot."
+      },
+      {
+        "besoin": "Decider -- le commit est CONTAMINE",
+        "action": "procedure",
+        "etapes": [
+          "NE PAS commiter -- c est un refus, pas une attente",
+          "Nommer ce qui empeche : verification manquante, contenu jetif, trace de runtime",
+          "Deposer le constat en item plutot que de le tenir en tete (friction 77 : un refus non dit se lit comme un silence)",
+          "Reprendre quand la cause est levee, pas quand la file est vide"
+        ],
+        "regle": "Le depot n est pas un reservoir de fin de mission : ne pas commiter est une REUSSITE du theme, pas un echec du round."
+      },
+      {
+        "besoin": "Restaurer apres incident",
+        "action": "procedure",
+        "etapes": [
+          "Mesurer l ETENDUE avant de restaurer : `git status --porcelain` et le compte de fichiers",
+          "Un restauration TOTALE (`git checkout --`) ne se justifie que sur une zone COMPROMISE, et se DIT",
+          "Une restauration partielle restaure ce qui manque, jamais ce qui a change depuis",
+          "Apres restauration, VERIFIER que l outil reparle (auto-test ou maillon) avant de conclure",
+          "Consigner : zone, commit de retour, nombre de fichiers, preuve de l etat revenu"
+        ],
+        "regle": "Restaurer, puis PROUVER. Une restauration non verifiee est un piege pose pour le prochain round."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "../fins.json",
+    "case": "fin-persistant"
+  }
+}

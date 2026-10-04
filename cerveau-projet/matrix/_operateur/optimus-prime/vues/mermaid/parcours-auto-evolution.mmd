@@ -1,0 +1,79 @@
+%% Parcours d Optimus -- theme AUTO-EVOLUTION
+%% Evoluer en 5 temps : detecter, qualifier, cibler, modifier, valider -- validation AUTONOME si risque faible, createur si
+%% genere par rendre-graphe v1.0.0 -- 32 noeud(s), 43 arete(s)
+flowchart TD
+    START(["Theme AUTO-EVOLUTION"])
+    CASE-1["1. Detecter les frictions"]
+    CASE-2["2. Detecter -- friction ordre de travail flou"]
+    CASE-3["3. Detecter -- friction outil manquant"]
+    CASE-4["4. Detecter -- friction theme incomplet"]
+    CASE-5["5. Detecter -- friction erreur repetee"]
+    CASE-6["6. Qualifier les frictions (auto)"]
+    CASE-7["7. Qualifier -- regle generale detectee (auto)"]
+    CASE-8["8. Qualifier -- cas particulier (auto)"]
+    CASE-9["9. Choisir la cible + evaluer risque (auto)"]
+    CASE-10["10. Choisir -- cible theme (ordre incomplet) -> RISQUE FA..."]
+    CASE-11["11. Choisir -- cible protocole (methode a fixer) -> RISQU..."]
+    CASE-12["12. Choisir -- cible combo (mini-mission) -> RISQUE FAIBLE"]
+    CASE-13["13. Choisir -- cible outil (outil manquant/fragile) -> RI..."]
+    CASE-14["14. Choisir -- cible convention -> RISQUE FAIBLE"]
+    CASE-15["15. Choisir -- cible fiche (valeur) -> RISQUE MOYEN"]
+    CASE-16["16. Choisir -- cible fiche (comportement core) -> RISQUE ..."]
+    CASE-17["17. Choisir -- cible regle immuable -> RISQUE CRITIQUE"]
+    CASE-18["18. Modifier petit pas reversible (auto-valide si risque ..."]
+    CASE-19["19. Modifier -- ajouter case dans theme (auto)"]
+    CASE-20["20. Modifier -- ajouter redirect dans theme (auto)"]
+    CASE-21["21. Modifier -- creer nouvel outil (auto)"]
+    CASE-22["22. Auto-valider (risque FAIBLE/MOYEN) -- SANS createur"]
+    CASE-23["23. Valider avec createur (risque CRITIQUE uniquement)"]
+    CASE-24["24. Auto-valider -- evolution confirmee"]
+    CASE-25["25. Valider createur -- evolution validee"]
+    CASE-26["26. Annuler (auto ou createur)"]
+    FIN-fin-persistant(["FIN - Retour au pilote (mode persistant)"])
+    INCOHERENCE-1[["fichier-absent : le theme AUTO-XXX (ordre 12) pointe vers..."]]
+    INCOHERENCE-2[["theme-orphelin : le theme theme-user-profil.json existe s..."]]
+    INCOHERENCE-3[["renvoi-casse : la case 2 du theme AUTO-EVOLUTION renvoie ..."]]
+    INCOHERENCE-4[["renvoi-casse : la case 5 du theme AUTO-EVOLUTION renvoie ..."]]
+    START -- "case 1" --> CASE-1
+    CASE-1 -- "case 2" --> CASE-2
+    CASE-2 -- "case 3" --> CASE-3
+    CASE-3 -- "si friction = 'Quand je dois <a..." --> PIECE-super-combos-combos-outils-outils-readme-md
+    CASE-3 -- "case 4" --> CASE-4
+    CASE-4 -- "si friction = 'Quand je suis le..." --> PIECE-theme-auto-evolution-json
+    CASE-4 -- "case 5" --> CASE-5
+    CASE-5 -- "case 6" --> CASE-6
+    CASE-6 -- "case 7" --> CASE-7
+    CASE-7 -- "case 8" --> CASE-8
+    CASE-8 -- "case 9" --> CASE-9
+    CASE-9 -- "case 10" --> CASE-10
+    CASE-10 -- "si friction type = ordre" --> PIECE-parcours-themes
+    CASE-10 -- "case 11" --> CASE-11
+    CASE-11 -- "si friction type = protocole" --> PIECE-protocoles
+    CASE-11 -- "case 12" --> CASE-12
+    CASE-12 -- "si friction type = combo" --> PIECE-super-combos
+    CASE-12 -- "case 13" --> CASE-13
+    CASE-13 -- "si friction type = outil" --> PIECE-super-combos-combos-outils
+    CASE-13 -- "case 14" --> CASE-14
+    CASE-14 -- "si friction type = convention" --> PIECE-conventions
+    CASE-14 -- "case 15" --> CASE-15
+    CASE-15 -- "si friction type = valeur" --> PIECE-optimus-prime-md
+    CASE-15 -- "case 16" --> CASE-16
+    CASE-16 -- "si friction type = comportement" --> PIECE-optimus-prime-md
+    CASE-16 -- "case 17" --> CASE-17
+    CASE-17 -- "si friction type = regle" --> PIECE-regles-immuables
+    CASE-17 -- "case 18" --> CASE-18
+    CASE-18 -- "case 19" --> CASE-19
+    CASE-19 -- "si modification = ajout case theme" --> PIECE-super-combos-combos-outils-ajouter-case-theme-py
+    CASE-19 -- "case 20" --> CASE-20
+    CASE-20 -- "si modification = ajout redirec..." --> PIECE-super-combos-combos-outils-ajouter-redirect-theme-py
+    CASE-20 -- "case 21" --> CASE-21
+    CASE-21 -- "si modification = nouvel outil" --> PIECE-super-combos-combos-outils-outils-readme-md
+    CASE-21 -- "case 22" --> CASE-22
+    CASE-22 -- "case 23" --> CASE-23
+    CASE-23 -- "case 24" --> CASE-24
+    CASE-24 -- "case 25" --> CASE-25
+    CASE-25 -- "case 26" --> CASE-26
+    CASE-26 -- "si (auto: tests echouent) OU (c..." --> PIECE-super-combos-combos-outils-revert-fichier-py
+    CASE-26 -- "fin" --> FIN-fin-persistant
+    CASE-2 -- "INCOHERENT" --> INCOHERENCE-3
+    CASE-5 -- "INCOHERENT" --> INCOHERENCE-4

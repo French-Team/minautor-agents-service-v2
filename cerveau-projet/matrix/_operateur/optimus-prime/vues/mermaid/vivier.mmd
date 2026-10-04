@@ -1,0 +1,63 @@
+%% Le vivier -- les themes par categorie
+%% le domicile du vivier (M-076) : Z:\analyste-in-console\cerveau-projet\matrix\matrice\data\vivier-themes.json
+%% genere par rendre-graphe v1.0.0 -- 30 noeud(s), 29 arete(s)
+flowchart TD
+    START(["Vivier"])
+    CAT-SYSTEME{"SYSTEME"}
+    THEME-BDD["TH-002 BDD -- construire, raccorder ou reparer une BDD du..."]
+    THEME-OUTIL["TH-003 OUTIL -- construire ou reparer un outil dedie (pre..."]
+    THEME-ROUTINE["TH-004 ROUTINE -- poser ou faire evoluer les routines de ..."]
+    THEME-INDICES["TH-005 INDICES -- poser ou mettre a jour les indices d'un..."]
+    THEME-CONTRATS["TH-006 CONTRATS -- relire et reparer les contrats (readme..."]
+    THEME-PILOTE["TH-007 PILOTE -- faire evoluer le pilote : injection, fin..."]
+    THEME-TEMPLATES["TH-008 TEMPLATES -- poser ou faire evoluer les moules et ..."]
+    THEME-REPARATION["TH-009 REPARATION -- reparer un ecart detecte par la veil..."]
+    THEME-ENTONNOIR["TH-011 ENTONNOIR -- Missions sur l'entonnoir : echelons, ..."]
+    CAT-GOUVERNANCE{"GOUVERNANCE"}
+    THEME-DEFCON["TH-012 DEFCON -- Piloter les periodes de mise en securite..."]
+    CAT-QUESTION{"QUESTION"}
+    THEME-ANALYSE["TH-013 ANALYSE -- Part 1 d'une [question] : analyser le s..."]
+    THEME-RECHERCHE["TH-014 RECHERCHE -- Part 2 d'une [question] : recherche a..."]
+    THEME-CONTRE-ANALYSE["TH-015 CONTRE-ANALYSE -- Part 3 d'une [question] : avis c..."]
+    THEME-RAPPORT["TH-016 RAPPORT -- Part 4 d'une [question] : rapport conso..."]
+    CAT-PERSONNALITE{"PERSONNALITE"}
+    THEME-CONSTRUCTEUR["TH-017 CONSTRUCTEUR -- Executer les missions dev : constr..."]
+    THEME-REDACTEUR["TH-018 REDACTEUR -- Executer les missions doc : ecrire de..."]
+    THEME-AUDITEUR["TH-019 AUDITEUR -- Executer les missions audit : constat ..."]
+    THEME-REVISEUR["TH-020 REVISEUR -- Executer les missions revision : relir..."]
+    THEME-REPARATEUR["TH-021 REPARATEUR -- Executer les missions reparation apr..."]
+    THEME-PERFORMANCE["TH-022 PERFORMANCE -- Theme mere des performances de la M..."]
+    THEME-PERFORMANCE-OUTILS["TH-023 PERFORMANCE-OUTILS -- Analyser / optimiser / ameli..."]
+    THEME-PERFORMANCE-ROUTINES["TH-024 PERFORMANCE-ROUTINES -- Analyser / optimiser / ame..."]
+    THEME-PERFORMANCE-SERVEURS["TH-025 PERFORMANCE-SERVEURS -- Analyser / optimiser / ame..."]
+    THEME-COMMUNICATION["TH-026 COMMUNICATION -- Accueil v3 (Flux 1) : le cameleon..."]
+    THEME-CADRAGE["TH-027 CADRAGE -- Constituer la CHAINE de missions avant ..."]
+    START --> CAT-SYSTEME
+    CAT-SYSTEME --> THEME-BDD
+    CAT-SYSTEME --> THEME-OUTIL
+    CAT-SYSTEME --> THEME-ROUTINE
+    CAT-SYSTEME --> THEME-INDICES
+    CAT-SYSTEME --> THEME-CONTRATS
+    CAT-SYSTEME --> THEME-PILOTE
+    CAT-SYSTEME --> THEME-TEMPLATES
+    CAT-SYSTEME --> THEME-REPARATION
+    CAT-SYSTEME --> THEME-ENTONNOIR
+    START --> CAT-GOUVERNANCE
+    CAT-GOUVERNANCE --> THEME-DEFCON
+    START --> CAT-QUESTION
+    CAT-QUESTION --> THEME-ANALYSE
+    CAT-QUESTION --> THEME-RECHERCHE
+    CAT-QUESTION --> THEME-CONTRE-ANALYSE
+    CAT-QUESTION --> THEME-RAPPORT
+    START --> CAT-PERSONNALITE
+    CAT-PERSONNALITE --> THEME-CONSTRUCTEUR
+    CAT-PERSONNALITE --> THEME-REDACTEUR
+    CAT-PERSONNALITE --> THEME-AUDITEUR
+    CAT-PERSONNALITE --> THEME-REVISEUR
+    CAT-PERSONNALITE --> THEME-REPARATEUR
+    CAT-SYSTEME --> THEME-PERFORMANCE
+    CAT-SYSTEME --> THEME-PERFORMANCE-OUTILS
+    CAT-SYSTEME --> THEME-PERFORMANCE-ROUTINES
+    CAT-SYSTEME --> THEME-PERFORMANCE-SERVEURS
+    CAT-SYSTEME --> THEME-COMMUNICATION
+    CAT-SYSTEME --> THEME-CADRAGE

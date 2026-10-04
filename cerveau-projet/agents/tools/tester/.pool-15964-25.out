@@ -1,0 +1,19 @@
+=== test-111 : pilote Oracle anti-redemarrage (residu etat-carte) ===
+  [OK] 1. garde anti-redemarrage presente dans pilote.py
+  [OK] 2. garde dans pilote() AVANT l appel a _piloter_arbre
+  [OK] 3. etat=fin -> mission terminee, aucun travail servi
+  [OK] 4. etat=travail -> pilote sert normalement
+  [OK] 5. etat factice supprime (aucune trace)
+  [OK] 6. condition portant bien sur etape=fin (pas seulement historise)
+  [OK] 7. ASCII strict + LF pur (pilote.py + test)
+
+
+=== CHRONO test (total 0.5s) ===
+  1. garde presente                    0.00s
+  2. garde avant resolution            0.00s
+  3. test reel etat=fin                0.20s
+  4. test reel etat=travail            0.30s
+  5. nettoyage                         0.00s
+  6. preuve negative                   0.00s
+  7. normes                            0.00s
+=== RESULTAT : 7 OK / 0 KO (sur 7 points) ===

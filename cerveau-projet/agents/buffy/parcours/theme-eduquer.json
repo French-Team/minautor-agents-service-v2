@@ -1,0 +1,37 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "buffy",
+    "nom": "EDUQUER",
+    "description": "Education / re-education d un agent ou de moi-meme - CHIRON est l agent habilite (formation continue, re-education quand les outils/regles/protocoles changent)"
+  },
+  "theme": {
+    "nom": "EDUQUER",
+    "but": "Rediriger la mission d education vers Chiron (agent habilite) - je n eduque JAMAIS moi-meme",
+    "redirects": [
+      {
+        "besoin": "La mission releve de l education (re-education de moi-meme ou d un autre agent) ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> REDIRIGER vers Chiron (agent habilite pour l education)",
+          "NON -> Mission hors education : retour a la racine"
+        ],
+        "regle": "REGLE ABSOLUE : je n execute JAMAIS une mission d education - Chiron est le SEUL agent habilite (regles-groupes-agents + domaines autres agents)."
+      },
+      {
+        "besoin": "Rediriger vers Chiron (delegation propre, modele aero R3)",
+        "action": "procedure",
+        "etapes": [
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent chiron \"<rapport de la mission d education>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin buffy \"<bilan>\" --cible oracle (le pilote larguera chiron et me renverra pour reprendre mon round)"
+        ],
+        "regle": "REGLE MODELE AERO (R2/R3) : je signale a ORACLE et ma fin va vers ORACLE - jamais cerberus, jamais un autre agent. Une erreur n est JAMAIS seulement detectee : reparation exclusive par l habilite (chiron)."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-delegation"
+  }
+}

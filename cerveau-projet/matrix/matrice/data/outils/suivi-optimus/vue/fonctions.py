@@ -1,0 +1,535 @@
+"""Fonctions simples de la categorie vue : une seule tache chacune.
+
+Decision createur (2026-09-09) : la vue est organisee en TABLEAUX DEDIES
+par action (jamais a la suite) -- le createur suit TOUTES les actions
+d'optimus-prime a des emplacements precis. optimus reste invisible : pas
+d'encart dans journal-multi-encarts.md, SON fichier est la seule vue.
+
+REVISION CREATEUR (2026-09-16, MO-139) : "suivi-optimus.md ne represente pas du
+tout le travail". Mesure a l'appui -- trois causes vivaient dans CE fichier :
+
+  (1) le DETAIL etait AMPUTE a 200 caracteres. Un bilan de mission en fait 2 000
+      a 3 000 : la vue livrait donc des phrases coupees au milieu, sans le
+      pourquoi ni les preuves. La substance du travail etait jetee a l'affichage.
+  (2) l'affichage s'arretait aux 10 DERNIERS evenements par action. Sur 246
+      evenements et 119 missions, la vue montrait une soixantaine de lignes,
+      presque toutes des "Debut implicite" : aucun RECAP du travail accompli.
+  (3) le compteur "Missions finies" comptait les missions PRESENTES dans la
+      trace, pas celles qui portent une FIN -- une mission ouverte la veille
+      etait comptee comme finie. Un compteur qui ne dit pas ce qu'il annonce.
+
+La vue porte donc DEUX tableaux de LECTURE DU TRAVAIL, en plus des tableaux par
+action (intention du createur conservee telle quelle) :
+
+  - RECAP PAR MISSION : une ligne par mission (debut, fin, duree, portes
+    utilisees, fichiers touches, etat). C'est la reponse a "qu'est-ce qui a ete
+    fait ?", qu'aucune somme d'evenements isoles ne donnait ;
+  - BILAN PAR JOURNEE : une ligne par jour (missions finies, portes, fichiers,
+    themes). C'est la reponse a "le travail depuis ce matin et les jours
+    precedents ?".
+
+Deux regles de fond, tenues par les helpers ci-dessous :
+  - une coupe est toujours DITE (`tronquer` ajoute le nombre de caracteres
+    restants) : une troncature muette a produit le defaut ci-dessus ;
+  - les bornes d'affichage sont DECLAREES en tetes de module, jamais en dur dans
+    la logique qui les consomme.
+"""
+
+
+# --- Bornes d'AFFICHAGE, declarees une seule fois -----------------------------
+# Le detail d'un evenement est la substance de la trace : on le BORNE (au lieu de
+# le jeter) et `tronquer` dit combien de caracteres restent. Mesure du 2026-09-16 :
+# 200 caracteres coupaient les bilans au milieu d'une phrase.
+LIMITE_DETAIL = 600
+# Evenements affiches par action : la memoire courte ne doit plus etre une cecite
+# (10 lignes sur 99 disparaissaient derriere un compteur). Le journal complet
+# reste consultable, la vue en montre assez pour lire une session.
+LIMITE_SECTION = 25
+# Missions et journees affichees dans les tableaux de lecture.
+LIMITE_MISSIONS = 30
+LIMITE_JOURS = 15
+# Longueur maximale d'une cellule de liste (fichiers, portes).
+LIMITE_LISTE = 300
+# Marqueur de coupe : sans lui, une valeur bornee se lit comme une valeur entiere.
+MARQUE_COUPE = " ... (+"
+# DEUX BORNES IDENTIQUES = duree INCONNUE (decision createur du 2026-09-21).
+# Mesure du jour : 59 missions portent un `debut` a la SECONDE EXACTE de leur
+# `fin`. Ce n'est pas une mission de zero seconde : c'est un debut POSE APRES
+# COUP, cree par le garde anti-fin-orphelin de la porte `noter` au moment ou la
+# fin arrive. Rendre 0 faisait passer cet ARTEFACT pour une mesure (L-055) --
+# c'est le defaut que MO-321 avait cru legitime ("zero LEGITIME"), renverse ici
+# sur la mesure du createur. La duree reste INCONNUE, et elle est DITE.
+DUREE_INCONNUE_BORNES_IDENTIQUES = "bornes identiques (debut pose apres coup)"
+DUREE_INCONNUE_BORNES_ILLISIBLES = "bornes illisibles"
+# Ce que la cellule Duree affiche quand aucune duree n'est mesurable : ni un
+# zero (qui se lirait mesure), ni un tiret muet.
+TEXTE_DUREE_INCONNUE = "inconnue"
+# Nombre de missions nommees dans la note qui DIT les durees inconnues.
+LIMITE_DUREE_INCONNUE_NOMMEES = 8
+
+# LA REGLE ASCII VIT A SON DOMICILE (EO-365 / MO-466) : `vers_ascii` etait la
+# SECONDE copie de la meme regle (l autre : bdd-sessions/ajouter). Ce nom CONSOMME
+# desormais data/commun/texte_ascii.py (M-076 ; L-029).
+from texte_ascii import vers_ascii as _vers_ascii_domicile  # noqa: E402
+
+
+def vers_ascii(texte):
+    """Ramene un texte a l'ASCII : la VUE est un artefact du perimetre ASCII.
+
+    `suivi-optimus.jsonl` peut porter des accents (le detail est du texte libre,
+    et le JSON les echange en `\\uXXXX`). Les recopier tels quels faisait de la
+    VUE le SEUL fichier non-ASCII du depot (mesure 2026-09-14, MO-079 : 1/594),
+    alors qu'elle est generee et jamais editee a la main. La frontiere se pose
+    donc ICI, une fois : un generateur qui ecrit du non-ASCII rend le garde ASCII
+    aveugle a sa propre sortie.
+    """
+    # LA REGLE VIT DESORMAIS A SON DOMICILE (EO-365 / MO-466) : ce nom etait la
+    # SECONDE copie de la meme regle (l autre : bdd-sessions/ajouter). Une copie
+    # derive en silence (L-029) : ce nom CONSOMME desormais le domicile (M-076).
+    return _vers_ascii_domicile(texte)
+
+
+def tronquer(texte, limite):
+    """Borne un texte en DISANT la coupe.
+
+    Une coupe muette est une cecite (lecon MO-055) : le lecteur de la vue ne peut
+    pas distinguer un detail qui s'arrete la d'un detail qui a ete ampute. Le
+    marqueur porte le nombre de caracteres non affiches.
+    """
+    texte = str(texte)
+    if len(texte) <= limite:
+        return texte
+    return texte[:limite].rstrip() + MARQUE_COUPE + str(len(texte) - limite) + " car.)"
+
+
+def echapper_pipe(texte):
+    """Echappe les barres verticales pour garder le tableau markdown intact."""
+    return str(texte).replace("|", "\\|")
+
+
+def lister_cellule(valeurs, limite=LIMITE_LISTE):
+    """Joint une liste pour une cellule markdown : bornee, et la coupe est DITE."""
+    valeurs = [str(valeur) for valeur in (valeurs or []) if str(valeur)]
+    if not valeurs:
+        return "-"
+    return tronquer(", ".join(valeurs), limite)
+
+
+def heure_courte(date_complete):
+    """Retourne `JJ/MM HH:MM` d'un horodatage `AAAA-MM-JJ HH:MM:SS`, ou la valeur brute."""
+    if not date_complete or " " not in date_complete:
+        return date_complete or "-"
+    jour, heure = date_complete.split(" ", 1)
+    morceaux = jour.split("-")
+    if len(morceaux) != 3:
+        return date_complete
+    return morceaux[2] + "/" + morceaux[1] + " " + heure[:5]
+
+
+def composer_ligne(evenement):
+    """Compose UNE ligne d'un tableau d'action (heure en premier).
+
+    Colonne DUREE retiree le 2026-09-19 (demande createur) : un EVENEMENT est un
+    INSTANT, il n a pas de duree -- seul le RECAP par mission en porte une, et
+    elle y est CALCULEE des deux bornes. Colonne FICHIERS retiree le meme jour :
+    dans un tableau d ACTION elle valait "-" pour tout le monde (les fichiers se
+    lisent au RECAP, par mission). A leur place, l HEURE DE DEBUT de la MISSION.
+    """
+    detail = echapper_pipe(tronquer(evenement.get("detail", ""), LIMITE_DETAIL))
+    mission = echapper_pipe(evenement.get("mission", "") or "-")
+    portes = lister_cellule(evenement.get("portes"))
+    # Separation date et heure pour affichage : heure en premier
+    date_complete = evenement.get("date", "")
+    heure = ""
+    if date_complete and " " in date_complete:
+        heure = date_complete.split(" ")[1]
+        date_complete = date_complete.split(" ")[0]
+    return vers_ascii("| " + " | ".join([
+        echapper_pipe(heure or "-"),
+        echapper_pipe(date_complete or "-"),
+        mission,
+        detail,
+        portes,
+    ]) + " |")
+
+
+def composer_section(action, evenements):
+    """Compose UNE section dediee (un tableau par action).
+
+    L'affichage est borne a LIMITE_SECTION evenements, et le reste est DIT avec
+    son compte : la borne est un choix de lisibilite, jamais un oubli.
+    """
+    lignes = ["## Action : " + action, ""]
+    if not evenements:
+        return lignes + ["(aucun evenement)", ""]
+    evenements_tries = sorted(evenements, key=lambda e: e.get("date", ""), reverse=True)
+    lignes += [
+        "| Heure | Date | Mission | Detail | Portes |",
+        "|---|---|---|---|---|",
+    ]
+    for evenement in evenements_tries[:LIMITE_SECTION]:
+        lignes.append(composer_ligne(evenement))
+    reste = len(evenements) - LIMITE_SECTION
+    if reste > 0:
+        lignes.append("")
+        lignes.append("*" + str(reste) + " evenement(s) de plus dans cette action "
+                      + "(journal complet : data/suivi-optimus.jsonl).")
+    return lignes + [""]
+
+
+def calculer_duree(debut, fin):
+    """Duree en SECONDES entre deux bornes du journal (EO-267), ou None.
+
+    Le journal PORTE le fait (deux bornes datees) : la duree est une
+    SOUSTRACTION, pas une declaration. Avant, la vue ne lisait qu un argument
+    `--duree-s` optionnel que NUL appel ne posait -- la colonne ne pouvait donc
+    que valoir zero. Une borne illisible rend None : la duree reste VIDE (une
+    colonne vide se lit moins mal qu une duree inventee, L-055).
+
+    DEUX BORNES IDENTIQUES RENDENT None, jamais 0 (decision createur du
+    2026-09-21) : voir DUREE_INCONNUE_BORNES_IDENTIQUES. Un zero seconde n'est
+    pas une duree, c'est un debut pose apres coup -- le rendre 0 le faisait
+    passer pour une mesure.
+    """
+    from datetime import datetime as horloge
+    try:
+        depart = horloge.strptime(debut, "%Y-%m-%d %H:%M:%S")
+        arrivee = horloge.strptime(fin, "%Y-%m-%d %H:%M:%S")
+    except (TypeError, ValueError):
+        return None
+    secondes = int((arrivee - depart).total_seconds())
+    # <= 0 : deux bornes identiques (ou une fin AVANT le debut) ne mesurent RIEN.
+    return secondes if secondes > 0 else None
+
+
+def agreger_par_mission(evenements):
+    """Retourne l'agregat PAR MISSION de la trace.
+
+    C'est la DERNIERE brique de lecture qui manquait : le journal porte des
+    evenements isoles, le travail se lit par MISSION. L'agregat rassemble les
+    portes et les fichiers de TOUS les evenements d'une mission (un evenement
+    isole peut ne rien porter : le recap, lui, ne perd rien).
+    """
+    agregats = {}
+    for evenement in evenements:
+        mission = evenement.get("mission", "") or "(sans mission)"
+        agregat = agregats.setdefault(mission, {
+            "mission": mission,
+            "theme": "",
+            "debut": "",
+            "fin": "",
+            "duree_s": "",
+            # Pourquoi la duree n'est pas mesurable (vide = elle l'est, ou elle
+            # est declaree). Sans ce champ, un "0" et une "duree inconnue"
+            # s'afficheraient pareil -- ce qui etait exactement le defaut.
+            "duree_inconnue": "",
+            "evenements": 0,
+            "portes": [],
+            "fichiers": [],
+        })
+        agregat["evenements"] += 1
+        if not agregat["theme"] and evenement.get("theme"):
+            agregat["theme"] = evenement.get("theme")
+        date = evenement.get("date", "")
+        action = evenement.get("action", "")
+        if action == "debut" and date and (not agregat["debut"] or date < agregat["debut"]):
+            agregat["debut"] = date
+        if action == "fin" and date and (not agregat["fin"] or date > agregat["fin"]):
+            agregat["fin"] = date
+        declare = str(evenement.get("duree_s", "") or "").strip()
+        # Un "0" DECLARE n est PAS une duree (EO-267) : c est le placeholder que
+        # le pilote pose a la cloture quand il ne la connait pas. Le prendre pour
+        # une mesure figeait la colonne a zero a VIE -- une valeur qui ment se lit
+        # comme un fait (L-055). Seule une valeur NON NULLE declare est retenue.
+        if declare and declare not in ("0", "0s"):
+            agregat["duree_s"] = declare
+        for porte in evenement.get("portes", ()) or ():
+            if porte not in agregat["portes"]:
+                agregat["portes"].append(porte)
+        for fichier in evenement.get("fichiers", ()) or ():
+            if fichier not in agregat["fichiers"]:
+                agregat["fichiers"].append(fichier)
+    for agregat in agregats.values():
+        # DUREE (EO-267) : le journal portait DEJA les deux bornes, mais la vue
+        # ne lisait qu un `duree_s` declare -- que personne ne posait. La duree
+        # est desormais CALCULEE des bornes quand elles existent ; un declare
+        # reste prioritaire ; sans fin, AUCUNE duree (rien d invente).
+        if not agregat["duree_s"] and agregat["debut"] and agregat["fin"]:
+            if agregat["debut"] == agregat["fin"]:
+                # Un debut et une fin au MEME instant ne mesurent pas 0 s : ils
+                # disent que la borne de debut a ete posee APRES COUP (garde
+                # anti-fin-orphelin). La duree est INCONNUE -- et elle le DIT.
+                agregat["duree_inconnue"] = DUREE_INCONNUE_BORNES_IDENTIQUES
+            else:
+                secondes = calculer_duree(agregat["debut"], agregat["fin"])
+                if secondes is not None:
+                    agregat["duree_s"] = str(secondes)
+                else:
+                    agregat["duree_inconnue"] = DUREE_INCONNUE_BORNES_ILLISIBLES
+        if agregat["fin"]:
+            agregat["etat"] = "finie"
+        elif agregat["debut"]:
+            agregat["etat"] = "en cours"
+        else:
+            agregat["etat"] = "trace seule"
+    return agregats
+
+
+def composer_recap_missions(evenements):
+    """Compose le tableau RECAP PAR MISSION (une ligne par mission).
+
+    Ordre : la mission la plus RECEMMENT touchee en premier (derniere date de
+    ses evenements), parce que c'est ce que le createur ouvre la vue pour voir.
+    """
+    agregats = agreger_par_mission(evenements)
+    lignes = ["## Recap par mission", ""]
+    if not agregats:
+        return lignes + ["(aucune mission tracee)", ""]
+    dernieres = {}
+    for evenement in evenements:
+        mission = evenement.get("mission", "") or "(sans mission)"
+        date = evenement.get("date", "")
+        if date > dernieres.get(mission, ""):
+            dernieres[mission] = date
+    ordonnees = sorted(agregats.values(), key=lambda a: dernieres[a["mission"]], reverse=True)
+    lignes += [
+        "| Mission | Theme | Debut | Fin | Duree | Ev. | Etat | Portes | Fichiers |",
+        "|---|---|---|---|---|---|---|---|---|",
+    ]
+    for agregat in ordonnees[:LIMITE_MISSIONS]:
+        lignes.append(vers_ascii("| " + " | ".join([
+            echapper_pipe(agregat["mission"]),
+            echapper_pipe(agregat["theme"] or "-"),
+            echapper_pipe(heure_courte(agregat["debut"])),
+            echapper_pipe(heure_courte(agregat["fin"])),
+            echapper_pipe(agregat["duree_s"] or (TEXTE_DUREE_INCONNUE
+                                                if agregat["duree_inconnue"] else "-")),
+            str(agregat["evenements"]),
+            agregat["etat"],
+            lister_cellule(agregat["portes"]),
+            lister_cellule(agregat["fichiers"]),
+        ]) + " |"))
+    # La colonne ne peut plus mentir : elle affiche `inconnue` au lieu d'un 0 qui
+    # se lirait comme une mesure. Une colonne qui dit `inconnue` sans dire POURQUOI
+    # laisserait le lecteur croire a une donnee perdue -- la note nomme les
+    # missions et la cause (mesure du 2026-09-21 : 59 missions concernees).
+    inconnues = [a["mission"] for a in ordonnees
+                 if not a["duree_s"] and a["duree_inconnue"]]
+    if inconnues:
+        lignes.append("")
+        lignes.append(vers_ascii(
+            "*Duree INCONNUE pour " + str(len(inconnues)) + " mission(s) : "
+            + ", ".join(inconnues[:LIMITE_DUREE_INCONNUE_NOMMEES])
+            + (" ..." if len(inconnues) > LIMITE_DUREE_INCONNUE_NOMMEES else "")
+            + " -- " + DUREE_INCONNUE_BORNES_IDENTIQUES
+            + " : un debut et une fin au meme instant ne mesurent pas zero seconde."))
+
+    reste = len(ordonnees) - LIMITE_MISSIONS
+    if reste > 0:
+        lignes.append("")
+        lignes.append("*" + str(reste) + " mission(s) de plus (journal complet : "
+                      "data/suivi-optimus.jsonl).")
+    return lignes + [""]
+
+
+def composer_bilan_journees(evenements):
+    """Compose le tableau BILAN PAR JOURNEE (une ligne par jour de travail).
+
+    Repond a la demande du createur du 2026-09-16 : "ce qui a ete fait depuis ce
+    matin et les jours precedents". Une journee = ses missions FINIES, ses
+    evenements, ses portes, ses fichiers et ses themes -- derive de la trace,
+    jamais d'une saisie parallele.
+    """
+    journees = {}
+    for evenement in evenements:
+        date = evenement.get("date", "")
+        if " " not in date:
+            continue
+        jour = date.split(" ")[0]
+        journee = journees.setdefault(jour, {
+            "missions_finies": set(),
+            "evenements": 0,
+            "portes": [],
+            "fichiers": [],
+            "themes": [],
+        })
+        journee["evenements"] += 1
+        if evenement.get("action") == "fin" and evenement.get("mission"):
+            journee["missions_finies"].add(evenement["mission"])
+        theme = evenement.get("theme", "")
+        if theme and theme not in journee["themes"]:
+            journee["themes"].append(theme)
+        for porte in evenement.get("portes", ()) or ():
+            if porte not in journee["portes"]:
+                journee["portes"].append(porte)
+        for fichier in evenement.get("fichiers", ()) or ():
+            if fichier not in journee["fichiers"]:
+                journee["fichiers"].append(fichier)
+    lignes = ["## Bilan par journee", ""]
+    if not journees:
+        return lignes + ["(aucune journee tracee)", ""]
+    lignes += [
+        "| Jour | Missions finies | Evenements | Portes | Fichiers | Themes |",
+        "|---|---|---|---|---|---|",
+    ]
+    for jour in sorted(journees, reverse=True)[:LIMITE_JOURS]:
+        journee = journees[jour]
+        lignes.append(vers_ascii("| " + " | ".join([
+            jour,
+            str(len(journee["missions_finies"])),
+            str(journee["evenements"]),
+            str(len(journee["portes"])),
+            str(len(journee["fichiers"])),
+            lister_cellule(journee["themes"], 160),
+        ]) + " |"))
+    return lignes + [""]
+
+
+def lire_attente_pilote(chemin_file):
+    """Retourne les ids des missions en attente/en cours dans la file du pilote."""
+    import json
+    try:
+        with open(str(chemin_file), "r", encoding="utf-8") as flux:
+            file_missions = json.load(flux)
+    except (OSError, ValueError):
+        return []
+    return [m.get("id", "") for m in file_missions.get("missions", [])
+            if m.get("statut") in ("en-attente", "en-cours") and m.get("id")]
+
+
+def lire_attente_journal(chemin_journal):
+    """Retourne les ids mission-creee sans mission-terminee (file Optimus)."""
+    import json
+    try:
+        with open(str(chemin_journal), "r", encoding="utf-8") as flux:
+            lignes = flux.readlines()
+    except OSError:
+        return []
+    crees, terminees = [], set()
+    for ligne in lignes:
+        ligne = ligne.strip()
+        if not ligne:
+            continue
+        try:
+            e = json.loads(ligne)
+        except ValueError:
+            continue
+        if e.get("type") == "mission-creee" and e.get("id"):
+            crees.append(e["id"])
+        elif e.get("type") == "mission-terminee" and e.get("id"):
+            terminees.add(e["id"])
+    return [i for i in crees if i not in terminees]
+
+
+def compter_missions_finies(evenements):
+    """Compte les missions qui portent une FIN -- pas celles qui sont PRESENTES.
+
+    Correction MO-139 : l'ancien compte rassemblait tout identifiant vu dans la
+    trace, donc une mission ouverte (debut sans fin) etait annoncee "finie". Le
+    fait qui dit une fin est l'evenement `fin`, rien d'autre.
+    """
+    return len({e.get("mission", "") for e in evenements
+                if e.get("action") == "fin" and e.get("mission")})
+
+
+def composer_vue(evenements, actions, attente_pilote=None):
+    """Retourne les lignes du fichier markdown (entete + lectures + sections par action).
+
+    Ordre ferme des sections d'action : celui des actions (constants.ACTIONS).
+    Chaque section est un TABLEAU dedie a SON action, present meme vide.
+    Les deux tableaux de LECTURE DU TRAVAIL (journees, missions) viennent en
+    tete : le createur ouvre la vue pour savoir ce qui a ete fait.
+    """
+    par_action = {action: [] for action in actions}
+    for evenement in evenements:
+        par_action.setdefault(evenement.get("action", "?"), []).append(evenement)
+
+    # Derniere mise a jour : date de la derniere action ( premiere entree en ordre chronologique inverse )
+    derniere_date = ""
+    if evenements:
+        dates = [e.get("date", "") for e in evenements if e.get("date")]
+        if dates:
+            derniere_date = max(dates)
+
+    # UNE LIGNE, UNE POPULATION, ET ELLE EST NOMMEE (EO-480, audit createur
+    # 2026-09-30). Le defaut mesure n etait pas un chiffre faux : c etait TROIS
+    # populations sur une seule ligne, sans que rien ne dise laquelle parle.
+    #   - "tracees" et "finies" comptaient le JOURNAL DE SUIVI (data/suivi-optimus.jsonl) ;
+    #   - "en attente" comptait la FILE DU PILOTE, puis un AUTRE journal
+    #     (historiques-missions-optimus.jsonl).
+    # Les deux premiers 455 se lisaient bien -- et le 0 de la troisieme column
+    # venait d ailleurs, donc ne les contredisait pas. Le createur lisait "455
+    # finies" et "0 en attente" et n avait aucun moyen de savoir que ces deux
+    # chiffres ne parlaient pas du meme livre. Mesure : 34 missions de la file
+    # (MO-252...MO-283) ne sont dans AUCUNE des trois colonnes -- ni tracees, ni
+    # finies, ni en attente.
+    #
+    # LA REPARATION : chaque chiffre porte DESORMAIS le nom de sa source, et la
+    # ligne dit lequel parle. Rien n est fusionne, rien n est masque -- deux
+    # populations LEGITIMEMENT differentes (le travail fait, le travail a faire)
+    # restent deux colonnes, mais chacune nomme ce qu elle compte.
+    missions_en_attente = []
+    for mission_id in (attente_pilote or []):
+        if mission_id not in missions_en_attente:
+            missions_en_attente.append(mission_id)
+
+    # TRACEES et FINIES : le journal de suivi, et RIEN d autre. C est le livre
+    # ou chaque mission passe par un `debut` et un `fin` (ou un `report`).
+    missions_tracees = {e.get("mission", "") for e in evenements if e.get("mission")}
+
+    # OUVERTES = tracees - finies, calcule PAR SOUSTRACTION et non par un
+    # parcours de plus. C est le chiffre que le createur cherchait sans le
+    # trouver : si la ligne affiche tracees = finies + ouvertes, elle se verifie
+    # elle-meme, et une mission reportee (EO-190 : un `report` neutralise le
+    # `debut` SANS produire de `fin`) ne peut plus disparaitre entre les deux
+    # colonnes -- elle passe desormais dans `ouvertes`, ce qui est vrai.
+    missions_finies = compter_missions_finies(evenements)
+    missions_ouvertes = max(len(missions_tracees) - missions_finies, 0)
+
+    # CARTE D'IDENTITE (MO-235) : depuis le deplacement, la vue vit dans
+    # `_operateur/optimus-prime/`, que le controle `verifier-cartes-identite`
+    # SCANNE -- un document sans carte y est un ECART. La carte est donc EMISE par
+    # le generateur : le fichier n'est jamais edite a la main, une carte posee a
+    # la main serait perdue a la regeneration suivante.
+    lignes = [
+        "---",
+        "identite:",
+        "  type: journal",
+        "  appartient_a: optimus-prime",
+        "  commun: false",
+        "---",
+        "",
+        "# Suivi d'optimus-prime (v3)",
+        "",
+        "",
+        "| Derniere mise a jour | Evenements | Missions tracees | Missions finies | Missions ouvertes | File du pilote |",
+        "|---|---|---|---|---|---|",
+        "| " + (derniere_date or "-") + " | " + str(len(evenements)) + " | "
+        + str(len(missions_tracees)) + " | " + str(missions_finies) + " | "
+        + str(missions_ouvertes) + " | " + str(len(missions_en_attente)) + " |",
+        "",
+        "> LES COLONNES NE PARLENT PAS DU MEME LIVRE (audit createur 2026-09-30) :",
+        ">   - tracees / finies / ouvertes : le JOURNAL DE SUIVI, ou chaque mission passe",
+        ">     par un `debut` et un `fin` (ou un `report`, EO-190). Une mission REPORTEE",
+        ">     n est ni terminee ni a faire : elle compte dans `ouvertes`, pas dans",
+        ">     `file du pilote` -- les deux chiffres disent deux choses vraies.",
+        ">   - file du pilote : les missions en-attente ou en-cours de la FILE, donc le",
+        ">     travail A FAIRE. Vaut 0 quand aucune mission n attend.",
+        ">   INVARIANT A VERIFIER : tracees = finies + ouvertes. S il ne tient pas, la vue",
+        ">   est fausse et le fichier le montre sans qu il faille le deviner.",
+        "",
+        "> VISUEL GENERE depuis data/suivi-optimus.jsonl -- jamais edite a la main.",
+        "> Regenerer : python3 matrice/data/outils/suivi-optimus/main.py vue",
+        "> Etancheite : le cameleon n'accede JAMAIS a cette trace -- elle vit dans la zone privee",
+        "> _operateur/optimus-prime/ (invisible PAR CONSTRUCTION, MO-235).",
+        "> optimus reste INVISIBLE de la Matrice : pas d'encart dans le journal",
+        "> multi-encarts, SON fichier est la seule vue de son travail.",
+        "",
+        "Flux : optimus (via l'outil suivi-optimus) -> data/suivi-optimus.jsonl -> VUE lecture seule",
+        "",
+    ]
+    lignes.extend(composer_bilan_journees(evenements))
+    lignes.extend(composer_recap_missions(evenements))
+    for action in actions:
+        lignes.extend(composer_section(action, par_action[action]))
+    return lignes

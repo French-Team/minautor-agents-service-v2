@@ -1,0 +1,70 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "optimus-prime",
+    "nom": "PREPARATION",
+    "description": "Phase de discussion & preparation avant outillage : cadrer, inventorier, dessiner, prioriser avec le createur. Declenchee par [preparation]. Voir _operateur/optimus-prime/preparation/README.md"
+  },
+  "theme": {
+    "nom": "PREPARATION",
+    "but": "Ouvrir un espace dedie a la DISCUSSION (pas au code) : inventorier les outils natifs, dessiner leurs versions ameliorees non configurables, prioriser la serie, valider le plan avant de lancer le 1er CREER-OUTIL",
+    "redirects": [
+      {
+        "besoin": "Ouvrir l'espace de discussion",
+        "action": "procedure",
+        "etapes": [
+          "Poser l'intention du createur en 1 phrase : 'On veut des outils natifs ameliores, non configurables, meilleurs que les natifs LLM'",
+          "Creer/ouvrir _operateur/optimus-prime/preparation/journal-preparation.md (entrees datees, discussion brute, jamais de code)",
+          "Noter debut suivi-optimus --theme PREPARATION (marbre) + vue",
+          "Annoncer : 'Mode PREPARATION : on discute, on ne code pas encore'"
+        ],
+        "regle": "PREPARATION = discussion seule. Aucun fichier matrice modifie hors preparation/ + suivi-optimus. Le code attend le GO createur."
+      },
+      {
+        "besoin": "Inventorier les outils natifs (existant)",
+        "action": "procedure",
+        "etapes": [
+          "Lister les outils natifs LLM actuels (read_files, write_file, str_replace, run_terminal_command, code_search, glob, list_directory, web_search, gravity_index, etc.)",
+          "Pour chacun : but reel, limites vues (configurable, lent, non deterministe, pas de porte unique, pas de preuve)",
+          "Noter dans journal-preparation.md section 'INVENTAIRE' (tableau : outil natif | usage | limite | piste d'amelioration)",
+          "Taguer friction bdd-frictions si manque detecte : 'Quand je dois <action>, l'outil natif <X> <limite>, car <cause>'"
+        ],
+        "regle": "Pas de jugement sans preuve : chaque limite = exemple reel ou lecon L-007 (outil natif produit, matrice possede et verifie)."
+      },
+      {
+        "besoin": "Dessiner les outils natifs ameliores (cibles)",
+        "action": "procedure",
+        "etapes": [
+          "Pour chaque outil natif prioritaire, dessiner sa version Matrice : nom (tiret), 1 phrase de besoin, verbes (1-3 max), garanties (porte unique, atomique, SHA, ASCII, perimetre, lecture/ecriture verrouillee)",
+          "Preciser : pourquoi meilleur que le natif (non configurable, deterministe, verifie, trace en BDD, invisible cameleon si prive)",
+          "Noter dans journal-preparation.md section 'CIBLES' (fiche par outil : natif -> ameliore | verbes | gagne)",
+          "Classer : SYSTEME vs PRIVE (cockpit) vs PILOTE (flux)"
+        ],
+        "regle": "Un outil ameliore = UN besoin, 0 config. S'il est configurable, ce n'est pas un natif ameliore."
+      },
+      {
+        "besoin": "Prioriser & sequencer la serie",
+        "action": "procedure",
+        "etapes": [
+          "Ordonner les cibles par dependance (BDD d'abord, puis pilote, puis routines, puis cockpit)",
+          "Choisir la serie : 1 outil a la fois (serie stricte), ordre propose + raison",
+          "Definir critere GO par outil : preuve avant/apres chiffree (ms, lignes, couverture)",
+          "Noter dans journal-preparation.md section 'SERIE' (liste ordonnee + ordre = vrac futur)"
+        ],
+        "regle": "Jamais 2 outils en parallele. La serie EST le plan : elle devient les missions [mission] au vrac apres validation."
+      },
+      {
+        "besoin": "Clore la preparation (validation createur)",
+        "action": "procedure",
+        "etapes": [
+          "Presenter au createur : inventaire + cibles + serie (resume 10 lignes max)",
+          "Attendre GO explicite : createur valide, ajuste ou refuse (son mot fait foi)",
+          "Si GO : verser 1 [mission] par outil de la serie au vrac (entonnoir deposer), dans l'ordre priorise",
+          "Noter fin suivi-optimus --detail '<nb outils> cibles validees, serie posee' + vue + lecon si regle generale"
+        ],
+        "regle": "Pas de code avant GO. La fin de PREPARATION = des missions au vrac, pas des fichiers modifies."
+      }
+    ]
+  },
+  "fin": { "type": "lien", "vers": "../fins.json", "case": "fin-persistant" }
+}

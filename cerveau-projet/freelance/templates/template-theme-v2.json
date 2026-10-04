@@ -1,0 +1,46 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "<agent>",
+    "nom": "<NOM_THEME>",
+    "description": "<Description du theme>"
+  },
+  "theme": {
+    "nom": "<NOM_THEME>",
+    "but": "<Objectif du theme>",
+    "redirects": [
+      {
+        "besoin": "<Besoin concret 1>",
+        "action": "procedure",
+        "description": "<Description du besoin>",
+        "etapes": [
+          "<Etape 1>",
+          "<Etape 2>",
+          "<Etape 3>"
+        ]
+      },
+      {
+        "besoin": "<Besoin concret 2>",
+        "action": "redirection",
+        "vers": {
+          "type": "outil",
+          "commande": "<nom-outil>",
+          "parametres": {}
+        }
+      },
+      {
+        "besoin": "<Besoin concret 3>",
+        "action": "procedure",
+        "etapes": [
+          "<Etape 1>",
+          "<Etape 2>"
+        ]
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-theme"
+  }
+}

@@ -1,0 +1,98 @@
+"""Fonctions simples de la categorie editer : une seule tache chacune."""
+from commun import (corriger_contenu, editer_atomique, lire_contenu_source,
+                    refus_zone_sources, resoudre_chemin, verifier_ascii)
+
+
+def executer_editer(fichier, ancien, nouveau, ancien_fichier, nouveau_fichier,
+                    textes_bit_exacts=False):
+    """Execute l'edition. Retourne code 0/1/2.
+
+    `textes_bit_exacts` (MO-376) : les DEUX textes arrivent deja RESUMES (transport
+    BASE64) et ne passent par AUCUNE heuristique -- ni `@fichier`, ni lecture de
+    fichier. Sans ce drapeau, un texte hostile qui COMMENCE par une arobase serait
+    relu comme un chemin, et la garantie bit-exacte tomberait EXACTEMENT sur les
+    cas qui l exigent.
+    """
+    # LA ZONE DES SOURCES (docs/) est LECTURE SEULE : le refus vient AVANT la
+    # correction ASCII, comme pour `ecrire` (MO-377).
+    motif_zone = refus_zone_sources(fichier)
+    if motif_zone is not None:
+        print(motif_zone)
+        return 2
+    # Resout ancien
+    try:
+        if textes_bit_exacts:
+            ancien_texte = ancien
+        elif ancien_fichier:
+            # ancien depuis fichier
+            ancien_texte = lire_contenu_source("", ancien_fichier)
+        elif ancien.startswith("@"):
+            # @file anti-heredoc
+            ancien_texte = lire_contenu_source(ancien, "")
+        else:
+            ancien_texte = ancien
+    except (FileNotFoundError, ValueError, OSError) as e:
+        print("REFUS : ancien : " + str(e))
+        return 2
+
+    # Resout nouveau (peut etre vide = suppression)
+    try:
+        if textes_bit_exacts:
+            nouveau_texte = nouveau
+        elif nouveau_fichier:
+            nouveau_texte = lire_contenu_source("", nouveau_fichier)
+        elif nouveau and nouveau.startswith("@") and nouveau.strip().startswith("@"):
+            # Si nouveau est @file et pas un contenu commencant par @ voulu
+            # Heuristique : si le fichier @ existe, on le lit, sinon on garde le texte tel quel
+            try:
+                nouveau_texte = lire_contenu_source(nouveau, "")
+            except FileNotFoundError:
+                nouveau_texte = nouveau
+        else:
+            nouveau_texte = nouveau
+    except (FileNotFoundError, ValueError, OSError) as e:
+        print("REFUS : nouveau : " + str(e))
+        return 2
+
+    if not ancien_texte:
+        print("REFUS : --ancien vide (rien a remplacer).")
+        return 2
+
+    # LE PASSAGE OBLIGE CORRIGE (MO-210) : la porte corrige ce que l'AGENT ecrit
+    # -- le fragment `nouveau`. Ce qui existait deja dans la cible n'est pas
+    # reecrit ici : c'est le metier de la routine de maintenance (corriger-ascii),
+    # qui seule a le droit de repasser sur un fichier entier.
+    nouveau_texte, refus = corriger_contenu(nouveau_texte, fichier)
+    if refus:
+        print(refus)
+        return 2
+
+    code, sha_avant, sha_apres, bak_path, msg_val = editer_atomique(fichier, ancien_texte, nouveau_texte)
+
+    if code == 2:
+        print(msg_val)
+        return 2
+    if sha_avant:
+        print("SHA avant : " + sha_avant[:16] + "...")
+    if sha_apres:
+        print("SHA apres : " + sha_apres[:16] + "...")
+    if bak_path:
+        print("Backup : " + bak_path.name)
+    try:
+        chemin_abs = resoudre_chemin(fichier)
+        nb, lignes = verifier_ascii(chemin_abs)
+        if nb > 0:
+            print("[ASCII] " + str(nb) + " non-ASCII lignes " + ",".join(str(x) for x in lignes[:5]) + ("..." if len(lignes) > 5 else ""))
+        else:
+            print("[ASCII] 0 non-ASCII")
+    except (OSError, RuntimeError):
+        pass
+    print(msg_val)
+    if code == 1:
+        # EO-129 : meme contrat que `ecrire` -- l'echec de validation laisse la
+        # cible INTACTE, il n'y a rien a reverts.
+        print("REFUS (code 1) : RIEN n'a ete ecrit -- la cible est INTACTE"
+              + (", .bak de la tentative : " + bak_path.name if bak_path else "") + ".")
+        return 1
+    print("OK : " + fichier + " edite (1 occurrence)")
+    return 0

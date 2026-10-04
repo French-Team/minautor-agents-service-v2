@@ -1,0 +1,35 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "forge",
+    "nom": "LIRE",
+    "description": "Consulter les outils existants, les specs"
+  },
+  "theme": {
+    "nom": "LIRE",
+    "but": "Accéder à la connaissance des outils",
+    "redirects": [
+      {
+        "besoin": "Lire un outil existant",
+        "action": "procedure",
+        "etapes": [
+          "Identifier l'emplacement (tools-commun/ ou <agent>/tools/)",
+          "Lire le .md (contrat)",
+          "Lire le .py (code)",
+          "Lire le -data.json (données)"
+        ]
+      },
+      {
+        "besoin": "Voir tous les outils disponibles",
+        "action": "redirection",
+        "vers": {"type": "commande", "commande": "ls cerveau-projet/freelance/tools-commun/"}
+      },
+      {
+        "besoin": "Consulter les leçons d'outils",
+        "action": "redirection",
+        "vers": {"type": "outil", "commande": "consulter-lecons", "parametres": {"agent": "forge", "domaine": "outils"}}
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

@@ -1,0 +1,40 @@
+{
+  "nom": "nr-edith",
+  "description": "Suite de non-regression de l'agent edith - fichiers d'identite + outils communs (non mutant)",
+  "actif": true,
+  "perimetre": [
+    "cerveau-projet/freelance/edith"
+  ],
+  "tests": [
+    {
+      "nom": "fiche-edith-existe-et-non-vide",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {
+          "chemin": "cerveau-projet/freelance/edith/edith.md",
+          "doit_exister": true
+        }
+      ]
+    },
+    {
+      "nom": "corrections-edith-present",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {
+          "chemin": "cerveau-projet/freelance/edith/corrections.md",
+          "doit_exister": true
+        }
+      ]
+    },
+    {
+      "nom": "arbre-edith-json-valide",
+      "commande": "python3 -c \"import json,sys; a=json.load(open(r'{racine}/cerveau-projet/freelance/edith/parcours/arbre-edith.json', encoding='utf-8')); assert a['racine']['branches']; print('ARBRE OK')\"",
+      "rc_attendu": 0,
+      "sortie_contient": [
+        "ARBRE OK"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "forge",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-forge",
+    "agent": "forge",
+    "description": "Arbre des décisions de Forge - constructeur d'outils v2. L'agent choisit UN THÈME au démarrage.",
+    "regles": {
+      "D1": "Chaque branche (thème) mène à des catégories, qui mènent aux cases d'exécution.",
+      "D5": "Les cases d'un thème sont des REDIRECTIONS.",
+      "D6": "L'agent lance UNE SIMPLE COMMANDE qui cache PLUSIEURS outils.",
+      "D3": "Les passages d'un fichier à l'autre sont TRANSPARENTS."
+    }
+  },
+  "racine": {
+    "titre": "Choisir un thème",
+    "type": "question",
+    "question": "Quel thème ?",
+    "branches": [
+      {"reponse": "CREER", "description": "Créer un nouvel outil v2", "vers": "theme-creer.json"},
+      {"reponse": "LIRE", "description": "Consulter les outils existants, les specs", "vers": "theme-lire.json"},
+      {"reponse": "VALIDER", "description": "Vérifier la conformité d'un outil créé", "vers": "theme-valider.json"},
+      {"reponse": "COORDONNER", "description": "Inter-round, retour à Stark", "vers": "theme-coordonner.json"},
+      {"reponse": "EXPLORER", "description": "Diagnostiquer un problème d'outil", "vers": "theme-explorer.json"}
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisées"
+  }
+}

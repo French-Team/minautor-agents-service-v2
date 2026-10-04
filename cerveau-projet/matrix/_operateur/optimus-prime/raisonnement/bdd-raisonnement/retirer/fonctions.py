@@ -1,0 +1,94 @@
+"""Fonctions simples de la categorie retirer : une seule tache chacune.
+
+POURQUOI CE VERBE (EO-537, mesure du 2026-09-30) : `corriger` ne fait que
+REATTRIBUER les tags. Un segment dont l'EXISTENCE MEMME est fautive -- un double
+depot, une segment deposee par erreur -- ne pouvait donc pas disparaitre : la
+porte n'avait que ajouter / lire / corriger / verifier. Mesure reelle : le
+script de depot du round a ete relance, et cinq segments sont apparus deux fois
+(RS-038 a RS-042, contenu identique a RS-033 a RS-037). Ils ont du etre MARQUES
+par `corriger`, faute de mieux, et ils restent la, charges, dans une BDD de 42
+entrees dont cinq sont fausses.
+
+CE QUE CE VERBE FAIT, ET CE QU IL NE FAIT PAS. Il retire UNE entree de la liste
+et la recopie ENTIEREMENT dans `retraits`, avec la date du retrait et son motif.
+Rien n'est efface en silence (lecon L-055) : un retrait sans temoin serait un
+effacement, et un effacement ne se repare pas. Concretement, l'entree retiree
+conserve son id, sa date, son texte, ses tags et sa source -- donc un retrait
+reste REVERSIBLE, exactement comme `bdd-modifications.retirer` (EO-175).
+
+L'AMBIGUITE EST REFUSEE, jamais tranchee. Le generateur d ids rend les ids
+UNIQUE (un compteur monotone), donc l'ambiguite est ici un ETAT DEGRADE de la
+BDD : deux entrees qui portent le meme id. La Deviner supprimerait la mauvaise
+ligne ; l'appelant desambigue avec --index. Le refus Nomme les deux dates, pour
+que le choix soit informatif et non un pari.
+
+LE COMPTEUR N'EST JAMAIS REMIS EN ARRIERE. Un id retire ne revient pas : s'il
+revenirait, une trace qui cite RS-038 designerait tot un AUTRE segment, et le
+temin de retrait deviendrait un mensonge. Le trou apparent dans la numerotation
+est donc la preuve du retrait, pas un oubli.
+"""
+from datetime import datetime
+
+# LE NOM DU CHAMP DE RETRAIT vit ICI et il est relu par le maillon de
+# non-regression : une seule forme, ecrite et lue au meme endroit (M-076).
+CHAMP_RETRAITS = "retraits"
+
+
+def positions_du_id(donnees, identifiant):
+    """Les positions des entrees qui portent CET identifiant (0, 1 ou 2+)."""
+    return [position for position, entree in enumerate(donnees.get("segments", []))
+            if entree.get("id") == identifiant]
+
+
+def choisir_position(positions, identifiant, index_demande=""):
+    """(code, position, message) : 0 = une seule position designee.
+
+    Meme discipline que le choix de position de bdd-modifications : l'ambiguite
+    se REFUSE et se desambigue, elle ne se devine jamais.
+    """
+    if not positions:
+        return 1, -1, ("Aucune entree ne porte l id " + str(identifiant)
+                       + " dans la BDD -- rien a retirer.")
+    if index_demande:
+        try:
+            numero = int(index_demande)
+        except ValueError:
+            return 2, -1, ("--index illisible : " + repr(index_demande)
+                           + " (attendu un entier de 1 a " + str(len(positions)) + ").")
+        if numero < 1 or numero > len(positions):
+            return 2, -1, ("--index hors plage : " + str(numero) + " (candidats : "
+                           + str(len(positions)) + ").")
+        return 0, positions[numero - 1], ""
+    if len(positions) > 1:
+        return 2, -1, ("Id AMBIGU : " + str(len(positions)) + " entrees portent "
+                       + str(identifiant) + " (etat degrade de la BDD) -- desambigu"
+                       "iser avec --index <1.." + str(len(positions)) + ">.")
+    return 0, positions[0], ""
+
+
+def retirer_entree(donnees, position, motif=""):
+    """Retire UNE entree de la liste et trace le retrait. (code, message).
+
+    L'entree retiree n'est PAS perdue : elle est recopiee ENTIEREMENT dans
+    `retraits`, avec la date du retrait et son motif. Le compteur n'est PAS
+    decremente (voir le docstring) : un id retire ne revient jamais.
+    """
+    entrees = donnees.get("segments", [])
+    if position < 0 or position >= len(entrees):
+        return 2, ("Position hors plage : " + str(position) + " (la BDD porte "
+                   + str(len(entrees)) + " entree(s)).")
+    entree = entrees[position]
+    retiree = dict(entree)
+    del entrees[position]
+    temoin = {
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "motif": motif,
+        "entree": retiree,
+    }
+    donnees.setdefault(CHAMP_RETRAITS, []).append(temoin)
+    apercu = str(retiree.get("segment", ""))[:70]
+    return 0, ("Segment " + str(retiree.get("id", "?")) + " RETIRE et trace dans "
+               + CHAMP_RETRAITS + " (reversible) -- enleve de la liste, son texte "
+               "survit entier ; compteur NON remis en arriere, donc cet id ne "
+               "reviendra pas" + (" ; motif : " + motif if motif else "")
+               + ".\n  Texte conserve : " + apercu)

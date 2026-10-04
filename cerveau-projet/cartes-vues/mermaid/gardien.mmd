@@ -1,0 +1,59 @@
+%% Carte de decision de gardien (parcours v0.2.4)
+flowchart TD
+    START(["Debut"]) --> c0
+    c0["RELIRE OBLIGATOIRE : corrections puis fiche"]
+    c0b{"Confirmation : as-tu lu ta fiche et tes corrections ?"}
+    c0c["CONTEXTE OBLIGATOIRE : activite recente des agents"]
+    c0g["GATE BON AGENT : verifier que tu es LE BON AGENT"]
+    c0ga{"GATE : es-tu le bon agent ?"}
+    c0h(["FIN - STOP : pas le bon agent, reactiver Cerberus"])
+    c1{"Mission"}
+    c2["Verifier l integrite du marbre (proteger-verrou-marbre --tous)"]
+    c29{"Mission hors parcours"}
+    c29a(["FIN - Delegation"])
+    c29b{"Besoin d un outil ?"}
+    c29c["Creer l outil temporaire (generateurs-outil-temporaire)"]
+    c29d(["FIN - Outil temporaire"])
+    c29e(["FIN - Signaler le besoin"])
+    c2a{"Marbre intact ?"}
+    c2b["Signaler la violation (rapport + activer l agent responsable)"]
+    c3["LIRE la raison de la mission (zone concernee)"]
+    c4["PROPOSER la modification (zone + raison + impact)"]
+    c5{"Validation utilisateur ?"}
+    c6["EXECUTER proteger-modifier-marbre (autorisation utilisateur)"]
+    c7["Lecon + enregistrer mes usages"]
+    c8["Enregistrer mes usages d outils"]
+    c9(["FIN - Activer Janus (second controle)"])
+    cU1{"Probleme avec un outil en cours de mission ?"}
+    cU2["COMPRENDRE L OUTIL : lire le .md puis generateurs-commande ou combo"]
+    cU3(["FIN - Reprendre ma mission"])
+    c0 --> c0b
+    c0b -- "OUI" --> c0g
+    c0b -- "NON" --> c0
+    c0c --> cU1
+    c0g --> c0ga
+    c0ga -- "OUI" --> c0c
+    c0ga -- "NON" --> c0h
+    c1 -- "verifier" --> c2
+    c1 -- "proposer" --> c3
+    c1 -- "autre" --> c29
+    c2 --> c2a
+    c29 -- "deleguer" --> c29a
+    c29 -- "outil" --> c29b
+    c29 -- "signaler" --> c29e
+    c29b -- "OUI" --> c29c
+    c29b -- "NON" --> c29e
+    c29c --> c29d
+    c2a -- "OUI" --> c9
+    c2a -- "NON" --> c2b
+    c2b --> c7
+    c3 --> c4
+    c4 --> c5
+    c5 -- "OUI" --> c6
+    c5 -- "NON" --> c7
+    c6 --> c7
+    c7 --> c8
+    c8 --> c9
+    cU1 -- "OUI" --> cU2
+    cU1 -- "NON" --> c1
+    cU2 --> cU3

@@ -1,0 +1,33 @@
+{
+  "identite": {
+    "type": "arbre",
+    "appartient_a": "<agent>",
+    "version": "0.1.0",
+    "commun": false
+  },
+  "arbre": {
+    "nom": "arbre-<agent>",
+    "agent": "<agent>",
+    "description": "Arbre des decisions de <NomMarvel> - <Role>. L'agent choisit UN THEME au demarrage.",
+    "regles": {
+      "D1": "Chaque branche (theme) menent a des categories, qui menent aux cases d'execution.",
+      "D5": "Les cases d'un theme sont des REDIRECTIONS.",
+      "D6": "L'agent lance UNE SIMPLE COMMANDE qui cache PLUSIEURS outils.",
+      "D3": "Les passages d'un fichier a l'autre sont TRANSPARENTS."
+    }
+  },
+  "racine": {
+    "titre": "Choisir un theme",
+    "type": "question",
+    "question": "Quel theme ?",
+    "branches": [
+      {"reponse": "<THEME_PRINCIPAL>", "description": "<Description>", "vers": "theme-<theme>.json"},
+      {"reponse": "LIRE", "description": "Consulter les fiches, les lecons, l'activite", "vers": "theme-lire.json"},
+      {"reponse": "COORDONNER", "description": "Inter-round, retour a Stark", "vers": "theme-coordonner.json"}
+    ]
+  },
+  "fins": {
+    "fichier": "fins.json",
+    "description": "Toutes les fins possibles centralisees"
+  }
+}

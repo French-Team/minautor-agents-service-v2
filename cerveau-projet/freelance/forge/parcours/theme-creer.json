@@ -1,0 +1,65 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "forge",
+    "nom": "CREER",
+    "description": "Creer un nouvel outil v2"
+  },
+  "theme": {
+    "nom": "CREER",
+    "but": "Construire un outil complet et operationnel",
+    "redirects": [
+      {
+        "besoin": "Determiner dedie ou commun",
+        "action": "procedure",
+        "etapes": [
+          "Si l'outil est pour un agent specifique -> <agent>/tools/<outil>/",
+          "Si l'outil est partage par tous -> tools-commun/<outil>/"
+        ]
+      },
+      {
+        "besoin": "Creer la structure de l'outil",
+        "action": "procedure",
+        "etapes": [
+          "Creer le dossier <outil>/",
+          "Creer <outil>.md (contrat, D7)",
+          "Creer <outil>.py (script)",
+          "Creer <outil>-data.json (donnees editables, D15)"
+        ]
+      },
+      {
+        "besoin": "Ecrire le formulaire (D7)",
+        "action": "procedure",
+        "etapes": [
+          "Definir les champs (nom, type, requis, defaut, description)",
+          "Ecrire le JSON du formulaire",
+          "Documenter chaque champ dans le .md"
+        ]
+      },
+      {
+        "besoin": "Separer code et donnees (D15)",
+        "action": "procedure",
+        "etapes": [
+          "Aucune valeur en dur dans le .py",
+          "Tout dans le -data.json",
+          "Le .py lit le -data.json au demarrage"
+        ]
+      },
+      {
+        "besoin": "Tester l'outil",
+        "action": "procedure",
+        "etapes": [
+          "Lancer l'outil avec des donnees test",
+          "Verifier la sortie",
+          "Verifier les erreurs"
+        ]
+      },
+      {
+        "besoin": "VALIDER l'outil cree",
+        "action": "redirection",
+        "vers": {"type": "theme", "fichier": "theme-valider.json", "besoin": "Valider un outil cree"}
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

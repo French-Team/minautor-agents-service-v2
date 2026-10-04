@@ -1,0 +1,160 @@
+"""Fonctions simples de l'echelon 0-1 : deposer au vrac, proposer le type.
+
+Une seule tache chacune (convention-architecture-outils).
+"""
+try:
+    from listes import (CHAMP_AUTO_AXES, CHAMP_AUTO_VALIDATION,
+                       CHAMP_AUTO_VALIDATION_TEXTE, CHAMP_GRAVITE,
+                       CHAMP_NIVEAU, CHAMP_SOURCE_TRACE,
+                       CHAMP_TYPE_SOURCE, GRAVITE_DEFAUT, MOTS_CLES_TYPES,
+                       NIVEAU_DEFAUT, PREFIXE_ITEM, URGENCE_DEFAUT,
+                       VERDICT_NON, CHAMP_TYPE_PROPOSE, MOT_CLE_DECLARE)
+    from mots import mot_parcourt, mots_de
+    from roles import CHAMP_ROLE, CHAMP_TITRE
+    from stockage import empreinte_texte, horodater, texte_juge
+except ImportError:  # importe comme paquet (depuis le pilote) : chemins complets
+    from entonnoir.listes import (CHAMP_AUTO_AXES, CHAMP_AUTO_VALIDATION,
+                                  CHAMP_AUTO_VALIDATION_TEXTE,
+                                  CHAMP_GRAVITE, CHAMP_NIVEAU, CHAMP_SOURCE_TRACE,
+                                  CHAMP_TYPE_SOURCE, GRAVITE_DEFAUT, MOTS_CLES_TYPES,
+                                  NIVEAU_DEFAUT, PREFIXE_ITEM, URGENCE_DEFAUT,
+                                  VERDICT_NON, CHAMP_TYPE_PROPOSE, MOT_CLE_DECLARE)
+    from entonnoir.mots import mot_parcourt, mots_de
+    from entonnoir.roles import CHAMP_ROLE, CHAMP_TITRE
+    from entonnoir.stockage import empreinte_texte, horodater, texte_juge
+
+# DOUBLON POSSIBLE (MO-243, constat N2 de l audit MO-220) : au moment ou un item
+# NAIT, l entonnoir ne disait RIEN des items proches -- mesure du 2026-09-19 : le
+# createur a depose TROIS fois la meme demande (EO-264, EO-271, EO-274) sans
+# qu aucune porte ne le signale. La regle est SIMPLE et DITE : deux demandes se
+# ressemblent quand leurs themes partagent au moins SEUIL_PROCHES mots
+# significatifs. Aucune similarite floue, et le verdict NOMME les mots communs.
+MOTS_VIDES_THEME = ("pilote", "optimus", "matrice", "agent", "mission", "item", "suivi",
+                    "elle", "cette", "dans", "pour", "avec", "sans", "plus")
+# SEUIL MESURE (2026-09-19, 10 items au vivant) : a DEUX mots communs, ZERO paire --
+# le triplement de la meme demande (EO-264, EO-271, EO-274) serait passe INAPERCU ; a UN
+# mot, DEUX paires seulement, dont EO-264 nomme pour la recurrence. Un doute se dit, la
+# porte ne bloque pas, et le verdict NOMME le mot commun : le seuil est UN.
+SEUIL_PROCHES = 1
+
+
+def _mots_significatifs(texte):
+    """Les mots qui COMPTENT dans un theme : quatre lettres ou plus, hors mots vides."""
+    return set(mot for mot in mots_de(str(texte))
+               if len(mot) >= 4 and mot not in MOTS_VIDES_THEME)
+
+
+def items_de_etat(etat):
+    """Tous les items visibles d un etat d entonnoir : le vrac et toutes les files."""
+    items = list(etat.get("vrac", []) or [])
+    for contenu in (etat.get("files", {}) or {}).values():
+        if isinstance(contenu, list):
+            items.extend(contenu)
+    return items
+
+
+def themes_proches(etat, theme):
+    """Les items dont le theme partage assez de mots avec celui qu on depose.
+
+    Rend des triplets (id, titre, mots communs) ; ne bloque JAMAIS.
+    """
+    mots = _mots_significatifs(theme)
+    if not mots:
+        return []
+    proches = []
+    for item in items_de_etat(etat):
+        communs = sorted(mots & _mots_significatifs(item.get(CHAMP_TITRE, "")))
+        if len(communs) >= SEUIL_PROCHES:
+            proches.append((item.get("id", "?"), item.get(CHAMP_TITRE, ""), communs))
+    return proches
+
+
+def deposer_vrac(etat, theme, objectif, urgence, source, role="", verdict="",
+                 axes=None, type_propose="", trace="", type_source="",
+                 gravite="", niveau=0):
+    """Depose UNE mission brute au vrac (echelon 0) et retourne son identifiant EO-XXX.
+
+    Le prefixe vient de listes.py PREFIXE_ITEM (CV-009 : chaque porte attribue
+    le prefixe depuis ses constantes, jamais recopie).
+
+    `theme` = le TITRE de la demande (texte libre) ; `role` = le ROLE de la
+    mission, optionnel au depot (une source qui sait deja quoi il s'agit le
+    donne, sinon c'est le classement qui le pose, L-061/MO-076).
+    """
+    etat["compteur"] = etat.get("compteur", 0) + 1
+    identifiant = PREFIXE_ITEM + str(etat["compteur"]).zfill(3)
+    mission = {
+        "id": identifiant,
+        CHAMP_TITRE: theme,
+        "objectif": objectif,
+        "urgence": urgence,
+        "source": source,
+        "deposee_le": horodater(),
+        # Le verdict d AUTO-VALIDATION est pose A LA CREATION (MO-175). Un verdict
+        # NON RENDU se DIT (`non`) : jamais un repli muet -- la file auto-validee
+        # ne doit recevoir que ce qui a ete declare, pas ce qui a ete oublie.
+        CHAMP_AUTO_VALIDATION: verdict or VERDICT_NON,
+        CHAMP_AUTO_AXES: axes or [],
+        # LA PROVENANCE DU VOTE (EO-491) : l empreinte du texte juge. Un item
+        # corrige plus tard pourra alors etre REJOUE, et seulement si son texte
+        # a reellement bouge depuis ce vote.
+        CHAMP_AUTO_VALIDATION_TEXTE: empreinte_texte(
+            texte_juge(theme, objectif, type_propose)),
+        # Le type est PORTE (R5) : le classement le consomme au lieu de le
+        # re-deviner, et la trace dit qui a parle (le crochet ou la table).
+        CHAMP_TYPE_PROPOSE: type_propose,
+        # L IMPORTANCE (EO-457) : l item PORTE ses deux champs des sa NAISSANCE.
+        # Une valeur absente prend le DEFAUT du domicile -- jamais un vide (un
+        # champ vide qui aurait l air renseigne est un mensonge de forme).
+        CHAMP_GRAVITE: gravite or GRAVITE_DEFAUT,
+        CHAMP_NIVEAU: niveau or NIVEAU_DEFAUT,
+    }
+    # L ORIGINE du type part avec l item (EO-192) : c est elle qui dit au
+    # classement s il a le DROIT de consommer ce type tout seul (la declaration
+    # est souveraine) ou s il doit le proposer pour qu on le confirme.
+    if type_source:
+        mission[CHAMP_TYPE_SOURCE] = type_source
+    # TRACE de provenance (F1) : son PROPRE champ, jamais le champ ferme
+    # `source`. Vide, elle n est pas posee -- un champ vide qui aurait l air
+    # renseigne est un mensonge de forme.
+    if trace:
+        mission[CHAMP_SOURCE_TRACE] = trace
+    if role:
+        mission[CHAMP_ROLE] = role
+    # DOUBLON POSSIBLE (MO-243) : calcule AVANT l ajout (l item ne se voit pas
+    # lui-meme), DIT apres -- et rien n est bloque : un doute se dit, il ne se tait pas.
+    proches = themes_proches(etat, theme)
+    etat.setdefault("vrac", []).append(mission)
+    if proches:
+        print("ATTENTION DOUBLON POSSIBLE (" + str(len(proches)) + " item(s) proche(s), "
+              + str(SEUIL_PROCHES) + " mot(s) commun(s) ou plus) :")
+        for ident, titre, communs in proches:
+            print("  - " + str(ident) + " : " + str(titre) + " [communs : " + ", ".join(communs) + "]")
+        print("  (rien n est bloque : si c est le meme travail, REUNIR les items ; sinon continuer.)")
+    return identifiant
+
+
+def proposer_type(theme, objectif, type_declare=""):
+    """PROPOSE un type : DECLARE (crochet du createur) ou par MOTS ENTIERS.
+
+    Un type DECLARE est SOUVERAIN : il n est pas re-devine. C est ce qui
+    rend le crochet utile -- `[outil]` porte `reparation`, `[audit]` porte
+    `audit` : sans cela le type annonce etait seulement IMPRIME (mesure
+    MO-174) et une demande sans mot-cle partait en `dev`.
+    Sinon un mot-cle ne parle que s il est un mot ENTIER du texte (casse
+    ignoree, pluriel simple tolere) : 'preparer' ne propose plus 'reparation'.
+    Retourne (type_propose, mot_cle_trouve) ; le mot-cle vaut MOT_CLE_DECLARE
+    quand le type vient d une declaration, "" si aucun mot-cle ne parle.
+    """
+    if type_declare:
+        return type_declare, MOT_CLE_DECLARE
+    mots = mots_de(theme + " " + objectif)
+    for mot_cle, type_associe in MOTS_CLES_TYPES:
+        if mot_parcourt(mots, mot_cle):
+            return type_associe, mot_cle
+    return "dev", ""
+
+
+def proposer_urgence(urgence):
+    """Retourne l'urgence validee (par defaut : normale)."""
+    return urgence or URGENCE_DEFAUT

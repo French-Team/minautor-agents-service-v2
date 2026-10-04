@@ -1,0 +1,33 @@
+{
+  "version": "0.1.0",
+  "description": "Patterns de fichiers lus par l'LLM - tokens entree",
+  "chars_par_token": 4.0,
+  "fichiers": [
+    {"chemin": "AGENTS.md", "label": "AGENTS.md (config agents)", "categorie": "config"},
+    {"chemin": "USER-DEMANDES.md", "label": "USER-DEMANDES.md", "categorie": "demandes"},
+    {"chemin": "AGENTS-activite-recente.md", "label": "Activite recente", "categorie": "historique"},
+    {"chemin": "AGENTS-historique.md", "label": "Historique v1", "categorie": "historique"},
+    {"chemin": "cerveau-projet/freelance/stark/stark.md", "label": "Fiche Stark", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/stark/corrections.md", "label": "Corrections Stark", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/shuri/shuri.md", "label": "Fiche Shuri", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/shuri/corrections.md", "label": "Corrections Shuri", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/forge/forge.md", "label": "Fiche Forge", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/forge/corrections.md", "label": "Corrections Forge", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/rogers/rogers.md", "label": "Fiche Rogers", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/rogers/corrections.md", "label": "Corrections Rogers", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/parker/parker.md", "label": "Fiche Parker", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/parker/corrections.md", "label": "Corrections Parker", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/jarvis/jarvis.md", "label": "Fiche JARVIS", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/jarvis/corrections.md", "label": "Corrections JARVIS", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/vision/vision.md", "label": "Fiche Vision", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/vision/corrections.md", "label": "Corrections Vision", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/fury/fury.md", "label": "Fiche Fury", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/fury/corrections.md", "label": "Corrections Fury", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/edith/edith.md", "label": "Fiche EDITH", "categorie": "fiches"},
+    {"chemin": "cerveau-projet/freelance/edith/corrections.md", "label": "Corrections EDITH", "categorie": "fiches"}
+  ],
+  "glob": [
+    {"pattern": "cerveau-projet/freelance/tools-commun/jarvis/inbox/*.jsonl", "label": "Inbox JARVIS", "categorie": "messages"},
+    {"pattern": "cerveau-projet/freelance/tools-commun/jarvis/outbox/*.jsonl", "label": "Outbox JARVIS", "categorie": "messages"}
+  ]
+}

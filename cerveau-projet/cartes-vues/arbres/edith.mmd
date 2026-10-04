@@ -1,0 +1,21 @@
+%% Arbre de decision de edith (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quel theme ?"}
+    RACINE -- "OBSERVER" --> THEME-OBSERVER
+    THEME-OBSERVER["Transformer les observations brutes en conclusions a 4 W"]
+    THEME-OBSERVER -- "besoin 1" --> THEME-OBSERVER-B0
+    THEME-OBSERVER-B0["Analyser depuis mon reveil ou ma derniere passe"]
+    FIN-fin-theme(["FIN - Theme termine"])
+    THEME-OBSERVER-B0 --> FIN-fin-theme
+    RACINE -- "LIRE" --> THEME-LIRE
+    THEME-LIRE["Repondre a une demande ponctuelle de consultation"]
+    THEME-LIRE -- "besoin 1" --> THEME-LIRE-B0
+    THEME-LIRE-B0["Consulter"]
+    THEME-LIRE-B0 --> FIN-fin-theme
+    RACINE -- "RAPPORTER" --> THEME-RAPPORTER
+    THEME-RAPPORTER["Rendre compte avec les 4 W, puis retourner dormir"]
+    THEME-RAPPORTER -- "besoin 1" --> THEME-RAPPORTER-B0
+    THEME-RAPPORTER-B0["Cloturer"]
+    FIN-fin-test-passe(["FIN - Rapport envoye"])
+    THEME-RAPPORTER-B0 --> FIN-fin-test-passe

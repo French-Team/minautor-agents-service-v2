@@ -1,0 +1,36 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "QUESTION",
+    "description": "Ouvrir une phase DEDIEE question/reponse avec l utilisateur - Cerberus ne repond JAMAIS directement : il transmet la question a Oracle qui active l agent detenteur de l information"
+  },
+  "theme": {
+    "nom": "QUESTION",
+    "but": "Ouvrir une phase dediee question/reponse, sans aucune autre tache - la reponse passe TOUJOURS par Oracle (l agent detenteur de l info est active par Oracle)",
+    "redirects": [
+      {
+        "besoin": "Transmettre la question a Oracle (qui active l agent detenteur de l information)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py envoyer cerberus oracle \"QUESTION: <la question>\" \"<question complete - c est ORACLE qui identifie et active l agent detenteur de l information (Atlas pour l exploration, Socrate pour la strategie...)>\"",
+          "ORACLE prend la main : il identifie l agent detenteur de l information, historise son DEBUT a sa place, et le pilote le dirige"
+        ],
+        "regle": "REGLE [question] (2026-09-02) : Cerberus ne repond JAMAIS directement a une question utilisateur. Toute question est transmise a Oracle qui active l agent detenteur de l information. Phase DEDIEE : aucune autre tache pendant la phase."
+      },
+      {
+        "besoin": "Transmettre la reponse collectee a l utilisateur",
+        "action": "procedure",
+        "etapes": [
+          "Une fois la reponse revenue via Oracle (DE-ORACLE -> VERS-USER), la transmettre completement a l utilisateur"
+        ],
+        "regle": "Repondre clairement a la question de l utilisateur avec la reponse collectee par l agent. La reponse vient d Oracle, jamais d une reponse directe de Cerberus."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-declencheur"
+  }
+}

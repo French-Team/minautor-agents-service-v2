@@ -1,0 +1,36 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "nemesis",
+    "nom": "INTER-ROUND",
+    "description": "Active en inter-round par un autre agent : accuser reception du rapport KO et relancer l appelant"
+  },
+  "theme": {
+    "nom": "INTER-ROUND",
+    "but": "Traiter un rapport KO recu d un autre agent et rendre la main",
+    "redirects": [
+      {
+        "besoin": "Accuser reception du rapport KO",
+        "action": "procedure",
+        "etapes": [
+          "Lire le rapport de l appelant (mission + defauts signales)",
+          "Confirmer la reception a l appelant via oracle.py"
+        ],
+        "regle": "INTER-ROUND : je ne reprends pas le round principal, je traite le rapport KO et je rends la main."
+      },
+      {
+        "besoin": "Rendre ma fin vers ORACLE (le pilote decide du suivant)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin nemesis \"<rapport du traitement inter-round>\" --cible oracle"
+        ],
+        "regle": "REGLE MODELE AERO (R1/R3) : ma fin va vers ORACLE, jamais vers cerberus, jamais vers un autre agent. Le pilote decide de la suite (retour a l appelant)."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-inter-round"
+  }
+}

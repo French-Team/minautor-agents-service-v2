@@ -1,0 +1,40 @@
+{
+  "nom": "nr-shuri",
+  "description": "Suite de non-regression de l'agent shuri - fichiers d'identite + outils communs (non mutant)",
+  "actif": true,
+  "perimetre": [
+    "cerveau-projet/freelance/shuri"
+  ],
+  "tests": [
+    {
+      "nom": "fiche-shuri-existe-et-non-vide",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {
+          "chemin": "cerveau-projet/freelance/shuri/shuri.md",
+          "doit_exister": true
+        }
+      ]
+    },
+    {
+      "nom": "corrections-shuri-present",
+      "commande": "cmd /c exit /b 0",
+      "rc_attendu": 0,
+      "fichiers_verifies": [
+        {
+          "chemin": "cerveau-projet/freelance/shuri/corrections.md",
+          "doit_exister": true
+        }
+      ]
+    },
+    {
+      "nom": "arbre-shuri-json-valide",
+      "commande": "python3 -c \"import json,sys; a=json.load(open(r'{racine}/cerveau-projet/freelance/shuri/parcours/arbre-shuri.json', encoding='utf-8')); assert a['racine']['branches']; print('ARBRE OK')\"",
+      "rc_attendu": 0,
+      "sortie_contient": [
+        "ARBRE OK"
+      ]
+    }
+  ]
+}

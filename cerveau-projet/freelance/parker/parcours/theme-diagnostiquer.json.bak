@@ -1,0 +1,45 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "parker",
+    "nom": "DIAGNOSTIQUER",
+    "description": "Comprendre un problème"
+  },
+  "theme": {
+    "nom": "DIAGNOSTIQUER",
+    "but": "Comprendre la cause d'un problème",
+    "redirects": [
+      {
+        "besoin": "Diagnostiquer un agent défaillant",
+        "action": "procedure",
+        "etapes": [
+          "Lire la fiche de l'agent",
+          "Lire son arbre de décision",
+          "Vérifier que l'arbre est valide",
+          "Identifier le problème"
+        ]
+      },
+      {
+        "besoin": "Diagnostiquer un outil défaillant",
+        "action": "procedure",
+        "etapes": [
+          "Lire le .md de l'outil",
+          "Vérifier les dépendances",
+          "Tester l'outil",
+          "Identifier l'erreur"
+        ]
+      },
+      {
+        "besoin": "Comprendre pourquoi quelque chose ne fonctionne pas",
+        "action": "procedure",
+        "etapes": [
+          "Explorer le contexte (EXPLORER)",
+          "Lire les logs/erreurs",
+          "Identifier la cause racine",
+          "Proposer un diagnostic"
+        ]
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-theme"}
+}

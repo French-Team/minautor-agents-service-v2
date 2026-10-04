@@ -1,0 +1,28 @@
+{
+  "identite": {
+    "type": "fins",
+    "appartient_a": "jarvis",
+    "description": "Toutes les fins possibles pour JARVIS"
+  },
+  "fins": {
+    "fin-theme": {
+      "titre": "Retour a la racine",
+      "action": "redirection",
+      "vers": "arbre-jarvis.json"
+    },
+    "fin-stark": {
+      "titre": "FIN DE CYCLE - Retour a Stark",
+      "description": "Terminer le round et retourner au coordinateur",
+      "action": "envoyer",
+      "cible": "stark",
+      "commande": "jarvis.py envoyer --de jarvis --vers stark --priorite 2 --objet 'Bilan' --corps '<bilan>'",
+      "regle": "Je retourne toujours a Stark en fin de cycle."
+    },
+    "fin-mission": {
+      "titre": "Mission distribuee - en attente de reponse",
+      "description": "La mission est envoyee, j'attends le retour de l'agent",
+      "action": "suivre",
+      "vers": "theme-suivre.json"
+    }
+  }
+}

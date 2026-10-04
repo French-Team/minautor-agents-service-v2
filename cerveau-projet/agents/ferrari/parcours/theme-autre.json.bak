@@ -1,0 +1,22 @@
+{
+  "identite": {"type": "theme", "appartient_a": "ferrari", "nom": "AUTRE", "description": "Autre correction dans freelance/"},
+  "theme": {
+    "nom": "AUTRE",
+    "but": "Effectuer une correction non classifiee dans le dossier freelance/",
+    "redirects": [
+      {"besoin": "Verifier le systeme", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"], "regle": "REGLE ABSOLUE."},
+      {"besoin": "Consulter les lecons", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent ferrari --domaine freelance"], "regle": "PATTERN 6."},
+      {"besoin": "CONTEXTE : activite recente", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"], "regle": "PATTERN 6."},
+      {"besoin": "Lire le cahier de dev", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/ferrari/cahier-dev.md"], "regle": "CAHIER DE DEV."},
+      {"besoin": "Lire le fichier a corriger (case c8)", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py <chemin-fichier>"], "regle": "LIRE le fichier cible avant de le corriger."},
+      {"besoin": "Verifier que le fichier est dans freelance/", "action": "procedure", "etapes": ["Verifier que la cible est bien dans cerveau-projet/freelance/"], "regle": "PERIMETRE WRITE : je n ecris QUE dans freelance/."},
+      {"besoin": "Appliquer la correction", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/editer/editer-fichier/editer-fichier.py <chemin-fichier>"], "regle": "CONVENTIONS V2 : UTF-8 + CRLF + D17."},
+      {"besoin": "Verifier la correction", "action": "procedure", "etapes": ["Relire le fichier corrige"], "regle": "GARDE-FOU."},
+      {"besoin": "Produire le rapport", "action": "procedure", "etapes": ["Rapport dans agents/ferrari/rapports/"], "regle": "PREUVE DE TRAVAIL."},
+      {"besoin": "Historiser l intervention", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer session-admin mecano 'CORRECTION TERMINEE: <description>'"], "regle": "HISTORISATION."},
+      {"besoin": "Mettre a jour le cahier de dev", "action": "procedure", "etapes": ["Ajouter dans cahier-dev.md"], "regle": "CAHIER DE DEV."},
+      {"besoin": "Ajouter les lecons", "action": "procedure", "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/ferrari/corrections.md <lecon>"], "regle": "PROTOCOLE FIN-MISSION."}
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-correction"}
+}

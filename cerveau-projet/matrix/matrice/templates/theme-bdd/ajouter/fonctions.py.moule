@@ -1,0 +1,31 @@
+"""Fonctions simples de la categorie ajouter : une seule tache chacune."""
+from datetime import datetime
+
+
+def normaliser_nom(nom):
+    """Retourne le nom du theme en majuscules, avec espaces serres (forme canonique)."""
+    return " ".join(nom.split()).upper()
+
+
+def nom_existe(themes, nom):
+    """True si le nom (casse ignoree) est deja pris par un theme du registre."""
+    nom_bas = nom.lower()
+    return any(theme.get("nom", "").lower() == nom_bas for theme in themes)
+
+
+def ajouter_theme(donnees, nom, but, description):
+    """Ajoute UN theme au registre (unicite du nom verifiee avant). Retourne (entree, doublon)."""
+    themes = donnees.setdefault("themes", [])
+    if nom_existe(themes, nom):
+        return None, True
+    donnees["compteur"] = donnees.get("compteur", 0) + 1
+    entree = {
+        "id": "__PREFIXE_ID__-" + str(donnees["compteur"]).zfill(3),
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "nom": normaliser_nom(nom),
+        "nom_affiche": "__NOM_AFFICHE__",
+        "but": but,
+        "description": description,
+    }
+    themes.append(entree)
+    return entree, False

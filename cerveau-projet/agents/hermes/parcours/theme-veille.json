@@ -1,0 +1,67 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "hermes",
+    "nom": "VEILLE",
+    "description": "Scan --tous du projet pour mesurer l etat orthographique global"
+  },
+  "theme": {
+    "nom": "VEILLE",
+    "but": "Mesurer l etat orthographique global du projet et produire un rapport",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine orthographe)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent hermes --domaine orthographe"
+        ],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"
+        ],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Scanner tout le projet (scan --tous)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/detecter/detecter-fautes-orthographe/detecter-fautes-orthographe.py --tous"
+        ],
+        "regle": "SCAN : parcourir la racine UNE fois (pas en double)."
+      },
+      {
+        "besoin": "Produire le rapport d etat orthographique",
+        "action": "procedure",
+        "etapes": [
+          "Synthetiser : nombre de fautes, repartition par fichier, dictionnaire actuel"
+        ],
+        "regle": "RAPPORT : etat reel du projet."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/hermes/corrections.md <lecon>"
+        ],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-veille"
+  }
+}

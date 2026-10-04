@@ -1,0 +1,30 @@
+=== GARDE-FOU test-063 : PROFILS DE TESTS ===
+[OK] 1. profils-tests.json existe et JSON valide
+[OK] 2. version + description + 6 profils presents
+[OK] 3. 6 noms de profils exacts
+[OK] 4. chaque profil a fichiers_detectes + tests
+[OK] 5. tous les 89 tests reels couverts par un profil
+[OK] 6. aucun test reference inexistant
+[OK] 7. lanceur --aide expose --profil et --fichiers
+[OK] 8. 4 fonctions du mode profil presentes
+[OK] 9. deduction auto : 5 cas reels OK + inconnu vide
+[OK] 10. ASCII strict : 0 non-ASCII (json + lanceur + test)
+[OK] 11. LF pur : 0 CRLF (json + lanceur + test)
+
+
+=== CHRONO test-063 (total 0.2s) ===
+  1. json                              0.00s
+  2. cles                              0.00s
+  3. noms                              0.00s
+  4. completude                        0.00s
+  5. couverture                        0.00s
+  6. refs mortes                       0.00s
+  7. aide                              0.16s
+  8. fonctions                         0.00s
+  9. deduction                         0.00s
+  10. normes                           0.01s
+=== RESULTAT : 11 OK / 0 KO (sur 11 points) ===
+test-063-profils-tests-garde-fou : 94.0/100 (EXCELLENT)
+
+=== RATING GENERAL (test) : a calculer avec --tous ===
+RATING GENERAL (test) : 98.6/100 (EXCELLENT)

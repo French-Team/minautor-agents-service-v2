@@ -1,0 +1,32 @@
+---
+identite:
+  type: convention
+  appartient_a: __APPARTIENT_A__
+  commun: false
+  liens: __LIENS__
+---
+
+# CONVENTION -- __TITRE__
+
+> Une convention dit la FORME ; elle ne dit pas ce qu il faut faire (c est le
+> role d une regle immuable) ni pourquoi (c est le role d une lecon). Elle leve
+> une question de forme pour que l agent ne la repose pas a chaque fichier.
+
+## LA REGLE DE FORME
+
+__REGLE__
+
+## LE FORMAT (la forme attendue, au point pres)
+
+__FORMAT__
+
+## POURQUOI (la source, et le manque qu elle comble)
+
+- SOURCE : __SOURCE__
+- MESURE : __MESURE__ (le fait compte, et sa date)
+- CE QUE CETTE CONVENTION REMPLACE : __REMPLACE__ (ce qui se faisait avant, sans
+  forme declaree -- sans cela, la convention ressemble a une invention).
+
+## LES CAS LIMITES (nommes, jamais laisses au lecteur)
+
+__CAS_LIMITES__

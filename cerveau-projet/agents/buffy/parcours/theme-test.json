@@ -1,0 +1,70 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "buffy",
+    "nom": "TEST",
+    "description": "Faire tester mes modifications par Morpheus (le testeur pro) via un inter-round : Morpheus teste, donne son verdict, et revient vers Buffy. Buffy n execute JAMAIS les tests elle-meme."
+  },
+  "theme": {
+    "nom": "TEST",
+    "but": "Confier le test de mes modifications a Morpheus (inter-round), recevoir son verdict et reprendre",
+    "redirects": [
+      {
+        "besoin": "Historiser le DEBUT de mon intervention",
+        "action": "procedure",
+        "etapes": [
+          "LIRE AVANT USAGE : cerveau-projet/agents/tools/oracle/oracle.md (Pattern 9)",
+          "python3 cerveau-projet/agents/tools/oracle/oracle.py historiser buffy \"DEBUT: <ma mission>\""
+        ],
+        "regle": "REGLE HISTORISATION : tracer le DEBUT avant de commencer."
+      },
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"
+        ],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS. Je VERIFIE avant d'agir."
+      },
+      {
+        "besoin": "Identifier le testeur pro : Morpheus, JAMAIS moi",
+        "action": "procedure",
+        "etapes": [
+          "LE TEST N EST PAS MON DOMAINE : c est Morpheus le testeur dedie. Je ne teste jamais moi-meme, j active Morpheus."
+        ],
+        "regle": "REGLE DEMARCATION : tester releve du domaine de Morpheus (test-XXX, non-regression). Buffy modifie, Morpheus teste."
+      },
+      {
+        "besoin": "Decrire les modifications a tester",
+        "action": "procedure",
+        "etapes": [
+          "Resumer precisement ce que j ai modifie (fichiers, outils, cartes) et ce que Morpheus doit verifier (tests, non-regression, comportement)."
+        ],
+        "regle": "Precision du besoin de test : Morpheus doit savoir EXACTEMENT quoi verifier."
+      },
+      {
+        "besoin": "Activer Morpheus pour tester (inter-round)",
+        "action": "procedure",
+        "etapes": [
+          "SIGNALER le besoin a ORACLE (le pilote decide du largage, R3 - je n active JAMAIS un autre agent) : python3 cerveau-projet/agents/tools/oracle/oracle.py mission-ajouter --file asap --agent morpheus \"<mission de test : mes modifs a verifier>\"",
+          "PUIS MA FIN vers ORACLE : python3 cerveau-projet/agents/tools/oracle/oracle.py reactiver-fin buffy \"<bilan>\" --cible oracle (le pilote larguera morpheus et me renverra pour reprendre mon round)"
+        ],
+        "regle": "INTER-ROUND : Buffy confie le test a Morpheus. Morpheus teste et REVIENT vers Buffy (il la reactive en fin)."
+      },
+      {
+        "besoin": "Retour de Morpheus recu ?",
+        "action": "procedure",
+        "etapes": [
+          "OUI -> fin-test",
+          "NON -> re-essai (Morpheus en inter-round revient vers moi)"
+        ],
+        "regle": "PATTERN RE-ESSAI : le retour de Morpheus (verdict) revient vers Buffy."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-test"
+  }
+}

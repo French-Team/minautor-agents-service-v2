@@ -1,0 +1,105 @@
+"""Routine de fond chien -- squelette du moule routine.
+
+declenche sur changement : observe, compare, lance le combo de correction en arriere-plan, puis se tait
+Une routine de fond est un processus supervise par le serveur matrice.
+
+
+Usage : python main.py [--once]
+"""
+import sys
+import time
+from pathlib import Path
+
+from constants import (
+    INTERVALLE_SECONDS,
+    ENCODAGE,
+    NOM_PID,
+    CHEMIN_PID,
+    CHEMIN_DRAPEAU_ARRET,
+)
+
+# data/commun est deja installe dans sys.path par constants (importe ci-dessus) :
+# une seconde insertion ici etait un ordre en DOUBLE (et visait un dossier
+# inexistant). Une seule source.
+from attente import attendre  # noqa: E402
+
+
+def ecrire_pid():
+    """Note le PID de la routine."""
+    try:
+        CHEMIN_PID.write_text(str(__import__("os").getpid()) + "\n", encoding=ENCODAGE)
+    except OSError:
+        pass
+
+
+def executer_once():
+    """Une passe de la routine."""
+    from passe.fonctions import passer, publier_passe
+
+    nombre, messages = passer()
+    publier_passe(nombre, messages)
+    if messages:
+        print("[" + time.strftime("%H:%M:%S") + "] chien : " + " | ".join(messages))
+    return 0
+
+
+def boucle():
+    """Boucle de passes periodiques avec arret cooperatif."""
+    from passe.fonctions import passer, publier_passe
+
+    # Cadence EFFECTIVE publiee a l'allumage : on la LIT, on ne l'attend pas.
+    print("[" + time.strftime("%H:%M:%S") + "] chien : demarrage, cadence "
+          + str(INTERVALLE_SECONDS) + "s")
+    while True:
+        nombre, messages = passer()
+        # L'etat de passe : le TEMOIN DE CADENCE (friction 28). Une passe qui
+        # n'ecrit rien n'en est pas moins une passe : elle doit laisser l'heure.
+        publier_passe(nombre, messages)
+        if messages:
+            print("[" + time.strftime("%H:%M:%S") + "] chien : " + " | ".join(messages))
+        if CHEMIN_DRAPEAU_ARRET.exists():
+            CHEMIN_DRAPEAU_ARRET.unlink()
+            print("[" + time.strftime("%H:%M:%S") + "] chien : arret cooperatif")
+            return 0
+        # Attente DECOUPEE : le drapeau est vu en 2 s, pas au bout de la cadence.
+        if attendre(INTERVALLE_SECONDS, CHEMIN_DRAPEAU_ARRET):
+            CHEMIN_DRAPEAU_ARRET.unlink()
+            print("[" + time.strftime("%H:%M:%S") + "] chien : arret cooperatif")
+            return 0
+
+
+def demander_arret():
+    """Pose le drapeau d'arret sans tuer le processus."""
+    CHEMIN_DRAPEAU_ARRET.write_text("arret\\n", encoding=ENCODAGE)
+    print("Drapeau d'arret pose pour chien.")
+    return 0
+
+
+if __name__ == "__main__":
+    import os
+    arguments = sys.argv[1:]
+    once = "--once" in arguments
+    if arguments and arguments[0] == "arret":
+        sys.exit(demander_arret())
+
+    if once:
+        # Passe unique (diagnostic) : AUCUN fichier PID.
+        # MO-053 -- une passe --once lancee pendant que le demon tourne ecrivait
+        # son PID puis l'EFFACAIT en sortant : le PID du demon disparaissait et
+        # `vie etat` annoncait "chien : ARRET" alors que le processus vivait.
+        # Un passage unique n'est pas un demon : il ne publie ni n'efface de PID.
+        sys.exit(executer_once())
+
+    ecrire_pid()
+    try:
+        boucle()
+    finally:
+        # LE PID S EFFACE EN SORTANT. Un PID laisse derriere soi annonce un
+        # FANTOME au maillon des fantomes : le serveur voit un chien vivant, et
+        # personne ne le voit. Mesure du 2026-10-03 : premiere boucle arretee
+        # cooperativement, `chien.pid=2060` est reste sur le disque et le maillon
+        # l a accuse -- a raison, l etat etait faux.
+        try:
+            CHEMIN_PID.unlink()
+        except OSError:
+            pass

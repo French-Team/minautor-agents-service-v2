@@ -1,0 +1,130 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "chiron",
+    "nom": "EDUCER",
+    "description": "Analyser un agent : fiche, corrections, regles, bumper, incoherences, conformite, cablages, synthese, rapport"
+  },
+  "theme": {
+    "nom": "EDUCER",
+    "but": "Analyser un agent cible pour detecter les incoherences nuisant a son intelligence operationnelle, documenter les corrections proposees et les signaler a Buffy",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine education)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent chiron --domaine education"],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Recevoir la mission - quel agent analyser (case c1)",
+        "action": "procedure",
+        "etapes": [
+          "Lire la raison dans AGENTS.md : quel agent, quel outil a change, quel protocole",
+          "Si la mission n est pas claire -> demander a Cerberus de preciser"
+        ],
+        "regle": "MISSION : preciser QUOI (agent cible, outil mis a jour, protocole change)."
+      },
+      {
+        "besoin": "Consulter le protocole education continue",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/regles-immuables/general/protocole-education-continue/protocole-education-continue.md"],
+        "regle": "PROTOCOLE : reference pour l education."
+      },
+      {
+        "besoin": "Lire la fiche de l agent cible (case c2)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/<agent>/<agent>.md"],
+        "regle": "LIRE la fiche : version parcours, outils P0, regles absolues, connexions."
+      },
+      {
+        "besoin": "Lire les corrections de l agent cible (case c3)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/<agent>/corrections.md"],
+        "regle": "LIRE les corrections : lecons documentees, erreurs reperees, patterns d erreur."
+      },
+      {
+        "besoin": "Lire les regles de l agent cible (case c4)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-fichier/lire-fichier.py cerveau-projet/agents/regles-immuables/general/"],
+        "regle": "LIRE les regles et conventions. Verifier la coherence avec la fiche."
+      },
+      {
+        "besoin": "Verifier les mises a jour d outils - bumper (case c5)",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/mettre/mettre-a-jour-versions/mettre-a-jour-versions.py",
+          "python3 cerveau-projet/agents/tools/detecter/detecter-divergences-version/detecter-divergences-version.py"
+        ],
+        "regle": "BUMPER : detecter les outils dont la version a change sans mise a jour des fiches/parcours."
+      },
+      {
+        "besoin": "Detecter les incoherences - regles vs actions reelles (case c6)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-conformite-fiche/verifier-conformite-fiche.py"],
+        "regle": "CROISER : fiche vs corrections vs regles vs versions outils."
+      },
+      {
+        "besoin": "Verifier la conformite de la fiche (case c7)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-conformite-fiche/verifier-conformite-fiche.py"],
+        "regle": "CONFORMITE : sections manquantes = incoherence a documenter."
+      },
+      {
+        "besoin": "Verifier le parcours/carte - detecter-cablages-manquants (case c8)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/detecter/detecter-cablages-manquants/detecter-cablages-manquants.py"],
+        "regle": "CABLAGE : orphelins, boucles, refs mortes = incoherence a documenter."
+      },
+      {
+        "besoin": "Synthetiser les incoherences (controle c9)",
+        "action": "procedure",
+        "etapes": [
+          "SI au moins 1 incoherence detectee -> OUI -> documenter les corrections (c10)",
+          "SI AUCUNE incoherence -> NON -> documenter et finir (c12)"
+        ],
+        "regle": "SYNTHESE : formuler chaque incoherence : TYPE, GRAVITE, FICHIER+LIGNE, CORRECTION PROPOSEE."
+      },
+      {
+        "besoin": "Documenter les corrections proposees puis signaler a Buffy (case c10)",
+        "action": "procedure",
+        "etapes": [
+          "Creer le rapport dans chiron/rapports/",
+          "Documenter : TYPE (fiche/version/regle/parcours), GRAVITE, FICHIER+LIGNE, CORRECTION PROPOSEE",
+          "SIGNALER a Buffy (seule habilitee a corriger les fichiers agents)"
+        ],
+        "regle": "JE DETECTE JE NE CORRIGE PAS : je documente et je signale. Jamais d ecriture directe."
+      },
+      {
+        "besoin": "Signaler les incoherences complexes a Buffy (case c11)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> buffy <raison>"],
+        "regle": "SIGNALER : incoherences de carte/parcours -> Buffy. Incoherences d outil -> Vulcain."
+      },
+      {
+        "besoin": "Enregistrer mes usages d outils",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/enregistrer/enregistrer-usage-outil/enregistrer-usage-outil.py --agent chiron --outil <outil> --contexte '<contexte>'"],
+        "regle": "BILAN OUTILS : declarer tous les outils utilises."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/chiron/corrections.md <lecon>"],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-educer"}
+}

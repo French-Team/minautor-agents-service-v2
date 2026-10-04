@@ -1,0 +1,49 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "cerberus",
+    "nom": "PROBLEME",
+    "description": "Router une resolution de probleme PAR TYPE vers l agent habilite"
+  },
+  "theme": {
+    "nom": "PROBLEME",
+    "but": "Router une demande de resolution de probleme vers l agent habilite selon son type",
+    "redirects": [
+      {
+        "besoin": "Identifier le type de probleme",
+        "action": "procedure",
+        "etapes": [
+          "DETECTER le type : outil, regles, tests, marbre, git, langue, workspace"
+        ],
+        "regle": "Routage PAR TYPE avant d activer."
+      },
+      {
+        "besoin": "Router vers l agent habilite",
+        "action": "procedure",
+        "etapes": [
+          "Outil -> Vulcain (constructeur d outils)",
+          "Regles -> Buffy (regles-immuables)",
+          "Tests -> Morpheus (testeur dedie)",
+          "Marbre -> Gardien (securite du marbre)",
+          "Git -> Hades (gardien des archives git)",
+          "Langue -> Hermes (orthographe, vocabulaire)",
+          "Workspace -> Hygie (nettoyage)"
+        ],
+        "regle": "REGLE [probleme] : activer l agent habilite selon le type de probleme definit dans declencheurs-v1.md."
+      },
+      {
+        "besoin": "Activer l agent habilite",
+        "action": "procedure",
+        "etapes": [
+          "python3 cerveau-projet/agents/tools/activer/activer-agent-principal/activer-agent-principal.py activer <session> <agent> \"<le probleme>\""
+        ],
+        "regle": "Activer l agent avec la mission de resolution precise."
+      }
+    ]
+  },
+  "fin": {
+    "type": "lien",
+    "vers": "fins.json",
+    "case": "fin-declencheur"
+  }
+}

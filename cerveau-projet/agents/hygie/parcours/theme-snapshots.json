@@ -1,0 +1,57 @@
+{
+  "identite": {
+    "type": "theme",
+    "appartient_a": "hygie",
+    "nom": "SNAPSHOTS",
+    "description": "Gerer les snapshots : creer, verifier rotation 7 jours"
+  },
+  "theme": {
+    "nom": "SNAPSHOTS",
+    "but": "Creer un snapshot de l etat du workspace et gerer la rotation (7 jours)",
+    "redirects": [
+      {
+        "besoin": "Verifier le systeme (ETAPE 1 OBLIGATOIRE)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/verifier/verifier-systeme/verifier-systeme.py"],
+        "regle": "REGLE ABSOLUE : je ne suppose JAMAIS."
+      },
+      {
+        "besoin": "Consulter les lecons (domaine nettoyage)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/consulter/consulter-lecons/consulter-lecons.py --agent hygie --domaine nettoyage"],
+        "regle": "PATTERN 6 : le contexte dynamique."
+      },
+      {
+        "besoin": "CONTEXTE : activite recente des agents",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/lire/lire-activite-recente/lire-activite-recente.py"],
+        "regle": "PATTERN 6 : l historique est DYNAMIQUE."
+      },
+      {
+        "besoin": "Creer le snapshot de l etat du workspace (case cS1)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py creer"],
+        "regle": "REGLE ASCII : avant d ecrire, verifier 100% ASCII."
+      },
+      {
+        "besoin": "Verifier la rotation 7 jours (case cS2)",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py rotation"],
+        "regle": "REGLE ROTATION : les snapshots de plus de 7 jours sont supprimes au nettoyage suivant."
+      },
+      {
+        "besoin": "Consulter le snapshot cree",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/nettoyer/snapshot-nettoyage/snapshot-nettoyage.py consulter"],
+        "regle": "Verifier que le snapshot a bien ete pris."
+      },
+      {
+        "besoin": "Ajouter les lecons dans corrections.md",
+        "action": "procedure",
+        "etapes": ["python3 cerveau-projet/agents/tools/ajouter/ajouter-contenu-fichier/ajouter-contenu-fichier.py cerveau-projet/agents/hygie/corrections.md <lecon>"],
+        "regle": "PROTOCOLE FIN-MISSION."
+      }
+    ]
+  },
+  "fin": {"type": "lien", "vers": "fins.json", "case": "fin-snapshots"}
+}

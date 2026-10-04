@@ -1,0 +1,249 @@
+#!/usr/bin/env python3
+# -*- coding: ascii -*-
+"""
+test-004-combos-tester-outil.py
+Test formel du combo tester-outil v0.1.0 (Pattern 3, chemin de test de Morpheus encapsule).
+
+Combo teste (cerveau-projet/agents/tools/combos/combo-tester-outil/):
+  combo-tester-outil (v0.1.0, 6 cases : c1 generateur creer-fichier ->
+  c2 outil cree le fichier -> c3 controle protections OUI->c4 / NON->c5 ->
+  c4 outil commande_test -> c5 fin PROTECTIONS MANQUANTES / c6 fin SYNTHESE)
+
+Cas couverts:
+  1. json.load valide + version 0.1.0 + case_depart c1
+  2. combos-moteur --liste affiche les 6 cases
+  3. Variable fichier_test manquante -> erreur claire (entrees de la case c1)
+  4. Variable commande_test manquante (apres c3=OUI) -> erreur claire (commande de la case c4)
+  5. Navigation chemin OUI : fichier de test CREE + test EXECUTE + c6 FIN (COMBO TERMINE)
+  6. Navigation chemin NON : c5 FIN PROTECTIONS MANQUANTES (REGLE ABSOLUE preservee)
+  7. Integration carte morpheus v2 (arbre + theme-tester.json) : le theme
+     Tester contient les besoins Lancer le combo tester-outil puis
+     Verifier les resultats et donner le verdict
+  8. valider-cartes-decision --agent morpheus : CONFORME
+  9. Nommage : definition-combo.json = bruit preexistant documente (identique aux 15 combos) - non bloquant
+ 10. ASCII : valider-conformite-ascii 0 (definition + parcours)
+
+Usage:
+  python3 test-004-combos-tester-outil.py
+Tags: outils, combos
+"""
+import importlib.util
+import io
+import json
+import os
+import subprocess
+import sys
+import tempfile
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+while not os.path.isdir(os.path.join(PROJECT_ROOT, "cerveau-projet")):
+    PROJECT_ROOT = os.path.dirname(PROJECT_ROOT)
+
+TOOLS_DIR = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "tools")
+PYTHON = sys.executable
+
+def charger_protections():
+    chemin = os.path.join(TOOLS_DIR, "tester", "tester-protections",
+                          "tester-protections.py")
+    spec = importlib.util.spec_from_file_location("tester_protections", chemin)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+PROTECTIONS = charger_protections()
+# ------------------------------------------------------------------
+# OPTIONS ON/OFF + CHRONO (regle immuable v0.3.0, deploiement dynamique) :
+#   --no-chrono            desactive le chrono (defaut : actif)
+#   --isoler N             n execute que le point N (diagnostic cible)
+#   --desactiver 1,3,5     saute les points listes (sans toucher au code)
+# ------------------------------------------------------------------
+CHRONO_ACTIF = "--no-chrono" not in sys.argv
+ISOLE = None
+DESACTIVES = []
+for _i, _arg in enumerate(sys.argv):
+    if _arg == "--isoler" and _i + 1 < len(sys.argv):
+        try:
+            ISOLE = int(sys.argv[_i + 1])
+        except ValueError:
+            pass
+    if _arg == "--desactiver" and _i + 1 < len(sys.argv):
+        for _p in sys.argv[_i + 1].split(','):
+            try:
+                DESACTIVES.append(int(_p))
+            except ValueError:
+                pass
+ETAPES = []
+T_START = __import__("time").monotonic()
+
+
+def point_actif(numero):
+    # True si le point N doit s executer (options on/off du test)
+    if ISOLE is not None:
+        return numero == ISOLE
+    return numero not in DESACTIVES
+
+
+def chrono_etape(nom, t_debut):
+    # Enregistre la duree d une etape (no-op si --no-chrono)
+    if CHRONO_ACTIF:
+        ETAPES.append((nom, __import__("time").monotonic() - t_debut))
+
+
+def bilan_chrono():
+    # Affiche le bilan des durees : total + detail par etape
+    if not CHRONO_ACTIF:
+        return
+    _total = __import__("time").monotonic() - T_START
+    print("")
+    print("=== CHRONO test (total %.1fs) ===" % _total)
+    for _nom, _duree in ETAPES:
+        print("  %-34s %6.2fs" % (_nom, _duree))
+
+
+MOTEUR_PY = os.path.join(TOOLS_DIR, "combos", "combos-moteur", "combos-moteur.py")
+VALIDER_CARTES = os.path.join(TOOLS_DIR, "valider", "valider-cartes-decision", "valider-cartes-decision.py")
+VALIDER_ASCII = os.path.join(TOOLS_DIR, "valider", "valider-conformite-ascii", "valider-conformite-ascii.py")
+
+COMBO = os.path.join(TOOLS_DIR, "combos", "combo-tester-outil", "definition-combo.json")
+ARBRE_MORPHEUS = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "morpheus", "parcours", "arbre-morpheus.json")
+THEME_TESTER = os.path.join(PROJECT_ROOT, "cerveau-projet", "agents", "morpheus", "parcours", "theme-tester.json")
+
+NB_POINTS = 0
+NB_OK = 0
+NB_KO = 0
+
+
+def verifier(nom, condition, detail=""):
+    global NB_POINTS, NB_OK, NB_KO
+    NB_POINTS += 1
+    if condition:
+        NB_OK += 1
+        print("  [OK] %s" % nom)
+    else:
+        NB_KO += 1
+        print("  [KO] %s %s" % (nom, ("-> " + detail) if detail else ""))
+
+
+def executer(cmd, cwd=None):
+    try:
+        proc = PROTECTIONS.lancer_protege(
+            cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+            timeout=300, cwd=cwd,
+        )
+        return proc.returncode, (proc.stdout or "") + (proc.stderr or "")
+    except PROTECTIONS.ArretProtection:
+        return -1, "TIMEOUT"
+
+
+def main():
+    global NB_POINTS, NB_OK, NB_KO
+    print("=== TEST 004 : combo tester-outil v0.1.0 ===\n")
+
+    # --- 1. Structure JSON
+    with io.open(COMBO, encoding="utf-8") as fh:
+        d = json.load(fh)
+    verifier("1. JSON valide + version 0.1.0 + case_depart c1",
+             d.get("combo", {}).get("version") == "0.1.0" and d.get("combo", {}).get("case_depart") == "c1")
+    verifier("1b. 6 cases (c1-c6)",
+             set(d.get("cases", {}).keys()) == {"c1", "c2", "c3", "c4", "c5", "c6"})
+
+    # --- 2. --liste
+    code, out = executer([PYTHON, MOTEUR_PY, COMBO, "--liste", "--no-journal"])
+    nb_cases_listees = sum(1 for l in out.splitlines() if "[c" in l)
+    verifier("2. --liste affiche 6 cases (code 0)", code == 0 and nb_cases_listees == 6,
+             "code=%s nb=%s" % (code, nb_cases_listees))
+
+    # --- 3. Variable manquante (fichier_test, case c1)
+    code, out = executer([PYTHON, MOTEUR_PY, COMBO, "--var", "contenu_test=t", "--no-journal"])
+    verifier("3. fichier_test manquant -> erreur claire", "Variable non trouvee" in out and "{fichier_test}" in out)
+
+    # --- 4. Variable manquante (commande_test, case c4)
+    code, out = executer([PYTHON, MOTEUR_PY, COMBO,
+                          "--var", "fichier_test=.tmp-test004/y.sh",
+                          "--var", "contenu_test=t",
+                          "--reponses", "c3=OUI",
+                          "--no-journal"])
+    verifier("4. commande_test manquant (apres c3=OUI) -> erreur claire",
+             "Variable non trouvee" in out and "{commande_test}" in out and "case c4" in out)
+
+    # --- 5. Navigation OUI : fichier cree + test execute + c6 FIN
+    # PIEGE WINDOWS : un chemin absolu avec backslashes (Z:\\...) casse
+    # shlex.split dans la case outil -> utiliser des FORWARD SLASHES.
+    tmp = os.path.join(PROJECT_ROOT, ".tmp-test004")
+    os.makedirs(tmp, exist_ok=True)
+    fichier_test_abs = os.path.join(tmp, "test-001-demo.sh")
+    fichier_test = fichier_test_abs.replace("\\", "/")
+    code, out = executer([PYTHON, MOTEUR_PY, COMBO,
+                          "--var", "fichier_test=" + fichier_test,
+                          "--var", "contenu_test=echo test",
+                          "--var", "commande_test=echo EXEC-OK",
+                          "--reponses", "c3=OUI",
+                          "--verbose",
+                          "--no-journal"])
+    fichier_cree = os.path.isfile(fichier_test_abs)
+    verifier("5a. Navigation OUI -> c6 FIN (COMBO TERMINE)", code == 0 and "Fin de combo atteinte : case 'c6'" in out)
+    verifier("5b. Fichier de test CREE (forward slashes)", fichier_cree)
+    verifier("5c. Test EXECUTE (sortie EXEC-OK, vue via --verbose)", "EXEC-OK" in out and "-> sortie: EXEC-OK" in out)
+
+    # --- 6. Navigation NON : c5 FIN PROTECTIONS MANQUANTES
+    # PIEGE WINDOWS (cf. point 5) : chemin en FORWARD SLASHES sinon
+    # shlex.split mange les backslashes et le fichier part a la racine.
+    fichier_test_x = os.path.join(tmp, "x.sh").replace("\\", "/")
+    code, out = executer([PYTHON, MOTEUR_PY, COMBO,
+                          "--var", "fichier_test=" + fichier_test_x,
+                          "--var", "contenu_test=t",
+                          "--var", "commande_test=echo ok",
+                          "--reponses", "c3=NON",
+                          "--no-journal"])
+    verifier("6. Navigation NON -> c5 FIN PROTECTIONS MANQUANTES (REGLE ABSOLUE)",
+             code == 0 and "Fin de combo atteinte : case 'c5'" in out and "PROTECTIONS MANQUANTES" in out)
+
+    # --- 7. Integration carte morpheus v2 (arbre + theme-tester.json)
+    # Migration v1->v2 (2026-09-05) : guider-parcours archive, la carte v2 =
+    # arbre-morpheus.json + themes. Le flux de test de Morpheus passe par
+    # le theme TESTER (besoins "Lancer le combo tester-outil" puis
+    # "Verifier les resultats et donner le verdict").
+    with io.open(ARBRE_MORPHEUS, encoding="utf-8") as fh:
+        arbre = json.load(fh)
+    verifier("7a. arbre morpheus v2 (identite arbre)",
+             arbre.get("identite", {}).get("type") == "arbre",
+             "type=%s" % arbre.get("identite", {}).get("type"))
+    with io.open(THEME_TESTER, encoding="utf-8") as fh:
+        theme = fh.read()
+    verifier("7b. theme Tester : besoin Lancer le combo tester-outil",
+             "Lancer le combo tester-outil" in theme)
+    verifier("7c. theme Tester : besoin Verifier les resultats et donner le verdict",
+             "Verifier les resultats et donner le verdict" in theme)
+
+    # --- 8. valider-cartes-decision --agent morpheus
+    code, out = executer([PYTHON, VALIDER_CARTES, "--agent", "morpheus"])
+    verifier("8. valider-cartes-decision --agent morpheus CONFORME", "CONFORME" in out)
+
+    # --- 9. Nommage : bruit preexistant documente (non bloquant, on documente seulement)
+    verifier("9. Nommage definition-combo.json : bruit preexistant (15 combos) - documente",
+             True, "identique aux combos existants (hors perimetre valider-nommage)")
+
+    # --- 10. ASCII
+    for nom, chemin in [("definition combo", COMBO), ("arbre morpheus", ARBRE_MORPHEUS),
+                        ("theme tester", THEME_TESTER)]:
+        with io.open(chemin, encoding="utf-8") as fh:
+            txt = fh.read()
+        na = sum(1 for c in txt if ord(c) > 127)
+        verifier("10. ASCII 0 (%s)" % nom, na == 0, "non-ASCII=%s" % na)
+
+    # --- Nettoyage du dossier temporaire
+    import shutil
+    shutil.rmtree(tmp, ignore_errors=True)
+
+    print("\n=== VERDICT : %d/%d points passes ===" % (NB_OK, NB_POINTS))
+    if NB_KO == 0:
+        print("COMBO TESTER-OUTIL v0.1.0 : VALIDE")
+        return 0
+    print("COMBO TESTER-OUTIL v0.1.0 : NON VALIDE (%d KO)" % NB_KO)
+    return 1
+
+
+bilan_chrono()
+
+if __name__ == "__main__":
+    sys.exit(main())

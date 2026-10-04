@@ -1,0 +1,49 @@
+%% Arbre de decision de parker (arbre v0.1.0)
+flowchart TD
+    START(["Debut"]) --> RACINE
+    RACINE{"Quel theme ?"}
+    RACINE -- "EXPLORER" --> THEME-EXPLORER
+    THEME-EXPLORER["Aller chercher l'information la ou elle se cache"]
+    THEME-EXPLORER -- "besoin 1" --> THEME-EXPLORER-B0
+    THEME-EXPLORER-B0["Explorer un dossier"]
+    THEME-EXPLORER -- "besoin 2" --> THEME-EXPLORER-B1
+    THEME-EXPLORER-B1["Chercher un mot-cle"]
+    THEME-EXPLORER -- "besoin 3" --> THEME-EXPLORER-B2
+    THEME-EXPLORER-B2["Comprendre un fichier"]
+    THEME-EXPLORER -- "besoin 4" --> THEME-EXPLORER-B3
+    THEME-EXPLORER-B3["Voir l'activite recente"]
+    FIN-fin-theme(["Retour a la racine"])
+    THEME-EXPLORER-B0 --> FIN-fin-theme
+    THEME-EXPLORER-B1 --> FIN-fin-theme
+    THEME-EXPLORER-B2 --> FIN-fin-theme
+    THEME-EXPLORER-B3 --> FIN-fin-theme
+    RACINE -- "LIRE" --> THEME-LIRE
+    THEME-LIRE["Acceder a la connaissance"]
+    THEME-LIRE -- "besoin 1" --> THEME-LIRE-B0
+    THEME-LIRE-B0["Lire une fiche d'agent"]
+    THEME-LIRE -- "besoin 2" --> THEME-LIRE-B1
+    THEME-LIRE-B1["Consulter les lecons"]
+    THEME-LIRE -- "besoin 3" --> THEME-LIRE-B2
+    THEME-LIRE-B2["Voir l'activite recente"]
+    THEME-LIRE-B0 --> FIN-fin-theme
+    THEME-LIRE-B1 --> FIN-fin-theme
+    THEME-LIRE-B2 --> FIN-fin-theme
+    RACINE -- "DIAGNOSTIQUER" --> THEME-DIAGNOSTIQUER
+    THEME-DIAGNOSTIQUER["Comprendre la cause d'un probleme"]
+    THEME-DIAGNOSTIQUER -- "besoin 1" --> THEME-DIAGNOSTIQUER-B0
+    THEME-DIAGNOSTIQUER-B0["Diagnostiquer un agent defaillant"]
+    THEME-DIAGNOSTIQUER -- "besoin 2" --> THEME-DIAGNOSTIQUER-B1
+    THEME-DIAGNOSTIQUER-B1["Diagnostiquer un outil defaillant"]
+    THEME-DIAGNOSTIQUER -- "besoin 3" --> THEME-DIAGNOSTIQUER-B2
+    THEME-DIAGNOSTIQUER-B2["Comprendre pourquoi quelque chose ne fonctionne pas"]
+    THEME-DIAGNOSTIQUER-B0 --> FIN-fin-theme
+    THEME-DIAGNOSTIQUER-B1 --> FIN-fin-theme
+    THEME-DIAGNOSTIQUER-B2 --> FIN-fin-theme
+    RACINE -- "COORDONNER" --> THEME-COORDONNER
+    THEME-COORDONNER["Gerer les transitions"]
+    THEME-COORDONNER -- "besoin 1" --> THEME-COORDONNER-B0
+    THEME-COORDONNER-B0["Reception inter-round"]
+    THEME-COORDONNER -- "besoin 2" --> THEME-COORDONNER-B1
+    THEME-COORDONNER-B1["Retour a Stark"]
+    THEME-COORDONNER-B0 --> FIN-fin-theme
+    THEME-COORDONNER-B1 --> FIN-fin-theme

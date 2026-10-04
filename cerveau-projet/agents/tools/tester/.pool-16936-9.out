@@ -1,0 +1,26 @@
+=== Garde-fou : BDD des lecons (enregistrer + consulter) ===
+[OK] 1. outils presents + compilent
+[OK] 2. --version des 2 outils
+[OK] 3. enregistrer-lecon creation OK (id retourne)
+[OK] 4. anti-usurpation : --agent != actif -> code 1
+[OK] 5. non-ASCII refuse -> code 1
+[OK] 6. anti-doublon : meme lecon -> code 1
+[OK] 7. consulter-lecons retrouve la lecon (toutes + recherche)
+[OK] 8. journalisation d activite (consultation directe au registre)
+[OK] 9. lecons.db referencee QUE par les 2 outils
+[OK] 10. ASCII strict : 0 non-ASCII (outils + test)
+[OK] 10b. LF pur : 0 CRLF (outils + test)
+
+
+=== CHRONO test-090 (total 3.0s) ===
+  1. outils                                0.01s
+  2. version                               0.35s
+  3. creation                              0.34s
+  4. usurpation                            0.21s
+  5. ascii                                 0.42s
+  6. doublon                               0.57s
+  7. consulter                             0.98s
+  8. journalisation                        0.00s
+  9. integrite                             0.09s
+  10. normes                               0.00s
+=== RESULTAT : 11 OK / 0 KO (sur 11 points) ===

@@ -1,0 +1,28 @@
+{
+  "flux_actif": "flux2",
+  "dernier_changement": "2026-09-13T07:53:49.434426",
+  "changement_par": "operateur",
+  "historique": [
+    {
+      "de": null,
+      "vers": "flux2",
+      "par": "operateur",
+      "timestamp": "2026-09-12T21:41:41.081599",
+      "raison": "Test du selecteur"
+    },
+    {
+      "de": "flux2",
+      "vers": "flux1",
+      "par": "operateur",
+      "timestamp": "2026-09-12T21:49:36.375080",
+      "raison": "Test du flux 1"
+    },
+    {
+      "de": "flux1",
+      "vers": "flux2",
+      "par": "operateur",
+      "timestamp": "2026-09-13T07:53:49.434426",
+      "raison": "Demande explicite de l'operateur pour activer le protocole Optimus Prime"
+    }
+  ]
+}

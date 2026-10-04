@@ -1,0 +1,37 @@
+=== Garde-fou : analyser-noms-maj + corriger-noms-maj (casse et forme des noms) ===
+  [OK] 1. analyser-noms-maj --version = 0.1.0
+  [OK] 2. corriger-noms-maj --version = 0.1.1
+  [OK] 3. parite .sh analyser-noms-maj
+  [OK] 4. parite .sh corriger-noms-maj
+  [OK] 5. registre reel -> PROPRE (17 entrees chemin corrigees)
+  [OK] 6. corriger --dry-run detecte la normalisation
+  [OK] 7. --dry-run ne modifie pas le fichier
+  [OK] 8. corriger reel normalise le champ outil
+  [OK] 9. entree normale conservee (tester-lancer-non-regression)
+  [OK] 10. catalogue 182 commandes trie + les 2 outils
+  [OK] 11. index-tools total 203 + Analyser 9 + Corriger 7 + les 2
+  [OK] 12. normes : 0 non-ASCII (test + outils)
+  [OK] 13. normes : 0 CRLF (test + outils)
+  [OK] 14. 0 residu tmp-test079 dans le workspace
+  [OK] 15. registre reel JSONL valide (230 entrees, 0 invalide)
+
+=== CHRONO test-079 (total 1.5s) ===
+  [chrono] 1. version analyser                 0.14s
+  [chrono] 2. version corriger                 0.14s
+  [chrono] 3. parite sh analyser               0.34s
+  [chrono] 4. parite sh corriger               0.25s
+  [chrono] 5. registre reel propre             0.13s
+  [chrono] 6. dry-run sur registre fictif      0.24s
+  [chrono] 7. dry-run non destructif           0.11s
+  [chrono] 8. application reelle               0.10s
+  [chrono] 9. conservation entrees saines      0.00s
+  [chrono] temp                                0.00s
+  [chrono] 10. catalogue                       0.00s
+  [chrono] 11. index-tools                     0.00s
+  [chrono] 12. normes ascii                    0.00s
+  [chrono] 13. normes lf                       0.00s
+  [chrono] 14. residus                         0.00s
+  [chrono] 15. registre valide                 0.00s
+
+=== RESULTAT : 15 OK / 0 KO (sur 15 points) ===
+=== VERDICT : PROPRE (casse et forme des noms verrouillees) ===
