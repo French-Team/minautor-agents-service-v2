@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-04 18:35:59",
+  "date": "2026-10-04 18:56:44",
   "elements": [
     {
       "id": "K-003",
@@ -47363,13 +47363,13 @@
     },
     {
       "id": "K-4746",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 24,
       "octets": 554,
-      "origine": "source",
+      "origine": "purge",
       "sha": "3d18ae9aa9a056da4a1c6dbc8bf78dbd7784f5cda2be20014ae632b4ee260b49",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_174100",
-      "verdict": "conserver"
+      "verdict": "archiver"
     },
     {
       "id": "K-4747",
@@ -47473,13 +47473,13 @@
     },
     {
       "id": "K-4757",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 54,
       "octets": 2836,
-      "origine": "source",
+      "origine": "purge",
       "sha": "9dab4b03d4be61f989c9a27d2e1a1bf1137c1eb017fe495b933cb2d964c7fe33",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_174059",
-      "verdict": "conserver"
+      "verdict": "archiver"
     },
     {
       "id": "K-4758",
@@ -47583,13 +47583,13 @@
     },
     {
       "id": "K-4768",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 39,
       "octets": 1058,
-      "origine": "source",
+      "origine": "purge",
       "sha": "1cd2967eeceadf74e44ba9655a82446b0b81ef7b839d5b8b5e451413369ecb31",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_174100",
-      "verdict": "conserver"
+      "verdict": "archiver"
     },
     {
       "id": "K-4769",
@@ -47693,13 +47693,13 @@
     },
     {
       "id": "K-4779",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 35,
       "octets": 1333,
-      "origine": "source",
+      "origine": "purge",
       "sha": "dcf406612d97fcc4d99788bb2705ed7b76cf14bc04c9e4e09feac6b3e5b361f9",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_174100",
-      "verdict": "conserver"
+      "verdict": "archiver"
     },
     {
       "id": "K-4780",
@@ -47803,13 +47803,13 @@
     },
     {
       "id": "K-4790",
-      "lecture": "disque",
+      "lecture": "registre",
       "lignes": 33,
       "octets": 1358,
-      "origine": "source",
+      "origine": "purge",
       "sha": "9de7b968a9be321acc6c574da47881531a0a2e84541551eb0cbb7e7e06196dcb",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_174100",
-      "verdict": "conserver"
+      "verdict": "archiver"
     },
     {
       "id": "K-4791",
@@ -48186,10 +48186,10 @@
       "lecture": "disque",
       "lignes": 153,
       "octets": 8378,
-      "origine": "source",
+      "origine": "archive",
       "sha": "020d31dbba146df8bee7ad14eb0c3fc674be01ae51fcb9e7721f68d637d3f0d8",
       "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_181910",
-      "verdict": "conserver"
+      "verdict": "archiver"
     },
     {
       "id": "K-4829",
@@ -48240,9 +48240,99 @@
       "sha": "9f857775abc120903a0d430caca1e8ad856310299b6990030a30c5cd80e4dfba",
       "source": "_operateur/optimus-prime/super-combos/sc-006-lacunes/main.py.bak.20261004_100350",
       "verdict": "conserver"
+    },
+    {
+      "id": "K-4834",
+      "lecture": "disque",
+      "lignes": 98,
+      "octets": 4056,
+      "origine": "source",
+      "sha": "8ecb760bd382d4b074b634cafa4bb6af6e59148e6bbddd962ff9d0d3481226bf",
+      "source": "_operateur/optimus-prime/preparation/mo-583-cadrage-cartes-liens.md.bak.20261004_184127",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4835",
+      "lecture": "disque",
+      "lignes": 24,
+      "octets": 554,
+      "origine": "source",
+      "sha": "b446c88ab0bfcc9ee2136260cfcb13d31fc899bc44b2e21e53197ea023fd6c64",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_184538",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4836",
+      "lecture": "disque",
+      "lignes": 54,
+      "octets": 2826,
+      "origine": "source",
+      "sha": "0da31b7e8d9791da84b7b5861241afbf7fd4ea1f317102e5b1f4ff5752e0b3ea",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_184537",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4837",
+      "lecture": "disque",
+      "lignes": 39,
+      "octets": 1058,
+      "origine": "source",
+      "sha": "f878b38abc02e15068287e2c0e7bc1501d9ebf1a0ac7e8258cef5fa1dcfe42bb",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_184538",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4838",
+      "lecture": "disque",
+      "lignes": 35,
+      "octets": 1332,
+      "origine": "source",
+      "sha": "84ad9854c72d94dbe206e3e7b418e2718a09c93f2e9120967e2a6c36de0ca3cb",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_184538",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4839",
+      "lecture": "disque",
+      "lignes": 33,
+      "octets": 1358,
+      "origine": "source",
+      "sha": "f414628ddb2bc8af615c643b74e0b9b6d01ea1dc27cf56754760fea6cfa014ef",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_184538",
+      "verdict": "conserver"
+    },
+    {
+      "id": "K-4840",
+      "lecture": "registre",
+      "lignes": 152,
+      "octets": 7994,
+      "origine": "purge",
+      "sha": "c0d11fa8cf31b9eae9993d3dd64e2e96669cf0c9f14affd00dfee2b846740b55",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_183735",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4841",
+      "lecture": "disque",
+      "lignes": 144,
+      "octets": 5596,
+      "origine": "archive",
+      "sha": "93a92d72367cfcaddb8f30de31864cc128889b7d4210d733a94399401e5f95fb",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_184223",
+      "verdict": "archiver"
+    },
+    {
+      "id": "K-4842",
+      "lecture": "disque",
+      "lignes": 144,
+      "octets": 5596,
+      "origine": "source",
+      "sha": "aa97248db214632a3e45a8ef43db0532b9219a89474b46d7d8befdeec276281a",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_184623",
+      "verdict": "conserver"
     }
   ],
-  "nb": 4824,
+  "nb": 4833,
   "non_mesures": {
     "ids": [
       "K-003",
@@ -48304,7 +48394,7 @@
     ],
     "nb": 56
   },
-  "octets": 144680173,
+  "octets": 144710543,
   "perimetre": {
     "critere": "tag:bak",
     "exclus": [

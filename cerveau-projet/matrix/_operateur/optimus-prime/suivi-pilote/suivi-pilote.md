@@ -12,7 +12,7 @@ identite:
 > dans suivi-optimus, file-missions, entonnoir, cycle-historique, outbox et
 > le journal des pauses -- ici, seulement ce que l instrument a JUGE.
 
-Mesure du 2026-10-04 18:46:22 | pannes declarees : 20 | detecteurs joues : 17.
+Mesure du 2026-10-04 18:58:18 | pannes declarees : 20 | detecteurs joues : 17.
 
 Pannes DECLAREES sans detecteur (couverture dite, jamais muette) :
 - fenetre-d-absorption-plus-courte-que-le-battement : aucun detecteur ecrit pour cette panne declaree
@@ -29,8 +29,6 @@ Pannes DECLAREES sans detecteur (couverture dite, jamais muette) :
 
 | Mission | Injectee le | Poids (tok) | Lecons utiles |
 |---|---|---|---|
-| MO-566 | 2026-10-04 05:06:33 | 10945 | 26 |
-| MO-565 | 2026-10-04 05:24:45 | 11156 | 26 |
 | MO-569 | 2026-10-04 06:24:24 | 10572 | 26 |
 | MO-573 | 2026-10-04 06:51:33 | 11208 | 30 |
 | MO-574 | 2026-10-04 07:00:47 | 11391 | 27 |
@@ -41,6 +39,8 @@ Pannes DECLAREES sans detecteur (couverture dite, jamais muette) :
 | MO-582 | 2026-10-04 18:31:44 | 10880 | 26 |
 | MO-583 | 2026-10-04 18:33:53 | 10990 | 25 |
 | MO-584 | 2026-10-04 18:36:33 | 10849 | 28 |
+| MO-585 | 2026-10-04 18:54:13 | 10687 | 29 |
+| MO-586 | 2026-10-04 18:57:19 | 10893 | 27 |
 
 ## Table 2 -- FILE (partie file/)
 
@@ -48,9 +48,7 @@ Pannes DECLAREES sans detecteur (couverture dite, jamais muette) :
 
 | Mission | Statut | Dernier fait | Silence |
 |---|---|---|---|
-| MO-584 | en-cours | prise | 10 min |
-| MO-585 | en-attente | inconnu | inconnu |
-| MO-586 | en-attente | inconnu | inconnu |
+| MO-586 | en-cours | debut | 1 min |
 | MO-587 | en-attente | inconnu | inconnu |
 | MO-588 | en-attente | inconnu | inconnu |
 | MO-589 | en-attente | inconnu | inconnu |
@@ -67,7 +65,7 @@ Pannes DECLAREES sans detecteur (couverture dite, jamais muette) :
 | MO-600 | en-attente | inconnu | inconnu |
 | MO-601 | en-attente | inconnu | inconnu |
 
-Colonnes OMISES (constantes, sans verdict) : Dans le lot (18 lignes) ; En attente depuis (18 lignes).
+Colonnes OMISES (constantes, sans verdict) : Dans le lot (16 lignes) ; En attente depuis (16 lignes).
 
 ## Table 3 -- LOT (partie file/, a part)
 
@@ -75,7 +73,7 @@ Colonnes OMISES (constantes, sans verdict) : Dans le lot (18 lignes) ; En attent
 
 | Lot | Portee | Ecoulees | Retirees | Tete | Enchainement |
 |---|---|---|---|---|---|
-| lot-21 | 21 | 3 | 0 | MO-584 | MO-584 |
+| lot-21 | 21 | 5 | 0 | MO-586 | MO-586 |
 
 ## Table 4 -- ENTONNOIR (files)
 
@@ -108,8 +106,6 @@ Colonnes OMISES (constantes, sans verdict) : Items (10 lignes) ; Tete (10 lignes
 
 | Mission close | Fin a | Bilan | Enchainement |
 |---|---|---|---|
-| MO-571 | 2026-10-04 04:55:43 | pose | STOP |
-| MO-572 | 2026-10-04 05:47:10 | pose | STOP |
 | MO-573 | 2026-10-04 06:52:30 | pose | auto |
 | MO-574 | 2026-10-04 07:00:56 | pose | auto |
 | MO-575 | 2026-10-04 08:42:54 | pose | STOP |
@@ -120,6 +116,8 @@ Colonnes OMISES (constantes, sans verdict) : Items (10 lignes) ; Tete (10 lignes
 | MO-581 | 2026-10-04 18:30:46 | pose | auto |
 | MO-582 | 2026-10-04 18:33:11 | pose | auto |
 | MO-583 | 2026-10-04 18:35:52 | pose | auto |
+| MO-584 | 2026-10-04 18:53:28 | pose | auto |
+| MO-585 | 2026-10-04 18:56:37 | pose | auto |
 
 ## Table 7 -- DEMANDES FILTREES (vrac)
 

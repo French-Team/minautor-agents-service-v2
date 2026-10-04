@@ -19222,3 +19222,9 @@
 {"type": "passe-debut", "mode": "relax", "date": "2026-10-04 18:48:55"}
 {"type": "visuel", "code": 0, "duree_ms": 406, "retard_avant_s": 312, "date": "2026-10-04 18:48:58"}
 {"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-10-04 18:49:05"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-10-04 18:54:08"}
+{"type": "visuel", "code": 0, "duree_ms": 402, "retard_avant_s": 312, "date": "2026-10-04 18:54:11"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-10-04 18:54:19"}
+{"type": "passe-debut", "mode": "relax", "date": "2026-10-04 18:59:23"}
+{"type": "visuel", "code": 0, "duree_ms": 405, "retard_avant_s": 314, "date": "2026-10-04 18:59:26"}
+{"type": "passe-fin", "mode": "relax", "detections": 0, "alertes": 0, "date": "2026-10-04 18:59:33"}

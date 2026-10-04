@@ -3,7 +3,7 @@
     "type": "bdd-conservation",
     "version": 1
   },
-  "compteur": 4833,
+  "compteur": 4842,
   "elements": [
     {
       "id": "K-001",
@@ -180158,14 +180158,14 @@
     },
     {
       "id": "K-4746",
-      "date": "2026-10-04 18:30:53",
+      "date": "2026-10-04 18:53:48",
       "mission": "MO-581",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_174100",
-      "destination": "",
-      "categorie": "STRUCTUREL",
-      "statut": "decide",
-      "verdict": "conserver",
-      "raison": "Point de restauration LE PLUS RECENT de suivi-espions.md : aucun plus recent n'existe pour ce fichier, il sert au revert d'une modification en cours (regle du plan MO-094 : garder les N plus recents par fichier).",
+      "destination": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_174100",
+      "categorie": "OBSOLETE",
+      "statut": "supprime",
+      "verdict": "archiver",
+      "raison": "RE-JUGE (EO-152) : ce point ETAIT le plus recent de sa famille ; un point plus recent l'a REMPLACE depuis, donc la regle du jour le dit OBSOLETE. Point de restauration REMPLACE de suivi-espions.md : une version plus recente existe pour ce fichier. Regle du plan MO-094 : garder les N plus recents par fichier, archiver les versions depassees (jamais de suppression seche).",
       "lecteurs": [
         "revert-fichier",
         "revert-periode"
@@ -180176,16 +180176,16 @@
       "index": [
         "matrice/data/conservation.json"
       ],
-      "sha_avant": "",
-      "sha_apres": "",
-      "octets_avant": "",
-      "octets_apres": "",
-      "lignes_avant": "",
-      "lignes_apres": "",
-      "restaurable": false,
-      "operation": "recenser",
-      "archive": "",
-      "preuve": "regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier -- dernier temoin de suivi-espions.md avant sa version courante. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
+      "sha_avant": "3d18ae9aa9a056da4a1c6dbc8bf78dbd7784f5cda2be20014ae632b4ee260b49",
+      "sha_apres": "3d18ae9aa9a056da4a1c6dbc8bf78dbd7784f5cda2be20014ae632b4ee260b49",
+      "octets_avant": 554,
+      "octets_apres": 554,
+      "lignes_avant": 24,
+      "lignes_apres": 24,
+      "restaurable": true,
+      "operation": "purger",
+      "archive": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_174100",
+      "preuve": "PURGE le 2026-10-04 18:53:48 : contenu PROUVE RECOUVRABLE par git -- les OCTETS du fichier VIVENT dans le depot (blob fccdd6b13f93097199ea47d7e97932d53a1176e7 : git cat-file blob fccdd6b13f93097199ea47d7e97932d53a1176e7) ; sha = 3d18ae9aa9a056da4a1c6dbc8bf78dbd7784f5cda2be20014ae632b4ee260b49, 554 octet(s)",
       "tags": [
         "balayer",
         "purification",
@@ -180576,14 +180576,14 @@
     },
     {
       "id": "K-4757",
-      "date": "2026-10-04 18:30:53",
+      "date": "2026-10-04 18:53:49",
       "mission": "MO-581",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_174059",
-      "destination": "",
-      "categorie": "STRUCTUREL",
-      "statut": "decide",
-      "verdict": "conserver",
-      "raison": "Point de restauration LE PLUS RECENT de suivi-matrice.md : aucun plus recent n'existe pour ce fichier, il sert au revert d'une modification en cours (regle du plan MO-094 : garder les N plus recents par fichier).",
+      "destination": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_174059",
+      "categorie": "OBSOLETE",
+      "statut": "supprime",
+      "verdict": "archiver",
+      "raison": "RE-JUGE (EO-152) : ce point ETAIT le plus recent de sa famille ; un point plus recent l'a REMPLACE depuis, donc la regle du jour le dit OBSOLETE. Point de restauration REMPLACE de suivi-matrice.md : une version plus recente existe pour ce fichier. Regle du plan MO-094 : garder les N plus recents par fichier, archiver les versions depassees (jamais de suppression seche).",
       "lecteurs": [
         "revert-fichier",
         "revert-periode"
@@ -180594,16 +180594,16 @@
       "index": [
         "matrice/data/conservation.json"
       ],
-      "sha_avant": "",
-      "sha_apres": "",
-      "octets_avant": "",
-      "octets_apres": "",
-      "lignes_avant": "",
-      "lignes_apres": "",
-      "restaurable": false,
-      "operation": "recenser",
-      "archive": "",
-      "preuve": "regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier -- dernier temoin de suivi-matrice.md avant sa version courante. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
+      "sha_avant": "9dab4b03d4be61f989c9a27d2e1a1bf1137c1eb017fe495b933cb2d964c7fe33",
+      "sha_apres": "9dab4b03d4be61f989c9a27d2e1a1bf1137c1eb017fe495b933cb2d964c7fe33",
+      "octets_avant": 2836,
+      "octets_apres": 2836,
+      "lignes_avant": 54,
+      "lignes_apres": 54,
+      "restaurable": true,
+      "operation": "purger",
+      "archive": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_174059",
+      "preuve": "PURGE le 2026-10-04 18:53:49 : contenu PROUVE RECOUVRABLE par git -- les OCTETS du fichier VIVENT dans le depot (blob 3f8daff46c1da43de911053671b38d1f9315b6b5 : git cat-file blob 3f8daff46c1da43de911053671b38d1f9315b6b5) ; sha = 9dab4b03d4be61f989c9a27d2e1a1bf1137c1eb017fe495b933cb2d964c7fe33, 2836 octet(s)",
       "tags": [
         "balayer",
         "purification",
@@ -180994,14 +180994,14 @@
     },
     {
       "id": "K-4768",
-      "date": "2026-10-04 18:30:53",
+      "date": "2026-10-04 18:53:50",
       "mission": "MO-581",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_174100",
-      "destination": "",
-      "categorie": "STRUCTUREL",
-      "statut": "decide",
-      "verdict": "conserver",
-      "raison": "Point de restauration LE PLUS RECENT de suivi-outils.md : aucun plus recent n'existe pour ce fichier, il sert au revert d'une modification en cours (regle du plan MO-094 : garder les N plus recents par fichier).",
+      "destination": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_174100",
+      "categorie": "OBSOLETE",
+      "statut": "supprime",
+      "verdict": "archiver",
+      "raison": "RE-JUGE (EO-152) : ce point ETAIT le plus recent de sa famille ; un point plus recent l'a REMPLACE depuis, donc la regle du jour le dit OBSOLETE. Point de restauration REMPLACE de suivi-outils.md : une version plus recente existe pour ce fichier. Regle du plan MO-094 : garder les N plus recents par fichier, archiver les versions depassees (jamais de suppression seche).",
       "lecteurs": [
         "revert-fichier",
         "revert-periode"
@@ -181012,16 +181012,16 @@
       "index": [
         "matrice/data/conservation.json"
       ],
-      "sha_avant": "",
-      "sha_apres": "",
-      "octets_avant": "",
-      "octets_apres": "",
-      "lignes_avant": "",
-      "lignes_apres": "",
-      "restaurable": false,
-      "operation": "recenser",
-      "archive": "",
-      "preuve": "regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier -- dernier temoin de suivi-outils.md avant sa version courante. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
+      "sha_avant": "1cd2967eeceadf74e44ba9655a82446b0b81ef7b839d5b8b5e451413369ecb31",
+      "sha_apres": "1cd2967eeceadf74e44ba9655a82446b0b81ef7b839d5b8b5e451413369ecb31",
+      "octets_avant": 1058,
+      "octets_apres": 1058,
+      "lignes_avant": 39,
+      "lignes_apres": 39,
+      "restaurable": true,
+      "operation": "purger",
+      "archive": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_174100",
+      "preuve": "PURGE le 2026-10-04 18:53:50 : contenu PROUVE RECOUVRABLE par git -- les OCTETS du fichier VIVENT dans le depot (blob 9d8fe8a48fe3523ddd5af363be79aa632f464a81 : git cat-file blob 9d8fe8a48fe3523ddd5af363be79aa632f464a81) ; sha = 1cd2967eeceadf74e44ba9655a82446b0b81ef7b839d5b8b5e451413369ecb31, 1058 octet(s)",
       "tags": [
         "balayer",
         "purification",
@@ -181412,14 +181412,14 @@
     },
     {
       "id": "K-4779",
-      "date": "2026-10-04 18:30:53",
+      "date": "2026-10-04 18:53:51",
       "mission": "MO-581",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_174100",
-      "destination": "",
-      "categorie": "STRUCTUREL",
-      "statut": "decide",
-      "verdict": "conserver",
-      "raison": "Point de restauration LE PLUS RECENT de suivi-parties-maitresses.md : aucun plus recent n'existe pour ce fichier, il sert au revert d'une modification en cours (regle du plan MO-094 : garder les N plus recents par fichier).",
+      "destination": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_174100",
+      "categorie": "OBSOLETE",
+      "statut": "supprime",
+      "verdict": "archiver",
+      "raison": "RE-JUGE (EO-152) : ce point ETAIT le plus recent de sa famille ; un point plus recent l'a REMPLACE depuis, donc la regle du jour le dit OBSOLETE. Point de restauration REMPLACE de suivi-parties-maitresses.md : une version plus recente existe pour ce fichier. Regle du plan MO-094 : garder les N plus recents par fichier, archiver les versions depassees (jamais de suppression seche).",
       "lecteurs": [
         "revert-fichier",
         "revert-periode"
@@ -181430,16 +181430,16 @@
       "index": [
         "matrice/data/conservation.json"
       ],
-      "sha_avant": "",
-      "sha_apres": "",
-      "octets_avant": "",
-      "octets_apres": "",
-      "lignes_avant": "",
-      "lignes_apres": "",
-      "restaurable": false,
-      "operation": "recenser",
-      "archive": "",
-      "preuve": "regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier -- dernier temoin de suivi-parties-maitresses.md avant sa version courante. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
+      "sha_avant": "dcf406612d97fcc4d99788bb2705ed7b76cf14bc04c9e4e09feac6b3e5b361f9",
+      "sha_apres": "dcf406612d97fcc4d99788bb2705ed7b76cf14bc04c9e4e09feac6b3e5b361f9",
+      "octets_avant": 1333,
+      "octets_apres": 1333,
+      "lignes_avant": 35,
+      "lignes_apres": 35,
+      "restaurable": true,
+      "operation": "purger",
+      "archive": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_174100",
+      "preuve": "PURGE le 2026-10-04 18:53:51 : contenu PROUVE RECOUVRABLE par git -- les OCTETS du fichier VIVENT dans le depot (blob 40b15b0eca10e94276964916b8531450112e61b2 : git cat-file blob 40b15b0eca10e94276964916b8531450112e61b2) ; sha = dcf406612d97fcc4d99788bb2705ed7b76cf14bc04c9e4e09feac6b3e5b361f9, 1333 octet(s)",
       "tags": [
         "balayer",
         "purification",
@@ -181830,14 +181830,14 @@
     },
     {
       "id": "K-4790",
-      "date": "2026-10-04 18:30:53",
+      "date": "2026-10-04 18:53:51",
       "mission": "MO-581",
       "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_174100",
-      "destination": "",
-      "categorie": "STRUCTUREL",
-      "statut": "decide",
-      "verdict": "conserver",
-      "raison": "Point de restauration LE PLUS RECENT de suivi-routines.md : aucun plus recent n'existe pour ce fichier, il sert au revert d'une modification en cours (regle du plan MO-094 : garder les N plus recents par fichier).",
+      "destination": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_174100",
+      "categorie": "OBSOLETE",
+      "statut": "supprime",
+      "verdict": "archiver",
+      "raison": "RE-JUGE (EO-152) : ce point ETAIT le plus recent de sa famille ; un point plus recent l'a REMPLACE depuis, donc la regle du jour le dit OBSOLETE. Point de restauration REMPLACE de suivi-routines.md : une version plus recente existe pour ce fichier. Regle du plan MO-094 : garder les N plus recents par fichier, archiver les versions depassees (jamais de suppression seche).",
       "lecteurs": [
         "revert-fichier",
         "revert-periode"
@@ -181848,16 +181848,16 @@
       "index": [
         "matrice/data/conservation.json"
       ],
-      "sha_avant": "",
-      "sha_apres": "",
-      "octets_avant": "",
-      "octets_apres": "",
-      "lignes_avant": "",
-      "lignes_apres": "",
-      "restaurable": false,
-      "operation": "recenser",
-      "archive": "",
-      "preuve": "regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier -- dernier temoin de suivi-routines.md avant sa version courante. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
+      "sha_avant": "9de7b968a9be321acc6c574da47881531a0a2e84541551eb0cbb7e7e06196dcb",
+      "sha_apres": "9de7b968a9be321acc6c574da47881531a0a2e84541551eb0cbb7e7e06196dcb",
+      "octets_avant": 1358,
+      "octets_apres": 1358,
+      "lignes_avant": 33,
+      "lignes_apres": 33,
+      "restaurable": true,
+      "operation": "purger",
+      "archive": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_174100",
+      "preuve": "PURGE le 2026-10-04 18:53:51 : contenu PROUVE RECOUVRABLE par git -- les OCTETS du fichier VIVENT dans le depot (blob 8d929967515d97611ee4fbbc14c88d8605705603 : git cat-file blob 8d929967515d97611ee4fbbc14c88d8605705603) ; sha = 9de7b968a9be321acc6c574da47881531a0a2e84541551eb0cbb7e7e06196dcb, 1358 octet(s)",
       "tags": [
         "balayer",
         "purification",
@@ -183274,14 +183274,14 @@
     },
     {
       "id": "K-4828",
-      "date": "2026-10-04 18:30:53",
+      "date": "2026-10-04 18:53:36",
       "mission": "MO-581",
       "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_181910",
-      "destination": "",
-      "categorie": "STRUCTUREL",
-      "statut": "decide",
-      "verdict": "conserver",
-      "raison": "Point de restauration LE PLUS RECENT de suivi-pilote.md : aucun plus recent n'existe pour ce fichier, il sert au revert d'une modification en cours (regle du plan MO-094 : garder les N plus recents par fichier).",
+      "destination": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_181910",
+      "categorie": "OBSOLETE",
+      "statut": "archive",
+      "verdict": "archiver",
+      "raison": "RE-JUGE (EO-152) : ce point ETAIT le plus recent de sa famille ; un point plus recent l'a REMPLACE depuis, donc la regle du jour le dit OBSOLETE. Point de restauration REMPLACE de suivi-pilote.md : une version plus recente existe pour ce fichier. Regle du plan MO-094 : garder les N plus recents par fichier, archiver les versions depassees (jamais de suppression seche).",
       "lecteurs": [
         "revert-fichier",
         "revert-periode"
@@ -183292,16 +183292,16 @@
       "index": [
         "matrice/data/conservation.json"
       ],
-      "sha_avant": "",
-      "sha_apres": "",
-      "octets_avant": "",
-      "octets_apres": "",
-      "lignes_avant": "",
-      "lignes_apres": "",
-      "restaurable": false,
-      "operation": "recenser",
-      "archive": "",
-      "preuve": "regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier -- dernier temoin de suivi-pilote.md avant sa version courante. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
+      "sha_avant": "020d31dbba146df8bee7ad14eb0c3fc674be01ae51fcb9e7721f68d637d3f0d8",
+      "sha_apres": "020d31dbba146df8bee7ad14eb0c3fc674be01ae51fcb9e7721f68d637d3f0d8",
+      "octets_avant": 8378,
+      "octets_apres": 8378,
+      "lignes_avant": 153,
+      "lignes_apres": 153,
+      "restaurable": true,
+      "operation": "archiver",
+      "archive": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_181910",
+      "preuve": "RE-JUGE (EO-152) : ce point ETAIT le plus recent de sa famille ; un point plus recent l'a REMPLACE depuis, donc la regle du jour le dit OBSOLETE. regle de la famille (mesure MO-162) : REMPLACE par suivi-pilote.md.bak.20261004_184623, qui reste EN PLACE -- ce point n'est plus le temoin d'une ecriture en cours.",
       "tags": [
         "balayer",
         "purification",
@@ -183492,6 +183492,348 @@
       "operation": "recenser",
       "archive": "",
       "preuve": "regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier -- dernier temoin de main.py avant sa version courante. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
+      "tags": [
+        "balayer",
+        "purification",
+        "bak",
+        "rotation",
+        "regle"
+      ]
+    },
+    {
+      "id": "K-4834",
+      "date": "2026-10-04 18:53:35",
+      "mission": "MO-584",
+      "source": "_operateur/optimus-prime/preparation/mo-583-cadrage-cartes-liens.md.bak.20261004_184127",
+      "destination": "",
+      "categorie": "STRUCTUREL",
+      "statut": "decide",
+      "verdict": "conserver",
+      "raison": "Point de restauration LE PLUS RECENT de mo-583-cadrage-cartes-liens.md : aucun plus recent n'existe pour ce fichier, il sert au revert d'une modification en cours (regle du plan MO-094 : garder les N plus recents par fichier).",
+      "lecteurs": [
+        "revert-fichier",
+        "revert-periode"
+      ],
+      "ecrivains": [
+        "matrice/data/outils/ecrire"
+      ],
+      "index": [
+        "matrice/data/conservation.json"
+      ],
+      "sha_avant": "",
+      "sha_apres": "",
+      "octets_avant": "",
+      "octets_apres": "",
+      "lignes_avant": "",
+      "lignes_apres": "",
+      "restaurable": false,
+      "operation": "recenser",
+      "archive": "",
+      "preuve": "regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier -- dernier temoin de mo-583-cadrage-cartes-liens.md avant sa version courante. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
+      "tags": [
+        "balayer",
+        "purification",
+        "bak",
+        "rotation",
+        "regle"
+      ]
+    },
+    {
+      "id": "K-4835",
+      "date": "2026-10-04 18:53:35",
+      "mission": "MO-584",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-espions.md.bak.20261004_184538",
+      "destination": "",
+      "categorie": "STRUCTUREL",
+      "statut": "decide",
+      "verdict": "conserver",
+      "raison": "Point de restauration LE PLUS RECENT de suivi-espions.md : aucun plus recent n'existe pour ce fichier, il sert au revert d'une modification en cours (regle du plan MO-094 : garder les N plus recents par fichier).",
+      "lecteurs": [
+        "revert-fichier",
+        "revert-periode"
+      ],
+      "ecrivains": [
+        "matrice/data/outils/ecrire"
+      ],
+      "index": [
+        "matrice/data/conservation.json"
+      ],
+      "sha_avant": "",
+      "sha_apres": "",
+      "octets_avant": "",
+      "octets_apres": "",
+      "lignes_avant": "",
+      "lignes_apres": "",
+      "restaurable": false,
+      "operation": "recenser",
+      "archive": "",
+      "preuve": "regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier -- dernier temoin de suivi-espions.md avant sa version courante. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
+      "tags": [
+        "balayer",
+        "purification",
+        "bak",
+        "rotation",
+        "regle"
+      ]
+    },
+    {
+      "id": "K-4836",
+      "date": "2026-10-04 18:53:35",
+      "mission": "MO-584",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-matrice.md.bak.20261004_184537",
+      "destination": "",
+      "categorie": "STRUCTUREL",
+      "statut": "decide",
+      "verdict": "conserver",
+      "raison": "Point de restauration LE PLUS RECENT de suivi-matrice.md : aucun plus recent n'existe pour ce fichier, il sert au revert d'une modification en cours (regle du plan MO-094 : garder les N plus recents par fichier).",
+      "lecteurs": [
+        "revert-fichier",
+        "revert-periode"
+      ],
+      "ecrivains": [
+        "matrice/data/outils/ecrire"
+      ],
+      "index": [
+        "matrice/data/conservation.json"
+      ],
+      "sha_avant": "",
+      "sha_apres": "",
+      "octets_avant": "",
+      "octets_apres": "",
+      "lignes_avant": "",
+      "lignes_apres": "",
+      "restaurable": false,
+      "operation": "recenser",
+      "archive": "",
+      "preuve": "regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier -- dernier temoin de suivi-matrice.md avant sa version courante. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
+      "tags": [
+        "balayer",
+        "purification",
+        "bak",
+        "rotation",
+        "regle"
+      ]
+    },
+    {
+      "id": "K-4837",
+      "date": "2026-10-04 18:53:35",
+      "mission": "MO-584",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-outils.md.bak.20261004_184538",
+      "destination": "",
+      "categorie": "STRUCTUREL",
+      "statut": "decide",
+      "verdict": "conserver",
+      "raison": "Point de restauration LE PLUS RECENT de suivi-outils.md : aucun plus recent n'existe pour ce fichier, il sert au revert d'une modification en cours (regle du plan MO-094 : garder les N plus recents par fichier).",
+      "lecteurs": [
+        "revert-fichier",
+        "revert-periode"
+      ],
+      "ecrivains": [
+        "matrice/data/outils/ecrire"
+      ],
+      "index": [
+        "matrice/data/conservation.json"
+      ],
+      "sha_avant": "",
+      "sha_apres": "",
+      "octets_avant": "",
+      "octets_apres": "",
+      "lignes_avant": "",
+      "lignes_apres": "",
+      "restaurable": false,
+      "operation": "recenser",
+      "archive": "",
+      "preuve": "regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier -- dernier temoin de suivi-outils.md avant sa version courante. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
+      "tags": [
+        "balayer",
+        "purification",
+        "bak",
+        "rotation",
+        "regle"
+      ]
+    },
+    {
+      "id": "K-4838",
+      "date": "2026-10-04 18:53:35",
+      "mission": "MO-584",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-parties-maitresses.md.bak.20261004_184538",
+      "destination": "",
+      "categorie": "STRUCTUREL",
+      "statut": "decide",
+      "verdict": "conserver",
+      "raison": "Point de restauration LE PLUS RECENT de suivi-parties-maitresses.md : aucun plus recent n'existe pour ce fichier, il sert au revert d'une modification en cours (regle du plan MO-094 : garder les N plus recents par fichier).",
+      "lecteurs": [
+        "revert-fichier",
+        "revert-periode"
+      ],
+      "ecrivains": [
+        "matrice/data/outils/ecrire"
+      ],
+      "index": [
+        "matrice/data/conservation.json"
+      ],
+      "sha_avant": "",
+      "sha_apres": "",
+      "octets_avant": "",
+      "octets_apres": "",
+      "lignes_avant": "",
+      "lignes_apres": "",
+      "restaurable": false,
+      "operation": "recenser",
+      "archive": "",
+      "preuve": "regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier -- dernier temoin de suivi-parties-maitresses.md avant sa version courante. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
+      "tags": [
+        "balayer",
+        "purification",
+        "bak",
+        "rotation",
+        "regle"
+      ]
+    },
+    {
+      "id": "K-4839",
+      "date": "2026-10-04 18:53:35",
+      "mission": "MO-584",
+      "source": "_operateur/optimus-prime/suivi-parties/suivi-routines.md.bak.20261004_184538",
+      "destination": "",
+      "categorie": "STRUCTUREL",
+      "statut": "decide",
+      "verdict": "conserver",
+      "raison": "Point de restauration LE PLUS RECENT de suivi-routines.md : aucun plus recent n'existe pour ce fichier, il sert au revert d'une modification en cours (regle du plan MO-094 : garder les N plus recents par fichier).",
+      "lecteurs": [
+        "revert-fichier",
+        "revert-periode"
+      ],
+      "ecrivains": [
+        "matrice/data/outils/ecrire"
+      ],
+      "index": [
+        "matrice/data/conservation.json"
+      ],
+      "sha_avant": "",
+      "sha_apres": "",
+      "octets_avant": "",
+      "octets_apres": "",
+      "lignes_avant": "",
+      "lignes_apres": "",
+      "restaurable": false,
+      "operation": "recenser",
+      "archive": "",
+      "preuve": "regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier -- dernier temoin de suivi-routines.md avant sa version courante. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
+      "tags": [
+        "balayer",
+        "purification",
+        "bak",
+        "rotation",
+        "regle"
+      ]
+    },
+    {
+      "id": "K-4840",
+      "date": "2026-10-04 18:54:04",
+      "mission": "MO-584",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_183735",
+      "destination": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_183735",
+      "categorie": "OBSOLETE",
+      "statut": "supprime",
+      "verdict": "archiver",
+      "raison": "Point de restauration REMPLACE de suivi-pilote.md : une version plus recente existe pour ce fichier. Regle du plan MO-094 : garder les N plus recents par fichier, archiver les versions depassees (jamais de suppression seche).",
+      "lecteurs": [
+        "revert-fichier",
+        "revert-periode"
+      ],
+      "ecrivains": [
+        "matrice/data/outils/ecrire"
+      ],
+      "index": [
+        "matrice/data/conservation.json"
+      ],
+      "sha_avant": "c0d11fa8cf31b9eae9993d3dd64e2e96669cf0c9f14affd00dfee2b846740b55",
+      "sha_apres": "c0d11fa8cf31b9eae9993d3dd64e2e96669cf0c9f14affd00dfee2b846740b55",
+      "octets_avant": 7994,
+      "octets_apres": 7994,
+      "lignes_avant": 152,
+      "lignes_apres": 152,
+      "restaurable": true,
+      "operation": "purger",
+      "archive": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_183735",
+      "preuve": "PURGE le 2026-10-04 18:54:04 : contenu PROUVE RECOUVRABLE par git -- les OCTETS du fichier VIVENT dans le depot (blob 9e5468c396545fafc9a2663e388f18608bc960b9 : git cat-file blob 9e5468c396545fafc9a2663e388f18608bc960b9) ; sha = c0d11fa8cf31b9eae9993d3dd64e2e96669cf0c9f14affd00dfee2b846740b55, 7994 octet(s)",
+      "tags": [
+        "balayer",
+        "purification",
+        "bak",
+        "rotation",
+        "regle"
+      ]
+    },
+    {
+      "id": "K-4841",
+      "date": "2026-10-04 18:53:36",
+      "mission": "MO-584",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_184223",
+      "destination": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_184223",
+      "categorie": "OBSOLETE",
+      "statut": "archive",
+      "verdict": "archiver",
+      "raison": "Point de restauration REMPLACE de suivi-pilote.md : une version plus recente existe pour ce fichier. Regle du plan MO-094 : garder les N plus recents par fichier, archiver les versions depassees (jamais de suppression seche).",
+      "lecteurs": [
+        "revert-fichier",
+        "revert-periode"
+      ],
+      "ecrivains": [
+        "matrice/data/outils/ecrire"
+      ],
+      "index": [
+        "matrice/data/conservation.json"
+      ],
+      "sha_avant": "93a92d72367cfcaddb8f30de31864cc128889b7d4210d733a94399401e5f95fb",
+      "sha_apres": "93a92d72367cfcaddb8f30de31864cc128889b7d4210d733a94399401e5f95fb",
+      "octets_avant": 5596,
+      "octets_apres": 5596,
+      "lignes_avant": 144,
+      "lignes_apres": 144,
+      "restaurable": true,
+      "operation": "archiver",
+      "archive": "_operateur/optimus-prime/purification/archives/_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_184223",
+      "preuve": "regle de la famille (mesure MO-162) : REMPLACE par suivi-pilote.md.bak.20261004_184623, qui reste EN PLACE -- ce point n'est plus le temoin d'une ecriture en cours. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
+      "tags": [
+        "balayer",
+        "purification",
+        "bak",
+        "rotation",
+        "regle"
+      ]
+    },
+    {
+      "id": "K-4842",
+      "date": "2026-10-04 18:53:35",
+      "mission": "MO-584",
+      "source": "_operateur/optimus-prime/suivi-pilote/suivi-pilote.md.bak.20261004_184623",
+      "destination": "",
+      "categorie": "STRUCTUREL",
+      "statut": "decide",
+      "verdict": "conserver",
+      "raison": "Point de restauration LE PLUS RECENT de suivi-pilote.md : aucun plus recent n'existe pour ce fichier, il sert au revert d'une modification en cours (regle du plan MO-094 : garder les N plus recents par fichier).",
+      "lecteurs": [
+        "revert-fichier",
+        "revert-periode"
+      ],
+      "ecrivains": [
+        "matrice/data/outils/ecrire"
+      ],
+      "index": [
+        "matrice/data/conservation.json"
+      ],
+      "sha_avant": "",
+      "sha_apres": "",
+      "octets_avant": "",
+      "octets_apres": "",
+      "lignes_avant": "",
+      "lignes_apres": "",
+      "restaurable": false,
+      "operation": "recenser",
+      "archive": "",
+      "preuve": "regle de la famille (mesure MO-162) : aucun plus recent pour ce fichier -- dernier temoin de suivi-pilote.md avant sa version courante. | RECENSEMENT : MO-306 : recensement de la famille applique par le balayage (revert-fichier + revert-periode restaurent depuis les .bak ; la porte ecrire cree le point ; conservation.json l indexe).",
       "tags": [
         "balayer",
         "purification",

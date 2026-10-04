@@ -10,7 +10,7 @@ identite:
 
 | Derniere mise a jour | Evenements | Missions tracees | Missions finies | Missions ouvertes | File du pilote |
 |---|---|---|---|---|---|
-| 2026-10-04 18:36:34 | 2812 | 530 | 529 | 1 | 18 |
+| 2026-10-04 18:57:19 | 2828 | 532 | 531 | 1 | 16 |
 
 > LES COLONNES NE PARLENT PAS DU MEME LIVRE (audit createur 2026-09-30) :
 >   - tracees / finies / ouvertes : le JOURNAL DE SUIVI, ou chaque mission passe
@@ -35,7 +35,7 @@ Flux : optimus (via l'outil suivi-optimus) -> data/suivi-optimus.jsonl -> VUE le
 
 | Jour | Missions finies | Evenements | Portes | Fichiers | Themes |
 |---|---|---|---|---|---|
-| 2026-10-04 | 12 | 174 | 7 | 130 | REPARATION, CONTRATS, CADRAGE, OUTIL, PILOTE, ROUTINE, CADREUR, BDD, DEPOT-GIT, audit-des-bloquants-du-vrac, CREER-OUTIL, ANALYSE |
+| 2026-10-04 | 14 | 190 | 7 | 135 | REPARATION, CONTRATS, CADRAGE, OUTIL, PILOTE, ROUTINE, CADREUR, BDD, DEPOT-GIT, audit-des-bloquants-du-vrac, CREER-OUTIL, ANALYSE |
 | 2026-10-03 | 21 | 179 | 14 | 201 | CONSTRUCTEUR, OUTIL, REPARATION, CONTRATS, CADRAGE, PILOTE, ROUTINE, CADREUR, BDD |
 | 2026-10-02 | 20 | 150 | 17 | 82 | CONSTRUCTEUR, ROUTINE, AUDITEUR, REPARATION, OUTIL, CONTRATS, SUIVI, PILOTE, TABLE-RONDE-ROUND, REVISEUR, SUIVI-OPTIMUS, ANALYSE |
 | 2026-10-01 | 22 | 163 | 7 | 91 | PILOTE, REPARATION, BDD, CONSTRUCTEUR, REDACTEUR, AUDITEUR, REVISEUR, ANALYSE, CADRAGE, CONTRATS |
@@ -55,10 +55,13 @@ Flux : optimus (via l'outil suivi-optimus) -> data/suivi-optimus.jsonl -> VUE le
 
 | Mission | Theme | Debut | Fin | Duree | Ev. | Etat | Portes | Fichiers |
 |---|---|---|---|---|---|---|---|---|
-| MO-584 | CADRAGE | 04/10 18:36 | - | - | 2 | en cours | pilote:injecter, pilote:prise | - |
-| MO-583 | CADRAGE | 04/10 18:33 | 04/10 18:35 | 119 | 7 | finie | pilote:injecter, pilote:prise, pilote:fin, pilote:rotation-intercom | - |
-| MO-582 | ANALYSE | 04/10 18:31 | 04/10 18:33 | 87 | 7 | finie | pilote:injecter, pilote:prise, pilote:fin, pilote:rotation-intercom | - |
-| MO-581 | REPARATION | 04/10 18:26 | 04/10 18:30 | 229 | 7 | finie | pilote:injecter, pilote:prise, pilote:fin, pilote:rotation-intercom | - |
+| MO-585 | REPARATION | 04/10 18:54 | 04/10 18:56 | 144 | 6 | finie | pilote:injecter, pilote:prise, pilote:fin, pilote:rotation-intercom | _operateur/optimus-prime/preparation/mo-585-doublon-naissance.md |
+| MO-586 | ANALYSE | 04/10 18:57 | - | - | 2 | en cours | pilote:injecter, pilote:prise | - |
+| MO-584 | CADRAGE | 04/10 18:36 | 04/10 18:53 | 1015 | 6 | finie | pilote:injecter, pilote:prise, pilote:fin, pilote:rotation-intercom | _operateur/optimus-prime/preparation/mo-584-cadrage-depot-git.md |
+| MO-582 | ANALYSE | 04/10 18:31 | 04/10 18:33 | 87 | 8 | finie | pilote:injecter, pilote:prise, pilote:fin, pilote:rotation-intercom | _operateur/optimus-prime/preparation/mo-582-presse-papier-windows.md |
+| MO-583 | CADRAGE | 04/10 18:33 | 04/10 18:35 | 119 | 8 | finie | pilote:injecter, pilote:prise, pilote:fin, pilote:rotation-intercom | _operateur/optimus-prime/preparation/mo-583-cadrage-cartes-liens.md |
+| MO-550 | REPARATION | 02/10 21:20 | 02/10 21:32 | 776 | 9 | finie | pilote:charger, pilote:prise, ecrire, bdd-modifications, entonnoir, suivi-optimus, pilote, pilote:fin, pilote:purge, pilote:rotation-intercom | matrice/data/commun/etat_histoire.py, _operateur/optimus-prime/super-combos/combos/outils/verifier-historique-non-redondant.py, _operateur/optimus-prime/super-combos/combos/outils/verifier-observations-non-redondantes.py, _operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py, ... (+141 car.) |
+| MO-581 | REPARATION | 04/10 18:26 | 04/10 18:30 | 229 | 8 | finie | pilote:injecter, pilote:prise, pilote:fin, pilote:rotation-intercom | _operateur/optimus-prime/preparation/mo-581-doublon-eo-559.md |
 | MO-095 | CREER-OUTIL | 15/09 19:10 | 15/09 19:10 | 1 | 4 | finie | bdd-conservation, bdd-modifications, non-regression | matrice/data/conservation.json, _operateur/optimus-prime/purification/plan-conservation.md, matrice/data/data-readme.md, matrice/data/manuel-outils.md, matrice/data/suivi-optimus.jsonl, matrice/data/outils/rechercher/constants.py, matrice/data/outils/rechercher/DESCRIPTION.md, _operateur/optimus-pri ... (+807 car.) |
 | MO-577 | REPARATION | 04/10 09:07 | 04/10 09:47 | 2422 | 10 | finie | pilote:injecter, pilote:prise, pilote:fin, pilote:rotation-intercom, pilote:purge | matrice/data/lecons.json, matrice/data/outils/chaine-pense-bete/main.py, matrice/data/outils/chaine-pense-bete/constants.py, matrice/data/outils/chaine-pense-bete/commun.py, matrice/data/outils/chaine-pense-bete/etape/entry.py, matrice/data/outils/chaine-pense-bete/etape/fonctions.py, _operateur/opt ... (+1001 car.) |
 | MO-579 | DEPOT-GIT | 04/10 14:22 | 04/10 14:22 | inconnue | 7 | finie | pilote:purge | _operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py, matrice/data/manuel-outils.md, _operateur/optimus-prime/remorque/inventaire.json, matrice/data/outils/editer-agents-md/commun.py, _operateur/optimus-prime/tmp-optimus/README.md, _operateur/optimus-prime/parcours/themes/th ... (+406 car.) |
@@ -82,18 +85,17 @@ Flux : optimus (via l'outil suivi-optimus) -> data/suivi-optimus.jsonl -> VUE le
 | MO-563 | REPARATION | 03/10 17:08 | 03/10 17:33 | 1483 | 11 | finie | pilote:charger, pilote:injection, pilote:prise, pilote:fin, pilote:purge, pilote:rotation-intercom | matrice/routines/suivi-sync/commun.py, matrice/routines/suivi-sync/constants.py, matrice/routines/suivi-sync/main.py, matrice/data/outils/ecrire/commun.py, _operateur/optimus-prime/conventions/convention-auto-correction.md, mo-563-bilan.md, mo-563-convention.md, mo-563-visuels.md, mo-570-bilan-mo-56 ... (+4 car.) |
 | MO-562 | CONTRATS | 03/10 16:32 | 03/10 17:03 | 1870 | 10 | finie | pilote:charger, pilote:prise, pilote:fin, pilote:purge, pilote:rotation-intercom | _operateur/optimus-prime/pilote/entonnoir-files-optimus.json, _operateur/optimus-prime/pilote/entonnoir/vrac/fonctions.py, _operateur/optimus-prime/pilote/entonnoir/classer/fonctions.py, _operateur/optimus-prime/pilote/entonnoir/vrac/entry.py, matrice/data/commun/passerelle_user.py, _operateur/optim ... (+156 car.) |
 | MO-561 | PILOTE | 03/10 14:39 | 03/10 15:33 | 3252 | 11 | finie | pilote:charger, pilote:injection, pilote:prise, pilote:fin, pilote:purge, pilote:rotation-intercom | _operateur/optimus-prime/pilote/entonnoir/listes.py, _operateur/optimus-prime/pilote/entonnoir/vrac/fonctions.py, _operateur/optimus-prime/pilote/entonnoir/vrac/entry.py, matrice/data/commun/passerelle_user.py, matrice/data/outils/passerelle-demandes/commun.py, _operateur/optimus-prime/pilote/entonn ... (+146 car.) |
-| MO-560 | OUTIL | 03/10 14:13 | 03/10 14:35 | 1362 | 11 | finie | pilote:charger, pilote:injection, pilote:prise, pilote:fin, pilote:purge, pilote:rotation-intercom | _operateur/optimus-prime/conventions/convention-crochets.md, _operateur/optimus-prime/parcours/index-parcours.json, matrice/data/vivier-themes.json, _operateur/optimus-prime/pilote/entonnoir/listes.py, _operateur/optimus-prime/pilote/entonnoir/roles.py, _operateur/optimus-prime/parcours/themes/index ... (+705 car.) |
-| MO-558 | CADRAGE | 03/10 12:37 | 03/10 13:42 | 3891 | 12 | finie | pilote:charger, pilote:prise, pilote:fin, pilote:purge, pilote:rotation-intercom | mo-558-bilan.md, mo-559-assembler.py, mo-559-conformite-demande-new.py, mo-559-conformite-demande.md, mo-559-desc-conformite.md, mo-559-desc-legende.md, mo-559-generer-head.py, mo-559-head-nouveau.md, mo-559-head-source.md, mo-559-patcher-conformite.py, mo-559-readme.md, mo-559-template-nouveau.md, ... (+47 car.) |
-| MO-557 | REPARATION | 03/10 11:48 | 03/10 11:55 | 384 | 13 | finie | pilote:charger, pilote:injection, pilote:prise, pilote:fin, pilote:purge, pilote:rotation-intercom | mo-556-bilan.md, mo-556-sonde-exclue.md, mo-557-bilan.md, _operateur/optimus-prime/suivi-optimus.md, mo-570-bilan-mo-557.md |
 
 *Duree INCONNUE pour 72 mission(s) : MO-579, MO-580, MO-572, MO-571, MO-088, MO-475, MO-479, MO-478 ... -- bornes identiques (debut pose apres coup) : un debut et une fin au meme instant ne mesurent pas zero seconde.
 
-*500 mission(s) de plus (journal complet : data/suivi-optimus.jsonl).
+*502 mission(s) de plus (journal complet : data/suivi-optimus.jsonl).
 
 ## Action : debut
 
 | Heure | Date | Mission | Detail | Portes |
 |---|---|---|---|---|
+| 18:57:19 | 2026-10-04 | MO-586 | debut declare par le pilote (injection) : ANALYSE : est-il possible de separe les portes communes et celle qui serait 'privee' que le cameleon ne pourait pas utiliser. je vois que le fait d'avoir que des portes communes, nous oblige 'toujours | pilote:injecter |
+| 18:54:13 | 2026-10-04 | MO-585 | debut declare par le pilote (injection) : REPARATION : Un garde : une demande identique deposee DEUX FOIS dans la memoire de naissance doit etre signalee au depot (mesure MO-527 : EO-519 le 2026-09-30 puis EO-546 le 2026-10-02, la meme demand | pilote:injecter |
 | 18:36:33 | 2026-10-04 | MO-584 | debut declare par le pilote (injection) : CADRAGE : on va devoir creer tout les fichiers (regles, protocoles, conventions, theme) pour le depot "git". on doit revoir sa description et son utilite. depuis que j'utilise des llm, je me rend comp | pilote:injecter |
 | 18:33:53 | 2026-10-04 | MO-583 | debut declare par le pilote (injection) : CADRAGE : creer une routine qui va verifier si les cartes d'identites des fichiers contiennent bien les liens des fichiers connecte a eux (qui doit permettre de facilement retrouver les fichiers conne | pilote:injecter |
 | 18:31:44 | 2026-10-04 | MO-582 | debut declare par le pilote (injection) : ANALYSE : est il possible d'utiliser le ##########################presse-papier de windows ? | pilote:injecter |
@@ -117,15 +119,15 @@ Flux : optimus (via l'outil suivi-optimus) -> data/suivi-optimus.jsonl -> VUE le
 | 17:08:52 | 2026-10-03 | MO-563 | debut declare par charger (charge INDIVIDUELLE) : REPARATION : Les visuels genere : le head de suivi-optimus doit se regenerer a chaque veille, comme le journal | pilote:charger |
 | 16:32:47 | 2026-10-03 | MO-562 | debut declare par charger (charge INDIVIDUELLE) : CONTRATS : La regle de type : reconnaitre question, cadrage et audit AVANT le repli dev | pilote:charger |
 | 14:39:25 | 2026-10-03 | MO-561 | debut declare par charger (charge INDIVIDUELLE) : PILOTE : favoriser les demandes deja engagees et rattraper le retard | pilote:charger |
-| 14:13:07 | 2026-10-03 | MO-560 | debut declare par charger (charge INDIVIDUELLE) : OUTIL : mot crochet : type neuf + process de creation injecte | pilote:charger |
-| 12:37:29 | 2026-10-03 | MO-559 | debut declare par charger (charge INDIVIDUELLE) : CADRAGE : Deux instruments ASCII, deux doctrines : faut-il supprimer ou preserver un caractere sans equivalent ? | pilote:charger |
 
-*505 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
+*507 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
 
 ## Action : fin
 
 | Heure | Date | Mission | Detail | Portes |
 |---|---|---|---|---|
+| 18:56:37 | 2026-10-04 | MO-585 | fin declaree par le pilote (cloture) : REPARATION : Un garde : une demande identique deposee DEUX FOIS dans la memoire de naissance doit etre signalee au depot (mesure MO-527 : EO-519 le 2026-09-30 puis EO-546 le 2026-10-02, la meme demand | pilote:fin |
+| 18:53:28 | 2026-10-04 | MO-584 | fin declaree par le pilote (cloture) : CADRAGE : on va devoir creer tout les fichiers (regles, protocoles, conventions, theme) pour le depot "git". on doit revoir sa description et son utilite. depuis que j'utilise des llm, je me rend comp | pilote:fin |
 | 18:35:52 | 2026-10-04 | MO-583 | fin declaree par le pilote (cloture) : CADRAGE : creer une routine qui va verifier si les cartes d'identites des fichiers contiennent bien les liens des fichiers connecte a eux (qui doit permettre de facilement retrouver les fichiers conne | pilote:fin |
 | 18:33:11 | 2026-10-04 | MO-582 | fin declaree par le pilote (cloture) : ANALYSE : est il possible d'utiliser le ##########################presse-papier de windows ? | pilote:fin |
 | 18:30:46 | 2026-10-04 | MO-581 | fin declaree par le pilote (cloture) : REPARATION : REPARATION-CONTROLE | pilote:fin |
@@ -203,15 +205,15 @@ Le perimetre pos ... (+3427 car.) | - |
 | 17:03:57 | 2026-10-03 | MO-562 | fin declaree par le pilote (cloture) : CONTRATS : La regle de type : reconnaitre question, cadrage et audit AVANT le repli dev | pilote:fin |
 | 15:33:37 | 2026-10-03 | MO-561 | fin declaree par le pilote (cloture) : PILOTE : favoriser les demandes deja engagees et rattraper le retard | pilote:fin |
 | 14:35:49 | 2026-10-03 | MO-560 | fin declaree par le pilote (cloture) : OUTIL : mot crochet : type neuf + process de creation injecte | pilote:fin |
-| 13:49:35 | 2026-10-03 | MO-559 | fin declaree par le pilote (cloture) : CADRAGE : Deux instruments ASCII, deux doctrines : faut-il supprimer ou preserver un caractere sans equivalent ? | pilote:fin |
-| 13:42:07 | 2026-10-03 | MO-558 | fin declaree par le pilote (cloture) : CADRAGE : Conformer une demande avant son depot : process mecanique + mini-parcours a outils dedies | pilote:fin |
 
-*505 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
+*507 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
 
 ## Action : porte
 
 | Heure | Date | Mission | Detail | Portes |
 |---|---|---|---|---|
+| 18:57:19 | 2026-10-04 | MO-585 | rotation des boites intercom : pilote/outbox 3050956 -> 3008939 o, 3 message(s) archive(s) dans boite-archive-20261004.jsonl, 200 garde(s) pour un seuil de 5242880 o ; matrice/inbox 222690 -> 221710 o, 2 message(s) archive(s) dans boite-archive-20261004.jsonl, 200 garde(s) pour un seuil de 5242880 o | pilote:rotation-intercom |
+| 18:54:13 | 2026-10-04 | MO-584 | rotation des boites intercom : pilote/outbox 3049541 -> 3007674 o, 3 message(s) archive(s) dans boite-archive-20261004.jsonl, 200 garde(s) pour un seuil de 5242880 o ; matrice/inbox 218639 -> 217659 o, 2 message(s) archive(s) dans boite-archive-20261004.jsonl, 200 garde(s) pour un seuil de 5242880 o | pilote:rotation-intercom |
 | 18:36:33 | 2026-10-04 | MO-583 | rotation des boites intercom : pilote/outbox 3047933 -> 3005612 o, 3 message(s) archive(s) dans boite-archive-20261004.jsonl, 200 garde(s) pour un seuil de 5242880 o ; matrice/inbox 214381 -> 213891 o, 1 message(s) archive(s) dans boite-archive-20261004.jsonl, 200 garde(s) pour un seuil de 5242880 o | pilote:rotation-intercom |
 | 18:33:53 | 2026-10-04 | MO-582 | rotation des boites intercom : pilote/outbox 3045623 -> 3003444 o, 3 message(s) archive(s) dans boite-archive-20261004.jsonl, 200 garde(s) pour un seuil de 5242880 o ; matrice/inbox 211696 -> 211206 o, 1 message(s) archive(s) dans boite-archive-20261004.jsonl, 200 garde(s) pour un seuil de 5242880 o | pilote:rotation-intercom |
 | 18:31:44 | 2026-10-04 | MO-581 | rotation des boites intercom : pilote/outbox 3044084 -> 3001564 o, 3 message(s) archive(s) dans boite-archive-20261004.jsonl, 200 garde(s) pour un seuil de 5242880 o ; matrice/inbox 252970 -> 208142 o, 35 message(s) archive(s) dans boite-archive-20261004.jsonl, 200 garde(s) pour un seuil de 5242880 o | pilote:rotation-intercom |
@@ -235,10 +237,8 @@ Le perimetre pos ... (+3427 car.) | - |
 | 15:34:07 | 2026-10-03 | MO-561 | rotation des boites intercom : pilote/outbox 3103302 -> 3061123 o, 3 message(s) archive(s) dans boite-archive-20261003.jsonl, 200 garde(s) pour un seuil de 5242880 o ; matrice/inbox 253280 -> 235676 o, 5 message(s) archive(s) dans boite-archive-20261003.jsonl, 200 garde(s) pour un seuil de 5242880 o | pilote:rotation-intercom |
 | 14:36:20 | 2026-10-03 | MO-560 | rotation des boites intercom : pilote/outbox 3100139 -> 3057619 o, 3 message(s) archive(s) dans boite-archive-20261003.jsonl, 200 garde(s) pour un seuil de 5242880 o ; matrice/inbox 263101 -> 246629 o, 5 message(s) archive(s) dans boite-archive-20261003.jsonl, 200 garde(s) pour un seuil de 5242880 o | pilote:rotation-intercom |
 | 13:50:00 | 2026-10-03 | MO-559 | rotation des boites intercom : pilote/outbox 3096837 -> 3055107 o, 3 message(s) archive(s) dans boite-archive-20261003.jsonl, 200 garde(s) pour un seuil de 5242880 o ; matrice/inbox 257496 -> 257006 o, 1 message(s) archive(s) dans boite-archive-20261003.jsonl, 200 garde(s) pour un seuil de 5242880 o | pilote:rotation-intercom |
-| 13:42:36 | 2026-10-03 | MO-558 | rotation des boites intercom : pilote/outbox 3176706 -> 3051095 o, 7 message(s) archive(s) dans boite-archive-20261003.jsonl, 200 garde(s) pour un seuil de 5242880 o ; matrice/inbox 255256 -> 250846 o, 9 message(s) archive(s) dans boite-archive-20261003.jsonl, 200 garde(s) pour un seuil de 5242880 o | pilote:rotation-intercom |
-| 12:01:24 | 2026-10-03 | MO-556 | rotation des boites intercom : pilote/outbox 3080749 -> 3040462 o, 3 message(s) archive(s) dans boite-archive-20261003.jsonl, 200 garde(s) pour un seuil de 5242880 o ; matrice/inbox 244678 -> 244188 o, 1 message(s) archive(s) dans boite-archive-20261003.jsonl, 200 garde(s) pour un seuil de 5242880 o | pilote:rotation-intercom |
 
-*224 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
+*226 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
 
 ## Action : depot
 
@@ -269,6 +269,14 @@ Le perimetre pos ... (+3427 car.) | - |
 
 | Heure | Date | Mission | Detail | Portes |
 |---|---|---|---|---|
+| 18:57:13 | 2026-10-04 | MO-585 | ALERTE conservation : BORNE N=1 ROMPUE -- au moins une famille garde plus d'un point EN PLACE, donc l'actif grandit a chaque ecriture (le balayage doit la re-juger : voir `balayer`). MESURE DE LA PORTE : BORNE N=1 PAR FAMILLE -- un seul point de restauration EN PLACE par famille \| familles connues        : 646 \| points EN PLACE         : 573 (decide + conserver ; une archive a quitte sa place) \| familles EN EXCES       : 0 \| points en trop          : 0 \| points en attente d acte: 0 (decide + archiver -- information, pas un ecart) \| familles hors borne SUR LE DISQUE: 6 (P2 : la borne se mesure ... (+804 car.) | - |
+| 18:56:36 | 2026-10-04 | MO-585 | RAISONNEMENT : NON -- aucun segment de la BDD ne porte la source MO-585 (BDD : 104 segment(s)). La cloture l A DEMANDE : soit ce round n a rien produit de REUTILISABLE et le bilan le DIT, soit il a produit un raisonnement sans le deposer -- alors depose-le et redeclare-le a la cloture (--segment-fichier). | - |
+| 18:54:06 | 2026-10-04 | MO-584 | ALERTE conservation : BORNE N=1 ROMPUE -- au moins une famille garde plus d'un point EN PLACE, donc l'actif grandit a chaque ecriture (le balayage doit la re-juger : voir `balayer`). MESURE DE LA PORTE : BORNE N=1 PAR FAMILLE -- un seul point de restauration EN PLACE par famille \| familles connues        : 646 \| points EN PLACE         : 573 (decide + conserver ; une archive a quitte sa place) \| familles EN EXCES       : 0 \| points en trop          : 0 \| points en attente d acte: 0 (decide + archiver -- information, pas un ecart) \| familles hors borne SUR LE DISQUE: 6 (P2 : la borne se mesure ... (+804 car.) | - |
+| 18:53:31 | 2026-10-04 | MO-582 | RATTRAPAGE AUTOMATIQUE (EO-133) : 1 fichier(s) modifie(s) par cette mission etaient notes au DOMICILE des modifications mais ABSENTS de la trace. La vue ne lit QUE le journal : ils etaient donc invisibles, et une colonne vide se lit 'aucun fichier touche'. Le pilote comble le trou a chaque cloture (voie b, arbitrage du createur du 2026-09-16) : la liste vient du domicile, elle ne depend PAS de la memoire de l'agent. ATTRIBUTION : c'est la MEME regle qu'a la cloture (le tag de la modification, ou une mention de la mission dans les FENETRE_MENTION_DETAIL premiers caracteres du detail) -- elle pe ... (+331 car.) | - |
+| 18:53:31 | 2026-10-04 | MO-583 | RATTRAPAGE AUTOMATIQUE (EO-133) : 1 fichier(s) modifie(s) par cette mission etaient notes au DOMICILE des modifications mais ABSENTS de la trace. La vue ne lit QUE le journal : ils etaient donc invisibles, et une colonne vide se lit 'aucun fichier touche'. Le pilote comble le trou a chaque cloture (voie b, arbitrage du createur du 2026-09-16) : la liste vient du domicile, elle ne depend PAS de la memoire de l'agent. ATTRIBUTION : c'est la MEME regle qu'a la cloture (le tag de la modification, ou une mention de la mission dans les FENETRE_MENTION_DETAIL premiers caracteres du detail) -- elle pe ... (+331 car.) | - |
+| 18:53:30 | 2026-10-04 | MO-550 | RATTRAPAGE AUTOMATIQUE (EO-133) : 1 fichier(s) modifie(s) par cette mission etaient notes au DOMICILE des modifications mais ABSENTS de la trace. La vue ne lit QUE le journal : ils etaient donc invisibles, et une colonne vide se lit 'aucun fichier touche'. Le pilote comble le trou a chaque cloture (voie b, arbitrage du createur du 2026-09-16) : la liste vient du domicile, elle ne depend PAS de la memoire de l'agent. ATTRIBUTION : c'est la MEME regle qu'a la cloture (le tag de la modification, ou une mention de la mission dans les FENETRE_MENTION_DETAIL premiers caracteres du detail) -- elle pe ... (+331 car.) | - |
+| 18:53:30 | 2026-10-04 | MO-581 | RATTRAPAGE AUTOMATIQUE (EO-133) : 1 fichier(s) modifie(s) par cette mission etaient notes au DOMICILE des modifications mais ABSENTS de la trace. La vue ne lit QUE le journal : ils etaient donc invisibles, et une colonne vide se lit 'aucun fichier touche'. Le pilote comble le trou a chaque cloture (voie b, arbitrage du createur du 2026-09-16) : la liste vient du domicile, elle ne depend PAS de la memoire de l'agent. ATTRIBUTION : c'est la MEME regle qu'a la cloture (le tag de la modification, ou une mention de la mission dans les FENETRE_MENTION_DETAIL premiers caracteres du detail) -- elle pe ... (+331 car.) | - |
+| 18:53:28 | 2026-10-04 | MO-584 | RAISONNEMENT : NON -- aucun segment de la BDD ne porte la source MO-584 (BDD : 104 segment(s)). La cloture l A DEMANDE : soit ce round n a rien produit de REUTILISABLE et le bilan le DIT, soit il a produit un raisonnement sans le deposer -- alors depose-le et redeclare-le a la cloture (--segment-fichier). | - |
 | 18:36:27 | 2026-10-04 | MO-583 | ALERTE conservation : BORNE N=1 ROMPUE -- au moins une famille garde plus d'un point EN PLACE, donc l'actif grandit a chaque ecriture (le balayage doit la re-juger : voir `balayer`). MESURE DE LA PORTE : BORNE N=1 PAR FAMILLE -- un seul point de restauration EN PLACE par famille \| familles connues        : 645 \| points EN PLACE         : 572 (decide + conserver ; une archive a quitte sa place) \| familles EN EXCES       : 0 \| points en trop          : 0 \| points en attente d acte: 0 (decide + archiver -- information, pas un ecart) \| familles hors borne SUR LE DISQUE: 6 (P2 : la borne se mesure ... (+804 car.) | - |
 | 18:35:52 | 2026-10-04 | MO-583 | TRACE MUETTE (EO-130) : la mission MO-583 est close sans AUCUNE modification tracee -- la colonne `Fichiers` de la vue sera VIDE, et une colonne vide se lit 'aucun fichier touche'. Deux causes : soit rien n'a ete touche (mission de MESURE -- le dire alors dans le bilan), soit les modifications n'ont pas ete notees (porte bdd-modifications). | - |
 | 18:35:51 | 2026-10-04 | MO-583 | RAISONNEMENT : NON -- aucun segment de la BDD ne porte la source MO-583 (BDD : 104 segment(s)). La cloture l A DEMANDE : soit ce round n a rien produit de REUTILISABLE et le bilan le DIT, soit il a produit un raisonnement sans le deposer -- alors depose-le et redeclare-le a la cloture (--segment-fichier). | - |
@@ -286,16 +294,8 @@ Le perimetre pos ... (+3427 car.) | - |
 | 18:12:13 | 2026-10-04 | MO-580 | TRACE MUETTE (EO-130) : la mission MO-580 est close sans AUCUNE modification tracee -- la colonne `Fichiers` de la vue sera VIDE, et une colonne vide se lit 'aucun fichier touche'. Deux causes : soit rien n'a ete touche (mission de MESURE -- le dire alors dans le bilan), soit les modifications n'ont pas ete notees (porte bdd-modifications). | - |
 | 18:12:13 | 2026-10-04 | MO-580 | RAISONNEMENT : OUI -- 3 segment(s) de CE round dans la BDD (source MO-580 : RS-133, RS-134, RS-135). BDD : 104 segment(s) au total. | - |
 | 14:42:10 | 2026-10-04 | MO-579 | RAISONNEMENT : OUI -- 4 segment(s) de CE round dans la BDD (source MO-579 : RS-129, RS-130, RS-131, RS-132). BDD : 101 segment(s) au total. | - |
-| 14:41:34 | 2026-10-04 | MO-577 | RAISONNEMENT : OUI -- 2 segment(s) de CE round dans la BDD (source MO-577 : RS-127, RS-128). BDD : 101 segment(s) au total. | - |
-| 14:40:58 | 2026-10-04 | MO-576 | RAISONNEMENT : OUI -- 1 segment(s) de CE round dans la BDD (source MO-576 : RS-126). BDD : 101 segment(s) au total. | - |
-| 14:40:04 | 2026-10-04 | MO-575 | RAISONNEMENT : OUI -- 1 segment(s) de CE round dans la BDD (source MO-575 : RS-125). BDD : 101 segment(s) au total. | - |
-| 14:22:30 | 2026-10-04 | MO-579 | RAISONNEMENT : NON -- aucun segment de la BDD ne porte la source MO-579 (BDD : 97 segment(s)). La cloture l A DEMANDE : soit ce round n a rien produit de REUTILISABLE et le bilan le DIT, soit il a produit un raisonnement sans le deposer -- alors depose-le et redeclare-le a la cloture (--segment-fichier). | - |
-| 09:48:33 | 2026-10-04 | MO-577 | ALERTE conservation : ECARTS dans la famille des points de restauration -- un element a quitte sa source sans passer par une porte, ou le compte ne referme plus l'origine (archive + actif + disparu + purge = origine). MESURE DE LA PORTE : origine : 4720 point(s), 142100574 octet(s) \| archive : 45 point(s), 386184 octet(s) \| actif   : 569 point(s), 11750760 octet(s) \| purge   : 3781 point(s), 121665543 octet(s) (contenu PROUVE recouvrable) \| disparu : 227 point(s), 4080027 octet(s) (disparition DECLAREE, EO-276) -- dont 56 legacy (declarees sans pesee) \| archive + actif + purge + disparu = 1378 ... (+839 car.) | - |
-| 09:48:26 | 2026-10-04 | MO-577 | ALERTE conservation : BORNE N=1 ROMPUE -- au moins une famille garde plus d'un point EN PLACE, donc l'actif grandit a chaque ecriture (le balayage doit la re-juger : voir `balayer`). MESURE DE LA PORTE : BORNE N=1 PAR FAMILLE -- un seul point de restauration EN PLACE par famille \| familles connues        : 642 \| points EN PLACE         : 569 (decide + conserver ; une archive a quitte sa place) \| familles EN EXCES       : 0 \| points en trop          : 0 \| points en attente d acte: 0 (decide + archiver -- information, pas un ecart) \| familles hors borne SUR LE DISQUE: 4 (P2 : la borne se mesure ... (+804 car.) | - |
-| 09:47:56 | 2026-10-04 | MO-577 | RAISONNEMENT : OUI -- 1 segment(s) de CE round dans la BDD (source MO-577 : RS-127). BDD : 96 segment(s) au total. | - |
-| 09:04:57 | 2026-10-04 | MO-576 | ALERTE conservation : ECARTS dans la famille des points de restauration -- un element a quitte sa source sans passer par une porte, ou le compte ne referme plus l'origine (archive + actif + disparu + purge = origine). MESURE DE LA PORTE : origine : 4689 point(s), 141876803 octet(s) \| archive : 32 point(s), 313170 octet(s) \| actif   : 568 point(s), 11732366 octet(s) \| purge   : 3764 point(s), 121533180 octet(s) (contenu PROUVE recouvrable) \| disparu : 227 point(s), 4080027 octet(s) (disparition DECLAREE, EO-276) -- dont 56 legacy (declarees sans pesee) \| archive + actif + purge + disparu = 1376 ... (+839 car.) | - |
 
-*500 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
+*508 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
 
 ## Action : purge
 
@@ -424,6 +424,8 @@ Pourquoi ce sujet, et pas un autre : deux faits du 2026-10-02 le mes | - |
 
 | Heure | Date | Mission | Detail | Portes |
 |---|---|---|---|---|
+| 18:57:19 | 2026-10-04 | MO-586 | prise de round par la CLOTURE (le pilote prend la suite qu il sert) : ANALYSE : est-il possible de separe les portes communes et celle qui serait 'privee' que le cameleon ne pourait pas utiliser. je vois que le fait d'avoir que des portes communes, nous oblige 'toujours | pilote:prise |
+| 18:54:13 | 2026-10-04 | MO-585 | prise de round par la CLOTURE (le pilote prend la suite qu il sert) : REPARATION : Un garde : une demande identique deposee DEUX FOIS dans la memoire de naissance doit etre signalee au depot (mesure MO-527 : EO-519 le 2026-09-30 puis EO-546 le 2026-10-02, la meme demand | pilote:prise |
 | 18:36:34 | 2026-10-04 | MO-584 | prise de round par la CLOTURE (le pilote prend la suite qu il sert) : CADRAGE : on va devoir creer tout les fichiers (regles, protocoles, conventions, theme) pour le depot "git". on doit revoir sa description et son utilite. depuis que j'utilise des llm, je me rend comp | pilote:prise |
 | 18:33:53 | 2026-10-04 | MO-583 | prise de round par la CLOTURE (le pilote prend la suite qu il sert) : CADRAGE : creer une routine qui va verifier si les cartes d'identites des fichiers contiennent bien les liens des fichiers connecte a eux (qui doit permettre de facilement retrouver les fichiers conne | pilote:prise |
 | 18:31:44 | 2026-10-04 | MO-582 | prise de round par la CLOTURE (le pilote prend la suite qu il sert) : ANALYSE : est il possible d'utiliser le ##########################presse-papier de windows ? | pilote:prise |
@@ -447,10 +449,8 @@ Pourquoi ce sujet, et pas un autre : deux faits du 2026-10-02 le mes | - |
 | 17:37:21 | 2026-10-03 | MO-564 | prise de round par l agent (geste de reception) : ROUTINE : Le chien : declencheur sur changement, combo en arriere-plan, silence ensuite | pilote:prise |
 | 17:08:53 | 2026-10-03 | MO-563 | prise de round par l agent (geste de reception) : REPARATION : Les visuels genere : le head de suivi-optimus doit se regenerer a chaque veille, comme le journal | pilote:prise |
 | 16:33:01 | 2026-10-03 | MO-562 | prise de round par l agent (geste de reception) : CONTRATS : La regle de type : reconnaitre question, cadrage et audit AVANT le repli dev | pilote:prise |
-| 14:39:26 | 2026-10-03 | MO-561 | prise de round par l agent (geste de reception) : PILOTE : favoriser les demandes deja engagees et rattraper le retard | pilote:prise |
-| 14:13:08 | 2026-10-03 | MO-560 | prise de round par l agent (geste de reception) : OUTIL : mot crochet : type neuf + process de creation injecte | pilote:prise |
 
-*294 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
+*296 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
 
 ## Action : injection
 

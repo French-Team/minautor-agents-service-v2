@@ -54360,6 +54360,46 @@
         "cadrage",
         "cartes"
       ]
+    },
+    "_operateur/optimus-prime/preparation/mo-584-cadrage-depot-git.md": {
+      "modifications": [
+        {
+          "date": "2026-10-04 18:53:20",
+          "action": "cree",
+          "detail": "MO-584 cadrage EO-529 : les 4 familles du depot git sont livrees ; la liste d outils (git fsck / git add -A / git push) a 0 occurrence dans le lanceur. Decision demandee au createur.",
+          "tags": [
+            "mo-584",
+            "cadrage",
+            "git"
+          ],
+          "empreinte": "a9857b9e60b4b5c4428c99cb20f946df2a44f56897f4bc54e75b4e39f7350cdf"
+        }
+      ],
+      "tags": [
+        "mo-584",
+        "cadrage",
+        "git"
+      ]
+    },
+    "_operateur/optimus-prime/preparation/mo-585-doublon-naissance.md": {
+      "modifications": [
+        {
+          "date": "2026-10-04 18:56:36",
+          "action": "cree",
+          "detail": "MO-585 : cause racine du doublon indetectable = CHAMPS_SOURCE ne porte pas le theme (216 tombes a theme vide). Correctif naif mesure comme cassant 216 items ; correctif sur propose (champ dedie). Aucun code de production modifie.",
+          "tags": [
+            "mo-585",
+            "doublon",
+            "diagnostic"
+          ],
+          "empreinte": "2cfc34c2b866618fc9cd4c967f0b273117d48c6b2003d0b05d0b35e7d4aa21cb"
+        }
+      ],
+      "tags": [
+        "mo-585",
+        "doublon",
+        "diagnostic"
+      ]
     }
   },
   "identite": {
