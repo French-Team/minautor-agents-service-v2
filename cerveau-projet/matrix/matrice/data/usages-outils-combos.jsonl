@@ -57110,3 +57110,7 @@
 {"date": "2026-10-04 17:43:12", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 894, "tokens_avant": 5, "tokens_apres": 1231}
 {"date": "2026-10-04 17:44:10", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 50, "tokens_avant": 1, "tokens_apres": 38}
 {"date": "2026-10-04 17:44:14", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 922, "tokens_avant": 5, "tokens_apres": 1231}
+{"date": "2026-10-04 17:45:11", "outil": "suivi-optimus", "commande": "vue", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 51, "tokens_avant": 1, "tokens_apres": 38}
+{"date": "2026-10-04 17:45:15", "outil": "corriger-ascii", "commande": "corriger", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 907, "tokens_avant": 5, "tokens_apres": 1231}
+{"date": "2026-10-04 17:45:16", "outil": "bdd-lecons", "commande": "ajouter", "code": 2, "tags": ["sac-a-dos"], "duree_ms": 0, "tokens_avant": 188, "tokens_apres": 19, "detail": "Usage : python main.py ajouter --lecon \"...\" --tags \"a,b\" [--source \"...\"]"}
+{"date": "2026-10-04 17:45:21", "outil": "bdd-lecons", "commande": "ajouter", "code": 0, "tags": ["sac-a-dos"], "duree_ms": 4, "tokens_avant": 202, "tokens_apres": 23}

@@ -8,15 +8,15 @@
     },
     "routeur-maintenance": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 17:44:10",
-      "passe_publiee_le": "2026-10-04 17:44:10",
-      "compteur": 11021
+      "dernier_allumage": "2026-10-04 17:45:10",
+      "passe_publiee_le": "2026-10-04 17:45:10",
+      "compteur": 11022
     },
     "suivi-sync": {
       "allume_le": null,
-      "dernier_allumage": "2026-10-04 17:44:10",
-      "passe_publiee_le": "2026-10-04 17:44:10",
-      "compteur": 10999
+      "dernier_allumage": "2026-10-04 17:45:10",
+      "passe_publiee_le": "2026-10-04 17:45:10",
+      "compteur": 11000
     },
     "veille-flux": {
       "allume_le": null,

@@ -3137,7 +3137,18 @@
         "contre-temoin"
       ],
       "source": "MO-579 (EO-529) -- doctrine du depot git : etat ramene, non-regression VERTE"
+    },
+    {
+      "id": "L-240",
+      "date": "2026-10-04 17:45:21",
+      "lecon": "Reconstruire un depot git : le remote est une donnee, pas une page blanche. Avant tout rm -rf .git, `git ls-remote origin` (distant VIVANT ?) et `git rev-list --left-right --count origin/main...HEAD` (derriere / devant ?) : ici le distant portait deja 119 commits a f13f0480, donc le \"nouveau point de depart\" exigeait un --force, jamais un push normal. Mesurer aussi le working tree et le plus gros fichier AVANT : un blob > 100 Mo fait rejeter GitHub, et le push echoue apres le commit. Enfin, apres deplacement, la non-regression peut lever un seul KO de FRAICHEUR (vues suivi-* perimees de plusieurs heures) parce que les daemons n'ont pas tourne pendant le geste : ce n'est pas une casse, la regen par la porte suffit a rebloquer.",
+      "tags": [
+        "git",
+        "depot",
+        "maintenance"
+      ],
+      "source": "demande-createur"
     }
   ],
-  "compteur": 239
+  "compteur": 240
 }
