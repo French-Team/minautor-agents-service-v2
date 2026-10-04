@@ -1,6 +1,6 @@
 VIGIE-PORTES -- racine : Z:\analyste-in-console\cerveau-projet\matrix
   portes : 45 | alertes : 40 | notables : 39 | muettes : 0
-  [basse] bdd-raisonnement : nom INCONNU au journal d'usages (233 appel(s)) : ni porte (outils/) ni routine (routines/) -- combo, renommage ou porte morte ?
+  [basse] bdd-raisonnement : nom INCONNU au journal d'usages (235 appel(s)) : ni porte (outils/) ni routine (routines/) -- combo, renommage ou porte morte ?
   [haute] preparation : construction sans NEMESIS : statut a-jour declare sans trace de contre-analyse (EO-219)
   [haute] domicilier : verbe fantome : plans/ sans entry.py
   [moyenne] bilan-periode : recette incomplete : DESCRIPTION.md absent (CV-010)
@@ -9,35 +9,35 @@ VIGIE-PORTES -- racine : Z:\analyste-in-console\cerveau-projet\matrix
   [moyenne] machine-defcon : recette incomplete : DESCRIPTION.md absent (CV-010)
   [moyenne] pause-session : recette incomplete : DESCRIPTION.md absent (CV-010)
   [moyenne] selecteur-flux : recette incomplete : DESCRIPTION.md absent (CV-010)
-  [moyenne] bdd-conventions-matrice : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] bdd-corvees : mal utilisee : 309 refus (code 2) sur 309 appel(s) en 30 jours
-  [moyenne] bdd-historique : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] bdd-lecons : mal utilisee : 313 refus (code 2) sur 336 appel(s) en 30 jours
-  [moyenne] bdd-protocoles-matrice : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] bdd-regles-matrice : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] bdd-sessions : mal utilisee : 308 refus (code 2) sur 405 appel(s) en 30 jours
-  [moyenne] bdd-variables : mal utilisee : 308 refus (code 2) sur 309 appel(s) en 30 jours
-  [moyenne] bilan-periode : mal utilisee : 308 refus (code 2) sur 309 appel(s) en 30 jours
-  [moyenne] carte-comparer : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] carte-creer : mal utilisee : 314 refus (code 2) sur 318 appel(s) en 30 jours
-  [moyenne] carte-editer : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] carte-modifier : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] chaine-pense-bete : mal utilisee : 331 refus (code 2) sur 346 appel(s) en 30 jours
-  [moyenne] dialoguer : mal utilisee : 154 refus (code 2) sur 154 appel(s) en 30 jours
-  [moyenne] domicilier : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] dupliquer-template : mal utilisee : 308 refus (code 2) sur 309 appel(s) en 30 jours
-  [moyenne] editer-agents-md : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] executer : mal utilisee : 154 refus (code 2) sur 154 appel(s) en 30 jours
-  [moyenne] fichiers-travail-cameleon : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] inventaire-systeme : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] lire : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] lister : mal utilisee : 309 refus (code 2) sur 309 appel(s) en 30 jours
-  [moyenne] machine-defcon : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] maintenir : mal utilisee : 154 refus (code 2) sur 154 appel(s) en 30 jours
-  [moyenne] passerelle-demandes : mal utilisee : 310 refus (code 2) sur 325 appel(s) en 30 jours
-  [moyenne] pause-session : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] theme-vivier : mal utilisee : 309 refus (code 2) sur 311 appel(s) en 30 jours
-  [moyenne] verifier-conventions : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
-  [moyenne] verifier-protocoles : mal utilisee : 308 refus (code 2) sur 524 appel(s) en 30 jours
-  [moyenne] verifier-regles : mal utilisee : 308 refus (code 2) sur 308 appel(s) en 30 jours
+  [moyenne] bdd-conventions-matrice : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] bdd-corvees : mal utilisee : 313 refus (code 2) sur 313 appel(s) en 30 jours
+  [moyenne] bdd-historique : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] bdd-lecons : mal utilisee : 317 refus (code 2) sur 342 appel(s) en 30 jours
+  [moyenne] bdd-protocoles-matrice : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] bdd-regles-matrice : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] bdd-sessions : mal utilisee : 312 refus (code 2) sur 409 appel(s) en 30 jours
+  [moyenne] bdd-variables : mal utilisee : 312 refus (code 2) sur 313 appel(s) en 30 jours
+  [moyenne] bilan-periode : mal utilisee : 312 refus (code 2) sur 313 appel(s) en 30 jours
+  [moyenne] carte-comparer : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] carte-creer : mal utilisee : 318 refus (code 2) sur 322 appel(s) en 30 jours
+  [moyenne] carte-editer : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] carte-modifier : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] chaine-pense-bete : mal utilisee : 335 refus (code 2) sur 350 appel(s) en 30 jours
+  [moyenne] dialoguer : mal utilisee : 156 refus (code 2) sur 156 appel(s) en 30 jours
+  [moyenne] domicilier : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] dupliquer-template : mal utilisee : 312 refus (code 2) sur 313 appel(s) en 30 jours
+  [moyenne] editer-agents-md : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] executer : mal utilisee : 156 refus (code 2) sur 156 appel(s) en 30 jours
+  [moyenne] fichiers-travail-cameleon : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] inventaire-systeme : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] lire : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] lister : mal utilisee : 313 refus (code 2) sur 313 appel(s) en 30 jours
+  [moyenne] machine-defcon : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] maintenir : mal utilisee : 156 refus (code 2) sur 156 appel(s) en 30 jours
+  [moyenne] passerelle-demandes : mal utilisee : 314 refus (code 2) sur 329 appel(s) en 30 jours
+  [moyenne] pause-session : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] theme-vivier : mal utilisee : 313 refus (code 2) sur 315 appel(s) en 30 jours
+  [moyenne] verifier-conventions : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
+  [moyenne] verifier-protocoles : mal utilisee : 312 refus (code 2) sur 530 appel(s) en 30 jours
+  [moyenne] verifier-regles : mal utilisee : 312 refus (code 2) sur 312 appel(s) en 30 jours
   aucun depot (deja-signale) : 39 alerte(s) notable(s), bilan a l'etat court.

@@ -6078,6 +6078,16 @@
             "lecon"
           ],
           "empreinte": "e6d9b7886a61bbb566a8413ddd16988ba451ae8f28417c61b04afdb26da70dee"
+        },
+        {
+          "date": "2026-10-04 18:02:48",
+          "action": "modifie",
+          "detail": "Lecon L-241 : reproduire par le chemin du producteur, pas py_compile isole ; course d ecriture comme faux positif.",
+          "tags": [
+            "lecon",
+            "veille"
+          ],
+          "empreinte": "53c10bc155e8a06ea5b56c3034ae2433efdcad4663cd9ff504eb2ecff9809876"
         }
       ],
       "tags": [
@@ -6098,7 +6108,8 @@
         "L-176",
         "MO-577",
         "chemin",
-        "escalier"
+        "escalier",
+        "veille"
       ]
     },
     "matrice/data/manuel-outils.md": {
@@ -54243,6 +54254,38 @@
             ]
           }
         }
+      ]
+    },
+    "_operateur/optimus-prime/preparation/bilan-mo-580.md": {
+      "modifications": [
+        {
+          "date": "2026-10-04 18:02:47",
+          "action": "cree",
+          "detail": "Audit des 10 items bloquants du vrac : tous hors d etat (9 resorbes, EO-578 faux positif par course d ecriture). Mesure par le chemin du producteur.",
+          "tags": [
+            "audit",
+            "veille",
+            "bloquant"
+          ],
+          "empreinte": "c0ea6afab968406a228c6e549d3ccb4abb0f91899680723eddcc41d961f6c1d5"
+        },
+        {
+          "date": "2026-10-04 18:07:16",
+          "action": "corrige",
+          "detail": "Carte d identite ajoutee (type journal, optimus-prime) : le maillon cartes signalait SANS CARTE.",
+          "tags": [
+            "carte",
+            "identite"
+          ],
+          "empreinte": "41cc11492eb2d13ecc5161137275bc25247ce95784d4c49afa76284fc3f0f158"
+        }
+      ],
+      "tags": [
+        "audit",
+        "veille",
+        "bloquant",
+        "carte",
+        "identite"
       ]
     }
   },

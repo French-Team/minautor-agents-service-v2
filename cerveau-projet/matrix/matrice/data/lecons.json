@@ -3148,7 +3148,18 @@
         "maintenance"
       ],
       "source": "demande-createur"
+    },
+    {
+      "id": "L-241",
+      "date": "2026-10-04 18:01:38",
+      "lecon": "Un blocage de la veille n'est pas forcement un defaut du code : REPRODUIRE par le CHEMIN DU PRODUCTEUR, jamais par un py_compile isole. Mesure du 2026-10-04 (MO-580) sur EO-578 (bloquant, 'bdd-conservation/archiver/entry.py ne compile pas') : py_compile isole dit code 0, et lancer_py_compile() de la veille dit aussi CODE=0 sur les 674 .py du perimetre. La cause du faux positif est une COURSE : le fichier a ete ecrit a 11:30:28 alors que l'item a ete depose a 11:30:25 -- la veille l'a compile PENDANT l'ecriture. Son re-test (PAUSE_REPRISE_SECONDES=2) n'a pas rattrape la fenetre. Un garde confirme doit donc mesurer l'horodatage du fichier, pas seulement son exit code. Corollaire mesure sur les 10 bloquants du vrac : 9 sont deja hors d'etat (les 8 'ascii-non-convertible' U+4E0D..U+FF0C : ZERO octet >= 128 dans les 674 .py), seul EO-444 (traceback critique) reste a instruire.",
+      "tags": [
+        "veille",
+        "reproduction",
+        "bloquant"
+      ],
+      "source": "MO-580"
     }
   ],
-  "compteur": 240
+  "compteur": 241
 }

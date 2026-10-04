@@ -1379,9 +1379,42 @@
         "forme-canonique"
       ],
       "source": "MO-579"
+    },
+    {
+      "id": "RS-133",
+      "date": "2026-10-04 18:12:12",
+      "segment": "Reproduction par le chemin du PRODUCTEUR, pas par py_compile isole : le py_compile isole disait code 0, et lancer_py_compile() de la veille disait CODE=0 sur les 674 .py du perimetre. Un garde accuse sur son propre chemin, jamais sur un equivalent suppose.",
+      "tags": [
+        "mo-580",
+        "reproduction",
+        "veille"
+      ],
+      "source": "MO-580"
+    },
+    {
+      "id": "RS-134",
+      "date": "2026-10-04 18:12:12",
+      "segment": "Le nom du bilan a fait rouge le maillon cartes : sans carte d identite en front-matter, un .md de preparation est lu comme un fichier sans carte. Meme famille que le rappel de MO-575 : la forme se paie au KO, pas au rejet.",
+      "tags": [
+        "mo-580",
+        "carte",
+        "identite"
+      ],
+      "source": "MO-580"
+    },
+    {
+      "id": "RS-135",
+      "date": "2026-10-04 18:12:13",
+      "segment": "Le /tmp de bash et le /tmp de Python ne sont pas le meme dossier sous Windows : Python ecrivait dans C:/Users/.../Temp, la porte ecrire editer resolvait ailleurs. Les fichiers de travail d une edition doivent vivre dans un chemin vu par les DEUX (ici .tmp-mo580/), sinon le refus 'Fichier source introuvable' tombe.",
+      "tags": [
+        "mo-580",
+        "chemin",
+        "edite"
+      ],
+      "source": "MO-580"
     }
   ],
-  "compteur": 132,
+  "compteur": 135,
   "retraits": [
     {
       "date": "2026-10-01 07:25:55",

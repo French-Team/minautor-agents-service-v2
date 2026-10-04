@@ -12,7 +12,7 @@ identite:
 > dans suivi-optimus, file-missions, entonnoir, cycle-historique, outbox et
 > le journal des pauses -- ici, seulement ce que l instrument a JUGE.
 
-Mesure du 2026-10-04 17:51:00 | pannes declarees : 20 | detecteurs joues : 17.
+Mesure du 2026-10-04 18:08:00 | pannes declarees : 20 | detecteurs joues : 17.
 
 Pannes DECLAREES sans detecteur (couverture dite, jamais muette) :
 - fenetre-d-absorption-plus-courte-que-le-battement : aucun detecteur ecrit pour cette panne declaree
@@ -25,7 +25,7 @@ Pannes DECLAREES sans detecteur (couverture dite, jamais muette) :
 |---|---|---|---|---|
 | normale | item-qui-dort | 21 item(s) du brin dorment (le plus vieux : EO-507, rang 2/21) | 2026-09-30 09:43:14 | servir le brin par la tete, une par une (file consommer) : le plus vieux dort au rang 2/21 -- il part apres les 1 item(s) qui le precedent |
 
-Motifs : item-qui-dort -- 21 dormeur(s) sur 21 items, au-dela de 1.0 j ; le plus vieux (EO-507) est depose depuis 4.3 j et occupe le rang 2 de la file.
+Motifs : item-qui-dort -- 21 dormeur(s) sur 21 items, au-dela de 1.0 j ; le plus vieux (EO-507) est depose depuis 4.4 j et occupe le rang 2 de la file.
 
 OUVERTES (constatees, deposees, suivies -- jamais tues) :
 - item-qui-dort : item MO-513 (EO-490, decision createur du 2026-09-29, confirmee par arbitrage le 2026-10-01) -- VERTE PAR JUSTIFICATION (demande createur 2026-10-01), pas par extinction. Un item au brin qui attend son tour dans une file SERIEUSE, dont la TETE AVANCE, est dans l etat ATTENDU de la regle < servir par la tete, un par une > : attendre est la contrepartie normale de la serie stricte, donc l accelerer n est pas un defaut. Mesure du 2026-10-01 qui le prouve : la tete (rang 1) a 23,3 h et descend, les 7 dormeurs sont a 36 h et PLUS, situes aux rangs 8 a 33 -- ils attendent derriere des items plus frais, donc la file COULE. Avant cette inversion, chaque passage PAYAIT une re-verification : l agent devait redemander pourquoi c etait rouge et reconclure que c etait juste (le faux positif recurrent le mieux documente du projet). La DETECTION et le CODE ne sont pas touches (d etection inchangee, meme mesure, meme remede nomme) : seule la COULEUR DU VERDICT est inversee. Le signal reste ENTier et reste muet sur rien : la sortie nomme toujours le nombre, le plus vieux et son rang. CETTE EXCEPTION EST UN ETAT VIVANT : elle couvre la file qui COULE. Si un jour la tete elle-meme s arretait au-dela du seuil, l item deviendrait un BLOQUAGE et cette exception serait levee (retirer ce champ) ; la decision par defaut reste le ROUGE de la panne.
@@ -71,12 +71,12 @@ OUVERTES (constatees, deposees, suivies -- jamais tues) :
 |---|---|---|---|---|
 | audit | 0 | inconnu | inconnu | inconnu |
 | cablage | 0 | inconnu | inconnu | inconnu |
-| cadrage | 8 | EO-511 | normale | 4.3 j |
+| cadrage | 8 | EO-511 | normale | 4.4 j |
 | dev | 0 | inconnu | inconnu | inconnu |
 | doc | 0 | inconnu | inconnu | inconnu |
 | investigation | 0 | inconnu | inconnu | inconnu |
-| preparer | 1 | EO-529 | normale | 4.3 j |
-| question | 6 | EO-507 | normale | 4.3 j |
+| preparer | 1 | EO-529 | normale | 4.4 j |
+| question | 6 | EO-507 | normale | 4.4 j |
 | reparation | 6 | EO-559 | normale | 1.9 j |
 | revision | 0 | inconnu | inconnu | inconnu |
 
@@ -87,26 +87,26 @@ OUVERTES (constatees, deposees, suivies -- jamais tues) :
 | Rang | Item | Categorie | Depose le | Age |
 |---|---|---|---|---|
 | 1 | EO-559 | routine | 2026-10-02 20:41:28 | 1.9 j |
-| 2 | EO-507 | reponse | 2026-09-30 09:43:14 | 4.3 j |
-| 3 | EO-511 | plan | 2026-09-30 09:43:15 | 4.3 j |
-| 4 | EO-529 | plan | 2026-09-30 09:43:20 | 4.3 j |
+| 2 | EO-507 | reponse | 2026-09-30 09:43:14 | 4.4 j |
+| 3 | EO-511 | plan | 2026-09-30 09:43:15 | 4.4 j |
+| 4 | EO-529 | plan | 2026-09-30 09:43:20 | 4.4 j |
 | 5 | EO-564 | autre | 2026-10-03 08:00:08 | 1.4 j |
-| 6 | EO-510 | reponse | 2026-09-30 09:43:15 | 4.3 j |
-| 7 | EO-513 | plan | 2026-09-30 09:43:16 | 4.3 j |
-| 8 | EO-566 | outil | 2026-10-03 09:43:48 | 1.3 j |
-| 9 | EO-536 | reponse | 2026-09-30 09:43:22 | 4.3 j |
-| 10 | EO-520 | plan | 2026-09-30 09:43:17 | 4.3 j |
+| 6 | EO-510 | reponse | 2026-09-30 09:43:15 | 4.4 j |
+| 7 | EO-513 | plan | 2026-09-30 09:43:16 | 4.4 j |
+| 8 | EO-566 | outil | 2026-10-03 09:43:48 | 1.4 j |
+| 9 | EO-536 | reponse | 2026-09-30 09:43:22 | 4.4 j |
+| 10 | EO-520 | plan | 2026-09-30 09:43:17 | 4.4 j |
 | 11 | EO-570 | bdd | 2026-10-03 10:15:15 | 1.3 j |
 | 12 | EO-547 | reponse | 2026-10-02 08:20:29 | 2.4 j |
-| 13 | EO-526 | plan | 2026-09-30 09:43:19 | 4.3 j |
+| 13 | EO-526 | plan | 2026-09-30 09:43:19 | 4.4 j |
 | 14 | EO-572 | outil | 2026-10-03 10:15:43 | 1.3 j |
 | 15 | EO-549 | reponse | 2026-10-02 08:34:36 | 2.4 j |
-| 16 | EO-527 | plan | 2026-09-30 09:43:19 | 4.3 j |
+| 16 | EO-527 | plan | 2026-09-30 09:43:19 | 4.4 j |
 | 17 | EO-574 | autre | 2026-10-03 10:24:16 | 1.3 j |
 | 18 | EO-558 | reponse | 2026-10-02 19:56:50 | 1.9 j |
-| 19 | EO-528 | plan | 2026-09-30 09:43:20 | 4.3 j |
-| 20 | EO-530 | plan | 2026-09-30 09:43:20 | 4.3 j |
-| 21 | EO-535 | plan | 2026-09-30 09:43:21 | 4.3 j |
+| 19 | EO-528 | plan | 2026-09-30 09:43:20 | 4.4 j |
+| 20 | EO-530 | plan | 2026-09-30 09:43:20 | 4.4 j |
+| 21 | EO-535 | plan | 2026-09-30 09:43:21 | 4.4 j |
 
 Colonnes OMISES (constantes, sans verdict) : Urgence (21 lignes).
 

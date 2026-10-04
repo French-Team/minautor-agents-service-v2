@@ -10,7 +10,7 @@ identite:
 
 | Derniere mise a jour | Evenements | Missions tracees | Missions finies | Missions ouvertes | File du pilote |
 |---|---|---|---|---|---|
-| 2026-10-04 14:42:10 | 2779 | 525 | 525 | 0 | 0 |
+| 2026-10-04 18:12:13 | 2783 | 526 | 526 | 0 | 0 |
 
 > LES COLONNES NE PARLENT PAS DU MEME LIVRE (audit createur 2026-09-30) :
 >   - tracees / finies / ouvertes : le JOURNAL DE SUIVI, ou chaque mission passe
@@ -35,7 +35,7 @@ Flux : optimus (via l'outil suivi-optimus) -> data/suivi-optimus.jsonl -> VUE le
 
 | Jour | Missions finies | Evenements | Portes | Fichiers | Themes |
 |---|---|---|---|---|---|
-| 2026-10-04 | 8 | 141 | 7 | 114 | REPARATION, CONTRATS, CADRAGE, OUTIL, PILOTE, ROUTINE, CADREUR, BDD, DEPOT-GIT |
+| 2026-10-04 | 9 | 145 | 7 | 114 | REPARATION, CONTRATS, CADRAGE, OUTIL, PILOTE, ROUTINE, CADREUR, BDD, DEPOT-GIT, audit-des-bloquants-du-vrac |
 | 2026-10-03 | 21 | 179 | 14 | 201 | CONSTRUCTEUR, OUTIL, REPARATION, CONTRATS, CADRAGE, PILOTE, ROUTINE, CADREUR, BDD |
 | 2026-10-02 | 20 | 150 | 17 | 82 | CONSTRUCTEUR, ROUTINE, AUDITEUR, REPARATION, OUTIL, CONTRATS, SUIVI, PILOTE, TABLE-RONDE-ROUND, REVISEUR, SUIVI-OPTIMUS, ANALYSE |
 | 2026-10-01 | 22 | 163 | 7 | 91 | PILOTE, REPARATION, BDD, CONSTRUCTEUR, REDACTEUR, AUDITEUR, REVISEUR, ANALYSE, CADRAGE, CONTRATS |
@@ -55,6 +55,7 @@ Flux : optimus (via l'outil suivi-optimus) -> data/suivi-optimus.jsonl -> VUE le
 
 | Mission | Theme | Debut | Fin | Duree | Ev. | Etat | Portes | Fichiers |
 |---|---|---|---|---|---|---|---|---|
+| MO-580 | audit-des-bloquants-du-vrac | 04/10 18:12 | 04/10 18:12 | inconnue | 4 | finie | - | - |
 | MO-579 | DEPOT-GIT | 04/10 14:22 | 04/10 14:22 | inconnue | 6 | finie | pilote:purge | _operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py, matrice/data/manuel-outils.md, _operateur/optimus-prime/remorque/inventaire.json, matrice/data/outils/editer-agents-md/commun.py, _operateur/optimus-prime/tmp-optimus/README.md, _operateur/optimus-prime/parcours/themes/th ... (+291 car.) |
 | MO-577 | REPARATION | 04/10 09:07 | 04/10 09:47 | 2422 | 9 | finie | pilote:injecter, pilote:prise, pilote:fin, pilote:rotation-intercom, pilote:purge | matrice/data/lecons.json, matrice/data/outils/chaine-pense-bete/main.py, matrice/data/outils/chaine-pense-bete/constants.py, matrice/data/outils/chaine-pense-bete/commun.py, matrice/data/outils/chaine-pense-bete/etape/entry.py, matrice/data/outils/chaine-pense-bete/etape/fonctions.py, _operateur/opt ... (+382 car.) |
 | MO-576 | REPARATION | 04/10 08:46 | 04/10 09:04 | 1105 | 9 | finie | pilote:injecter, pilote:prise, pilote:fin, pilote:rotation-intercom, pilote:purge | _operateur/optimus-prime/super-combos/combos/outils/controle-attribution.py, _operateur/optimus-prime/super-combos/combos/outils/suivi-parties-maitresses.py, _operateur/optimus-prime/super-combos/combos/outils/attribution-registre.json, _operateur/optimus-prime/preparation/bilan-mo-576.md, mo-579-r- ... (+66 car.) |
@@ -84,16 +85,16 @@ Flux : optimus (via l'outil suivi-optimus) -> data/suivi-optimus.jsonl -> VUE le
 | MO-552 | REPARATION | 03/10 10:12 | 03/10 10:30 | 1050 | 7 | finie | pilote:charger, pilote:prise, pilote:fin, pilote:purge, pilote:rotation-intercom | _operateur/optimus-prime/super-combos/combos/outils/suivi-cameleon.py, mo-552-bilan.md, mo-552-fermetures-m.jsonl, mo-552-fermetures-masquees.jsonl, mo-552-generer-fermetures.py, mo-552-missions-m-vers-flux2.md |
 | MO-551 | REPARATION | 03/10 09:48 | 03/10 09:59 | 622 | 8 | finie | pilote:charger, pilote:injection, pilote:prise, pilote:fin, pilote:purge, pilote:rotation-intercom | _operateur/optimus-prime/pilote/injection/entry.py, _operateur/optimus-prime/pilote/injection/cycle.py, mo-535-bilan-eo-refus-sondes.md, mo-535-bilan.md, mo-535-cobaye-alerte-refus.py, mo-551-bilan.md, mo-551-traces-fausses-cycle.md |
 | MO-202 | OUTIL | 19/09 17:48 | 19/09 18:03 | 877 | 6 | finie | pilote:injecter, pilote:purge | cerveau-projet/matrix/_operateur/optimus-prime/super-combos/combos/outils/creer-combo.py, cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-004-auto-diagnostic/main.py, cerveau-projet/matrix/_operateur/optimus-prime/super-combos/sc-004-auto-diagnostic/README.md, cerveau-projet/matrix/_o ... (+386 car.) |
-| MO-534 | OUTIL | 02/10 18:51 | 03/10 08:57 | 50763 | 22 | finie | pilote:injecter, pilote:prise, pilote:fin, pilote:purge, pilote:rotation-intercom, pilote:rouvrir, ecrire, bdd-modifications, registre-outils, espion-integrite-optimus, remorque-optimus, controle-attribution, lanceur-non-regression | mo547-bilan.txt, _operateur/optimus-prime/suivi-pilote/pannes-declarees.json, _operateur/optimus-prime/pilote/main.py, _operateur/optimus-prime/pilote/rouvrir/fonctions.py, _operateur/optimus-prime/pilote/rouvrir/entry.py, sc-003-auto-suivi/main.py, lanceur-non-regression.py, suivi-cameleon.py, cont ... (+1438 car.) |
 
-*Duree INCONNUE pour 71 mission(s) : MO-579, MO-572, MO-571, MO-088, MO-475, MO-479, MO-478, MO-477 ... -- bornes identiques (debut pose apres coup) : un debut et une fin au meme instant ne mesurent pas zero seconde.
+*Duree INCONNUE pour 72 mission(s) : MO-580, MO-579, MO-572, MO-571, MO-088, MO-475, MO-479, MO-478 ... -- bornes identiques (debut pose apres coup) : un debut et une fin au meme instant ne mesurent pas zero seconde.
 
-*495 mission(s) de plus (journal complet : data/suivi-optimus.jsonl).
+*496 mission(s) de plus (journal complet : data/suivi-optimus.jsonl).
 
 ## Action : debut
 
 | Heure | Date | Mission | Detail | Portes |
 |---|---|---|---|---|
+| 18:12:13 | 2026-10-04 | MO-580 | Debut implicite (garde anti-fin-orpheline) : mission prise en charge. | - |
 | 14:22:30 | 2026-10-04 | MO-579 | Debut implicite (garde anti-fin-orpheline) : mission prise en charge. | - |
 | 09:07:34 | 2026-10-04 | MO-577 | debut declare par le pilote (injection) : REPARATION : AUDIT MO-538 : la chaine pense-bete n a pas d etat d execution, ses 4 objets sont bloques a todo | pilote:injecter |
 | 08:46:11 | 2026-10-04 | MO-576 | debut declare par le pilote (injection) : REPARATION : les six fichiers accuses sans note : une ecriture fantome du 2026-10-03 | pilote:injecter |
@@ -118,14 +119,35 @@ Flux : optimus (via l'outil suivi-optimus) -> data/suivi-optimus.jsonl -> VUE le
 | 11:48:56 | 2026-10-03 | MO-556 | debut declare par charger (charge INDIVIDUELLE) : CONTRATS : Exclure la sonde DECLAREE de la metrique 'porte mal utilisee' (le canal existe, l exclusion manque) | pilote:charger |
 | 11:48:56 | 2026-10-03 | MO-557 | debut declare par charger (charge INDIVIDUELLE) : REPARATION : usage_par_porte : ne pas compter une SONDE de refus comme une mauvaise utilisation | pilote:charger |
 | 11:30:08 | 2026-10-03 | MO-555 | debut declare par charger (charge INDIVIDUELLE) : CONTRATS : SONDE declaree : un harnais qui appelle faux volontairement ne doit pas crier 'porte mal utilisee' | pilote:charger |
-| 11:05:50 | 2026-10-03 | MO-554 | debut declare par charger (charge INDIVIDUELLE) : REPARATION : correcteur automatise des caracteres exotiques des scripts tmp, branche dans la securite | pilote:charger |
 
-*500 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
+*501 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
 
 ## Action : fin
 
 | Heure | Date | Mission | Detail | Portes |
 |---|---|---|---|---|
+| 18:12:13 | 2026-10-04 | MO-580 | ---
+identite:
+  type: journal
+  appartient_a: optimus-prime
+  commun: false
+---
+
+# MO-580 -- AUDIT DES BLOCANTS : les 10 items bloquants du vrac sont-ils encore vivants ?
+
+Date : 2026-10-04. Aucun fichier de production modifie. Ce dossier est la MESURE.
+
+## 1. PERIMETRE MESURE
+
+Le vrac de l'entonnoir contient 15 items, dont **10 `bloquante`**. Le brin
+(21 items, deja versables en lot) n'en contient **aucun** : ces 10 n'ont jamais
+ete tisses. Les prioriser est donc la seule tache qui bloquait le round.
+
+## 2. MESURE PAR ITEM
+
+\| Item \| Cible \| Etat reel \| Verdict \|
+\|---\|---\|---\|---\|
+\| EO-578 \| ` ... (+2074 car.) | - |
 | 14:22:30 | 2026-10-04 | MO-579 | # MO-579 / EO-529 -- BILAN -- LA DOCTRINE DU DEPOT GIT : ETAT RAMENE, PAS SEULEMENT ECRIT
 
 ## La demande (EO-529, 2026-09-30)
@@ -183,9 +205,8 @@ Le perimetre pos ... (+3427 car.) | - |
 | 12:01:04 | 2026-10-03 | MO-556 | fin declaree par le pilote (cloture) : CONTRATS : Exclure la sonde DECLAREE de la metrique 'porte mal utilisee' (le canal existe, l exclusion manque) | pilote:fin |
 | 11:55:20 | 2026-10-03 | MO-557 | fin declaree par le pilote (cloture) : REPARATION : usage_par_porte : ne pas compter une SONDE de refus comme une mauvaise utilisation | pilote:fin |
 | 11:39:10 | 2026-10-03 | MO-555 | fin declaree par le pilote (cloture) : CONTRATS : SONDE declaree : un harnais qui appelle faux volontairement ne doit pas crier 'porte mal utilisee' | pilote:fin |
-| 11:22:14 | 2026-10-03 | MO-554 | fin declaree par le pilote (cloture) : REPARATION : correcteur automatise des caracteres exotiques des scripts tmp, branche dans la securite | pilote:fin |
 
-*501 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
+*502 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
 
 ## Action : porte
 
@@ -248,6 +269,8 @@ Le perimetre pos ... (+3427 car.) | - |
 
 | Heure | Date | Mission | Detail | Portes |
 |---|---|---|---|---|
+| 18:12:13 | 2026-10-04 | MO-580 | TRACE MUETTE (EO-130) : la mission MO-580 est close sans AUCUNE modification tracee -- la colonne `Fichiers` de la vue sera VIDE, et une colonne vide se lit 'aucun fichier touche'. Deux causes : soit rien n'a ete touche (mission de MESURE -- le dire alors dans le bilan), soit les modifications n'ont pas ete notees (porte bdd-modifications). | - |
+| 18:12:13 | 2026-10-04 | MO-580 | RAISONNEMENT : OUI -- 3 segment(s) de CE round dans la BDD (source MO-580 : RS-133, RS-134, RS-135). BDD : 104 segment(s) au total. | - |
 | 14:42:10 | 2026-10-04 | MO-579 | RAISONNEMENT : OUI -- 4 segment(s) de CE round dans la BDD (source MO-579 : RS-129, RS-130, RS-131, RS-132). BDD : 101 segment(s) au total. | - |
 | 14:41:34 | 2026-10-04 | MO-577 | RAISONNEMENT : OUI -- 2 segment(s) de CE round dans la BDD (source MO-577 : RS-127, RS-128). BDD : 101 segment(s) au total. | - |
 | 14:40:58 | 2026-10-04 | MO-576 | RAISONNEMENT : OUI -- 1 segment(s) de CE round dans la BDD (source MO-576 : RS-126). BDD : 101 segment(s) au total. | - |
@@ -271,10 +294,8 @@ Le perimetre pos ... (+3427 car.) | - |
 | 06:24:56 | 2026-10-04 | MO-569 | ALERTE conservation : ECARTS dans la famille des points de restauration -- un element a quitte sa source sans passer par une porte, ou le compte ne referme plus l'origine (archive + actif + disparu + purge = origine). MESURE DE LA PORTE : origine : 4629 point(s), 136352597 octet(s) \| archive : 16 point(s), 261212 octet(s) \| actif   : 565 point(s), 11557126 octet(s) \| purge   : 3723 point(s), 120229149 octet(s) (contenu PROUVE recouvrable) \| disparu : 90 point(s), 87050 octet(s) (disparition DECLAREE, EO-276) -- dont 56 legacy (declarees sans pesee) \| archive + actif + purge + disparu = 1321345 ... (+839 car.) | - |
 | 06:24:50 | 2026-10-04 | MO-569 | ALERTE conservation : BORNE N=1 ROMPUE -- au moins une famille garde plus d'un point EN PLACE, donc l'actif grandit a chaque ecriture (le balayage doit la re-juger : voir `balayer`). MESURE DE LA PORTE : BORNE N=1 PAR FAMILLE -- un seul point de restauration EN PLACE par famille \| familles connues        : 639 \| points EN PLACE         : 565 (decide + conserver ; une archive a quitte sa place) \| familles EN EXCES       : 0 \| points en trop          : 0 \| points en attente d acte: 0 (decide + archiver -- information, pas un ecart) \| familles hors borne SUR LE DISQUE: 4 (P2 : la borne se mesure ... (+804 car.) | - |
 | 06:24:33 | 2026-10-04 | MO-554 | RATTRAPAGE AUTOMATIQUE (EO-133) : 2 fichier(s) modifie(s) par cette mission etaient notes au DOMICILE des modifications mais ABSENTS de la trace. La vue ne lit QUE le journal : ils etaient donc invisibles, et une colonne vide se lit 'aucun fichier touche'. Le pilote comble le trou a chaque cloture (voie b, arbitrage du createur du 2026-09-16) : la liste vient du domicile, elle ne depend PAS de la memoire de l'agent. ATTRIBUTION : c'est la MEME regle qu'a la cloture (le tag de la modification, ou une mention de la mission dans les FENETRE_MENTION_DETAIL premiers caracteres du detail) -- elle pe ... (+331 car.) | - |
-| 06:24:33 | 2026-10-04 | MO-559 | RATTRAPAGE AUTOMATIQUE (EO-133) : 2 fichier(s) modifie(s) par cette mission etaient notes au DOMICILE des modifications mais ABSENTS de la trace. La vue ne lit QUE le journal : ils etaient donc invisibles, et une colonne vide se lit 'aucun fichier touche'. Le pilote comble le trou a chaque cloture (voie b, arbitrage du createur du 2026-09-16) : la liste vient du domicile, elle ne depend PAS de la memoire de l'agent. ATTRIBUTION : c'est la MEME regle qu'a la cloture (le tag de la modification, ou une mention de la mission dans les FENETRE_MENTION_DETAIL premiers caracteres du detail) -- elle pe ... (+331 car.) | - |
-| 06:24:33 | 2026-10-04 | MO-567 | RATTRAPAGE AUTOMATIQUE (EO-133) : 1 fichier(s) modifie(s) par cette mission etaient notes au DOMICILE des modifications mais ABSENTS de la trace. La vue ne lit QUE le journal : ils etaient donc invisibles, et une colonne vide se lit 'aucun fichier touche'. Le pilote comble le trou a chaque cloture (voie b, arbitrage du createur du 2026-09-16) : la liste vient du domicile, elle ne depend PAS de la memoire de l'agent. ATTRIBUTION : c'est la MEME regle qu'a la cloture (le tag de la modification, ou une mention de la mission dans les FENETRE_MENTION_DETAIL premiers caracteres du detail) -- elle pe ... (+331 car.) | - |
 
-*484 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
+*486 evenement(s) de plus dans cette action (journal complet : data/suivi-optimus.jsonl).
 
 ## Action : purge
 

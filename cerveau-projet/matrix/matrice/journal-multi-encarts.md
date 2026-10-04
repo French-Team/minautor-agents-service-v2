@@ -35,11 +35,11 @@ Flux : routines/veille-flux/journal-veille.txt -> VUE lecture seule
 
 | Entree | Heure | Date |
 |---|---|---|
-| passe relax demarree | 17:40:58 | 04/10/2026 |
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 17:41:08 | 04/10/2026 |
-| passe relax demarree | 17:46:11 | 04/10/2026 |
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 17:46:22 | 04/10/2026 |
-| passe relax demarree | 17:51:25 | 04/10/2026 |
+| passe relax demarree | 18:01:52 | 04/10/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 18:02:03 | 04/10/2026 |
+| passe relax demarree | 18:07:05 | 04/10/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 18:07:16 | 04/10/2026 |
+| passe relax demarree | 18:12:20 | 04/10/2026 |
 
 ## Encart : alertes
 
@@ -47,11 +47,11 @@ Flux : veille-flux/alertes-emises.json + intercom/matrice/inbox.jsonl -> VUE lec
 
 | Entree | Heure | Date |
 |---|---|---|
-| intercom : signaler | 16:34:16 | 04/10/2026 |
-| intercom : signaler | 16:49:55 | 04/10/2026 |
 | intercom : signaler | 17:05:35 | 04/10/2026 |
 | intercom : signaler | 17:21:15 | 04/10/2026 |
 | intercom : signaler | 17:36:55 | 04/10/2026 |
+| intercom : signaler | 17:52:37 | 04/10/2026 |
+| intercom : signaler | 18:08:18 | 04/10/2026 |
 
 ## Encart : cameleon
 
@@ -71,14 +71,14 @@ Flux : sac-a-dos (chaque outil) -> bdd-usages -> usages-outils-combos.jsonl -> V
 
 | Entree | Heure | Date |
 |---|---|---|
-| rendre-graphe/mermaid code 0 8ms | 17:51:17 | 04/10/2026 |
-| rendre-graphe/svg code 0 9ms | 17:51:18 | 04/10/2026 |
-| rendre-graphe/verifier code 0 1ms | 17:51:18 | 04/10/2026 |
-| suivi-optimus/coherence code 1 23ms | 17:51:19 | 04/10/2026 |
-| suivi-optimus/coherence code 1 23ms | 17:51:19 | 04/10/2026 |
-| suivi-optimus/vue code 0 49ms | 17:51:25 | 04/10/2026 |
-| corriger-ascii/corriger code 0 991ms | 17:51:26 | 04/10/2026 |
-| corriger-ascii/corriger code 0 907ms | 17:51:26 | 04/10/2026 |
+| suivi-optimus/noter code 0 3ms | 18:12:13 | 04/10/2026 |
+| suivi-optimus/noter code 0 3ms | 18:12:13 | 04/10/2026 |
+| bdd-sessions/ajouter code 0 15ms | 18:12:13 | 04/10/2026 |
+| suivi-optimus/vue code 0 50ms | 18:12:13 | 04/10/2026 |
+| bdd-conservation/declarer-disparition code 0 432ms | 18:12:14 | 04/10/2026 |
+| suivi-optimus/vue code 0 52ms | 18:12:20 | 04/10/2026 |
+| corriger-ascii/corriger code 0 933ms | 18:12:21 | 04/10/2026 |
+| corriger-ascii/corriger code 0 1017ms | 18:12:21 | 04/10/2026 |
 
 ## Encart : modifications
 
@@ -86,9 +86,9 @@ Flux : notes de mission -> bdd-modifications -> modifications-par-fichier.json -
 
 | Entree | Heure | Date |
 |---|---|---|
-| _operateur/optimus-prime/parcours/themes/index-themes.json | 14:31:05 | 04/10/2026 |
-| _operateur/optimus-prime/parcours/index-parcours.json | 14:31:11 | 04/10/2026 |
 | _operateur/optimus-prime/super-combos/combos/outils/lanceur-non-regression.py | 14:50:01 | 04/10/2026 |
+| matrice/data/lecons.json | 18:02:48 | 04/10/2026 |
+| _operateur/optimus-prime/preparation/bilan-mo-580.md | 18:07:16 | 04/10/2026 |
 | .gitignore |  |  |
 | x |  |  |
 
@@ -98,11 +98,11 @@ Flux : lecons gravees -> bdd-lecons -> lecons.json -> VUE (relues a chaque injec
 
 | Entree | Heure | Date |
 |---|---|---|
-| L-236 UNE REGLE QUI NE TROUVE PAS REND LA MAIN, ELLE NE DEVINE PAS. Si aucune marche ne designe de fichier | 11:00:25 | 04/10/2026 |
 | L-237 UN TEMOIN QUI NE CONNAIT PAS LE NOUVEAU TIRVOIR CRIE A TORT, ET IL A RAISON DE CRIER. Le solder des  | 11:19:34 | 04/10/2026 |
 | L-238 LE CONTROLE QU ON ECRIT POUR UN AUTRE SE RETOURNE CONTRE SOI. Le nouveau controle d ancrage a accuse | 11:19:34 | 04/10/2026 |
 | L-239 UN GARDE QUI ACCUSE UN ETAT REELLEMENT INTERDIT N EST PAS UNE PANNE DU GARDE : C EST UN ETAT A RAMEN | 14:19:00 | 04/10/2026 |
 | L-240 Reconstruire un depot git : le remote est une donnee, pas une page blanche. Avant tout rm -rf .git,  | 17:45:21 | 04/10/2026 |
+| L-241 Un blocage de la veille n'est pas forcement un defaut du code : REPRODUIRE par le CHEMIN DU PRODUCTE | 18:01:38 | 04/10/2026 |
 
 ## Encart : variables
 
