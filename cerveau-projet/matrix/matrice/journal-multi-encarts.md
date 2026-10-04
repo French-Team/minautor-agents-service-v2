@@ -35,11 +35,11 @@ Flux : routines/veille-flux/journal-veille.txt -> VUE lecture seule
 
 | Entree | Heure | Date |
 |---|---|---|
-| passe relax demarree | 18:07:05 | 04/10/2026 |
-| passe relax terminee : 0 detection(s), 0 alerte(s) | 18:07:16 | 04/10/2026 |
 | passe relax demarree | 18:12:20 | 04/10/2026 |
 | passe relax terminee : 0 detection(s), 0 alerte(s) | 18:12:31 | 04/10/2026 |
 | passe relax demarree | 18:17:34 | 04/10/2026 |
+| passe relax terminee : 0 detection(s), 0 alerte(s) | 18:17:44 | 04/10/2026 |
+| passe relax demarree | 18:22:47 | 04/10/2026 |
 
 ## Encart : alertes
 
@@ -71,14 +71,14 @@ Flux : sac-a-dos (chaque outil) -> bdd-usages -> usages-outils-combos.jsonl -> V
 
 | Entree | Heure | Date |
 |---|---|---|
-| suivi-optimus/coherence code 1 23ms | 18:14:56 | 04/10/2026 |
-| suivi-optimus/coherence code 1 23ms | 18:14:56 | 04/10/2026 |
-| suivi-optimus/vue code 0 49ms | 18:15:33 | 04/10/2026 |
-| corriger-ascii/corriger code 0 897ms | 18:15:48 | 04/10/2026 |
-| suivi-optimus/vue code 0 51ms | 18:16:33 | 04/10/2026 |
-| corriger-ascii/corriger code 0 890ms | 18:16:49 | 04/10/2026 |
-| suivi-optimus/vue code 0 50ms | 18:17:33 | 04/10/2026 |
-| corriger-ascii/corriger code 0 1006ms | 18:17:35 | 04/10/2026 |
+| suivi-optimus/vue code 0 50ms | 18:19:45 | 04/10/2026 |
+| corriger-ascii/corriger code 0 891ms | 18:19:54 | 04/10/2026 |
+| suivi-optimus/vue code 0 50ms | 18:20:46 | 04/10/2026 |
+| corriger-ascii/corriger code 0 884ms | 18:20:56 | 04/10/2026 |
+| suivi-optimus/vue code 0 49ms | 18:21:46 | 04/10/2026 |
+| corriger-ascii/corriger code 0 918ms | 18:21:57 | 04/10/2026 |
+| suivi-optimus/vue code 0 50ms | 18:22:47 | 04/10/2026 |
+| corriger-ascii/corriger code 0 1000ms | 18:22:48 | 04/10/2026 |
 
 ## Encart : modifications
 

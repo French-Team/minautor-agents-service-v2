@@ -2,18 +2,18 @@
   "portes": 45,
   "notables": 39,
   "signature": "6926303aafe6cbbfda119324891ec094bec7a49df0f9f02a9145e8f9c4fe2a0a",
-  "date": "2026-10-04 18:08:18",
+  "date": "2026-10-04 18:23:59",
   "alertes": 40,
   "motif": "deja-signale",
   "mode": "absorbee",
   "signature_passe": "{\"notables\": 39, \"portes\": 45, \"signature\": \"6926303aafe6cbbfda119324891ec094bec7a49df0f9f02a9145e8f9c4fe2a0a\"}",
-  "passes_absorbes": 85,
+  "passes_absorbes": 86,
   "derniere_ecriture": "2026-10-03 19:41:07",
   "dernieres_passes": [
-    "2026-10-04 17:05:35",
     "2026-10-04 17:21:15",
     "2026-10-04 17:36:55",
     "2026-10-04 17:52:37",
-    "2026-10-04 18:08:18"
+    "2026-10-04 18:08:18",
+    "2026-10-04 18:23:59"
   ]
 }

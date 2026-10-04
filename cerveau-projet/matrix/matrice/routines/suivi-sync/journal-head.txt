@@ -1407,3 +1407,5 @@
 {"code": 0, "date": "2026-10-04 18:19:45", "duree_ms": 272, "retard_avant_s": 60, "type": "head"}
 {"code": 0, "date": "2026-10-04 18:20:46", "duree_ms": 270, "retard_avant_s": 60, "type": "head"}
 {"code": 0, "date": "2026-10-04 18:21:46", "duree_ms": 273, "retard_avant_s": 60, "type": "head"}
+{"code": 0, "date": "2026-10-04 18:22:47", "duree_ms": 279, "retard_avant_s": 60, "type": "head"}
+{"code": 0, "date": "2026-10-04 18:23:58", "duree_ms": 274, "retard_avant_s": 71, "type": "head"}
